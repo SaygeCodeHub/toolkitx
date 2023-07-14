@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -58,9 +60,10 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                   if (state is ToDoMarkingAsDone) {
                     ProgressBar.show(context);
                   } else if (state is ToDoMarkedAsDone) {
+                    log("fetched=====>");
                     ProgressBar.dismiss(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    Navigator.pop(context, true);
+                    Navigator.pop(context, true);
                     context
                         .read<ToDoBloc>()
                         .add(FetchTodoAssignedToMeAndByMeListEvent());
@@ -74,16 +77,16 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                   }
                 },
                 buildWhen: (previousState, currentState) =>
-                    currentState is FetchingTodoDetailsAndDocumentDetails ||
+                currentState is FetchingTodoDetailsAndDocumentDetails ||
                     currentState is TodoDetailsAndDocumentDetailsFetched,
                 builder: (context, state) {
                   if (state is FetchingTodoDetailsAndDocumentDetails) {
                     return Center(
                         child: Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 3.5),
-                      child: const CircularProgressIndicator(),
-                    ));
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 3.5),
+                          child: const CircularProgressIndicator(),
+                        ));
                   } else if (state is TodoDetailsAndDocumentDetailsFetched) {
                     todoMap['clientId'] = state.clientId;
                     return CustomTabBarView(

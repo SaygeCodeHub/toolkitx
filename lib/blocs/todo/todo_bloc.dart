@@ -83,7 +83,8 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     }
   }
 
-  _toggleIndexChanged(ToDoToggleIndex event, Emitter<ToDoStates> emit) {
+  FutureOr _toggleIndexChanged(
+      ToDoToggleIndex event, Emitter<ToDoStates> emit) {
     emit(TodoAssignedToMeAndByMeListFetched(
         fetchToDoAssignToMeListModel: event.fetchToDoAssignToMeListModel!,
         selectedIndex: event.selectedIndex,
