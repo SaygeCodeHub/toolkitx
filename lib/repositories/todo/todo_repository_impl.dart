@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/todo/fetch_assign_todo_by_me_list_model.dart
 import 'package:toolkit/data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_details_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_details_model.dart';
+import 'package:toolkit/data/models/todo/send_reminder_for_todo_model.dart';
 import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 
@@ -57,5 +58,12 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}todo/markasdone", todoMarkAsDoneMap);
     return ToDoMarkAsDoneModel.fromJson(response);
+  }
+
+  @override
+  Future<SendReminderTodoModel> sendReminderForTodo(Map sendReminderMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/SendReminder", sendReminderMap);
+    return SendReminderTodoModel.fromJson(response);
   }
 }

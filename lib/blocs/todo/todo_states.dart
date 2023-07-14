@@ -3,6 +3,7 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/send_reminder_for_todo_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 
 abstract class ToDoStates {}
@@ -53,4 +54,22 @@ class ToDoMarkedAsDone extends ToDoStates {
   ToDoMarkedAsDone({required this.toDoMarkAsDoneModel});
 }
 
-class ToDoCannotMarkAsDone extends ToDoStates {}
+class ToDoCannotMarkAsDone extends ToDoStates {
+  final String cannotMarkAsDone;
+
+  ToDoCannotMarkAsDone({required this.cannotMarkAsDone});
+}
+
+class SendingReminderForToDo extends ToDoStates {}
+
+class ReminderSendForToDo extends ToDoStates {
+  final SendReminderTodoModel sendReminderTodoModel;
+
+  ReminderSendForToDo({required this.sendReminderTodoModel});
+}
+
+class ReminderCannotSendForToDo extends ToDoStates {
+  final String cannotSendReminder;
+
+  ReminderCannotSendForToDo({required this.cannotSendReminder});
+}

@@ -37,3 +37,9 @@ class ToDoMarkAsDone extends ToDoEvent {
 
   ToDoMarkAsDone({required this.todoMap});
 }
+
+class ToDoSendReminder extends ToDoEvent {
+  final Map todoMap;
+
+  ToDoSendReminder({required this.todoMap});
+}

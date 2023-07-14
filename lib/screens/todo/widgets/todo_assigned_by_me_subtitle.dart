@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../blocs/todo/todo_bloc.dart';
+import '../../../blocs/todo/todo_event.dart';
+import '../../../blocs/todo/todo_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/status_tag_model.dart';
 import '../../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/android_pop_up.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/icon_and_text_row.dart';
+import '../../../widgets/progress_bar.dart';
 import '../../../widgets/status_tag.dart';
 
 class ToDoAssignedByMeSubtitle extends StatelessWidget {
   final AssignByMeListDatum assignedByMeListDatum;
+  final Map todoMap;
 
   const ToDoAssignedByMeSubtitle(
-      {Key? key, required this.assignedByMeListDatum})
+      {Key? key, required this.assignedByMeListDatum, required this.todoMap})
       : super(key: key);
 
   @override
@@ -37,6 +45,83 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
               IconAndTextRow(
                   title: assignedByMeListDatum.createdfor,
                   icon: 'human_avatar_three'),
+              const SizedBox(height: tinierSpacing),
+              Row(
+                children: [
+                  BlocListener<TodoBloc, ToDoStates>(
+                    listener: (context, state) {
+                      if (state is ToDoMarkingAsDone) {
+                        ProgressBar.show(context);
+                      } else if (state is ToDoMarkedAsDone) {
+                        context
+                            .read<TodoBloc>()
+                            .add(FetchTodoAssignedToMeAndByMeListEvent());
+                      } else if (state is ToDoCannotMarkAsDone) {
+                        showCustomSnackBar(
+                            context,
+                            DatabaseUtil.getText(
+                                'some_unknown_error_please_try_again'),
+                            '');
+                      }
+                    },
+                    child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AndroidPopUp(
+                                    contentPadding: EdgeInsets.zero,
+                                    titleValue:
+                                        DatabaseUtil.getText('DeleteRecord'),
+                                    onPressed: () {
+                                      todoMap['todoId'] =
+                                          assignedByMeListDatum.id;
+                                      context.read<TodoBloc>().add(
+                                          ToDoMarkAsDone(todoMap: todoMap));
+                                      Navigator.pop(context);
+                                    },
+                                    contentValue: '');
+                              });
+                        },
+                        icon: const Icon(Icons.check_circle,
+                            color: AppColor.green, size: kIconSize)),
+                  ),
+                  const SizedBox(width: tinierSpacing),
+                  BlocListener<TodoBloc, ToDoStates>(
+                    listener: (context, state) {
+                      if (state is SendingReminderForToDo) {
+                        ProgressBar.show(context);
+                      } else if (state is ReminderSendForToDo) {
+                        ProgressBar.dismiss(context);
+                        context
+                            .read<TodoBloc>()
+                            .add(FetchTodoAssignedToMeAndByMeListEvent());
+                      } else if (state is ReminderCannotSendForToDo) {
+                        showCustomSnackBar(
+                            context, state.cannotSendReminder, '');
+                      }
+                    },
+                    child: Visibility(
+                      visible: assignedByMeListDatum.istododue == 1,
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          onPressed: () {
+                            todoMap['todoId'] = assignedByMeListDatum.id;
+                            context
+                                .read<TodoBloc>()
+                                .add(ToDoSendReminder(todoMap: todoMap));
+                            showCustomSnackBar(context,
+                                DatabaseUtil.getText('remindersent'), '');
+                          },
+                          icon: const Icon(Icons.alarm_on_sharp,
+                              color: AppColor.green, size: kIconSize)),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: tinierSpacing),
               StatusTag(tags: [
                 StatusTagModel(
