@@ -155,6 +155,7 @@ abstract class StringConstants {
   static const String kValidateEmptyEmail = 'Please enter email'; //
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
+  static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
   static const String kSomethingWentWrong = 'Something went wrong';
   static const String kNoInternetError =

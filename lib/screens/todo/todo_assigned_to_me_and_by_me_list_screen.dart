@@ -9,6 +9,7 @@ import '../../blocs/todo/todo_states.dart';
 import '../../blocs/todo/todo_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
+import 'add_todo_screen.dart';
 import 'widgets/todo_assigned_by_me_body.dart';
 import 'widgets/todo_assigned_to_me_body.dart';
 
@@ -25,7 +26,11 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(context, AddToDoScreen.routeName,
+                  arguments: todoMap);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
