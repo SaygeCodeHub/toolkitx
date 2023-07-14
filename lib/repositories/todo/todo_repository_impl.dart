@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/todo/fetch_assign_todo_by_me_list_model.dart
 import 'package:toolkit/data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_details_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_details_model.dart';
+import 'package:toolkit/data/models/todo/submit_todo_model.dart';
 import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 
@@ -12,28 +13,32 @@ import '../../utils/dio_client.dart';
 
 class ToDoRepositoryImpl extends ToDoRepository {
   @override
-  Future<FetchToDoAssignToMeListModel> fetchToDoAssignToMeList(int pageNo, String hashCode, String filter, String userId) async {
+  Future<FetchToDoAssignToMeListModel> fetchToDoAssignToMeList(
+      int pageNo, String hashCode, String filter, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/get?pageno=1&hashcode=$hashCode&filter=$filter&userid=$userId");
     return FetchToDoAssignToMeListModel.fromJson(response);
   }
 
   @override
-  Future<FetchToDoAssignToByListModel> fetchToDoAssignByMeList(int pageNo, String hashCode, String filter, String userId) async {
+  Future<FetchToDoAssignToByListModel> fetchToDoAssignByMeList(
+      int pageNo, String hashCode, String filter, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/get?pageno=1&hashcode=$hashCode&filter=$filter&userid=$userId");
     return FetchToDoAssignToByListModel.fromJson(response);
   }
 
   @override
-  Future<FetchToDoDetailsModel> fetchToDoDetails(String hashCode, String todoId) async {
+  Future<FetchToDoDetailsModel> fetchToDoDetails(
+      String hashCode, String todoId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/gettodo?hashcode=$hashCode&todoid=$todoId");
     return FetchToDoDetailsModel.fromJson(response);
   }
 
   @override
-  Future<FetchToDoDocumentDetailsModel> fetchToDoDocumentDetails(String hashCode, String todoId) async {
+  Future<FetchToDoDocumentDetailsModel> fetchToDoDocumentDetails(
+      String hashCode, String todoId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/GetToDoDocument?hashcode=$hashCode&todoid=$todoId");
 
@@ -41,7 +46,8 @@ class ToDoRepositoryImpl extends ToDoRepository {
   }
 
   @override
-  Future<DeleteToDoDocumentModel> toDoDeleteDocument(Map todoDeleteDocumentMap) async {
+  Future<DeleteToDoDocumentModel> toDoDeleteDocument(
+      Map todoDeleteDocumentMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}todo/deletedocument", todoDeleteDocumentMap);
     return DeleteToDoDocumentModel.fromJson(response);
@@ -59,5 +65,12 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response =
         await DioClient().post("${ApiConstants.baseUrl}todo/save", addToDoMap);
     return AddToDoModel.fromJson(response);
+  }
+
+  @override
+  Future<SubmitToDoModel> submitToDo(Map submitToDoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/publishtodo", submitToDoMap);
+    return SubmitToDoModel.fromJson(response);
   }
 }

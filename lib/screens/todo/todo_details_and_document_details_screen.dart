@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import 'package:toolkit/widgets/primary_button.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
 import '../../blocs/todo/todo_bloc.dart';
@@ -13,6 +10,7 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/todo_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
+import 'widgets/submit_todo_bottom_app_bar.dart';
 import 'widgets/todo_details_tab.dart';
 import 'widgets/todo_document_details_tab.dart';
 
@@ -29,30 +27,7 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
         selectedIndex: 0, todoId: todoMap['todoId']));
     return Scaffold(
       appBar: const GenericAppBar(),
-      bottomNavigationBar: Visibility(
-        visible: todoMap['isFromAdd'] == true,
-        child: BottomAppBar(
-          child: Row(
-            children: [
-              Expanded(
-                child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: DatabaseUtil.getText('buttonBack'),
-                ),
-              ),
-              const SizedBox(width: xxTinierSpacing),
-              Expanded(
-                child: PrimaryButton(
-                  onPressed: () {},
-                  textValue: StringConstants.kSubmitTodo,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: SubmitToDoBottomAppBar(todoMap: todoMap),
       body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,

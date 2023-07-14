@@ -4,6 +4,7 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 
 abstract class ToDoStates {}
@@ -17,9 +18,10 @@ class TodoAssignedToMeAndByMeListFetched extends ToDoStates {
   final FetchToDoAssignToByListModel fetchToDoAssignToByListModel;
   final int? selectedIndex;
 
-  TodoAssignedToMeAndByMeListFetched({required this.fetchToDoAssignToByListModel,
-    this.selectedIndex,
-    required this.fetchToDoAssignToMeListModel});
+  TodoAssignedToMeAndByMeListFetched(
+      {required this.fetchToDoAssignToByListModel,
+      this.selectedIndex,
+      required this.fetchToDoAssignToMeListModel});
 }
 
 class FetchingTodoDetailsAndDocumentDetails extends ToDoStates {}
@@ -29,9 +31,10 @@ class TodoDetailsAndDocumentDetailsFetched extends ToDoStates {
   final FetchToDoDocumentDetailsModel fetchToDoDocumentDetailsModel;
   final String clientId;
 
-  TodoDetailsAndDocumentDetailsFetched({required this.clientId,
-    required this.fetchToDoDocumentDetailsModel,
-    required this.fetchToDoDetailsModel});
+  TodoDetailsAndDocumentDetailsFetched(
+      {required this.clientId,
+      required this.fetchToDoDocumentDetailsModel,
+      required this.fetchToDoDetailsModel});
 }
 
 class DeletingToDoDocument extends ToDoStates {}
@@ -67,4 +70,18 @@ class ToDoNotAdded extends ToDoStates {
   final String todoNotAdded;
 
   ToDoNotAdded({required this.todoNotAdded});
+}
+
+class SubmittingToDo extends ToDoStates {}
+
+class ToDoSubmitted extends ToDoStates {
+  final SubmitToDoModel submitToDoModel;
+
+  ToDoSubmitted({required this.submitToDoModel});
+}
+
+class ToDoNotSubmitted extends ToDoStates {
+  final String todoNotSubmitted;
+
+  ToDoNotSubmitted({required this.todoNotSubmitted});
 }

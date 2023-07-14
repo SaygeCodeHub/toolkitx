@@ -43,3 +43,9 @@ class AddToDo extends ToDoEvent {
 
   AddToDo({required this.todoMap});
 }
+
+class SubmitToDo extends ToDoEvent {
+  final Map todoMap;
+
+  SubmitToDo({required this.todoMap});
+}
