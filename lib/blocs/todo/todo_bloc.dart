@@ -6,6 +6,7 @@ import 'package:toolkit/repositories/todo/todo_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
+import '../../data/models/todo/add_todo_model.dart';
 import '../../data/models/todo/delete_todo_document_model.dart';
 import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
@@ -28,6 +29,7 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<FetchToDoDetailsAndDocumentDetails>(_fetchDetails);
     on<DeleteToDoDocument>(_deleteDocument);
     on<ToDoMarkAsDone>(_markAsDone);
+    on<AddToDo>(_addTodo);
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -123,6 +125,32 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
       ToDoMarkAsDoneModel toDoMarkAsDoneModel =
           await _toDoRepository.toDoMarkAsDone(markAsDoneMapMap);
       emit(ToDoMarkedAsDone(toDoMarkAsDoneModel: toDoMarkAsDoneModel));
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  FutureOr _addTodo(AddToDo event, Emitter<ToDoStates> emit) async {
+    emit(AddingToDo());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      todoMap = event.todoMap;
+      Map addToDoMap = {
+        "idm": userId,
+        "description": todoMap['description'],
+        "duedate": todoMap['duedate'],
+        "heading": todoMap['heading'],
+        "categoryid": "",
+        "userid": userId,
+        "createdfor": "e2c25001-e312-4dfa-ae59-51ac706f6b87",
+        "hashcode": hashCode
+      };
+      AddToDoModel addToDoModel = await _toDoRepository.addToDo(addToDoMap);
+      if (addToDoModel.status == 200) {
+        todoMap['todoId'] = addToDoModel.message;
+      }
+      emit(ToDoAdded(todoMap: todoMap, addToDoModel: addToDoModel));
     } catch (e) {
       e.toString();
     }

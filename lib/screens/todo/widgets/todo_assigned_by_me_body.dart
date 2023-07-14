@@ -52,6 +52,7 @@ class TodoAssignedByMeBody extends StatelessWidget {
                                     assignedByMeListDatum[index].id;
                                 todoMap['todoName'] =
                                     assignedByMeListDatum[index].todoname;
+                                todoMap['isFromAdd'] = false;
                                 Navigator.pushNamed(
                                     context,
                                     ToDoDetailsAndDocumentDetailsScreen

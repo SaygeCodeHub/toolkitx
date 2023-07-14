@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/primary_button.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
 import '../../blocs/todo/todo_bloc.dart';
@@ -26,6 +29,30 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
         selectedIndex: 0, todoId: todoMap['todoId']));
     return Scaffold(
       appBar: const GenericAppBar(),
+      bottomNavigationBar: Visibility(
+        visible: todoMap['isFromAdd'] == true,
+        child: BottomAppBar(
+          child: Row(
+            children: [
+              Expanded(
+                child: PrimaryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText('buttonBack'),
+                ),
+              ),
+              const SizedBox(width: xxTinierSpacing),
+              Expanded(
+                child: PrimaryButton(
+                  onPressed: () {},
+                  textValue: StringConstants.kSubmitTodo,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -42,7 +69,7 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(todoMap['todoName'],
+                              Text(todoMap['todoName'] ?? '',
                                   style: Theme.of(context).textTheme.medium)
                             ])))),
             const SizedBox(height: xxTinierSpacing),
@@ -68,7 +95,8 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                         tabBarViewWidgets: [
                           ToDoDetailsTab(
                               initialIndex: 0,
-                              todoDetails: state.fetchToDoDetailsModel.data),
+                              todoDetails: state.fetchToDoDetailsModel.data,
+                              todoMap: todoMap),
                           ToDoDocumentDetailsTab(
                               initialIndex: 1,
                               documentDetailsDatum: state
