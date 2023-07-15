@@ -20,6 +20,7 @@ class PickAndUploadImageBloc
       getIt<UploadImageRepository>();
   final ImagePicker _imagePicker = ImagePicker();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  bool isInitial = true;
 
   PickAndUploadImageStates get initialState => PermissionInitial();
 
@@ -33,6 +34,7 @@ class PickAndUploadImageBloc
   }
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
+    isInitial = true;
     emit(PermissionInitial());
   }
 
@@ -54,10 +56,12 @@ class PickAndUploadImageBloc
         return;
       } else {
         bool isAttached = false;
-        List cameraPathsList = List.from(event.cameraImageList);
+        List cameraPathsList =
+            List.from((isInitial == false) ? event.cameraImageList : []);
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
+        isInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
           isAttached = true;
@@ -106,10 +110,12 @@ class PickAndUploadImageBloc
         return;
       } else {
         bool isAttached = false;
-        List galleryPathsList = List.from(event.galleryImagesList);
+        List galleryPathsList =
+            List.from((isInitial == false) ? event.galleryImagesList : []);
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);
+        isInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
           isAttached = true;
@@ -146,11 +152,16 @@ class PickAndUploadImageBloc
     try {
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.imageFile), hashCode);
-      emit(ImagePickerLoaded(
-          isImageAttached: event.isImageAttached,
-          imagePathsList: event.imagesList,
-          imagePath: event.imageFile,
-          uploadPictureModel: uploadPictureModel));
+      if (uploadPictureModel.status == 200) {
+        emit(ImagePickerLoaded(
+            isImageAttached: event.isImageAttached,
+            imagePathsList: event.imagesList,
+            imagePath: event.imageFile,
+            uploadPictureModel: uploadPictureModel));
+      } else {
+        emit(ImageNotUploaded(
+            imageNotUploaded: StringConstants.kErrorImageUpload));
+      }
     } catch (e) {
       emit(ImageNotUploaded(
           imageNotUploaded: StringConstants.kErrorImageUpload));
