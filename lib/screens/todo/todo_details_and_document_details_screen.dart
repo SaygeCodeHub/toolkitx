@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -10,7 +8,6 @@ import '../../blocs/todo/todo_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
-import '../../utils/database_utils.dart';
 import '../../utils/todo_util.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
@@ -57,29 +54,17 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
             const Divider(height: kDividerHeight, thickness: kDividerWidth),
             BlocConsumer<ToDoBloc, ToDoStates>(
                 listener: (context, state) {
-                  if (state is ToDoMarkingAsDone) {
+                  if (state is PopUpMenuToDoMarkingAsDone) {
                     ProgressBar.show(context);
-                  } else if (state is ToDoMarkedAsDone) {
-                    log("fetched=====>");
+                  } else if (state is PopUpMenuToDoMarkedAsDone) {
                     ProgressBar.dismiss(context);
+                    Navigator.pop(context);
                     context
                         .read<ToDoBloc>()
                         .add(FetchTodoAssignedToMeAndByMeListEvent());
-                    // Navigator.canPop(context);
-                    // context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             const TodoAssignedByMeAndToMeListScreen()),
-                    //     (route) => false);
-                  } else if (state is ToDoCannotMarkAsDone) {
+                  } else if (state is PopUpMenuToDoCannotMarkAsDone) {
                     ProgressBar.dismiss(context);
-                    showCustomSnackBar(
-                        context,
-                        DatabaseUtil.getText(
-                            'some_unknown_error_please_try_again'),
-                        '');
+                    showCustomSnackBar(context, state.cannotMarkAsDone, '');
                   }
                 },
                 buildWhen: (previousState, currentState) =>

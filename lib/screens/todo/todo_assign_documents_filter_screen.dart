@@ -36,7 +36,10 @@ class ToDoAssignDocumentsFilterScreen extends StatelessWidget {
           children: [
             Expanded(
               child: PrimaryButton(
-                  onPressed: () {}, textValue: DatabaseUtil.getText('Close')),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText('Close')),
             ),
             const SizedBox(width: xxTinySpacing),
             Expanded(

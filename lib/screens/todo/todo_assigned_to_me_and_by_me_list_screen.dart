@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -22,7 +21,6 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("here===========>");
     context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
@@ -80,11 +78,10 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                 const SizedBox(height: xxTinySpacing),
                 BlocBuilder<ToDoBloc, ToDoStates>(
                     buildWhen: (previousState, currentState) =>
-                    currentState is FetchingTodoAssignedToMeAndByMeList ||
+                        currentState is FetchingTodoAssignedToMeAndByMeList ||
                         currentState is TodoAssignedToMeAndByMeListFetched,
                     builder: (context, state) {
                       if (state is FetchingTodoAssignedToMeAndByMeList) {
-                        log("loading state======>");
                         return Center(
                           child: Padding(
                               padding: EdgeInsets.only(

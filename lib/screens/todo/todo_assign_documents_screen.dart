@@ -37,7 +37,9 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
         appBar: GenericAppBar(title: DatabaseUtil.getText('AssignDocuments')),
         bottomNavigationBar: BottomAppBar(
             child: PrimaryButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 textValue: DatabaseUtil.getText('buttonDone'))),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),

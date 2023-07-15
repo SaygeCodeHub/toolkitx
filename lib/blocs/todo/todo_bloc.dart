@@ -43,6 +43,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<ToDoUploadDocument>(_uploadDocument);
     on<ApplyToDoFilter>(_applyFilter);
     on<ClearToDoFilter>(_clearFilter);
+    on<ToDoPopUpMenuMarkAsDone>(_popupMenuMarkAsDone);
   }
 
   _applyFilter(ApplyToDoFilter event, Emitter<ToDoStates> emit) {
@@ -148,7 +149,13 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       };
       ToDoMarkAsDoneModel toDoMarkAsDoneModel =
           await _toDoRepository.toDoMarkAsDone(markAsDoneMapMap);
-      emit(ToDoMarkedAsDone(toDoMarkAsDoneModel: toDoMarkAsDoneModel));
+      if (toDoMarkAsDoneModel.status == 200) {
+        emit(ToDoMarkedAsDone(toDoMarkAsDoneModel: toDoMarkAsDoneModel));
+      } else {
+        emit(ToDoCannotMarkAsDone(
+            cannotMarkAsDone:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
     } catch (e) {
       e.toString();
     }
@@ -244,11 +251,44 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         };
         ToDoUploadDocumentModel uploadDocumentModel =
             await _toDoRepository.uploadToDoDocument(uploadDocumentMap);
-        emit(
-            ToDoDocumentUploaded(toDoUploadDocumentModel: uploadDocumentModel));
+        if (uploadDocumentModel.status == 200) {
+          emit(ToDoDocumentUploaded(
+              toDoUploadDocumentModel: uploadDocumentModel));
+        } else {
+          emit(ToDoDocumentNotUploaded(
+              documentNotUploaded:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       }
     } catch (e) {
       emit(ToDoDocumentNotUploaded(documentNotUploaded: e.toString()));
+    }
+  }
+
+  FutureOr _popupMenuMarkAsDone(
+      ToDoPopUpMenuMarkAsDone event, Emitter<ToDoStates> emit) async {
+    emit(PopUpMenuToDoMarkingAsDone());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      todoMap = event.todoMap;
+      Map markAsDoneMapMap = {
+        'todoid': todoMap['todoId'],
+        'userid': userId,
+        'hashcode': hashCode
+      };
+      ToDoMarkAsDoneModel toDoMarkAsDoneModel =
+          await _toDoRepository.toDoMarkAsDone(markAsDoneMapMap);
+      if (toDoMarkAsDoneModel.status == 200) {
+        emit(PopUpMenuToDoMarkedAsDone(
+            toDoMarkAsDoneModel: toDoMarkAsDoneModel));
+      } else {
+        emit(PopUpMenuToDoCannotMarkAsDone(
+            cannotMarkAsDone:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(PopUpMenuToDoCannotMarkAsDone(cannotMarkAsDone: e.toString()));
     }
   }
 }

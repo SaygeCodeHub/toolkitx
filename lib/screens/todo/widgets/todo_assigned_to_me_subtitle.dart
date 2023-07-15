@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../blocs/todo/todo_bloc.dart';
 import '../../../blocs/todo/todo_event.dart';
 import '../../../blocs/todo/todo_states.dart';
@@ -21,7 +18,8 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
   final AssignedToMeListDatum assignToMeListDatum;
   final Map todoMap;
 
-  const ToDoAssignedToMeSubtitle({Key? key, required this.assignToMeListDatum, required this.todoMap})
+  const ToDoAssignedToMeSubtitle(
+      {Key? key, required this.assignToMeListDatum, required this.todoMap})
       : super(key: key);
 
   @override
@@ -50,16 +48,13 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                       if (state is ToDoMarkingAsDone) {
                         ProgressBar.show(context);
                       } else if (state is ToDoMarkedAsDone) {
-                        log("are you here to me======>");
+                        ProgressBar.dismiss(context);
                         context
                             .read<ToDoBloc>()
                             .add(FetchTodoAssignedToMeAndByMeListEvent());
                       } else if (state is ToDoCannotMarkAsDone) {
-                        showCustomSnackBar(
-                            context,
-                            DatabaseUtil.getText(
-                                'some_unknown_error_please_try_again'),
-                            '');
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context, state.cannotMarkAsDone, '');
                       }
                     },
                     child: IconButton(
@@ -72,7 +67,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 return AndroidPopUp(
                                     contentPadding: EdgeInsets.zero,
                                     titleValue:
-                                    DatabaseUtil.getText('DeleteRecord'),
+                                        DatabaseUtil.getText('DeleteRecord'),
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignToMeListDatum.id;
@@ -99,7 +94,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 return AndroidPopUp(
                                     contentPadding: EdgeInsets.zero,
                                     titleValue:
-                                    DatabaseUtil.getText('DeleteRecord'),
+                                        DatabaseUtil.getText('DeleteRecord'),
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignToMeListDatum.id;

@@ -11,6 +11,7 @@ import '../../data/models/todo/todo_upload_document_model.dart';
 abstract class ToDoStates {}
 
 class TodoInitial extends ToDoStates {}
+
 class FetchingTodoAssignedToMeAndByMeList extends ToDoStates {}
 
 class TodoAssignedToMeAndByMeListFetched extends ToDoStates {
@@ -23,6 +24,7 @@ class TodoAssignedToMeAndByMeListFetched extends ToDoStates {
       this.selectedIndex,
       required this.fetchToDoAssignToMeListModel});
 }
+
 class FetchingTodoDetailsAndDocumentDetails extends ToDoStates {}
 
 class TodoDetailsAndDocumentDetailsFetched extends ToDoStates {
@@ -54,7 +56,11 @@ class ToDoMarkedAsDone extends ToDoStates {
   ToDoMarkedAsDone({required this.toDoMarkAsDoneModel});
 }
 
-class ToDoCannotMarkAsDone extends ToDoStates {}
+class ToDoCannotMarkAsDone extends ToDoStates {
+  final String cannotMarkAsDone;
+
+  ToDoCannotMarkAsDone({required this.cannotMarkAsDone});
+}
 
 class FetchingDocumentForToDo extends ToDoStates {}
 
@@ -99,4 +105,18 @@ class ToDoDocumentNotUploaded extends ToDoStates {
   final String documentNotUploaded;
 
   ToDoDocumentNotUploaded({required this.documentNotUploaded});
+}
+
+class PopUpMenuToDoMarkingAsDone extends ToDoStates {}
+
+class PopUpMenuToDoMarkedAsDone extends ToDoStates {
+  final ToDoMarkAsDoneModel toDoMarkAsDoneModel;
+
+  PopUpMenuToDoMarkedAsDone({required this.toDoMarkAsDoneModel});
+}
+
+class PopUpMenuToDoCannotMarkAsDone extends ToDoStates {
+  final String cannotMarkAsDone;
+
+  PopUpMenuToDoCannotMarkAsDone({required this.cannotMarkAsDone});
 }
