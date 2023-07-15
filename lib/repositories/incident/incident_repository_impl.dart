@@ -105,7 +105,7 @@ class IncidentRepositoryImpl extends IncidentRepository {
   Future<PdfGenerationModel> generatePdf(
       String hashCode, String incidentId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}incident/getpdf?incidentid=$incidentId&hashcode=vbdvrj9aN/gnmG9HRZBOV137+VBlDH1innvdsfSI8lOHTShvQP8iAcfeuRbflSG0|3|1|1|cet_3");
+        "${ApiConstants.baseUrl}incident/getpdf?incidentid=$incidentId&hashcode=$hashCode");
     return PdfGenerationModel.fromJson(response);
   }
 }
