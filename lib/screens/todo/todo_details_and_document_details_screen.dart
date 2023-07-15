@@ -62,11 +62,17 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                   } else if (state is ToDoMarkedAsDone) {
                     log("fetched=====>");
                     ProgressBar.dismiss(context);
-                    Navigator.pop(context, true);
-                    Navigator.pop(context, true);
                     context
                         .read<ToDoBloc>()
                         .add(FetchTodoAssignedToMeAndByMeListEvent());
+                    // Navigator.canPop(context);
+                    // context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
+                    // Navigator.pushAndRemoveUntil(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             const TodoAssignedByMeAndToMeListScreen()),
+                    //     (route) => false);
                   } else if (state is ToDoCannotMarkAsDone) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(
@@ -83,10 +89,10 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                   if (state is FetchingTodoDetailsAndDocumentDetails) {
                     return Center(
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height / 3.5),
-                          child: const CircularProgressIndicator(),
-                        ));
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 3.5),
+                      child: const CircularProgressIndicator(),
+                    ));
                   } else if (state is TodoDetailsAndDocumentDetailsFetched) {
                     todoMap['clientId'] = state.clientId;
                     return CustomTabBarView(

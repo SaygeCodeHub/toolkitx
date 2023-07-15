@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,8 +21,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
   final AssignedToMeListDatum assignToMeListDatum;
   final Map todoMap;
 
-  const ToDoAssignedToMeSubtitle(
-      {Key? key, required this.assignToMeListDatum, required this.todoMap})
+  const ToDoAssignedToMeSubtitle({Key? key, required this.assignToMeListDatum, required this.todoMap})
       : super(key: key);
 
   @override
@@ -49,6 +50,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                       if (state is ToDoMarkingAsDone) {
                         ProgressBar.show(context);
                       } else if (state is ToDoMarkedAsDone) {
+                        log("are you here to me======>");
                         context
                             .read<ToDoBloc>()
                             .add(FetchTodoAssignedToMeAndByMeListEvent());
@@ -70,7 +72,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 return AndroidPopUp(
                                     contentPadding: EdgeInsets.zero,
                                     titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
+                                    DatabaseUtil.getText('DeleteRecord'),
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignToMeListDatum.id;
@@ -97,7 +99,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 return AndroidPopUp(
                                     contentPadding: EdgeInsets.zero,
                                     titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
+                                    DatabaseUtil.getText('DeleteRecord'),
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignToMeListDatum.id;

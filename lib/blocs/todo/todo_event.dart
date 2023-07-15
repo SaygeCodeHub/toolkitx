@@ -2,7 +2,6 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 
 abstract class ToDoEvent {}
-
 class FetchTodoAssignedToMeAndByMeListEvent extends ToDoEvent {}
 
 class ToDoToggleIndex extends ToDoEvent {

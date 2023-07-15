@@ -11,7 +11,6 @@ import '../../data/models/todo/todo_upload_document_model.dart';
 abstract class ToDoStates {}
 
 class TodoInitial extends ToDoStates {}
-
 class FetchingTodoAssignedToMeAndByMeList extends ToDoStates {}
 
 class TodoAssignedToMeAndByMeListFetched extends ToDoStates {
@@ -24,7 +23,6 @@ class TodoAssignedToMeAndByMeListFetched extends ToDoStates {
       this.selectedIndex,
       required this.fetchToDoAssignToMeListModel});
 }
-
 class FetchingTodoDetailsAndDocumentDetails extends ToDoStates {}
 
 class TodoDetailsAndDocumentDetailsFetched extends ToDoStates {

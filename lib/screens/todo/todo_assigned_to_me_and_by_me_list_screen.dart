@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:toolkit/blocs/todo/todo_bloc.dart';
+import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/todo/todo_event.dart';
-import '../../blocs/todo/todo_states.dart';
-import '../../blocs/todo/todo_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import 'widgets/todo_assigned_by_me_body.dart';
@@ -39,7 +38,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                 const SizedBox(height: xxTinySpacing),
                 BlocBuilder<ToDoBloc, ToDoStates>(
                     buildWhen: (previousState, currentState) =>
-                    currentState is TodoAssignedToMeAndByMeListFetched,
+                        currentState is TodoAssignedToMeAndByMeListFetched,
                     builder: (context, state) {
                       if (state is TodoAssignedToMeAndByMeListFetched) {
                         return Row(
@@ -67,9 +66,9 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                                 context.read<ToDoBloc>().add(ToDoToggleIndex(
                                     selectedIndex: indexSelected,
                                     fetchToDoAssignToByListModel:
-                                    state.fetchToDoAssignToByListModel,
+                                        state.fetchToDoAssignToByListModel,
                                     fetchToDoAssignToMeListModel:
-                                    state.fetchToDoAssignToMeListModel));
+                                        state.fetchToDoAssignToMeListModel));
                               },
                             ),
                           ],
@@ -85,11 +84,12 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                         currentState is TodoAssignedToMeAndByMeListFetched,
                     builder: (context, state) {
                       if (state is FetchingTodoAssignedToMeAndByMeList) {
+                        log("loading state======>");
                         return Center(
                           child: Padding(
                               padding: EdgeInsets.only(
                                   top:
-                                  MediaQuery.of(context).size.height / 3.5),
+                                      MediaQuery.of(context).size.height / 3.5),
                               child: const CircularProgressIndicator()),
                         );
                       } else if (state is TodoAssignedToMeAndByMeListFetched) {
