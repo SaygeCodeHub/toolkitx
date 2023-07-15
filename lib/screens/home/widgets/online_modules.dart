@@ -17,7 +17,6 @@ import '../../checklist/workforce/workforce_list_screen.dart';
 import '../../incident/incident_list_screen.dart';
 import '../../logBook/logbook_list_screen.dart';
 import '../../permit/permit_list_screen.dart';
-import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 
 class OnLineModules extends StatelessWidget {
   static bool isFirstTime = true;
@@ -156,10 +155,6 @@ class OnLineModules extends StatelessWidget {
         break;
       case 'sl':
         Navigator.pushNamed(context, LogbookListScreen.routeName);
-        break;
-      case 'todo':
-        Navigator.pushNamed(
-            context, TodoAssignedByMeAndToMeListScreen.routeName);
         break;
     }
   }
