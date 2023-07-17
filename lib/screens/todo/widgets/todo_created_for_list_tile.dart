@@ -4,14 +4,17 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/todo/fetch_todo_master_model.dart';
 import 'todo_created_for_list.dart';
 
 class ToDoCreatedForListTile extends StatefulWidget {
   final Map todoMap;
+  final List<ToDoMasterDatum> data;
 
   const ToDoCreatedForListTile({
     Key? key,
     required this.todoMap,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -19,25 +22,7 @@ class ToDoCreatedForListTile extends StatefulWidget {
 }
 
 class _ToDoCreatedForListTileState extends State<ToDoCreatedForListTile> {
-  final List createdForList = [
-    {"id": '1', "name": 'Aditya'},
-    {"id": '2', "name": 'Rucha'},
-    {"id": '3', "name": 'Aditi'},
-    {"id": '4', "name": 'Animesh'},
-    {"id": '5', "name": 'Aayushi'},
-    {"id": '6', "name": 'Sumit'},
-    {"id": '7', "name": 'Amit'},
-    {"id": '8', "name": 'John'},
-    {"id": '9', "name": 'Joe'},
-    {"id": '10', "name": 'Phoebe'},
-    {"id": '11', "name": 'Naruto'},
-    {"id": '12', "name": 'Luffy'},
-    {"id": '13', "name": 'Itachi'},
-    {"id": '14', "name": 'Sauske'},
-    {"id": '15', "name": 'Saturo Gojo'},
-    {"id": '16', "name": 'Kakashi'}
-  ];
-  static List createdForNameList = [];
+  List createdForNameList = [];
   static List createdForIdList = [];
 
   @override
@@ -49,7 +34,7 @@ class _ToDoCreatedForListTileState extends State<ToDoCreatedForListTile> {
               context,
               MaterialPageRoute(
                   builder: (context) => ToDoCreatedForList(
-                        createdForList: createdForList,
+                    todoMasterDatum: widget.data,
                         onCreatedForChanged: (List id) {
                           createdForIdList = id;
                           widget.todoMap['createdfor'] = createdForIdList

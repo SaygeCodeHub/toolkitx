@@ -16,9 +16,9 @@ import 'widgets/todo_assigned_to_me_body.dart';
 class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
   static const routeName = 'TodoAssignedByMeAndToMeListScreen';
   static int indexSelected = 0;
-  static Map todoMap = {};
+  final Map todoMap = {};
 
-  const TodoAssignedByMeAndToMeListScreen({Key? key}) : super(key: key);
+  TodoAssignedByMeAndToMeListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

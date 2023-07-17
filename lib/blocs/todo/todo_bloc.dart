@@ -12,6 +12,7 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import 'todo_event.dart';
@@ -21,6 +22,7 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   int initialIndex = 0;
   Map todoMap = {};
+  FetchToDoMasterModel fetchToDoMasterModel = FetchToDoMasterModel();
 
   ToDoStates get initialState => TodoInitial();
 
@@ -32,6 +34,8 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<ToDoMarkAsDone>(_markAsDone);
     on<AddToDo>(_addTodo);
     on<SubmitToDo>(_submitTodo);
+    on<ToDoFetchMaster>(_fetchMaster);
+    on<ChangeToDoCategory>(_categoryChanged);
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -138,21 +142,38 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       todoMap = event.todoMap;
-      Map addToDoMap = {
-        "idm": userId,
-        "description": todoMap['description'],
-        "duedate": todoMap['duedate'],
-        "heading": todoMap['heading'],
-        "categoryid": "",
-        "userid": userId,
-        "createdfor": "e2c25001-e312-4dfa-ae59-51ac706f6b87",
-        "hashcode": hashCode
-      };
-      AddToDoModel addToDoModel = await _toDoRepository.addToDo(addToDoMap);
-      if (addToDoModel.status == 200) {
-        todoMap['todoId'] = addToDoModel.message;
+      if (todoMap['createdfor'] == null ||
+          todoMap['createdfor'].toString().isEmpty) {
+        emit(ToDoNotAdded(todoNotAdded: StringConstants.kSelectCreatedFor));
+      } else if (todoMap['categoryid'] == null ||
+          todoMap['categoryid'].toString().isEmpty) {
+        emit(ToDoNotAdded(todoNotAdded: StringConstants.kSelectCategory));
+      } else if (todoMap['duedate'] == null ||
+          todoMap['duedate'].toString().isEmpty) {
+        emit(ToDoNotAdded(todoNotAdded: StringConstants.kSelectDueDate));
+      } else if (todoMap['heading'] == null ||
+          todoMap['heading'].toString().trim().isEmpty) {
+        emit(ToDoNotAdded(todoNotAdded: StringConstants.kAddHeading));
+      } else if (todoMap['description'] == null ||
+          todoMap['description'].toString().trim().isEmpty) {
+        emit(ToDoNotAdded(todoNotAdded: StringConstants.kAddDescription));
+      } else {
+        Map addToDoMap = {
+          "idm": userId,
+          "description": todoMap['description'],
+          "duedate": todoMap['duedate'],
+          "heading": todoMap['heading'],
+          "categoryid": todoMap['categoryid'],
+          "userid": userId,
+          "createdfor": todoMap['createdfor'],
+          "hashcode": hashCode
+        };
+        AddToDoModel addToDoModel = await _toDoRepository.addToDo(addToDoMap);
+        if (addToDoModel.status == 200) {
+          todoMap['todoId'] = addToDoModel.message;
+        }
+        emit(ToDoAdded(todoMap: todoMap, addToDoModel: addToDoModel));
       }
-      emit(ToDoAdded(todoMap: todoMap, addToDoModel: addToDoModel));
     } catch (e) {
       emit(ToDoNotAdded(todoNotAdded: e.toString()));
     }
@@ -175,5 +196,23 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
     } catch (e) {
       emit(ToDoNotSubmitted(todoNotSubmitted: e.toString()));
     }
+  }
+
+  FutureOr _fetchMaster(ToDoFetchMaster event, Emitter<ToDoStates> emit) async {
+    emit(ToDoFetchingMaster());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      fetchToDoMasterModel =
+          await _toDoRepository.fetchMaster(hashCode!, userId!);
+      emit(ToDoMasterFetched(fetchToDoMasterModel: fetchToDoMasterModel));
+      add(ChangeToDoCategory(categoryId: ''));
+    } catch (e) {
+      emit(ToDoMasterNotFetched(masterNotFetched: e.toString()));
+    }
+  }
+
+  _categoryChanged(ChangeToDoCategory event, Emitter<ToDoStates> emit) {
+    emit(ToDoCategoryChanged(categoryId: event.categoryId));
   }
 }

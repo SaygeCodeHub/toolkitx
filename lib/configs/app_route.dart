@@ -152,7 +152,7 @@ class AppRoutes {
       case LogbookListScreen.routeName:
         return _createRoute(const LogbookListScreen());
       case TodoAssignedByMeAndToMeListScreen.routeName:
-        return _createRoute(const TodoAssignedByMeAndToMeListScreen());
+        return _createRoute(TodoAssignedByMeAndToMeListScreen());
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
         return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
             todoMap: settings.arguments as Map));

@@ -1,67 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/todo/todo_bloc.dart';
+import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/data/enums/todo_category_enum.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../../../blocs/todo/todo_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/todo/fetch_todo_master_model.dart';
 
-class ToDoCategoryExpansionTile extends StatefulWidget {
+class ToDoCategoryExpansionTile extends StatelessWidget {
   final Map todoMap;
+  final List<ToDoMasterDatum> data;
 
-  const ToDoCategoryExpansionTile({Key? key, required this.todoMap})
+  const ToDoCategoryExpansionTile(
+      {Key? key, required this.todoMap, required this.data})
       : super(key: key);
-  static String categoryName = '';
 
-  @override
-  State<ToDoCategoryExpansionTile> createState() =>
-      _ToDoCategoryExpansionTileState();
-}
-
-class _ToDoCategoryExpansionTileState extends State<ToDoCategoryExpansionTile> {
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-            tilePadding: const EdgeInsets.only(
-                left: kExpansionTileMargin, right: kExpansionTileMargin),
-            collapsedBackgroundColor: AppColor.white,
-            maintainState: true,
-            iconColor: AppColor.deepBlue,
-            textColor: AppColor.black,
-            key: GlobalKey(),
-            title: Text(
-                ToDoCategoryExpansionTile.categoryName == ''
-                    ? 'Select'
-                    : ToDoCategoryExpansionTile.categoryName,
-                style: Theme.of(context).textTheme.xSmall),
-            children: [
-              ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: ToDoCategoryEnum.values.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RadioListTile(
-                        contentPadding:
-                            const EdgeInsets.only(left: xxxTinierSpacing),
-                        activeColor: AppColor.deepBlue,
-                        title: Text(
-                            ToDoCategoryEnum.values.elementAt(index).status,
-                            style: Theme.of(context).textTheme.xSmall),
-                        controlAffinity: ListTileControlAffinity.trailing,
-                        value: ToDoCategoryEnum.values.elementAt(index).status,
-                        groupValue: ToDoCategoryExpansionTile.categoryName,
-                        onChanged: (value) {
-                          setState(() {
-                            value =
-                                ToDoCategoryEnum.values.elementAt(index).status;
-                            ToDoCategoryExpansionTile.categoryName = value!;
-                            widget.todoMap['categoryid'] =
-                                ToDoCategoryEnum.values.elementAt(index).value;
-                          });
-                        });
-                  })
-            ]));
+    String categoryName = '';
+    return BlocBuilder<TodoBloc, ToDoStates>(
+        buildWhen: (previousState, currentState) =>
+            currentState is ToDoCategoryChanged,
+        builder: (context, state) {
+          if (state is ToDoCategoryChanged) {
+            todoMap['categoryid'] = state.categoryId.toString();
+            return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                    tilePadding: const EdgeInsets.only(
+                        left: kExpansionTileMargin,
+                        right: kExpansionTileMargin),
+                    collapsedBackgroundColor: AppColor.white,
+                    maintainState: true,
+                    iconColor: AppColor.deepBlue,
+                    textColor: AppColor.black,
+                    key: GlobalKey(),
+                    title: Text(
+                        categoryName == ''
+                            ? StringConstants.kSelect
+                            : categoryName,
+                        style: Theme.of(context).textTheme.xSmall),
+                    children: [
+                      ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RadioListTile(
+                                contentPadding: const EdgeInsets.only(
+                                    left: xxxTinierSpacing),
+                                activeColor: AppColor.deepBlue,
+                                title: Text(data[index].name,
+                                    style: Theme.of(context).textTheme.xSmall),
+                                controlAffinity:
+                                    ListTileControlAffinity.trailing,
+                                value: data[index].id.toString(),
+                                groupValue: state.categoryId,
+                                onChanged: (value) {
+                                  value = data[index].id.toString();
+                                  categoryName = data[index].name;
+                                  context.read<TodoBloc>().add(
+                                      ChangeToDoCategory(categoryId: value));
+                                });
+                          })
+                    ]));
+          } else {
+            return const SizedBox();
+          }
+        });
   }
 }

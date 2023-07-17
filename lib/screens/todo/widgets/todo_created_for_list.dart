@@ -6,18 +6,19 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/todo/fetch_todo_master_model.dart';
 import '../../../widgets/generic_app_bar.dart';
 import '../../../widgets/primary_button.dart';
 
 typedef CreatedForListCallBack = Function(List id);
 
 class ToDoCreatedForList extends StatefulWidget {
-  final List createdForList;
+  final List<ToDoMasterDatum> todoMasterDatum;
   final CreatedForListCallBack onCreatedForChanged;
 
   const ToDoCreatedForList(
       {Key? key,
-      required this.createdForList,
+      required this.todoMasterDatum,
       required this.onCreatedForChanged})
       : super(key: key);
 
@@ -60,25 +61,25 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
               top: xxTinierSpacing),
           child: SearchableList(
               autoFocusOnSearch: false,
-              initialList: widget.createdForList,
-              builder: (createdForList) {
+              initialList: widget.todoMasterDatum,
+              builder: (ToDoMasterDatum todoMasterDatum) {
                 return CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     activeColor: AppColor.deepBlue,
                     controlAffinity: ListTileControlAffinity.trailing,
-                    title: Text(createdForList['name']),
+                    title: Text(todoMasterDatum.name),
                     value:
-                        selectedCreatedForIdList.contains(createdForList['id']),
+                        selectedCreatedForIdList.contains(todoMasterDatum.id),
                     onChanged: (isChecked) {
                       setState(() {
-                        checkBoxChange(isChecked!, createdForList['id'],
-                            createdForList['name']);
+                        checkBoxChange(isChecked!, todoMasterDatum.id,
+                            todoMasterDatum.name);
                       });
                     });
               },
               emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
-              filter: (value) => widget.createdForList
-                  .where((element) => element['name']
+              filter: (value) => widget.todoMasterDatum
+                  .where((element) => element.name
                       .toLowerCase()
                       .contains(value.toLowerCase().trim()))
                   .toList(),
