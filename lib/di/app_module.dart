@@ -5,13 +5,14 @@ import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
-
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
+import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
+import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
 import '../repositories/permit/permit_repository_impl.dart';
 import '../data/cache/customer_cache.dart';
@@ -54,4 +55,6 @@ configurableDependencies() {
       () => IncidentRepositoryImpl());
   getIt.registerLazySingleton<LogbookRepository>(() => LogbookRepositoryImpl());
   getIt.registerLazySingleton<ToDoRepository>(() => ToDoRepositoryImpl());
+  getIt.registerLazySingleton<LeavesAndHolidaysRepository>(
+      () => LeavesAndHolidaysRepositoryImpl());
 }
