@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/todo/fetch_assign_todo_by_me_list_model.dart
 import 'package:toolkit/data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_details_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_details_model.dart';
+import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 
 import '../../utils/constants/api_constants.dart';
@@ -49,5 +50,12 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}todo/deletedocument", todoDeleteDocumentMap);
     return DeleteToDoDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<ToDoMarkAsDoneModel> toDoMarkAsDone(Map todoMarkAsDoneMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/markasdone", todoMarkAsDoneMap);
+    return ToDoMarkAsDoneModel.fromJson(response);
   }
 }

@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -143,6 +144,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => ReportNewIncidentBloc()),
           BlocProvider(lazy: false, create: (context) => InjuryDetailsBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => LeavesAndHolidaysBloc()),
           BlocProvider(lazy: true, create: (context) => TodoBloc()),
           BlocProvider(
               lazy: false,

@@ -31,3 +31,9 @@ class DeleteToDoDocument extends ToDoEvent {
 
   DeleteToDoDocument({required this.todoMap});
 }
+
+class ToDoMarkAsDone extends ToDoEvent {
+  final Map todoMap;
+
+  ToDoMarkAsDone({required this.todoMap});
+}

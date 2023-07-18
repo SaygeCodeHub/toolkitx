@@ -41,7 +41,7 @@ class StatusTag extends StatelessWidget {
                                       style: const TextStyle(
                                           color: AppColor.white),
                                       textAlign: TextAlign.center)))))
-                  : const SizedBox();
+                  : const SizedBox.shrink();
             }));
   }
 }

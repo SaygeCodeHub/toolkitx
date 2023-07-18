@@ -3,6 +3,7 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/todo_mark_as_done_model.dart';
 
 abstract class ToDoStates {}
 
@@ -43,3 +44,13 @@ class ToDoDocumentDeleted extends ToDoStates {
 }
 
 class CannotDeleteToDoDocument extends ToDoStates {}
+
+class ToDoMarkingAsDone extends ToDoStates {}
+
+class ToDoMarkedAsDone extends ToDoStates {
+  final ToDoMarkAsDoneModel toDoMarkAsDoneModel;
+
+  ToDoMarkedAsDone({required this.toDoMarkAsDoneModel});
+}
+
+class ToDoCannotMarkAsDone extends ToDoStates {}

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
+import '../../../blocs/todo/todo_bloc.dart';
+import '../../../blocs/todo/todo_event.dart';
+import '../../../blocs/todo/todo_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/status_tag_model.dart';
 import '../../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/android_pop_up.dart';
 import '../../../widgets/custom_card.dart';
-import '../../../widgets/status_tag.dart';
 import '../todo_details_and_document_details_screen.dart';
+import 'todo_assigned_to_me_subtitle.dart';
 
 class TodoAssignedToMeBody extends StatelessWidget {
   final List<AssignedToMeListDatum> assignToMeListDatum;
@@ -22,10 +28,15 @@ class TodoAssignedToMeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (assignToMeListDatum.isEmpty)
-        ? Center(
-            child: Text(StringConstants.kNoToDoAssignedTo,
-                style: Theme.of(context).textTheme.small.copyWith(
-                    fontWeight: FontWeight.w700, color: AppColor.mediumBlack)))
+        ? Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
+            child: Center(
+                child: Text(StringConstants.kNoToDoAssignedTo,
+                    style: Theme.of(context).textTheme.small.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.mediumBlack))),
+          )
         : Expanded(
             child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
@@ -47,52 +58,68 @@ class TodoAssignedToMeBody extends StatelessWidget {
                                         .routeName,
                                     arguments: todoMap);
                               },
-                              title: Text(assignToMeListDatum[index].todoname,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .small
-                                      .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColor.black)),
-                              subtitle: Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: tinierSpacing),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            assignToMeListDatum[index]
-                                                .description,
-                                            maxLines: 3),
-                                        const SizedBox(height: tinierSpacing),
-                                        Text(
-                                            assignToMeListDatum[index].category,
-                                            maxLines: 3),
-                                        const SizedBox(height: tinierSpacing),
-                                        Row(children: [
-                                          Image.asset(
-                                              'assets/icons/calendar.png',
-                                              height: kImageHeight,
-                                              width: kImageWidth),
-                                          const SizedBox(width: tiniestSpacing),
-                                          Text(assignToMeListDatum[index]
-                                              .duedate)
-                                        ]),
-                                        const SizedBox(height: tinierSpacing),
-                                        StatusTag(tags: [
-                                          StatusTagModel(
-                                              title: (assignToMeListDatum[index]
-                                                          .istododue ==
-                                                      1)
-                                                  ? DatabaseUtil.getText(
-                                                      'Overdue')
-                                                  : '',
-                                              bgColor: AppColor.errorRed),
-                                        ])
-                                      ])))));
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(assignToMeListDatum[index].todoname,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .small
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColor.black)),
+                                  BlocListener<TodoBloc, ToDoStates>(
+                                    listener: (context, state) {
+                                      if (state is ToDoMarkingAsDone) {
+                                        ProgressBar.show(context);
+                                      } else if (state is ToDoMarkedAsDone) {
+                                        context.read<TodoBloc>().add(
+                                            FetchTodoAssignedToMeAndByMeListEvent());
+                                      } else if (state
+                                          is ToDoCannotMarkAsDone) {
+                                        showCustomSnackBar(
+                                            context,
+                                            DatabaseUtil.getText(
+                                                'some_unknown_error_please_try_again'),
+                                            '');
+                                      }
+                                    },
+                                    child: IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(),
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AndroidPopUp(
+                                                    titleValue:
+                                                        DatabaseUtil.getText(
+                                                            'DeleteRecord'),
+                                                    onPressed: () {
+                                                      todoMap['todoId'] =
+                                                          assignToMeListDatum[
+                                                                  index]
+                                                              .id;
+                                                      context
+                                                          .read<TodoBloc>()
+                                                          .add(ToDoMarkAsDone(
+                                                              todoMap:
+                                                                  todoMap));
+                                                      Navigator.pop(context);
+                                                    },
+                                                    contentValue: '');
+                                              });
+                                        },
+                                        icon: const Icon(Icons.check_circle,
+                                            color: AppColor.green,
+                                            size: kIconSize)),
+                                  )
+                                ],
+                              ),
+                              subtitle: ToDoAssignedToMeSubtitle(
+                                  assignToMeListDatum:
+                                      assignToMeListDatum[index]))));
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(height: tinierSpacing);
