@@ -69,6 +69,7 @@ abstract class StringConstants {
   static const String kDocumentUploadValidation =
       'Please add atleast one photo!'; //
   static const String kApplyFilter = 'Apply Filter'; //
+  static const String kLeaveDetails = 'Leave Details'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
