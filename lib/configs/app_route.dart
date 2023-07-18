@@ -22,6 +22,9 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
+import '../screens/leavesAndHolidays/leaves_details_screen.dart';
+import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -157,6 +160,12 @@ class AppRoutes {
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
         return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
             todoMap: settings.arguments as Map));
+      case LeavesAndHolidaysScreen.routeName:
+        return _createRoute(const LeavesAndHolidaysScreen());
+      case LeavesSummaryScreen.routeName:
+        return _createRoute(const LeavesSummaryScreen());
+      case LeavesDetailsScreen.routeName:
+        return _createRoute(const LeavesDetailsScreen());
       case ToDoHistoryListScreen.routeName:
         return _createRoute(const ToDoHistoryListScreen());
       case ToDoSettingsScreen.routeName:

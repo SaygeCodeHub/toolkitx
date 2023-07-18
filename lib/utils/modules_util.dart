@@ -42,6 +42,11 @@ abstract class ModulesUtil {
     ModulesModel(
         moduleName: 'TimeVacation',
         moduleImage: '${kBaseImagePath}holiday.png',
+        key: 'ess',
+        notificationKey: ''),
+    ModulesModel(
+        moduleName: 'TimeVacation',
+        moduleImage: '${kBaseImagePath}holiday.png',
         key: 'wf_timesheet',
         notificationKey: ''),
     ModulesModel(
@@ -128,6 +133,11 @@ abstract class ModulesUtil {
         moduleName: 'Trips',
         moduleImage: '${kBaseImagePath}trips.png',
         key: 'wf_trips',
+        notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Signout',
+        moduleImage: '${kBaseImagePath}trips.png',
+        key: 'tracking',
         notificationKey: ''),
   ];
 }
