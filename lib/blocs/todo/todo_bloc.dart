@@ -23,7 +23,6 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
   int initialIndex = 0;
   Map todoMap = {};
   FetchToDoMasterModel fetchToDoMasterModel = FetchToDoMasterModel();
-
   ToDoStates get initialState => TodoInitial();
 
   TodoBloc() : super(TodoInitial()) {

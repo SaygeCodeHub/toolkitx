@@ -10,7 +10,6 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/todo_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
-import 'widgets/submit_todo_bottom_app_bar.dart';
 import 'widgets/todo_details_tab.dart';
 import 'widgets/todo_document_details_tab.dart';
 
@@ -27,7 +26,6 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
         selectedIndex: 0, todoId: todoMap['todoId']));
     return Scaffold(
       appBar: const GenericAppBar(),
-      bottomNavigationBar: SubmitToDoBottomAppBar(todoMap: todoMap),
       body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,

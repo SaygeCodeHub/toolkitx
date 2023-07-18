@@ -21,7 +21,6 @@ import 'widgets/todo_created_for_list_tile.dart';
 class AddToDoScreen extends StatelessWidget {
   static const routeName = 'AddToDoScreen';
   final Map todoMap;
-  static bool isFromAdd = false;
 
   const AddToDoScreen({Key? key, required this.todoMap}) : super(key: key);
 
@@ -63,7 +62,6 @@ class AddToDoScreen extends StatelessWidget {
               child: Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        todoMap['isFromAdd'] = isFromAdd;
                         context.read<TodoBloc>().add(AddToDo(todoMap: todoMap));
                       },
                       textValue: DatabaseUtil.getText('nextButtonText'))),

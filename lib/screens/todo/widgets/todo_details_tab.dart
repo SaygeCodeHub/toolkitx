@@ -4,6 +4,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/todo/fetch_todo_details_model.dart';
 import '../../../utils/database_utils.dart';
+import 'submit_todo_button.dart';
 
 class ToDoDetailsTab extends StatelessWidget {
   final int initialIndex;
@@ -24,7 +25,7 @@ class ToDoDetailsTab extends StatelessWidget {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const SizedBox(height: tinySpacing),
           Visibility(
-              visible: todoMap['isFromAdd'] == true,
+              visible: todoDetails.isdraft == '1',
               child: Text(
                 DatabaseUtil.getText('DraftMessageToDo'),
                 style: Theme.of(context)
@@ -32,7 +33,7 @@ class ToDoDetailsTab extends StatelessWidget {
                     .xSmall
                     .copyWith(color: AppColor.deepBlue, fontSize: 15),
               )),
-          (todoMap['isFromAdd'] == true)
+          (todoDetails.isdraft == '1')
               ? const SizedBox(height: tinySpacing)
               : const SizedBox.shrink(),
           Text(DatabaseUtil.getText('Heading'),
@@ -59,6 +60,8 @@ class ToDoDetailsTab extends StatelessWidget {
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: xxTinierSpacing),
           Text(todoDetails.duedate, style: Theme.of(context).textTheme.small),
+          const SizedBox(height: smallerSpacing),
+          SubmitToDoButton(todoMap: todoMap, todoDetails: todoDetails)
         ]));
   }
 }

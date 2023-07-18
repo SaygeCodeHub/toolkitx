@@ -27,7 +27,6 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              AddToDoScreen.isFromAdd = true;
               Navigator.pushNamed(context, AddToDoScreen.routeName,
                   arguments: todoMap);
             },
