@@ -9,7 +9,8 @@ import 'leaves_and_holidays_repository.dart';
 
 class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
   @override
-  Future<FetchLeavesSummaryModel> fetchLeavesSummary(String userId, String hashCode) async {
+  Future<FetchLeavesSummaryModel> fetchLeavesSummary(
+      String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}timesheet/GetWorkforceLeaveDetails?userid=$userId&hashcode=$hashCode");
     return FetchLeavesSummaryModel.fromJson(response);

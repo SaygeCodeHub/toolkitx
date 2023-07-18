@@ -46,67 +46,67 @@ class _LeavesDetailsScreenState extends State<LeavesDetailsScreen> {
             },
             child: const Icon(Icons.add)),
         body: BlocConsumer<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
-            buildWhen: (previousState, currentState) =>
-                ((currentState is LeavesDetailsFetched && noMoreData != true) ||
-                    (currentState is FetchingLeavesDetails && page == 1)),
-            listener: (context, state) {
-              if (state is LeavesDetailsFetched) {
-                if (state.fetchLeavesDetailsModel.status == 204 &&
-                    leavesDetailsData.isNotEmpty) {
-                  noMoreData = true;
-                  showCustomSnackBar(
-                      context, StringConstants.kAllDataLoaded, '');
-                }
+          buildWhen: (previousState, currentState) =>
+              ((currentState is LeavesDetailsFetched && noMoreData != true) ||
+                  (currentState is FetchingLeavesDetails && page == 1)),
+          listener: (context, state) {
+            if (state is LeavesDetailsFetched) {
+              if (state.fetchLeavesDetailsModel.status == 204 &&
+                  leavesDetailsData.isNotEmpty) {
+                noMoreData = true;
+                showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
               }
-            },
-            builder: (context, state) {
-              if (state is LeavesDetailsFetched) {
-                if (state.fetchLeavesDetailsModel.data.isNotEmpty) {
-                  if (page == 1) {
-                    leavesDetailsData = state.fetchLeavesDetailsModel.data;
-                  } else {
-                    for (var item in state.fetchLeavesDetailsModel.data) {
-                      leavesDetailsData.add(item);
-                    }
-                  }
-                  waitForData = false;
-                  return Padding(
-                      padding: const EdgeInsets.only(
-                          left: leftRightMargin,
-                          right: leftRightMargin,
-                          top: xxTinierSpacing),
-                      child: ListView.separated(
-                          controller: controller
-                            ..addListener(() {
-                              if (noMoreData != true && waitForData == false) {
-                                if (controller.position.extentAfter < 500) {
-                                  page++;
-                                  context
-                                      .read<LeavesAndHolidaysBloc>()
-                                      .add(FetchLeavesDetails(page: page));
-                                  waitForData = true;
-                                }
-                              }
-                            }),
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: leavesDetailsData.length,
-                          itemBuilder: (context, index) {
-                            return LeavesDetailsCard(
-                                detailsData: leavesDetailsData[index]);
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: tinierSpacing);
-                          }));
+            }
+          },
+          builder: (context, state) {
+            if (state is LeavesDetailsFetched) {
+              if (state.fetchLeavesDetailsModel.data.isNotEmpty) {
+                if (page == 1) {
+                  leavesDetailsData = state.fetchLeavesDetailsModel.data;
                 } else {
-                  return Center(
-                      child: Text(DatabaseUtil.getText('no_records_found')));
+                  for (var item in state.fetchLeavesDetailsModel.data) {
+                    leavesDetailsData.add(item);
+                  }
                 }
-              } else if (state is FetchingLeavesDetails) {
-                return const Center(child: CircularProgressIndicator());
+                waitForData = false;
+                return Padding(
+                    padding: const EdgeInsets.only(
+                        left: leftRightMargin,
+                        right: leftRightMargin,
+                        top: xxTinierSpacing),
+                    child: ListView.separated(
+                        controller: controller
+                          ..addListener(() {
+                            if (noMoreData != true && waitForData == false) {
+                              if (controller.position.extentAfter < 500) {
+                                page++;
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .add(FetchLeavesDetails(page: page));
+                                waitForData = true;
+                              }
+                            }
+                          }),
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: leavesDetailsData.length,
+                        itemBuilder: (context, index) {
+                          return LeavesDetailsCard(
+                              detailsData: leavesDetailsData[index]);
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: tinierSpacing);
+                        }));
               } else {
-                return const SizedBox();
+                return Center(
+                    child: Text(DatabaseUtil.getText('no_records_found')));
               }
-            }));
+            } else if (state is FetchingLeavesDetails) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return const SizedBox();
+            }
+          },
+        ));
   }
 }
