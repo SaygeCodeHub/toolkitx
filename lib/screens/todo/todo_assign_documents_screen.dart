@@ -83,7 +83,7 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                                             todoMasterDatum: todoMasterDatum,
                                             todoMap: todoMap,
                                             addFiltersDataMap:
-                                            addFiltersDataMap)));
+                                                addFiltersDataMap)));
                               },
                               secondaryOnPress: () {},
                               clearOnPress: () {
@@ -106,10 +106,10 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                         if (state is FetchingDocumentForToDo) {
                           return Center(
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height / 3.5),
-                                child: const CircularProgressIndicator(),
-                              ));
+                            padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height / 3.5),
+                            child: const CircularProgressIndicator(),
+                          ));
                         } else if (state is DocumentForToDoFetched) {
                           addFiltersDataMap.addAll(state.filterMap);
                           todoMap['documents'] = state.selectDocumentList
@@ -142,18 +142,18 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                                               .textTheme
                                               .xSmall
                                               .copyWith(
-                                              fontWeight: FontWeight.w600)),
+                                                  fontWeight: FontWeight.w600)),
                                       subtitle: Text(state
                                           .fetchDocumentForToDoModel
                                           .fetchDocumentDatum![index]
                                           .doctypename),
                                       controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                          ListTileControlAffinity.trailing,
                                       onChanged: (isChecked) {
                                         context.read<ToDoBloc>().add(
                                             SelectDocumentForToDo(
                                                 documentList:
-                                                state.selectDocumentList,
+                                                    state.selectDocumentList,
                                                 selectedDocument: state
                                                     .fetchDocumentForToDoModel
                                                     .fetchDocumentDatum![index]
