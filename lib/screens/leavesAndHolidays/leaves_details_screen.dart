@@ -8,7 +8,7 @@ import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
-import '../../widgets/generic_no_records_text.dart';
+import 'apply_for_leave_screen.dart';
 import 'widgtes/leaves_details_card.dart';
 
 class LeavesDetailsScreen extends StatefulWidget {
@@ -40,6 +40,11 @@ class _LeavesDetailsScreenState extends State<LeavesDetailsScreen> {
     context.read<LeavesAndHolidaysBloc>().add(FetchLeavesDetails(page: 1));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kLeaveDetails),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, ApplyForLeaveScreen.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: BlocConsumer<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
             buildWhen: (previousState, currentState) =>
                 ((currentState is LeavesDetailsFetched && noMoreData != true) ||
@@ -94,8 +99,8 @@ class _LeavesDetailsScreenState extends State<LeavesDetailsScreen> {
                             return const SizedBox(height: tinierSpacing);
                           }));
                 } else {
-                  return NoRecordsText(
-                      text: DatabaseUtil.getText('no_records_found'));
+                  return Center(
+                      child: Text(DatabaseUtil.getText('no_records_found')));
                 }
               } else if (state is FetchingLeavesDetails) {
                 return const Center(child: CircularProgressIndicator());

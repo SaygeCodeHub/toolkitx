@@ -1,3 +1,5 @@
+import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 
@@ -31,4 +33,45 @@ class LeavesDetailsNotFetched extends LeavesAndHolidaysStates {
   final String detailsNotFetched;
 
   LeavesDetailsNotFetched({required this.detailsNotFetched});
+}
+
+class FetchingLeavesAndHolidaysMaster extends LeavesAndHolidaysStates {}
+
+class LeavesAndHolidaysMasterFetched extends LeavesAndHolidaysStates {
+  final FetchLeavesAndHolidaysMasterModel fetchLeavesAndHolidaysMasterModel;
+
+  LeavesAndHolidaysMasterFetched(
+      {required this.fetchLeavesAndHolidaysMasterModel});
+}
+
+class LeavesAndHolidaysMasterNotFetched extends LeavesAndHolidaysStates {
+  final String masterNotFetched;
+
+  LeavesAndHolidaysMasterNotFetched({required this.masterNotFetched});
+}
+
+class LeaveTypeSelected extends LeavesAndHolidaysStates {
+  final String leaveTypeId;
+
+  LeaveTypeSelected({required this.leaveTypeId});
+}
+
+class ApplyingForLeave extends LeavesAndHolidaysStates {}
+
+class AppliedForLeave extends LeavesAndHolidaysStates {
+  final ApplyForLeaveModel applyForLeaveModel;
+
+  AppliedForLeave({required this.applyForLeaveModel});
+}
+
+class CouldNotApplyForLeave extends LeavesAndHolidaysStates {
+  final String couldNotApplyForLeave;
+
+  CouldNotApplyForLeave({required this.couldNotApplyForLeave});
+}
+
+class ApplyForLeaveManagerConfirmationNeeded extends LeavesAndHolidaysStates {
+  final String confirmationMessage;
+
+  ApplyForLeaveManagerConfirmationNeeded({required this.confirmationMessage});
 }
