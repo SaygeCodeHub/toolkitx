@@ -15,6 +15,7 @@ import '../../data/models/todo/fetch_document_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
+import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
 import 'todo_event.dart';
@@ -44,6 +45,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<ApplyToDoFilter>(_applyFilter);
     on<ClearToDoFilter>(_clearFilter);
     on<ToDoPopUpMenuMarkAsDone>(_popupMenuMarkAsDone);
+    on<SaveToDoDocuments>(_saveDocuments);
   }
 
   _applyFilter(ApplyToDoFilter event, Emitter<ToDoStates> emit) {
@@ -289,6 +291,40 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       }
     } catch (e) {
       emit(PopUpMenuToDoCannotMarkAsDone(cannotMarkAsDone: e.toString()));
+    }
+  }
+
+  FutureOr _saveDocuments(
+      SaveToDoDocuments event, Emitter<ToDoStates> emit) async {
+    emit(SavingToDoDocuments());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      todoMap = event.todoMap;
+      if (todoMap['documents'] == null ||
+          todoMap['documents'].toString().isEmpty) {
+        emit(ToDoDocumentsNotSaved(
+            documentsNotSaved: DatabaseUtil.getText('PleaseSelectDocuments')));
+      } else {
+        Map saveDocumentsMap = {
+          "hashcode": hashCode,
+          "todoid": todoMap['todoid'],
+          "documents": todoMap['documents'],
+          "userid": userId
+        };
+        SaveToDoDocumentsModel saveToDoDocumentsModel =
+            await _toDoRepository.saveToDoDocuments(saveDocumentsMap);
+        if (saveToDoDocumentsModel.status == 200) {
+          emit(ToDoDocumentsSaved(
+              saveToDoDocumentsModel: saveToDoDocumentsModel));
+        } else {
+          emit(ToDoDocumentsNotSaved(
+              documentsNotSaved:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(ToDoDocumentsNotSaved(documentsNotSaved: e.toString()));
     }
   }
 }

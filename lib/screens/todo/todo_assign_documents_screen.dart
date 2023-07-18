@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/custom_icon_button_row.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../blocs/todo/todo_bloc.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
@@ -30,17 +32,35 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    todoMap['documents'] = '';
     context.read<ToDoBloc>().add(FetchDocumentForToDo(
         todoMap: todoMap, isFromPopUpMenu: isFromPopUpMenu));
     addFiltersDataMap.clear();
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('AssignDocuments')),
         bottomNavigationBar: BottomAppBar(
-            child: PrimaryButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                textValue: DatabaseUtil.getText('buttonDone'))),
+            child: BlocListener<ToDoBloc, ToDoStates>(
+          listener: (context, state) {
+            if (state is SavingToDoDocuments) {
+              ProgressBar.show(context);
+            } else if (state is ToDoDocumentsSaved) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              context.read<ToDoBloc>().add(FetchToDoDetailsAndDocumentDetails(
+                  todoId: todoMap['todoId'], selectedIndex: 0));
+            } else if (state is ToDoDocumentsNotSaved) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.documentsNotSaved, '');
+            }
+          },
+          child: PrimaryButton(
+              onPressed: () {
+                context
+                    .read<ToDoBloc>()
+                    .add(SaveToDoDocuments(todoMap: todoMap));
+              },
+              textValue: DatabaseUtil.getText('buttonDone')),
+        )),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
@@ -63,7 +83,7 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                                             todoMasterDatum: todoMasterDatum,
                                             todoMap: todoMap,
                                             addFiltersDataMap:
-                                                addFiltersDataMap)));
+                                            addFiltersDataMap)));
                               },
                               secondaryOnPress: () {},
                               clearOnPress: () {
@@ -80,18 +100,22 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                       }),
                   BlocBuilder<ToDoBloc, ToDoStates>(
                       buildWhen: (previousState, currentState) =>
-                          currentState is FetchingDocumentForToDo ||
+                      currentState is FetchingDocumentForToDo ||
                           currentState is DocumentForToDoFetched,
                       builder: (context, state) {
                         if (state is FetchingDocumentForToDo) {
                           return Center(
                               child: Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height / 3.5),
-                            child: const CircularProgressIndicator(),
-                          ));
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height / 3.5),
+                                child: const CircularProgressIndicator(),
+                              ));
                         } else if (state is DocumentForToDoFetched) {
                           addFiltersDataMap.addAll(state.filterMap);
+                          todoMap['documents'] = state.selectDocumentList
+                              .toString()
+                              .replaceAll("[", "")
+                              .replaceAll("]", "");
                           if (state.fetchDocumentForToDoModel
                               .fetchDocumentDatum!.isNotEmpty) {
                             return ListView.builder(
@@ -118,18 +142,18 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                                               .textTheme
                                               .xSmall
                                               .copyWith(
-                                                  fontWeight: FontWeight.w600)),
+                                              fontWeight: FontWeight.w600)),
                                       subtitle: Text(state
                                           .fetchDocumentForToDoModel
                                           .fetchDocumentDatum![index]
                                           .doctypename),
                                       controlAffinity:
-                                          ListTileControlAffinity.trailing,
+                                      ListTileControlAffinity.trailing,
                                       onChanged: (isChecked) {
                                         context.read<ToDoBloc>().add(
                                             SelectDocumentForToDo(
                                                 documentList:
-                                                    state.selectDocumentList,
+                                                state.selectDocumentList,
                                                 selectedDocument: state
                                                     .fetchDocumentForToDoModel
                                                     .fetchDocumentDatum![index]

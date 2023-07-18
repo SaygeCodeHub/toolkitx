@@ -68,7 +68,7 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                   }
                 },
                 buildWhen: (previousState, currentState) =>
-                currentState is FetchingTodoDetailsAndDocumentDetails ||
+                    currentState is FetchingTodoDetailsAndDocumentDetails ||
                     currentState is TodoDetailsAndDocumentDetailsFetched,
                 builder: (context, state) {
                   if (state is FetchingTodoDetailsAndDocumentDetails) {

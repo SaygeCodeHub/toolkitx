@@ -85,3 +85,9 @@ class ToDoPopUpMenuMarkAsDone extends ToDoEvent {
 
   ToDoPopUpMenuMarkAsDone({required this.todoMap});
 }
+
+class SaveToDoDocuments extends ToDoEvent {
+  final Map todoMap;
+
+  SaveToDoDocuments({required this.todoMap});
+}

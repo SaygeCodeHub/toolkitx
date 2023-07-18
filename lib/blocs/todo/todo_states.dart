@@ -5,6 +5,7 @@ import '../../data/models/todo/fetch_document_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
+import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
 
@@ -119,4 +120,18 @@ class PopUpMenuToDoCannotMarkAsDone extends ToDoStates {
   final String cannotMarkAsDone;
 
   PopUpMenuToDoCannotMarkAsDone({required this.cannotMarkAsDone});
+}
+
+class SavingToDoDocuments extends ToDoStates {}
+
+class ToDoDocumentsSaved extends ToDoStates {
+  final SaveToDoDocumentsModel saveToDoDocumentsModel;
+
+  ToDoDocumentsSaved({required this.saveToDoDocumentsModel});
+}
+
+class ToDoDocumentsNotSaved extends ToDoStates {
+  final String documentsNotSaved;
+
+  ToDoDocumentsNotSaved({required this.documentsNotSaved});
 }

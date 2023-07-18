@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/data/models/todo/todo_upload_document_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 
+import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 
@@ -84,5 +85,12 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}todo/uploaddocument", uploadDocumentMap);
     return ToDoUploadDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveToDoDocumentsModel> saveToDoDocuments(Map saveDocumentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/managedocuments", saveDocumentMap);
+    return SaveToDoDocumentsModel.fromJson(response);
   }
 }
