@@ -44,8 +44,8 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                     isEnabled: true,
                     primaryOnPress: () {},
                     secondaryOnPress: () {
-                      Navigator.pushNamed(
-                          context, ToDoSettingsScreen.routeName);
+                      Navigator.pushNamed(context, ToDoSettingsScreen.routeName,
+                          arguments: todoMap);
                     },
                     clearOnPress: () {
                       Navigator.of(context)

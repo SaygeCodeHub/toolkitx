@@ -3,6 +3,7 @@ import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/fetch_todo_history_list_model.dart';
 
@@ -25,4 +26,6 @@ abstract class ToDoRepository {
 
   Future<FetchToDoHistoryListModel> fetchToDoHistoryList(
       int pageNo, String hashCode, String userId);
+
+  Future<SaveToDoSettingsModel> todoSaveSettings(Map todoSaveSettingsMap);
 }

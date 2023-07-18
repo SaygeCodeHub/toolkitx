@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/todo/delete_todo_document_model.dart';
@@ -12,6 +13,7 @@ import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
 import '../../data/models/todo/fetch_todo_history_list_model.dart';
+import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import 'todo_event.dart';
 
@@ -30,6 +32,9 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<DeleteToDoDocument>(_deleteDocument);
     on<ToDoMarkAsDone>(_markAsDone);
     on<FetchToDoHistoryList>(_fetchHistoryList);
+    on<SelectToDoSendEmailOption>(_selectEmailOption);
+    on<SelectToDoSendNotificationOption>(_selectNotificationOption);
+    on<SaveToDoSettings>(_saveSettings);
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -142,6 +147,52 @@ class TodoBloc extends Bloc<ToDoEvent, ToDoStates> {
           fetchToDoHistoryListModel: fetchToDoHistoryListModel));
     } catch (e) {
       e.toString();
+    }
+  }
+
+  _selectEmailOption(
+      SelectToDoSendEmailOption event, Emitter<ToDoStates> emit) {
+    Map emailOptionsMap = {
+      "1": DatabaseUtil.getText('Yes'),
+      "0": DatabaseUtil.getText('No')
+    };
+    emit(ToDoSendEmailOptionSelected(
+        optionId: event.optionId,
+        emailOptionsMap: emailOptionsMap,
+        optionName: event.optionName));
+  }
+
+  _selectNotificationOption(
+      SelectToDoSendNotificationOption event, Emitter<ToDoStates> emit) {
+    Map notificationOptionsMap = {
+      "1": DatabaseUtil.getText('Yes'),
+      "0": DatabaseUtil.getText('No')
+    };
+
+    emit(ToDoSendNotificationOptionSelected(
+        optionId: event.optionId,
+        notificationOptionsMap: notificationOptionsMap,
+        optionName: event.optionName));
+  }
+
+  FutureOr _saveSettings(
+      SaveToDoSettings event, Emitter<ToDoStates> emit) async {
+    emit(SavingToDoSettings());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      todoMap = event.todoMap;
+      Map saveSettingsMap = {
+        "userid": userId,
+        "hashcode": hashCode,
+        "assigned": todoMap['assigned'],
+        "completed": todoMap['completed']
+      };
+      SaveToDoSettingsModel saveToDoSettingsModel =
+          await _toDoRepository.todoSaveSettings(saveSettingsMap);
+      emit(ToDoSettingsSaved(saveToDoSettingsModel: saveToDoSettingsModel));
+    } catch (e) {
+      emit(ToDoSettingsNotSaved(settingsNotSaved: e.toString()));
     }
   }
 }

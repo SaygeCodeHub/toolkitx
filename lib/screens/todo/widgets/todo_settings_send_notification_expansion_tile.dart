@@ -1,72 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
+import '../../../blocs/todo/todo_bloc.dart';
+import '../../../blocs/todo/todo_event.dart';
+import '../../../blocs/todo/todo_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 
-class ToDoSettingsSendNotificationExpansionTile extends StatefulWidget {
-  const ToDoSettingsSendNotificationExpansionTile({Key? key}) : super(key: key);
+class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
+  final Map todoMap;
 
-  static List settingsSendNotificationList = ['Yes', 'No'];
-  static String sendNotificationElement = '';
+  const ToDoSettingsSendNotificationExpansionTile(
+      {Key? key, required this.todoMap})
+      : super(key: key);
 
-  @override
-  State<ToDoSettingsSendNotificationExpansionTile> createState() =>
-      _ToDoSettingsSendNotificationExpansionTileState();
-}
-
-class _ToDoSettingsSendNotificationExpansionTileState
-    extends State<ToDoSettingsSendNotificationExpansionTile> {
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-            tilePadding: const EdgeInsets.only(
-                left: kExpansionTileMargin, right: kExpansionTileMargin),
-            collapsedBackgroundColor: AppColor.white,
-            maintainState: true,
-            iconColor: AppColor.deepBlue,
-            textColor: AppColor.black,
-            key: GlobalKey(),
-            title: Text(
-                (ToDoSettingsSendNotificationExpansionTile
-                            .sendNotificationElement ==
-                        '')
-                    ? 'Select'
-                    : ToDoSettingsSendNotificationExpansionTile
-                        .sendNotificationElement,
-                style: Theme.of(context).textTheme.xSmall),
-            children: [
-              ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: ToDoSettingsSendNotificationExpansionTile
-                      .settingsSendNotificationList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RadioListTile(
-                        contentPadding:
-                            const EdgeInsets.only(left: xxxTinierSpacing),
-                        activeColor: AppColor.deepBlue,
-                        title: Text(
-                            ToDoSettingsSendNotificationExpansionTile
-                                .settingsSendNotificationList[index],
-                            style: Theme.of(context).textTheme.xSmall),
-                        controlAffinity: ListTileControlAffinity.trailing,
-                        value: ToDoSettingsSendNotificationExpansionTile
-                            .settingsSendNotificationList[index],
-                        groupValue: ToDoSettingsSendNotificationExpansionTile
-                            .sendNotificationElement,
-                        onChanged: (value) {
-                          setState(() {
-                            value = ToDoSettingsSendNotificationExpansionTile
-                                .settingsSendNotificationList[index];
-                            ToDoSettingsSendNotificationExpansionTile
-                                .sendNotificationElement = value;
-                          });
-                        });
-                  })
-            ]));
+    context.read<TodoBloc>().add(SelectToDoSendNotificationOption(
+        optionId: '', optionName: DatabaseUtil.getText('Yes')));
+    return BlocBuilder<TodoBloc, ToDoStates>(
+        buildWhen: (previousState, currentState) =>
+            currentState is ToDoSendNotificationOptionSelected,
+        builder: (context, state) {
+          if (state is ToDoSendNotificationOptionSelected) {
+            todoMap['completed'] = state.optionId;
+            return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                    tilePadding: const EdgeInsets.only(
+                        left: kExpansionTileMargin,
+                        right: kExpansionTileMargin),
+                    collapsedBackgroundColor: AppColor.white,
+                    maintainState: true,
+                    iconColor: AppColor.deepBlue,
+                    textColor: AppColor.black,
+                    key: GlobalKey(),
+                    title: Text(state.optionName,
+                        style: Theme.of(context).textTheme.xSmall),
+                    children: [
+                      ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.notificationOptionsMap.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return RadioListTile(
+                                contentPadding: const EdgeInsets.only(
+                                    left: xxxTinierSpacing),
+                                activeColor: AppColor.deepBlue,
+                                title: Text(
+                                    state.notificationOptionsMap.values
+                                        .elementAt(index),
+                                    style: Theme.of(context).textTheme.xSmall),
+                                controlAffinity:
+                                    ListTileControlAffinity.trailing,
+                                value: state.notificationOptionsMap.keys
+                                    .elementAt(index),
+                                groupValue: state.optionId,
+                                onChanged: (value) {
+                                  value = state.notificationOptionsMap.keys
+                                      .elementAt(index);
+                                  context.read<TodoBloc>().add(
+                                      SelectToDoSendNotificationOption(
+                                          optionId: value,
+                                          optionName: state
+                                              .notificationOptionsMap.values
+                                              .elementAt(index)));
+                                });
+                          })
+                    ]));
+          } else {
+            return const SizedBox.shrink();
+          }
+        });
   }
 }

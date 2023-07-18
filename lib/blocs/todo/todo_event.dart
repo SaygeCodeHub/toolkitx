@@ -39,3 +39,24 @@ class ToDoMarkAsDone extends ToDoEvent {
 }
 
 class FetchToDoHistoryList extends ToDoEvent {}
+
+class SelectToDoSendEmailOption extends ToDoEvent {
+  final String optionId;
+  final String optionName;
+
+  SelectToDoSendEmailOption({required this.optionName, required this.optionId});
+}
+
+class SelectToDoSendNotificationOption extends ToDoEvent {
+  final String optionId;
+  final String optionName;
+
+  SelectToDoSendNotificationOption(
+      {required this.optionName, required this.optionId});
+}
+
+class SaveToDoSettings extends ToDoEvent {
+  final Map todoMap;
+
+  SaveToDoSettings({required this.todoMap});
+}

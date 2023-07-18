@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/todo/fetch_assign_todo_by_me_list_model.dart
 import 'package:toolkit/data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_details_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_details_model.dart';
+import 'package:toolkit/data/models/todo/save_todo_settings_model.dart';
 import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_history_list_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
@@ -66,5 +67,13 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/gethistory?pageno=1&hashcode=$hashCode&userid=$userId");
     return FetchToDoHistoryListModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveToDoSettingsModel> todoSaveSettings(
+      Map todoSaveSettingsMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/SaveSettings", todoSaveSettingsMap);
+    return SaveToDoSettingsModel.fromJson(response);
   }
 }
