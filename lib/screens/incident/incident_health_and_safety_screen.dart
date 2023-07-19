@@ -76,13 +76,27 @@ class IncidentHealthAndSafetyScreen extends StatelessWidget {
             }
           }),
       bottomNavigationBar: BottomAppBar(
-          child: PrimaryButton(
-              onPressed: () {
-                addAndEditIncidentMap['customfields'] = customInfoFieldList;
-                Navigator.pushNamed(context, AddInjuredPersonScreen.routeName,
-                    arguments: addAndEditIncidentMap);
-              },
-              textValue: DatabaseUtil.getText('nextButtonText'))),
+          child: Row(
+        children: [
+          Expanded(
+              child: PrimaryButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            textValue: DatabaseUtil.getText('buttonBack'),
+          )),
+          const SizedBox(width: xxTinierSpacing),
+          Expanded(
+            child: PrimaryButton(
+                onPressed: () {
+                  addAndEditIncidentMap['customfields'] = customInfoFieldList;
+                  Navigator.pushNamed(context, AddInjuredPersonScreen.routeName,
+                      arguments: addAndEditIncidentMap);
+                },
+                textValue: DatabaseUtil.getText('nextButtonText')),
+          ),
+        ],
+      )),
     );
   }
 }

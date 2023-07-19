@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -16,6 +15,7 @@ class EditIncidentDetailsBloc
   final IncidentRepository _incidentRepository = getIt<IncidentRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map editIncidentDetailsMap = {};
+  String incidentId = '';
 
   EditIncidentDetailsStates get initialState => EditIncidentDetailsInitial();
 
@@ -63,11 +63,8 @@ class EditIncidentDetailsBloc
     try {
       editIncidentDetailsMap = event.editIncidentDetailsMap;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
       Map saveIncidentPhotosMap = {
-        "userid": userId,
-        "incidentid": editIncidentDetailsMap['incidentid'],
-        "commentid": "",
+        "incidentid": editIncidentDetailsMap['incidentId'],
         "filenames": editIncidentDetailsMap['filenames'],
         "hashcode": hashCode
       };

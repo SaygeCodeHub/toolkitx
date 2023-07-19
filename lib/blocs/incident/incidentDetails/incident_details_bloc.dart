@@ -4,7 +4,6 @@ import '../../../../data/cache/cache_keys.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/models/incident/fetch_permit_to_link_model.dart';
-import '../../../data/enums/user_type_emun.dart';
 import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/incident/incident_details_model.dart';
 import '../../../data/models/incident/saved_linked_permit_model.dart';
@@ -45,12 +44,6 @@ class IncidentDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
-      String? userType = await _customerCache.getUserType(CacheKeys.userType);
-      bool userTypeName = UserType.values
-              .elementAt(UserType.values
-                  .indexWhere((element) => element.value == userType))
-              .type ==
-          'systemuser';
       incidentTabIndex = event.initialIndex;
       incidentId = event.incidentId;
       incidentDetailsModel = await _incidentRepository.fetchIncidentDetails(
@@ -94,7 +87,8 @@ class IncidentDetailsBloc
           "eventdatetime": incidentDetailsModel.data!.eventdatetime,
           "optionIds": customFieldsOptionIds,
           "companyid": incidentDetailsModel.data!.companyid,
-          "files": incidentDetailsModel.data!.files
+          "files": incidentDetailsModel.data!.files,
+          "incidentId": incidentDetailsModel.data!.id
         };
         if (incidentDetailsModel.data!.canEdit == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));

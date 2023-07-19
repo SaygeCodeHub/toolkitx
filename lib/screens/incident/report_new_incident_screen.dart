@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
-import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
-import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/incident/incident_location_screen.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/incident_contractor_list_tile.dart';
 import 'package:toolkit/screens/incident/widgets/incident_report_anonymously_expansion_tile.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
-import '../../widgets/primary_button.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'category_screen.dart';
+import 'widgets/report_new_incident_bottom_bar.dart';
 
 class ReportNewIncidentScreen extends StatelessWidget {
   static const routeName = 'ReportNewIncidentScreen';
@@ -145,26 +140,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       IncidentContractorListTile(
                           addIncidentMap: addAndEditIncidentMap),
                     ]))),
-        bottomNavigationBar: BottomAppBar(
-          child: BlocListener<ReportNewIncidentBloc, ReportNewIncidentStates>(
-            listener: (context, state) {
-              if (state is ReportNewIncidentDateTimeDescValidated) {
-                showCustomSnackBar(
-                    context, state.dateTimeDescValidationMessage, '');
-              } else if (state
-                  is ReportNewIncidentDateTimeDescValidationComplete) {
-                Navigator.pushNamed(context, IncidentLocationScreen.routeName,
-                    arguments: addAndEditIncidentMap);
-              }
-            },
-            child: PrimaryButton(
-                onPressed: () {
-                  context.read<ReportNewIncidentBloc>().add(
-                      ReportNewIncidentDateTimeDescriptionValidation(
-                          reportNewIncidentMap: addAndEditIncidentMap));
-                },
-                textValue: DatabaseUtil.getText('nextButtonText')),
-          ),
-        ));
+        bottomNavigationBar: ReportNewIncidentBottomBar(
+            addAndEditIncidentMap: addAndEditIncidentMap));
   }
 }

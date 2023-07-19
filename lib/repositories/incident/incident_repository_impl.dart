@@ -76,8 +76,7 @@ class IncidentRepositoryImpl extends IncidentRepository {
   Future<SaveReportNewIncidentPhotosModel> saveIncidentPhotos(
       Map saveIncidentPhotosMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}incident/savecommentsfiles",
-        saveIncidentPhotosMap);
+        "${ApiConstants.baseUrl}incident/savefiles", saveIncidentPhotosMap);
     return SaveReportNewIncidentPhotosModel.fromJson(response);
   }
 

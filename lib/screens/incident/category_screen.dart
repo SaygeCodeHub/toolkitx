@@ -8,12 +8,11 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/report_new_incident_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/error_section.dart';
-
-import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
+import 'widgets/incident_category_body.dart';
 
 class CategoryScreen extends StatelessWidget {
   static const routeName = 'CategoryScreen';
@@ -58,96 +57,32 @@ class CategoryScreen extends StatelessWidget {
                                   .medium
                                   .copyWith(fontWeight: FontWeight.w500)),
                           const SizedBox(height: xxTinySpacing),
-                          Expanded(
-                              child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: state.categoryList.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                              state.categoryList[index]
-                                                  ['title'],
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .medium
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color:
-                                                          AppColor.greyBlack)),
-                                          const SizedBox(
-                                              height: xxTiniestSpacing),
-                                          ListView.builder(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: state
-                                                  .categoryList[index]['items']
-                                                  .length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int itemIndex) {
-                                                return CheckboxListTile(
-                                                    checkColor: AppColor.white,
-                                                    activeColor:
-                                                        AppColor.deepBlue,
-                                                    contentPadding:
-                                                        EdgeInsets.zero,
-                                                    value: state.categorySelectedList.contains(state
-                                                        .categoryList[index]
-                                                            ['items'][itemIndex]
-                                                        .id
-                                                        .toString()
-                                                        .trim()),
-                                                    title: Text(
-                                                        state
-                                                            .categoryList[index]
-                                                                ['items']
-                                                                [itemIndex]
-                                                            .name,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .xSmall
-                                                            .copyWith(
-                                                                fontWeight: FontWeight.w400,
-                                                                color: AppColor.grey)),
-                                                    controlAffinity: ListTileControlAffinity.trailing,
-                                                    onChanged: (value) {
-                                                      context
-                                                          .read<
-                                                              ReportNewIncidentBloc>()
-                                                          .add(
-                                                              SelectIncidentCategory(
-                                                            selectedCategory: state
-                                                                .categoryList[
-                                                                    index]
-                                                                    ['items']
-                                                                    [itemIndex]
-                                                                .id
-                                                                .toString()
-                                                                .trim(),
-                                                            multiSelectList: state
-                                                                .categorySelectedList,
-                                                          ));
-                                                    });
-                                              }),
-                                          const SizedBox(
-                                              height: xxTiniestSpacing)
-                                        ]);
-                                  })),
+                          IncidentCategoryBody(
+                              categoryList: state.categoryList,
+                              categorySelectedList: state.categorySelectedList),
                           const SizedBox(height: xxTiniestSpacing),
-                          PrimaryButton(
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                    context, ReportNewIncidentScreen.routeName,
-                                    arguments: addAndEditIncidentMap);
-                              },
-                              textValue:
-                                  DatabaseUtil.getText('nextButtonText')),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: PrimaryButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                textValue: DatabaseUtil.getText('buttonBack'),
+                              )),
+                              const SizedBox(width: xxTinierSpacing),
+                              Expanded(
+                                child: PrimaryButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context,
+                                          ReportNewIncidentScreen.routeName,
+                                          arguments: addAndEditIncidentMap);
+                                    },
+                                    textValue:
+                                        DatabaseUtil.getText('nextButtonText')),
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: xxTiniestSpacing)
                         ]);
                   } else if (state is IncidentMasterNotFetched) {

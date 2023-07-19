@@ -48,25 +48,39 @@ class IncidentLocationScreen extends StatelessWidget {
                         addIncidentMap: addAndEditIncidentMap),
                   ]))),
       bottomNavigationBar: BottomAppBar(
-        child: BlocListener<ReportNewIncidentBloc, ReportNewIncidentStates>(
-            listener: (context, state) {
-              if (state is ReportNewIncidentSiteLocationValidated) {
-                showCustomSnackBar(
-                    context, state.siteLocationValidationMessage, '');
-              } else if (state
-                  is ReportNewIncidentSiteLocationValidationComplete) {
-                Navigator.pushNamed(
-                    context, IncidentHealthAndSafetyScreen.routeName,
-                    arguments: addAndEditIncidentMap);
-              }
-            },
-            child: PrimaryButton(
-                onPressed: () {
-                  context.read<ReportNewIncidentBloc>().add(
-                      ReportNewIncidentSiteLocationValidation(
-                          reportNewIncidentMap: addAndEditIncidentMap));
+        child: Row(
+          children: [
+            Expanded(
+                child: PrimaryButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              textValue: DatabaseUtil.getText('buttonBack'),
+            )),
+            const SizedBox(width: xxTinierSpacing),
+            BlocListener<ReportNewIncidentBloc, ReportNewIncidentStates>(
+                listener: (context, state) {
+                  if (state is ReportNewIncidentSiteLocationValidated) {
+                    showCustomSnackBar(
+                        context, state.siteLocationValidationMessage, '');
+                  } else if (state
+                      is ReportNewIncidentSiteLocationValidationComplete) {
+                    Navigator.pushNamed(
+                        context, IncidentHealthAndSafetyScreen.routeName,
+                        arguments: addAndEditIncidentMap);
+                  }
                 },
-                textValue: DatabaseUtil.getText('nextButtonText'))),
+                child: Expanded(
+                  child: PrimaryButton(
+                      onPressed: () {
+                        context.read<ReportNewIncidentBloc>().add(
+                            ReportNewIncidentSiteLocationValidation(
+                                reportNewIncidentMap: addAndEditIncidentMap));
+                      },
+                      textValue: DatabaseUtil.getText('nextButtonText')),
+                )),
+          ],
+        ),
       ),
     );
   }

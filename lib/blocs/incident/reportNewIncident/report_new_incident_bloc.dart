@@ -285,11 +285,8 @@ class ReportNewIncidentBloc
     try {
       reportNewIncidentMap = event.reportNewIncidentMap;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
       Map saveIncidentPhotosMap = {
-        "userid": userId,
         "incidentid": incidentId,
-        "commentid": "",
         "filenames": reportNewIncidentMap['filenames'],
         "hashcode": hashCode
       };
