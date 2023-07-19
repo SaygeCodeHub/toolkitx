@@ -22,6 +22,7 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
@@ -164,6 +165,8 @@ class AppRoutes {
         return _createRoute(const LeavesSummaryScreen());
       case LeavesDetailsScreen.routeName:
         return _createRoute(const LeavesDetailsScreen());
+      case ApplyForLeaveScreen.routeName:
+        return _createRoute(ApplyForLeaveScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
