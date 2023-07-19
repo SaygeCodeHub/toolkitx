@@ -9,18 +9,18 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 
-typedef CustomFieldCallBack = Function(int customFieldOptionId);
+typedef CustomFieldCallBack = Function(String customFieldOptionId);
 
 class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
   final CustomFieldCallBack onCustomFieldChanged;
   final int index;
-  final Map addIncidentMap;
+  final Map addAndEditIncidentMap;
 
   const IncidentReportCustomFiledInfoExpansionTile(
       {Key? key,
       required this.onCustomFieldChanged,
       required this.index,
-      required this.addIncidentMap})
+      required this.addAndEditIncidentMap})
       : super(key: key);
 
   @override
@@ -28,16 +28,15 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
     context.read<ReportNewIncidentBloc>().add(
         ReportNewIncidentCustomInfoFiledExpansionChange(
             reportIncidentCustomInfoOptionId:
-                (addIncidentMap['customfields'] == null ||
-                        addIncidentMap['customfields'].isEmpty)
-                    ? ""
-                    : addIncidentMap['customfields'][index]['id'].toString()));
-    String customFieldName = (addIncidentMap['customfields'] == null ||
-            addIncidentMap['customfields'].isEmpty)
+                (addAndEditIncidentMap['optionIds'] == null ||
+                        addAndEditIncidentMap['optionIds'].isEmpty)
+                    ? '[]'
+                    : addAndEditIncidentMap['optionIds'][index]['optionId']
+                        .toString()));
+    String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
+            addAndEditIncidentMap['customfields'].isEmpty)
         ? ""
-        : addIncidentMap['customfields'][index]['value'];
-            reportIncidentCustomInfoOptionId: 0));
-    String customFieldName = '';
+        : addAndEditIncidentMap['customfields'][index]['value'];
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentCustomFieldSelected,
@@ -82,14 +81,17 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                                 value: state
                                     .fetchIncidentMasterModel
                                     .incidentMasterDatum![7][index]
-                                    .queoptions[itemIndex]['optionid'],
-                                groupValue:
-                                    state.reportIncidentCustomInfoOptionId,
+                                    .queoptions[itemIndex]['optionid']
+                                    .toString(),
+                                groupValue: state
+                                    .reportIncidentCustomInfoOptionId
+                                    .toString(),
                                 onChanged: (value) {
                                   value = state
                                       .fetchIncidentMasterModel
                                       .incidentMasterDatum![7][index]
-                                      .queoptions[itemIndex]['optionid'];
+                                      .queoptions[itemIndex]['optionid']
+                                      .toString();
                                   customFieldName = state
                                       .fetchIncidentMasterModel
                                       .incidentMasterDatum![7][index]

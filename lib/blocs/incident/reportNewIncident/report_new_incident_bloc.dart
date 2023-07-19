@@ -59,10 +59,10 @@ class ReportNewIncidentBloc
           IncidentMasterDatum.fromJson(
               {"location": DatabaseUtil.getText('Other')}));
       if (event.categories != "null") {
-        categories = event.categories.toString().split(',');
+        categories = event.categories.toString().replaceAll(" ", "").split(',');
       }
       add(SelectIncidentCategory(
-          multiSelectList: categories, selectedCategory: null));
+          multiSelectList: categories, selectedCategory: ''));
     } catch (e) {
       emit(IncidentMasterNotFetched());
     }
@@ -119,7 +119,7 @@ class ReportNewIncidentBloc
       }
     ];
     List selectedCategoryList = List.from(event.multiSelectList);
-    if (event.selectedCategory != null) {
+    if (event.selectedCategory != '') {
       if (event.multiSelectList.contains(event.selectedCategory) != true) {
         selectedCategoryList.add(event.selectedCategory);
       } else {

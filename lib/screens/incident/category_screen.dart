@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
+import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
+import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
+import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/incident/report_new_incident_screen.dart';
+import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/error_section.dart';
 
-import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
-import '../../blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
-import '../../blocs/incident/reportNewIncident/report_new_incident_events.dart';
-import '../../blocs/incident/reportNewIncident/report_new_incident_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
-import '../../utils/database_utils.dart';
-import '../../widgets/error_section.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
-import 'report_new_incident_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
   static const routeName = 'CategoryScreen';
-  static Map addIncidentMap = {};
+  static bool isFromEdit = false;
+  static Map addAndEditIncidentMap = {};
 
   const CategoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<ReportNewIncidentBloc>().add(FetchIncidentMaster(
-        role: context.read<IncidentLisAndFilterBloc>().roleId, categories: ''));
+        role: context.read<IncidentLisAndFilterBloc>().roleId,
+        categories: (addAndEditIncidentMap['category'] == null)
+            ? ""
+            : addAndEditIncidentMap['category']));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kCategory),
         body: Padding(
@@ -40,7 +44,8 @@ class CategoryScreen extends StatelessWidget {
                   if (state is FetchingIncidentMaster) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is IncidentMasterFetched) {
-                    addIncidentMap['category'] = state.categorySelectedList
+                    addAndEditIncidentMap['category'] = state
+                        .categorySelectedList
                         .toString()
                         .replaceAll("[", "")
                         .replaceAll("]", "");
@@ -92,12 +97,12 @@ class CategoryScreen extends StatelessWidget {
                                                         AppColor.deepBlue,
                                                     contentPadding:
                                                         EdgeInsets.zero,
-                                                    value: state.categorySelectedList
-                                                        .contains(state
-                                                            .categoryList[index]
-                                                                ['items']
-                                                                [itemIndex]
-                                                            .id),
+                                                    value: state.categorySelectedList.contains(state
+                                                        .categoryList[index]
+                                                            ['items'][itemIndex]
+                                                        .id
+                                                        .toString()
+                                                        .trim()),
                                                     title: Text(
                                                         state
                                                             .categoryList[index]
@@ -115,15 +120,19 @@ class CategoryScreen extends StatelessWidget {
                                                       context
                                                           .read<
                                                               ReportNewIncidentBloc>()
-                                                          .add(SelectIncidentCategory(
-                                                              selectedCategory: state
-                                                                  .categoryList[
-                                                                      index]
-                                                                      ['items'][
-                                                                      itemIndex]
-                                                                  .id,
-                                                              multiSelectList: state
-                                                                  .categorySelectedList));
+                                                          .add(
+                                                              SelectIncidentCategory(
+                                                            selectedCategory: state
+                                                                .categoryList[
+                                                                    index]
+                                                                    ['items']
+                                                                    [itemIndex]
+                                                                .id
+                                                                .toString()
+                                                                .trim(),
+                                                            multiSelectList: state
+                                                                .categorySelectedList,
+                                                          ));
                                                     });
                                               }),
                                           const SizedBox(
@@ -135,7 +144,7 @@ class CategoryScreen extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pushNamed(
                                     context, ReportNewIncidentScreen.routeName,
-                                    arguments: addIncidentMap);
+                                    arguments: addAndEditIncidentMap);
                               },
                               textValue:
                                   DatabaseUtil.getText('nextButtonText')),

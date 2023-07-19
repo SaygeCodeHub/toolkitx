@@ -33,12 +33,9 @@ class IncidentDetailsFetched extends IncidentDetailsStates {
   final List incidentPopUpMenu;
   final bool showPopUpMenu;
 
-  IncidentDetailsFetched(
+  const IncidentDetailsFetched(
       {required this.editIncidentDetailsMap,
       required this.clientId,
-      required this.incidentDetailsModel});
-  const IncidentDetailsFetched(
-      {required this.clientId,
       required this.incidentDetailsModel,
       required this.incidentPopUpMenu,
       required this.showPopUpMenu});

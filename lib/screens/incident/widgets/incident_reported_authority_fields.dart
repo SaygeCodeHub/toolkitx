@@ -50,8 +50,8 @@ class IncidentReportedAuthorityFields extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: xxxTinierSpacing),
           Visibility(
-            visible: CategoryScreen.isFromEdit != true &&
-                addIncidentMap['reporteddatetime'] == null,
+            visible: addIncidentMap['reporteddatetime'] == null ||
+                addIncidentMap['reporteddatetime'].toString().isEmpty,
             replacement: TextFieldWidget(
                 value: (addIncidentMap['reporteddatetime'] == null ||
                         addIncidentMap['reporteddatetime'].isEmpty)
@@ -76,8 +76,8 @@ class IncidentReportedAuthorityFields extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: xxxTinierSpacing),
           Visibility(
-            visible: CategoryScreen.isFromEdit != true &&
-                addIncidentMap['reporteddatetime'] == null,
+            visible: addIncidentMap['reporteddatetime'] == null ||
+                addIncidentMap['reporteddatetime'].toString().isEmpty,
             replacement: TextFieldWidget(
                 value: (addIncidentMap['reporteddatetime'] == null ||
                         addIncidentMap['reporteddatetime'].isEmpty)

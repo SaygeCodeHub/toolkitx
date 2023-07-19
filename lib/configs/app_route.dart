@@ -137,17 +137,17 @@ class AppRoutes {
         return _createRoute(IncidentDetailsScreen(
             incidentListDatum: settings.arguments as IncidentListDatum));
       case ReportNewIncidentScreen.routeName:
-        return _createRoute(
-            ReportNewIncidentScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(ReportNewIncidentScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentLocationScreen.routeName:
-        return _createRoute(
-            IncidentLocationScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(IncidentLocationScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentHealthAndSafetyScreen.routeName:
         return _createRoute(IncidentHealthAndSafetyScreen(
-            addIncidentMap: settings.arguments as Map));
+            addAndEditIncidentMap: settings.arguments as Map));
       case AddInjuredPersonScreen.routeName:
-        return _createRoute(
-            AddInjuredPersonScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(AddInjuredPersonScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentInjuriesScreen.routeName:
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));

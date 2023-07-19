@@ -36,8 +36,7 @@ class IncidentContractorListTile extends StatelessWidget {
           if (state is ReportNewIncidentContractorSelected) {
             addIncidentMap['companyid'] = state.selectContractorId;
             return Visibility(
-              visible: CategoryScreen.isFromEdit != true &&
-                  state.selectContractorName == '',
+              visible: CategoryScreen.isFromEdit != true,
               replacement: ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(DatabaseUtil.getText('contractor'),
@@ -48,7 +47,8 @@ class IncidentContractorListTile extends StatelessWidget {
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: tiniestSpacing),
                   child: Text(
-                      (addIncidentMap['companyid'] == null)
+                      (addIncidentMap['companyid'] == null ||
+                              addIncidentMap['companyid'].toString().isEmpty)
                           ? ""
                           : state.selectContractorName,
                       style: Theme.of(context)
@@ -75,7 +75,8 @@ class IncidentContractorListTile extends StatelessWidget {
                           .textTheme
                           .medium
                           .copyWith(color: AppColor.black)),
-                  subtitle: (state.selectContractorName == '')
+                  subtitle: (addIncidentMap['companyid'] == null ||
+                          addIncidentMap['companyid'].toString().isEmpty)
                       ? null
                       : Padding(
                           padding: const EdgeInsets.only(top: tiniestSpacing),

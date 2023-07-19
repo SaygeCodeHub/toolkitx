@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
@@ -14,12 +13,12 @@ import 'incident_reported_authority_fields.dart';
 class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
   final Map addIncidentMap;
 
-  const IncidentReportedAuthorityExpansionTile({Key? key, required this.addIncidentMap})
+  const IncidentReportedAuthorityExpansionTile(
+      {Key? key, required this.addIncidentMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    log("authority======.${addIncidentMap['responsible_person']}");
     context.read<ReportNewIncidentBloc>().add(
         ReportNewIncidentAuthorityExpansionChange(
             reportIncidentAuthorityId:
@@ -59,7 +58,7 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
                             itemCount:
-                            state.reportIncidentAuthorityMap.keys.length,
+                                state.reportIncidentAuthorityMap.keys.length,
                             itemBuilder: (BuildContext context, int index) {
                               return RadioListTile(
                                   contentPadding: const EdgeInsets.only(
@@ -69,9 +68,9 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
                                       state.reportIncidentAuthorityMap.values
                                           .elementAt(index),
                                       style:
-                                      Theme.of(context).textTheme.xSmall),
+                                          Theme.of(context).textTheme.xSmall),
                                   controlAffinity:
-                                  ListTileControlAffinity.trailing,
+                                      ListTileControlAffinity.trailing,
                                   value: state.reportIncidentAuthorityMap.keys
                                       .elementAt(index),
                                   groupValue: state.reportIncidentAuthorityId,

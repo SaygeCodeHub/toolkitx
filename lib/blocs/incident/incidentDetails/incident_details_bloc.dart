@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../data/cache/cache_keys.dart';
 import '../../../../data/cache/customer_cache.dart';
@@ -21,6 +20,8 @@ class IncidentDetailsBloc
   final CustomerCache _customerCache = getIt<CustomerCache>();
   int incidentTabIndex = 0;
   List savedList = [];
+  IncidentDetailsModel incidentDetailsModel = IncidentDetailsModel();
+  String incidentId = '';
 
   IncidentDetailsStates get initialState => const IncidentDetailsInitial();
 
@@ -40,6 +41,7 @@ class IncidentDetailsBloc
       ];
       List customFieldList = [];
       List injuredPersonList = [];
+      List customFieldsOptionIds = [];
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
@@ -50,9 +52,9 @@ class IncidentDetailsBloc
               .type ==
           'systemuser';
       incidentTabIndex = event.initialIndex;
-      IncidentDetailsModel incidentDetailsModel =
-          await _incidentRepository.fetchIncidentDetails(
-              event.incidentId, hashCode!, userId!, event.role);
+      incidentId = event.incidentId;
+      incidentDetailsModel = await _incidentRepository.fetchIncidentDetails(
+          event.incidentId, hashCode!, userId!, event.role);
       if (incidentDetailsModel.status == 200) {
         for (int i = 0;
             i < incidentDetailsModel.data!.customfields!.length;
@@ -60,6 +62,13 @@ class IncidentDetailsBloc
           customFieldList.add({
             "id": incidentDetailsModel.data!.customfields![i].fieldid,
             "value": incidentDetailsModel.data!.customfields![i].fieldvalue
+          });
+        }
+        for (int k = 0;
+            k < incidentDetailsModel.data!.customfields!.length;
+            k++) {
+          customFieldsOptionIds.add({
+            "optionId": incidentDetailsModel.data!.customfields![k].optionid
           });
         }
         for (int j = 0;
@@ -73,29 +82,20 @@ class IncidentDetailsBloc
           });
         }
         Map editIncidentDetailsMap = {
-          "eventdatetime": incidentDetailsModel.data!.eventdatetime,
           "description": incidentDetailsModel.data!.description,
           "responsible_person": incidentDetailsModel.data!.responsiblePerson,
           "site_name": incidentDetailsModel.data!.sitename,
           "location_name": incidentDetailsModel.data!.locationname,
-          "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,
           "category": incidentDetailsModel.data!.category,
-          "createduserby": incidentDetailsModel.data!.createduserby,
-          "createdworkforceby": incidentDetailsModel.data!.createdworkforceby,
-          "hashcode": hashCode,
-          "role": event.role,
-          "identity": '',
-          "companyid": incidentDetailsModel.data!.companyid,
+          "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,
+          "customfields": customFieldList,
+          "incidentid": event.incidentId,
           "persons": injuredPersonList,
-          "customfields": customFieldList
+          "eventdatetime": incidentDetailsModel.data!.eventdatetime,
+          "optionIds": customFieldsOptionIds,
+          "companyid": incidentDetailsModel.data!.companyid,
+          "files": incidentDetailsModel.data!.files
         };
-        log("edit map bloc======>$editIncidentDetailsMap");
-        emit(IncidentDetailsFetched(
-            incidentDetailsModel: incidentDetailsModel,
-            clientId: hashKey!,
-            editIncidentDetailsMap: editIncidentDetailsMap));
-      }
-      if (incidentDetailsModel.status == 200) {
         if (incidentDetailsModel.data!.canEdit == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
         }
@@ -121,8 +121,9 @@ class IncidentDetailsBloc
         emit(IncidentDetailsFetched(
             incidentDetailsModel: incidentDetailsModel,
             clientId: hashKey!,
+            editIncidentDetailsMap: editIncidentDetailsMap,
             incidentPopUpMenu: popUpMenuItems,
-            showPopUpMenu: userTypeName));
+            showPopUpMenu: true));
       }
     } catch (e) {
       emit(const IncidentDetailsNotFetched());

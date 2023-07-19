@@ -39,8 +39,10 @@ class IncidentDetailsScreen extends StatelessWidget {
                 if (state is IncidentDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return IncidentDetailsPopUpMenu(
+                        incidentDetailsModel: state.incidentDetailsModel,
                         popUpMenuItems: state.incidentPopUpMenu,
-                        incidentListDatum: incidentListDatum);
+                        incidentListDatum: incidentListDatum,
+                        incidentDetailsMap: state.editIncidentDetailsMap);
                   } else {
                     return const SizedBox();
                   }
@@ -50,22 +52,6 @@ class IncidentDetailsScreen extends StatelessWidget {
               })
         ]),
         body: BlocConsumer<IncidentDetailsBloc, IncidentDetailsStates>(
-        appBar: GenericAppBar(actions: [
-          BlocBuilder<IncidentDetailsBloc, IncidentDetailsStates>(
-              buildWhen: (previousState, currentState) =>
-                  currentState is IncidentDetailsFetched,
-              builder: (context, state) {
-                if (state is IncidentDetailsFetched) {
-                  Map incidentDetailsMap = state.editIncidentDetailsMap;
-                  return IncidentDetailsPopUpMenu(
-                      incidentDetailsMap: incidentDetailsMap,
-                      incidentDetailsModel: state.incidentDetailsModel);
-                } else {
-                  return const SizedBox();
-                }
-              })
-        ]),
-        body: BlocBuilder<IncidentDetailsBloc, IncidentDetailsStates>(
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingIncidentDetails ||
                 currentState is IncidentDetailsFetched ||
