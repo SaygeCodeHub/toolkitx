@@ -144,24 +144,25 @@ class ReportNewIncidentScreen extends StatelessWidget {
                           addIncidentMap: addIncidentMap),
                     ]))),
         bottomNavigationBar: BottomAppBar(
-            child: BlocListener<ReportNewIncidentBloc, ReportNewIncidentStates>(
-          listener: (context, state) {
-            if (state is ReportNewIncidentDateTimeDescValidated) {
-              showCustomSnackBar(
-                  context, state.dateTimeDescValidationMessage, '');
-            } else if (state
-                is ReportNewIncidentDateTimeDescValidationComplete) {
-              Navigator.pushNamed(context, IncidentLocationScreen.routeName,
-                  arguments: addIncidentMap);
-            }
-          },
-          child: PrimaryButton(
-              onPressed: () {
-                context.read<ReportNewIncidentBloc>().add(
-                    ReportNewIncidentDateTimeDescriptionValidation(
-                        reportNewIncidentMap: addIncidentMap));
-              },
-              textValue: DatabaseUtil.getText('nextButtonText')),
-        )));
+          child: BlocListener<ReportNewIncidentBloc, ReportNewIncidentStates>(
+            listener: (context, state) {
+              if (state is ReportNewIncidentDateTimeDescValidated) {
+                showCustomSnackBar(
+                    context, state.dateTimeDescValidationMessage, '');
+              } else if (state
+                  is ReportNewIncidentDateTimeDescValidationComplete) {
+                Navigator.pushNamed(context, IncidentLocationScreen.routeName,
+                    arguments: addIncidentMap);
+              }
+            },
+            child: PrimaryButton(
+                onPressed: () {
+                  context.read<ReportNewIncidentBloc>().add(
+                      ReportNewIncidentDateTimeDescriptionValidation(
+                          reportNewIncidentMap: addIncidentMap));
+                },
+                textValue: DatabaseUtil.getText('nextButtonText')),
+          ),
+        ));
   }
 }

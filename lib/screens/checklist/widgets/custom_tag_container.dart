@@ -24,7 +24,7 @@ class CustomTagContainer extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
-                .xSmall
+                .xxSmall
                 .copyWith(color: AppColor.white)));
   }
 }

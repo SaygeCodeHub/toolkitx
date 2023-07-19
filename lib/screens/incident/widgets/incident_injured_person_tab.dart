@@ -5,10 +5,10 @@ import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../../blocs/incident/incidentDetails/incident_details_event.dart';
-import '../../../blocs/incident/incidentGetAndChangeRole/incident_get_and_change_role_bloc.dart';
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_bloc.dart';
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_event.dart';
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_states.dart';
+import '../../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../../data/models/incident/incident_details_model.dart';
@@ -72,9 +72,7 @@ class IncidentInjuredPersonTab extends StatelessWidget {
                 context.read<IncidentDetailsBloc>().add(
                     FetchIncidentDetailsEvent(
                         incidentId: incidentListDatum.id,
-                        role: context
-                            .read<IncidentFetchAndChangeRoleBloc>()
-                            .roleId,
+                        role: context.read<IncidentLisAndFilterBloc>().roleId,
                         initialIndex: initialIndex));
               }
               if (state is ErrorSavingInjuredPerson) {
@@ -99,9 +97,6 @@ class IncidentInjuredPersonTab extends StatelessWidget {
                             child: PrimaryButton(
                                 onPressed: () {
                                   context
-                                      .read<IncidentDetailsBloc>()
-                                      .addInjuredPerson = false;
-                                  context
                                       .read<InjuryDetailsBloc>()
                                       .add(const CancelAddInjuredPerson());
                                 },
@@ -110,9 +105,6 @@ class IncidentInjuredPersonTab extends StatelessWidget {
                         Expanded(
                             child: PrimaryButton(
                                 onPressed: () {
-                                  context
-                                      .read<IncidentDetailsBloc>()
-                                      .addInjuredPerson = false;
                                   context.read<InjuryDetailsBloc>().add(
                                       SaveInjuredPerson(
                                           injuredPersonDetailMap));

@@ -16,12 +16,16 @@ import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
-import '../screens/incident/filter_screen.dart';
+import '../screens/incident/incident_filter_screen.dart';
 import '../screens/incident/incident_health_and_safety_screen.dart';
 import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
+import '../screens/leavesAndHolidays/leaves_details_screen.dart';
+import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -39,6 +43,8 @@ import '../screens/permit/permit_details_screen.dart';
 import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
+import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
 class AppRoutes {
@@ -68,7 +74,8 @@ class AppRoutes {
         return _createRoute(SystemUserScheduleDatesScreen(
             checkListId: settings.arguments.toString()));
       case SystemUserCheckListScreen.routeName:
-        return _createRoute(const SystemUserCheckListScreen());
+        return _createRoute(
+            SystemUserCheckListScreen(isFromHome: settings.arguments as bool));
       case WorkForceListScreen.routeName:
         return _createRoute(const WorkForceListScreen());
       case ChangeRoleScreen.routeName:
@@ -78,7 +85,8 @@ class AppRoutes {
       case EditHeaderScreen.routeName:
         return _createRoute(EditHeaderScreen());
       case IncidentListScreen.routeName:
-        return _createRoute(const IncidentListScreen());
+        return _createRoute(
+            IncidentListScreen(isFromHome: settings.arguments as bool));
       case IncidentFilterScreen.routeName:
         return _createRoute(IncidentFilterScreen());
       case IncidentChangeRoleScreen.routeName:
@@ -143,7 +151,19 @@ class AppRoutes {
       case IncidentInjuriesScreen.routeName:
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));
-
+      case LogbookListScreen.routeName:
+        return _createRoute(const LogbookListScreen());
+      case TodoAssignedByMeAndToMeListScreen.routeName:
+        return _createRoute(const TodoAssignedByMeAndToMeListScreen());
+      case ToDoDetailsAndDocumentDetailsScreen.routeName:
+        return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
+            todoMap: settings.arguments as Map));
+      case LeavesAndHolidaysScreen.routeName:
+        return _createRoute(const LeavesAndHolidaysScreen());
+      case LeavesSummaryScreen.routeName:
+        return _createRoute(const LeavesSummaryScreen());
+      case LeavesDetailsScreen.routeName:
+        return _createRoute(const LeavesDetailsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

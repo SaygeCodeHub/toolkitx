@@ -1,18 +1,30 @@
-abstract class IncidentListAndFilterEvent {}
+abstract class IncidentListAndFilterEvent {
+  const IncidentListAndFilterEvent();
+}
 
 class FetchIncidentListEvent extends IncidentListAndFilterEvent {
   final bool isFromHome;
-  final String roleId;
+  final int page;
 
-  FetchIncidentListEvent({required this.roleId, required this.isFromHome});
+  const FetchIncidentListEvent({required this.page, required this.isFromHome});
 }
 
 class ApplyIncidentFilter extends IncidentListAndFilterEvent {
   final Map incidentFilterMap;
 
-  ApplyIncidentFilter({required this.incidentFilterMap});
+  const ApplyIncidentFilter({required this.incidentFilterMap});
 }
 
 class ClearIncidentFilters extends IncidentListAndFilterEvent {
-  ClearIncidentFilters();
+  const ClearIncidentFilters();
+}
+
+class IncidentFetchRoles extends IncidentListAndFilterEvent {
+  const IncidentFetchRoles();
+}
+
+class IncidentChangeRole extends IncidentListAndFilterEvent {
+  final String roleId;
+
+  const IncidentChangeRole({required this.roleId});
 }

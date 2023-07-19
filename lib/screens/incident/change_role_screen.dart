@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/incident/incidentGetAndChangeRole/incident_get_and_change_role_bloc.dart';
-import 'package:toolkit/blocs/incident/incidentGetAndChangeRole/incident_get_and_change_role_states.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/database_utils.dart';
-import 'package:toolkit/widgets/error_section.dart';
 
-import '../../blocs/incident/incidentGetAndChangeRole/incident_get_and_change_role_events.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_event.dart';
+import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_state.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import '../../utils/constants/string_constants.dart';
+import '../../utils/database_utils.dart';
+import '../../widgets/error_section.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'incident_list_screen.dart';
 
 class IncidentChangeRoleScreen extends StatelessWidget {
   static const routeName = 'IncidentChangeRoleScreen';
@@ -20,23 +19,21 @@ class IncidentChangeRoleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<IncidentFetchAndChangeRoleBloc>().add(IncidentFetchRoles());
+    context.read<IncidentLisAndFilterBloc>().add(const IncidentFetchRoles());
     return Scaffold(
-        appBar: GenericAppBar(
-          title: DatabaseUtil.getText('ChangeRole'),
-        ),
-        body: BlocConsumer<IncidentFetchAndChangeRoleBloc,
-            IncidentFetchAndChangeRoleStates>(listener: (context, state) {
-          if (state is IncidentRoleChanged) {
-            context.read<IncidentLisAndFilterBloc>().add(FetchIncidentListEvent(
-                roleId: state.roleId, isFromHome: false));
-            Navigator.pop(context);
-          }
-        }, builder: (context, state) {
-          if (state is FetchingIncidentRoles) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is IncidentRolesFetched) {
-            return SingleChildScrollView(
+      appBar: GenericAppBar(title: DatabaseUtil.getText('ChangeRole')),
+      body: BlocConsumer<IncidentLisAndFilterBloc, IncidentListAndFilterStates>(
+          listener: (context, state) {
+        if (state is IncidentRoleChanged) {
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, IncidentListScreen.routeName,
+              arguments: false);
+        }
+      }, builder: (context, state) {
+        if (state is FetchingIncidentRoles) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is IncidentRolesFetched) {
+          return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Padding(
                   padding: const EdgeInsets.only(top: topBottomPadding),
@@ -65,29 +62,29 @@ class IncidentChangeRoleScreen extends StatelessWidget {
                                           .data![index].groupId,
                                       groupValue: state.roleId,
                                       onChanged: (value) {
-                                        value = state.incidentFetchRolesModel
-                                            .data![index].groupId;
                                         context
-                                            .read<
-                                                IncidentFetchAndChangeRoleBloc>()
+                                            .read<IncidentLisAndFilterBloc>()
                                             .add(IncidentChangeRole(
-                                                roleId: value));
+                                                roleId: state
+                                                    .incidentFetchRolesModel
+                                                    .data![index]
+                                                    .groupId));
                                       }));
                             }),
                         const SizedBox(height: xxxSmallerSpacing)
-                      ])),
-            );
-          } else if (state is IncidentRolesNotFetched) {
-            return GenericReloadButton(
-                onPressed: () {
-                  context
-                      .read<IncidentFetchAndChangeRoleBloc>()
-                      .add(IncidentFetchRoles());
-                },
-                textValue: StringConstants.kReload);
-          } else {
-            return const SizedBox();
-          }
-        }));
+                      ])));
+        } else if (state is IncidentRolesNotFetched) {
+          return GenericReloadButton(
+              onPressed: () {
+                context
+                    .read<IncidentLisAndFilterBloc>()
+                    .add(const IncidentFetchRoles());
+              },
+              textValue: StringConstants.kReload);
+        } else {
+          return const SizedBox();
+        }
+      }),
+    );
   }
 }

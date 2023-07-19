@@ -21,36 +21,35 @@ class SystemUserListCard extends StatelessWidget {
         child: ListTile(
             contentPadding: const EdgeInsets.all(tinierSpacing),
             title: Padding(
-                padding: const EdgeInsets.only(bottom: xxTinierSpacing),
+                padding: const EdgeInsets.only(top: tinierSpacing),
                 child: Text(checkListDatum.name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .small
-                        .copyWith(color: AppColor.black))),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                    '${checkListDatum.categoryname} -- ${checkListDatum.subcategoryname}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .xSmall
-                        .copyWith(color: AppColor.grey)),
-                const SizedBox(height: xxTinySpacing),
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Visibility(
-                      visible: checkListDatum.responsecount != 0,
-                      child: const CustomTagContainer(
-                          color: AppColor.lightGreen,
-                          textValue: StringConstants.kResponded)),
-                  const SizedBox(width: tiniestSpacing),
-                  Visibility(
-                      visible: checkListDatum.approvalpendingcount != 0,
-                      child: const Icon(Icons.question_mark_outlined,
-                          color: AppColor.errorRed, size: kIconSize))
-                ])
-              ],
-            ),
+                    style: Theme.of(context).textTheme.small.copyWith(
+                        fontWeight: FontWeight.bold, color: AppColor.black))),
+            subtitle: Padding(
+                padding: const EdgeInsets.only(top: tinierSpacing),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${checkListDatum.categoryname} -- ${checkListDatum.subcategoryname}',
+                      ),
+                      const SizedBox(height: tinierSpacing),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Visibility(
+                                visible: checkListDatum.responsecount != 0,
+                                child: const CustomTagContainer(
+                                    color: AppColor.lightGreen,
+                                    textValue: StringConstants.kResponded)),
+                            const SizedBox(width: tiniestSpacing),
+                            Visibility(
+                                visible:
+                                    checkListDatum.approvalpendingcount != 0,
+                                child: const Icon(Icons.question_mark_outlined,
+                                    color: AppColor.errorRed, size: kIconSize))
+                          ])
+                    ])),
             onTap: () {
               Navigator.pushNamed(
                   context, SystemUserScheduleDatesScreen.routeName,

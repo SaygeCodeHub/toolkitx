@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/string_extension.dart';
 import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
 import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_event.dart';
 import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_state.dart';
@@ -42,7 +43,7 @@ class FilterExpansionTileLayout extends StatelessWidget {
                     title: Text(
                         state.categoryName == ""
                             ? StringConstants.kSelectCategory
-                            : state.categoryName,
+                            : state.categoryName.capitalize(),
                         style: Theme.of(context).textTheme.xSmall),
                     children: [
                       ListView.builder(
@@ -58,7 +59,8 @@ class FilterExpansionTileLayout extends StatelessWidget {
                                 title: Text(
                                     state.getFilterCategoryData
                                         .elementAt(index)
-                                        .name,
+                                        .name
+                                        .capitalize(),
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
@@ -89,14 +91,13 @@ class FilterExpansionTileLayout extends StatelessWidget {
                     ]));
           } else if (state is CheckListCategoryNotFetched) {
             return Center(
-              child: GenericReloadButton(
-                  onPressed: () {
-                    context
-                        .read<SysUserCheckListBloc>()
-                        .add(FetchCheckListMaster());
-                  },
-                  textValue: StringConstants.kReload),
-            );
+                child: GenericReloadButton(
+                    onPressed: () {
+                      context
+                          .read<SysUserCheckListBloc>()
+                          .add(FetchCheckListMaster());
+                    },
+                    textValue: StringConstants.kReload));
           } else {
             return const SizedBox();
           }

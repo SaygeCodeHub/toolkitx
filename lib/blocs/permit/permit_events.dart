@@ -17,9 +17,8 @@ class GetPermitDetails extends PermitEvents {
 
 class GeneratePDF extends PermitEvents {
   final String permitId;
-  final bool isFromPopUpMenu;
 
-  const GeneratePDF(this.permitId, this.isFromPopUpMenu);
+  const GeneratePDF(this.permitId);
 }
 
 class GetPermitRoles extends PermitEvents {

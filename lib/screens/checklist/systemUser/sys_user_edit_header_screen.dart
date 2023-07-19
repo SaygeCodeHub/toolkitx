@@ -84,7 +84,9 @@ class EditHeaderScreen extends StatelessWidget {
                                               .title,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .medium,
+                                              .xSmall
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w600),
                                           children: [
                                             (state
                                                         .getCheckListEditHeaderModel
@@ -95,11 +97,15 @@ class EditHeaderScreen extends StatelessWidget {
                                                     text: ' *',
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .medium)
+                                                        .xSmall
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600))
                                                 : const TextSpan()
                                           ]),
                                     ),
-                                    const SizedBox(height: xxTinierSpacing),
+                                    const SizedBox(height: xxxTinierSpacing),
                                     EditHeader()
                                         .fetchEditHeaderSwitchCaseWidget(
                                             index,

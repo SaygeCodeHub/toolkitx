@@ -24,8 +24,8 @@ class DateTimeRow extends StatelessWidget {
                     height: kImageHeight, width: kImageWidth),
                 const SizedBox(width: tiniestSpacing),
                 Text((allPermitDatum.enddate == '')
-                    ? DateUtil.splitDate(allPermitDatum.startdate!)[0]
-                    : '${DateUtil.splitDate(allPermitDatum.startdate!)[0]} - ${DateUtil.splitDate(allPermitDatum.enddate!)[0]}')
+                    ? DateUtil.splitDateTime(allPermitDatum.startdate!)[0]
+                    : '${DateUtil.splitDateTime(allPermitDatum.startdate!)[0]} - ${DateUtil.splitDateTime(allPermitDatum.enddate!)[0]}')
               ]),
           Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,8 +35,8 @@ class DateTimeRow extends StatelessWidget {
                     height: kImageHeight, width: kImageWidth),
                 const SizedBox(width: tiniestSpacing),
                 Text((allPermitDatum.enddate == '')
-                    ? DateUtil.splitDate(allPermitDatum.startdate!)[1]
-                    : '${DateUtil.splitDate(allPermitDatum.startdate!)[1]} - ${DateUtil.splitDate(allPermitDatum.enddate!)[1]}')
+                    ? DateUtil.splitDateTime(allPermitDatum.startdate!)[1]
+                    : '${DateUtil.splitDateTime(allPermitDatum.startdate!)[1]} - ${DateUtil.splitDateTime(allPermitDatum.enddate!)[1]}')
               ])
         ]);
   }

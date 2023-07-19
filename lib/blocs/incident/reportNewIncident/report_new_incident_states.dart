@@ -98,7 +98,7 @@ class ReportNewIncidentCustomFieldFetched extends ReportNewIncidentStates {
 
 class ReportNewIncidentCustomFieldSelected extends ReportNewIncidentStates {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
-  final String reportIncidentCustomInfoOptionId;
+  final int reportIncidentCustomInfoOptionId;
 
   ReportNewIncidentCustomFieldSelected(
       {required this.fetchIncidentMasterModel,

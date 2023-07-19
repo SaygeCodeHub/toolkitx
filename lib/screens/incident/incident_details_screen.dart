@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_states.dart';
-import '../../blocs/incident/incidentGetAndChangeRole/incident_get_and_change_role_bloc.dart';
-import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
-import '../../configs/app_spacing.dart';
+import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
-import '../../data/models/status_tag_model.dart';
+import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/string_constants.dart';
-import '../../utils/incident_util.dart';
-import '../../widgets/custom_tabbar_view.dart';
+import '../../utils/database_utils.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/error_section.dart';
 import '../../widgets/generic_app_bar.dart';
-import '../../widgets/status_tag.dart';
-import 'widgets/incident_custom_field_info.dart';
-import 'widgets/incident_custom_timeline.dart';
-import 'widgets/incident_details.dart';
-import 'widgets/incident_details_comment.dart';
-import 'widgets/incident_injured_person_tab.dart';
-import 'widgets/incident_link_permit_list.dart';
+import '../../widgets/progress_bar.dart';
+import 'widgets/incident_details_body.dart';
 import 'incident_pop_up_menu_screen.dart';
 
 class IncidentDetailsScreen extends StatelessWidget {
@@ -35,9 +27,29 @@ class IncidentDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<IncidentDetailsBloc>().add(FetchIncidentDetailsEvent(
         incidentId: incidentListDatum.id,
-        role: context.read<IncidentFetchAndChangeRoleBloc>().roleId,
+        role: context.read<IncidentLisAndFilterBloc>().roleId,
         initialIndex: 0));
     return Scaffold(
+        appBar: GenericAppBar(actions: [
+          BlocBuilder<IncidentDetailsBloc, IncidentDetailsStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is FetchingIncidentDetails ||
+                  currentState is IncidentDetailsFetched,
+              builder: (context, state) {
+                if (state is IncidentDetailsFetched) {
+                  if (state.showPopUpMenu == true) {
+                    return IncidentDetailsPopUpMenu(
+                        popUpMenuItems: state.incidentPopUpMenu,
+                        incidentListDatum: incidentListDatum);
+                  } else {
+                    return const SizedBox();
+                  }
+                } else {
+                  return const SizedBox();
+                }
+              })
+        ]),
+        body: BlocConsumer<IncidentDetailsBloc, IncidentDetailsStates>(
         appBar: GenericAppBar(actions: [
           BlocBuilder<IncidentDetailsBloc, IncidentDetailsStates>(
               buildWhen: (previousState, currentState) =>
@@ -58,80 +70,31 @@ class IncidentDetailsScreen extends StatelessWidget {
                 currentState is FetchingIncidentDetails ||
                 currentState is IncidentDetailsFetched ||
                 currentState is IncidentDetailsNotFetched,
+            listener: (context, state) {
+              if (state is GeneratingIncidentPDF) {
+                ProgressBar.show(context);
+              }
+              if (state is IncidentPDFGenerated) {
+                ProgressBar.dismiss(context);
+                launchUrlString(
+                    '${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
+                    mode: LaunchMode.externalApplication);
+              } else if (state is IncidentPDFGenerationFailed) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(
+                    context,
+                    DatabaseUtil.getText('some_unknown_error_please_try_again'),
+                    '');
+              }
+            },
             builder: (context, state) {
               if (state is FetchingIncidentDetails) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is IncidentDetailsFetched) {
-                return Padding(
-                    padding: const EdgeInsets.only(
-                        left: leftRightMargin,
-                        right: leftRightMargin,
-                        top: xxTinierSpacing),
-                    child: Column(children: [
-                      Card(
-                          color: AppColor.white,
-                          elevation: kCardElevation,
-                          child: ListTile(
-                              title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: xxTinierSpacing),
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(incidentListDatum.refno,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .medium),
-                                        StatusTag(tags: [
-                                          StatusTagModel(
-                                              title: state.incidentDetailsModel
-                                                  .data!.statusText,
-                                              bgColor: AppColor.deepBlue)
-                                        ])
-                                      ])))),
-                      const SizedBox(height: xxTinierSpacing),
-                      const Divider(
-                          height: kDividerHeight, thickness: kDividerWidth),
-                      CustomTabBarView(
-                          lengthOfTabs: 6,
-                          tabBarViewIcons: IncidentUtil().tabBarViewIcons,
-                          tabBarViewWidgets: [
-                            IncidentDetails(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                clientId: state.clientId,
-                                initialIndex: 0),
-                            IncidentCustomFieldInfo(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                initialIndex: 1),
-                            PermitDetailsComment(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                clientId: state.clientId,
-                                initialIndex: 2),
-                            IncidentInjuredPersonTab(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                initialIndex: 3,
-                                incidentListDatum: incidentListDatum),
-                            IncidentCustomTimeLine(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                initialIndex: 4),
-                            IncidentLinkPermitList(
-                                incidentDetailsModel:
-                                    state.incidentDetailsModel,
-                                incidentListDatum: incidentListDatum,
-                                initialIndex: 5)
-                          ],
-                          initialIndex: context
-                              .read<IncidentDetailsBloc>()
-                              .incidentTabIndex)
-                    ]));
+                return IncidentDetailsBody(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: state.incidentDetailsModel,
+                    clientId: state.clientId);
               } else if (state is IncidentDetailsNotFetched) {
                 return Center(
                     child: GenericReloadButton(
@@ -140,7 +103,7 @@ class IncidentDetailsScreen extends StatelessWidget {
                               FetchIncidentDetailsEvent(
                                   incidentId: incidentListDatum.id,
                                   role: context
-                                      .read<IncidentFetchAndChangeRoleBloc>()
+                                      .read<IncidentLisAndFilterBloc>()
                                       .roleId,
                                   initialIndex: 0));
                         },

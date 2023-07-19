@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
@@ -60,12 +59,10 @@ class ReportNewIncidentBloc
           IncidentMasterDatum.fromJson(
               {"location": DatabaseUtil.getText('Other')}));
       if (event.categories != "null") {
-        log("event categories=====>${event.categories}");
-        categories = event.categories.toString().replaceAll(" ", "").split(',');
-        log("categories====>$categories");
+        categories = event.categories.toString().split(',');
       }
       add(SelectIncidentCategory(
-          multiSelectList: categories, selectedCategory: ''));
+          multiSelectList: categories, selectedCategory: null));
     } catch (e) {
       emit(IncidentMasterNotFetched());
     }
@@ -122,7 +119,7 @@ class ReportNewIncidentBloc
       }
     ];
     List selectedCategoryList = List.from(event.multiSelectList);
-    if (event.selectedCategory != '') {
+    if (event.selectedCategory != null) {
       if (event.multiSelectList.contains(event.selectedCategory) != true) {
         selectedCategoryList.add(event.selectedCategory);
       } else {
@@ -218,7 +215,7 @@ class ReportNewIncidentBloc
     emit(ReportNewIncidentCustomFieldSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         reportIncidentCustomInfoOptionId:
-            event.reportIncidentCustomInfoOptionId));
+            event.reportIncidentCustomInfoOptionId!));
   }
 
   FutureOr<void> _saveIncident(SaveReportNewIncident event,
@@ -229,7 +226,6 @@ class ReportNewIncidentBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userType = await _customerCache.getUserType(CacheKeys.userType);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      log("custom fields===>${reportNewIncidentMap['customfields']}");
       Map addNewIncidentMap = {
         "eventdatetime": reportNewIncidentMap['eventdatetime'],
         "description": reportNewIncidentMap['description'],
@@ -252,8 +248,9 @@ class ReportNewIncidentBloc
         "persons": (reportNewIncidentMap['persons'] == null)
             ? []
             : reportNewIncidentMap['persons'],
-        "customfields":
-            (reportNewIncidentMap['customfields'].toString().contains("{},"))
+        "customfields": (reportNewIncidentMap['customfields'] == null)
+            ? []
+            : (reportNewIncidentMap['customfields'].toString().contains("{},"))
                 ? reportNewIncidentMap['customfields']
                     .toString()
                     .replaceAll("{}", "")
@@ -261,22 +258,21 @@ class ReportNewIncidentBloc
                     .replaceAll(" ", "")
                 : reportNewIncidentMap['customfields']
       };
-      // SaveReportNewIncidentModel saveReportNewIncidentModel =
-      //     await _incidentRepository.saveIncident(addNewIncidentMap);
-      log("model data=====>$addNewIncidentMap");
-      // if (saveReportNewIncidentModel.status == 200) {
-      //   incidentId = saveReportNewIncidentModel.message;
-      // } else {
-      //   emit(ReportNewIncidentNotSaved(
-      //       incidentNotSavedMessage:
-      //           DatabaseUtil.getText('some_unknown_error_please_try_again')));
-      // }
-      // (reportNewIncidentMap['filenames'] != null)
-      //     ? add(SaveReportNewIncidentPhotos(
-      //         reportNewIncidentMap: reportNewIncidentMap))
-      //     : null;
-      // emit(ReportNewIncidentSaved(
-      //     saveReportNewIncidentModel: saveReportNewIncidentModel));
+      SaveReportNewIncidentModel saveReportNewIncidentModel =
+          await _incidentRepository.saveIncident(addNewIncidentMap);
+      if (saveReportNewIncidentModel.status == 200) {
+        incidentId = saveReportNewIncidentModel.message;
+      } else {
+        emit(ReportNewIncidentNotSaved(
+            incidentNotSavedMessage:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+      (reportNewIncidentMap['filenames'] != null)
+          ? add(SaveReportNewIncidentPhotos(
+              reportNewIncidentMap: reportNewIncidentMap))
+          : null;
+      emit(ReportNewIncidentSaved(
+          saveReportNewIncidentModel: saveReportNewIncidentModel));
     } catch (e) {
       emit(ReportNewIncidentNotSaved(
           incidentNotSavedMessage:

@@ -6,6 +6,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/checklist/widgets/checklist_app_bar.dart';
 import 'package:toolkit/screens/checklist/systemUser/sys_user_pop_up_menu_screen.dart';
+import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import 'widgets/sys_user_workforce_list_section.dart';
 
@@ -26,8 +27,14 @@ class SysUserWorkForceListScreen extends StatelessWidget {
                     currentState is CheckListWorkforceListError,
                 builder: (context, state) {
                   if (state is CheckListWorkforceListFetched) {
-                    return Text(state
-                        .checkListWorkforceListModel.data![0].checklistname);
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        state
+                            .checkListWorkforceListModel.data![0].checklistname,
+                      ),
+                    );
                   } else {
                     return const SizedBox();
                   }
@@ -67,19 +74,21 @@ class SysUserWorkForceListScreen extends StatelessWidget {
                   builder: (context, state) {
                     if (state is CheckListWorkforceListFetched) {
                       return Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          children: [
+                          alignment: Alignment.topLeft,
+                          child: Row(children: [
                             Image.asset("assets/icons/calendar.png",
                                 height: kProfileImageHeight,
                                 width: kProfileImageWidth),
                             const SizedBox(width: xxTinierSpacing),
                             Text(
                                 '${state.checkListWorkforceListModel.data![0].startdate} - ${state.checkListWorkforceListModel.data![0].enddate}',
-                                style: Theme.of(context).textTheme.xSmall),
-                          ],
-                        ),
-                      );
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .small
+                                    .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.black))
+                          ]));
                     } else {
                       return const SizedBox();
                     }

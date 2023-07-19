@@ -9,7 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 
-typedef CustomFieldCallBack = Function(String customFieldOptionId);
+typedef CustomFieldCallBack = Function(int customFieldOptionId);
 
 class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
   final CustomFieldCallBack onCustomFieldChanged;
@@ -36,6 +36,8 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
             addIncidentMap['customfields'].isEmpty)
         ? ""
         : addIncidentMap['customfields'][index]['value'];
+            reportIncidentCustomInfoOptionId: 0));
+    String customFieldName = '';
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentCustomFieldSelected,
@@ -80,16 +82,14 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                                 value: state
                                     .fetchIncidentMasterModel
                                     .incidentMasterDatum![7][index]
-                                    .queoptions[itemIndex]['optionid']
-                                    .toString(),
+                                    .queoptions[itemIndex]['optionid'],
                                 groupValue:
                                     state.reportIncidentCustomInfoOptionId,
                                 onChanged: (value) {
                                   value = state
                                       .fetchIncidentMasterModel
                                       .incidentMasterDatum![7][index]
-                                      .queoptions[itemIndex]['optionid']
-                                      .toString();
+                                      .queoptions[itemIndex]['optionid'];
                                   customFieldName = state
                                       .fetchIncidentMasterModel
                                       .incidentMasterDatum![7][index]

@@ -41,100 +41,89 @@ class WorkForceListSection extends StatelessWidget {
                             state.checkListWorkforceListModel.data!.length,
                         itemBuilder: (context, index) {
                           return CustomCard(
-                              child: ListTile(
-                                  dense: true,
-                                  contentPadding:
-                                      const EdgeInsets.all(xxxTinierSpacing),
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          state.checkListWorkforceListModel
-                                              .data![index].name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .small
-                                              .copyWith(color: AppColor.black)),
-                                      FetchPdfSection(
-                                          responseId: context
-                                              .read<
-                                                  CheckListScheduleDatesResponseBloc>()
-                                              .responseId),
-                                    ],
-                                  ),
-                                  subtitle: Column(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: tinierSpacing),
+                            child: ListTile(
+                                dense: true,
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        state.checkListWorkforceListModel
+                                            .data![index].name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .small
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColor.black)),
+                                    FetchPdfSection(
+                                        responseId: context
+                                            .read<
+                                                CheckListScheduleDatesResponseBloc>()
+                                            .responseId),
+                                  ],
+                                ),
+                                subtitle: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: tinierSpacing),
+                                  child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const SizedBox(
-                                            height: xxTiniestSpacing),
                                         Text(
-                                            '${state.checkListWorkforceListModel.data![index].jobtitle} -- ${state.checkListWorkforceListModel.data![index].company}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .xSmall
-                                                .copyWith(
-                                                    color: AppColor.grey)),
-                                        const SizedBox(height: tiniestSpacing),
+                                          '${state.checkListWorkforceListModel.data![index].jobtitle} -- ${state.checkListWorkforceListModel.data![index].company}',
+                                        ),
+                                        const SizedBox(height: tinierSpacing),
                                         Text(
-                                            '${StringConstants.kResponseDate} ${state.checkListWorkforceListModel.data![index].responsedate}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .xSmall
-                                                .copyWith(
-                                                    color: AppColor.grey)),
-                                        const SizedBox(height: tiniestSpacing),
+                                          '${StringConstants.kResponseDate} ${state.checkListWorkforceListModel.data![index].responsedate}',
+                                        ),
+                                        const SizedBox(height: tinierSpacing),
                                         Visibility(
-                                          visible: state
-                                                  .checkListWorkforceListModel
-                                                  .data![index]
-                                                  .approvalstatus ==
-                                              1,
-                                          child: Text(
-                                              DatabaseUtil.getText('Approved'),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .xSmall
-                                                  .copyWith(
-                                                      color: AppColor.grey)),
-                                        )
+                                            visible: state
+                                                    .checkListWorkforceListModel
+                                                    .data![index]
+                                                    .approvalstatus ==
+                                                1,
+                                            child: Text(DatabaseUtil.getText(
+                                                'Approved')))
                                       ]),
-                                  trailing: Visibility(
-                                      visible: state
-                                              .checkListWorkforceListModel
-                                              .data![index]
-                                              .responseid
-                                              .isNotEmpty &&
-                                          state.checkListWorkforceListModel
-                                                  .data![index].isdeptapprove ==
-                                              "0",
-                                      child: Checkbox(
-                                          value: state.selectedIResponseIdList
-                                              .contains(state
-                                                  .checkListWorkforceListModel
-                                                  .data![index]
-                                                  .responseid),
-                                          onChanged: (value) {
-                                            context
-                                                .read<
-                                                    CheckListScheduleDatesResponseBloc>()
-                                                .add(CheckListCheckBoxCheck(
-                                                    responseId: state
-                                                        .checkListWorkforceListModel
-                                                        .data![index]
-                                                        .responseid,
-                                                    checkListWorkforceListModel:
-                                                        state
-                                                            .checkListWorkforceListModel,
-                                                    responseIdList: state
-                                                        .selectedIResponseIdList));
-                                          }))));
+                                ),
+                                trailing: Visibility(
+                                    visible: state
+                                            .checkListWorkforceListModel
+                                            .data![index]
+                                            .responseid
+                                            .isNotEmpty &&
+                                        state.checkListWorkforceListModel
+                                                .data![index].isdeptapprove ==
+                                            "0",
+                                    child: Checkbox(
+                                        value: state.selectedIResponseIdList
+                                            .contains(state
+                                                .checkListWorkforceListModel
+                                                .data![index]
+                                                .responseid),
+                                        onChanged: (value) {
+                                          context
+                                              .read<
+                                                  CheckListScheduleDatesResponseBloc>()
+                                              .add(CheckListCheckBoxCheck(
+                                                  responseId: state
+                                                      .checkListWorkforceListModel
+                                                      .data![index]
+                                                      .responseid,
+                                                  checkListWorkforceListModel: state
+                                                      .checkListWorkforceListModel,
+                                                  responseIdList: state
+                                                      .selectedIResponseIdList));
+                                        }))),
+                          ));
                         },
                         separatorBuilder: (context, index) {
-                          return const SizedBox(height: xxTinySpacing);
+                          return const SizedBox(height: tinierSpacing);
                         }));
               } else if (state is CheckListWorkforceListError) {
                 return Center(

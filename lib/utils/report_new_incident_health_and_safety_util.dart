@@ -5,29 +5,28 @@ import '../screens/incident/widgets/incident_custom_field_info_expansion_tile.da
 
 class ReportNewIncidentHealthAndSafetyUtil {
   Widget addHealthAndSafetyCaseWidget(
-      index, customFieldDatum, customFieldList, addIncidentMap) {
-    customFieldList.add({});
+      index, customFieldDatum, customFieldList) {
+    customFieldList.add({
+      "id": '',
+      "value": '',
+    });
     switch (customFieldDatum[index].type) {
       case 4:
         return IncidentReportCustomFiledInfoExpansionTile(
-            onCustomFieldChanged: (String customFieldOptionId) {
-              customFieldList[index]['id'] =
-                  customFieldDatum[index].id.toString();
-              customFieldList[index]['value'] = customFieldOptionId;
-            },
-            index: index,
-            addIncidentMap: addIncidentMap);
+          onCustomFieldChanged: (int customFieldOptionId) {
+            customFieldList[index]['id'] =
+                customFieldDatum[index].id.toString();
+            customFieldList[index]['value'] = customFieldOptionId.toString();
+          },
+          index: index,
+        );
       case 2:
         return TextFieldWidget(
-            value: (addIncidentMap['customfields'] == null ||
-                    addIncidentMap['customfields'].isEmpty)
-                ? ""
-                : addIncidentMap['customfields'][index]['value'],
             maxLength: 250,
             onTextFieldChanged: (String textField) {
               customFieldList[index]['id'] =
                   customFieldDatum[index].id.toString();
-              customFieldList[index]['value'] = textField;
+              customFieldList[index]['value'] = textField.toString();
             });
       default:
         return Container(

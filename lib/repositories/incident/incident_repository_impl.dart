@@ -1,6 +1,7 @@
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/dio_client.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import '../../data/models/incident/fetch_permit_to_link_model.dart';
 import '../../data/models/incident/incident_details_model.dart';
 import '../../data/models/incident/fetch_incident_master_model.dart';
 import '../../data/models/incident/incident_fetch_roles_model.dart';
@@ -9,6 +10,8 @@ import '../../data/models/incident/incident_unlink_permit_model.dart';
 import '../../data/models/incident/save_report_new_incident_model.dart';
 import '../../data/models/incident/save_report_new_incident_photos_model.dart';
 import '../../data/models/incident/save_injured_person_model.dart';
+import '../../data/models/pdf_generation_model.dart';
+import '../../data/models/incident/saved_linked_permit_model.dart';
 import 'incident_repository.dart';
 
 class IncidentRepositoryImpl extends IncidentRepository {
@@ -21,10 +24,10 @@ class IncidentRepositoryImpl extends IncidentRepository {
   }
 
   @override
-  Future<FetchIncidentsListModel> fetchIncidents(
-      String userId, String hashCode, String filter, String role) async {
+  Future<FetchIncidentsListModel> fetchIncidents(String userId, String hashCode,
+      String filter, String role, int page) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}incident/get?pageno=1&userid=$userId&hashcode=$hashCode&filter=$filter&role=$role");
+        "${ApiConstants.baseUrl}incident/get?pageno=$page&userid=$userId&hashcode=$hashCode&filter=$filter&role=$role");
     return FetchIncidentsListModel.fromJson(response);
   }
 
@@ -81,5 +84,28 @@ class IncidentRepositoryImpl extends IncidentRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}incident/saveinjuredperson", injuredPersonMap);
     return SaveInjuredPersonModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchPermitToLinkModel> fetchPermitToLink(
+      int pageNo, String hashCode, String filter, String incidentId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}/incident/getpermitstolink?pageno=$pageNo&hashcode=$hashCode&filter=$filter&incidentid=$incidentId");
+    return FetchPermitToLinkModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveLinkedPermitModel> saveLinkedPermit(Map linkedPermitMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}incident/savelinkedpermit", linkedPermitMap);
+    return SaveLinkedPermitModel.fromJson(response);
+  }
+
+  @override
+  Future<PdfGenerationModel> generatePdf(
+      String hashCode, String incidentId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}incident/getpdf?incidentid=$incidentId&hashcode=$hashCode");
+    return PdfGenerationModel.fromJson(response);
   }
 }

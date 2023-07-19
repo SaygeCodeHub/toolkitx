@@ -71,7 +71,7 @@ class ReportNewIncidentCustomInfoFieldFetch extends ReportNewIncidentEvent {
 
 class ReportNewIncidentCustomInfoFiledExpansionChange
     extends ReportNewIncidentEvent {
-  final String reportIncidentCustomInfoOptionId;
+  final int? reportIncidentCustomInfoOptionId;
 
   ReportNewIncidentCustomInfoFiledExpansionChange(
       {required this.reportIncidentCustomInfoOptionId});

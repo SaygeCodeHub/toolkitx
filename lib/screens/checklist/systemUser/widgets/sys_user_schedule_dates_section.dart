@@ -52,23 +52,28 @@ class ScheduleDatesSection extends StatelessWidget {
                         state.checklistScheduledByDatesModel.data!.length,
                     itemBuilder: (context, index) {
                       return CustomCard(
-                          child: ListTile(
-                              title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: xxTinierSpacing,
-                                      bottom: xxTinierSpacing),
-                                  child: Row(children: [
-                                    Image.asset("assets/icons/calendar.png",
-                                        height: kProfileImageHeight,
-                                        width: kProfileImageWidth),
-                                    const SizedBox(width: tiniestSpacing),
-                                    Text(
-                                        state.checklistScheduledByDatesModel
-                                            .data![index].dates,
-                                        style:
-                                            Theme.of(context).textTheme.xSmall)
-                                  ])),
-                              subtitle: Column(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: tinierSpacing),
+                        child: ListTile(
+                            title: Row(children: [
+                              Image.asset("assets/icons/calendar.png",
+                                  height: kProfileImageHeight,
+                                  width: kProfileImageWidth),
+                              const SizedBox(width: tinierSpacing),
+                              Text(
+                                  state.checklistScheduledByDatesModel
+                                      .data![index].dates,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .small
+                                      .copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.black))
+                            ]),
+                            subtitle: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: tinierSpacing),
+                              child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
@@ -90,24 +95,26 @@ class ScheduleDatesSection extends StatelessWidget {
                                             size: kIconSize)),
                                     const SizedBox(height: tiniestSpacing),
                                   ]),
-                              onTap: () {
-                                context
-                                    .read<CheckListScheduleDatesResponseBloc>()
-                                    .add(CheckCheckListScheduleDatesResponse(
-                                        getChecklistDetailsData: state
-                                            .checklistScheduledByDatesModel
-                                            .data![index],
-                                        scheduleId: state
-                                            .checklistScheduledByDatesModel
-                                            .data![index]
-                                            .id,
-                                        role: context
-                                            .read<CheckListRoleBloc>()
-                                            .roleId));
-                              }));
+                            ),
+                            onTap: () {
+                              context
+                                  .read<CheckListScheduleDatesResponseBloc>()
+                                  .add(CheckCheckListScheduleDatesResponse(
+                                      getChecklistDetailsData: state
+                                          .checklistScheduledByDatesModel
+                                          .data![index],
+                                      scheduleId: state
+                                          .checklistScheduledByDatesModel
+                                          .data![index]
+                                          .id,
+                                      role: context
+                                          .read<CheckListRoleBloc>()
+                                          .roleId));
+                            }),
+                      ));
                     },
                     separatorBuilder: (context, index) {
-                      return const SizedBox(height: xxTinySpacing);
+                      return const SizedBox(height: tinierSpacing);
                     })));
       } else if (state is CheckListDatesNotScheduled) {
         return Center(

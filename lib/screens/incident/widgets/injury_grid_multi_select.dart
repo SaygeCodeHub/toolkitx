@@ -30,31 +30,33 @@ class InjuryMultiSelect extends StatelessWidget {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                     childAspectRatio: 4 / 2,
-                    mainAxisSpacing: xxxTinierSpacing,
+                    mainAxisSpacing: tiniestSpacing,
                     crossAxisSpacing: xxTinierSpacing),
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: InjuryAreaMultiSelectEnum.multiSelect.area.length,
                 itemBuilder: (BuildContext context, int index) {
                   return SizedBox(
-                      child: Row(children: [
-                    Text(InjuryAreaMultiSelectEnum.multiSelect.area[index]),
-                    Checkbox(
-                        activeColor: AppColor.deepBlue,
-                        value: state.selectedInjuryArea.contains(
-                            InjuryAreaMultiSelectEnum.multiSelect.area[index]),
-                        onChanged: (isChecked) {
-                          context.read<InjuryDetailsBloc>().add(
-                              SelectInjuryNature(
-                                  state.selectedInjuryId,
-                                  state.selectedInjuryNature,
-                                  null,
-                                  state.selectedInjuryArea,
-                                  InjuryAreaMultiSelectEnum
-                                      .multiSelect.area[index]
-                                      .toString()));
-                        })
-                  ]));
+                    child: Row(children: [
+                      Text(InjuryAreaMultiSelectEnum.multiSelect.area[index]),
+                      Checkbox(
+                          activeColor: AppColor.deepBlue,
+                          value: state.selectedInjuryArea.contains(
+                              InjuryAreaMultiSelectEnum
+                                  .multiSelect.area[index]),
+                          onChanged: (isChecked) {
+                            context.read<InjuryDetailsBloc>().add(
+                                SelectInjuryNature(
+                                    state.selectedInjuryId,
+                                    state.selectedInjuryNature,
+                                    null,
+                                    state.selectedInjuryArea,
+                                    InjuryAreaMultiSelectEnum
+                                        .multiSelect.area[index]
+                                        .toString()));
+                          })
+                    ]),
+                  );
                 });
           } else {
             return const SizedBox();

@@ -22,8 +22,12 @@ class SystemUserScheduleDatesScreen extends StatelessWidget {
         appBar: ChecklistAppBar(title: BlocBuilder<CheckListScheduleDatesBloc,
             CheckListScheduleDatesStates>(builder: (context, state) {
           if (state is CheckListDatesScheduled) {
-            return Text(
-                state.checklistScheduledByDatesModel.data![0].checklistname);
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                  state.checklistScheduledByDatesModel.data![0].checklistname),
+            );
           } else {
             return const SizedBox();
           }

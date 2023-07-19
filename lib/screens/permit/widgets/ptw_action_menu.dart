@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/permit/close_permit_screen.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../data/models/permit/permit_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../close_permit_screen.dart';
 import '../open_permit_screen.dart';
 
 class PTWActionMenu extends StatelessWidget {
@@ -38,7 +38,7 @@ class PTWActionMenu extends StatelessWidget {
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
           if (popUpMenuItems[value] == StringConstants.kGeneratePdf) {
-            context.read<PermitBloc>().add(GeneratePDF(permitId, true));
+            context.read<PermitBloc>().add(GeneratePDF(permitId));
           } else if (popUpMenuItems[value] == StringConstants.kClosePermit) {
             Navigator.pushNamed(context, ClosePermitScreen.routeName,
                 arguments: permitDetailsModel);

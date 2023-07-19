@@ -40,57 +40,47 @@ class WorkForceListScreen extends StatelessWidget {
                     itemCount: state.workforceGetCheckListModel.data!.length,
                     itemBuilder: (context, index) {
                       return CustomCard(
-                          child: ListTile(
-                              contentPadding:
-                                  const EdgeInsets.all(tinierSpacing),
-                              title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: xxTinierSpacing),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            state.workforceGetCheckListModel
-                                                .data![index].name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .small
-                                                .copyWith(
-                                                    color: AppColor.black)),
-                                        const SizedBox(width: xxTinierSpacing),
-                                        Visibility(
-                                            visible: state
-                                                    .workforceGetCheckListModel
-                                                    .data![index]
-                                                    .isdraft ==
-                                                1,
-                                            child: Text(
-                                                '[${StringConstants.kDraft}]',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .xSmall
-                                                    .copyWith(
-                                                        color:
-                                                            AppColor.errorRed)))
-                                      ])),
-                              subtitle: Column(
+                          child: Padding(
+                        padding: const EdgeInsets.only(top: tinierSpacing),
+                        child: ListTile(
+                            title: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      state.workforceGetCheckListModel
+                                          .data![index].name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .small
+                                          .copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.black)),
+                                  const SizedBox(height: tinierSpacing),
+                                  Visibility(
+                                      visible: state.workforceGetCheckListModel
+                                              .data![index].isdraft ==
+                                          1,
+                                      child: Text('[${StringConstants.kDraft}]',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(
+                                                  color: AppColor.errorRed)))
+                                ]),
+                            subtitle: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: tinierSpacing),
+                              child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        '${DatabaseUtil.getText('Assignedate')}: ${state.workforceGetCheckListModel.data![index].submitdate}  -- ${DatabaseUtil.getText('Dueon')}: ${state.workforceGetCheckListModel.data![index].overduedate}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(color: AppColor.grey)),
+                                      '${DatabaseUtil.getText('Assignedate')}: ${state.workforceGetCheckListModel.data![index].submitdate}  -- ${DatabaseUtil.getText('Dueon')}: ${state.workforceGetCheckListModel.data![index].overduedate}',
+                                    ),
                                     const SizedBox(height: xxTinierSpacing),
                                     Text(
-                                        '${state.workforceGetCheckListModel.data![index].categoryname} -- ${state.workforceGetCheckListModel.data![index].subcategoryname}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(color: AppColor.grey)),
-                                    const SizedBox(height: xxTinierSpacing),
+                                      '${state.workforceGetCheckListModel.data![index].categoryname} -- ${state.workforceGetCheckListModel.data![index].subcategoryname}',
+                                    ),
+                                    const SizedBox(height: tinierSpacing),
                                     Visibility(
                                       visible: state.workforceGetCheckListModel
                                               .data![index].isrejected !=
@@ -117,28 +107,29 @@ class WorkForceListScreen extends StatelessWidget {
                                           textValue:
                                               StringConstants.kSubmitted),
                                     ),
+                                    const SizedBox(height: tinierSpacing)
                                   ]),
-                              onTap: () {
-                                Map checklistDataMap = {
-                                  "scheduleId": state.workforceGetCheckListModel
-                                      .data![index].scheduleid
-                                      .toString(),
-                                  "checklistId": state
-                                      .workforceGetCheckListModel
-                                      .data![index]
-                                      .id,
-                                  "isDraft": state.workforceGetCheckListModel
-                                      .data![index].isdraft,
-                                  "isRejected": state.workforceGetCheckListModel
-                                      .data![index].isrejected
-                                };
-                                Navigator.pushNamed(
-                                    context, WorkForceQuestionsScreen.routeName,
-                                    arguments: checklistDataMap);
-                              }));
+                            ),
+                            onTap: () {
+                              Map checklistDataMap = {
+                                "scheduleId": state.workforceGetCheckListModel
+                                    .data![index].scheduleid
+                                    .toString(),
+                                "checklistId": state
+                                    .workforceGetCheckListModel.data![index].id,
+                                "isDraft": state.workforceGetCheckListModel
+                                    .data![index].isdraft,
+                                "isRejected": state.workforceGetCheckListModel
+                                    .data![index].isrejected
+                              };
+                              Navigator.pushNamed(
+                                  context, WorkForceQuestionsScreen.routeName,
+                                  arguments: checklistDataMap);
+                            }),
+                      ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: xxTinySpacing);
+                      return const SizedBox(height: tinierSpacing);
                     });
               } else if (state is ListNotFetched) {
                 return GenericReloadButton(

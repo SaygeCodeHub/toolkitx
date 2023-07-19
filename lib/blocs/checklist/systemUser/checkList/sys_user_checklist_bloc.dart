@@ -44,9 +44,9 @@ class SysUserCheckListBloc
       } else {
         add(ClearCheckListFilter());
         ChecklistListModel getChecklistModel = await _sysUserCheckListRepository
-            .fetchCheckList(event.page, hashCode, filterData);
+            .fetchCheckList(event.page, hashCode, '{}');
         emit(CheckListFetched(
-            getChecklistModel: getChecklistModel, filterData: filterData));
+            getChecklistModel: getChecklistModel, filterData: '{}'));
       }
     } catch (e) {
       emit(CheckListError(

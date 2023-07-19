@@ -9,7 +9,7 @@ String incidentDetailsModelToJson(IncidentDetailsModel data) =>
 class IncidentDetailsModel {
   final int? status;
   final String? message;
-  final Data? data;
+  final IncidentDetailsDatum? data;
 
   IncidentDetailsModel({
     this.status,
@@ -21,7 +21,7 @@ class IncidentDetailsModel {
       IncidentDetailsModel(
         status: json["Status"],
         message: json["Message"],
-        data: Data.fromJson(json["Data"]),
+        data: IncidentDetailsDatum.fromJson(json["Data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +31,7 @@ class IncidentDetailsModel {
       };
 }
 
-class Data {
+class IncidentDetailsDatum {
   final String id;
   final String eventdatetime;
   final String status;
@@ -67,7 +67,7 @@ class Data {
   final List<Linkedpermit>? linkedpermits;
   final List<Log>? logs;
 
-  Data({
+  IncidentDetailsDatum({
     required this.id,
     required this.eventdatetime,
     required this.status,
@@ -104,7 +104,8 @@ class Data {
     this.logs,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory IncidentDetailsDatum.fromJson(Map<String, dynamic> json) =>
+      IncidentDetailsDatum(
         id: json["id"],
         eventdatetime: json["eventdatetime"],
         status: json["status"],

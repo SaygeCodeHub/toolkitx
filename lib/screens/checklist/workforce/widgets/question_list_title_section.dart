@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
-import '../../../../configs/app_color.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 
 class QuestionListTitleSection extends StatelessWidget {
@@ -21,12 +19,16 @@ class QuestionListTitleSection extends StatelessWidget {
               text: '${questionList.title}?',
               style: Theme.of(context)
                   .textTheme
-                  .small
-                  .copyWith(color: AppColor.black, fontWeight: FontWeight.w500),
+                  .xSmall
+                  .copyWith(fontWeight: FontWeight.w600),
               children: [
                 (questionList.ismandatory == 1)
                     ? TextSpan(
-                        text: ' *', style: Theme.of(context).textTheme.medium)
+                        text: ' *',
+                        style: Theme.of(context)
+                            .textTheme
+                            .xSmall
+                            .copyWith(fontWeight: FontWeight.w600))
                     : const TextSpan()
               ])),
     );

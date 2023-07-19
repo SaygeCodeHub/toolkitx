@@ -1,8 +1,6 @@
 import '../../data/models/uploadImage/upload_image_model.dart';
 
-abstract class PickAndUploadImage {
-  const PickAndUploadImage();
-}
+abstract class PickAndUploadImage {}
 
 class UploadInitial extends PickAndUploadImage {}
 
@@ -12,7 +10,7 @@ class PickCameraImage extends PickAndUploadImage {
   final int? index;
   final bool isSignature;
 
-  const PickCameraImage(
+  PickCameraImage(
       {this.isSignature = false,
       this.index,
       required this.cameraImageList,
@@ -25,7 +23,7 @@ class PickGalleryImage extends PickAndUploadImage {
   final int? index;
   final bool isSignature;
 
-  const PickGalleryImage({
+  PickGalleryImage({
     this.isSignature = false,
     this.index,
     required this.isImageAttached,
@@ -38,7 +36,7 @@ class UploadImageEvent extends PickAndUploadImage {
   final bool isImageAttached;
   final List imagesList;
 
-  const UploadImageEvent(
+  UploadImageEvent(
       {required this.imagesList,
       required this.isImageAttached,
       required this.imageFile});
