@@ -42,11 +42,6 @@ abstract class ModulesUtil {
     ModulesModel(
         moduleName: 'TimeVacation',
         moduleImage: '${kBaseImagePath}holiday.png',
-        key: 'ess',
-        notificationKey: ''),
-    ModulesModel(
-        moduleName: 'TimeVacation',
-        moduleImage: '${kBaseImagePath}holiday.png',
         key: 'wf_timesheet',
         notificationKey: ''),
     ModulesModel(

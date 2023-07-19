@@ -70,6 +70,14 @@ abstract class StringConstants {
       'Please add atleast one photo!'; //
   static const String kApplyFilter = 'Apply Filter'; //
   static const String kLeaveDetails = 'Leave Details'; //
+  static const String kStartDateValidation = 'Please select start date!'; //
+  static const String kEndDateValidation = 'Please select end date!'; //
+  static const String kTypeValidation = 'Please select type!'; //
+  static const String kReasonValidation = 'Please enter reason!'; //
+  static const String kEmergencyContactValidation =
+      'Please enter emergency contact!'; //
+  static const String kSelect = 'Select'; //
+  static const String kAlert = 'Alert'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
