@@ -21,8 +21,9 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ToDoBloc>().add(ChangeToDoCategory(categoryId: ''));
     String categoryName = '';
-    return BlocBuilder<TodoBloc, ToDoStates>(
+    return BlocBuilder<ToDoBloc, ToDoStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ToDoCategoryChanged,
         builder: (context, state) {
@@ -58,13 +59,13 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
                                 title: Text(data[index].name,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
-                                    ListTileControlAffinity.trailing,
+                                ListTileControlAffinity.trailing,
                                 value: data[index].id.toString(),
                                 groupValue: state.categoryId,
                                 onChanged: (value) {
                                   value = data[index].id.toString();
                                   categoryName = data[index].name;
-                                  context.read<TodoBloc>().add(
+                                  context.read<ToDoBloc>().add(
                                       ChangeToDoCategory(categoryId: value));
                                 });
                           })

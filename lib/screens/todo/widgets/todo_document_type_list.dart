@@ -5,18 +5,18 @@ import 'package:toolkit/blocs/todo/todo_bloc.dart';
 import '../../../blocs/todo/todo_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/todo/fetch_todo_master_model.dart';
+import '../../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/generic_app_bar.dart';
 
 class ToDoDocumentTypeList extends StatelessWidget {
-  final List<List<ToDoMasterDatum>> todoMasterDatum;
+  final List<List<ToDoDocumentMasterDatum>> data;
   final int documentTypeId;
   final Map todoFilterMap;
 
   const ToDoDocumentTypeList(
       {Key? key,
-      required this.todoMasterDatum,
+      required this.data,
       required this.documentTypeId,
       required this.todoFilterMap})
       : super(key: key);
@@ -37,22 +37,21 @@ class ToDoDocumentTypeList extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        itemCount: todoMasterDatum[0].length,
+                        itemCount: data[0].length,
                         itemBuilder: (context, index) {
                           return RadioListTile(
                               contentPadding: EdgeInsets.zero,
                               activeColor: AppColor.deepBlue,
                               controlAffinity: ListTileControlAffinity.trailing,
-                              title: Text(todoMasterDatum[0][index].name),
-                              value: todoMasterDatum[0][index].id,
+                              title: Text(data[0][index].name),
+                              value: data[0][index].id,
                               groupValue: documentTypeId,
                               onChanged: (value) {
-                                value = todoMasterDatum[0][index].id;
+                                value = data[0][index].id;
                                 context.read<ToDoBloc>().add(
                                     SelectToDoDocumentType(
                                         documentTypeId: value,
-                                        documentTypeName:
-                                            todoMasterDatum[0][index].name));
+                                        documentTypeName: data[0][index].name));
                                 Navigator.pop(context);
                               });
                         }),

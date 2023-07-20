@@ -9,28 +9,29 @@ String sendReminderTodoModelToJson(FetchToDoMasterModel data) =>
 class FetchToDoMasterModel {
   final int? status;
   final String? message;
-  final List<List<ToDoMasterDatum>>? data;
+  final List<List<ToDoMasterDatum>>? todoFetchMasterDatum;
 
   FetchToDoMasterModel({
     this.status,
     this.message,
-    this.data,
+    this.todoFetchMasterDatum,
   });
 
   factory FetchToDoMasterModel.fromJson(Map<String, dynamic> json) =>
       FetchToDoMasterModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<List<ToDoMasterDatum>>.from(json["Data"].map((x) =>
-            List<ToDoMasterDatum>.from(
+        todoFetchMasterDatum: List<List<ToDoMasterDatum>>.from(json["Data"].map(
+            (x) => List<ToDoMasterDatum>.from(
                 x.map((x) => ToDoMasterDatum.fromJson(x))))),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "Status": status,
         "Message": message,
-        "Data": List<dynamic>.from(
-            data!.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+        "Data": List<dynamic>.from(todoFetchMasterDatum!
+            .map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
       };
 }
 

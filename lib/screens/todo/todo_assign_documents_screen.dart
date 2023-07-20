@@ -10,7 +10,7 @@ import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
-import '../../data/models/todo/fetch_todo_master_model.dart';
+import '../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/generic_no_records_text.dart';
@@ -19,14 +19,14 @@ import 'todo_assign_documents_filter_screen.dart';
 
 class ToDoAssignDocumentsScreen extends StatelessWidget {
   final Map todoMap;
-  final List<List<ToDoMasterDatum>> todoMasterDatum;
+  final List<List<ToDoDocumentMasterDatum>> data;
   final bool isFromPopUpMenu;
   static Map addFiltersDataMap = {};
 
   const ToDoAssignDocumentsScreen(
       {Key? key,
       required this.todoMap,
-      required this.todoMasterDatum,
+      required this.data,
       this.isFromPopUpMenu = false})
       : super(key: key);
 
@@ -80,7 +80,7 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         ToDoAssignDocumentsFilterScreen(
-                                            todoMasterDatum: todoMasterDatum,
+                                            data: data,
                                             todoMap: todoMap,
                                             addFiltersDataMap:
                                                 addFiltersDataMap)));

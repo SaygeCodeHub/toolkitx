@@ -23,7 +23,7 @@ class SubmitToDoButton extends StatelessWidget {
     return Visibility(
       visible: todoDetails.isdraft == '1',
       child: BottomAppBar(
-        child: BlocListener<TodoBloc, ToDoStates>(
+        child: BlocListener<ToDoBloc, ToDoStates>(
           listener: (context, state) {
             if (state is SubmittingToDo) {
               ProgressBar.show(context);
@@ -32,7 +32,7 @@ class SubmitToDoButton extends StatelessWidget {
               Navigator.pop(context);
               Navigator.pop(context);
               context
-                  .read<TodoBloc>()
+                  .read<ToDoBloc>()
                   .add(FetchTodoAssignedToMeAndByMeListEvent());
             } else if (state is ToDoNotSubmitted) {
               ProgressBar.dismiss(context);
@@ -50,7 +50,7 @@ class SubmitToDoButton extends StatelessWidget {
                       contentValue: '',
                       onPressed: () {
                         context
-                            .read<TodoBloc>()
+                            .read<ToDoBloc>()
                             .add(SubmitToDo(todoMap: todoMap));
                         Navigator.pop(context);
                       },

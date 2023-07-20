@@ -104,7 +104,7 @@ class SubmitToDo extends ToDoEvent {
   SubmitToDo({required this.todoMap});
 }
 
-class ToDoFetchMaster extends ToDoEvent {}
+class FetchToDoDocumentMaster extends ToDoEvent {}
 
 class ChangeToDoCategory extends ToDoEvent {
   final String categoryId;

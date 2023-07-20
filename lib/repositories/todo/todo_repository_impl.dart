@@ -5,7 +5,7 @@ import 'package:toolkit/data/models/todo/fetch_assign_todo_to_me_list_model.dart
 import 'package:toolkit/data/models/todo/fetch_document_for_todo_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_details_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_details_model.dart';
-import 'package:toolkit/data/models/todo/fetch_todo_master_model.dart';
+import 'package:toolkit/data/models/todo/fetch_todo_document_master_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_master_model.dart';
 import 'package:toolkit/data/models/todo/submit_todo_model.dart';
 import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
@@ -116,5 +116,13 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}todo/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchToDoMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchToDoDocumentMasterModel> fetchDocumentMaster(
+      String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}document/getmaster?hashcode=$hashCode&userid=$userId");
+    return FetchToDoDocumentMasterModel.fromJson(response);
   }
 }

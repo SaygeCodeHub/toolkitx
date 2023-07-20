@@ -26,7 +26,7 @@ class AddToDoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(ToDoFetchMaster());
+    context.read<ToDoBloc>().add(FetchToDoMaster());
     todoMap['createdfor'] = null;
     todoMap['categoryid'] = null;
     todoMap['duedate'] = null;
@@ -45,7 +45,7 @@ class AddToDoScreen extends StatelessWidget {
                   textValue: DatabaseUtil.getText('buttonBack')),
             ),
             const SizedBox(width: xxxTinierSpacing),
-            BlocListener<TodoBloc, ToDoStates>(
+            BlocListener<ToDoBloc, ToDoStates>(
               listener: (context, state) {
                 if (state is AddingToDo) {
                   ProgressBar.show(context);
@@ -62,14 +62,14 @@ class AddToDoScreen extends StatelessWidget {
               child: Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        context.read<TodoBloc>().add(AddToDo(todoMap: todoMap));
+                        context.read<ToDoBloc>().add(AddToDo(todoMap: todoMap));
                       },
                       textValue: DatabaseUtil.getText('nextButtonText'))),
             )
           ],
         ),
       ),
-      body: BlocBuilder<TodoBloc, ToDoStates>(
+      body: BlocBuilder<ToDoBloc, ToDoStates>(
           buildWhen: (previousState, currentState) =>
               currentState is ToDoFetchingMaster ||
               currentState is ToDoMasterFetched ||
@@ -88,7 +88,8 @@ class AddToDoScreen extends StatelessWidget {
                   children: [
                     ToDoCreatedForListTile(
                         todoMap: todoMap,
-                        data: state.fetchToDoMasterModel.data![0]),
+                        data: state
+                            .fetchToDoMasterModel.todoFetchMasterDatum![0]),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Category'),
                         style: Theme.of(context)
@@ -98,7 +99,8 @@ class AddToDoScreen extends StatelessWidget {
                     const SizedBox(height: xxxTinierSpacing),
                     ToDoCategoryExpansionTile(
                         todoMap: todoMap,
-                        data: state.fetchToDoMasterModel.data![1]),
+                        data: state
+                            .fetchToDoMasterModel.todoFetchMasterDatum![1]),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Duedate'),
                         style: Theme.of(context)

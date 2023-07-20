@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/todo/fetch_todo_document_master_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -17,7 +18,6 @@ import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
-import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
@@ -28,6 +28,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   FetchDocumentForToDoModel fetchDocumentForToDoModel =
       FetchDocumentForToDoModel();
+  FetchToDoMasterModel fetchToDoMasterModel = FetchToDoMasterModel();
   int initialIndex = 0;
   Map todoMap = {};
   Map filters = {};
@@ -49,6 +50,10 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<ClearToDoFilter>(_clearFilter);
     on<ToDoPopUpMenuMarkAsDone>(_popupMenuMarkAsDone);
     on<SaveToDoDocuments>(_saveDocuments);
+    on<AddToDo>(_addTodo);
+    on<SubmitToDo>(_submitTodo);
+    on<ChangeToDoCategory>(_categoryChanged);
+    on<FetchToDoDocumentMaster>(_fetchDocumentMaster);
   }
 
   _applyFilter(ApplyToDoFilter event, Emitter<ToDoStates> emit) {
@@ -58,10 +63,6 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
   FutureOr<void> _clearFilter(
       ClearToDoFilter event, Emitter<ToDoStates> emit) async {
     filters = {};
-    on<AddToDo>(_addTodo);
-    on<SubmitToDo>(_submitTodo);
-    on<ToDoFetchMaster>(_fetchMaster);
-    on<ChangeToDoCategory>(_categoryChanged);
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -209,25 +210,6 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         filterMap: filters));
   }
 
-  FutureOr _fetchMaster(FetchToDoMaster event, Emitter<ToDoStates> emit) async {
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      FetchToDoMasterModel fetchToDoMasterModel =
-          await _toDoRepository.fetchTodoMaster(hashCode!, userId!);
-      List popUpMenuList = [
-        DatabaseUtil.getText('MarkasDone'),
-        DatabaseUtil.getText('AssignDocuments'),
-        DatabaseUtil.getText('dms_uploaddocuments'),
-      ];
-      emit(ToDoMasterFetched(
-          fetchToDoMasterModel: fetchToDoMasterModel,
-          todoPopUpMenuList: popUpMenuList));
-    } catch (e) {
-      e.toString();
-    }
-  }
-
   FutureOr _addTodo(AddToDo event, Emitter<ToDoStates> emit) async {
     emit(AddingToDo());
     try {
@@ -290,7 +272,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     }
   }
 
-  FutureOr _fetchMaster(ToDoFetchMaster event, Emitter<ToDoStates> emit) async {
+  FutureOr _fetchMaster(FetchToDoMaster event, Emitter<ToDoStates> emit) async {
     emit(ToDoFetchingMaster());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -298,14 +280,9 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       fetchToDoMasterModel =
           await _toDoRepository.fetchMaster(hashCode!, userId!);
       emit(ToDoMasterFetched(fetchToDoMasterModel: fetchToDoMasterModel));
-      add(ChangeToDoCategory(categoryId: ''));
     } catch (e) {
-      emit(ToDoMasterNotFetched(masterNotFetched: e.toString()));
+      emit(ToDoMasterNotFetched());
     }
-  }
-
-  _categoryChanged(ChangeToDoCategory event, Emitter<ToDoStates> emit) {
-    emit(ToDoCategoryChanged(categoryId: event.categoryId));
   }
 
   _selectDocumentType(SelectToDoDocumentType event, Emitter<ToDoStates> emit) {
@@ -413,5 +390,31 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     } catch (e) {
       emit(ToDoDocumentsNotSaved(documentsNotSaved: e.toString()));
     }
+  }
+
+  FutureOr _fetchDocumentMaster(
+      FetchToDoDocumentMaster event, Emitter<ToDoStates> emit) async {
+    emit(FetchingToDoDocumentMaster());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      FetchToDoDocumentMasterModel fetchToDoDocumentMasterModel =
+          await _toDoRepository.fetchDocumentMaster(hashCode!, userId!);
+      List popUpMenuList = [
+        DatabaseUtil.getText('MarkasDone'),
+        DatabaseUtil.getText('AssignDocuments'),
+        DatabaseUtil.getText('dms_uploaddocuments'),
+      ];
+      emit(ToDoDocumentMasterFetched(
+          fetchToDoDocumentMasterModel: fetchToDoDocumentMasterModel,
+          popUpMenuList: popUpMenuList));
+      add(ChangeToDoCategory(categoryId: ''));
+    } catch (e) {
+      emit(ToDoMasterNotFetched());
+    }
+  }
+
+  _categoryChanged(ChangeToDoCategory event, Emitter<ToDoStates> emit) {
+    emit(ToDoCategoryChanged(categoryId: event.categoryId));
   }
 }

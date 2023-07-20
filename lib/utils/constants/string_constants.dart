@@ -80,7 +80,6 @@ abstract class StringConstants {
   static const String kReasonValidation = 'Please enter reason!'; //
   static const String kEmergencyContactValidation =
       'Please enter emergency contact!'; //
-  static const String kSelect = 'Select'; //
   static const String kAlert = 'Alert'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';

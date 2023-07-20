@@ -24,12 +24,12 @@ class ToDoPopUpMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ToDoBloc>().add(FetchToDoMaster());
+    context.read<ToDoBloc>().add(FetchToDoDocumentMaster());
     return BlocBuilder<ToDoBloc, ToDoStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is ToDoMasterFetched,
+            currentState is ToDoDocumentMasterFetched,
         builder: (context, state) {
-          if (state is ToDoMasterFetched) {
+          if (state is ToDoDocumentMasterFetched) {
             return PopupMenuButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(kCardRadius)),
@@ -55,9 +55,8 @@ class ToDoPopUpMenu extends StatelessWidget {
                   if (value == DatabaseUtil.getText('AssignDocuments')) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ToDoAssignDocumentsScreen(
-                              todoMap: todoMap,
-                              todoMasterDatum:
-                                  state.fetchToDoMasterModel.todoMasterDatum,
+                          todoMap: todoMap,
+                              data: state.fetchToDoDocumentMasterModel.data,
                               isFromPopUpMenu: true,
                             )));
                   }
@@ -65,15 +64,15 @@ class ToDoPopUpMenu extends StatelessWidget {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ToDoUploadDocumentScreen(
                             todoMap: todoMap,
-                            todoMasterDatum:
-                                state.fetchToDoMasterModel.todoMasterDatum)));
+                            data: state.fetchToDoDocumentMasterModel.data)));
                   }
                 },
                 position: PopupMenuPosition.under,
-                itemBuilder: (BuildContext context) => [
-                      for (int i = 0; i < state.todoPopUpMenuList.length; i++)
-                        _buildPopupMenuItem(context, state.todoPopUpMenuList[i],
-                            state.todoPopUpMenuList[i])
+                itemBuilder: (BuildContext context) =>
+                [
+                      for (int i = 0; i < state.popUpMenuList.length; i++)
+                        _buildPopupMenuItem(context, state.popUpMenuList[i],
+                            state.popUpMenuList[i])
                     ]);
           } else {
             return const SizedBox();
