@@ -100,7 +100,7 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
                       }),
                   BlocBuilder<ToDoBloc, ToDoStates>(
                       buildWhen: (previousState, currentState) =>
-                      currentState is FetchingDocumentForToDo ||
+                          currentState is FetchingDocumentForToDo ||
                           currentState is DocumentForToDoFetched,
                       builder: (context, state) {
                         if (state is FetchingDocumentForToDo) {
