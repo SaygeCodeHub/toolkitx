@@ -5,14 +5,10 @@ import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_eve
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/utils/database_utils.dart';
-
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../utils/constants/string_constants.dart';
-import '../../../widgets/generic_text_field.dart';
-import 'date_picker.dart';
+import 'incident_reported_authority_fields.dart';
 
 class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
   final Map addIncidentMap;
@@ -25,9 +21,15 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ReportNewIncidentBloc>().add(
         ReportNewIncidentAuthorityExpansionChange(
-            reportIncidentAuthorityId: ''));
-    String authorityName = '';
-    String reportedDate = '';
+            reportIncidentAuthorityId:
+                (addIncidentMap['responsible_person'] == null ||
+                        addIncidentMap['responsible_person'].isEmpty)
+                    ? ""
+                    : "1"));
+    String authorityName = (addIncidentMap['responsible_person'] == null ||
+            addIncidentMap['responsible_person'].isEmpty)
+        ? ""
+        : DatabaseUtil.getText('Yes');
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentAuthoritySelected,
@@ -85,52 +87,9 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
                                   });
                             })
                       ])),
-              Visibility(
-                  visible: state.reportIncidentAuthorityId == '1',
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: xxTinySpacing),
-                        Text(DatabaseUtil.getText('WhichAuthority'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: xxxTinierSpacing),
-                        TextFieldWidget(
-                            hintText: DatabaseUtil.getText('WhichAuthority'),
-                            onTextFieldChanged: (String textField) {
-                              addIncidentMap['responsible_person'] = textField;
-                            }),
-                        const SizedBox(height: xxTinySpacing),
-                        Text(DatabaseUtil.getText('WhenReported'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: xxxTinierSpacing),
-                        DatePickerTextField(
-                          hintText: StringConstants.kSelectDate,
-                          onDateChanged: (String date) {
-                            reportedDate = date;
-                          },
-                        ),
-                        const SizedBox(height: xxTinySpacing),
-                        Text(StringConstants.kTime,
-                            style: Theme.of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: xxxTinierSpacing),
-                        TimePickerTextField(
-                          hintText: StringConstants.kSelectTime,
-                          onTimeChanged: (String time) {
-                            addIncidentMap['reporteddatetime'] =
-                                '$reportedDate $time';
-                          },
-                        ),
-                        const SizedBox(height: xxTinySpacing)
-                      ]))
+              IncidentReportedAuthorityFields(
+                  addIncidentMap: addIncidentMap,
+                  reportIncidentAuthorityId: state.reportIncidentAuthorityId),
             ]);
           } else {
             return const SizedBox();

@@ -55,9 +55,24 @@ abstract class StringConstants {
       'Enter New Password'; // comment lines indicates that keys are not available
   static const String kConfirmPassword = 'Confirm Password'; //
   static const String kNoCustomFields = 'No custom fields info!'; //
+  static const String kNoDocument = 'No Document!'; //
+  static const String kNoToDoAssignedBy = 'No todo is assigned by you!'; //
+  static const String kNoToDoAssignedTo = 'No todo is assigned to you!'; //
   static const String kNoComment = 'No comments!'; //
   static const String kNoInjuredPerson = 'No injured person!'; //
   static const String kNoILinkedPermit = 'No linked permit!'; //
+  static const String kAssignedToMe = 'assignedtome'; //
+  static const String kAssignedByMe = 'assignedbyme'; //
+  static const String kViewHistory = 'View History'; //
+  static const String kLeaveDetails = 'Leave Details'; //
+  static const String kStartDateValidation = 'Please select start date!'; //
+  static const String kEndDateValidation = 'Please select end date!'; //
+  static const String kTypeValidation = 'Please select type!'; //
+  static const String kReasonValidation = 'Please enter reason!'; //
+  static const String kEmergencyContactValidation =
+      'Please enter emergency contact!'; //
+  static const String kSelect = 'Select'; //
+  static const String kAlert = 'Alert'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';

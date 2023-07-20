@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -23,6 +25,7 @@ import 'blocs/checklist/workforce/workforceList/workforce_list_bloc.dart';
 import 'blocs/client/client_bloc.dart';
 import 'blocs/dateFormat/date_format_bloc.dart';
 import 'blocs/home/home_bloc.dart';
+import 'blocs/incident/editIncidentDetails/edit_incident_details_bloc.dart';
 import 'blocs/incident/incidentDetails/incident_details_bloc.dart';
 import 'blocs/incident/incidentInjuryDetails/incident_injury_details_bloc.dart';
 import 'blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
@@ -37,6 +40,7 @@ import 'blocs/permit/permit_bloc.dart';
 import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
+import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_states.dart';
@@ -131,6 +135,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false, create: (context) => PickAndUploadImageBloc()),
           BlocProvider(lazy: true, create: (context) => IncidentDetailsBloc()),
+          BlocProvider(create: (context) => LogbookBloc()),
           BlocProvider(
               lazy: false, create: (context) => PickAndUploadImageBloc()),
           BlocProvider(lazy: false, create: (context) => IncidentDetailsBloc()),
@@ -140,6 +145,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => ReportNewIncidentBloc()),
           BlocProvider(lazy: false, create: (context) => InjuryDetailsBloc()),
+          BlocProvider(lazy: true, create: (context) => TodoBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => LeavesAndHolidaysBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => EditIncidentDetailsBloc()),
           BlocProvider(
               lazy: false,
               create: (context) => OnBoardingBloc()..add(CheckClientSelected()))

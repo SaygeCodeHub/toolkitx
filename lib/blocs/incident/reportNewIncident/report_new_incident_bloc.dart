@@ -59,10 +59,10 @@ class ReportNewIncidentBloc
           IncidentMasterDatum.fromJson(
               {"location": DatabaseUtil.getText('Other')}));
       if (event.categories != "null") {
-        categories = event.categories.toString().split(',');
+        categories = event.categories.toString().replaceAll(" ", "").split(',');
       }
       add(SelectIncidentCategory(
-          multiSelectList: categories, selectedCategory: null));
+          multiSelectList: categories, selectedCategory: ''));
     } catch (e) {
       emit(IncidentMasterNotFetched());
     }
@@ -119,7 +119,7 @@ class ReportNewIncidentBloc
       }
     ];
     List selectedCategoryList = List.from(event.multiSelectList);
-    if (event.selectedCategory != null) {
+    if (event.selectedCategory != '') {
       if (event.multiSelectList.contains(event.selectedCategory) != true) {
         selectedCategoryList.add(event.selectedCategory);
       } else {
@@ -215,7 +215,7 @@ class ReportNewIncidentBloc
     emit(ReportNewIncidentCustomFieldSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         reportIncidentCustomInfoOptionId:
-            event.reportIncidentCustomInfoOptionId));
+            event.reportIncidentCustomInfoOptionId!));
   }
 
   FutureOr<void> _saveIncident(SaveReportNewIncident event,
@@ -285,11 +285,8 @@ class ReportNewIncidentBloc
     try {
       reportNewIncidentMap = event.reportNewIncidentMap;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
       Map saveIncidentPhotosMap = {
-        "userid": userId,
         "incidentid": incidentId,
-        "commentid": "",
         "filenames": reportNewIncidentMap['filenames'],
         "hashcode": hashCode
       };

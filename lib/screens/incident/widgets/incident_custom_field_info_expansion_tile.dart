@@ -14,17 +14,29 @@ typedef CustomFieldCallBack = Function(String customFieldOptionId);
 class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
   final CustomFieldCallBack onCustomFieldChanged;
   final int index;
+  final Map addAndEditIncidentMap;
 
   const IncidentReportCustomFiledInfoExpansionTile(
-      {Key? key, required this.onCustomFieldChanged, required this.index})
+      {Key? key,
+      required this.onCustomFieldChanged,
+      required this.index,
+      required this.addAndEditIncidentMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<ReportNewIncidentBloc>().add(
         ReportNewIncidentCustomInfoFiledExpansionChange(
-            reportIncidentCustomInfoOptionId: ''));
-    String customFieldName = '';
+            reportIncidentCustomInfoOptionId:
+                (addAndEditIncidentMap['optionIds'] == null ||
+                        addAndEditIncidentMap['optionIds'].isEmpty)
+                    ? '[]'
+                    : addAndEditIncidentMap['optionIds'][index]['optionId']
+                        .toString()));
+    String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
+            addAndEditIncidentMap['customfields'].isEmpty)
+        ? ""
+        : addAndEditIncidentMap['customfields'][index]['value'];
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentCustomFieldSelected,
@@ -71,8 +83,9 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                                     .incidentMasterDatum![7][index]
                                     .queoptions[itemIndex]['optionid']
                                     .toString(),
-                                groupValue:
-                                    state.reportIncidentCustomInfoOptionId,
+                                groupValue: state
+                                    .reportIncidentCustomInfoOptionId
+                                    .toString(),
                                 onChanged: (value) {
                                   value = state
                                       .fetchIncidentMasterModel
