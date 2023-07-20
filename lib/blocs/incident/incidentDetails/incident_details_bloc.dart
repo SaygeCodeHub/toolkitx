@@ -67,7 +67,7 @@ class IncidentDetailsBloc
         if (incidentDetailsModel.data!.nextStatus == '4') {
           popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
         }
-        if (incidentDetailsModel.data!.canResolve == '1') {
+        if (incidentDetailsModel.data!.canResolve == '0') {
           popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
         }
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));

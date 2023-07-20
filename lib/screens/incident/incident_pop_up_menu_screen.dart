@@ -8,6 +8,7 @@ import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import 'incident_add_comments_screen.dart';
+import 'incident_mark_as_resolved_screen.dart';
 
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -42,7 +43,10 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
           if (value == DatabaseUtil.getText('DefineMitigation')) {}
           if (value == DatabaseUtil.getText('ApproveMitigation')) {}
           if (value == DatabaseUtil.getText('ImplementMitigation')) {}
-          if (value == DatabaseUtil.getText('Markasresolved')) {}
+          if (value == DatabaseUtil.getText('Markasresolved')) {
+            Navigator.pushNamed(context, IncidentMarkAsResolvedScreen.routeName,
+                arguments: incidentListDatum);
+          }
           if (value == DatabaseUtil.getText('GenerateReport')) {
             context
                 .read<IncidentDetailsBloc>()

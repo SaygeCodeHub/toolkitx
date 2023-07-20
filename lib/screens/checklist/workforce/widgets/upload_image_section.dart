@@ -46,16 +46,63 @@ class UploadImageMenu extends StatelessWidget {
                   width: kProgressIndicatorTogether,
                   height: kProgressIndicatorTogether,
                   child: CircularProgressIndicator()),
-                );
-              } else if (state is ImagePickerLoaded) {
-                uploadImageList.add(state.uploadPictureModel.data);
-                onUploadImageResponse(uploadImageList);
-                imagesList = List.from(state.imagePathsList);
-                return (state.isImageAttached == true)
-                    ? UploadPictureContainer(
-                    imagePathsList: state.imagePathsList,
-                    isImageAttached: state.isImageAttached,
-                    uploadPictureModel: state.uploadPictureModel)
+            );
+          } else if (state is ImagePickerLoaded) {
+            uploadImageList.add(state.uploadPictureModel.data);
+            onUploadImageResponse(uploadImageList);
+            imagesList = List.from(state.imagePathsList);
+            return (state.isImageAttached == true)
+                ? Column(
+                    children: [
+                      UploadPictureContainer(
+                          imagePathsList: state.imagePathsList,
+                          isImageAttached: state.isImageAttached,
+                          uploadPictureModel: state.uploadPictureModel),
+                      Visibility(
+                        visible: uploadImageList.length <= 5 &&
+                            isFromIncident == true,
+                        replacement: const SizedBox.shrink(),
+                        child: SecondaryButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return UploadAlertDialog(
+                                      isSignature: isSignature,
+                                      onCamera: () {
+                                        if (removeSignPad != null) {
+                                          removeSignPad!();
+                                        }
+                                        context
+                                            .read<PickAndUploadImageBloc>()
+                                            .add(PickCameraImage(
+                                                cameraImageList: imagesList,
+                                                isImageAttached: null,
+                                                isSignature: isSignature!));
+                                        Navigator.pop(context);
+                                      },
+                                      onDevice: () {
+                                        if (removeSignPad != null) {
+                                          removeSignPad!();
+                                        }
+                                        context
+                                            .read<PickAndUploadImageBloc>()
+                                            .add(PickGalleryImage(
+                                                isImageAttached: null,
+                                                galleryImagesList: imagesList,
+                                                isSignature: isSignature!));
+                                        Navigator.pop(context);
+                                      },
+                                      onSign: onSign,
+                                    );
+                                  });
+                            },
+                            textValue: (isSignature == false)
+                                ? StringConstants.kUpload
+                                : StringConstants.kEditSignature),
+                      )
+                    ],
+                  )
                 : const SizedBox();
           } else if (state is ImagePickerError) {
             return Text(
@@ -63,47 +110,48 @@ class UploadImageMenu extends StatelessWidget {
               style: const TextStyle(color: AppColor.errorRed),
             );
           } else {
-            return const SizedBox();
+            return Column(
+              children: [
+                SecondaryButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return UploadAlertDialog(
+                              isSignature: isSignature,
+                              onCamera: () {
+                                if (removeSignPad != null) {
+                                  removeSignPad!();
+                                }
+                                context.read<PickAndUploadImageBloc>().add(
+                                    PickCameraImage(
+                                        cameraImageList: imagesList,
+                                        isImageAttached: null,
+                                        isSignature: isSignature!));
+                                Navigator.pop(context);
+                              },
+                              onDevice: () {
+                                if (removeSignPad != null) {
+                                  removeSignPad!();
+                                }
+                                context.read<PickAndUploadImageBloc>().add(
+                                    PickGalleryImage(
+                                        isImageAttached: null,
+                                        galleryImagesList: imagesList,
+                                        isSignature: isSignature!));
+                                Navigator.pop(context);
+                              },
+                              onSign: onSign,
+                            );
+                          });
+                    },
+                    textValue: (isSignature == false)
+                        ? StringConstants.kUpload
+                        : StringConstants.kEditSignature),
+              ],
+            );
           }
         }),
-      (uploadImageList.length >= 6 == true && isFromIncident == true)
-          ? const SizedBox(child: Text('I am here'))
-          : SecondaryButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return UploadAlertDialog(
-                        isSignature: isSignature,
-                        onCamera: () {
-                          if (removeSignPad != null) {
-                            removeSignPad!();
-                          }
-                          context.read<PickAndUploadImageBloc>().add(
-                              PickCameraImage(
-                                  cameraImageList: imagesList,
-                                  isImageAttached: null,
-                                  isSignature: isSignature!));
-                          Navigator.pop(context);
-                        },
-                        onDevice: () {
-                          if (removeSignPad != null) {
-                            removeSignPad!();
-                          }
-                          context.read<PickAndUploadImageBloc>().add(
-                              PickGalleryImage(
-                                  isImageAttached: null,
-                                  galleryImagesList: imagesList,
-                                  isSignature: isSignature!));
-                          Navigator.pop(context);
-                        },
-                        onSign: onSign,
-                      );
-                    });
-              },
-              textValue: (isSignature == false)
-                  ? StringConstants.kUpload
-                  : StringConstants.kEditSignature)
     ]);
   }
 }

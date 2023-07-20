@@ -152,12 +152,18 @@ class PickAndUploadImageBloc
     try {
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.imageFile), hashCode);
+      int? number;
       if (uploadPictureModel.status == 200) {
+        for (int i = 0; i <= event.imagesList.length; i++) {
+          int incrementNumber = i;
+          number = incrementNumber;
+        }
         emit(ImagePickerLoaded(
             isImageAttached: event.isImageAttached,
             imagePathsList: event.imagesList,
             imagePath: event.imageFile,
-            uploadPictureModel: uploadPictureModel));
+            uploadPictureModel: uploadPictureModel,
+            incrementNumber: number!));
       } else {
         emit(ImageNotUploaded(
             imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -171,14 +177,15 @@ class PickAndUploadImageBloc
   _removeImage(RemoveImage event, Emitter<PickAndUploadImageStates> emit) {
     bool isAttached = true;
     List images = List.from(event.imagesList);
+    int? decrementNumber;
     if (event.index >= 0 && event.index < images.length) {
-      images.removeAt(event.index);
       images.isEmpty ? isAttached = false : isAttached = true;
       emit(ImagePickerLoaded(
           isImageAttached: isAttached,
           imagePathsList: images,
           imagePath: '',
-          uploadPictureModel: event.uploadPictureModel));
+          uploadPictureModel: event.uploadPictureModel,
+          incrementNumber: decrementNumber!));
     }
   }
 

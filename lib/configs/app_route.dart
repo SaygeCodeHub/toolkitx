@@ -22,6 +22,7 @@ import '../screens/incident/incident_health_and_safety_screen.dart';
 import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
+import '../screens/incident/incident_mark_as_resolved_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
 import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
@@ -170,6 +171,9 @@ class AppRoutes {
         return _createRoute(ApplyForLeaveScreen());
       case IncidentAddCommentsScreen.routeName:
         return _createRoute(IncidentAddCommentsScreen(
+            incidentListDatum: settings.arguments as IncidentListDatum));
+      case IncidentMarkAsResolvedScreen.routeName:
+        return _createRoute(IncidentMarkAsResolvedScreen(
             incidentListDatum: settings.arguments as IncidentListDatum));
       default:
         return _createRoute(const WelcomeScreen());

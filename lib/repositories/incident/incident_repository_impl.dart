@@ -19,7 +19,8 @@ import 'incident_repository.dart';
 
 class IncidentRepositoryImpl extends IncidentRepository {
   @override
-  Future<IncidentFetchRolesModel> fetchIncidentRole(String hashCode, String userId) async {
+  Future<IncidentFetchRolesModel> fetchIncidentRole(
+      String hashCode, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/getroles?hashcode=$hashCode&userid=$userId");
     return IncidentFetchRolesModel.fromJson(response);
@@ -41,35 +42,40 @@ class IncidentRepositoryImpl extends IncidentRepository {
   }
 
   @override
-  Future<IncidentDetailsModel> fetchIncidentDetails(String incidentId, String hashCode, String userId, String role) async {
+  Future<IncidentDetailsModel> fetchIncidentDetails(
+      String incidentId, String hashCode, String userId, String role) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/getincident1?incidentid=$incidentId&hashcode=$hashCode&userid=$userId&role=$role");
     return IncidentDetailsModel.fromJson(response);
   }
 
   @override
-  Future<IncidentUnlinkPermitModel> removeLinkedPermit(Map removeLinkedPermitMap) async {
+  Future<IncidentUnlinkPermitModel> removeLinkedPermit(
+      Map removeLinkedPermitMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}incident/unlinkpermit", removeLinkedPermitMap);
     return IncidentUnlinkPermitModel.fromJson(response);
   }
 
   @override
-  Future<FetchIncidentMasterModel> fetchIncidentMaster(String hashCode, String role) async {
+  Future<FetchIncidentMasterModel> fetchIncidentMaster(
+      String hashCode, String role) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/getmaster?hashcode=$hashCode&role=$role");
     return FetchIncidentMasterModel.fromJson(response);
   }
 
   @override
-  Future<SaveReportNewIncidentModel> saveIncident(Map reportNewIncidentMap) async {
+  Future<SaveReportNewIncidentModel> saveIncident(
+      Map reportNewIncidentMap) async {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}incident/save", reportNewIncidentMap);
     return SaveReportNewIncidentModel.fromJson(response);
   }
 
   @override
-  Future<SaveReportNewIncidentPhotosModel> saveIncidentPhotos(Map saveIncidentPhotosMap) async {
+  Future<SaveReportNewIncidentPhotosModel> saveIncidentPhotos(
+      Map saveIncidentPhotosMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}incident/savecommentsfiles",
         saveIncidentPhotosMap);
@@ -84,7 +90,8 @@ class IncidentRepositoryImpl extends IncidentRepository {
   }
 
   @override
-  Future<FetchPermitToLinkModel> fetchPermitToLink(int pageNo, String hashCode, String filter, String incidentId) async {
+  Future<FetchPermitToLinkModel> fetchPermitToLink(
+      int pageNo, String hashCode, String filter, String incidentId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}/incident/getpermitstolink?pageno=$pageNo&hashcode=$hashCode&filter=$filter&incidentid=$incidentId");
     return FetchPermitToLinkModel.fromJson(response);
