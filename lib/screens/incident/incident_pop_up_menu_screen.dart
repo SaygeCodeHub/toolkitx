@@ -8,7 +8,6 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
-import '../../data/models/incident/incident_details_model.dart';
 import 'category_screen.dart';
 import 'widgets/incident_contractor_list_tile.dart';
 import 'incident_add_comments_screen.dart';
@@ -53,12 +52,11 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
           if (value == DatabaseUtil.getText('EditIncident')) {
             CategoryScreen.addAndEditIncidentMap = incidentDetailsMap;
             IncidentContractorListTile.contractorName =
-            (incidentDetailsModel.data!.companyname == "null")
-                ? ''
-                : incidentDetailsModel.data!.companyname;
+                (incidentDetailsModel.data!.companyname == "null")
+                    ? ''
+                    : incidentDetailsModel.data!.companyname;
             CategoryScreen.isFromEdit = true;
             Navigator.pushNamed(context, CategoryScreen.routeName);
-
           }
           if (value == DatabaseUtil.getText('Report')) {
             Navigator.of(context).push(MaterialPageRoute(
