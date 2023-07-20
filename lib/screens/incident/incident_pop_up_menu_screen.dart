@@ -8,6 +8,9 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import '../../data/models/incident/incident_details_model.dart';
+import 'category_screen.dart';
+import 'widgets/incident_contractor_list_tile.dart';
 import 'incident_add_comments_screen.dart';
 import 'incident_mark_as_resolved_screen.dart';
 import 'incident_status_screen.dart';
@@ -15,12 +18,14 @@ import 'incident_status_screen.dart';
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
   final IncidentListDatum incidentListDatum;
+  final Map incidentDetailsMap;
   final IncidentDetailsModel incidentDetailsModel;
 
   const IncidentDetailsPopUpMenu(
       {Key? key,
       required this.popUpMenuItems,
       required this.incidentListDatum,
+      required this.incidentDetailsMap,
       required this.incidentDetailsModel})
       : super(key: key);
 
@@ -45,7 +50,16 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
-          if (value == DatabaseUtil.getText('EditIncident')) {}
+          if (value == DatabaseUtil.getText('EditIncident')) {
+            CategoryScreen.addAndEditIncidentMap = incidentDetailsMap;
+            IncidentContractorListTile.contractorName =
+            (incidentDetailsModel.data!.companyname == "null")
+                ? ''
+                : incidentDetailsModel.data!.companyname;
+            CategoryScreen.isFromEdit = true;
+            Navigator.pushNamed(context, CategoryScreen.routeName);
+
+          }
           if (value == DatabaseUtil.getText('Report')) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(

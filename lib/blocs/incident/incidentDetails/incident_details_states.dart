@@ -31,11 +31,13 @@ class FetchingIncidentDetails extends IncidentDetailsStates {
 class IncidentDetailsFetched extends IncidentDetailsStates {
   final IncidentDetailsModel incidentDetailsModel;
   final String clientId;
+  final Map editIncidentDetailsMap;
   final List incidentPopUpMenu;
   final bool showPopUpMenu;
 
   const IncidentDetailsFetched(
-      {required this.clientId,
+      {required this.editIncidentDetailsMap,
+      required this.clientId,
       required this.incidentDetailsModel,
       required this.incidentPopUpMenu,
       required this.showPopUpMenu});
