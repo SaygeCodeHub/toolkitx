@@ -165,9 +165,6 @@ class AppRoutes {
         return _createRoute(const LeavesSummaryScreen());
       case LeavesDetailsScreen.routeName:
         return _createRoute(const LeavesDetailsScreen());
-      case ToDoDetailsAndDocumentDetailsScreen.routeName:
-        return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
-            todoMap: settings.arguments as Map));
       case ApplyForLeaveScreen.routeName:
         return _createRoute(ApplyForLeaveScreen());
       default:
