@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -160,7 +160,6 @@ class PickAndUploadImageBloc
     try {
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.imageFile), hashCode);
-      log("listttt of upload======>${event.imagesList}");
       if (uploadPictureModel.status == 200) {
         emit(ImagePickerLoaded(
             isImageAttached: event.isImageAttached,
