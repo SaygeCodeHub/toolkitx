@@ -7,6 +7,7 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import 'incident_add_comments_screen.dart';
 
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -31,7 +32,10 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
-          if (value == DatabaseUtil.getText('AddComments')) {}
+          if (value == DatabaseUtil.getText('AddComments')) {
+            Navigator.pushNamed(context, IncidentAddCommentsScreen.routeName,
+                arguments: incidentListDatum);
+          }
           if (value == DatabaseUtil.getText('EditIncident')) {}
           if (value == DatabaseUtil.getText('Report')) {}
           if (value == DatabaseUtil.getText('Acknowledge')) {}

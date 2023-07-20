@@ -32,3 +32,15 @@ class SaveLikedPermits extends IncidentDetailsEvent {
 
   SaveLikedPermits({required this.savedPermitList, required this.incidentId});
 }
+
+class SaveIncidentComments extends IncidentDetailsEvent {
+  final Map saveCommentsMap;
+
+  SaveIncidentComments({required this.saveCommentsMap});
+}
+
+class SaveIncidentCommentsFiles extends IncidentDetailsEvent {
+  final Map saveCommentsMap;
+
+  SaveIncidentCommentsFiles({required this.saveCommentsMap});
+}

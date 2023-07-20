@@ -16,6 +16,7 @@ import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
+import '../screens/incident/incident_add_comments_screen.dart';
 import '../screens/incident/incident_filter_screen.dart';
 import '../screens/incident/incident_health_and_safety_screen.dart';
 import '../screens/incident/incident_injuries_screen.dart';
@@ -167,6 +168,9 @@ class AppRoutes {
         return _createRoute(const LeavesDetailsScreen());
       case ApplyForLeaveScreen.routeName:
         return _createRoute(ApplyForLeaveScreen());
+      case IncidentAddCommentsScreen.routeName:
+        return _createRoute(IncidentAddCommentsScreen(
+            incidentListDatum: settings.arguments as IncidentListDatum));
       default:
         return _createRoute(const WelcomeScreen());
     }
