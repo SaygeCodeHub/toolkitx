@@ -57,7 +57,7 @@ class AssignedToMeListDatum {
         todoname: json["todoname"],
         istododue: json["istododue"],
         description: json["description"],
-        category: json["category"],
+        category: json["category"] ?? '',
         duedate: json["duedate"],
         createdfor: json["createdfor"],
       );

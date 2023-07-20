@@ -167,6 +167,7 @@ class OnLineModules extends StatelessWidget {
       case 'todo':
         Navigator.pushNamed(
             context, TodoAssignedByMeAndToMeListScreen.routeName);
+        break;
     }
   }
 }
