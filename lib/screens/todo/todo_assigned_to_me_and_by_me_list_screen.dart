@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:toolkit/blocs/todo/todo_bloc.dart';
+import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/todo/todo_event.dart';
-import '../../blocs/todo/todo_states.dart';
-import '../../blocs/todo/todo_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import 'widgets/todo_assigned_by_me_body.dart';
@@ -21,7 +21,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
+    context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
@@ -34,7 +34,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: xxTinySpacing),
-                BlocBuilder<TodoBloc, ToDoStates>(
+                BlocBuilder<ToDoBloc, ToDoStates>(
                     buildWhen: (previousState, currentState) =>
                         currentState is TodoAssignedToMeAndByMeListFetched,
                     builder: (context, state) {
@@ -61,7 +61,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                               ],
                               onToggle: (index) {
                                 indexSelected = index!;
-                                context.read<TodoBloc>().add(ToDoToggleIndex(
+                                context.read<ToDoBloc>().add(ToDoToggleIndex(
                                     selectedIndex: indexSelected,
                                     fetchToDoAssignToByListModel:
                                         state.fetchToDoAssignToByListModel,
@@ -76,7 +76,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                       }
                     }),
                 const SizedBox(height: xxTinySpacing),
-                BlocBuilder<TodoBloc, ToDoStates>(
+                BlocBuilder<ToDoBloc, ToDoStates>(
                     buildWhen: (previousState, currentState) =>
                         currentState is FetchingTodoAssignedToMeAndByMeList ||
                         currentState is TodoAssignedToMeAndByMeListFetched,
@@ -84,10 +84,10 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                       if (state is FetchingTodoAssignedToMeAndByMeList) {
                         return Center(
                           child: Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height / 3.5),
-                            child: const CircularProgressIndicator(),
-                          ),
+                              padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height / 3.5),
+                              child: const CircularProgressIndicator()),
                         );
                       } else if (state is TodoAssignedToMeAndByMeListFetched) {
                         if (indexSelected == 0) {
