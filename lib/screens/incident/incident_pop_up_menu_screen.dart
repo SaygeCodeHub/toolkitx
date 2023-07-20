@@ -7,13 +7,22 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import '../../data/models/incident/incident_details_model.dart';
+import 'category_screen.dart';
+import 'widgets/incident_contractor_list_tile.dart';
 
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
   final IncidentListDatum incidentListDatum;
+  final Map incidentDetailsMap;
+  final IncidentDetailsModel incidentDetailsModel;
 
   const IncidentDetailsPopUpMenu(
-      {Key? key, required this.popUpMenuItems, required this.incidentListDatum})
+      {Key? key,
+      required this.popUpMenuItems,
+      required this.incidentListDatum,
+      required this.incidentDetailsMap,
+      required this.incidentDetailsModel})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -32,7 +41,15 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
           if (value == DatabaseUtil.getText('AddComments')) {}
-          if (value == DatabaseUtil.getText('EditIncident')) {}
+          if (value == DatabaseUtil.getText('EditIncident')) {
+            CategoryScreen.addAndEditIncidentMap = incidentDetailsMap;
+            IncidentContractorListTile.contractorName =
+                (incidentDetailsModel.data!.companyname == "null")
+                    ? ''
+                    : incidentDetailsModel.data!.companyname;
+            CategoryScreen.isFromEdit = true;
+            Navigator.pushNamed(context, CategoryScreen.routeName);
+          }
           if (value == DatabaseUtil.getText('Report')) {}
           if (value == DatabaseUtil.getText('Acknowledge')) {}
           if (value == DatabaseUtil.getText('DefineMitigation')) {}
