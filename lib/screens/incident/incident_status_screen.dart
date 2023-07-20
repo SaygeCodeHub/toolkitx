@@ -7,6 +7,7 @@ import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc
 import '../../configs/app_spacing.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/incident_details_model.dart';
+import '../../utils/constants/incident_status_util.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
@@ -17,7 +18,6 @@ import 'widgets/incident_common_comments_section.dart';
 class IncidentStatusScreen extends StatelessWidget {
   final IncidentListDatum incidentListDatum;
   final IncidentDetailsModel incidentDetailsModel;
-  static const routeName = 'IncidentStatusScreen';
 
   IncidentStatusScreen(
       {Key? key,
@@ -29,7 +29,9 @@ class IncidentStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GenericAppBar(title: incidentDetailsModel.data!.statusText),
+        appBar: GenericAppBar(
+            title: IncidentStatusUtil()
+                .incidentStatusWidget(incidentDetailsModel)),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
