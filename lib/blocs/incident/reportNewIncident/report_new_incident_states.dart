@@ -31,7 +31,7 @@ class ReportNewIncidentAnonymousSelected extends ReportNewIncidentStates {
 
 class ReportNewIncidentContractorSelected extends ReportNewIncidentStates {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
-  final int selectContractorId;
+  final String selectContractorId;
   final String selectContractorName;
 
   ReportNewIncidentContractorSelected(
@@ -98,7 +98,7 @@ class ReportNewIncidentCustomFieldFetched extends ReportNewIncidentStates {
 
 class ReportNewIncidentCustomFieldSelected extends ReportNewIncidentStates {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
-  final int reportIncidentCustomInfoOptionId;
+  final String reportIncidentCustomInfoOptionId;
 
   ReportNewIncidentCustomFieldSelected(
       {required this.fetchIncidentMasterModel,

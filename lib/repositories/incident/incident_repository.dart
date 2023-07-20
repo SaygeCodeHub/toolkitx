@@ -1,3 +1,4 @@
+import '../../data/models/incident/edit_incident_details_model.dart';
 import '../../data/models/incident/fetch_incident_master_model.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/fetch_permit_to_link_model.dart';
@@ -42,4 +43,6 @@ abstract class IncidentRepository {
       int pageNo, String hashCode, String filter, String incidentId);
 
   Future<SaveLinkedPermitModel> saveLinkedPermit(Map linkedPermitMap);
+
+  Future<EditIncidentDetailsModel> editIncidentDetails(Map editIncidentDetails);
 }

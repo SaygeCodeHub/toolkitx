@@ -8,7 +8,7 @@ class FetchIncidentMaster extends ReportNewIncidentEvent {
 }
 
 class SelectIncidentCategory extends ReportNewIncidentEvent {
-  final int? selectedCategory;
+  final String selectedCategory;
   final List multiSelectList;
 
   SelectIncidentCategory(
@@ -23,7 +23,7 @@ class ReportNewIncidentAnonymousExpansionChange extends ReportNewIncidentEvent {
 }
 
 class ReportNewIncidentContractorListChange extends ReportNewIncidentEvent {
-  final int selectContractorId;
+  final String selectContractorId;
   final String selectContractorName;
 
   ReportNewIncidentContractorListChange(
@@ -71,7 +71,7 @@ class ReportNewIncidentCustomInfoFieldFetch extends ReportNewIncidentEvent {
 
 class ReportNewIncidentCustomInfoFiledExpansionChange
     extends ReportNewIncidentEvent {
-  final int? reportIncidentCustomInfoOptionId;
+  final String? reportIncidentCustomInfoOptionId;
 
   ReportNewIncidentCustomInfoFiledExpansionChange(
       {required this.reportIncidentCustomInfoOptionId});
