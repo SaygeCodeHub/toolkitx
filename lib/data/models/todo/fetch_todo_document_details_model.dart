@@ -54,7 +54,7 @@ class ToDoDocumentDetailsDatum {
         tododocid: json["tododocid"],
         docid: json["docid"],
         docname: json["docname"],
-        doctypename: json["doctypename"],
+        doctypename: json["doctypename"] ?? '',
         files: json["files"],
       );
 

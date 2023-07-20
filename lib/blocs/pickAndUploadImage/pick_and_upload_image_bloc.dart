@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -21,6 +22,7 @@ class PickAndUploadImageBloc
   final ImagePicker _imagePicker = ImagePicker();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   bool isInitial = true;
+  int number = 0;
 
   PickAndUploadImageStates get initialState => PermissionInitial();
 
@@ -68,6 +70,9 @@ class PickAndUploadImageBloc
           cameraPathsList.add(pickedFile.path);
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
+          }
+          for (int i = 0; i <= cameraPathsList.length; i++) {
+            number = i;
           }
           if (isAttached == true) {
             if (event.isSignature == true) {
@@ -123,6 +128,9 @@ class PickAndUploadImageBloc
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
           }
+          for (int i = 0; i <= galleryPathsList.length; i++) {
+            number = i;
+          }
           if (isAttached == true) {
             if (event.isSignature == true) {
               add(CropImage(imagePath: imagePath));
@@ -157,7 +165,8 @@ class PickAndUploadImageBloc
             isImageAttached: event.isImageAttached,
             imagePathsList: event.imagesList,
             imagePath: event.imageFile,
-            uploadPictureModel: uploadPictureModel));
+            uploadPictureModel: uploadPictureModel,
+            incrementNumber: number));
       } else {
         emit(ImageNotUploaded(
             imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -173,12 +182,14 @@ class PickAndUploadImageBloc
     List images = List.from(event.imagesList);
     if (event.index >= 0 && event.index < images.length) {
       images.removeAt(event.index);
+      number--;
       images.isEmpty ? isAttached = false : isAttached = true;
       emit(ImagePickerLoaded(
           isImageAttached: isAttached,
           imagePathsList: images,
           imagePath: '',
-          uploadPictureModel: event.uploadPictureModel));
+          uploadPictureModel: event.uploadPictureModel,
+          incrementNumber: number));
     }
   }
 

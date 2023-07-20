@@ -22,6 +22,10 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
+import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
+import '../screens/leavesAndHolidays/leaves_details_screen.dart';
+import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -135,17 +139,17 @@ class AppRoutes {
         return _createRoute(IncidentDetailsScreen(
             incidentListDatum: settings.arguments as IncidentListDatum));
       case ReportNewIncidentScreen.routeName:
-        return _createRoute(
-            ReportNewIncidentScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(ReportNewIncidentScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentLocationScreen.routeName:
-        return _createRoute(
-            IncidentLocationScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(IncidentLocationScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentHealthAndSafetyScreen.routeName:
         return _createRoute(IncidentHealthAndSafetyScreen(
-            addIncidentMap: settings.arguments as Map));
+            addAndEditIncidentMap: settings.arguments as Map));
       case AddInjuredPersonScreen.routeName:
-        return _createRoute(
-            AddInjuredPersonScreen(addIncidentMap: settings.arguments as Map));
+        return _createRoute(AddInjuredPersonScreen(
+            addAndEditIncidentMap: settings.arguments as Map));
       case IncidentInjuriesScreen.routeName:
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));
@@ -156,6 +160,15 @@ class AppRoutes {
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
         return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
             todoMap: settings.arguments as Map));
+      case LeavesAndHolidaysScreen.routeName:
+        return _createRoute(const LeavesAndHolidaysScreen());
+      case LeavesSummaryScreen.routeName:
+        return _createRoute(const LeavesSummaryScreen());
+      case LeavesDetailsScreen.routeName:
+        return _createRoute(const LeavesDetailsScreen());
+      case ApplyForLeaveScreen.routeName:
+        return _createRoute(ApplyForLeaveScreen());
+
       case AddToDoScreen.routeName:
         return _createRoute(AddToDoScreen(todoMap: settings.arguments as Map));
       default:

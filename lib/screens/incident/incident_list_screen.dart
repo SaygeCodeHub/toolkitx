@@ -54,7 +54,8 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
         appBar: GenericAppBar(title: DatabaseUtil.getText('ReportanIncident')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              CategoryScreen.addIncidentMap = {};
+              CategoryScreen.isFromEdit = false;
+              CategoryScreen.addAndEditIncidentMap = {};
               Navigator.pushNamed(context, CategoryScreen.routeName);
             },
             child: const Icon(Icons.add)),

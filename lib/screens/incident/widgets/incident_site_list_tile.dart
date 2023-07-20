@@ -21,9 +21,10 @@ class IncidentSiteListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ReportNewIncidentBloc>()
-        .add(ReportIncidentSiteListChange(selectSiteName: ''));
+    context.read<ReportNewIncidentBloc>().add(ReportIncidentSiteListChange(
+        selectSiteName: (addIncidentMap['site_name'] == null)
+            ? ''
+            : addIncidentMap['site_name']));
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentSiteSelected,

@@ -69,20 +69,19 @@ class TodoAssignedByMeBody extends StatelessWidget {
                                           .copyWith(
                                               fontWeight: FontWeight.bold,
                                               color: AppColor.black)),
-                                  BlocListener<TodoBloc, ToDoStates>(
+                                  BlocListener<ToDoBloc, ToDoStates>(
                                     listener: (context, state) {
                                       if (state is ToDoMarkingAsDone) {
                                         ProgressBar.show(context);
                                       } else if (state is ToDoMarkedAsDone) {
-                                        context.read<TodoBloc>().add(
+                                        ProgressBar.dismiss(context);
+                                        context.read<ToDoBloc>().add(
                                             FetchTodoAssignedToMeAndByMeListEvent());
                                       } else if (state
                                           is ToDoCannotMarkAsDone) {
-                                        showCustomSnackBar(
-                                            context,
-                                            DatabaseUtil.getText(
-                                                'some_unknown_error_please_try_again'),
-                                            '');
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(context,
+                                            state.cannotMarkAsDone, '');
                                       }
                                     },
                                     child: IconButton(
@@ -104,7 +103,7 @@ class TodoAssignedByMeBody extends StatelessWidget {
                                                                   index]
                                                               .id;
                                                       context
-                                                          .read<TodoBloc>()
+                                                          .read<ToDoBloc>()
                                                           .add(ToDoMarkAsDone(
                                                               todoMap:
                                                                   todoMap));

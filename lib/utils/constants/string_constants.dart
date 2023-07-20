@@ -68,6 +68,20 @@ abstract class StringConstants {
   static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
+  static const String kDocumentNameValidation =
+      'Please enter document name!'; //
+  static const String kDocumentUploadValidation =
+      'Please add atleast one photo!'; //
+  static const String kApplyFilter = 'Apply Filter'; //
+  static const String kLeaveDetails = 'Leave Details'; //
+  static const String kStartDateValidation = 'Please select start date!'; //
+  static const String kEndDateValidation = 'Please select end date!'; //
+  static const String kTypeValidation = 'Please select type!'; //
+  static const String kReasonValidation = 'Please enter reason!'; //
+  static const String kEmergencyContactValidation =
+      'Please enter emergency contact!'; //
+  static const String kSelect = 'Select'; //
+  static const String kAlert = 'Alert'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
@@ -83,7 +97,7 @@ abstract class StringConstants {
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectYourLanguage = 'Select Your Language';
-  static const String kClearFilter = 'Clear Filter';
+  static const String kClearFilter = 'Clear';
   static const String kPleaseConfirm = 'Please Confirm';
   static const String kThirdParty = 'Third Party Approve';
   static const String kEditHeader = 'Edit Header';

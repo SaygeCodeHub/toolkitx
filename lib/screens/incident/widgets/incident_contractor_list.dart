@@ -10,7 +10,7 @@ import '../../../widgets/generic_app_bar.dart';
 
 class IncidentContractorList extends StatelessWidget {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
-  final int selectContractorId;
+  final String selectContractorId;
   final String selectContractorName;
 
   const IncidentContractorList(
@@ -46,18 +46,21 @@ class IncidentContractorList extends StatelessWidget {
                               title: Text(fetchIncidentMasterModel
                                   .incidentMasterDatum![8][index].groupName!),
                               value: fetchIncidentMasterModel
-                                  .incidentMasterDatum![8][index].groupId!,
+                                  .incidentMasterDatum![8][index].groupId!
+                                  .toString(),
                               groupValue: selectContractorId,
                               onChanged: (value) {
-                                value = fetchIncidentMasterModel
-                                    .incidentMasterDatum![8][index].groupId!;
                                 context.read<ReportNewIncidentBloc>().add(
                                     ReportNewIncidentContractorListChange(
                                         selectContractorName:
                                             fetchIncidentMasterModel
                                                 .incidentMasterDatum![8][index]
                                                 .groupName!,
-                                        selectContractorId: value));
+                                        selectContractorId:
+                                            fetchIncidentMasterModel
+                                                .incidentMasterDatum![8][index]
+                                                .groupId!
+                                                .toString()));
                                 Navigator.pop(context);
                               });
                         }),

@@ -129,5 +129,10 @@ abstract class ModulesUtil {
         moduleImage: '${kBaseImagePath}trips.png',
         key: 'wf_trips',
         notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Signout',
+        moduleImage: '${kBaseImagePath}trips.png',
+        key: 'tracking',
+        notificationKey: ''),
   ];
 }
