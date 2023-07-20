@@ -40,7 +40,8 @@ class IncidentDetailsScreen extends StatelessWidget {
                   if (state.showPopUpMenu == true) {
                     return IncidentDetailsPopUpMenu(
                         popUpMenuItems: state.incidentPopUpMenu,
-                        incidentListDatum: incidentListDatum);
+                        incidentListDatum: incidentListDatum,
+                        incidentDetailsModel: state.incidentDetailsModel);
                   } else {
                     return const SizedBox();
                   }

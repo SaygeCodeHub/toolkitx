@@ -6,6 +6,7 @@ import '../../blocs/incident/incidentDetails/incident_details_states.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import '../../data/models/incident/incident_details_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -15,10 +16,13 @@ import '../../widgets/progress_bar.dart';
 import 'widgets/incident_common_comments_section.dart';
 
 class IncidentMarkAsResolvedScreen extends StatelessWidget {
-  static const routeName = 'IncidentMarkAsResolvedScreen';
   final IncidentListDatum incidentListDatum;
+  final IncidentDetailsModel incidentDetailsModel;
 
-  IncidentMarkAsResolvedScreen({Key? key, required this.incidentListDatum})
+  IncidentMarkAsResolvedScreen(
+      {Key? key,
+      required this.incidentListDatum,
+      required this.incidentDetailsModel})
       : super(key: key);
   final Map incidentCommentsMap = {};
 
@@ -45,6 +49,8 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
                 onTextFieldValue: (String textValue) {
                   incidentCommentsMap['comments'] = textValue;
                 },
+                incidentCommentsMap: incidentCommentsMap,
+                incidentDetailsModel: incidentDetailsModel,
               ),
               BlocListener<IncidentDetailsBloc, IncidentDetailsStates>(
                   listener: (context, state) {

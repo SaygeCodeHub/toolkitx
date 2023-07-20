@@ -44,3 +44,9 @@ class SaveIncidentCommentsFiles extends IncidentDetailsEvent {
 
   SaveIncidentCommentsFiles({required this.saveCommentsMap});
 }
+
+class SelectIncidentClassification extends IncidentDetailsEvent {
+  final String classificationId;
+
+  SelectIncidentClassification({required this.classificationId});
+}

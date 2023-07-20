@@ -81,7 +81,7 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
                       ToDoDocumentTypeListTile(
                           todoMasterDatum: todoMasterDatum,
                           todoMap: todoMap,
-                          todoFilterMap: {}),
+                          todoFilterMap: const {}),
                       const SizedBox(height: xxTinySpacing),
                       Text(DatabaseUtil.getText('UploadPhotos'),
                           style: Theme.of(context)

@@ -13,15 +13,19 @@ import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
+import '../../data/models/incident/incident_details_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/primary_button.dart';
 import 'widgets/incident_common_comments_section.dart';
 
 class IncidentAddCommentsScreen extends StatelessWidget {
   final IncidentListDatum incidentListDatum;
-  static const routeName = 'IncidentAddCommentsScreen';
+  final IncidentDetailsModel incidentDetailsModel;
 
-  IncidentAddCommentsScreen({Key? key, required this.incidentListDatum})
+  IncidentAddCommentsScreen(
+      {Key? key,
+      required this.incidentListDatum,
+      required this.incidentDetailsModel})
       : super(key: key);
   final Map incidentCommentsMap = {};
 
@@ -50,6 +54,8 @@ class IncidentAddCommentsScreen extends StatelessWidget {
                 onTextFieldValue: (String textValue) {
                   incidentCommentsMap['comments'] = textValue;
                 },
+                incidentCommentsMap: incidentCommentsMap,
+                incidentDetailsModel: incidentDetailsModel,
               ),
               BlocListener<IncidentDetailsBloc, IncidentDetailsStates>(
                   listener: (context, state) {

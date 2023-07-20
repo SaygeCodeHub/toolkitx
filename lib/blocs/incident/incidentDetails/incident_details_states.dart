@@ -117,3 +117,12 @@ class IncidentCommentsFilesNotSaved extends IncidentDetailsStates {
 
   const IncidentCommentsFilesNotSaved({required this.commentsFilesNotSaved});
 }
+
+class IncidentClassificationSelected extends IncidentDetailsStates {
+  final String classificationId;
+
+  const IncidentClassificationSelected({required this.classificationId});
+
+  @override
+  List<Object?> get props => [classificationId];
+}

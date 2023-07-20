@@ -19,6 +19,7 @@ class IncidentDetailsBloc
     extends Bloc<IncidentDetailsEvent, IncidentDetailsStates> {
   final IncidentRepository _incidentRepository = getIt<IncidentRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  IncidentDetailsModel incidentDetailsModel = IncidentDetailsModel();
   int incidentTabIndex = 0;
   List savedList = [];
   String commentId = '';
@@ -32,6 +33,7 @@ class IncidentDetailsBloc
     on<GenerateIncidentPDF>(_generateIncidentPDF);
     on<SaveIncidentComments>(_saveComments);
     on<SaveIncidentCommentsFiles>(_saveCommentsFiles);
+    on<SelectIncidentClassification>(_selectClassification);
   }
 
   FutureOr<void> _fetchDetails(FetchIncidentDetailsEvent event,
@@ -45,9 +47,8 @@ class IncidentDetailsBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
       incidentTabIndex = event.initialIndex;
-      IncidentDetailsModel incidentDetailsModel =
-          await _incidentRepository.fetchIncidentDetails(
-              event.incidentId, hashCode!, userId!, event.role);
+      incidentDetailsModel = await _incidentRepository.fetchIncidentDetails(
+          event.incidentId, hashCode!, userId!, event.role);
       if (incidentDetailsModel.status == 200) {
         if (incidentDetailsModel.data!.canEdit == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
@@ -67,7 +68,7 @@ class IncidentDetailsBloc
         if (incidentDetailsModel.data!.nextStatus == '4') {
           popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
         }
-        if (incidentDetailsModel.data!.canResolve == '0') {
+        if (incidentDetailsModel.data!.canResolve == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
         }
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
@@ -156,9 +157,9 @@ class IncidentDetailsBloc
           "userid": userid,
           "incidentid": saveCommentMap['incidentId'],
           "hashcode": hashCode,
-          "status": "",
+          "status": saveCommentMap['status'] ?? '',
           "comments": saveCommentMap['comments'],
-          "classification": ""
+          "classification": saveCommentMap['classification'] ?? ''
         };
         SaveIncidentCommentsModel saveIncidentCommentsModel =
             await _incidentRepository.saveComments(saveCommentsMap);
@@ -206,5 +207,11 @@ class IncidentDetailsBloc
     } catch (e) {
       emit(IncidentCommentsFilesNotSaved(commentsFilesNotSaved: e.toString()));
     }
+  }
+
+  _selectClassification(
+      SelectIncidentClassification event, Emitter<IncidentDetailsStates> emit) {
+    emit(IncidentClassificationSelected(
+        classificationId: event.classificationId));
   }
 }

@@ -155,8 +155,7 @@ class PickAndUploadImageBloc
       int? number;
       if (uploadPictureModel.status == 200) {
         for (int i = 0; i <= event.imagesList.length; i++) {
-          int incrementNumber = i;
-          number = incrementNumber;
+          number = i;
         }
         emit(ImagePickerLoaded(
             isImageAttached: event.isImageAttached,

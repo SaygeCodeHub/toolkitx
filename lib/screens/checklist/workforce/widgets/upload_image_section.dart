@@ -20,8 +20,9 @@ class UploadImageMenu extends StatelessWidget {
   final bool? showSignPad;
   final bool? isSignature;
   final bool? isFromIncident;
+  final List uploadImageList = [];
 
-  const UploadImageMenu(
+  UploadImageMenu(
       {Key? key,
       required this.onUploadImageResponse,
       this.onSign,
@@ -33,7 +34,6 @@ class UploadImageMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List uploadImageList = [];
     List imagesList = [];
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       if (isSignature == false)
