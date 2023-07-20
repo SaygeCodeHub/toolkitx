@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
 import '../../../blocs/client/client_states.dart';
@@ -158,6 +159,9 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, LogbookListScreen.routeName);
         break;
       case 'timesheet':
+        Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+        break;
+      case 'wf_timesheet':
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         break;
       case 'todo':

@@ -65,3 +65,4 @@ const double kNotificationBadgeSize = 12.5;
 const double kNotificationBadgePadding = 20;
 const double kToggleSwitchMinWidth = 120;
 const double kToggleSwitchCornerRadius = 20;
+const double kGridViewMainAxisExtent = 215;
