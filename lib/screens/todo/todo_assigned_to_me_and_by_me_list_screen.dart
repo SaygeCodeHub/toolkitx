@@ -9,15 +9,16 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
+import 'add_todo_screen.dart';
 import 'widgets/todo_assigned_by_me_body.dart';
 import 'widgets/todo_assigned_to_me_body.dart';
 
 class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
   static const routeName = 'TodoAssignedByMeAndToMeListScreen';
   static int indexSelected = 0;
-  static Map todoMap = {};
+  final Map todoMap = {};
 
-  const TodoAssignedByMeAndToMeListScreen({Key? key}) : super(key: key);
+  TodoAssignedByMeAndToMeListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,11 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(context, AddToDoScreen.routeName,
+                  arguments: todoMap);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

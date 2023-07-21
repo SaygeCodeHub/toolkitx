@@ -58,7 +58,6 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                               BlocListener<ToDoBloc, ToDoStates>(
                                 listener: (context, state) {
                                   if (state is DeletingToDoDocument) {
-                                    ProgressBar.show(context);
                                   } else if (state is ToDoDocumentDeleted) {
                                     context.read<ToDoBloc>().add(
                                         FetchToDoDetailsAndDocumentDetails(
@@ -66,6 +65,7 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                                             selectedIndex: initialIndex));
                                   } else if (state
                                       is CannotDeleteToDoDocument) {
+                                    ProgressBar.dismiss(context);
                                     showCustomSnackBar(
                                         context,
                                         DatabaseUtil.getText(
@@ -80,6 +80,7 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                                           context: context,
                                           builder: (context) {
                                             return AndroidPopUp(
+                                                contentPadding: EdgeInsets.zero,
                                                 titleValue:
                                                     DatabaseUtil.getText(
                                                         'DeleteRecord'),

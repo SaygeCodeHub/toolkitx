@@ -61,7 +61,11 @@ abstract class StringConstants {
   static const String kNoComment = 'No comments!'; //
   static const String kNoInjuredPerson = 'No injured person!'; //
   static const String kNoILinkedPermit = 'No linked permit!'; //
+  static const String kSelectDueDate = 'Please select due date!'; //
+  static const String kAddHeading = 'Please add heading!'; //
+  static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
+  static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
   static const String kDocumentNameValidation =
@@ -76,7 +80,6 @@ abstract class StringConstants {
   static const String kReasonValidation = 'Please enter reason!'; //
   static const String kEmergencyContactValidation =
       'Please enter emergency contact!'; //
-  static const String kSelect = 'Select'; //
   static const String kAlert = 'Alert'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
@@ -101,6 +104,7 @@ abstract class StringConstants {
   static const String kResponseDate = 'Response Date:';
   static const String kNoResponseFound = 'No response found!';
   static const String kReject = 'Reject'; //
+  static const String kSelectCreatedFor = 'Please select created for!'; //
   static const String kDialogContent =
       "The language file doesn't exist or an old version.Please download the latest language file."; //
   static const String kReload = 'RELOAD'; //
@@ -170,7 +174,10 @@ abstract class StringConstants {
   static const String kValidateEmptyEmail = 'Please enter email'; //
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
+  static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
+  static const String kSubmitTodo = 'Submit TODO'; //
+  static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
   static const String kSomethingWentWrong = 'Something went wrong';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //

@@ -91,3 +91,27 @@ class SaveToDoDocuments extends ToDoEvent {
 
   SaveToDoDocuments({required this.todoMap});
 }
+
+class AddToDo extends ToDoEvent {
+  final Map todoMap;
+
+  AddToDo({required this.todoMap});
+}
+
+class SubmitToDo extends ToDoEvent {
+  final Map todoMap;
+
+  SubmitToDo({required this.todoMap});
+}
+
+class FetchToDoDocumentMaster extends ToDoEvent {
+  final Map todoMap;
+
+  FetchToDoDocumentMaster({required this.todoMap});
+}
+
+class ChangeToDoCategory extends ToDoEvent {
+  final String categoryId;
+
+  ChangeToDoCategory({required this.categoryId});
+}

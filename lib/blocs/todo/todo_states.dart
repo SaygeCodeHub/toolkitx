@@ -1,11 +1,14 @@
+import '../../data/models/todo/add_todo_model.dart';
 import '../../data/models/todo/delete_todo_document_model.dart';
 import '../../data/models/todo/fetch_assign_todo_by_me_list_model.dart';
 import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_document_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
+import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
 
@@ -78,10 +81,8 @@ class DocumentForToDoFetched extends ToDoStates {
 
 class ToDoMasterFetched extends ToDoStates {
   final FetchToDoMasterModel fetchToDoMasterModel;
-  final List todoPopUpMenuList;
 
-  ToDoMasterFetched(
-      {required this.todoPopUpMenuList, required this.fetchToDoMasterModel});
+  ToDoMasterFetched({required this.fetchToDoMasterModel});
 }
 
 class ToDoMasterNotFetched extends ToDoStates {}
@@ -134,4 +135,58 @@ class ToDoDocumentsNotSaved extends ToDoStates {
   final String documentsNotSaved;
 
   ToDoDocumentsNotSaved({required this.documentsNotSaved});
+}
+
+class AddingToDo extends ToDoStates {}
+
+class ToDoAdded extends ToDoStates {
+  final Map todoMap;
+  final AddToDoModel addToDoModel;
+
+  ToDoAdded({required this.addToDoModel, required this.todoMap});
+}
+
+class ToDoNotAdded extends ToDoStates {
+  final String todoNotAdded;
+
+  ToDoNotAdded({required this.todoNotAdded});
+}
+
+class SubmittingToDo extends ToDoStates {}
+
+class ToDoSubmitted extends ToDoStates {
+  final SubmitToDoModel submitToDoModel;
+
+  ToDoSubmitted({required this.submitToDoModel});
+}
+
+class ToDoNotSubmitted extends ToDoStates {
+  final String todoNotSubmitted;
+
+  ToDoNotSubmitted({required this.todoNotSubmitted});
+}
+
+class ToDoFetchingMaster extends ToDoStates {}
+
+class ToDoCategoryChanged extends ToDoStates {
+  final String categoryId;
+
+  ToDoCategoryChanged({required this.categoryId});
+}
+
+class FetchingToDoDocumentMaster extends ToDoStates {}
+
+class ToDoDocumentMasterFetched extends ToDoStates {
+  final FetchToDoDocumentMasterModel fetchToDoDocumentMasterModel;
+  final List popUpMenuList;
+
+  ToDoDocumentMasterFetched(
+      {required this.popUpMenuList,
+      required this.fetchToDoDocumentMasterModel});
+}
+
+class ToDoDocumentMasterNotFetched extends ToDoStates {
+  final String documentMasterNotFetched;
+
+  ToDoDocumentMasterNotFetched({required this.documentMasterNotFetched});
 }

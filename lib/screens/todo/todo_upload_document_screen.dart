@@ -14,16 +14,17 @@ import '../../blocs/todo/todo_bloc.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
 import '../../configs/app_spacing.dart';
-import '../../data/models/todo/fetch_todo_master_model.dart';
+import '../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../widgets/progress_bar.dart';
 import 'widgets/todo_documnet_type_list_tile.dart';
 
 class ToDoUploadDocumentScreen extends StatelessWidget {
-  final List<List<ToDoMasterDatum>> todoMasterDatum;
+  final List<List<ToDoDocumentMasterDatum>> data;
   final Map todoMap;
+  final Map? todoFilterMap;
 
   const ToDoUploadDocumentScreen(
-      {Key? key, required this.todoMap, required this.todoMasterDatum})
+      {Key? key, required this.todoMap, required this.data, this.todoFilterMap})
       : super(key: key);
 
   @override
@@ -79,9 +80,9 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
                             todoMap['name'] = textValue;
                           }),
                       ToDoDocumentTypeListTile(
-                          todoMasterDatum: todoMasterDatum,
+                          data: data,
                           todoMap: todoMap,
-                          todoFilterMap: const {}),
+                          todoFilterMap: todoFilterMap ?? {}),
                       const SizedBox(height: xxTinySpacing),
                       Text(DatabaseUtil.getText('UploadPhotos'),
                           style: Theme.of(context)

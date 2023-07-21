@@ -2,7 +2,7 @@ import 'database_utils.dart';
 
 class IncidentStatusUtil {
   incidentStatusWidget(incidentDetailsModel) {
-    switch (incidentDetailsModel.data!.nextStatus) {
+    switch (incidentDetailsModel.todoFetchMasterDatum!.nextStatus) {
       case '0':
         return DatabaseUtil.getText('Report');
       case '1':

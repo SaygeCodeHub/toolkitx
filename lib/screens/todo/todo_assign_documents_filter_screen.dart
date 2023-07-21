@@ -8,19 +8,19 @@ import 'package:toolkit/widgets/primary_button.dart';
 import '../../blocs/todo/todo_bloc.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../configs/app_spacing.dart';
-import '../../data/models/todo/fetch_todo_master_model.dart';
+import '../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/generic_text_field.dart';
 import 'widgets/todo_assign_documents_filter_status.dart';
 
 class ToDoAssignDocumentsFilterScreen extends StatelessWidget {
-  final List<List<ToDoMasterDatum>> todoMasterDatum;
+  final List<List<ToDoDocumentMasterDatum>> data;
   final Map todoMap;
   final Map addFiltersDataMap;
 
   const ToDoAssignDocumentsFilterScreen(
       {Key? key,
-      required this.todoMasterDatum,
+      required this.data,
       required this.todoMap,
       required this.addFiltersDataMap})
       : super(key: key);
@@ -77,9 +77,7 @@ class ToDoAssignDocumentsFilterScreen extends StatelessWidget {
                     todoFilterMap['name'] = textValue;
                   }),
               ToDoDocumentTypeListTile(
-                  todoMasterDatum: todoMasterDatum,
-                  todoMap: todoMap,
-                  todoFilterMap: todoFilterMap),
+                  data: data, todoMap: todoMap, todoFilterMap: todoFilterMap),
               const SizedBox(height: xxTinySpacing),
               Text(DatabaseUtil.getText('Status'),
                   style: Theme.of(context)

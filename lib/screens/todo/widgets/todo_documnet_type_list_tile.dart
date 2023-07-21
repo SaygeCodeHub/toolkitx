@@ -7,18 +7,18 @@ import '../../../blocs/todo/todo_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/todo/fetch_todo_master_model.dart';
+import '../../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../../utils/database_utils.dart';
 import 'todo_document_type_list.dart';
 
 class ToDoDocumentTypeListTile extends StatelessWidget {
-  final List<List<ToDoMasterDatum>> todoMasterDatum;
+  final List<List<ToDoDocumentMasterDatum>> data;
   final Map todoMap;
   final Map todoFilterMap;
 
   const ToDoDocumentTypeListTile(
       {Key? key,
-      required this.todoMasterDatum,
+      required this.data,
       required this.todoMap,
       required this.todoFilterMap})
       : super(key: key);
@@ -48,7 +48,7 @@ class ToDoDocumentTypeListTile extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ToDoDocumentTypeList(
-                                  todoMasterDatum: todoMasterDatum,
+                                  data: data,
                                   documentTypeId: state.documentTypeId,
                                   todoFilterMap: todoFilterMap)));
                     },
