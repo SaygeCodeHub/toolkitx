@@ -61,10 +61,26 @@ abstract class StringConstants {
   static const String kNoComment = 'No comments!'; //
   static const String kNoInjuredPerson = 'No injured person!'; //
   static const String kNoILinkedPermit = 'No linked permit!'; //
+  static const String kSelectDueDate = 'Please select due date!'; //
+  static const String kAddHeading = 'Please add heading!'; //
+  static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
+  static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
+  static const String kDocumentNameValidation =
+      'Please enter document name!'; //
+  static const String kDocumentUploadValidation =
+      'Please add atleast one photo!'; //
+  static const String kApplyFilter = 'Apply Filter'; //
   static const String kLeaveDetails = 'Leave Details'; //
+  static const String kStartDateValidation = 'Please select start date!'; //
+  static const String kEndDateValidation = 'Please select end date!'; //
+  static const String kTypeValidation = 'Please select type!'; //
+  static const String kReasonValidation = 'Please enter reason!'; //
+  static const String kEmergencyContactValidation =
+      'Please enter emergency contact!'; //
+  static const String kAlert = 'Alert'; //
   static const String kViewAll = 'View All'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
@@ -80,14 +96,16 @@ abstract class StringConstants {
   static const String kOldPassword = 'Old Password'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
+  static const String kResolve = 'Resolve'; //
   static const String kSelectYourLanguage = 'Select Your Language';
-  static const String kClearFilter = 'Clear Filter';
+  static const String kClearFilter = 'Clear';
   static const String kPleaseConfirm = 'Please Confirm';
   static const String kThirdParty = 'Third Party Approve';
   static const String kEditHeader = 'Edit Header';
   static const String kResponseDate = 'Response Date:';
   static const String kNoResponseFound = 'No response found!';
   static const String kReject = 'Reject'; //
+  static const String kSelectCreatedFor = 'Please select created for!'; //
   static const String kDialogContent =
       "The language file doesn't exist or an old version.Please download the latest language file."; //
   static const String kReload = 'RELOAD'; //
@@ -157,7 +175,10 @@ abstract class StringConstants {
   static const String kValidateEmptyEmail = 'Please enter email'; //
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
+  static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
+  static const String kSubmitTodo = 'Submit TODO'; //
+  static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
   static const String kSomethingWentWrong = 'Something went wrong';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //

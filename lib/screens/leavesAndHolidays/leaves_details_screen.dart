@@ -8,7 +8,7 @@ import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
-import '../../widgets/generic_no_records_text.dart';
+import 'apply_for_leave_screen.dart';
 import 'widgtes/leaves_details_card.dart';
 
 class LeavesDetailsScreen extends StatefulWidget {
@@ -40,68 +40,73 @@ class _LeavesDetailsScreenState extends State<LeavesDetailsScreen> {
     context.read<LeavesAndHolidaysBloc>().add(FetchLeavesDetails(page: 1));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kLeaveDetails),
-        body: BlocConsumer<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
-            buildWhen: (previousState, currentState) =>
-                ((currentState is LeavesDetailsFetched && noMoreData != true) ||
-                    (currentState is FetchingLeavesDetails && page == 1)),
-            listener: (context, state) {
-              if (state is LeavesDetailsFetched) {
-                if (state.fetchLeavesDetailsModel.status == 204 &&
-                    leavesDetailsData.isNotEmpty) {
-                  noMoreData = true;
-                  showCustomSnackBar(
-                      context, StringConstants.kAllDataLoaded, '');
-                }
-              }
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, ApplyForLeaveScreen.routeName);
             },
-            builder: (context, state) {
-              if (state is LeavesDetailsFetched) {
-                if (state.fetchLeavesDetailsModel.data.isNotEmpty) {
-                  if (page == 1) {
-                    leavesDetailsData = state.fetchLeavesDetailsModel.data;
-                  } else {
-                    for (var item in state.fetchLeavesDetailsModel.data) {
-                      leavesDetailsData.add(item);
-                    }
-                  }
-                  waitForData = false;
-                  return Padding(
-                      padding: const EdgeInsets.only(
-                          left: leftRightMargin,
-                          right: leftRightMargin,
-                          top: xxTinierSpacing),
-                      child: ListView.separated(
-                          controller: controller
-                            ..addListener(() {
-                              if (noMoreData != true && waitForData == false) {
-                                if (controller.position.extentAfter < 500) {
-                                  page++;
-                                  context
-                                      .read<LeavesAndHolidaysBloc>()
-                                      .add(FetchLeavesDetails(page: page));
-                                  waitForData = true;
-                                }
-                              }
-                            }),
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: leavesDetailsData.length,
-                          itemBuilder: (context, index) {
-                            return LeavesDetailsCard(
-                                detailsData: leavesDetailsData[index]);
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: tinierSpacing);
-                          }));
-                } else {
-                  return NoRecordsText(
-                      text: DatabaseUtil.getText('no_records_found'));
-                }
-              } else if (state is FetchingLeavesDetails) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return const SizedBox();
+            child: const Icon(Icons.add)),
+        body: BlocConsumer<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+          buildWhen: (previousState, currentState) =>
+              ((currentState is LeavesDetailsFetched && noMoreData != true) ||
+                  (currentState is FetchingLeavesDetails && page == 1)),
+          listener: (context, state) {
+            if (state is LeavesDetailsFetched) {
+              if (state.fetchLeavesDetailsModel.status == 204 &&
+                  leavesDetailsData.isNotEmpty) {
+                noMoreData = true;
+                showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
               }
-            }));
+            }
+          },
+          builder: (context, state) {
+            if (state is LeavesDetailsFetched) {
+              if (state.fetchLeavesDetailsModel.data.isNotEmpty) {
+                if (page == 1) {
+                  leavesDetailsData = state.fetchLeavesDetailsModel.data;
+                } else {
+                  for (var item in state.fetchLeavesDetailsModel.data) {
+                    leavesDetailsData.add(item);
+                  }
+                }
+                waitForData = false;
+                return Padding(
+                    padding: const EdgeInsets.only(
+                        left: leftRightMargin,
+                        right: leftRightMargin,
+                        top: xxTinierSpacing),
+                    child: ListView.separated(
+                        controller: controller
+                          ..addListener(() {
+                            if (noMoreData != true && waitForData == false) {
+                              if (controller.position.extentAfter < 500) {
+                                page++;
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .add(FetchLeavesDetails(page: page));
+                                waitForData = true;
+                              }
+                            }
+                          }),
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: leavesDetailsData.length,
+                        itemBuilder: (context, index) {
+                          return LeavesDetailsCard(
+                              detailsData: leavesDetailsData[index]);
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: tinierSpacing);
+                        }));
+              } else {
+                return Center(
+                    child: Text(DatabaseUtil.getText('no_records_found')));
+              }
+            } else if (state is FetchingLeavesDetails) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return const SizedBox();
+            }
+          },
+        ));
   }
 }

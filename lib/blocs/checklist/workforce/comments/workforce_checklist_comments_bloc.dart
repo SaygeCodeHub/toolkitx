@@ -52,7 +52,7 @@ class WorkForceCheckListCommentBloc extends Bloc<
           "id": allDataForChecklistMap["userId"],
           "queresponseid": allDataForChecklistMap["questionResponseId"],
           "comments": event.saveQuestionCommentMap["comments"],
-          "filenames": '',
+          "filenames": event.saveQuestionCommentMap["filenames"],
           "hashcode": hashCode
         };
         SaveQuestionCommentsModel saveQuestionCommentsModel =

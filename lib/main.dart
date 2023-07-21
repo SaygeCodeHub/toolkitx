@@ -25,6 +25,7 @@ import 'blocs/checklist/workforce/workforceList/workforce_list_bloc.dart';
 import 'blocs/client/client_bloc.dart';
 import 'blocs/dateFormat/date_format_bloc.dart';
 import 'blocs/home/home_bloc.dart';
+import 'blocs/incident/editIncidentDetails/edit_incident_details_bloc.dart';
 import 'blocs/incident/incidentDetails/incident_details_bloc.dart';
 import 'blocs/incident/incidentInjuryDetails/incident_injury_details_bloc.dart';
 import 'blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
@@ -144,9 +145,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => ReportNewIncidentBloc()),
           BlocProvider(lazy: false, create: (context) => InjuryDetailsBloc()),
-          BlocProvider(lazy: true, create: (context) => TodoBloc()),
+          BlocProvider(lazy: false, create: (context) => ToDoBloc()),
           BlocProvider(
               lazy: true, create: (context) => LeavesAndHolidaysBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => EditIncidentDetailsBloc()),
           BlocProvider(
               lazy: false,
               create: (context) => OnBoardingBloc()..add(CheckClientSelected()))

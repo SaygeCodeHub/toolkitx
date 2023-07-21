@@ -39,8 +39,10 @@ class IncidentDetailsScreen extends StatelessWidget {
                 if (state is IncidentDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return IncidentDetailsPopUpMenu(
+                        incidentDetailsModel: state.incidentDetailsModel,
                         popUpMenuItems: state.incidentPopUpMenu,
-                        incidentListDatum: incidentListDatum);
+                        incidentListDatum: incidentListDatum,
+                        incidentDetailsMap: state.editIncidentDetailsMap);
                   } else {
                     return const SizedBox();
                   }
