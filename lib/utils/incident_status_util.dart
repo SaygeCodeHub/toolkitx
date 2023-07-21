@@ -1,4 +1,4 @@
-import '../database_utils.dart';
+import 'database_utils.dart';
 
 class IncidentStatusUtil {
   incidentStatusWidget(incidentDetailsModel) {
@@ -14,7 +14,7 @@ class IncidentStatusUtil {
       case '4':
         return DatabaseUtil.getText('ImplementMitigation');
       default:
-        return DatabaseUtil.getText('Created');
+        return '';
     }
   }
 }

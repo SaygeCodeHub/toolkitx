@@ -8,7 +8,6 @@ import '../../configs/app_spacing.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/incident_details_model.dart';
 import '../../utils/constants/string_constants.dart';
-import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
@@ -29,7 +28,7 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('Markasresolved')),
+      appBar: const GenericAppBar(title: StringConstants.kResolve),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
