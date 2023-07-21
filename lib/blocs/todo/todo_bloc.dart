@@ -128,6 +128,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
 
   FutureOr _deleteDocument(
       DeleteToDoDocument event, Emitter<ToDoStates> emit) async {
+    emit(DeletingToDoDocument());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
@@ -372,8 +373,8 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       } else {
         Map saveDocumentsMap = {
           "hashcode": hashCode,
-          "todoid": todoMap['todoid'],
-          "documents": todoMap['documents'],
+          "todoid": todoMap['todoId'],
+          "documents": todoMap['documents'].toString().replaceAll(' ', ''),
           "userid": userId
         };
         SaveToDoDocumentsModel saveToDoDocumentsModel =
