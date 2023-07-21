@@ -94,6 +94,7 @@ abstract class StringConstants {
   static const String kNoHeader =
       'No header data available for this checklist!';
   static const String kOldPassword = 'Old Password'; //
+  static const String kToDoHistory = 'ToDo History'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kResolve = 'Resolve'; //

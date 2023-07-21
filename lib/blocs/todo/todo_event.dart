@@ -116,7 +116,11 @@ class ChangeToDoCategory extends ToDoEvent {
   ChangeToDoCategory({required this.categoryId});
 }
 
-class FetchToDoHistoryList extends ToDoEvent {}
+class FetchToDoHistoryList extends ToDoEvent {
+  final int page;
+
+  FetchToDoHistoryList({required this.page});
+}
 
 class SelectToDoSendEmailOption extends ToDoEvent {
   final String optionId;

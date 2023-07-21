@@ -215,7 +215,8 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchToDoHistoryListModel fetchToDoHistoryListModel =
-          await _toDoRepository.fetchToDoHistoryList(1, hashCode!, userId!);
+          await _toDoRepository.fetchToDoHistoryList(
+              event.page, hashCode!, userId!);
       emit(TodoHistoryListFetched(
           fetchToDoHistoryListModel: fetchToDoHistoryListModel));
     } catch (e) {

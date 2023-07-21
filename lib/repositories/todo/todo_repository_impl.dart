@@ -132,7 +132,7 @@ class ToDoRepositoryImpl extends ToDoRepository {
   Future<FetchToDoHistoryListModel> fetchToDoHistoryList(
       int pageNo, String hashCode, String userId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}todo/gethistory?pageno=1&hashcode=$hashCode&userid=$userId");
+        "${ApiConstants.baseUrl}todo/gethistory?pageno=$pageNo&hashcode=$hashCode&userid=$userId");
     return FetchToDoHistoryListModel.fromJson(response);
   }
 
