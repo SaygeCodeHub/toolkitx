@@ -42,13 +42,13 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                 Text(assignToMeListDatum.duedate)
               ]),
               const SizedBox(height: tinierSpacing),
-              BlocListener<TodoBloc, ToDoStates>(
+              BlocListener<ToDoBloc, ToDoStates>(
                 listener: (context, state) {
                   if (state is ToDoMarkingAsDone) {
                     ProgressBar.show(context);
                   } else if (state is ToDoMarkedAsDone) {
                     context
-                        .read<TodoBloc>()
+                        .read<ToDoBloc>()
                         .add(FetchTodoAssignedToMeAndByMeListEvent());
                   } else if (state is ToDoCannotMarkAsDone) {
                     showCustomSnackBar(
@@ -72,7 +72,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 onPressed: () {
                                   todoMap['todoId'] = assignToMeListDatum.id;
                                   context
-                                      .read<TodoBloc>()
+                                      .read<ToDoBloc>()
                                       .add(ToDoMarkAsDone(todoMap: todoMap));
                                   Navigator.pop(context);
                                 },

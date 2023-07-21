@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import '../../../data/models/incident/fetch_permit_to_link_model.dart';
 import '../../../data/models/incident/incident_details_model.dart';
+import '../../../data/models/incident/save_incident_comments_files_model.dart';
+import '../../../data/models/incident/save_incident_comments_model.dart';
 import '../../../data/models/pdf_generation_model.dart';
 import '../../../data/models/incident/saved_linked_permit_model.dart';
 
@@ -29,11 +31,13 @@ class FetchingIncidentDetails extends IncidentDetailsStates {
 class IncidentDetailsFetched extends IncidentDetailsStates {
   final IncidentDetailsModel incidentDetailsModel;
   final String clientId;
+  final Map editIncidentDetailsMap;
   final List incidentPopUpMenu;
   final bool showPopUpMenu;
 
   const IncidentDetailsFetched(
-      {required this.clientId,
+      {required this.editIncidentDetailsMap,
+      required this.clientId,
       required this.incidentDetailsModel,
       required this.incidentPopUpMenu,
       required this.showPopUpMenu});
@@ -86,4 +90,41 @@ class LinkedPermitsNotSaved extends IncidentDetailsStates {
   final String permitNotSavedMessage;
 
   const LinkedPermitsNotSaved({required this.permitNotSavedMessage});
+}
+
+class SavingIncidentComments extends IncidentDetailsStates {}
+
+class IncidentCommentsSaved extends IncidentDetailsStates {
+  final SaveIncidentCommentsModel saveIncidentCommentsModel;
+
+  const IncidentCommentsSaved({required this.saveIncidentCommentsModel});
+}
+
+class IncidentCommentsNotSaved extends IncidentDetailsStates {
+  final String commentsNotSaved;
+
+  const IncidentCommentsNotSaved({required this.commentsNotSaved});
+}
+
+class SavingIncidentCommentsFiles extends IncidentDetailsStates {}
+
+class IncidentCommentsFilesSaved extends IncidentDetailsStates {
+  final SaveIncidentCommentsFilesModel saveIncidentCommentsModel;
+
+  const IncidentCommentsFilesSaved({required this.saveIncidentCommentsModel});
+}
+
+class IncidentCommentsFilesNotSaved extends IncidentDetailsStates {
+  final String commentsFilesNotSaved;
+
+  const IncidentCommentsFilesNotSaved({required this.commentsFilesNotSaved});
+}
+
+class IncidentClassificationSelected extends IncidentDetailsStates {
+  final String classificationId;
+
+  const IncidentClassificationSelected({required this.classificationId});
+
+  @override
+  List<Object?> get props => [classificationId];
 }

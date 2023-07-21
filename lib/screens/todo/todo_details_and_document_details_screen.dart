@@ -9,9 +9,12 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/todo_util.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
+import '../../widgets/progress_bar.dart';
 import 'widgets/todo_details_tab.dart';
 import 'widgets/todo_document_details_tab.dart';
+import 'widgets/todo_pop_up_menu.dart';
 
 class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
   static const routeName = 'ToDoDetailsAndDocumentDetailsScreen';
@@ -22,10 +25,12 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(FetchToDoDetailsAndDocumentDetails(
+    context.read<ToDoBloc>().add(FetchToDoDetailsAndDocumentDetails(
         selectedIndex: 0, todoId: todoMap['todoId']));
     return Scaffold(
-      appBar: const GenericAppBar(),
+      appBar: GenericAppBar(
+        actions: [ToDoPopUpMenu(todoMap: todoMap)],
+      ),
       body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -38,16 +43,37 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                 child: ListTile(
                     title: Padding(
                         padding: const EdgeInsets.only(top: xxTinierSpacing),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(todoMap['todoName'],
-                                  style: Theme.of(context).textTheme.medium)
-                            ])))),
+                        child: BlocBuilder<ToDoBloc, ToDoStates>(
+                            buildWhen: (previousState, currentState) =>
+                                currentState
+                                    is TodoDetailsAndDocumentDetailsFetched,
+                            builder: (context, state) {
+                              if (state
+                                  is TodoDetailsAndDocumentDetailsFetched) {
+                                return Text(
+                                    state.fetchToDoDetailsModel.data.todo,
+                                    style: Theme.of(context).textTheme.medium);
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            })))),
             const SizedBox(height: xxTinierSpacing),
             const Divider(height: kDividerHeight, thickness: kDividerWidth),
-            BlocBuilder<TodoBloc, ToDoStates>(
+            BlocConsumer<ToDoBloc, ToDoStates>(
+                listener: (context, state) {
+                  if (state is PopUpMenuToDoMarkingAsDone) {
+                    ProgressBar.show(context);
+                  } else if (state is PopUpMenuToDoMarkedAsDone) {
+                    ProgressBar.dismiss(context);
+                    Navigator.pop(context);
+                    context
+                        .read<ToDoBloc>()
+                        .add(FetchTodoAssignedToMeAndByMeListEvent());
+                  } else if (state is PopUpMenuToDoCannotMarkAsDone) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(context, state.cannotMarkAsDone, '');
+                  }
+                },
                 buildWhen: (previousState, currentState) =>
                     currentState is FetchingTodoDetailsAndDocumentDetails ||
                     currentState is TodoDetailsAndDocumentDetailsFetched,
@@ -64,11 +90,12 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                     return CustomTabBarView(
                         lengthOfTabs: 2,
                         tabBarViewIcons: ToDoUtil().tabBarViewIcons,
-                        initialIndex: context.read<TodoBloc>().initialIndex,
+                        initialIndex: context.read<ToDoBloc>().initialIndex,
                         tabBarViewWidgets: [
                           ToDoDetailsTab(
                               initialIndex: 0,
-                              todoDetails: state.fetchToDoDetailsModel.data),
+                              todoDetails: state.fetchToDoDetailsModel.data,
+                              todoMap: todoMap),
                           ToDoDocumentDetailsTab(
                               initialIndex: 1,
                               documentDetailsDatum: state

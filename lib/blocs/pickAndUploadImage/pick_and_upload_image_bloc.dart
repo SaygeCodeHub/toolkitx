@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -20,6 +21,8 @@ class PickAndUploadImageBloc
       getIt<UploadImageRepository>();
   final ImagePicker _imagePicker = ImagePicker();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  bool isInitial = true;
+  int number = 0;
 
   PickAndUploadImageStates get initialState => PermissionInitial();
 
@@ -33,6 +36,7 @@ class PickAndUploadImageBloc
   }
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
+    isInitial = true;
     emit(PermissionInitial());
   }
 
@@ -54,16 +58,21 @@ class PickAndUploadImageBloc
         return;
       } else {
         bool isAttached = false;
-        List cameraPathsList = List.from(event.cameraImageList);
+        List cameraPathsList =
+            List.from((isInitial == false) ? event.cameraImageList : []);
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
+        isInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
           isAttached = true;
           cameraPathsList.add(pickedFile.path);
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
+          }
+          for (int i = 0; i <= cameraPathsList.length; i++) {
+            number = i;
           }
           if (isAttached == true) {
             if (event.isSignature == true) {
@@ -106,16 +115,21 @@ class PickAndUploadImageBloc
         return;
       } else {
         bool isAttached = false;
-        List galleryPathsList = List.from(event.galleryImagesList);
+        List galleryPathsList =
+            List.from((isInitial == false) ? event.galleryImagesList : []);
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);
+        isInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
           isAttached = true;
           galleryPathsList.add(pickedFile.path);
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
+          }
+          for (int i = 0; i <= galleryPathsList.length; i++) {
+            number = i;
           }
           if (isAttached == true) {
             if (event.isSignature == true) {
@@ -146,11 +160,17 @@ class PickAndUploadImageBloc
     try {
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.imageFile), hashCode);
-      emit(ImagePickerLoaded(
-          isImageAttached: event.isImageAttached,
-          imagePathsList: event.imagesList,
-          imagePath: event.imageFile,
-          uploadPictureModel: uploadPictureModel));
+      if (uploadPictureModel.status == 200) {
+        emit(ImagePickerLoaded(
+            isImageAttached: event.isImageAttached,
+            imagePathsList: event.imagesList,
+            imagePath: event.imageFile,
+            uploadPictureModel: uploadPictureModel,
+            incrementNumber: number));
+      } else {
+        emit(ImageNotUploaded(
+            imageNotUploaded: StringConstants.kErrorImageUpload));
+      }
     } catch (e) {
       emit(ImageNotUploaded(
           imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -162,12 +182,14 @@ class PickAndUploadImageBloc
     List images = List.from(event.imagesList);
     if (event.index >= 0 && event.index < images.length) {
       images.removeAt(event.index);
+      number--;
       images.isEmpty ? isAttached = false : isAttached = true;
       emit(ImagePickerLoaded(
           isImageAttached: isAttached,
           imagePathsList: images,
           imagePath: '',
-          uploadPictureModel: event.uploadPictureModel));
+          uploadPictureModel: event.uploadPictureModel,
+          incrementNumber: number));
     }
   }
 

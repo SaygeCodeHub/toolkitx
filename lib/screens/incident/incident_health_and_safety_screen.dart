@@ -14,10 +14,11 @@ import 'add_injured_person_screen.dart';
 
 class IncidentHealthAndSafetyScreen extends StatelessWidget {
   static const routeName = 'IncidentHealthAndSafetyScreen';
-  final Map addIncidentMap;
+  final Map addAndEditIncidentMap;
   static List customInfoFieldList = [];
 
-  const IncidentHealthAndSafetyScreen({Key? key, required this.addIncidentMap})
+  const IncidentHealthAndSafetyScreen(
+      {Key? key, required this.addAndEditIncidentMap})
       : super(key: key);
 
   @override
@@ -62,7 +63,8 @@ class IncidentHealthAndSafetyScreen extends StatelessWidget {
                                         index,
                                         state.fetchIncidentMasterModel
                                             .incidentMasterDatum![7],
-                                        customInfoFieldList),
+                                        customInfoFieldList,
+                                        addAndEditIncidentMap),
                                 const SizedBox(height: xxTinySpacing),
                               ],
                             );
@@ -74,13 +76,27 @@ class IncidentHealthAndSafetyScreen extends StatelessWidget {
             }
           }),
       bottomNavigationBar: BottomAppBar(
-          child: PrimaryButton(
-              onPressed: () {
-                addIncidentMap['customfields'] = customInfoFieldList;
-                Navigator.pushNamed(context, AddInjuredPersonScreen.routeName,
-                    arguments: addIncidentMap);
-              },
-              textValue: DatabaseUtil.getText('nextButtonText'))),
+          child: Row(
+        children: [
+          Expanded(
+              child: PrimaryButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            textValue: DatabaseUtil.getText('buttonBack'),
+          )),
+          const SizedBox(width: xxTinierSpacing),
+          Expanded(
+            child: PrimaryButton(
+                onPressed: () {
+                  addAndEditIncidentMap['customfields'] = customInfoFieldList;
+                  Navigator.pushNamed(context, AddInjuredPersonScreen.routeName,
+                      arguments: addAndEditIncidentMap);
+                },
+                textValue: DatabaseUtil.getText('nextButtonText')),
+          ),
+        ],
+      )),
     );
   }
 }
