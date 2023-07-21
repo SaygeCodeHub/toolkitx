@@ -400,11 +400,15 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FetchToDoDocumentMasterModel fetchToDoDocumentMasterModel =
           await _toDoRepository.fetchDocumentMaster(hashCode!, userId!);
+      todoMap = event.todoMap;
       List popUpMenuList = [
         DatabaseUtil.getText('MarkasDone'),
         DatabaseUtil.getText('AssignDocuments'),
         DatabaseUtil.getText('dms_uploaddocuments'),
       ];
+      if (todoMap['isFromAdd'] == true) {
+        popUpMenuList.removeAt(0);
+      }
       emit(ToDoDocumentMasterFetched(
           fetchToDoDocumentMasterModel: fetchToDoDocumentMasterModel,
           popUpMenuList: popUpMenuList));

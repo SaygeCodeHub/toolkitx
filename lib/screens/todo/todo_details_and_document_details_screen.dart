@@ -43,13 +43,20 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
                 child: ListTile(
                     title: Padding(
                         padding: const EdgeInsets.only(top: xxTinierSpacing),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(todoMap['todoName'] ?? '',
-                                  style: Theme.of(context).textTheme.medium)
-                            ])))),
+                        child: BlocBuilder<ToDoBloc, ToDoStates>(
+                            buildWhen: (previousState, currentState) =>
+                                currentState
+                                    is TodoDetailsAndDocumentDetailsFetched,
+                            builder: (context, state) {
+                              if (state
+                                  is TodoDetailsAndDocumentDetailsFetched) {
+                                return Text(
+                                    state.fetchToDoDetailsModel.data.todo,
+                                    style: Theme.of(context).textTheme.medium);
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            })))),
             const SizedBox(height: xxTinierSpacing),
             const Divider(height: kDividerHeight, thickness: kDividerWidth),
             BlocConsumer<ToDoBloc, ToDoStates>(

@@ -22,7 +22,7 @@ class ToDoCreatedForListTile extends StatefulWidget {
 }
 
 class _ToDoCreatedForListTileState extends State<ToDoCreatedForListTile> {
-  List createdForNameList = [];
+  final List createdForNameList = [];
   static List createdForIdList = [];
 
   @override

@@ -24,7 +24,7 @@ class ToDoPopUpMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ToDoBloc>().add(FetchToDoDocumentMaster());
+    context.read<ToDoBloc>().add(FetchToDoDocumentMaster(todoMap: todoMap));
     return BlocBuilder<ToDoBloc, ToDoStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ToDoDocumentMasterFetched,
@@ -68,8 +68,7 @@ class ToDoPopUpMenu extends StatelessWidget {
                   }
                 },
                 position: PopupMenuPosition.under,
-                itemBuilder: (BuildContext context) =>
-                [
+                itemBuilder: (BuildContext context) => [
                       for (int i = 0; i < state.popUpMenuList.length; i++)
                         _buildPopupMenuItem(context, state.popUpMenuList[i],
                             state.popUpMenuList[i])
