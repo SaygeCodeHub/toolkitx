@@ -116,6 +116,12 @@ class ChangeToDoCategory extends ToDoEvent {
   ChangeToDoCategory({required this.categoryId});
 }
 
+class ToDoSendReminder extends ToDoEvent {
+  final Map todoMap;
+
+  ToDoSendReminder({required this.todoMap});
+}
+
 class FetchToDoHistoryList extends ToDoEvent {
   final int page;
 

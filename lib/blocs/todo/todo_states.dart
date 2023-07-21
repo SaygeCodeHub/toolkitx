@@ -9,6 +9,7 @@ import '../../data/models/todo/fetch_todo_document_master_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
+import '../../data/models/todo/send_reminder_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_history_list_model.dart';
 import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
@@ -191,6 +192,20 @@ class ToDoDocumentMasterNotFetched extends ToDoStates {
   final String documentMasterNotFetched;
 
   ToDoDocumentMasterNotFetched({required this.documentMasterNotFetched});
+}
+
+class SendingReminderForToDo extends ToDoStates {}
+
+class ReminderSendForToDo extends ToDoStates {
+  final SendReminderTodoModel sendReminderTodoModel;
+
+  ReminderSendForToDo({required this.sendReminderTodoModel});
+}
+
+class ReminderCannotSendForToDo extends ToDoStates {
+  final String cannotSendReminder;
+
+  ReminderCannotSendForToDo({required this.cannotSendReminder});
 }
 
 class FetchingTodoHistoryList extends ToDoStates {}
