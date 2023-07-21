@@ -191,11 +191,6 @@ class ToDoDocumentMasterNotFetched extends ToDoStates {
 
   ToDoDocumentMasterNotFetched({required this.documentMasterNotFetched});
 }
-class ToDoCannotMarkAsDone extends ToDoStates {
-  final String cannotMarkAsDone;
-
-  ToDoCannotMarkAsDone({required this.cannotMarkAsDone});
-}
 
 class SendingReminderForToDo extends ToDoStates {}
 

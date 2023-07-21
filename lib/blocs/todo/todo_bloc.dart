@@ -21,7 +21,6 @@ import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
-import '../../utils/database_utils.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
 import 'todo_event.dart';
 
@@ -162,7 +161,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         'hashcode': hashCode
       };
       ToDoMarkAsDoneModel toDoMarkAsDoneModel =
-          await _toDoRepository.toDoMarkAsDone(markAsDoneMapMap);
+          await _toDoRepository.toDoMarkAsDone(markAsDoneMap);
       if (toDoMarkAsDoneModel.status == 200) {
         emit(ToDoMarkedAsDone(toDoMarkAsDoneModel: toDoMarkAsDoneModel));
       } else {

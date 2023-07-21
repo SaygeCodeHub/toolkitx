@@ -48,15 +48,17 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
               const SizedBox(height: tinierSpacing),
               Row(
                 children: [
-                  BlocListener<TodoBloc, ToDoStates>(
+                  BlocListener<ToDoBloc, ToDoStates>(
                     listener: (context, state) {
                       if (state is ToDoMarkingAsDone) {
                         ProgressBar.show(context);
                       } else if (state is ToDoMarkedAsDone) {
+                        ProgressBar.dismiss(context);
                         context
-                            .read<TodoBloc>()
+                            .read<ToDoBloc>()
                             .add(FetchTodoAssignedToMeAndByMeListEvent());
                       } else if (state is ToDoCannotMarkAsDone) {
+                        ProgressBar.dismiss(context);
                         showCustomSnackBar(
                             context,
                             DatabaseUtil.getText(
@@ -78,7 +80,7 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignedByMeListDatum.id;
-                                      context.read<TodoBloc>().add(
+                                      context.read<ToDoBloc>().add(
                                           ToDoMarkAsDone(todoMap: todoMap));
                                       Navigator.pop(context);
                                     },
@@ -89,16 +91,17 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
                             color: AppColor.green, size: kIconSize)),
                   ),
                   const SizedBox(width: tinierSpacing),
-                  BlocListener<TodoBloc, ToDoStates>(
+                  BlocListener<ToDoBloc, ToDoStates>(
                     listener: (context, state) {
                       if (state is SendingReminderForToDo) {
                         ProgressBar.show(context);
                       } else if (state is ReminderSendForToDo) {
                         ProgressBar.dismiss(context);
                         context
-                            .read<TodoBloc>()
+                            .read<ToDoBloc>()
                             .add(FetchTodoAssignedToMeAndByMeListEvent());
                       } else if (state is ReminderCannotSendForToDo) {
+                        ProgressBar.dismiss(context);
                         showCustomSnackBar(
                             context, state.cannotSendReminder, '');
                       }
@@ -111,7 +114,7 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
                           onPressed: () {
                             todoMap['todoId'] = assignedByMeListDatum.id;
                             context
-                                .read<TodoBloc>()
+                                .read<ToDoBloc>()
                                 .add(ToDoSendReminder(todoMap: todoMap));
                             showCustomSnackBar(context,
                                 DatabaseUtil.getText('remindersent'), '');
