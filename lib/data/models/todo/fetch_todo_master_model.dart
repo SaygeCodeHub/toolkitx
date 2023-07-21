@@ -26,8 +26,7 @@ class FetchToDoMasterModel {
                 x.map((x) => ToDoMasterDatum.fromJson(x))))),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
         "Data": List<dynamic>.from(todoFetchMasterDatum!

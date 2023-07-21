@@ -59,7 +59,7 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
                                 title: Text(data[index].name,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
-                                ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                                 value: data[index].id.toString(),
                                 groupValue: state.categoryId,
                                 onChanged: (value) {
