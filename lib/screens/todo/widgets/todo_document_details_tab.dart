@@ -55,12 +55,12 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                           color: AppColor.black),
                                   maxLines: 3),
-                              BlocListener<TodoBloc, ToDoStates>(
+                              BlocListener<ToDoBloc, ToDoStates>(
                                 listener: (context, state) {
                                   if (state is DeletingToDoDocument) {
                                     ProgressBar.show(context);
                                   } else if (state is ToDoDocumentDeleted) {
-                                    context.read<TodoBloc>().add(
+                                    context.read<ToDoBloc>().add(
                                         FetchToDoDetailsAndDocumentDetails(
                                             todoId: todoMap['todoId'],
                                             selectedIndex: initialIndex));
@@ -88,7 +88,7 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                                                       documentDetailsDatum[
                                                               index]
                                                           .tododocid;
-                                                  context.read<TodoBloc>().add(
+                                                  context.read<ToDoBloc>().add(
                                                       DeleteToDoDocument(
                                                           todoMap: todoMap));
                                                   Navigator.pop(context);

@@ -167,6 +167,7 @@ class AppRoutes {
         return _createRoute(const LeavesDetailsScreen());
       case ApplyForLeaveScreen.routeName:
         return _createRoute(ApplyForLeaveScreen());
+
       default:
         return _createRoute(const WelcomeScreen());
     }

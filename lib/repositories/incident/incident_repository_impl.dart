@@ -1,5 +1,8 @@
 import 'package:toolkit/data/models/incident/edit_incident_details_model.dart';
 
+import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
+import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
+
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/dio_client.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
@@ -116,5 +119,21 @@ class IncidentRepositoryImpl extends IncidentRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}incident/update", editIncidentDetails);
     return EditIncidentDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveIncidentCommentsFilesModel> saveCommentsFiles(
+      Map saveCommentsFilesMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}incident/savecommentsfiles",
+        saveCommentsFilesMap);
+    return SaveIncidentCommentsFilesModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveIncidentCommentsModel> saveComments(Map saveCommentsMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}incident/savecomments", saveCommentsMap);
+    return SaveIncidentCommentsModel.fromJson(response);
   }
 }

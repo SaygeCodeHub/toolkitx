@@ -6,6 +6,8 @@ import '../../data/models/incident/incident_details_model.dart';
 import '../../data/models/incident/incident_fetch_roles_model.dart';
 import '../../data/models/incident/incident_injury_master.dart';
 import '../../data/models/incident/incident_unlink_permit_model.dart';
+import '../../data/models/incident/save_incident_comments_files_model.dart';
+import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/incident/save_injured_person_model.dart';
 import '../../data/models/incident/save_report_new_incident_model.dart';
 import '../../data/models/incident/save_report_new_incident_photos_model.dart';
@@ -45,4 +47,9 @@ abstract class IncidentRepository {
   Future<SaveLinkedPermitModel> saveLinkedPermit(Map linkedPermitMap);
 
   Future<EditIncidentDetailsModel> editIncidentDetails(Map editIncidentDetails);
+
+  Future<SaveIncidentCommentsModel> saveComments(Map saveCommentsMap);
+
+  Future<SaveIncidentCommentsFilesModel> saveCommentsFiles(
+      Map saveCommentsFilesMap);
 }

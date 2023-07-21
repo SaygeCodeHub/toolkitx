@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/incident/incident_details_model.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
-import '../../data/models/incident/incident_details_model.dart';
 import 'category_screen.dart';
 import 'widgets/incident_contractor_list_tile.dart';
+import 'incident_add_comments_screen.dart';
+import 'incident_mark_as_resolved_screen.dart';
+import 'incident_status_screen.dart';
 
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -40,7 +43,12 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
-          if (value == DatabaseUtil.getText('AddComments')) {}
+          if (value == DatabaseUtil.getText('AddComments')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentAddCommentsScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
           if (value == DatabaseUtil.getText('EditIncident')) {
             CategoryScreen.addAndEditIncidentMap = incidentDetailsMap;
             IncidentContractorListTile.contractorName =
@@ -50,12 +58,42 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             CategoryScreen.isFromEdit = true;
             Navigator.pushNamed(context, CategoryScreen.routeName);
           }
-          if (value == DatabaseUtil.getText('Report')) {}
-          if (value == DatabaseUtil.getText('Acknowledge')) {}
-          if (value == DatabaseUtil.getText('DefineMitigation')) {}
-          if (value == DatabaseUtil.getText('ApproveMitigation')) {}
-          if (value == DatabaseUtil.getText('ImplementMitigation')) {}
-          if (value == DatabaseUtil.getText('Markasresolved')) {}
+          if (value == DatabaseUtil.getText('Report')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentStatusScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
+          if (value == DatabaseUtil.getText('Acknowledge')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentStatusScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
+          if (value == DatabaseUtil.getText('DefineMitigation')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentStatusScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
+          if (value == DatabaseUtil.getText('ApproveMitigation')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentStatusScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
+          if (value == DatabaseUtil.getText('ImplementMitigation')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentStatusScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
+          if (value == DatabaseUtil.getText('Markasresolved')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => IncidentMarkAsResolvedScreen(
+                    incidentListDatum: incidentListDatum,
+                    incidentDetailsModel: incidentDetailsModel)));
+          }
           if (value == DatabaseUtil.getText('GenerateReport')) {
             context
                 .read<IncidentDetailsBloc>()
