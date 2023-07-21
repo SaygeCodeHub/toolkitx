@@ -179,6 +179,7 @@ abstract class StringConstants {
   static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
   static const String kSubmitTodo = 'Submit TODO'; //
+  static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
   static const String kSomethingWentWrong = 'Something went wrong';
   static const String kNoInternetError =

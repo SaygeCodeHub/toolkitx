@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../../blocs/LogBook/logbook_bloc.dart';
 import '../../../blocs/LogBook/logbook_events.dart';
 import '../../../blocs/LogBook/logbook_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_no_records_text.dart';
+import '../logbook_details_screen.dart';
 
 class LogbookList extends StatefulWidget {
   static bool noMoreData = false;
@@ -88,7 +89,16 @@ class _LogbookListState extends State<LogbookList> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: tinierSpacing),
                       child: ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          String encryptId = '';
+                          encryptId = EncryptData.encryptAESPrivateKey(
+                              state.fetchLogBookListModel.data[index].id
+                                  .toString(),
+                              state.privateApiKey);
+                          Navigator.pushNamed(
+                              context, LogBookDetailsScreen.routeName,
+                              arguments: encryptId);
+                        },
                         title: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
