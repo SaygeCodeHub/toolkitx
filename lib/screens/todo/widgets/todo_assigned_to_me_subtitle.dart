@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../blocs/todo/todo_bloc.dart';
 import '../../../blocs/todo/todo_event.dart';
 import '../../../blocs/todo/todo_states.dart';
@@ -41,71 +42,45 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                 Text(assignToMeListDatum.duedate)
               ]),
               const SizedBox(height: tinierSpacing),
-              Row(
-                children: [
-                  BlocListener<ToDoBloc, ToDoStates>(
-                    listener: (context, state) {
-                      if (state is ToDoMarkingAsDone) {
-                        ProgressBar.show(context);
-                      } else if (state is ToDoMarkedAsDone) {
-                        ProgressBar.dismiss(context);
-                        context
-                            .read<ToDoBloc>()
-                            .add(FetchTodoAssignedToMeAndByMeListEvent());
-                      } else if (state is ToDoCannotMarkAsDone) {
-                        ProgressBar.dismiss(context);
-                        showCustomSnackBar(context, state.cannotMarkAsDone, '');
-                      }
+              BlocListener<ToDoBloc, ToDoStates>(
+                listener: (context, state) {
+                  if (state is ToDoMarkingAsDone) {
+                    ProgressBar.show(context);
+                  } else if (state is ToDoMarkedAsDone) {
+                    context
+                        .read<ToDoBloc>()
+                        .add(FetchTodoAssignedToMeAndByMeListEvent());
+                  } else if (state is ToDoCannotMarkAsDone) {
+                    showCustomSnackBar(
+                        context,
+                        DatabaseUtil.getText(
+                            'some_unknown_error_please_try_again'),
+                        '');
+                  }
+                },
+                child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AndroidPopUp(
+                                contentPadding: EdgeInsets.zero,
+                                titleValue:
+                                    DatabaseUtil.getText('todoConfirmMsgDone'),
+                                onPressed: () {
+                                  todoMap['todoId'] = assignToMeListDatum.id;
+                                  context
+                                      .read<ToDoBloc>()
+                                      .add(ToDoMarkAsDone(todoMap: todoMap));
+                                  Navigator.pop(context);
+                                },
+                                contentValue: '');
+                          });
                     },
-                    child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AndroidPopUp(
-                                    contentPadding: EdgeInsets.zero,
-                                    titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
-                                    onPressed: () {
-                                      todoMap['todoId'] =
-                                          assignToMeListDatum.id;
-                                      context.read<ToDoBloc>().add(
-                                          ToDoMarkAsDone(todoMap: todoMap));
-                                      Navigator.pop(context);
-                                    },
-                                    contentValue: '');
-                              });
-                        },
-                        icon: const Icon(Icons.check_circle,
-                            color: AppColor.green, size: kIconSize)),
-                  ),
-                  const SizedBox(width: tinierSpacing),
-                  Visibility(
-                    visible: assignToMeListDatum.istododue == 1,
-                    child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AndroidPopUp(
-                                    contentPadding: EdgeInsets.zero,
-                                    titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
-                                    onPressed: () {
-                                      todoMap['todoId'] =
-                                          assignToMeListDatum.id;
-                                    },
-                                    contentValue: '');
-                              });
-                        },
-                        icon: const Icon(Icons.alarm_on_sharp,
-                            color: AppColor.green, size: kIconSize)),
-                  ),
-                ],
+                    icon: const Icon(Icons.check_circle,
+                        color: AppColor.green, size: kIconSize)),
               ),
               const SizedBox(height: tinierSpacing),
               StatusTag(tags: [

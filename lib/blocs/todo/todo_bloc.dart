@@ -16,6 +16,7 @@ import '../../data/models/todo/fetch_assign_todo_to_me_list_model.dart';
 import '../../data/models/todo/fetch_document_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
+import '../../data/models/todo/send_reminder_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
@@ -41,6 +42,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<FetchToDoDetailsAndDocumentDetails>(_fetchDetails);
     on<DeleteToDoDocument>(_deleteDocument);
     on<ToDoMarkAsDone>(_markAsDone);
+    on<ToDoSendReminder>(_sendReminder);
     on<FetchDocumentForToDo>(_fetchDocumentForTodo);
     on<SelectDocumentForToDo>(_selectDocumentForTodo);
     on<FetchToDoMaster>(_fetchMaster);
@@ -153,13 +155,13 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       todoMap = event.todoMap;
-      Map markAsDoneMapMap = {
+      Map markAsDoneMap = {
         'todoid': todoMap['todoId'],
         'userid': userId,
         'hashcode': hashCode
       };
       ToDoMarkAsDoneModel toDoMarkAsDoneModel =
-          await _toDoRepository.toDoMarkAsDone(markAsDoneMapMap);
+          await _toDoRepository.toDoMarkAsDone(markAsDoneMap);
       if (toDoMarkAsDoneModel.status == 200) {
         emit(ToDoMarkedAsDone(toDoMarkAsDoneModel: toDoMarkAsDoneModel));
       } else {
@@ -191,7 +193,32 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
             selectedDocument: '', documentList: [], filtersMap: filters));
       }
     } catch (e) {
-      e.toString();
+      emit(ToDoCannotMarkAsDone(cannotMarkAsDone: e.toString()));
+    }
+  }
+
+  FutureOr _sendReminder(
+      ToDoSendReminder event, Emitter<ToDoStates> emit) async {
+    emit(SendingReminderForToDo());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      todoMap = event.todoMap;
+      Map sendReminderMap = {
+        "idm": todoMap['todoId'],
+        "todoid": todoMap['todoId'],
+        "hashcode": hashCode
+      };
+      SendReminderTodoModel sendReminderTodoModel =
+          await _toDoRepository.sendReminderForTodo(sendReminderMap);
+      if (sendReminderTodoModel.status == 200) {
+        emit(ReminderSendForToDo(sendReminderTodoModel: sendReminderTodoModel));
+      } else {
+        emit(ReminderCannotSendForToDo(
+            cannotSendReminder:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ReminderCannotSendForToDo(cannotSendReminder: e.toString()));
     }
   }
 
