@@ -75,8 +75,8 @@ class ToDoAssignedByMeSubtitle extends StatelessWidget {
                               builder: (context) {
                                 return AndroidPopUp(
                                     contentPadding: EdgeInsets.zero,
-                                    titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
+                                    titleValue: DatabaseUtil.getText(
+                                        'todoConfirmMsgDone'),
                                     onPressed: () {
                                       todoMap['todoId'] =
                                           assignedByMeListDatum.id;
