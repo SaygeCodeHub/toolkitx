@@ -17,6 +17,8 @@ import '../../data/models/todo/fetch_document_for_todo_model.dart';
 import '../../data/models/todo/fetch_todo_details_model.dart';
 import '../../data/models/todo/fetch_todo_document_details_model.dart';
 import '../../data/models/todo/send_reminder_for_todo_model.dart';
+import '../../data/models/todo/fetch_todo_history_list_model.dart';
+import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
@@ -43,6 +45,10 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<DeleteToDoDocument>(_deleteDocument);
     on<ToDoMarkAsDone>(_markAsDone);
     on<ToDoSendReminder>(_sendReminder);
+    on<FetchToDoHistoryList>(_fetchHistoryList);
+    on<SelectToDoSendEmailOption>(_selectEmailOption);
+    on<SelectToDoSendNotificationOption>(_selectNotificationOption);
+    on<SaveToDoSettings>(_saveSettings);
     on<FetchDocumentForToDo>(_fetchDocumentForTodo);
     on<SelectDocumentForToDo>(_selectDocumentForTodo);
     on<FetchToDoMaster>(_fetchMaster);
@@ -56,6 +62,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<SubmitToDo>(_submitTodo);
     on<ChangeToDoCategory>(_categoryChanged);
     on<FetchToDoDocumentMaster>(_fetchDocumentMaster);
+    on<ShowToDoSettingByUserType>(_showSettingByUserType);
   }
 
   _applyFilter(ApplyToDoFilter event, Emitter<ToDoStates> emit) {
@@ -65,6 +72,12 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
   FutureOr<void> _clearFilter(
       ClearToDoFilter event, Emitter<ToDoStates> emit) async {
     filters = {};
+  }
+
+  FutureOr<void> _showSettingByUserType(
+      ShowToDoSettingByUserType event, Emitter<ToDoStates> emit) async {
+    String? userType = await _customerCache.getUserType(CacheKeys.userType);
+    emit(ToDoSettingsShowedByUserType(userType: userType!));
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -219,6 +232,68 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       }
     } catch (e) {
       emit(ReminderCannotSendForToDo(cannotSendReminder: e.toString()));
+    }
+  }
+
+  FutureOr _fetchHistoryList(
+      FetchToDoHistoryList event, Emitter<ToDoStates> emit) async {
+    emit(FetchingTodoHistoryList());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchToDoHistoryListModel fetchToDoHistoryListModel =
+          await _toDoRepository.fetchToDoHistoryList(
+              event.page, hashCode!, userId!);
+      emit(TodoHistoryListFetched(
+          fetchToDoHistoryListModel: fetchToDoHistoryListModel));
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  _selectEmailOption(
+      SelectToDoSendEmailOption event, Emitter<ToDoStates> emit) {
+    Map emailOptionsMap = {
+      "1": DatabaseUtil.getText('Yes'),
+      "0": DatabaseUtil.getText('No')
+    };
+    emit(ToDoSendEmailOptionSelected(
+        optionId: event.optionId,
+        emailOptionsMap: emailOptionsMap,
+        optionName: event.optionName));
+  }
+
+  _selectNotificationOption(
+      SelectToDoSendNotificationOption event, Emitter<ToDoStates> emit) {
+    Map notificationOptionsMap = {
+      "1": DatabaseUtil.getText('Yes'),
+      "0": DatabaseUtil.getText('No')
+    };
+
+    emit(ToDoSendNotificationOptionSelected(
+        optionId: event.optionId,
+        notificationOptionsMap: notificationOptionsMap,
+        optionName: event.optionName));
+  }
+
+  FutureOr _saveSettings(
+      SaveToDoSettings event, Emitter<ToDoStates> emit) async {
+    emit(SavingToDoSettings());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      todoMap = event.todoMap;
+      Map saveSettingsMap = {
+        "userid": userId,
+        "hashcode": hashCode,
+        "assigned": todoMap['assigned'],
+        "completed": todoMap['completed']
+      };
+      SaveToDoSettingsModel saveToDoSettingsModel =
+          await _toDoRepository.todoSaveSettings(saveSettingsMap);
+      emit(ToDoSettingsSaved(saveToDoSettingsModel: saveToDoSettingsModel));
+    } catch (e) {
+      emit(ToDoSettingsNotSaved(settingsNotSaved: e.toString()));
     }
   }
 
@@ -434,7 +509,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         DatabaseUtil.getText('AssignDocuments'),
         DatabaseUtil.getText('dms_uploaddocuments'),
       ];
-      if (todoMap['isFromAdd'] == true) {
+      if (todoMap['isFromAdd'] == true || todoMap['isFromHistory'] == true) {
         popUpMenuList.removeAt(0);
       }
       emit(ToDoDocumentMasterFetched(

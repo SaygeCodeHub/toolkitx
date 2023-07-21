@@ -10,6 +10,8 @@ import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/send_reminder_for_todo_model.dart';
+import '../../data/models/todo/fetch_todo_history_list_model.dart';
+import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
 
@@ -204,4 +206,54 @@ class ReminderCannotSendForToDo extends ToDoStates {
   final String cannotSendReminder;
 
   ReminderCannotSendForToDo({required this.cannotSendReminder});
+}
+
+class FetchingTodoHistoryList extends ToDoStates {}
+
+class TodoHistoryListFetched extends ToDoStates {
+  final FetchToDoHistoryListModel fetchToDoHistoryListModel;
+
+  TodoHistoryListFetched({required this.fetchToDoHistoryListModel});
+}
+
+class ToDoSendEmailOptionSelected extends ToDoStates {
+  final String optionId;
+  final Map emailOptionsMap;
+  final String optionName;
+
+  ToDoSendEmailOptionSelected(
+      {required this.optionName,
+      required this.emailOptionsMap,
+      required this.optionId});
+}
+
+class ToDoSendNotificationOptionSelected extends ToDoStates {
+  final String optionId;
+  final Map notificationOptionsMap;
+  final String optionName;
+
+  ToDoSendNotificationOptionSelected(
+      {required this.optionName,
+      required this.notificationOptionsMap,
+      required this.optionId});
+}
+
+class SavingToDoSettings extends ToDoStates {}
+
+class ToDoSettingsSaved extends ToDoStates {
+  final SaveToDoSettingsModel saveToDoSettingsModel;
+
+  ToDoSettingsSaved({required this.saveToDoSettingsModel});
+}
+
+class ToDoSettingsNotSaved extends ToDoStates {
+  final String settingsNotSaved;
+
+  ToDoSettingsNotSaved({required this.settingsNotSaved});
+}
+
+class ToDoSettingsShowedByUserType extends ToDoStates {
+  final String userType;
+
+  ToDoSettingsShowedByUserType({required this.userType});
 }

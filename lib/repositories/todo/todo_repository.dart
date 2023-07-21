@@ -10,8 +10,10 @@ import '../../data/models/todo/fetch_todo_master_model.dart';
 import '../../data/models/todo/save_todo_documents_model.dart';
 import '../../data/models/todo/submit_todo_model.dart';
 import '../../data/models/todo/send_reminder_for_todo_model.dart';
+import '../../data/models/todo/save_todo_settings_model.dart';
 import '../../data/models/todo/todo_mark_as_done_model.dart';
 import '../../data/models/todo/todo_upload_document_model.dart';
+import '../../data/models/todo/fetch_todo_history_list_model.dart';
 
 abstract class ToDoRepository {
   Future<FetchToDoAssignToMeListModel> fetchToDoAssignToMeList(
@@ -49,4 +51,9 @@ abstract class ToDoRepository {
       String hashCode, String userId);
 
   Future<SendReminderTodoModel> sendReminderForTodo(Map sendReminderMap);
+
+  Future<FetchToDoHistoryListModel> fetchToDoHistoryList(
+      int pageNo, String hashCode, String userId);
+
+  Future<SaveToDoSettingsModel> todoSaveSettings(Map todoSaveSettingsMap);
 }

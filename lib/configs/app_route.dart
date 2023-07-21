@@ -47,6 +47,8 @@ import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
+import '../screens/todo/todo_history_list_screen.dart';
+import '../screens/todo/todo_settings_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
 class AppRoutes {
@@ -171,6 +173,12 @@ class AppRoutes {
 
       case AddToDoScreen.routeName:
         return _createRoute(AddToDoScreen(todoMap: settings.arguments as Map));
+      case ToDoHistoryListScreen.routeName:
+        return _createRoute(
+            ToDoHistoryListScreen(todoMap: settings.arguments as Map));
+      case ToDoSettingsScreen.routeName:
+        return _createRoute(
+            ToDoSettingsScreen(todoMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

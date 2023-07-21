@@ -158,15 +158,15 @@ class OnLineModules extends StatelessWidget {
       case 'sl':
         Navigator.pushNamed(context, LogbookListScreen.routeName);
         break;
+      case 'todo':
+        Navigator.pushNamed(
+            context, TodoAssignedByMeAndToMeListScreen.routeName);
+        break;
       case 'timesheet':
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         break;
       case 'wf_timesheet':
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
-        break;
-      case 'todo':
-        Navigator.pushNamed(
-            context, TodoAssignedByMeAndToMeListScreen.routeName);
         break;
     }
   }

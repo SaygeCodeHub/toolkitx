@@ -4,11 +4,15 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:toolkit/blocs/todo/todo_bloc.dart';
 import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_icon_button_row.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
+import 'todo_history_list_screen.dart';
+import 'todo_settings_screen.dart';
 import 'add_todo_screen.dart';
 import 'widgets/todo_assigned_by_me_body.dart';
 import 'widgets/todo_assigned_to_me_body.dart';
@@ -23,6 +27,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
+    context.read<ToDoBloc>().add(ShowToDoSettingByUserType());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
@@ -38,6 +43,32 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child: Column(
               children: [
+                BlocBuilder<ToDoBloc, ToDoStates>(
+                    buildWhen: (previousState, currentState) =>
+                        currentState is ToDoSettingsShowedByUserType,
+                    builder: (context, state) {
+                      if (state is ToDoSettingsShowedByUserType) {
+                        return CustomIconButtonRow(
+                            clearVisible: true,
+                            textValue: StringConstants.kViewAll,
+                            secondaryVisible: state.userType == '1',
+                            primaryVisible: false,
+                            isEnabled: true,
+                            primaryOnPress: () {},
+                            secondaryOnPress: () {
+                              Navigator.pushNamed(
+                                  context, ToDoSettingsScreen.routeName,
+                                  arguments: todoMap);
+                            },
+                            clearOnPress: () {
+                              Navigator.of(context).pushNamed(
+                                  ToDoHistoryListScreen.routeName,
+                                  arguments: todoMap);
+                            });
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }),
                 const SizedBox(height: xxTinySpacing),
                 BlocBuilder<ToDoBloc, ToDoStates>(
                     buildWhen: (previousState, currentState) =>

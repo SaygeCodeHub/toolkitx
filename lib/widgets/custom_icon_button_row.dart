@@ -9,6 +9,7 @@ class CustomIconButtonRow extends StatelessWidget {
   final bool clearVisible;
   final bool secondaryVisible;
   final bool isEnabled;
+  final String textValue;
   final void Function() primaryOnPress;
   final void Function() clearOnPress;
   final void Function() secondaryOnPress;
@@ -23,7 +24,8 @@ class CustomIconButtonRow extends StatelessWidget {
       this.primaryVisible = true,
       this.secondaryVisible = true,
       this.clearVisible = false,
-      required this.clearOnPress})
+      required this.clearOnPress,
+      this.textValue = StringConstants.kClearFilter})
       : super(key: key);
 
   @override
@@ -31,9 +33,7 @@ class CustomIconButtonRow extends StatelessWidget {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       Visibility(
           visible: clearVisible,
-          child: TextButton(
-              onPressed: clearOnPress,
-              child: const Text(StringConstants.kClearFilter))),
+          child: TextButton(onPressed: clearOnPress, child: Text(textValue))),
       Visibility(
           visible: primaryVisible,
           child: IconButton(

@@ -9,8 +9,10 @@ import 'package:toolkit/data/models/todo/send_reminder_for_todo_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_document_master_model.dart';
 import 'package:toolkit/data/models/todo/fetch_todo_master_model.dart';
 import 'package:toolkit/data/models/todo/submit_todo_model.dart';
+import 'package:toolkit/data/models/todo/save_todo_settings_model.dart';
 import 'package:toolkit/data/models/todo/todo_mark_as_done_model.dart';
 import 'package:toolkit/data/models/todo/todo_upload_document_model.dart';
+import 'package:toolkit/data/models/todo/fetch_todo_history_list_model.dart';
 import 'package:toolkit/repositories/todo/todo_repository.dart';
 
 import '../../data/models/todo/save_todo_documents_model.dart';
@@ -132,5 +134,21 @@ class ToDoRepositoryImpl extends ToDoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}todo/SendReminder", sendReminderMap);
     return SendReminderTodoModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchToDoHistoryListModel> fetchToDoHistoryList(
+      int pageNo, String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}todo/gethistory?pageno=$pageNo&hashcode=$hashCode&userid=$userId");
+    return FetchToDoHistoryListModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveToDoSettingsModel> todoSaveSettings(
+      Map todoSaveSettingsMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}todo/SaveSettings", todoSaveSettingsMap);
+    return SaveToDoSettingsModel.fromJson(response);
   }
 }

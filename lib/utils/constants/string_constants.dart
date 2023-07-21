@@ -81,6 +81,7 @@ abstract class StringConstants {
   static const String kEmergencyContactValidation =
       'Please enter emergency contact!'; //
   static const String kAlert = 'Alert'; //
+  static const String kViewAll = 'View All'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
@@ -93,6 +94,7 @@ abstract class StringConstants {
   static const String kNoHeader =
       'No header data available for this checklist!';
   static const String kOldPassword = 'Old Password'; //
+  static const String kToDoHistory = 'ToDo History'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kResolve = 'Resolve'; //

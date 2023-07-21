@@ -121,3 +121,32 @@ class ToDoSendReminder extends ToDoEvent {
 
   ToDoSendReminder({required this.todoMap});
 }
+
+class FetchToDoHistoryList extends ToDoEvent {
+  final int page;
+
+  FetchToDoHistoryList({required this.page});
+}
+
+class SelectToDoSendEmailOption extends ToDoEvent {
+  final String optionId;
+  final String optionName;
+
+  SelectToDoSendEmailOption({required this.optionName, required this.optionId});
+}
+
+class SelectToDoSendNotificationOption extends ToDoEvent {
+  final String optionId;
+  final String optionName;
+
+  SelectToDoSendNotificationOption(
+      {required this.optionName, required this.optionId});
+}
+
+class SaveToDoSettings extends ToDoEvent {
+  final Map todoMap;
+
+  SaveToDoSettings({required this.todoMap});
+}
+
+class ShowToDoSettingByUserType extends ToDoEvent {}
