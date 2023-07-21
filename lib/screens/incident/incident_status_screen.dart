@@ -4,10 +4,12 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_states.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/incident_details_model.dart';
-import '../../utils/constants/incident_status_util.dart';
+import '../../utils/incident_status_util.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
@@ -28,6 +30,8 @@ class IncidentStatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    incidentCommentsMap['filenames'] = null;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: GenericAppBar(
             title: IncidentStatusUtil()
