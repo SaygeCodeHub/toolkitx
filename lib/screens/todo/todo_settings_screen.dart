@@ -24,7 +24,7 @@ class ToDoSettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('Settings')),
       bottomNavigationBar: BottomAppBar(
-        child: BlocListener<TodoBloc, ToDoStates>(
+        child: BlocListener<ToDoBloc, ToDoStates>(
           listener: (context, state) {
             if (state is SavingToDoSettings) {
               ProgressBar.show(context);
@@ -32,7 +32,7 @@ class ToDoSettingsScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               context
-                  .read<TodoBloc>()
+                  .read<ToDoBloc>()
                   .add(FetchTodoAssignedToMeAndByMeListEvent());
             } else if (state is ToDoSettingsNotSaved) {
               ProgressBar.dismiss(context);
@@ -42,7 +42,7 @@ class ToDoSettingsScreen extends StatelessWidget {
           child: PrimaryButton(
               onPressed: () {
                 context
-                    .read<TodoBloc>()
+                    .read<ToDoBloc>()
                     .add(SaveToDoSettings(todoMap: todoMap));
               },
               textValue: DatabaseUtil.getText('buttonSave')),

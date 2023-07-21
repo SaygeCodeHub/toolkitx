@@ -27,6 +27,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ToDoBloc>().add(FetchTodoAssignedToMeAndByMeListEvent());
+    context.read<ToDoBloc>().add(ShowToDoSettingByUserType());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ToDo')),
         floatingActionButton: FloatingActionButton(
@@ -42,19 +43,31 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child: Column(
               children: [
-                CustomIconButtonRow(
-                    clearVisible: true,
-                    textValue: StringConstants.kViewAll,
-                    primaryVisible: false,
-                    isEnabled: true,
-                    primaryOnPress: () {},
-                    secondaryOnPress: () {
-                      Navigator.pushNamed(context, ToDoSettingsScreen.routeName,
-                          arguments: todoMap);
-                    },
-                    clearOnPress: () {
-                      Navigator.of(context)
-                          .pushNamed(ToDoHistoryListScreen.routeName);
+                BlocBuilder<ToDoBloc, ToDoStates>(
+                    buildWhen: (previousState, currentState) =>
+                        currentState is ToDoSettingsShowedByUserType,
+                    builder: (context, state) {
+                      if (state is ToDoSettingsShowedByUserType) {
+                        return CustomIconButtonRow(
+                            clearVisible: true,
+                            textValue: StringConstants.kViewAll,
+                            secondaryVisible: state.userType == '1',
+                            primaryVisible: false,
+                            isEnabled: true,
+                            primaryOnPress: () {},
+                            secondaryOnPress: () {
+                              Navigator.pushNamed(
+                                  context, ToDoSettingsScreen.routeName,
+                                  arguments: todoMap);
+                            },
+                            clearOnPress: () {
+                              Navigator.of(context).pushNamed(
+                                  ToDoHistoryListScreen.routeName,
+                                  arguments: todoMap);
+                            });
+                      } else {
+                        return const SizedBox.shrink();
+                      }
                     }),
                 const SizedBox(height: xxTinySpacing),
                 BlocBuilder<ToDoBloc, ToDoStates>(

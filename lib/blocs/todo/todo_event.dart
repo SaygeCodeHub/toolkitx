@@ -138,3 +138,5 @@ class SaveToDoSettings extends ToDoEvent {
 
   SaveToDoSettings({required this.todoMap});
 }
+
+class ShowToDoSettingByUserType extends ToDoEvent {}

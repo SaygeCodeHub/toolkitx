@@ -168,10 +168,6 @@ class OnLineModules extends StatelessWidget {
       case 'wf_timesheet':
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         break;
-      case 'todo':
-        Navigator.pushNamed(
-            context, TodoAssignedByMeAndToMeListScreen.routeName);
-        break;
     }
   }
 }

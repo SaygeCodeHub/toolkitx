@@ -174,7 +174,8 @@ class AppRoutes {
       case AddToDoScreen.routeName:
         return _createRoute(AddToDoScreen(todoMap: settings.arguments as Map));
       case ToDoHistoryListScreen.routeName:
-        return _createRoute(const ToDoHistoryListScreen());
+        return _createRoute(
+            ToDoHistoryListScreen(todoMap: settings.arguments as Map));
       case ToDoSettingsScreen.routeName:
         return _createRoute(
             ToDoSettingsScreen(todoMap: settings.arguments as Map));

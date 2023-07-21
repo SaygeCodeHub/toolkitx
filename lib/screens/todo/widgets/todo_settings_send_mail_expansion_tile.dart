@@ -18,9 +18,9 @@ class ToDoSettingsSendMailExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(SelectToDoSendEmailOption(
-        optionId: '', optionName: DatabaseUtil.getText('Yes')));
-    return BlocBuilder<TodoBloc, ToDoStates>(
+    context.read<ToDoBloc>().add(SelectToDoSendEmailOption(
+        optionId: '1', optionName: DatabaseUtil.getText('Yes')));
+    return BlocBuilder<ToDoBloc, ToDoStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ToDoSendEmailOptionSelected,
         builder: (context, state) {
@@ -62,7 +62,7 @@ class ToDoSettingsSendMailExpansionTile extends StatelessWidget {
                                 onChanged: (value) {
                                   value = state.emailOptionsMap.keys
                                       .elementAt(index);
-                                  context.read<TodoBloc>().add(
+                                  context.read<ToDoBloc>().add(
                                       SelectToDoSendEmailOption(
                                           optionId: value,
                                           optionName: state

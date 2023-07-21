@@ -236,3 +236,9 @@ class ToDoSettingsNotSaved extends ToDoStates {
 
   ToDoSettingsNotSaved({required this.settingsNotSaved});
 }
+
+class ToDoSettingsShowedByUserType extends ToDoStates {
+  final String userType;
+
+  ToDoSettingsShowedByUserType({required this.userType});
+}

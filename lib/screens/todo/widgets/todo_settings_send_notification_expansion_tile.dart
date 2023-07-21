@@ -19,9 +19,9 @@ class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(SelectToDoSendNotificationOption(
-        optionId: '', optionName: DatabaseUtil.getText('Yes')));
-    return BlocBuilder<TodoBloc, ToDoStates>(
+    context.read<ToDoBloc>().add(SelectToDoSendNotificationOption(
+        optionId: '1', optionName: DatabaseUtil.getText('Yes')));
+    return BlocBuilder<ToDoBloc, ToDoStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ToDoSendNotificationOptionSelected,
         builder: (context, state) {
@@ -63,7 +63,7 @@ class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
                                 onChanged: (value) {
                                   value = state.notificationOptionsMap.keys
                                       .elementAt(index);
-                                  context.read<TodoBloc>().add(
+                                  context.read<ToDoBloc>().add(
                                       SelectToDoSendNotificationOption(
                                           optionId: value,
                                           optionName: state

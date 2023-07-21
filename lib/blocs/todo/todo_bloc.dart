@@ -60,6 +60,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
     on<SubmitToDo>(_submitTodo);
     on<ChangeToDoCategory>(_categoryChanged);
     on<FetchToDoDocumentMaster>(_fetchDocumentMaster);
+    on<ShowToDoSettingByUserType>(_showSettingByUserType);
   }
 
   _applyFilter(ApplyToDoFilter event, Emitter<ToDoStates> emit) {
@@ -69,6 +70,12 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
   FutureOr<void> _clearFilter(
       ClearToDoFilter event, Emitter<ToDoStates> emit) async {
     filters = {};
+  }
+
+  FutureOr<void> _showSettingByUserType(
+      ShowToDoSettingByUserType event, Emitter<ToDoStates> emit) async {
+    String? userType = await _customerCache.getUserType(CacheKeys.userType);
+    emit(ToDoSettingsShowedByUserType(userType: userType!));
   }
 
   FutureOr _fetchAssignToMeAndByMeList(
@@ -474,7 +481,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         DatabaseUtil.getText('AssignDocuments'),
         DatabaseUtil.getText('dms_uploaddocuments'),
       ];
-      if (todoMap['isFromAdd'] == true) {
+      if (todoMap['isFromAdd'] == true || todoMap['isFromHistory'] == true) {
         popUpMenuList.removeAt(0);
       }
       emit(ToDoDocumentMasterFetched(

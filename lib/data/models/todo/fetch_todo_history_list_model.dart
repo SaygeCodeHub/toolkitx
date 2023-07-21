@@ -54,8 +54,8 @@ class Datum {
         id: json["id"],
         todoname: json["todoname"],
         istododue: json["istododue"],
-        description: json["description"],
-        category: json["category"],
+        description: json["description"] ?? '',
+        category: json["category"] ?? '',
         duedate: json["duedate"],
         createdfor: json["createdfor"],
       );

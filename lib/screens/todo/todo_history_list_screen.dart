@@ -12,15 +12,18 @@ import '../../data/models/status_tag_model.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_card.dart';
 import '../../widgets/status_tag.dart';
+import 'todo_details_and_document_details_screen.dart';
 
 class ToDoHistoryListScreen extends StatelessWidget {
   static const routeName = 'ToDoHistoryListScreen';
+  final Map todoMap;
 
-  const ToDoHistoryListScreen({Key? key}) : super(key: key);
+  const ToDoHistoryListScreen({Key? key, required this.todoMap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<TodoBloc>().add(FetchToDoHistoryList());
+    context.read<ToDoBloc>().add(FetchToDoHistoryList());
     return Scaffold(
         appBar: const GenericAppBar(title: 'ToDo History'),
         body: Padding(
@@ -28,7 +31,7 @@ class ToDoHistoryListScreen extends StatelessWidget {
               left: leftRightMargin,
               right: leftRightMargin,
               top: xxTinierSpacing),
-          child: BlocBuilder<TodoBloc, ToDoStates>(
+          child: BlocBuilder<ToDoBloc, ToDoStates>(
               buildWhen: (previousState, currentState) =>
                   currentState is FetchingTodoHistoryList ||
                   currentState is TodoHistoryListFetched,
@@ -46,7 +49,18 @@ class ToDoHistoryListScreen extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.only(top: tinierSpacing),
                                 child: ListTile(
-                                    onTap: () {},
+                                    onTap: () {
+                                      todoMap['isFromHistory'] = true;
+                                      todoMap['todoId'] = state
+                                          .fetchToDoHistoryListModel
+                                          .data[index]
+                                          .id;
+                                      Navigator.pushNamed(
+                                          context,
+                                          ToDoDetailsAndDocumentDetailsScreen
+                                              .routeName,
+                                          arguments: todoMap);
+                                    },
                                     title: Text(
                                         state.fetchToDoHistoryListModel
                                             .data[index].todoname,
