@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -33,7 +31,6 @@ class _LogbookListState extends State<LogbookList> {
 
   @override
   void initState() {
-    log("herr=======>");
     LogbookList.page = 1;
     LogbookList.noMoreData = false;
     widget.logbookData.clear();
@@ -44,21 +41,20 @@ class _LogbookListState extends State<LogbookList> {
   Widget build(BuildContext context) {
     return Expanded(
         child: BlocConsumer<LogbookBloc, LogbookStates>(
-          buildWhen: (previousState, currentState) => ((currentState
-          is LogbookListFetched &&
+      buildWhen: (previousState, currentState) => ((currentState
+                  is LogbookListFetched &&
               LogbookList.noMoreData != true) ||
-              (currentState is FetchingLogbookList && widget.logbookData.isEmpty)),
-          listener: (context, state) {
-            if (state is LogbookListFetched) {
-              if (state.fetchLogBookListModel.status == 204 &&
-                  widget.logbookData.isNotEmpty) {
-                LogbookList.noMoreData = true;
-                showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
-              }
-            }
-          },
-          builder: (context, state) {
-            log("widget.logbookData.isEmpty======>${widget.logbookData.isEmpty}");
+          (currentState is FetchingLogbookList && widget.logbookData.isEmpty)),
+      listener: (context, state) {
+        if (state is LogbookListFetched) {
+          if (state.fetchLogBookListModel.status == 204 &&
+              widget.logbookData.isNotEmpty) {
+            LogbookList.noMoreData = true;
+            showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
+          }
+        }
+      },
+      builder: (context, state) {
         if (state is FetchingLogbookList) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -70,87 +66,87 @@ class _LogbookListState extends State<LogbookList> {
               widget.logbookData.add(item);
             }
             waitForData = false;
-                return ListView.separated(
-                    controller: controller
-                      ..addListener(() {
-                        if (LogbookList.noMoreData != true &&
-                            waitForData == false) {
-                          if (controller.position.extentAfter < 500) {
-                            LogbookList.page++;
-                            context
-                                .read<LogbookBloc>()
-                                .add(FetchLogbookList(pageNo: LogbookList.page));
-                            waitForData = true;
-                          }
-                        }
-                      }),
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.logbookData.length,
-                    itemBuilder: (context, index) {
-                      return CustomCard(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: tinierSpacing),
-                          child: ListTile(
-                            onTap: () {},
-                            title: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Text(widget.logbookData[index].logbookname,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .small
-                                            .copyWith(
+            return ListView.separated(
+                controller: controller
+                  ..addListener(() {
+                    if (LogbookList.noMoreData != true &&
+                        waitForData == false) {
+                      if (controller.position.extentAfter < 500) {
+                        LogbookList.page++;
+                        context
+                            .read<LogbookBloc>()
+                            .add(FetchLogbookList(pageNo: LogbookList.page));
+                        waitForData = true;
+                      }
+                    }
+                  }),
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.logbookData.length,
+                itemBuilder: (context, index) {
+                  return CustomCard(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: tinierSpacing),
+                      child: ListTile(
+                        onTap: () {},
+                        title: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: [
+                                Text(widget.logbookData[index].logbookname,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .small
+                                        .copyWith(
                                             fontWeight: FontWeight.bold,
                                             color: AppColor.black)),
-                                  ]),
-                                  Text(widget.logbookData[index].status,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .xSmall
-                                          .copyWith(
+                              ]),
+                              Text(widget.logbookData[index].status,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: AppColor.deepBlue))
-                                ]),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: tinierSpacing),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(widget.logbookData[index].description),
-                                  const SizedBox(height: tinierSpacing),
-                                  Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Image.asset('assets/icons/calendar.png',
-                                            height: kImageHeight,
-                                            width: kImageWidth),
-                                        const SizedBox(width: tiniestSpacing),
-                                        Text(
-                                            widget.logbookData[index].eventdatetime)
-                                      ]),
-                                ],
-                              ),
-                            ),
+                            ]),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: tinierSpacing),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.logbookData[index].description),
+                              const SizedBox(height: tinierSpacing),
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset('assets/icons/calendar.png',
+                                        height: kImageHeight,
+                                        width: kImageWidth),
+                                    const SizedBox(width: tiniestSpacing),
+                                    Text(
+                                        widget.logbookData[index].eventdatetime)
+                                  ]),
+                            ],
                           ),
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: tinierSpacing);
-                    });
-              } else {
-                return NoRecordsText(
-                    text: DatabaseUtil.getText('no_records_found'));
-              }
-            } else {
-              return const SizedBox();
-            }
-          },
-        ));
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: tinierSpacing);
+                });
+          } else {
+            return NoRecordsText(
+                text: DatabaseUtil.getText('no_records_found'));
+          }
+        } else {
+          return const SizedBox();
+        }
+      },
+    ));
   }
 }

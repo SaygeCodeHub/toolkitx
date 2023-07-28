@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -142,11 +141,9 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
           "loc": event.reportLogbook['loc'],
           "hashcode": hashCode
         };
-        log("mappp=====>$registerNewLogMap");
         ReportNewLogBookModel reportNewLogBookModel =
             await _logbookRepository.reportNewLogbook(registerNewLogMap);
         if (reportNewLogBookModel.status == 200) {
-          log("status=====>${reportNewLogBookModel.status}");
           emit(
               NewLogBookReported(reportNewLogBookModel: reportNewLogBookModel));
         } else {

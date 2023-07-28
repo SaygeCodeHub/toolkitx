@@ -136,7 +136,7 @@ class ReportNewLogBookScreen extends StatelessWidget {
               TextFieldWidget(
                   value: '',
                   maxLength: 100,
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
                   textInputType: TextInputType.text,
                   onTextFieldChanged: (String textField) {
                     reportNewLogBookMap['component'] = textField;
