@@ -44,6 +44,7 @@ import '../screens/profile/profile_edit_screen.dart';
 import '../screens/permit/permit_details_screen.dart';
 import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
+import '../screens/qualityManagement/qm_list_screen.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -182,6 +183,8 @@ class AppRoutes {
       case LogBookDetailsScreen.routeName:
         return _createRoute(
             LogBookDetailsScreen(logId: settings.arguments.toString()));
+      case QualityManagementListScreen.routeName:
+        return _createRoute(const QualityManagementListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
