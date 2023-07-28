@@ -11,6 +11,7 @@ import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'qm_details_screen.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 
@@ -46,7 +47,7 @@ class _QualityManagementListScreenState
         .read<QualityManagementBloc>()
         .add(FetchQualityManagementList(pageNo: 1));
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('ReportanIncident')),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {}, child: const Icon(Icons.add)),
         body: Padding(
@@ -130,7 +131,18 @@ class _QualityManagementListScreenState
                                           subtitle:
                                               QualityManagementListTileSubtitle(
                                                   data: qmListData[index]),
-                                          onTap: () {}));
+                                          onTap: () {
+                                            Map qmListMap = {
+                                              'id': qmListData[index].id,
+                                              'refNo': qmListData[index].refno,
+                                              'status': qmListData[index].status
+                                            };
+                                            Navigator.pushNamed(
+                                                context,
+                                                QualityManagementDetailsScreen
+                                                    .routeName,
+                                                arguments: qmListMap);
+                                          }));
                                 },
                                 separatorBuilder: (context, index) {
                                   return const SizedBox(height: xxTinySpacing);

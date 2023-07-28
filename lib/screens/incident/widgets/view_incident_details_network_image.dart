@@ -28,21 +28,20 @@ class IncidentCommentViewNetworkImage extends StatelessWidget {
             crossAxisSpacing: tinierSpacing,
             mainAxisSpacing: tinierSpacing),
         itemCount:
-            IncidentViewImageUtil.viewImageList(commentsList.files.toString())
-                .length,
+            ViewImageUtil.viewImageList(commentsList.files.toString()).length,
         itemBuilder: (context, index) {
           return InkWell(
               splashColor: AppColor.transparent,
               highlightColor: AppColor.transparent,
               onTap: () {
                 launchUrlString(
-                    '${ApiConstants.viewDocBaseUrl}${IncidentViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                    '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                     mode: LaunchMode.inAppWebView);
               },
               child: CachedNetworkImage(
                   height: kCachedNetworkImageHeight,
                   imageUrl:
-                      '${ApiConstants.viewDocBaseUrl}${IncidentViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: Colors.grey.shade100,
                       highlightColor: AppColor.white,

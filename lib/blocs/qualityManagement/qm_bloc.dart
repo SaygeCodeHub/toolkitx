@@ -7,6 +7,7 @@ import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
+import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 
 class QualityManagementBloc
@@ -16,11 +17,13 @@ class QualityManagementBloc
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
   String roleId = '';
+  int incidentTabIndex = 0;
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
   QualityManagementBloc() : super(QualityManagementInitial()) {
     on<FetchQualityManagementList>(_fetchList);
+    on<FetchQualityManagementDetails>(_fetchDetails);
   }
 
   FutureOr<void> _fetchList(FetchQualityManagementList event,
@@ -37,6 +40,26 @@ class QualityManagementBloc
       ));
     } catch (e) {
       e.toString();
+    }
+  }
+
+  FutureOr<void> _fetchDetails(FetchQualityManagementDetails event,
+      Emitter<QualityManagementStates> emit) async {
+    emit(FetchingQualityManagementDetails());
+    try {
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
+      incidentTabIndex = event.initialIndex;
+      FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
+          await _qualityManagementRepository.fetchQualityManagementDetails(
+              event.qmId, hashCode, userId, '');
+      emit(QualityManagementDetailsFetched(
+          fetchQualityManagementDetailsModel:
+              fetchQualityManagementDetailsModel,
+          clientId: hashKey!));
+    } catch (e) {
+      emit(QualityManagementDetailsNotFetched(detailsNotFetched: e.toString()));
     }
   }
 }
