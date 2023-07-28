@@ -27,6 +27,7 @@ import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
+import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -184,6 +185,8 @@ class AppRoutes {
       case LogBookDetailsScreen.routeName:
         return _createRoute(
             LogBookDetailsScreen(logId: settings.arguments.toString()));
+      case AddLogBookScreen.routeName:
+        return _createRoute(const AddLogBookScreen());
       case QualityManagementListScreen.routeName:
         return _createRoute(const QualityManagementListScreen());
       case QualityManagementDetailsScreen.routeName:
