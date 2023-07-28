@@ -26,6 +26,7 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -170,7 +171,6 @@ class AppRoutes {
         return _createRoute(const LeavesDetailsScreen());
       case ApplyForLeaveScreen.routeName:
         return _createRoute(ApplyForLeaveScreen());
-
       case AddToDoScreen.routeName:
         return _createRoute(AddToDoScreen(todoMap: settings.arguments as Map));
       case ToDoHistoryListScreen.routeName:
@@ -179,6 +179,9 @@ class AppRoutes {
       case ToDoSettingsScreen.routeName:
         return _createRoute(
             ToDoSettingsScreen(todoMap: settings.arguments as Map));
+      case LogBookDetailsScreen.routeName:
+        return _createRoute(
+            LogBookDetailsScreen(logId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

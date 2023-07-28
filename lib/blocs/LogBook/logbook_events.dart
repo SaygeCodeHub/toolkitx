@@ -5,3 +5,9 @@ class FetchLogbookList extends LogbookEvents {
 
   FetchLogbookList({required this.pageNo});
 }
+
+class FetchLogBookDetails extends LogbookEvents {
+  final String logId;
+
+  FetchLogBookDetails({required this.logId});
+}
