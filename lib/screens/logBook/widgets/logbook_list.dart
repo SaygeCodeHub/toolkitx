@@ -74,9 +74,8 @@ class _LogbookListState extends State<LogbookList> {
                         waitForData == false) {
                       if (controller.position.extentAfter < 500) {
                         LogbookList.page++;
-                        context
-                            .read<LogbookBloc>()
-                            .add(FetchLogbookList(pageNo: LogbookList.page));
+                        context.read<LogbookBloc>().add(FetchLogbookList(
+                            pageNo: LogbookList.page, isFromHome: false));
                         waitForData = true;
                       }
                     }

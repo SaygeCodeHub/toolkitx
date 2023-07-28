@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -16,6 +17,7 @@ import 'logbook_states.dart';
 class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
   final LogbookRepository _logbookRepository = getIt<LogbookRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  static Map filters = {};
 
   LogbookBloc() : super(LogbookInitial()) {
     on<FetchLogbookList>(_fetchLogbookList);
@@ -27,6 +29,16 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     on<SelectLogBookPriority>(_selectLogBookPriority);
     on<SelectLogBookHandoverLog>(_selectLogBookHandover);
     on<ReportNewLogBook>(_reportNewLogbook);
+    on<ApplyLogBookFilter>(_applyLogbookFilter);
+    on<ClearLogBookFilter>(_clearLogbookFilter);
+  }
+
+  _applyLogbookFilter(ApplyLogBookFilter event, Emitter<LogbookStates> emit) {
+    filters = event.filterMap;
+  }
+
+  _clearLogbookFilter(ClearLogBookFilter event, Emitter<LogbookStates> emit) {
+    filters = {};
   }
 
   FutureOr<void> _fetchLogbookList(
@@ -36,12 +48,23 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
-      String? filter = "";
-      FetchLogBookListModel fetchLogBookListModel = await _logbookRepository
-          .fetchLogbookList(userId!, hashCode!, filter, event.pageNo);
-      emit(LogbookListFetched(
-          fetchLogBookListModel: fetchLogBookListModel,
-          privateApiKey: privateKey!));
+      if (event.isFromHome == true) {
+        add((ClearLogBookFilter()));
+        FetchLogBookListModel fetchLogBookListModel = await _logbookRepository
+            .fetchLogbookList(userId!, hashCode!, '', event.pageNo);
+        emit(LogbookListFetched(
+            fetchLogBookListModel: fetchLogBookListModel,
+            privateApiKey: privateKey!,
+            filtersMap: {}));
+      } else {
+        FetchLogBookListModel fetchLogBookListModel =
+            await _logbookRepository.fetchLogbookList(
+                userId!, hashCode!, jsonEncode(filters), event.pageNo);
+        emit(LogbookListFetched(
+            fetchLogBookListModel: fetchLogBookListModel,
+            privateApiKey: privateKey!,
+            filtersMap: filters));
+      }
     } catch (e) {
       emit(LogbookFetchError());
     }
@@ -55,7 +78,8 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
       LogBookFetchMasterModel logBookFetchMasterModel =
           await _logbookRepository.fetchLogBookMaster(hashCode!);
       emit(LogBookMasterFetched(
-          logBookFetchMasterModel: logBookFetchMasterModel));
+          logBookFetchMasterModel: logBookFetchMasterModel,
+          filterMap: filters));
     } catch (e) {
       emit(LogBookMasterNotFetched(masterNotFetched: e.toString()));
     }

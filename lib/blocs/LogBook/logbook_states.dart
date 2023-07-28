@@ -14,9 +14,12 @@ class FetchingLogbookList extends LogbookStates {}
 class LogbookListFetched extends LogbookStates {
   final FetchLogBookListModel fetchLogBookListModel;
   final String privateApiKey;
+  final Map filtersMap;
 
   const LogbookListFetched(
-      {required this.privateApiKey, required this.fetchLogBookListModel});
+      {required this.filtersMap,
+      required this.privateApiKey,
+      required this.fetchLogBookListModel});
 }
 
 class LogbookFetchError extends LogbookStates {}
@@ -39,8 +42,10 @@ class LogBookFetchingMaster extends LogbookStates {}
 
 class LogBookMasterFetched extends LogbookStates {
   final LogBookFetchMasterModel logBookFetchMasterModel;
+  final Map filterMap;
 
-  LogBookMasterFetched({required this.logBookFetchMasterModel});
+  LogBookMasterFetched(
+      {required this.filterMap, required this.logBookFetchMasterModel});
 }
 
 class LogBookMasterNotFetched extends LogbookStates {
