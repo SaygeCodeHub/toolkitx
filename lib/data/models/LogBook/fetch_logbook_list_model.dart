@@ -9,7 +9,7 @@ String fetchLogBookListModelToJson(FetchLogBookListModel data) =>
 class FetchLogBookListModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<LogBookListDatum> data;
 
   FetchLogBookListModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchLogBookListModel {
       FetchLogBookListModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<LogBookListDatum>.from(
+            json["Data"].map((x) => LogBookListDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,14 +32,14 @@ class FetchLogBookListModel {
       };
 }
 
-class Datum {
+class LogBookListDatum {
   final int id;
   final String logbookname;
   final String eventdatetime;
   final String? description;
   final String status;
 
-  Datum({
+  LogBookListDatum({
     required this.id,
     required this.logbookname,
     required this.eventdatetime,
@@ -46,7 +47,8 @@ class Datum {
     required this.status,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory LogBookListDatum.fromJson(Map<String, dynamic> json) =>
+      LogBookListDatum(
         id: json["id"],
         logbookname: json["logbookname"],
         eventdatetime: json["eventdatetime"],
