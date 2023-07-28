@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
 import '../../blocs/qualityManagement/qm_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../blocs/qualityManagement/qm_states.dart';
-import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
@@ -14,6 +11,8 @@ import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'widgets/qm_list_tile_subtitle.dart';
+import 'widgets/qm_list_tile_titile.dart';
 
 class QualityManagementListScreen extends StatefulWidget {
   static const routeName = 'QualityManagementListScreen';
@@ -126,80 +125,11 @@ class _QualityManagementListScreenState
                                       child: ListTile(
                                           contentPadding: const EdgeInsets.all(
                                               xxTinierSpacing),
-                                          title: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: xxTinierSpacing),
-                                              child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        qmListData[index].refno,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .small
-                                                            .copyWith(
-                                                                color: AppColor
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600)),
-                                                    const SizedBox(
-                                                        width: tinierSpacing),
-                                                    Text(
-                                                        qmListData[index]
-                                                            .status,
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .xxSmall
-                                                            .copyWith(
-                                                                color: AppColor
-                                                                    .deepBlue))
-                                                  ])),
-                                          subtitle: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    qmListData[index]
-                                                        .description,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .xSmall),
-                                                const SizedBox(
-                                                    height: tinierSpacing),
-                                                Text(qmListData[index].location,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .xSmall
-                                                        .copyWith(
-                                                            color:
-                                                                AppColor.grey)),
-                                                const SizedBox(
-                                                    height: tinierSpacing),
-                                                Row(children: [
-                                                  Image.asset(
-                                                      "assets/icons/calendar.png",
-                                                      height: kIconSize,
-                                                      width: kIconSize),
-                                                  const SizedBox(
-                                                      width: tiniestSpacing),
-                                                  Text(
-                                                      qmListData[index]
-                                                          .eventdatetime,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .xSmall
-                                                          .copyWith(
-                                                              color: AppColor
-                                                                  .grey))
-                                                ]),
-                                                const SizedBox(
-                                                    height: tinierSpacing),
-                                              ]),
+                                          title: QualityManagementListTileTitle(
+                                              data: qmListData[index]),
+                                          subtitle:
+                                              QualityManagementListTileSubtitle(
+                                                  data: qmListData[index]),
                                           onTap: () {}));
                                 },
                                 separatorBuilder: (context, index) {
