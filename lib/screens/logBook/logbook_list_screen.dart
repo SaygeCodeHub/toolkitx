@@ -8,6 +8,7 @@ import '../../blocs/LogBook/logbook_bloc.dart';
 import '../../blocs/LogBook/logbook_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_icon_button_row.dart';
+import 'add_logbook_screen.dart';
 
 class LogbookListScreen extends StatelessWidget {
   static const routeName = 'LogbookListScreen';
@@ -23,7 +24,9 @@ class LogbookListScreen extends StatelessWidget {
         title: DatabaseUtil.getText('ReportaLog'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, AddLogBookScreen.routeName);
+        },
         child: const Icon(Icons.add),
       ),
       body: Padding(
