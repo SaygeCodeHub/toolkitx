@@ -31,7 +31,7 @@ class QualityManagementBloc
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       FetchQualityManagementListModel fetchQualityManagementListModel =
           await _qualityManagementRepository.fetchQualityManagementList(
-              1, userId, hashCode, '', '');
+              event.pageNo, userId, hashCode, '', '');
       emit(QualityManagementListFetched(
         fetchQualityManagementListModel: fetchQualityManagementListModel,
       ));

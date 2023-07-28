@@ -7,19 +7,45 @@ import '../../blocs/qualityManagement/qm_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_card.dart';
 import '../../widgets/custom_icon_button_row.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
+import '../../widgets/generic_no_records_text.dart';
 
-class QualityManagementListScreen extends StatelessWidget {
+class QualityManagementListScreen extends StatefulWidget {
   static const routeName = 'QualityManagementListScreen';
 
   const QualityManagementListScreen({Key? key}) : super(key: key);
 
   @override
+  State<QualityManagementListScreen> createState() =>
+      _QualityManagementListScreenState();
+}
+
+class _QualityManagementListScreenState
+    extends State<QualityManagementListScreen> {
+  static bool noMoreData = false;
+  static List qmListData = [];
+  var controller = ScrollController(keepScrollOffset: true);
+  static bool waitForData = false;
+  static int page = 1;
+
+  @override
+  void initState() {
+    page = 1;
+    noMoreData = false;
+    qmListData = [];
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    context.read<QualityManagementBloc>().add(FetchQualityManagementList());
+    context
+        .read<QualityManagementBloc>()
+        .add(FetchQualityManagementList(pageNo: 1));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ReportanIncident')),
         floatingActionButton: FloatingActionButton(
@@ -39,7 +65,21 @@ class QualityManagementListScreen extends StatelessWidget {
               ]),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<QualityManagementBloc, QualityManagementStates>(
-                  listener: (context, state) {},
+                  buildWhen: (previousState, currentState) =>
+                      ((currentState is QualityManagementListFetched &&
+                              noMoreData != true) ||
+                          (currentState is FetchingQualityManagementList &&
+                              page == 1)),
+                  listener: (context, state) {
+                    if (state is QualityManagementListFetched) {
+                      if (state.fetchQualityManagementListModel.status == 204 &&
+                          page != 1) {
+                        noMoreData = true;
+                        showCustomSnackBar(
+                            context, StringConstants.kAllDataLoaded, '');
+                      }
+                    }
+                  },
                   builder: (context, state) {
                     if (state is FetchingQualityManagementList) {
                       return Center(
@@ -51,12 +91,36 @@ class QualityManagementListScreen extends StatelessWidget {
                     } else if (state is QualityManagementListFetched) {
                       if (state
                           .fetchQualityManagementListModel.data.isNotEmpty) {
+                        if (page == 1) {
+                          qmListData =
+                              state.fetchQualityManagementListModel.data;
+                        } else {
+                          for (var item
+                              in state.fetchQualityManagementListModel.data) {
+                            qmListData.add(item);
+                          }
+                        }
+                        waitForData = false;
                         return Expanded(
                             child: ListView.separated(
                                 physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: state.fetchQualityManagementListModel
-                                    .data.length,
+                                controller: controller
+                                  ..addListener(() {
+                                    if (noMoreData != true &&
+                                        waitForData == false) {
+                                      if (controller.position.extentAfter <
+                                          500) {
+                                        page++;
+                                        context
+                                            .read<QualityManagementBloc>()
+                                            .add(FetchQualityManagementList(
+                                                pageNo: page));
+                                        waitForData = true;
+                                      }
+                                    }
+                                  }),
+                                itemCount: qmListData.length,
                                 itemBuilder: (context, index) {
                                   return CustomCard(
                                       child: ListTile(
@@ -73,10 +137,7 @@ class QualityManagementListScreen extends StatelessWidget {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                        state
-                                                            .fetchQualityManagementListModel
-                                                            .data[index]
-                                                            .refno,
+                                                        qmListData[index].refno,
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .small
@@ -89,9 +150,7 @@ class QualityManagementListScreen extends StatelessWidget {
                                                     const SizedBox(
                                                         width: tinierSpacing),
                                                     Text(
-                                                        state
-                                                            .fetchQualityManagementListModel
-                                                            .data[index]
+                                                        qmListData[index]
                                                             .status,
                                                         style: Theme.of(context)
                                                             .textTheme
@@ -105,20 +164,14 @@ class QualityManagementListScreen extends StatelessWidget {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                    state
-                                                        .fetchQualityManagementListModel
-                                                        .data[index]
+                                                    qmListData[index]
                                                         .description,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .xSmall),
                                                 const SizedBox(
                                                     height: tinierSpacing),
-                                                Text(
-                                                    state
-                                                        .fetchQualityManagementListModel
-                                                        .data[index]
-                                                        .location,
+                                                Text(qmListData[index].location,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .xSmall
@@ -135,9 +188,7 @@ class QualityManagementListScreen extends StatelessWidget {
                                                   const SizedBox(
                                                       width: tiniestSpacing),
                                                   Text(
-                                                      state
-                                                          .fetchQualityManagementListModel
-                                                          .data[index]
+                                                      qmListData[index]
                                                           .eventdatetime,
                                                       style: Theme.of(context)
                                                           .textTheme
@@ -155,7 +206,13 @@ class QualityManagementListScreen extends StatelessWidget {
                                   return const SizedBox(height: xxTinySpacing);
                                 }));
                       } else {
-                        return const SizedBox.shrink();
+                        if (state.fetchQualityManagementListModel.status ==
+                            204) {
+                          return NoRecordsText(
+                              text: DatabaseUtil.getText('no_records_found'));
+                        } else {
+                          return const SizedBox();
+                        }
                       }
                     } else {
                       return const SizedBox.shrink();
