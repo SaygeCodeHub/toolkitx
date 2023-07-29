@@ -13,3 +13,11 @@ class FetchQualityManagementDetails extends QualityManagementEvent {
   FetchQualityManagementDetails(
       {required this.initialIndex, required this.qmId});
 }
+
+class FetchQualityManagementRoles extends QualityManagementEvent {}
+
+class SelectQualityManagementRole extends QualityManagementEvent {
+  final String roleId;
+
+  SelectQualityManagementRole({required this.roleId});
+}
