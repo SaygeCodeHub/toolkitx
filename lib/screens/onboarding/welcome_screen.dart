@@ -3,7 +3,6 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/circle_avatar.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import '../../configs/app_color.dart';
 import '../../widgets/primary_button.dart';
 import 'select_language_screen.dart';
 
@@ -26,10 +25,7 @@ class WelcomeScreen extends StatelessWidget {
                   const CircleAvatarWidget(imagePath: 'mechanic_person.png'),
                   const SizedBox(height: xxxMediumSpacing),
                   Text(StringConstants.kWelcomeToToolkitX,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xxLarge
-                          .copyWith(color: AppColor.mediumBlack)),
+                      style: Theme.of(context).textTheme.xxLarge),
                   const SizedBox(height: xxTinySpacing),
                   Text(StringConstants.kAppIntroductionNoSpacing,
                       style: Theme.of(context)
