@@ -66,7 +66,7 @@ class UploadAlertDialog extends StatelessWidget {
                         )
                       ])),
                   const VerticalDivider(
-                      color: Colors.grey,
+                      color: AppColor.grey,
                       width: kDividerWidth,
                       thickness: kDividerThickness,
                       indent: kDividerIndent,
@@ -99,7 +99,7 @@ class UploadAlertDialog extends StatelessWidget {
                       ])),
                   if (isSignature == true)
                     const VerticalDivider(
-                        color: Colors.grey,
+                        color: AppColor.grey,
                         width: kDividerWidth,
                         thickness: kDividerThickness,
                         indent: kDividerIndent,

@@ -48,7 +48,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
         builder: (BuildContext builder) {
           return Container(
               height: kDateTimePickerContainerHeight,
-              color: Colors.white,
+              color: AppColor.white,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

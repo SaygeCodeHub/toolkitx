@@ -126,7 +126,7 @@ class _RootScreenState extends State<RootScreen> {
               label: '')
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: AppColor.deepBlue,
         unselectedItemColor:
             (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
         onTap: (isDisabled) ? null : _onItemTapped);
