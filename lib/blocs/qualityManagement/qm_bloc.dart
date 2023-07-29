@@ -30,11 +30,11 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) async {
     emit(FetchingQualityManagementList());
     try {
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchQualityManagementListModel fetchQualityManagementListModel =
           await _qualityManagementRepository.fetchQualityManagementList(
-              event.pageNo, userId, hashCode, '', '');
+              event.pageNo, userId!, hashCode!, '', '');
       emit(QualityManagementListFetched(
         fetchQualityManagementListModel: fetchQualityManagementListModel,
       ));
@@ -47,13 +47,13 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) async {
     emit(FetchingQualityManagementDetails());
     try {
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
       incidentTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode, userId, '');
+              event.qmId, hashCode!, userId!, '');
       emit(QualityManagementDetailsFetched(
           fetchQualityManagementDetailsModel:
               fetchQualityManagementDetailsModel,
