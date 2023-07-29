@@ -7,7 +7,6 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/todo/todo_event.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/todo/fetch_todo_master_model.dart';
 
@@ -33,13 +32,7 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                    tilePadding: const EdgeInsets.only(
-                        left: kExpansionTileMargin,
-                        right: kExpansionTileMargin),
-                    collapsedBackgroundColor: AppColor.white,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         categoryName == ''

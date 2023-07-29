@@ -39,8 +39,6 @@ class RadioButtonExpansionTile extends StatelessWidget {
                 child: ExpansionTile(
                     collapsedBackgroundColor: AppColor.offWhite,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         (radioValue == '')

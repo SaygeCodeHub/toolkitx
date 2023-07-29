@@ -22,6 +22,7 @@ class UserTypeExpansionTile extends StatelessWidget {
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+            collapsedBackgroundColor: AppColor.offWhite,
             maintainState: true,
             key: GlobalKey(),
             title: Text(
@@ -50,7 +51,7 @@ class UserTypeExpansionTile extends StatelessWidget {
                           context.read<LoginBloc>().add(ChangeUserType(
                               userType: value,
                               typeValue:
-                                  UserType.values.elementAt(index).value));
+                              UserType.values.elementAt(index).value));
                         });
                   })
             ]));

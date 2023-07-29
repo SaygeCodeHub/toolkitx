@@ -32,8 +32,6 @@ class InjuryNatureExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                    collapsedBackgroundColor: AppColor.white,
-                    backgroundColor: AppColor.white,
                     maintainState: true,
                     title: Text(
                         (state.selectedInjuryNature.isEmpty)
