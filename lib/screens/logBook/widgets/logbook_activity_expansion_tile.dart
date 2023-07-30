@@ -29,7 +29,7 @@ class LogBookActivityExpansionTile extends StatelessWidget {
           if (state is LogBookActivitySelected) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     maintainState: true,
                     key: GlobalKey(),

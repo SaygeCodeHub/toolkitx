@@ -27,7 +27,7 @@ class LogBookHandoverExpansionTile extends StatelessWidget {
           if (state is LogBookHandoverSelected) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     maintainState: true,
                     key: GlobalKey(),

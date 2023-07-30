@@ -30,7 +30,7 @@ class MultiSelectExpansionTile extends StatelessWidget {
     String multiSelectNames =
         selectedNamesList.toString().replaceAll("[", "").replaceAll("]", "");
     return Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
             collapsedBackgroundColor: AppColor.offWhite,
             maintainState: true,

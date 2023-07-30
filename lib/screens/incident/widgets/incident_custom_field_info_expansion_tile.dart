@@ -43,7 +43,7 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
           if (state is ReportNewIncidentCustomFieldSelected) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     maintainState: true,
                     key: GlobalKey(),

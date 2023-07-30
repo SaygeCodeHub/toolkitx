@@ -20,7 +20,7 @@ class UserTypeExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
             collapsedBackgroundColor: AppColor.offWhite,
             maintainState: true,

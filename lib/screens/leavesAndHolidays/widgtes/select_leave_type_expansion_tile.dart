@@ -28,7 +28,7 @@ class SelectLeaveTypeExpansionTile extends StatelessWidget {
             applyForLeaveMap['type'] = state.leaveTypeId;
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     maintainState: true,
                     key: GlobalKey(),

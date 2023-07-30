@@ -36,7 +36,7 @@ class DropDownExpansionTile extends StatelessWidget {
           if (state is CheckListAnswersEdited) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     key: GlobalKey(),
                     collapsedBackgroundColor: AppColor.offWhite,

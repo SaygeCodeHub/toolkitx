@@ -84,9 +84,7 @@ class PermitAdditionalInfo extends StatelessWidget {
                       Text(
                           permitDetailsModel
                               .data.tab2.customfields[index].title,
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold)),
+                          style: Theme.of(context).textTheme.medium),
                       const SizedBox(height: xxTinierSpacing),
                       Text(
                           permitDetailsModel

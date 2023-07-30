@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 
 class ProgressBar {
   static void show(BuildContext context) {
     showDialog(
         context: context,
-        barrierColor: Colors.transparent,
+        barrierColor: AppColor.transparent,
         barrierDismissible: false,
         builder: (context) {
           return const Center(
@@ -20,7 +21,7 @@ class ProgressBar {
   static Widget showLoadingWidget(BuildContext context) {
     return const Center(
         child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey)));
+            valueColor: AlwaysStoppedAnimation<Color>(AppColor.blueGrey)));
   }
 
   static void dismiss(BuildContext context) {

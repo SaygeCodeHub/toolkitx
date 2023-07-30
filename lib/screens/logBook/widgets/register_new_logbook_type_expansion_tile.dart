@@ -31,8 +31,8 @@ class RegisterNewLogBookTypeExpansionTile extends StatelessWidget {
                 .replaceAll("[", "")
                 .replaceAll("]", "");
             return Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(context)
+                  .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
                   maintainState: true,
                   title: Text(

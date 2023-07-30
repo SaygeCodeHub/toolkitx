@@ -47,7 +47,7 @@ class SelectLanguageBody extends StatelessWidget {
                           imageUrl:
                               '${ApiConstants.baseUrlFlag}${getLanguagesData.flagName}',
                           placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: Colors.grey.shade100,
+                              baseColor: AppColor.paleGrey,
                               highlightColor: AppColor.white,
                               child: Container(
                                   height: kLanguageFlagHeight,

@@ -29,7 +29,7 @@ class IncidentReportAnonymousExpansionTile extends StatelessWidget {
             addIncidentMap['identity'] = state.reportAnonymousId;
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     maintainState: true,
                     key: GlobalKey(),

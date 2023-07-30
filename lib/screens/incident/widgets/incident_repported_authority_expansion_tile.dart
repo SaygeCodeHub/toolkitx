@@ -37,7 +37,7 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
             return Column(children: [
               Theme(
                   data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                      .copyWith(dividerColor: AppColor.transparent),
                   child: ExpansionTile(
                       maintainState: true,
                       key: GlobalKey(),
