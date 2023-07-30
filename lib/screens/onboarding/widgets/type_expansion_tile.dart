@@ -22,6 +22,7 @@ class UserTypeExpansionTile extends StatelessWidget {
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
+            collapsedBackgroundColor: AppColor.offWhite,
             maintainState: true,
             key: GlobalKey(),
             title: Text(

@@ -8,7 +8,6 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 
 class IncidentClassificationExpansionTile extends StatelessWidget {
@@ -34,13 +33,7 @@ class IncidentClassificationExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    tilePadding: const EdgeInsets.only(
-                        left: kExpansionTileMargin,
-                        right: kExpansionTileMargin),
-                    collapsedBackgroundColor: AppColor.white,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         (classificationStatus == '')

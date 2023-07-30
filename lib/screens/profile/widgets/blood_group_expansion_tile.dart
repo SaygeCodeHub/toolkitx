@@ -21,7 +21,6 @@ class BloodGroupExpansionTile extends StatelessWidget {
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
             maintainState: true,
-            collapsedBackgroundColor: AppColor.white,
             backgroundColor: AppColor.white,
             key: GlobalKey(),
             title: Text(

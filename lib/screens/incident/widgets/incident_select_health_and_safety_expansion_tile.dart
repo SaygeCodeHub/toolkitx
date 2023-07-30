@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
-import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
 import '../../../blocs/incident/reportNewIncident/report_new_incident_events.dart';
@@ -30,13 +29,6 @@ class IncidentReportHealthAndSafetyExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    tilePadding: const EdgeInsets.only(
-                        left: kExpansionTileMargin,
-                        right: kExpansionTileMargin),
-                    collapsedBackgroundColor: AppColor.white,
-                    maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         (anonymousName == '')

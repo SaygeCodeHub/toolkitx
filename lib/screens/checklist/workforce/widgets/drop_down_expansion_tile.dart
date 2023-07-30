@@ -40,10 +40,6 @@ class DropDownExpansionTile extends StatelessWidget {
                 child: ExpansionTile(
                     key: GlobalKey(),
                     collapsedBackgroundColor: AppColor.offWhite,
-                    tilePadding: const EdgeInsets.only(
-                        left: xxTinierSpacing, right: xxTinierSpacing),
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     title: Text((dropDown == "")
                         ? DatabaseUtil.getText('select_item')
                         : dropDown),
