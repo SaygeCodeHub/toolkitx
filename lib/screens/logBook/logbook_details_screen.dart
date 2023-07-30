@@ -7,7 +7,6 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/LogBook/logbook_events.dart';
-import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 
@@ -44,16 +43,12 @@ class LogBookDetailsScreen extends StatelessWidget {
                         const SizedBox(height: tiniestSpacing),
                         Text(
                           state.fetchLogBookDetailsModel.data.logbookname,
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: tinySpacing),
                         Text(
                           StringConstants.kDate,
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(state.fetchLogBookDetailsModel.data.createddate,
@@ -61,9 +56,7 @@ class LogBookDetailsScreen extends StatelessWidget {
                         const SizedBox(height: tinySpacing),
                         Text(
                           DatabaseUtil.getText('Component'),
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(state.fetchLogBookDetailsModel.data.component,
@@ -71,9 +64,7 @@ class LogBookDetailsScreen extends StatelessWidget {
                         const SizedBox(height: tinySpacing),
                         Text(
                           DatabaseUtil.getText('Location'),
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(state.fetchLogBookDetailsModel.data.locationname,
@@ -81,9 +72,7 @@ class LogBookDetailsScreen extends StatelessWidget {
                         const SizedBox(height: tinySpacing),
                         Text(
                           DatabaseUtil.getText('Activity'),
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(state.fetchLogBookDetailsModel.data.activityname,
@@ -91,9 +80,7 @@ class LogBookDetailsScreen extends StatelessWidget {
                         const SizedBox(height: tinySpacing),
                         Text(
                           DatabaseUtil.getText('Details'),
-                          style: Theme.of(context).textTheme.medium.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.medium,
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(state.fetchLogBookDetailsModel.data.description,
