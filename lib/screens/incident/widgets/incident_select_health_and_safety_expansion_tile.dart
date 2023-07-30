@@ -28,7 +28,7 @@ class IncidentReportHealthAndSafetyExpansionTile extends StatelessWidget {
           if (state is ReportNewIncidentAnonymousSelected) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     tilePadding: const EdgeInsets.only(
                         left: kExpansionTileMargin,

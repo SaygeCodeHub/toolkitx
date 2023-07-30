@@ -24,8 +24,8 @@ class LogBookPriorityExpansionTile extends StatelessWidget {
         builder: (context, state) {
           if (state is LogBookPrioritySelected) {
             return Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(context)
+                  .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
                   tilePadding: const EdgeInsets.only(
                       left: kExpansionTileMargin, right: kExpansionTileMargin),

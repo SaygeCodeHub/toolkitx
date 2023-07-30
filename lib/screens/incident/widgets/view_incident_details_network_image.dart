@@ -44,7 +44,7 @@ class IncidentCommentViewNetworkImage extends StatelessWidget {
                   imageUrl:
                       '${ApiConstants.viewDocBaseUrl}${IncidentViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey.shade100,
+                      baseColor: AppColor.paleGrey,
                       highlightColor: AppColor.white,
                       child: Container(
                           height: kNetworkImageContainerTogether,

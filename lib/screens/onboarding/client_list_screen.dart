@@ -83,20 +83,24 @@ class ClientListScreen extends StatelessWidget {
                                             fit: BoxFit.fitHeight,
                                             imageUrl: state.clientListModel
                                                 .data![index].hashimg,
-                                            placeholder: (context, url) => Shimmer.fromColors(
-                                                baseColor: Colors.grey.shade100,
-                                                highlightColor: AppColor.white,
-                                                child: Container(
-                                                    height:
-                                                        kClientListShimmerHeight,
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                        color: AppColor.white,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                kCardRadius)))),
-                                            errorWidget: (context, url,
-                                                    error) =>
+                                            placeholder: (context, url) =>
+                                                Shimmer.fromColors(
+                                                    baseColor:
+                                                        AppColor.paleGrey,
+                                                    highlightColor:
+                                                        AppColor.white,
+                                                    child: Container(
+                                                        height:
+                                                            kClientListShimmerHeight,
+                                                        width: double.infinity,
+                                                        decoration: BoxDecoration(
+                                                            color:
+                                                                AppColor.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        kCardRadius)))),
+                                            errorWidget: (context, url, error) =>
                                                 const Icon(
                                                     Icons.error_outline_sharp,
                                                     size: kIconSize))));
