@@ -1,20 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_qm_details_model.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/incident_details_model.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/generic_alphanumeric_generator_util.dart';
 import '../../../utils/incident_view_image_util.dart';
 
-class IncidentCommentViewNetworkImage extends StatelessWidget {
+class QualityManagementViewNetworkImage extends StatelessWidget {
   final Commentslist commentsList;
   final String clientId;
 
-  const IncidentCommentViewNetworkImage(
+  const QualityManagementViewNetworkImage(
       {Key? key, required this.commentsList, required this.clientId})
       : super(key: key);
 
@@ -43,7 +44,7 @@ class IncidentCommentViewNetworkImage extends StatelessWidget {
                   imageUrl:
                       '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(commentsList.files.toString())[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: AppColor.paleGrey,
+                      baseColor: Colors.grey.shade100,
                       highlightColor: AppColor.white,
                       child: Container(
                           height: kNetworkImageContainerTogether,
