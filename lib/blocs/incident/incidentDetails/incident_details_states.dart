@@ -95,7 +95,7 @@ class LinkedPermitsNotSaved extends IncidentDetailsStates {
 class SavingIncidentComments extends IncidentDetailsStates {}
 
 class IncidentCommentsSaved extends IncidentDetailsStates {
-  final SaveIncidentCommentsModel saveIncidentCommentsModel;
+  final SaveIncidentAndQMCommentsModel saveIncidentCommentsModel;
 
   const IncidentCommentsSaved({required this.saveIncidentCommentsModel});
 }
@@ -109,7 +109,7 @@ class IncidentCommentsNotSaved extends IncidentDetailsStates {
 class SavingIncidentCommentsFiles extends IncidentDetailsStates {}
 
 class IncidentCommentsFilesSaved extends IncidentDetailsStates {
-  final SaveIncidentCommentsFilesModel saveIncidentCommentsModel;
+  final SaveIncidentAndQMCommentsFilesModel saveIncidentCommentsModel;
 
   const IncidentCommentsFilesSaved({required this.saveIncidentCommentsModel});
 }

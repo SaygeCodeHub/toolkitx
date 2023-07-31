@@ -14,6 +14,7 @@ import '../../data/models/status_tag_model.dart';
 import '../../utils/quality_management_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/status_tag.dart';
+import 'qm_pop_up_menu_screen.dart';
 import 'widgets/qm_comments.dart';
 import 'widgets/qm_custom_fields.dart';
 import 'widgets/qm_custom_timeline.dart';
@@ -31,7 +32,26 @@ class QualityManagementDetailsScreen extends StatelessWidget {
     context.read<QualityManagementBloc>().add(
         FetchQualityManagementDetails(qmId: qmListMap['id'], initialIndex: 0));
     return Scaffold(
-      appBar: const GenericAppBar(),
+      appBar: GenericAppBar(
+        actions: [
+          BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+              builder: (context, state) {
+            if (state is QualityManagementDetailsFetched) {
+              if (state.showPopUpMenu == true) {
+                return QualityManagementPopUpMenuScreen(
+                    popUpMenuItems: state.qmPopUpMenu,
+                    data: state.fetchQualityManagementDetailsModel.data,
+                    fetchQualityManagementDetailsModel:
+                        state.fetchQualityManagementDetailsModel);
+              } else {
+                return const SizedBox.shrink();
+              }
+            } else {
+              return const SizedBox.shrink();
+            }
+          })
+        ],
+      ),
       body: BlocBuilder<QualityManagementBloc, QualityManagementStates>(
           buildWhen: (previousState, currentState) =>
               currentState is FetchingQualityManagementDetails ||

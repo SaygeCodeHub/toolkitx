@@ -208,7 +208,7 @@ class IncidentDetailsBloc
           "comments": saveCommentMap['comments'],
           "classification": saveCommentMap['classification'] ?? ''
         };
-        SaveIncidentCommentsModel saveIncidentCommentsModel =
+        SaveIncidentAndQMCommentsModel saveIncidentCommentsModel =
             await _incidentRepository.saveComments(saveCommentsMap);
         if (saveIncidentCommentsModel.status == 200) {
           commentId = saveIncidentCommentsModel.message;
@@ -241,7 +241,7 @@ class IncidentDetailsBloc
         "filenames": sameFilesMap['filenames'],
         "hashcode": hashCode
       };
-      SaveIncidentCommentsFilesModel saveIncidentCommentsModel =
+      SaveIncidentAndQMCommentsFilesModel saveIncidentCommentsModel =
           await _incidentRepository.saveCommentsFiles(saveCommentsFilesMap);
       if (saveIncidentCommentsModel.status == 200) {
         emit(IncidentCommentsFilesSaved(
