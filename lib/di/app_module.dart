@@ -22,6 +22,8 @@ import '../repositories/language/language_repository.dart';
 import '../repositories/language/language_repository_impl.dart';
 import '../repositories/login/login_repository.dart';
 import '../repositories/profile/profile_repository.dart';
+import '../repositories/qualityManagement/qm_repository.dart';
+import '../repositories/qualityManagement/qm_repository_impl.dart';
 import '../repositories/timeZone/time_zone_repository.dart';
 import '../repositories/timeZone/time_zone_repository_impl.dart';
 import '../repositories/todo/todo_repository.dart';
@@ -57,4 +59,6 @@ configurableDependencies() {
   getIt.registerLazySingleton<ToDoRepository>(() => ToDoRepositoryImpl());
   getIt.registerLazySingleton<LeavesAndHolidaysRepository>(
       () => LeavesAndHolidaysRepositoryImpl());
+  getIt.registerLazySingleton<QualityManagementRepository>(
+      () => QualityManagementRepositoryImpl());
 }
