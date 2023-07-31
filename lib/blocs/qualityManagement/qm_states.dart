@@ -9,8 +9,11 @@ class FetchingQualityManagementList extends QualityManagementStates {}
 
 class QualityManagementListFetched extends QualityManagementStates {
   final FetchQualityManagementListModel fetchQualityManagementListModel;
+  final Map filtersMap;
 
-  QualityManagementListFetched({required this.fetchQualityManagementListModel});
+  QualityManagementListFetched(
+      {required this.filtersMap,
+      required this.fetchQualityManagementListModel});
 }
 
 class FetchingQualityManagementDetails extends QualityManagementStates {}

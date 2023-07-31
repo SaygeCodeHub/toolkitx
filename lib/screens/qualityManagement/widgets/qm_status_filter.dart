@@ -6,23 +6,25 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/enums/incident_and_qm_filter_status_enum.dart';
 
-class IncidentStatusFilter extends StatefulWidget {
-  final Map incidentFilterMap;
+class QualityManagementStatusFilter extends StatefulWidget {
+  final Map qmFilterMap;
 
-  const IncidentStatusFilter({super.key, required this.incidentFilterMap});
+  const QualityManagementStatusFilter({super.key, required this.qmFilterMap});
 
   @override
-  State<IncidentStatusFilter> createState() => _IncidentStatusFilterState();
+  State<QualityManagementStatusFilter> createState() =>
+      _QualityManagementStatusFilterState();
 }
 
-class _IncidentStatusFilterState extends State<IncidentStatusFilter> {
+class _QualityManagementStatusFilterState
+    extends State<QualityManagementStatusFilter> {
   List selectedData = [];
 
   @override
   void initState() {
-    selectedData = (widget.incidentFilterMap['status'] == null)
+    selectedData = (widget.qmFilterMap['status'] == null)
         ? []
-        : widget.incidentFilterMap['status']
+        : widget.qmFilterMap['status']
             .toString()
             .replaceAll(' ', '')
             .split(',');
@@ -52,7 +54,7 @@ class _IncidentStatusFilterState extends State<IncidentStatusFilter> {
                     color: AppColor.black, fontWeight: FontWeight.normal)),
             onSelected: (bool selected) {
               multiSelect(item.value.toString());
-              widget.incidentFilterMap['status'] = selectedData
+              widget.qmFilterMap['status'] = selectedData
                   .toString()
                   .replaceAll('[', '')
                   .replaceAll(']', '')

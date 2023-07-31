@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
@@ -24,6 +25,18 @@ class QualityManagementBloc
   QualityManagementBloc() : super(QualityManagementInitial()) {
     on<FetchQualityManagementList>(_fetchList);
     on<FetchQualityManagementDetails>(_fetchDetails);
+    on<QualityManagementApplyFilter>(_applyFilter);
+    on<QualityManagementClearFilter>(_clearFilter);
+  }
+
+  _applyFilter(QualityManagementApplyFilter event,
+      Emitter<QualityManagementStates> emit) {
+    filters = event.filtersMap;
+  }
+
+  _clearFilter(QualityManagementClearFilter event,
+      Emitter<QualityManagementStates> emit) {
+    filters = {};
   }
 
   FutureOr<void> _fetchList(FetchQualityManagementList event,
@@ -32,12 +45,22 @@ class QualityManagementBloc
     try {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchQualityManagementListModel fetchQualityManagementListModel =
-          await _qualityManagementRepository.fetchQualityManagementList(
-              event.pageNo, userId!, hashCode!, '', '');
-      emit(QualityManagementListFetched(
-        fetchQualityManagementListModel: fetchQualityManagementListModel,
-      ));
+      if (event.isFromHome == true) {
+        add(QualityManagementClearFilter());
+        FetchQualityManagementListModel fetchQualityManagementListModel =
+            await _qualityManagementRepository.fetchQualityManagementList(
+                event.pageNo, userId!, hashCode!, '', '');
+        emit(QualityManagementListFetched(
+            fetchQualityManagementListModel: fetchQualityManagementListModel,
+            filtersMap: {}));
+      } else {
+        FetchQualityManagementListModel fetchQualityManagementListModel =
+            await _qualityManagementRepository.fetchQualityManagementList(
+                event.pageNo, userId!, hashCode!, jsonEncode(filters), '');
+        emit(QualityManagementListFetched(
+            fetchQualityManagementListModel: fetchQualityManagementListModel,
+            filtersMap: filters));
+      }
     } catch (e) {
       e.toString();
     }
