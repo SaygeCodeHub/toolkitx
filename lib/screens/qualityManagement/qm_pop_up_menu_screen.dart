@@ -47,7 +47,13 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
           if (value == DatabaseUtil.getText('DefineMitigation')) {}
           if (value == DatabaseUtil.getText('ApproveMitigation')) {}
           if (value == DatabaseUtil.getText('ImplementMitigation')) {}
-          if (value == DatabaseUtil.getText('Markasresolved')) {}
+          if (value == DatabaseUtil.getText('Markasresolved')) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => QualityManagementAddCommentsScreen(
+                    fetchQualityManagementDetailsModel:
+                        fetchQualityManagementDetailsModel,
+                    data: data)));
+          }
           if (value == DatabaseUtil.getText('GenerateReport')) {}
         },
         position: PopupMenuPosition.under,

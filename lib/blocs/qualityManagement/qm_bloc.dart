@@ -66,7 +66,7 @@ class QualityManagementBloc
       incidentTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode!, userId!, '');
+              event.qmId, hashCode!, userId!, 'F+Fjrkdr/Hg0T7m+UVeVoQ==');
       if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
         popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
       }
@@ -125,7 +125,10 @@ class QualityManagementBloc
           "userid": userid,
           "incidentid": saveCommentMap['incidentid'],
           "hashcode": hashCode,
-          "status": saveCommentMap['status'] ?? '',
+          "status": (saveCommentMap['status'] == null ||
+                  saveCommentMap['status'].isEmpty)
+              ? ''
+              : saveCommentMap['status'],
           "comments": saveCommentMap['comments'],
           "classification": saveCommentMap['classification'] ?? ''
         };
