@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
+import '../../blocs/qualityManagement/qm_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -35,26 +37,50 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
           if (value == DatabaseUtil.getText('AddComments')) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => QualityManagementAddCommentsScreen(
-                    fetchQualityManagementDetailsModel:
-                        fetchQualityManagementDetailsModel,
-                    data: data)));
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
           }
-          if (value == DatabaseUtil.getText('EditIncident')) {}
-          if (value == DatabaseUtil.getText('Report')) {}
-          if (value == DatabaseUtil.getText('Acknowledge')) {}
-          if (value == DatabaseUtil.getText('DefineMitigation')) {}
-          if (value == DatabaseUtil.getText('ApproveMitigation')) {}
-          if (value == DatabaseUtil.getText('ImplementMitigation')) {}
+          if (value == DatabaseUtil.getText('EditIncident')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
+          if (value == DatabaseUtil.getText('Report')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
+          if (value == DatabaseUtil.getText('Acknowledge')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
+          if (value == DatabaseUtil.getText('DefineMitigation')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
+          if (value == DatabaseUtil.getText('ApproveMitigation')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
+          if (value == DatabaseUtil.getText('ImplementMitigation')) {
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
+          }
           if (value == DatabaseUtil.getText('Markasresolved')) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => QualityManagementAddCommentsScreen(
-                    fetchQualityManagementDetailsModel:
-                        fetchQualityManagementDetailsModel,
-                    data: data)));
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: fetchQualityManagementDetailsModel);
           }
-          if (value == DatabaseUtil.getText('GenerateReport')) {}
+          if (value == DatabaseUtil.getText('GenerateReport')) {
+            context
+                .read<QualityManagementBloc>()
+                .add(GenerateQualityManagementPDF());
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [

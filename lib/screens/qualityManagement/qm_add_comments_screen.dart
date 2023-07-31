@@ -14,13 +14,11 @@ import '../../widgets/progress_bar.dart';
 import 'widgets/qm_common_comments_section.dart';
 
 class QualityManagementAddCommentsScreen extends StatelessWidget {
+  static const routeName = 'QualityManagementAddCommentsScreen';
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
-  final QMDetailsData data;
 
   QualityManagementAddCommentsScreen(
-      {Key? key,
-      required this.fetchQualityManagementDetailsModel,
-      required this.data})
+      {Key? key, required this.fetchQualityManagementDetailsModel})
       : super(key: key);
   final Map qmCommentsMap = {};
 
@@ -49,7 +47,7 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   },
                   qmCommentsMap: qmCommentsMap,
                   fetchQualityManagementDetailsModel:
-                      fetchQualityManagementDetailsModel),
+                  fetchQualityManagementDetailsModel),
               BlocListener<QualityManagementBloc, QualityManagementStates>(
                   listener: (context, state) {
                     if (state is QualityManagementSavingComments) {
@@ -67,9 +65,6 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   },
                   child: PrimaryButton(
                       onPressed: () {
-                        qmCommentsMap['incidentId'] = data.id;
-                        qmCommentsMap['status'] =
-                            fetchQualityManagementDetailsModel.data.nextStatus;
                         context.read<QualityManagementBloc>().add(
                             SaveQualityManagementComments(
                                 saveCommentsMap: qmCommentsMap));

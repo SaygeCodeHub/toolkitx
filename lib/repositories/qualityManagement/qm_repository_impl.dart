@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
+import 'package:toolkit/data/models/pdf_generation_model.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_details_model.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_list_model.dart';
 
@@ -39,5 +40,12 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
         "${ApiConstants.baseUrl}qaincident/savecommentsfiles",
         saveCommentsFilesMap);
     return SaveIncidentAndQMCommentsFilesModel.fromJson(response);
+  }
+
+  @override
+  Future<PdfGenerationModel> generatePdf(String qmId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/getpdf?incidentid=$qmId&hashcode=$hashCode");
+    return PdfGenerationModel.fromJson(response);
   }
 }

@@ -36,3 +36,7 @@ class SaveQualityManagementCommentsFiles extends QualityManagementEvent {
       {required this.saveIncidentAndQMCommentsModel,
       required this.saveCommentsMap});
 }
+
+class GenerateQualityManagementPDF extends QualityManagementEvent {
+  GenerateQualityManagementPDF();
+}

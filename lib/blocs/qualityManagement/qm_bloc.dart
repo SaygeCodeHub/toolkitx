@@ -9,6 +9,7 @@ import '../../../data/cache/cache_keys.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
+import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../utils/database_utils.dart';
@@ -23,8 +24,10 @@ class QualityManagementBloc
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
   String roleId = '';
-  int incidentTabIndex = 0;
+  int qmTabIndex = 0;
   String commentId = '';
+  String nextStatus = '';
+  String qmId = '';
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -34,6 +37,7 @@ class QualityManagementBloc
     on<SelectQualityManagementClassification>(_selectClassification);
     on<SaveQualityManagementComments>(_saveComments);
     on<SaveQualityManagementCommentsFiles>(_saveCommentsFile);
+    on<GenerateQualityManagementPDF>(_generatePdf);
   }
 
   FutureOr<void> _fetchList(FetchQualityManagementList event,
@@ -63,10 +67,12 @@ class QualityManagementBloc
       List popUpMenuItems = [
         DatabaseUtil.getText('AddComments'),
       ];
-      incidentTabIndex = event.initialIndex;
+      qmTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode!, userId!, 'F+Fjrkdr/Hg0T7m+UVeVoQ==');
+              event.qmId, hashCode!, userId!, '');
+      nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
+      qmId = fetchQualityManagementDetailsModel.data.id;
       if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
         popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
       }
@@ -88,6 +94,7 @@ class QualityManagementBloc
       if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
         popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
       }
+      popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
       emit(QualityManagementDetailsFetched(
           fetchQualityManagementDetailsModel:
               fetchQualityManagementDetailsModel,
@@ -113,9 +120,9 @@ class QualityManagementBloc
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       Map saveCommentMap = event.saveCommentsMap;
-      String id = EncryptData.encryptAESPrivateKey(
-          saveCommentMap['incidentId'], privateKey);
+      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
       saveCommentMap['incidentid'] = id;
+      saveCommentMap['status'] = nextStatus;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
         emit(QualityManagementCommentsNotSaved(
@@ -192,6 +199,33 @@ class QualityManagementBloc
       }
     } catch (e) {
       emit(QualityManagementCommentsNotSaved(commentsNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr<void> _generatePdf(GenerateQualityManagementPDF event,
+      Emitter<QualityManagementStates> emit) async {
+    try {
+      emit(GeneratingQualityManagementPDF());
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? aipKey = await _customerCache.getApiKey(CacheKeys.apiKey);
+      String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
+      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
+      final PdfGenerationModel pdfGenerationModel =
+          await _qualityManagementRepository.generatePdf(id, hashCode!);
+      String pdfLink =
+          EncryptData.encryptAESPrivateKey(pdfGenerationModel.message, aipKey);
+      if (pdfGenerationModel.status == 200) {
+        emit(QualityManagementPDFGenerated(
+            pdfGenerationModel: pdfGenerationModel, pdfLink: pdfLink));
+      } else {
+        emit(QualityManagementPDFGenerationFailed(
+            pdfNoteGenerated:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(
+          QualityManagementPDFGenerationFailed(pdfNoteGenerated: e.toString()));
+      rethrow;
     }
   }
 }
