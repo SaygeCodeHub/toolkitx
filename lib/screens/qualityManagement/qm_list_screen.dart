@@ -153,7 +153,7 @@ class _QualityManagementListScreenState
                           return NoRecordsText(
                               text: DatabaseUtil.getText('no_records_found'));
                         } else {
-                          return const SizedBox();
+                          return const SizedBox.shrink();
                         }
                       }
                     } else {

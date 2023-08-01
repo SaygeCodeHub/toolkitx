@@ -102,13 +102,15 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                         ])
                   ]));
             } else if (state is QualityManagementDetailsNotFetched) {
-              return GenericReloadButton(
-                  onPressed: () {
-                    context.read<QualityManagementBloc>().add(
-                        FetchQualityManagementDetails(
-                            qmId: qmListMap['id'], initialIndex: 0));
-                  },
-                  textValue: StringConstants.kReload);
+              return Center(
+                child: GenericReloadButton(
+                    onPressed: () {
+                      context.read<QualityManagementBloc>().add(
+                          FetchQualityManagementDetails(
+                              qmId: qmListMap['id'], initialIndex: 0));
+                    },
+                    textValue: StringConstants.kReload),
+              );
             } else {
               return const SizedBox.shrink();
             }
