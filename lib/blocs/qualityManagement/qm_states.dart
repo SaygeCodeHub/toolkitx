@@ -22,8 +22,9 @@ class QualityManagementDetailsFetched extends QualityManagementStates {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
   final String clientId;
 
-  QualityManagementDetailsFetched({required this.clientId,
-    required this.fetchQualityManagementDetailsModel});
+  QualityManagementDetailsFetched(
+      {required this.clientId,
+      required this.fetchQualityManagementDetailsModel});
 }
 
 class QualityManagementDetailsNotFetched extends QualityManagementStates {
@@ -61,8 +62,8 @@ class ReportNewQualityManagementContractorSelected
 
   ReportNewQualityManagementContractorSelected(
       {required this.fetchQualityManagementMasterModel,
-        required this.selectContractorId,
-        required this.selectContractorName});
+      required this.selectContractorId,
+      required this.selectContractorName});
 }
 
 class ReportNewQualityManagementDateTimeDescValidated
@@ -84,7 +85,7 @@ class ReportNewQualityManagementSiteSelected extends QualityManagementStates {
 
   ReportNewQualityManagementSiteSelected(
       {required this.fetchQualityManagementMasterModel,
-        required this.selectSiteName});
+      required this.selectSiteName});
 }
 
 class ReportNewQualityManagementLocationSelected
@@ -94,7 +95,7 @@ class ReportNewQualityManagementLocationSelected
 
   ReportNewQualityManagementLocationSelected(
       {required this.fetchQualityManagementMasterModel,
-        required this.selectLocationName});
+      required this.selectLocationName});
 }
 
 class ReportNewQualityManagementSeveritySelected
@@ -102,16 +103,18 @@ class ReportNewQualityManagementSeveritySelected
   final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
   final String severityId;
 
-  ReportNewQualityManagementSeveritySelected({required this.severityId,
-    required this.fetchQualityManagementMasterModel});
+  ReportNewQualityManagementSeveritySelected(
+      {required this.severityId,
+      required this.fetchQualityManagementMasterModel});
 }
 
 class ReportNewQualityManagementImpactSelected extends QualityManagementStates {
   final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
   final String impactId;
 
-  ReportNewQualityManagementImpactSelected({required this.impactId,
-    required this.fetchQualityManagementMasterModel});
+  ReportNewQualityManagementImpactSelected(
+      {required this.impactId,
+      required this.fetchQualityManagementMasterModel});
 }
 
 class ReportNewQualityManagementSiteLocationValidated
@@ -142,13 +145,14 @@ class ReportNewQualityManagementCustomFieldSelected
 
   ReportNewQualityManagementCustomFieldSelected(
       {required this.fetchQualityManagementMasterModel,
-        required this.reportQMCustomInfoOptionId});
+      required this.reportQMCustomInfoOptionId});
 }
 
 class ReportNewQualityManagementSaving extends QualityManagementStates {}
 
 class ReportNewQualityManagementSaved extends QualityManagementStates {
-  final SaveNewQualityManagementReportingModel saveNewQualityManagementReporting;
+  final SaveNewQualityManagementReportingModel
+      saveNewQualityManagementReporting;
 
   ReportNewQualityManagementSaved(
       {required this.saveNewQualityManagementReporting});
