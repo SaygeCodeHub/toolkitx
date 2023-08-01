@@ -12,6 +12,7 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
 import 'qm_details_screen.dart';
+import 'report_new_qm.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 
@@ -49,7 +50,10 @@ class _QualityManagementListScreenState
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(context, ReportNewQA.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

@@ -45,8 +45,11 @@ import '../screens/profile/profile_edit_screen.dart';
 import '../screens/permit/permit_details_screen.dart';
 import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
+import '../screens/qualityManagement/qm_custom_fields_screen.dart';
 import '../screens/qualityManagement/qm_details_screen.dart';
 import '../screens/qualityManagement/qm_list_screen.dart';
+import '../screens/qualityManagement/qm_location_screen.dart';
+import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -192,6 +195,14 @@ class AppRoutes {
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
+      case ReportNewQA.routeName:
+        return _createRoute(ReportNewQA());
+      case QualityManagementLocationScreen.routeName:
+        return _createRoute(QualityManagementLocationScreen(
+            reportNewQMMap: settings.arguments as Map));
+      case QualityManagementCustomFieldsScreen.routeName:
+        return _createRoute(QualityManagementCustomFieldsScreen(
+            reportNewQAMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }
