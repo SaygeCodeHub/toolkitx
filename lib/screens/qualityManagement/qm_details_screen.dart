@@ -77,9 +77,8 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                         lengthOfTabs: 4,
                         tabBarViewIcons:
                             QualityManagementUtil().tabBarViewIcons,
-                        initialIndex: context
-                            .read<QualityManagementBloc>()
-                            .incidentTabIndex,
+                        initialIndex:
+                            context.read<QualityManagementBloc>().qmTabIndex,
                         tabBarViewWidgets: [
                           QualityManagementDetails(
                               data:
