@@ -35,12 +35,10 @@ class RadioButtonExpansionTile extends StatelessWidget {
           if (state is CheckListAnswersEdited) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
                     collapsedBackgroundColor: AppColor.offWhite,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         (radioValue == '')

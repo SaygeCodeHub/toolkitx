@@ -45,7 +45,7 @@ class ToDoViewDocument extends StatelessWidget {
                   imageUrl:
                       '${ApiConstants.viewDocBaseUrl}${ToDoViewDocumentUtil.viewImageList(documentDetailsDatum.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(todoMap['clientId'])}',
                   placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey.shade100,
+                      baseColor: AppColor.paleGrey,
                       highlightColor: AppColor.white,
                       child: Container(
                           height: kNetworkImageContainerTogether,

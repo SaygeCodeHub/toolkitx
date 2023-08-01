@@ -29,7 +29,10 @@ OutlinedButtonThemeData outlinedButtonThemeData = OutlinedButtonThemeData(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius))));
 ExpansionTileThemeData expansionTileThemeData = ExpansionTileThemeData(
-    collapsedBackgroundColor: AppColor.offWhite,
+    collapsedBackgroundColor: AppColor.white,
+    backgroundColor: AppColor.offWhite,
+    tilePadding: const EdgeInsets.only(
+        left: kExpansionTileMargin, right: kExpansionTileMargin),
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kCardRadius)),
     iconColor: AppColor.deepBlue,
