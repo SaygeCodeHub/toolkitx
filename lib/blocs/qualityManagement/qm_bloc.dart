@@ -47,6 +47,7 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (event.isFromHome == true) {
         add(QualityManagementClearFilter());
+        roleId = '';
         FetchQualityManagementListModel fetchQualityManagementListModel =
             await _qualityManagementRepository.fetchQualityManagementList(
                 event.pageNo, userId!, hashCode!, '', '');
