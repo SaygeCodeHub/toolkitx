@@ -28,8 +28,7 @@ class IncidentDetailsViewNetworkImage extends StatelessWidget {
             crossAxisCount: 4,
             crossAxisSpacing: tinierSpacing,
             mainAxisSpacing: tinierSpacing),
-        itemCount: IncidentViewImageUtil.viewImageList(
-                incidentDetailsModel.data!.files)
+        itemCount: ViewImageUtil.viewImageList(incidentDetailsModel.data!.files)
             .length,
         itemBuilder: (context, index) {
           return InkWell(
@@ -37,13 +36,13 @@ class IncidentDetailsViewNetworkImage extends StatelessWidget {
               highlightColor: AppColor.transparent,
               onTap: () {
                 launchUrlString(
-                    '${ApiConstants.viewDocBaseUrl}${IncidentViewImageUtil.viewImageList(incidentDetailsModel.data!.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                    '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(incidentDetailsModel.data!.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                     mode: LaunchMode.inAppWebView);
               },
               child: CachedNetworkImage(
                   height: kCachedNetworkImageHeight,
                   imageUrl:
-                      '${ApiConstants.viewDocBaseUrl}${IncidentViewImageUtil.viewImageList(incidentDetailsModel.data!.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(incidentDetailsModel.data!.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: AppColor.paleGrey,
                       highlightColor: AppColor.white,

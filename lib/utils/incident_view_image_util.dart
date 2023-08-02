@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class IncidentViewImageUtil {
+class ViewImageUtil {
   static List viewImageList(String fileName) {
     List files = [];
     files = jsonDecode(jsonEncode(fileName.split(',')));
