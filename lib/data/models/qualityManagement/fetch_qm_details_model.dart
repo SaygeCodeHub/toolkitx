@@ -253,11 +253,11 @@ class Customfield {
   });
 
   factory Customfield.fromJson(Map<String, dynamic> json) => Customfield(
-        title: json["title"],
-        fieldvalue: json["fieldvalue"],
-        fieldtype: json["fieldtype"],
-        fieldid: json["fieldid"],
-        optionid: json["optionid"],
+        title: json["title"] ?? '',
+        fieldvalue: json["fieldvalue"] ?? '',
+        fieldtype: json["fieldtype"] ?? '',
+        fieldid: json["fieldid"] ?? '',
+        optionid: json["optionid"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
