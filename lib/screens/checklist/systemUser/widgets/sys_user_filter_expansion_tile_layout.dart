@@ -30,15 +30,9 @@ class FilterExpansionTileLayout extends StatelessWidget {
           } else if (state is CheckListCategoryFetched) {
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    tilePadding: const EdgeInsets.only(
-                        left: kExpansionTileMargin,
-                        right: kExpansionTileMargin),
-                    collapsedBackgroundColor: AppColor.white,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(
                         state.categoryName == ""

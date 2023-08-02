@@ -100,7 +100,7 @@ class _SignaturePadState extends State<SignaturePad> {
                             height: kSignaturePadHeight,
                             child: Center(
                                 child: Shimmer.fromColors(
-                                    baseColor: Colors.grey.shade100,
+                                    baseColor: AppColor.paleGrey,
                                     highlightColor: AppColor.white,
                                     child: Container(
                                         decoration: BoxDecoration(
@@ -123,7 +123,7 @@ class _SignaturePadState extends State<SignaturePad> {
                             imageUrl:
                                 '${ApiConstants.baseDocUrl}${widget.map[widget.mapKey]}',
                             placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey.shade100,
+                                baseColor: AppColor.paleGrey,
                                 highlightColor: AppColor.white,
                                 child: Container(
                                     decoration: BoxDecoration(

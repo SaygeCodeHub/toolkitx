@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
-import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../configs/app_color.dart';
@@ -38,15 +37,9 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
             return Column(children: [
               Theme(
                   data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                      .copyWith(dividerColor: AppColor.transparent),
                   child: ExpansionTile(
-                      tilePadding: const EdgeInsets.only(
-                          left: kExpansionTileMargin,
-                          right: kExpansionTileMargin),
-                      collapsedBackgroundColor: AppColor.white,
                       maintainState: true,
-                      iconColor: AppColor.deepBlue,
-                      textColor: AppColor.black,
                       key: GlobalKey(),
                       title: Text(
                           authorityName == ''

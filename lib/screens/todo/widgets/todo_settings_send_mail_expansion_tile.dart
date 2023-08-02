@@ -7,7 +7,6 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../blocs/todo/todo_event.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 
 class ToDoSettingsSendMailExpansionTile extends StatelessWidget {
@@ -28,15 +27,9 @@ class ToDoSettingsSendMailExpansionTile extends StatelessWidget {
             todoMap['assigned'] = state.optionId;
             return Theme(
                 data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                    .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    tilePadding: const EdgeInsets.only(
-                        left: kExpansionTileMargin,
-                        right: kExpansionTileMargin),
-                    collapsedBackgroundColor: AppColor.white,
                     maintainState: true,
-                    iconColor: AppColor.deepBlue,
-                    textColor: AppColor.black,
                     key: GlobalKey(),
                     title: Text(state.optionName,
                         style: Theme.of(context).textTheme.xSmall),
