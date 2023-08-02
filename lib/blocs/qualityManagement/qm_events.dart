@@ -2,6 +2,7 @@ abstract class QualityManagementEvent {}
 
 class FetchQualityManagementList extends QualityManagementEvent {
   final int pageNo;
+
   final bool isFromHome;
 
   FetchQualityManagementList({required this.isFromHome, required this.pageNo});

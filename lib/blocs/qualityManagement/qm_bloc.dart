@@ -18,7 +18,7 @@ class QualityManagementBloc
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
   String roleId = '';
-  int incidentTabIndex = 0;
+  int qmTabIndex = 0;
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -73,7 +73,7 @@ class QualityManagementBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
-      incidentTabIndex = event.initialIndex;
+      qmTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
               event.qmId, hashCode!, userId!, '');
