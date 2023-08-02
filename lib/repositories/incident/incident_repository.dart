@@ -48,8 +48,8 @@ abstract class IncidentRepository {
 
   Future<EditIncidentDetailsModel> editIncidentDetails(Map editIncidentDetails);
 
-  Future<SaveIncidentCommentsModel> saveComments(Map saveCommentsMap);
+  Future<SaveIncidentAndQMCommentsModel> saveComments(Map saveCommentsMap);
 
-  Future<SaveIncidentCommentsFilesModel> saveCommentsFiles(
+  Future<SaveIncidentAndQMCommentsFilesModel> saveCommentsFiles(
       Map saveCommentsFilesMap);
 }

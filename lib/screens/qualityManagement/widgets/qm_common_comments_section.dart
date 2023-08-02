@@ -6,27 +6,27 @@ import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/incident_details_model.dart';
+import '../../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../checklist/workforce/widgets/upload_image_section.dart';
-import 'incident_classification_expansion_tile.dart';
+import 'qm_classification_expansion_tile.dart';
 
 typedef UploadListCallBack = Function(List uploadList);
 typedef TextFieldListCallBack = Function(String textValue);
 
-class IncidentCommonCommentsSection extends StatelessWidget {
+class QualityManagementCommonCommentsSection extends StatelessWidget {
   final UploadListCallBack onPhotosUploaded;
   final TextFieldListCallBack onTextFieldValue;
-  final IncidentDetailsModel? incidentDetailsModel;
-  final Map incidentCommentsMap;
+  final FetchQualityManagementDetailsModel? fetchQualityManagementDetailsModel;
+  final Map qmCommentsMap;
 
-  const IncidentCommonCommentsSection(
+  const QualityManagementCommonCommentsSection(
       {Key? key,
       required this.onPhotosUploaded,
       required this.onTextFieldValue,
-      this.incidentDetailsModel,
-      required this.incidentCommentsMap})
+      this.fetchQualityManagementDetailsModel,
+      required this.qmCommentsMap})
       : super(key: key);
 
   @override
@@ -35,18 +35,19 @@ class IncidentCommonCommentsSection extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Visibility(
-            visible: incidentDetailsModel!.data!.nextStatus == '1',
+            visible: fetchQualityManagementDetailsModel!.data.nextStatus == '1',
             child: Text(DatabaseUtil.getText('Classification'),
                 style: Theme.of(context).textTheme.small.copyWith(
                     color: AppColor.black, fontWeight: FontWeight.w500)),
           ),
-          (incidentDetailsModel!.data!.nextStatus != '1')
+          (fetchQualityManagementDetailsModel!.data.nextStatus != '1')
               ? const SizedBox.shrink()
               : const SizedBox(height: xxTinierSpacing),
           Visibility(
-              visible: incidentDetailsModel!.data!.nextStatus == '1',
-              child: IncidentClassificationExpansionTile(
-                  incidentCommentsMap: incidentCommentsMap)),
+              visible:
+                  fetchQualityManagementDetailsModel!.data.nextStatus == '1',
+              child: QualityManagementClassificationExpansionTile(
+                  qmCommentsMap: qmCommentsMap)),
           const SizedBox(height: xxTinierSpacing),
           Text(StringConstants.kComments,
               style: Theme.of(context).textTheme.small.copyWith(

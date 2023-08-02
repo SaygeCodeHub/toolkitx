@@ -4,16 +4,21 @@ import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
+import '../../utils/constants/api_constants.dart';
 import '../../utils/quality_management_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/status_tag.dart';
+import 'qm_pop_up_menu_screen.dart';
 import 'widgets/qm_comments.dart';
 import 'widgets/qm_custom_fields.dart';
 import 'widgets/qm_custom_timeline.dart';
@@ -31,8 +36,41 @@ class QualityManagementDetailsScreen extends StatelessWidget {
     context.read<QualityManagementBloc>().add(
         FetchQualityManagementDetails(qmId: qmListMap['id'], initialIndex: 0));
     return Scaffold(
-      appBar: const GenericAppBar(),
-      body: BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+      appBar: GenericAppBar(
+        actions: [
+          BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is QualityManagementDetailsFetched,
+              builder: (context, state) {
+                if (state is QualityManagementDetailsFetched) {
+                  if (state.showPopUpMenu == true) {
+                    return QualityManagementPopUpMenuScreen(
+                        popUpMenuItems: state.qmPopUpMenu,
+                        data: state.fetchQualityManagementDetailsModel.data,
+                        fetchQualityManagementDetailsModel:
+                            state.fetchQualityManagementDetailsModel);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
+        ],
+      ),
+      body: BlocConsumer<QualityManagementBloc, QualityManagementStates>(
+          listener: (context, state) {
+            if (state is GeneratingQualityManagementPDF) {
+              ProgressBar.show(context);
+            } else if (state is QualityManagementPDFGenerated) {
+              ProgressBar.dismiss(context);
+              launchUrlString('${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
+                  mode: LaunchMode.externalApplication);
+            } else if (state is QualityManagementPDFGenerationFailed) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.pdfNoteGenerated, '');
+            }
+          },
           buildWhen: (previousState, currentState) =>
               currentState is FetchingQualityManagementDetails ||
               currentState is QualityManagementDetailsFetched ||
