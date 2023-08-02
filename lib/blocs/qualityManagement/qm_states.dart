@@ -1,6 +1,7 @@
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/pdf_generation_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 
@@ -35,12 +36,6 @@ class QualityManagementDetailsNotFetched extends QualityManagementStates {
   final String detailsNotFetched;
 
   QualityManagementDetailsNotFetched({required this.detailsNotFetched});
-}
-
-class QualityManagementClassificationSelected extends QualityManagementStates {
-  final String classificationId;
-
-  QualityManagementClassificationSelected({required this.classificationId});
 }
 
 class QualityManagementSavingComments extends QualityManagementStates {}
@@ -78,4 +73,26 @@ class QualityManagementPDFGenerationFailed extends QualityManagementStates {
   final String pdfNoteGenerated;
 
   QualityManagementPDFGenerationFailed({required this.pdfNoteGenerated});
+}
+
+class FetchingQualityManagementClassificationValue
+    extends QualityManagementStates {}
+
+class QualityManagementClassificationValueFetched
+    extends QualityManagementStates {
+  final FetchQualityManagementClassificationModel
+      fetchQualityManagementClassificationModel;
+  final String classificationId;
+
+  QualityManagementClassificationValueFetched(
+      {required this.classificationId,
+      required this.fetchQualityManagementClassificationModel});
+}
+
+class QualityManagementClassificationValueNotFetched
+    extends QualityManagementStates {
+  final String classificationNotFetched;
+
+  QualityManagementClassificationValueNotFetched(
+      {required this.classificationNotFetched});
 }

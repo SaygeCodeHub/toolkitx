@@ -47,7 +47,7 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   },
                   qmCommentsMap: qmCommentsMap,
                   fetchQualityManagementDetailsModel:
-                  fetchQualityManagementDetailsModel),
+                      fetchQualityManagementDetailsModel),
               BlocListener<QualityManagementBloc, QualityManagementStates>(
                   listener: (context, state) {
                     if (state is QualityManagementSavingComments) {

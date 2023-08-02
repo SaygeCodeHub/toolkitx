@@ -1,4 +1,5 @@
 import '../../data/models/incident/save_incident_comments_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 
 abstract class QualityManagementEvent {}
 
@@ -18,8 +19,12 @@ class FetchQualityManagementDetails extends QualityManagementEvent {
 
 class SelectQualityManagementClassification extends QualityManagementEvent {
   final String classificationId;
+  final FetchQualityManagementClassificationModel
+      fetchQualityManagementClassificationModel;
 
-  SelectQualityManagementClassification({required this.classificationId});
+  SelectQualityManagementClassification(
+      {required this.fetchQualityManagementClassificationModel,
+      required this.classificationId});
 }
 
 class SaveQualityManagementComments extends QualityManagementEvent {
@@ -40,3 +45,6 @@ class SaveQualityManagementCommentsFiles extends QualityManagementEvent {
 class GenerateQualityManagementPDF extends QualityManagementEvent {
   GenerateQualityManagementPDF();
 }
+
+class FetchQualityManagementClassificationValue
+    extends QualityManagementEvent {}
