@@ -20,8 +20,9 @@ class QualityManagementDetailsFetched extends QualityManagementStates {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
   final String clientId;
 
-  QualityManagementDetailsFetched({required this.clientId,
-    required this.fetchQualityManagementDetailsModel});
+  QualityManagementDetailsFetched(
+      {required this.clientId,
+      required this.fetchQualityManagementDetailsModel});
 }
 
 class QualityManagementDetailsNotFetched extends QualityManagementStates {
