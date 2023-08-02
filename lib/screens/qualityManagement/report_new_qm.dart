@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/error_section.dart';
-
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
 import '../../blocs/qualityManagement/qm_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
-import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
@@ -19,18 +17,24 @@ import '../incident/widgets/date_picker.dart';
 import '../incident/widgets/time_picker.dart';
 import 'widgets/qm_bottom_navigation_bar.dart';
 import 'widgets/qm_contractor_list_tile.dart';
+import 'widgets/qm_edit_view_image.dart';
 import 'widgets/qm_report_anonymously_expansion_tile.dart';
+import 'widgets/qm_show_upload_increment_number.dart';
 
 class ReportNewQA extends StatelessWidget {
   static const routeName = 'ReportNewQA';
+  static bool isFromEdit = false;
 
-  ReportNewQA({Key? key}) : super(key: key);
-  final Map reportNewQMMap = {};
+  const ReportNewQA({Key? key}) : super(key: key);
+  static Map reportAndEditQMMap = {};
   static String eventDate = '';
 
   @override
   Widget build(BuildContext context) {
-    context.read<QualityManagementBloc>().add(FetchQualityManagementMaster());
+    context
+        .read<QualityManagementBloc>()
+        .add(FetchQualityManagementMaster(reportNewQAMap: reportAndEditQMMap));
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('NewQAReporting')),
         body: BlocBuilder<QualityManagementBloc, QualityManagementStates>(
@@ -42,6 +46,7 @@ class ReportNewQA extends StatelessWidget {
               if (state is FetchingQualityManagementMaster) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is QualityManagementMasterFetched) {
+                int incrementNum = state.number;
                 return Padding(
                     padding: const EdgeInsets.only(
                         left: leftRightMargin,
@@ -59,10 +64,10 @@ class ReportNewQA extends StatelessWidget {
                                       .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxxTinierSpacing),
                               ReportAnonymouslyExpansionTile(
-                                  reportNewQAMap: reportNewQMMap),
+                                  reportNewQAMap: reportAndEditQMMap),
                               const SizedBox(height: xxxTinierSpacing),
                               QualityManagementContractorListTile(
-                                  reportNewQAMap: reportNewQMMap),
+                                  reportNewQAMap: reportAndEditQMMap),
                               const SizedBox(height: xxTinySpacing),
                               Text(DatabaseUtil.getText('Date'),
                                   style: Theme.of(context)
@@ -70,11 +75,25 @@ class ReportNewQA extends StatelessWidget {
                                       .xSmall
                                       .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxxTinierSpacing),
-                              DatePickerTextField(
-                                hintText: StringConstants.kSelectDate,
-                                onDateChanged: (String date) {
-                                  eventDate = date;
-                                },
+                              Visibility(
+                                visible: ReportNewQA.isFromEdit != true &&
+                                    reportAndEditQMMap['eventdatetime'] == null,
+                                replacement: TextFieldWidget(
+                                    value: (reportAndEditQMMap[
+                                                'eventdatetime'] ==
+                                            null)
+                                        ? ""
+                                        : reportAndEditQMMap['eventdatetime']
+                                            .toString()
+                                            .substring(0, 10),
+                                    readOnly: true,
+                                    onTextFieldChanged: (String textField) {}),
+                                child: DatePickerTextField(
+                                  hintText: StringConstants.kSelectDate,
+                                  onDateChanged: (String date) {
+                                    eventDate = date;
+                                  },
+                                ),
                               ),
                               const SizedBox(height: xxTinySpacing),
                               Text(StringConstants.kTime,
@@ -83,12 +102,26 @@ class ReportNewQA extends StatelessWidget {
                                       .xSmall
                                       .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxxTinierSpacing),
-                              TimePickerTextField(
-                                hintText: StringConstants.kSelectTime,
-                                onTimeChanged: (String time) {
-                                  reportNewQMMap['eventdatetime'] =
-                                      '$eventDate $time';
-                                },
+                              Visibility(
+                                visible: ReportNewQA.isFromEdit != true &&
+                                    reportAndEditQMMap['eventdatetime'] == null,
+                                replacement: TextFieldWidget(
+                                    value: (reportAndEditQMMap[
+                                                'eventdatetime'] ==
+                                            null)
+                                        ? ""
+                                        : reportAndEditQMMap['eventdatetime']
+                                            .toString()
+                                            .substring(12, 19),
+                                    readOnly: true,
+                                    onTextFieldChanged: (String textField) {}),
+                                child: TimePickerTextField(
+                                  hintText: StringConstants.kSelectTime,
+                                  onTimeChanged: (String time) {
+                                    reportAndEditQMMap['eventdatetime'] =
+                                        '$eventDate $time';
+                                  },
+                                ),
                               ),
                               const SizedBox(height: xxTinySpacing),
                               Text(StringConstants.kDetailedDescription,
@@ -98,74 +131,38 @@ class ReportNewQA extends StatelessWidget {
                                       .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxxTinierSpacing),
                               TextFieldWidget(
+                                  value: (ReportNewQA.isFromEdit == true &&
+                                          reportAndEditQMMap['description'] !=
+                                              null)
+                                      ? reportAndEditQMMap['description']
+                                      : '',
                                   maxLength: 250,
                                   maxLines: 3,
                                   textInputAction: TextInputAction.done,
                                   textInputType: TextInputType.text,
                                   onTextFieldChanged: (String textField) {
-                                    reportNewQMMap['description'] = textField;
+                                    reportAndEditQMMap['description'] =
+                                        textField;
                                   }),
                               const SizedBox(height: xxTinySpacing),
-                              BlocBuilder<PickAndUploadImageBloc,
-                                      PickAndUploadImageStates>(
-                                  buildWhen: (previousState, currentState) =>
-                                      currentState is ImagePickerLoaded,
-                                  builder: (context, state) {
-                                    if (state is ImagePickerLoaded) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(StringConstants.kPhoto,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .xSmall
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                          Text('${state.incrementNumber}/6',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .small
-                                                  .copyWith(
-                                                      color: AppColor.black,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                        ],
-                                      );
-                                    } else {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(StringConstants.kUploadPhoto,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .small
-                                                  .copyWith(
-                                                      color: AppColor.black,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                          Text('0/6',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .small
-                                                  .copyWith(
-                                                      color: AppColor.black,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                        ],
-                                      );
-                                    }
-                                  }),
+                              QualityManagementEditViewImage(
+                                  reportAndEditQMMap: reportAndEditQMMap,
+                                  clientId: state.clientId),
+                              const SizedBox(height: xxTinySpacing),
+                              QMShowUploadIncrementNumber(
+                                  incrementNum: incrementNum),
                               const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
-                                isFromIncident: true,
+                                editedImageList: reportAndEditQMMap['files']
+                                    .toString()
+                                    .split(","),
+                                isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
-                                  reportNewQMMap['filenames'] = uploadImageList
-                                      .toString()
-                                      .replaceAll("[", "")
-                                      .replaceAll("]", "");
+                                  reportAndEditQMMap['filenames'] =
+                                      uploadImageList
+                                          .toString()
+                                          .replaceAll("[", "")
+                                          .replaceAll("]", "");
                                 },
                               ),
                               const SizedBox(height: xxTinySpacing),
@@ -173,9 +170,9 @@ class ReportNewQA extends StatelessWidget {
               } else if (state is QualityManagementMasterNotFetched) {
                 return GenericReloadButton(
                     onPressed: () {
-                      context
-                          .read<QualityManagementBloc>()
-                          .add(FetchQualityManagementMaster());
+                      context.read<QualityManagementBloc>().add(
+                          FetchQualityManagementMaster(
+                              reportNewQAMap: reportAndEditQMMap));
                     },
                     textValue: StringConstants.kReload);
               } else {
@@ -183,6 +180,6 @@ class ReportNewQA extends StatelessWidget {
               }
             }),
         bottomNavigationBar:
-            NewQMReportingBottomBar(reportNewQAMap: reportNewQMMap));
+            NewQMReportingBottomBar(reportNewQAMap: reportAndEditQMMap));
   }
 }

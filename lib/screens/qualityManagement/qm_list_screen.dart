@@ -51,6 +51,8 @@ class _QualityManagementListScreenState
         appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              ReportNewQA.isFromEdit = false;
+              ReportNewQA.reportAndEditQMMap = {};
               Navigator.pushNamed(context, ReportNewQA.routeName);
             },
             child: const Icon(Icons.add)),

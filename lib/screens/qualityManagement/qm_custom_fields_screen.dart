@@ -12,6 +12,7 @@ import '../../utils/qm_custom_field_info_util.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
+import 'report_new_qm.dart';
 
 class QualityManagementCustomFieldsScreen extends StatelessWidget {
   static const routeName = 'QualityManagementCustomFieldsScreen';
@@ -92,31 +93,62 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
             textValue: DatabaseUtil.getText('buttonBack'),
           )),
           const SizedBox(width: xxTinierSpacing),
-          BlocListener<QualityManagementBloc, QualityManagementStates>(
-            listener: (context, state) {
-              if (state is ReportNewQualityManagementSaving) {
-                ProgressBar.show(context);
-              } else if (state is ReportNewQualityManagementSaved) {
-                ProgressBar.dismiss(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                context
-                    .read<QualityManagementBloc>()
-                    .add(FetchQualityManagementList(pageNo: 1));
-              } else if (state is ReportNewQualityManagementNotSaved) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(
-                    context, state.qualityManagementNotSavedMessage, '');
-              }
-            },
+          MultiBlocListener(
+            listeners: [
+              BlocListener<QualityManagementBloc, QualityManagementStates>(
+                  listener: (context, state) {
+                if (state is ReportNewQualityManagementSaving) {
+                  ProgressBar.show(context);
+                } else if (state is ReportNewQualityManagementSaved) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  context
+                      .read<QualityManagementBloc>()
+                      .add(FetchQualityManagementList(pageNo: 1));
+                } else if (state is ReportNewQualityManagementNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(
+                      context, state.qualityManagementNotSavedMessage, '');
+                }
+              }),
+              BlocListener<QualityManagementBloc, QualityManagementStates>(
+                  listener: (context, state) {
+                if (state is UpdatingQualityManagementDetails) {
+                  ProgressBar.show(context);
+                } else if (state is QualityManagementDetailsUpdated ||
+                    state is ReportNewQualityManagementPhotoSaved) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  context.read<QualityManagementBloc>().add(
+                      FetchQualityManagementDetails(
+                          initialIndex: 0,
+                          qmId: context
+                              .read<QualityManagementBloc>()
+                              .encryptQmId));
+                } else if (state is QualityManagementDetailsNotUpdated) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.editDetailsNotUpdated, '');
+                }
+              }),
+            ],
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    reportNewQAMap['customfields'] = customInfoFieldList;
-                    context.read<QualityManagementBloc>().add(
-                        SaveReportNewQualityManagement(
-                            role: '', reportNewQAMap: reportNewQAMap));
+                    if (ReportNewQA.isFromEdit == false) {
+                      reportNewQAMap['customfields'] = customInfoFieldList;
+                      context.read<QualityManagementBloc>().add(
+                          SaveReportNewQualityManagement(
+                              role: '', reportNewQAMap: reportNewQAMap));
+                    } else {
+                      reportNewQAMap['customfields'] = customInfoFieldList;
+                      context.read<QualityManagementBloc>().add(
+                          UpdateQualityManagementDetails(
+                              editQMDetailsMap: reportNewQAMap));
+                    }
                   },
                   textValue: DatabaseUtil.getText('buttonSave')),
             ),

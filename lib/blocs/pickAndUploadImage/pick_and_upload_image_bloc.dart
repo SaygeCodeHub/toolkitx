@@ -37,6 +37,7 @@ class PickAndUploadImageBloc
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
     isInitial = true;
+    number = 0;
     emit(PermissionInitial());
   }
 
@@ -60,6 +61,8 @@ class PickAndUploadImageBloc
         bool isAttached = false;
         List cameraPathsList =
             List.from((isInitial == false) ? event.cameraImageList : []);
+        List editedCameraList =
+            List.from((isInitial == false) ? event.editedCameraList! : []);
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
@@ -71,8 +74,15 @@ class PickAndUploadImageBloc
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
           }
-          for (int i = 0; i <= cameraPathsList.length; i++) {
-            number = i;
+          if (editedCameraList.toString() != "[null]") {
+            number = editedCameraList.length - 1;
+            for (int j = 0; j <= cameraPathsList.length; j++) {
+              number = number + 1;
+            }
+          } else {
+            for (int i = 0; i <= cameraPathsList.length; i++) {
+              number = i;
+            }
           }
           if (isAttached == true) {
             if (event.isSignature == true) {
@@ -117,6 +127,10 @@ class PickAndUploadImageBloc
         bool isAttached = false;
         List galleryPathsList =
             List.from((isInitial == false) ? event.galleryImagesList : []);
+        List editedGalleryList = [];
+        editedGalleryList = List.from((isInitial == false)
+            ? event.editedGalleryList!
+            : event.editedGalleryList!);
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -128,8 +142,15 @@ class PickAndUploadImageBloc
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
           }
-          for (int i = 0; i <= galleryPathsList.length; i++) {
-            number = i;
+          if (editedGalleryList.toString() != "[null]") {
+            number = editedGalleryList.length - 1;
+            for (int j = 0; j <= galleryPathsList.length; j++) {
+              number = number + 1;
+            }
+          } else {
+            for (int i = 0; i <= galleryPathsList.length; i++) {
+              number = i;
+            }
           }
           if (isAttached == true) {
             if (event.isSignature == true) {

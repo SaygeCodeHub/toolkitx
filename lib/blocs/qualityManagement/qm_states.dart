@@ -6,6 +6,7 @@ import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
+import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
 
 abstract class QualityManagementStates {}
 
@@ -26,11 +27,13 @@ class QualityManagementDetailsFetched extends QualityManagementStates {
   final String clientId;
   final List qmPopUpMenu;
   final bool showPopUpMenu;
+  final Map editQMDetailsMap;
 
   QualityManagementDetailsFetched(
       {required this.qmPopUpMenu,
       required this.showPopUpMenu,
       required this.clientId,
+      required this.editQMDetailsMap,
       required this.fetchQualityManagementDetailsModel});
 }
 
@@ -50,9 +53,13 @@ class FetchingQualityManagementMaster extends QualityManagementStates {}
 
 class QualityManagementMasterFetched extends QualityManagementStates {
   final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
+  final int number;
+  final String clientId;
 
   QualityManagementMasterFetched(
-      {required this.fetchQualityManagementMasterModel});
+      {required this.clientId,
+      required this.number,
+      required this.fetchQualityManagementMasterModel});
 }
 
 class QualityManagementMasterNotFetched extends QualityManagementStates {
@@ -220,4 +227,19 @@ class QualityManagementPDFGenerationFailed extends QualityManagementStates {
   final String pdfNoteGenerated;
 
   QualityManagementPDFGenerationFailed({required this.pdfNoteGenerated});
+}
+
+class UpdatingQualityManagementDetails extends QualityManagementStates {}
+
+class QualityManagementDetailsUpdated extends QualityManagementStates {
+  final UpdateQualityManagementDetailsModel updateQualityManagementDetailsModel;
+
+  QualityManagementDetailsUpdated(
+      {required this.updateQualityManagementDetailsModel});
+}
+
+class QualityManagementDetailsNotUpdated extends QualityManagementStates {
+  final String editDetailsNotUpdated;
+
+  QualityManagementDetailsNotUpdated({required this.editDetailsNotUpdated});
 }

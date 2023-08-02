@@ -202,7 +202,7 @@ class AppRoutes {
             fetchQualityManagementDetailsModel:
                 settings.arguments as FetchQualityManagementDetailsModel));
       case ReportNewQA.routeName:
-        return _createRoute(ReportNewQA());
+        return _createRoute(const ReportNewQA());
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(
             reportNewQMMap: settings.arguments as Map));

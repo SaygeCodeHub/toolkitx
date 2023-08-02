@@ -22,7 +22,11 @@ class ReportNewQAAnonymously extends QualityManagementEvent {
   ReportNewQAAnonymously({required this.anonymousId});
 }
 
-class FetchQualityManagementMaster extends QualityManagementEvent {}
+class FetchQualityManagementMaster extends QualityManagementEvent {
+  final Map reportNewQAMap;
+
+  FetchQualityManagementMaster({required this.reportNewQAMap});
+}
 
 class ReportNewQualityManagementContractorListChange
     extends QualityManagementEvent {
@@ -123,4 +127,10 @@ class SaveQualityManagementCommentsFiles extends QualityManagementEvent {
 
 class GenerateQualityManagementPDF extends QualityManagementEvent {
   GenerateQualityManagementPDF();
+}
+
+class UpdateQualityManagementDetails extends QualityManagementEvent {
+  final Map editQMDetailsMap;
+
+  UpdateQualityManagementDetails({required this.editQMDetailsMap});
 }

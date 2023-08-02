@@ -6,6 +6,7 @@ import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
+import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
 
 abstract class QualityManagementRepository {
   Future<FetchQualityManagementListModel> fetchQualityManagementList(
@@ -29,4 +30,7 @@ abstract class QualityManagementRepository {
 
   Future<SaveQualityManagementPhotos> saveQualityManagementPhotos(
       Map savePhotosMap);
+
+  Future<UpdateQualityManagementDetailsModel> updateQualityManagementDetails(
+      Map updateDetailsMap);
 }
