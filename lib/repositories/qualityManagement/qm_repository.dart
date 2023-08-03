@@ -1,5 +1,6 @@
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 
 abstract class QualityManagementRepository {
   Future<FetchQualityManagementListModel> fetchQualityManagementList(
@@ -7,4 +8,7 @@ abstract class QualityManagementRepository {
 
   Future<FetchQualityManagementDetailsModel> fetchQualityManagementDetails(
       String qmId, String hashCode, String userId, String role);
+
+  Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
+      String hashCode, String userId);
 }

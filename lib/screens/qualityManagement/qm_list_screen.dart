@@ -12,6 +12,7 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
 import 'qm_details_screen.dart';
+import 'qm_roles_screen.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 
@@ -59,7 +60,10 @@ class _QualityManagementListScreenState
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 CustomIconButtonRow(
                     primaryOnPress: () {},
-                    secondaryOnPress: () {},
+                    secondaryOnPress: () {
+                      Navigator.pushNamed(
+                          context, QualityManagementRolesScreen.routeName);
+                    },
                     isEnabled: true,
                     clearOnPress: () {})
               ]),
