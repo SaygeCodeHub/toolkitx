@@ -104,3 +104,27 @@ class NewLogBookNotReported extends LogbookStates {
 
   NewLogBookNotReported({required this.logbookNotReported});
 }
+
+class LogBookActivityFilterSelected extends LogbookStates {
+  final int selectIndex;
+
+  LogBookActivityFilterSelected({required this.selectIndex});
+}
+
+class LogBookFilterSelected extends LogbookStates {
+  final int selectIndex;
+
+  LogBookFilterSelected({required this.selectIndex});
+}
+
+class LogBookFilterPrioritySelected extends LogbookStates {
+  final int selectIndex;
+
+  LogBookFilterPrioritySelected({required this.selectIndex});
+}
+
+class LogBookFilterStatusSelected extends LogbookStates {
+  final int selectIndex;
+
+  LogBookFilterStatusSelected({required this.selectIndex});
+}

@@ -1,63 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:toolkit/configs/app_theme.dart';
-
-import '../../../configs/app_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/LogBook/logbook_states.dart';
+import '../../../blocs/LogBook/logbook_events.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/enums/logbook_priority_enum.dart';
 import '../../../utils/logbook_priotity_filter_util.dart';
+import '../../../widgets/custom_choice_chip.dart';
 
-class LogbookPriorityFilter extends StatefulWidget {
+class LogbookPriorityFilter extends StatelessWidget {
   final Map logbookFilterMap;
 
   const LogbookPriorityFilter({Key? key, required this.logbookFilterMap})
       : super(key: key);
 
   @override
-  State<LogbookPriorityFilter> createState() => _LogbookPriorityFilterState();
-}
-
-class _LogbookPriorityFilterState extends State<LogbookPriorityFilter> {
-  int? selectedIndex = 0;
-
-  @override
-  void initState() {
-    selectedIndex = LogBookPriorityFilterUtil().priorityFilter(
-        (widget.logbookFilterMap['pri'] == null)
-            ? ''
-            : widget.logbookFilterMap['pri']);
-    (widget.logbookFilterMap['pri'] == null)
-        ? ''
-        : widget.logbookFilterMap['pri'];
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<LogbookBloc>().add(SelectLogBookPriorityFilter(
+        selectedIndex: LogBookPriorityFilterUtil().priorityFilter(
+            (logbookFilterMap['pri'] == null) ? '' : logbookFilterMap['pri'])));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
     for (int i = 0; i < LogbookPriorityEnum.values.length; i++) {
-      Widget item = ChoiceChip(
-        label: Text(LogbookPriorityEnum.values[i].priority),
-        labelStyle: Theme.of(context)
-            .textTheme
-            .xxSmall
-            .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
-        backgroundColor: AppColor.lightestGrey,
-        selected: (widget.logbookFilterMap['pri'] == null)
-            ? false
-            : selectedIndex == i,
-        selectedColor: AppColor.green,
-        onSelected: (bool value) {
-          setState(() {
-            selectedIndex = i;
-            widget.logbookFilterMap['pri'] =
-                LogbookPriorityEnum.values[i].value.toString();
+      Widget item = BlocBuilder<LogbookBloc, LogbookStates>(
+          buildWhen: (previousState, currentState) =>
+              currentState is LogBookFilterPrioritySelected,
+          builder: (context, state) {
+            if (state is LogBookFilterPrioritySelected) {
+              return CustomChoiceChip(
+                label: LogbookPriorityEnum.values[i].priority,
+                selected: (logbookFilterMap['pri'] == null)
+                    ? false
+                    : state.selectIndex == i,
+                onSelected: (bool value) {
+                  state.selectIndex;
+                  logbookFilterMap['pri'] =
+                      LogbookPriorityEnum.values[i].value.toString();
+                  context
+                      .read<LogbookBloc>()
+                      .add(SelectLogBookPriorityFilter(selectedIndex: i));
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
           });
-        },
-      );
       chips.add(item);
     }
     return chips;

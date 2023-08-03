@@ -31,6 +31,10 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     on<ReportNewLogBook>(_reportNewLogbook);
     on<ApplyLogBookFilter>(_applyLogbookFilter);
     on<ClearLogBookFilter>(_clearLogbookFilter);
+    on<SelectLogBookActivityFilter>(_selectLogbookActivityFilter);
+    on<SelectLogBookFilter>(_selectLogbookFilter);
+    on<SelectLogBookPriorityFilter>(_selectLogbookPriorityFilter);
+    on<SelectLogBookStatusFilter>(_selectLogbookStatusFilter);
   }
 
   _applyLogbookFilter(ApplyLogBookFilter event, Emitter<LogbookStates> emit) {
@@ -197,5 +201,28 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     } catch (e) {
       emit(LogBookDetailsNotFetched(detailsNotFetched: e.toString()));
     }
+  }
+
+  _selectLogbookActivityFilter(
+      SelectLogBookActivityFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookActivityFilterSelected(
+        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+  }
+
+  _selectLogbookFilter(SelectLogBookFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterSelected(
+        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+  }
+
+  _selectLogbookPriorityFilter(
+      SelectLogBookPriorityFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterPrioritySelected(
+        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+  }
+
+  _selectLogbookStatusFilter(
+      SelectLogBookStatusFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterStatusSelected(
+        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
   }
 }

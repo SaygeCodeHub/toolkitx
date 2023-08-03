@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/utils/logbook_acitivity_util.dart';
-import '../../../configs/app_color.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import '../../../blocs/LogBook/logbook_events.dart';
+import '../../../blocs/LogBook/logbook_states.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
+import '../../../utils/logbook_acitivity_util.dart';
+import '../../../widgets/custom_choice_chip.dart';
 
-class LogBookActivityFilter extends StatefulWidget {
+class LogBookActivityFilter extends StatelessWidget {
   final List<List<LogBokFetchMaster>> data;
   final Map logbookFilterMap;
 
@@ -14,51 +17,40 @@ class LogBookActivityFilter extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<LogBookActivityFilter> createState() => _LogBookActivityFilterState();
-}
-
-class _LogBookActivityFilterState extends State<LogBookActivityFilter> {
-  int? selectedIndex = 0;
-
-  @override
-  void initState() {
-    selectedIndex = LogBookActivityFilterUtil().activityFilter(
-        (widget.logbookFilterMap['activity'] == null)
-            ? ''
-            : widget.logbookFilterMap['activity']);
-    (widget.logbookFilterMap['activity'] == null)
-        ? ''
-        : widget.logbookFilterMap['activity'];
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<LogbookBloc>().add(SelectLogBookActivityFilter(
+        selectedIndex: LogBookActivityFilterUtil().activityFilter(
+            (logbookFilterMap['activity'] == null)
+                ? ''
+                : logbookFilterMap['activity'])));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
-    for (int i = 0; i < widget.data[3].length; i++) {
-      Widget item = ChoiceChip(
-        label: Text(widget.data[3][i].activityname),
-        labelStyle: Theme.of(context)
-            .textTheme
-            .xxSmall
-            .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
-        backgroundColor: AppColor.lightestGrey,
-        selected: (widget.logbookFilterMap['activity'] == null)
-            ? false
-            : selectedIndex == i,
-        selectedColor: AppColor.green,
-        onSelected: (bool value) {
-          setState(() {
-            selectedIndex = i;
-            widget.logbookFilterMap['activity'] =
-                widget.data[3][i].id.toString();
+    for (int i = 0; i < data[3].length; i++) {
+      Widget item = BlocBuilder<LogbookBloc, LogbookStates>(
+          buildWhen: (previousState, currentState) =>
+              currentState is LogBookActivityFilterSelected,
+          builder: (context, state) {
+            if (state is LogBookActivityFilterSelected) {
+              return CustomChoiceChip(
+                label: data[3][i].activityname,
+                selected: (logbookFilterMap['activity'] == null)
+                    ? false
+                    : state.selectIndex == i,
+                onSelected: (bool value) {
+                  state.selectIndex;
+                  logbookFilterMap['activity'] = data[3][i].id.toString();
+                  context
+                      .read<LogbookBloc>()
+                      .add(SelectLogBookActivityFilter(selectedIndex: i));
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
           });
-        },
-      );
       chips.add(item);
     }
     return chips;
