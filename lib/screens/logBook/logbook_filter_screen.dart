@@ -47,7 +47,7 @@ class LogBookFilterScreen extends StatelessWidget {
               if (state is LogBookFetchingMaster) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is LogBookMasterFetched) {
-                // logbookFilterMap.addAll();
+                logbookFilterMap.addAll(state.filterMap);
                 return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(

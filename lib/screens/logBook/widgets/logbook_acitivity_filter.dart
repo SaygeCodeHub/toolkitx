@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/logbook_acitivity_util.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
@@ -17,10 +18,14 @@ class LogBookActivityFilter extends StatefulWidget {
 }
 
 class _LogBookActivityFilterState extends State<LogBookActivityFilter> {
-  int selectedIndex = 0;
+  int? selectedIndex = 0;
 
   @override
   void initState() {
+    selectedIndex = LogBookActivityFilterUtil().activityFilter(
+        (widget.logbookFilterMap['activity'] == null)
+            ? ''
+            : widget.logbookFilterMap['activity']);
     (widget.logbookFilterMap['activity'] == null)
         ? ''
         : widget.logbookFilterMap['activity'];

@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
+import '../../../utils/logbook_filter_util.dart';
 
 class LogbookFilter extends StatefulWidget {
   final List<List<LogBokFetchMaster>> data;
@@ -18,13 +19,17 @@ class LogbookFilter extends StatefulWidget {
 }
 
 class _LogbookFilterState extends State<LogbookFilter> {
-  int selectedIndex = 0;
+  int? selectedIndex = 0;
 
   @override
   void initState() {
-    (widget.logbookFilterMap['log'] == null)
+    selectedIndex = LogBookFilterUtil().filter(
+        (widget.logbookFilterMap['lgbooks'] == null)
+            ? ''
+            : widget.logbookFilterMap['lgbooks']);
+    (widget.logbookFilterMap['lgbooks'] == null)
         ? ''
-        : widget.logbookFilterMap['log'];
+        : widget.logbookFilterMap['lgbooks'];
     super.initState();
   }
 
@@ -43,14 +48,15 @@ class _LogbookFilterState extends State<LogbookFilter> {
             .xxSmall
             .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
         backgroundColor: AppColor.lightestGrey,
-        selected: (widget.logbookFilterMap['log'] == null)
+        selected: (widget.logbookFilterMap['lgbooks'] == null)
             ? false
             : selectedIndex == i,
         selectedColor: AppColor.green,
         onSelected: (bool value) {
           setState(() {
             selectedIndex = i;
-            widget.logbookFilterMap['log'] = widget.data[0][i].id.toString();
+            widget.logbookFilterMap['lgbooks'] =
+                widget.data[0][i].id.toString();
           });
         },
       );

@@ -18,7 +18,7 @@ class LogbookListScreen extends StatelessWidget {
   static List logbookData = [];
   final bool isFromHome;
 
-  const LogbookListScreen({Key? key, required this.isFromHome})
+  const LogbookListScreen({Key? key, this.isFromHome = false})
       : super(key: key);
 
   @override

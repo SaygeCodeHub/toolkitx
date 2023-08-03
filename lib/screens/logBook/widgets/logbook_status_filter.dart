@@ -20,9 +20,11 @@ class _LogbookStatusFilterState extends State<LogbookStatusFilter> {
 
   @override
   void initState() {
-    (widget.logbookFilterMap['log'] == null)
+    selectedIndex = widget.logbookFilterMap['status'] == "1" ? 0 : 0;
+    selectedIndex = widget.logbookFilterMap['status'] == "2" ? 1 : 0;
+    (widget.logbookFilterMap['status'] == null)
         ? ''
-        : widget.logbookFilterMap['log'];
+        : widget.logbookFilterMap['status'];
     super.initState();
   }
 
@@ -41,14 +43,14 @@ class _LogbookStatusFilterState extends State<LogbookStatusFilter> {
             .xxSmall
             .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
         backgroundColor: AppColor.lightestGrey,
-        selected: (widget.logbookFilterMap['log'] == null)
+        selected: (widget.logbookFilterMap['status'] == null)
             ? false
             : selectedIndex == i,
         selectedColor: AppColor.green,
         onSelected: (bool value) {
           setState(() {
             selectedIndex = i;
-            widget.logbookFilterMap['log'] =
+            widget.logbookFilterMap['status'] =
                 LogbookStatusEnum.values[i].value.toString();
           });
         },

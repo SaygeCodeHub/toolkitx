@@ -21,9 +21,9 @@ class _LogbookTypeFilterState extends State<LogbookTypeFilter> {
 
   @override
   void initState() {
-    selectedData = (widget.logbookFilterMap['type'] == null)
+    selectedData = (widget.logbookFilterMap['types'] == null)
         ? []
-        : widget.logbookFilterMap['type']
+        : widget.logbookFilterMap['types']
             .toString()
             .replaceAll(' ', '')
             .split(',');
@@ -53,7 +53,7 @@ class _LogbookTypeFilterState extends State<LogbookTypeFilter> {
                     color: AppColor.black, fontWeight: FontWeight.normal)),
             onSelected: (bool selected) {
               multiSelect(item.id.toString());
-              widget.logbookFilterMap['type'] = selectedData
+              widget.logbookFilterMap['types'] = selectedData
                   .toString()
                   .replaceAll('[', '')
                   .replaceAll(']', '');

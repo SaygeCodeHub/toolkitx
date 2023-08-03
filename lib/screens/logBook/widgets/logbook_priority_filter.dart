@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/enums/logbook_priority_enum.dart';
+import '../../../utils/logbook_priotity_filter_util.dart';
 
 class LogbookPriorityFilter extends StatefulWidget {
   final Map logbookFilterMap;
@@ -16,13 +17,17 @@ class LogbookPriorityFilter extends StatefulWidget {
 }
 
 class _LogbookPriorityFilterState extends State<LogbookPriorityFilter> {
-  int selectedIndex = 0;
+  int? selectedIndex = 0;
 
   @override
   void initState() {
-    (widget.logbookFilterMap['priority'] == null)
+    selectedIndex = LogBookPriorityFilterUtil().priorityFilter(
+        (widget.logbookFilterMap['pri'] == null)
+            ? ''
+            : widget.logbookFilterMap['pri']);
+    (widget.logbookFilterMap['pri'] == null)
         ? ''
-        : widget.logbookFilterMap['priority'];
+        : widget.logbookFilterMap['pri'];
     super.initState();
   }
 
@@ -41,14 +46,14 @@ class _LogbookPriorityFilterState extends State<LogbookPriorityFilter> {
             .xxSmall
             .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
         backgroundColor: AppColor.lightestGrey,
-        selected: (widget.logbookFilterMap['log'] == null)
+        selected: (widget.logbookFilterMap['pri'] == null)
             ? false
             : selectedIndex == i,
         selectedColor: AppColor.green,
         onSelected: (bool value) {
           setState(() {
             selectedIndex = i;
-            widget.logbookFilterMap['priority'] =
+            widget.logbookFilterMap['pri'] =
                 LogbookPriorityEnum.values[i].value.toString();
           });
         },
