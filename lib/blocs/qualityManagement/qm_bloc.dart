@@ -10,6 +10,7 @@ import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 
 class QualityManagementBloc
     extends Bloc<QualityManagementEvent, QualityManagementStates> {
@@ -25,10 +26,11 @@ class QualityManagementBloc
   QualityManagementBloc() : super(QualityManagementInitial()) {
     on<FetchQualityManagementList>(_fetchList);
     on<FetchQualityManagementDetails>(_fetchDetails);
+    on<FetchQualityManagementRoles>(_fetchRoles);
+    on<SelectQualityManagementRole>(_selectRoles);
     on<QualityManagementApplyFilter>(_applyFilter);
     on<QualityManagementClearFilter>(_clearFilter);
   }
-
   _applyFilter(QualityManagementApplyFilter event,
       Emitter<QualityManagementStates> emit) {
     filters = event.filtersMap;
@@ -38,7 +40,6 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     filters = {};
   }
-
   FutureOr<void> _fetchList(FetchQualityManagementList event,
       Emitter<QualityManagementStates> emit) async {
     emit(FetchingQualityManagementList());
@@ -77,7 +78,7 @@ class QualityManagementBloc
       qmTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode!, userId!, '');
+              event.qmId, hashCode!, userId!, roleId);
       emit(QualityManagementDetailsFetched(
           fetchQualityManagementDetailsModel:
               fetchQualityManagementDetailsModel,
@@ -85,5 +86,31 @@ class QualityManagementBloc
     } catch (e) {
       emit(QualityManagementDetailsNotFetched(detailsNotFetched: e.toString()));
     }
+  }
+
+  FutureOr<void> _fetchRoles(FetchQualityManagementRoles event,
+      Emitter<QualityManagementStates> emit) async {
+    emit(FetchingQualityManagementRoles());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchQualityManagementRolesModel fetchQualityManagementRolesModel =
+          await _qualityManagementRepository.fetchQualityManagementRoles(
+              hashCode!, userId!);
+      if (roleId == '') {
+        roleId = fetchQualityManagementRolesModel.data[0].groupId;
+      }
+      emit(QualityManagementRolesFetched(
+          fetchQualityManagementRolesModel: fetchQualityManagementRolesModel,
+          roleId: roleId));
+    } catch (e) {
+      emit(QualityManagementRolesNotFetched(rolesNotFetched: e.toString()));
+    }
+  }
+
+  _selectRoles(SelectQualityManagementRole event,
+      Emitter<QualityManagementStates> emit) {
+    roleId = event.roleId;
+    emit(QualityManagementRoleChanged(roleId: roleId));
   }
 }

@@ -47,6 +47,7 @@ import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
 import '../screens/qualityManagement/qm_details_screen.dart';
 import '../screens/qualityManagement/qm_list_screen.dart';
+import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -194,6 +195,8 @@ class AppRoutes {
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
+      case QualityManagementRolesScreen.routeName:
+        return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       default:
