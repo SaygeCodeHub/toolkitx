@@ -62,25 +62,25 @@ class ApplyLogBookFilter extends LogbookEvents {
 class ClearLogBookFilter extends LogbookEvents {}
 
 class SelectLogBookActivityFilter extends LogbookEvents {
-  final int? selectedIndex;
+  final String selectedIndex;
 
-  SelectLogBookActivityFilter({this.selectedIndex});
+  SelectLogBookActivityFilter({required this.selectedIndex});
 }
 
 class SelectLogBookFilter extends LogbookEvents {
-  final int? selectedIndex;
+  final String selectedIndex;
 
-  SelectLogBookFilter({this.selectedIndex});
+  SelectLogBookFilter({required this.selectedIndex});
 }
 
 class SelectLogBookPriorityFilter extends LogbookEvents {
-  final int? selectedIndex;
+  final String selectedIndex;
 
-  SelectLogBookPriorityFilter({this.selectedIndex});
+  SelectLogBookPriorityFilter({required this.selectedIndex});
 }
 
 class SelectLogBookStatusFilter extends LogbookEvents {
-  final int? selectedIndex;
+  final String selectedIndex;
 
-  SelectLogBookStatusFilter({this.selectedIndex});
+  SelectLogBookStatusFilter({required this.selectedIndex});
 }

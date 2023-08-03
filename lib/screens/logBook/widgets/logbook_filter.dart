@@ -5,7 +5,6 @@ import 'package:toolkit/blocs/LogBook/logbook_states.dart';
 import '../../../blocs/LogBook/logbook_events.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
-import '../../../utils/logbook_filter_util.dart';
 import '../../../widgets/custom_choice_chip.dart';
 
 class LogbookFilter extends StatelessWidget {
@@ -18,33 +17,30 @@ class LogbookFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LogbookBloc>().add(SelectLogBookFilter(
-        selectedIndex: LogBookFilterUtil().filter(
-            (logbookFilterMap['lgbooks'] == null)
-                ? ''
-                : logbookFilterMap['lgbooks'])));
+    context.read<LogbookBloc>().add(
+        SelectLogBookFilter(selectedIndex: logbookFilterMap['lgbooks'] ?? ''));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
     for (int i = 0; i < data[0].length; i++) {
+      String id = data[0][i].id.toString();
       Widget item = BlocBuilder<LogbookBloc, LogbookStates>(
           buildWhen: (previousState, currentState) =>
               currentState is LogBookFilterSelected,
           builder: (context, state) {
             if (state is LogBookFilterSelected) {
+              logbookFilterMap['lgbooks'] = state.selectIndex;
               return CustomChoiceChip(
                 label: data[0][i].name,
                 selected: (logbookFilterMap['lgbooks'] == null)
                     ? false
-                    : state.selectIndex == i,
+                    : state.selectIndex == id,
                 onSelected: (bool value) {
-                  state.selectIndex;
-                  logbookFilterMap['lgbooks'] = data[0][i].id.toString();
                   context
                       .read<LogbookBloc>()
-                      .add(SelectLogBookFilter(selectedIndex: i));
+                      .add(SelectLogBookFilter(selectedIndex: id));
                 },
               );
             } else {

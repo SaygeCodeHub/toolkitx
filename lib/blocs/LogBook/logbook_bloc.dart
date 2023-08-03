@@ -205,24 +205,20 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
 
   _selectLogbookActivityFilter(
       SelectLogBookActivityFilter event, Emitter<LogbookStates> emit) {
-    emit(LogBookActivityFilterSelected(
-        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+    emit(LogBookActivityFilterSelected(selectIndex: event.selectedIndex));
   }
 
   _selectLogbookFilter(SelectLogBookFilter event, Emitter<LogbookStates> emit) {
-    emit(LogBookFilterSelected(
-        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+    emit(LogBookFilterSelected(selectIndex: event.selectedIndex));
   }
 
   _selectLogbookPriorityFilter(
       SelectLogBookPriorityFilter event, Emitter<LogbookStates> emit) {
-    emit(LogBookFilterPrioritySelected(
-        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+    emit(LogBookFilterPrioritySelected(selectIndex: event.selectedIndex));
   }
 
   _selectLogbookStatusFilter(
       SelectLogBookStatusFilter event, Emitter<LogbookStates> emit) {
-    emit(LogBookFilterStatusSelected(
-        selectIndex: (event.selectedIndex == null) ? 0 : event.selectedIndex!));
+    emit(LogBookFilterStatusSelected(selectIndex: event.selectedIndex));
   }
 }

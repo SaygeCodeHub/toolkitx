@@ -106,25 +106,25 @@ class NewLogBookNotReported extends LogbookStates {
 }
 
 class LogBookActivityFilterSelected extends LogbookStates {
-  final int selectIndex;
+  final String selectIndex;
 
   LogBookActivityFilterSelected({required this.selectIndex});
 }
 
 class LogBookFilterSelected extends LogbookStates {
-  final int selectIndex;
+  final String selectIndex;
 
   LogBookFilterSelected({required this.selectIndex});
 }
 
 class LogBookFilterPrioritySelected extends LogbookStates {
-  final int selectIndex;
+  final String selectIndex;
 
   LogBookFilterPrioritySelected({required this.selectIndex});
 }
 
 class LogBookFilterStatusSelected extends LogbookStates {
-  final int selectIndex;
+  final String selectIndex;
 
   LogBookFilterStatusSelected({required this.selectIndex});
 }

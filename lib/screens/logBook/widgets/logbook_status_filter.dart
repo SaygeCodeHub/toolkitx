@@ -17,30 +17,29 @@ class LogbookStatusFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<LogbookBloc>().add(SelectLogBookStatusFilter(
-        selectedIndex: logbookFilterMap['status'] == "1" ? 0 : 1));
+        selectedIndex: logbookFilterMap['status'] ?? ''));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
     for (int i = 0; i < LogbookStatusEnum.values.length; i++) {
+      String id = LogbookStatusEnum.values[i].value.toString();
       Widget item = BlocBuilder<LogbookBloc, LogbookStates>(
           buildWhen: (previousState, currentState) =>
               currentState is LogBookFilterStatusSelected,
           builder: (context, state) {
             if (state is LogBookFilterStatusSelected) {
+              logbookFilterMap['status'] = state.selectIndex;
               return CustomChoiceChip(
                 label: LogbookStatusEnum.values[i].status,
                 selected: (logbookFilterMap['status'] == null)
                     ? false
-                    : state.selectIndex == i,
+                    : state.selectIndex == id,
                 onSelected: (bool value) {
-                  state.selectIndex;
-                  logbookFilterMap['status'] =
-                      LogbookStatusEnum.values[i].value.toString();
                   context
                       .read<LogbookBloc>()
-                      .add(SelectLogBookStatusFilter(selectedIndex: i));
+                      .add(SelectLogBookStatusFilter(selectedIndex: id));
                 },
               );
             } else {
