@@ -40,6 +40,7 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     filters = {};
   }
+
   FutureOr<void> _fetchList(FetchQualityManagementList event,
       Emitter<QualityManagementStates> emit) async {
     emit(FetchingQualityManagementList());
