@@ -4,8 +4,6 @@ import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 
 abstract class QualityManagementStates {}
@@ -25,9 +23,6 @@ class FetchingQualityManagementDetails extends QualityManagementStates {}
 class QualityManagementDetailsFetched extends QualityManagementStates {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
   final String clientId;
-
-  QualityManagementDetailsFetched(
-      {required this.clientId,
   final List qmPopUpMenu;
   final bool showPopUpMenu;
 
@@ -64,6 +59,8 @@ class QualityManagementRoleChanged extends QualityManagementStates {
   final String roleId;
 
   QualityManagementRoleChanged({required this.roleId});
+}
+
 class QualityManagementSavingComments extends QualityManagementStates {}
 
 class QualityManagementCommentsSaved extends QualityManagementStates {

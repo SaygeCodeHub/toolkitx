@@ -24,6 +24,7 @@ class SelectQualityManagementRole extends QualityManagementEvent {
 
   SelectQualityManagementRole({required this.roleId});
 }
+
 class SelectQualityManagementClassification extends QualityManagementEvent {
   final String classificationId;
   final FetchQualityManagementClassificationModel

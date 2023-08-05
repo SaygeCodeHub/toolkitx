@@ -138,6 +138,8 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     roleId = event.roleId;
     emit(QualityManagementRoleChanged(roleId: roleId));
+  }
+
   FutureOr<void> _saveComments(SaveQualityManagementComments event,
       Emitter<QualityManagementStates> emit) async {
     emit(QualityManagementSavingComments());

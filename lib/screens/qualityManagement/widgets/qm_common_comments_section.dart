@@ -47,7 +47,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
               : const SizedBox(height: xxTinierSpacing),
           Visibility(
               visible:
-              fetchQualityManagementDetailsModel!.data.nextStatus == '1',
+                  fetchQualityManagementDetailsModel!.data.nextStatus == '1',
               child: QualityManagementClassificationExpansionTile(
                   qmCommentsMap: qmCommentsMap)),
           const SizedBox(height: xxTinierSpacing),
@@ -65,7 +65,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
           const SizedBox(height: xxTinierSpacing),
           BlocBuilder<PickAndUploadImageBloc, PickAndUploadImageStates>(
               buildWhen: (previousState, currentState) =>
-              currentState is ImagePickerLoaded,
+                  currentState is ImagePickerLoaded,
               builder: (context, state) {
                 if (state is ImagePickerLoaded) {
                   return Row(
