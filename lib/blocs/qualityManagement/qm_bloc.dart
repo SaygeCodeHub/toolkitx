@@ -28,7 +28,7 @@ class QualityManagementBloc
   int qmTabIndex = 0;
   String commentId = '';
   String nextStatus = '';
-  String qmId = '';
+  String encryptQmId = '';
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -66,6 +66,7 @@ class QualityManagementBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
+      String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       List popUpMenuItems = [
         DatabaseUtil.getText('AddComments'),
       ];
@@ -74,7 +75,8 @@ class QualityManagementBloc
           await _qualityManagementRepository.fetchQualityManagementDetails(
               event.qmId, hashCode!, userId!, '');
       nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
-      qmId = fetchQualityManagementDetailsModel.data.id;
+      encryptQmId = EncryptData.encryptAESPrivateKey(
+          fetchQualityManagementDetailsModel.data.id, privateKey);
       if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
         popUpMenuItems.add(DatabaseUtil.getText('Edit'));
       }
@@ -114,10 +116,7 @@ class QualityManagementBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
-      String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       Map saveCommentMap = event.saveCommentsMap;
-      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
-      saveCommentMap['incidentid'] = id;
       saveCommentMap['status'] = nextStatus;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
@@ -126,7 +125,7 @@ class QualityManagementBloc
       } else {
         Map saveCommentsMap = {
           "userid": userid,
-          "incidentid": saveCommentMap['incidentid'],
+          "incidentid": encryptQmId,
           "hashcode": hashCode,
           "status": (saveCommentMap['status'] == null ||
                   saveCommentMap['status'].isEmpty)
@@ -143,7 +142,7 @@ class QualityManagementBloc
               saveIncidentAndQMCommentsModel: saveIncidentAndQMCommentsModel,
               saveIncidentAndQMCommentsFilesModel:
                   saveIncidentAndQMCommentsFilesModel,
-              qmId: saveCommentMap['incidentid']));
+              qmId: encryptQmId));
           if (saveCommentMap['filenames'] != null) {
             add(SaveQualityManagementCommentsFiles(
                 saveCommentsMap: saveCommentMap,
@@ -166,13 +165,10 @@ class QualityManagementBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
-      String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       Map saveFilesMap = event.saveCommentsMap;
-      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
-      saveFilesMap['incidentId'] = id;
       Map saveCommentsFilesMap = {
         "userid": userid,
-        "incidentid": saveFilesMap['incidentId'],
+        "incidentid": encryptQmId,
         "commentid": commentId,
         "filenames": saveFilesMap['filenames'],
         "hashcode": hashCode
@@ -186,7 +182,7 @@ class QualityManagementBloc
                 event.saveIncidentAndQMCommentsModel,
             saveIncidentAndQMCommentsFilesModel:
                 saveIncidentAndQMCommentsFilesModel,
-            qmId: saveFilesMap['incidentId']));
+            qmId: encryptQmId));
       } else {
         emit(QualityManagementCommentsNotSaved(
             commentsNotSaved:
@@ -203,10 +199,9 @@ class QualityManagementBloc
       emit(GeneratingQualityManagementPDF());
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? aipKey = await _customerCache.getApiKey(CacheKeys.apiKey);
-      String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
-      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
       final PdfGenerationModel pdfGenerationModel =
-          await _qualityManagementRepository.generatePdf(id, hashCode!);
+          await _qualityManagementRepository.generatePdf(
+              encryptQmId, hashCode!);
       String pdfLink =
           EncryptData.encryptAESPrivateKey(pdfGenerationModel.message, aipKey);
       if (pdfGenerationModel.status == 200) {
