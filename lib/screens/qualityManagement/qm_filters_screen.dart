@@ -72,7 +72,7 @@ class QualityManagementFilterScreen extends StatelessWidget {
                                     child: DatePickerTextField(
                                         editDate: qmFilterMap["et"] ?? '',
                                         hintText:
-                                        DatabaseUtil.getText('SelectDate'),
+                                            DatabaseUtil.getText('SelectDate'),
                                         onDateChanged: (String date) {
                                           qmFilterMap["et"] = date;
                                         }))
