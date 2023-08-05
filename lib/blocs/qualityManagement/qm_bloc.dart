@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
@@ -60,7 +59,6 @@ class QualityManagementBloc
             fetchQualityManagementListModel: fetchQualityManagementListModel,
             filtersMap: {}));
       } else {
-        log("json encode filteer======>${jsonEncode(filters)}");
         FetchQualityManagementListModel fetchQualityManagementListModel =
             await _qualityManagementRepository.fetchQualityManagementList(
                 event.pageNo, userId!, hashCode!, jsonEncode(filters), '');
