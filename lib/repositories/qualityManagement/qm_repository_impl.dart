@@ -1,9 +1,10 @@
+import 'package:toolkit/data/models/qualityManagement/fetch_qm_details_model.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_qm_list_model.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_qm_roles_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
 import 'package:toolkit/data/models/pdf_generation_model.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_classification_model.dart';
-import 'package:toolkit/data/models/qualityManagement/fetch_qm_details_model.dart';
-import 'package:toolkit/data/models/qualityManagement/fetch_qm_list_model.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -56,5 +57,29 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}qaincident/getclassifications?hashcode=$hashCode");
     return FetchQualityManagementClassificationModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
+      String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/getroles?hashcode=$hashCode&userid=$userId");
+    return FetchQualityManagementRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQualityManagementListModel> fetchQualityManagementList(int pageNo,
+      String userId, String hashCode, String filter, String role) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/get?pageno=$pageNo&userid=$userId&hashcode=$hashCode&filter=$filter&role=$role");
+    return FetchQualityManagementListModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQualityManagementDetailsModel> fetchQualityManagementDetails(
+      String qmId, String hashCode, String userId, String role) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/getincident?incidentid=$qmId&hashcode=$hashCode&userid=$userId&role=$role");
+    return FetchQualityManagementDetailsModel.fromJson(response);
   }
 }

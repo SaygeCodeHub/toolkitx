@@ -17,6 +17,13 @@ class FetchQualityManagementDetails extends QualityManagementEvent {
       {required this.initialIndex, required this.qmId});
 }
 
+class FetchQualityManagementRoles extends QualityManagementEvent {}
+
+class SelectQualityManagementRole extends QualityManagementEvent {
+  final String roleId;
+
+  SelectQualityManagementRole({required this.roleId});
+}
 class SelectQualityManagementClassification extends QualityManagementEvent {
   final String classificationId;
   final FetchQualityManagementClassificationModel
