@@ -77,7 +77,7 @@ class QualityManagementBloc
       qmTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode!, userId!, '');
+              event.qmId, hashCode!, userId!, roleId);
       nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
       encryptQmId = EncryptData.encryptAESPrivateKey(
           fetchQualityManagementDetailsModel.data.id, privateKey);
