@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
@@ -30,7 +31,9 @@ class QualityManagementBloc
     on<SelectQualityManagementRole>(_selectRoles);
     on<QualityManagementApplyFilter>(_applyFilter);
     on<QualityManagementClearFilter>(_clearFilter);
+    on<SelectQualityManagementStatusFilter>(_selectFilterStatus);
   }
+
   _applyFilter(QualityManagementApplyFilter event,
       Emitter<QualityManagementStates> emit) {
     filters = event.filtersMap;
@@ -57,6 +60,7 @@ class QualityManagementBloc
             fetchQualityManagementListModel: fetchQualityManagementListModel,
             filtersMap: {}));
       } else {
+        log("json encode filteer======>${jsonEncode(filters)}");
         FetchQualityManagementListModel fetchQualityManagementListModel =
             await _qualityManagementRepository.fetchQualityManagementList(
                 event.pageNo, userId!, hashCode!, jsonEncode(filters), '');
@@ -113,5 +117,19 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     roleId = event.roleId;
     emit(QualityManagementRoleChanged(roleId: roleId));
+  }
+
+  _selectFilterStatus(SelectQualityManagementStatusFilter event,
+      Emitter<QualityManagementStates> emit) {
+    List selectedStatusList = List.from(event.statusList);
+    if (event.statusId != '') {
+      if (event.statusList.contains(event.statusId) != true) {
+        selectedStatusList.add(event.statusId);
+      } else {
+        selectedStatusList.remove(event.statusId);
+      }
+    }
+    emit(QualityManagementFilterStatusSelected(
+        selectedStatusList: selectedStatusList));
   }
 }

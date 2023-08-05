@@ -55,3 +55,9 @@ class QualityManagementRoleChanged extends QualityManagementStates {
 
   QualityManagementRoleChanged({required this.roleId});
 }
+
+class QualityManagementFilterStatusSelected extends QualityManagementStates {
+  final List selectedStatusList;
+
+  QualityManagementFilterStatusSelected({required this.selectedStatusList});
+}

@@ -31,3 +31,11 @@ class QualityManagementApplyFilter extends QualityManagementEvent {
 }
 
 class QualityManagementClearFilter extends QualityManagementEvent {}
+
+class SelectQualityManagementStatusFilter extends QualityManagementEvent {
+  final List statusList;
+  final String statusId;
+
+  SelectQualityManagementStatusFilter(
+      {required this.statusList, required this.statusId});
+}

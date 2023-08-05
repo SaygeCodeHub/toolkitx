@@ -23,6 +23,15 @@ class QualityManagementFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<QualityManagementBloc>().add(
+        SelectQualityManagementStatusFilter(
+            statusList: (qmFilterMap['status'] == null)
+                ? []
+                : qmFilterMap['status']
+                    .toString()
+                    .replaceAll(' ', '')
+                    .split(','),
+            statusId: ''));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('Filters')),
         body: BlocBuilder<QualityManagementBloc, QualityManagementStates>(
@@ -63,7 +72,7 @@ class QualityManagementFilterScreen extends StatelessWidget {
                                     child: DatePickerTextField(
                                         editDate: qmFilterMap["et"] ?? '',
                                         hintText:
-                                            DatabaseUtil.getText('SelectDate'),
+                                        DatabaseUtil.getText('SelectDate'),
                                         onDateChanged: (String date) {
                                           qmFilterMap["et"] = date;
                                         }))
@@ -75,8 +84,22 @@ class QualityManagementFilterScreen extends StatelessWidget {
                                   .xSmall
                                   .copyWith(fontWeight: FontWeight.w600)),
                           const SizedBox(height: xxTinySpacing),
-                          QualityManagementStatusFilter(
-                              qmFilterMap: qmFilterMap),
+                          BlocBuilder<QualityManagementBloc,
+                                  QualityManagementStates>(
+                              builder: (context, state) {
+                            if (state
+                                is QualityManagementFilterStatusSelected) {
+                              qmFilterMap['status'] = state.selectedStatusList
+                                  .toString()
+                                  .replaceAll('[', '')
+                                  .replaceAll(']', '')
+                                  .replaceAll(' ', '');
+                              return QualityManagementStatusFilter(
+                                  selectedStatusList: state.selectedStatusList);
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          }),
                           const SizedBox(height: xxxSmallerSpacing),
                           PrimaryButton(
                               onPressed: () {
