@@ -48,9 +48,10 @@ class QualityManagementComment extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: AppColor.mediumBlack)),
                       Text(data.commentslist[index].created,
-                          style: Theme.of(context).textTheme.xSmall.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.mediumBlack))
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w500))
                     ],
                   ),
                   subtitle: Column(

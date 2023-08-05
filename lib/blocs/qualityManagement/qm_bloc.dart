@@ -72,7 +72,7 @@ class QualityManagementBloc
       qmTabIndex = event.initialIndex;
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
-              event.qmId, hashCode!, userId!, 'F+Fjrkdr/Hg0T7m+UVeVoQ==');
+              event.qmId, hashCode!, userId!, '');
       nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
       qmId = fetchQualityManagementDetailsModel.data.id;
       if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
@@ -168,8 +168,7 @@ class QualityManagementBloc
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       Map saveFilesMap = event.saveCommentsMap;
-      String id = EncryptData.encryptAESPrivateKey(
-          saveFilesMap['incidentId'], privateKey);
+      String id = EncryptData.encryptAESPrivateKey(qmId, privateKey);
       saveFilesMap['incidentId'] = id;
       Map saveCommentsFilesMap = {
         "userid": userid,
