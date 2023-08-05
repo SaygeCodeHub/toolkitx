@@ -48,6 +48,7 @@ import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
 import '../screens/qualityManagement/qm_details_screen.dart';
 import '../screens/qualityManagement/qm_list_screen.dart';
+import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -196,6 +197,8 @@ class AppRoutes {
             qmListMap: settings.arguments as Map));
       case LogBookFilterScreen.routeName:
         return _createRoute(LogBookFilterScreen());
+      case QualityManagementRolesScreen.routeName:
+        return _createRoute(const QualityManagementRolesScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
