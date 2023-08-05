@@ -84,3 +84,11 @@ class SelectLogBookStatusFilter extends LogbookEvents {
 
   SelectLogBookStatusFilter({required this.selectedIndex});
 }
+
+class SelectLogBookTypeFilter extends LogbookEvents {
+  final List selectTypeList;
+  final String typesName;
+
+  SelectLogBookTypeFilter(
+      {required this.selectTypeList, required this.typesName});
+}

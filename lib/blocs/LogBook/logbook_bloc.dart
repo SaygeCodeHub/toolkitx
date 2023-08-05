@@ -35,6 +35,7 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     on<SelectLogBookFilter>(_selectLogbookFilter);
     on<SelectLogBookPriorityFilter>(_selectLogbookPriorityFilter);
     on<SelectLogBookStatusFilter>(_selectLogbookStatusFilter);
+    on<SelectLogBookTypeFilter>(_selectLogbookTypesFilter);
   }
 
   _applyLogbookFilter(ApplyLogBookFilter event, Emitter<LogbookStates> emit) {
@@ -220,5 +221,18 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
   _selectLogbookStatusFilter(
       SelectLogBookStatusFilter event, Emitter<LogbookStates> emit) {
     emit(LogBookFilterStatusSelected(selectIndex: event.selectedIndex));
+  }
+
+  _selectLogbookTypesFilter(
+      SelectLogBookTypeFilter event, Emitter<LogbookStates> emit) {
+    List selectedTypeList = List.from(event.selectTypeList);
+    if (event.typesName != '') {
+      if (event.selectTypeList.contains(event.typesName) != true) {
+        selectedTypeList.add(event.typesName);
+      } else {
+        selectedTypeList.remove(event.typesName);
+      }
+    }
+    emit(LogBookFilterTypesSelected(selectedTypesList: selectedTypeList));
   }
 }

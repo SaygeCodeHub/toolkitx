@@ -9,6 +9,7 @@ import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
+import '../../widgets/generic_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../incident/widgets/date_picker.dart';
 import 'logbook_list_screen.dart';
@@ -95,6 +96,21 @@ class LogBookFilterScreen extends StatelessWidget {
                                               logbookFilterMap['et'] = date;
                                             }))
                                   ]),
+                              const SizedBox(height: xxTinySpacing),
+                              Text('Keyword',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(fontWeight: FontWeight.w600)),
+                              const SizedBox(height: xxxTinierSpacing),
+                              TextFieldWidget(
+                                  value: (logbookFilterMap['kword'] == null)
+                                      ? ''
+                                      : logbookFilterMap['kword'],
+                                  hintText: 'Keyword',
+                                  onTextFieldChanged: (String textField) {
+                                    logbookFilterMap['kword'] = textField;
+                                  }),
                               const SizedBox(height: xxTinySpacing),
                               Text(DatabaseUtil.getText('type'),
                                   style: Theme.of(context)

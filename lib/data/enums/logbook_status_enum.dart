@@ -1,6 +1,6 @@
 enum LogbookStatusEnum {
-  approved(status: 'Open', value: '5'),
-  open(status: 'Close', value: '2');
+  approved(status: 'Open', value: '1'),
+  open(status: 'Close', value: '0');
 
   const LogbookStatusEnum({required this.status, required this.value});
 

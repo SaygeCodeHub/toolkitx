@@ -128,3 +128,9 @@ class LogBookFilterStatusSelected extends LogbookStates {
 
   LogBookFilterStatusSelected({required this.selectIndex});
 }
+
+class LogBookFilterTypesSelected extends LogbookStates {
+  final List selectedTypesList;
+
+  LogBookFilterTypesSelected({required this.selectedTypesList});
+}
