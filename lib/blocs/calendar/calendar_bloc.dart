@@ -23,6 +23,8 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
     on<FetchCalendarEvents>(_fetchCalendarEvents);
   }
 
+  final DateFormat formatter = DateFormat('dd.MM.yyyy');
+
   FutureOr<void> _fetchCalendarEvents(
       FetchCalendarEvents event, Emitter<CalendarStates> emit) async {
     try {
@@ -40,15 +42,20 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
               '01/6/2023',
               'month');
       log("model data====>$fetchCalendarEventsModel");
-      List calendarEvents = [];
-      for (int i = 0; i < fetchCalendarEventsModel.data!.length; i++) {
-        if (fetchCalendarEventsModel.data![i].fulldate == '01.06.2023') {
-          calendarEvents.addAll(fetchCalendarEventsModel.data![i].events);
-          log("string=====>$calendarEvents");
-        }
-      }
       emit(CalendarEventsFetched(
           fetchCalendarEventsModel: fetchCalendarEventsModel));
     } catch (e) {}
+  }
+
+  List<Object> getEventsForDay(
+      DateTime day, FetchCalendarEventsModel fetchCalendarEventsModel) {
+    List<CalendarEvent> calendarEvents = [];
+    for (int i = 0; i < fetchCalendarEventsModel.data!.length; i++) {
+      if (fetchCalendarEventsModel.data![i].fulldate == formatter.format(day)) {
+        calendarEvents.addAll(fetchCalendarEventsModel.data![i].events);
+        log("string=====>$calendarEvents");
+      }
+    }
+    return calendarEvents;
   }
 }

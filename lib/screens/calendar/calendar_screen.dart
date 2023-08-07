@@ -69,7 +69,10 @@ class CalendarScreen extends StatelessWidget {
                                       date);
                                 },
                                 eventLoader: (day) {
-                                  return [];
+                                  return context
+                                      .read<CalendarBloc>()
+                                      .getEventsForDay(
+                                          day, state.fetchCalendarEventsModel);
                                 },
                                 calendarStyle: const CalendarStyle(
                                   isTodayHighlighted: false,
