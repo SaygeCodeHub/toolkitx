@@ -1,4 +1,4 @@
-enum IncidentAndQualityManagementStatusEnum {
+enum IncidentStatusEnum {
   created(status: 'Created', value: '-1'),
   reported(status: 'Reported', value: '0'),
   acknowledged(status: 'Acknowledged', value: '1'),
@@ -7,8 +7,7 @@ enum IncidentAndQualityManagementStatusEnum {
   mitigationImplemented(status: 'MitigationImplemented', value: '4'),
   resolved(status: 'Resolved', value: '5');
 
-  const IncidentAndQualityManagementStatusEnum(
-      {required this.status, required this.value});
+  const IncidentStatusEnum({required this.status, required this.value});
 
   final String status;
   final String value;

@@ -4,7 +4,7 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
-import '../../../data/enums/incident_and_qm_filter_status_enum.dart';
+import '../../../data/enums/incident_filter_status_enum.dart';
 
 class IncidentStatusFilter extends StatefulWidget {
   final Map incidentFilterMap;
@@ -42,7 +42,7 @@ class _IncidentStatusFilterState extends State<IncidentStatusFilter> {
   @override
   Widget build(BuildContext context) {
     return Wrap(spacing: kFilterTags, children: [
-      for (var item in IncidentAndQualityManagementStatusEnum.values)
+      for (var item in IncidentStatusEnum.values)
         FilterChip(
             backgroundColor: (selectedData.contains(item.value.toString()))
                 ? AppColor.green

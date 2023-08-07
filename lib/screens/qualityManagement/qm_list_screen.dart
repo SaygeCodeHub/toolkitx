@@ -11,7 +11,6 @@ import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
-import '../../widgets/text_button.dart';
 import 'qm_details_screen.dart';
 import 'qm_roles_screen.dart';
 import 'qm_filters_screen.dart';
@@ -60,50 +59,43 @@ class _QualityManagementListScreenState
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                BlocBuilder<QualityManagementBloc, QualityManagementStates>(
-                    buildWhen: (previousState, currentState) {
-                  if (currentState is FetchingQualityManagementList &&
-                      widget.isFromHome == true) {
-                    return true;
-                  } else if (currentState is QualityManagementListFetched) {
-                    return true;
-                  }
-                  return false;
-                }, builder: (context, state) {
-                  if (state is QualityManagementListFetched) {
-                    return Visibility(
-                        visible: state.filtersMap.isNotEmpty,
-                        child: CustomTextButton(
-                            onPressed: () {
-                              page = 1;
-                              qmListData.clear();
-                              noMoreData = false;
-                              context
-                                  .read<QualityManagementBloc>()
-                                  .add(QualityManagementClearFilter());
-                              context.read<QualityManagementBloc>().add(
-                                  FetchQualityManagementList(
-                                      isFromHome: widget.isFromHome,
-                                      pageNo: 1));
-                            },
-                            textValue: DatabaseUtil.getText('Clear')));
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
-                CustomIconButtonRow(
-                    secondaryOnPress: () {
-                      Navigator.pushNamed(
-                          context, QualityManagementRolesScreen.routeName);
-                    },
-                    primaryOnPress: () {
-                      Navigator.pushNamed(
-                          context, QualityManagementFilterScreen.routeName);
-                    },
-                    isEnabled: true,
-                    clearOnPress: () {})
-              ]),
+              BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+                  buildWhen: (previousState, currentState) {
+                if (currentState is FetchingQualityManagementList &&
+                    widget.isFromHome == true) {
+                  return true;
+                } else if (currentState is QualityManagementListFetched) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
+                if (state is QualityManagementListFetched) {
+                  return CustomIconButtonRow(
+                      secondaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, QualityManagementRolesScreen.routeName);
+                      },
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, QualityManagementFilterScreen.routeName);
+                      },
+                      isEnabled: true,
+                      clearVisible: state.filtersMap.isNotEmpty,
+                      clearOnPress: () {
+                        page = 1;
+                        qmListData.clear();
+                        noMoreData = false;
+                        context
+                            .read<QualityManagementBloc>()
+                            .add(QualityManagementClearFilter());
+                        context.read<QualityManagementBloc>().add(
+                            FetchQualityManagementList(
+                                isFromHome: widget.isFromHome, pageNo: 1));
+                      });
+                } else {
+                  return const SizedBox();
+                }
+              }),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<QualityManagementBloc, QualityManagementStates>(
                   buildWhen: (previousState, currentState) =>
