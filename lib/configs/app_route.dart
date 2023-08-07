@@ -195,8 +195,6 @@ class AppRoutes {
         return _createRoute(const QualityManagementListScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
-        return _createRoute(QualityManagementListScreen(
-            isFromHome: settings.arguments as bool));
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
@@ -204,8 +202,6 @@ class AppRoutes {
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:
                 settings.arguments as FetchQualityManagementDetailsModel));
-      case QualityManagementRolesScreen.routeName:
-        return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       default:
