@@ -3,6 +3,7 @@ import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
+import '../screens/calendar/calendar_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -195,6 +196,8 @@ class AppRoutes {
             qmListMap: settings.arguments as Map));
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
+      case CalendarScreen.routeName:
+        return _createRoute(const CalendarScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
