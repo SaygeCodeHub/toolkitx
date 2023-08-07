@@ -170,7 +170,8 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         break;
       case 'qareport':
-        Navigator.pushNamed(context, QualityManagementListScreen.routeName);
+        Navigator.pushNamed(context, QualityManagementListScreen.routeName,
+            arguments: true);
         break;
     }
   }
