@@ -78,7 +78,7 @@ class QualityManagementBloc
       } else {
         FetchQualityManagementListModel fetchQualityManagementListModel =
             await _qualityManagementRepository.fetchQualityManagementList(
-                event.pageNo, userId!, hashCode!, jsonEncode(filters), '');
+                event.pageNo, userId!, hashCode!, jsonEncode(filters), roleId);
         emit(QualityManagementListFetched(
             fetchQualityManagementListModel: fetchQualityManagementListModel,
             filtersMap: filters));

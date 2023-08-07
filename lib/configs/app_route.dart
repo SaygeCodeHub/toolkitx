@@ -192,7 +192,8 @@ class AppRoutes {
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
       case QualityManagementListScreen.routeName:
-        return _createRoute(const QualityManagementListScreen());
+        return _createRoute(QualityManagementListScreen(
+            isFromHome: settings.arguments as bool));
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementDetailsScreen.routeName:
