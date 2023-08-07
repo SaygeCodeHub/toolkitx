@@ -14,8 +14,11 @@ class FetchingQualityManagementList extends QualityManagementStates {}
 
 class QualityManagementListFetched extends QualityManagementStates {
   final FetchQualityManagementListModel fetchQualityManagementListModel;
+  final Map filtersMap;
 
-  QualityManagementListFetched({required this.fetchQualityManagementListModel});
+  QualityManagementListFetched(
+      {required this.filtersMap,
+      required this.fetchQualityManagementListModel});
 }
 
 class FetchingQualityManagementDetails extends QualityManagementStates {}
@@ -59,6 +62,12 @@ class QualityManagementRoleChanged extends QualityManagementStates {
   final String roleId;
 
   QualityManagementRoleChanged({required this.roleId});
+}
+
+class QualityManagementFilterStatusSelected extends QualityManagementStates {
+  final List selectedStatusList;
+
+  QualityManagementFilterStatusSelected({required this.selectedStatusList});
 }
 
 class QualityManagementSavingComments extends QualityManagementStates {}

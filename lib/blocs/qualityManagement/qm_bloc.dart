@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
@@ -44,6 +45,19 @@ class QualityManagementBloc
     on<FetchQualityManagementClassificationValue>(_fetchClassification);
     on<FetchQualityManagementRoles>(_fetchRoles);
     on<SelectQualityManagementRole>(_selectRoles);
+    on<QualityManagementApplyFilter>(_applyFilter);
+    on<QualityManagementClearFilter>(_clearFilter);
+    on<SelectQualityManagementStatusFilter>(_selectFilterStatus);
+  }
+
+  _applyFilter(QualityManagementApplyFilter event,
+      Emitter<QualityManagementStates> emit) {
+    filters = event.filtersMap;
+  }
+
+  _clearFilter(QualityManagementClearFilter event,
+      Emitter<QualityManagementStates> emit) {
+    filters = {};
   }
 
   FutureOr<void> _fetchList(FetchQualityManagementList event,
@@ -52,12 +66,23 @@ class QualityManagementBloc
     try {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchQualityManagementListModel fetchQualityManagementListModel =
-          await _qualityManagementRepository.fetchQualityManagementList(
-              event.pageNo, userId!, hashCode!, '', roleId);
-      emit(QualityManagementListFetched(
-        fetchQualityManagementListModel: fetchQualityManagementListModel,
-      ));
+      if (event.isFromHome == true) {
+        add(QualityManagementClearFilter());
+        roleId = '';
+        FetchQualityManagementListModel fetchQualityManagementListModel =
+            await _qualityManagementRepository.fetchQualityManagementList(
+                event.pageNo, userId!, hashCode!, '', '');
+        emit(QualityManagementListFetched(
+            fetchQualityManagementListModel: fetchQualityManagementListModel,
+            filtersMap: {}));
+      } else {
+        FetchQualityManagementListModel fetchQualityManagementListModel =
+            await _qualityManagementRepository.fetchQualityManagementList(
+                event.pageNo, userId!, hashCode!, jsonEncode(filters), '');
+        emit(QualityManagementListFetched(
+            fetchQualityManagementListModel: fetchQualityManagementListModel,
+            filtersMap: filters));
+      }
     } catch (e) {
       e.toString();
     }
@@ -138,6 +163,20 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     roleId = event.roleId;
     emit(QualityManagementRoleChanged(roleId: roleId));
+  }
+
+  _selectFilterStatus(SelectQualityManagementStatusFilter event,
+      Emitter<QualityManagementStates> emit) {
+    List selectedStatusList = List.from(event.statusList);
+    if (event.statusId != '') {
+      if (event.statusList.contains(event.statusId) != true) {
+        selectedStatusList.add(event.statusId);
+      } else {
+        selectedStatusList.remove(event.statusId);
+      }
+    }
+    emit(QualityManagementFilterStatusSelected(
+        selectedStatusList: selectedStatusList));
   }
 
   FutureOr<void> _saveComments(SaveQualityManagementComments event,

@@ -6,7 +6,9 @@ abstract class QualityManagementEvent {}
 class FetchQualityManagementList extends QualityManagementEvent {
   final int pageNo;
 
-  FetchQualityManagementList({required this.pageNo});
+  final bool isFromHome;
+
+  FetchQualityManagementList({required this.isFromHome, required this.pageNo});
 }
 
 class FetchQualityManagementDetails extends QualityManagementEvent {
@@ -23,6 +25,22 @@ class SelectQualityManagementRole extends QualityManagementEvent {
   final String roleId;
 
   SelectQualityManagementRole({required this.roleId});
+}
+
+class QualityManagementApplyFilter extends QualityManagementEvent {
+  final Map filtersMap;
+
+  QualityManagementApplyFilter({required this.filtersMap});
+}
+
+class QualityManagementClearFilter extends QualityManagementEvent {}
+
+class SelectQualityManagementStatusFilter extends QualityManagementEvent {
+  final List statusList;
+  final String statusId;
+
+  SelectQualityManagementStatusFilter(
+      {required this.statusList, required this.statusId});
 }
 
 class SelectQualityManagementClassification extends QualityManagementEvent {
