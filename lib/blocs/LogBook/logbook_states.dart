@@ -14,9 +14,12 @@ class FetchingLogbookList extends LogbookStates {}
 class LogbookListFetched extends LogbookStates {
   final FetchLogBookListModel fetchLogBookListModel;
   final String privateApiKey;
+  final Map filtersMap;
 
   const LogbookListFetched(
-      {required this.privateApiKey, required this.fetchLogBookListModel});
+      {required this.filtersMap,
+      required this.privateApiKey,
+      required this.fetchLogBookListModel});
 }
 
 class LogbookFetchError extends LogbookStates {}
@@ -39,8 +42,10 @@ class LogBookFetchingMaster extends LogbookStates {}
 
 class LogBookMasterFetched extends LogbookStates {
   final LogBookFetchMasterModel logBookFetchMasterModel;
+  final Map filterMap;
 
-  LogBookMasterFetched({required this.logBookFetchMasterModel});
+  LogBookMasterFetched(
+      {required this.filterMap, required this.logBookFetchMasterModel});
 }
 
 class LogBookMasterNotFetched extends LogbookStates {
@@ -98,4 +103,34 @@ class NewLogBookNotReported extends LogbookStates {
   final String logbookNotReported;
 
   NewLogBookNotReported({required this.logbookNotReported});
+}
+
+class LogBookActivityFilterSelected extends LogbookStates {
+  final String selectIndex;
+
+  LogBookActivityFilterSelected({required this.selectIndex});
+}
+
+class LogBookFilterSelected extends LogbookStates {
+  final String selectIndex;
+
+  LogBookFilterSelected({required this.selectIndex});
+}
+
+class LogBookFilterPrioritySelected extends LogbookStates {
+  final String selectIndex;
+
+  LogBookFilterPrioritySelected({required this.selectIndex});
+}
+
+class LogBookFilterStatusSelected extends LogbookStates {
+  final String selectIndex;
+
+  LogBookFilterStatusSelected({required this.selectIndex});
+}
+
+class LogBookFilterTypesSelected extends LogbookStates {
+  final List selectedTypesList;
+
+  LogBookFilterTypesSelected({required this.selectedTypesList});
 }
