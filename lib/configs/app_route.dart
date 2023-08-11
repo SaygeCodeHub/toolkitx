@@ -28,6 +28,7 @@ import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
+import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -162,7 +163,8 @@ class AppRoutes {
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));
       case LogbookListScreen.routeName:
-        return _createRoute(const LogbookListScreen());
+        return _createRoute(
+            LogbookListScreen(isFromHome: settings.arguments as bool));
       case TodoAssignedByMeAndToMeListScreen.routeName:
         return _createRoute(TodoAssignedByMeAndToMeListScreen());
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
@@ -195,6 +197,8 @@ class AppRoutes {
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
+      case LogBookFilterScreen.routeName:
+        return _createRoute(LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementFilterScreen.routeName:
