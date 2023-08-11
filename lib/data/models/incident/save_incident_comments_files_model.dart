@@ -1,24 +1,27 @@
 import 'dart:convert';
 
-SaveIncidentCommentsFilesModel saveIncidentCommentsModelFromJson(String str) =>
-    SaveIncidentCommentsFilesModel.fromJson(json.decode(str));
+SaveIncidentAndQMCommentsFilesModel saveIncidentCommentsModelFromJson(
+        String str) =>
+    SaveIncidentAndQMCommentsFilesModel.fromJson(json.decode(str));
 
-String saveIncidentCommentsModelToJson(SaveIncidentCommentsFilesModel data) =>
+String saveIncidentCommentsModelToJson(
+        SaveIncidentAndQMCommentsFilesModel data) =>
     json.encode(data.toJson());
 
-class SaveIncidentCommentsFilesModel {
-  final int status;
-  final String message;
-  final Data data;
+class SaveIncidentAndQMCommentsFilesModel {
+  final int? status;
+  final String? message;
+  final Data? data;
 
-  SaveIncidentCommentsFilesModel({
-    required this.status,
-    required this.message,
-    required this.data,
+  SaveIncidentAndQMCommentsFilesModel({
+    this.status,
+    this.message,
+    this.data,
   });
 
-  factory SaveIncidentCommentsFilesModel.fromJson(Map<String, dynamic> json) =>
-      SaveIncidentCommentsFilesModel(
+  factory SaveIncidentAndQMCommentsFilesModel.fromJson(
+          Map<String, dynamic> json) =>
+      SaveIncidentAndQMCommentsFilesModel(
         status: json["Status"],
         message: json["Message"],
         data: Data.fromJson(json["Data"]),
@@ -27,7 +30,7 @@ class SaveIncidentCommentsFilesModel {
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
-        "Data": data.toJson(),
+        "Data": data!.toJson(),
       };
 }
 
