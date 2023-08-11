@@ -57,8 +57,10 @@ class QualityManagementDetails extends StatelessWidget {
             const SizedBox(height: xxTinierSpacing),
             QualityManagementMapLinksList(data: data),
             const SizedBox(height: tinySpacing),
-            Text(DatabaseUtil.getText('SeverityImpact'),
-                style: Theme.of(context).textTheme.medium),
+            Text(
+              DatabaseUtil.getText('SeverityImpact'),
+              style: Theme.of(context).textTheme.medium,
+            ),
             const SizedBox(height: xxTinierSpacing),
             Text('${data.severityname} - ${data.impactname}',
                 style: Theme.of(context).textTheme.small),

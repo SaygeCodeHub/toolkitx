@@ -6,7 +6,7 @@ enum IncidentClassificationEnum {
   majorLostTimeInjury(status: 'Major lost time injury', value: '4'),
   permanentDisability(status: 'Permanent disability', value: '5'),
   propertyDamage(status: 'Property damage', value: '6'),
-  nearAccident(status: 'Near sccident', value: '7'),
+  nearAccident(status: 'Near accident', value: '7'),
   hazardousSituations(status: 'Hazardous Situation', value: '8');
 
   const IncidentClassificationEnum({required this.status, required this.value});

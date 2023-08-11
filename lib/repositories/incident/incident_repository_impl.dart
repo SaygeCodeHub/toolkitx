@@ -122,18 +122,19 @@ class IncidentRepositoryImpl extends IncidentRepository {
   }
 
   @override
-  Future<SaveIncidentCommentsFilesModel> saveCommentsFiles(
+  Future<SaveIncidentAndQMCommentsFilesModel> saveCommentsFiles(
       Map saveCommentsFilesMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}incident/savecommentsfiles",
         saveCommentsFilesMap);
-    return SaveIncidentCommentsFilesModel.fromJson(response);
+    return SaveIncidentAndQMCommentsFilesModel.fromJson(response);
   }
 
   @override
-  Future<SaveIncidentCommentsModel> saveComments(Map saveCommentsMap) async {
+  Future<SaveIncidentAndQMCommentsModel> saveComments(
+      Map saveCommentsMap) async {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}incident/savecomments", saveCommentsMap);
-    return SaveIncidentCommentsModel.fromJson(response);
+    return SaveIncidentAndQMCommentsModel.fromJson(response);
   }
 }
