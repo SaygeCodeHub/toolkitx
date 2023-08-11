@@ -3,7 +3,6 @@ import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
-import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -29,6 +28,7 @@ import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
+import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -164,7 +164,8 @@ class AppRoutes {
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));
       case LogbookListScreen.routeName:
-        return _createRoute(const LogbookListScreen());
+        return _createRoute(
+            LogbookListScreen(isFromHome: settings.arguments as bool));
       case TodoAssignedByMeAndToMeListScreen.routeName:
         return _createRoute(TodoAssignedByMeAndToMeListScreen());
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
@@ -194,11 +195,13 @@ class AppRoutes {
       case QualityManagementListScreen.routeName:
         return _createRoute(QualityManagementListScreen(
             isFromHome: settings.arguments as bool));
-      case QualityManagementRolesScreen.routeName:
-        return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
+      case LogBookFilterScreen.routeName:
+        return _createRoute(LogBookFilterScreen());
+      case QualityManagementRolesScreen.routeName:
+        return _createRoute(const QualityManagementRolesScreen());
       case QualityManagementAddCommentsScreen.routeName:
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:
