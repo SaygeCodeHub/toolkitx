@@ -7,7 +7,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/qualityManagement/qm_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
-import '../../../data/enums/incident_and_qm_filter_status_enum.dart';
+import '../../../data/enums/qm_status_enum.dart';
 
 class QualityManagementStatusFilter extends StatelessWidget {
   final List selectedStatusList;
@@ -18,7 +18,7 @@ class QualityManagementStatusFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(spacing: kFilterTags, children: [
-      for (var item in IncidentAndQualityManagementStatusEnum.values)
+      for (var item in QualityManagementStatusEnum.values)
         FilterChip(
             backgroundColor:
                 (selectedStatusList.contains(item.value.toString()))
