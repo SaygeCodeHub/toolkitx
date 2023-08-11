@@ -101,9 +101,8 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
-                context
-                    .read<QualityManagementBloc>()
-                    .add(FetchQualityManagementList(pageNo: 1));
+                context.read<QualityManagementBloc>().add(
+                    FetchQualityManagementList(pageNo: 1, isFromHome: false));
               } else if (state is ReportNewQualityManagementNotSaved) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(

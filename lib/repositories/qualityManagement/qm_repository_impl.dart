@@ -68,6 +68,9 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}qaincident/getroles?hashcode=$hashCode&userid=$userId");
     return FetchQualityManagementRolesModel.fromJson(response);
+  }
+
+  @override
   Future<FetchQualityManagementMasterModel> fetchQualityManagementMaster(
       String hashCode, String role) async {
     final response = await DioClient().get(

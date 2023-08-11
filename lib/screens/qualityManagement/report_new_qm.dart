@@ -160,7 +160,7 @@ class ReportNewQA extends StatelessWidget {
                                   }),
                               const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
-                                isFromIncident: true,
+                                isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
                                   reportNewQMMap['filenames'] = uploadImageList
                                       .toString()

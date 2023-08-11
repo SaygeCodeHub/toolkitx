@@ -5,8 +5,6 @@ import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
@@ -132,10 +130,6 @@ class QualityManagementClassificationValueNotFetched
 
   QualityManagementClassificationValueNotFetched(
       {required this.classificationNotFetched});
-class ReportedNewQAAnonymously extends QualityManagementStates {
-  final String anonymousId;
-
-  ReportedNewQAAnonymously({required this.anonymousId});
 }
 
 class FetchingQualityManagementMaster extends QualityManagementStates {}
@@ -151,6 +145,12 @@ class QualityManagementMasterNotFetched extends QualityManagementStates {
   final String masterNotFetched;
 
   QualityManagementMasterNotFetched({required this.masterNotFetched});
+}
+
+class ReportedNewQAAnonymously extends QualityManagementStates {
+  final String anonymousId;
+
+  ReportedNewQAAnonymously({required this.anonymousId});
 }
 
 class ReportNewQualityManagementContractorSelected

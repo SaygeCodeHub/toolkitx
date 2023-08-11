@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_qm_master_model.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -28,6 +29,8 @@ class QualityManagementBloc
   final SaveIncidentAndQMCommentsFilesModel
       saveIncidentAndQMCommentsFilesModel =
       SaveIncidentAndQMCommentsFilesModel();
+  FetchQualityManagementMasterModel fetchQualityManagementMasterModel =
+      FetchQualityManagementMasterModel();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
   String roleId = '';
@@ -35,6 +38,9 @@ class QualityManagementBloc
   String commentId = '';
   String nextStatus = '';
   String encryptQmId = '';
+  Map reportNewQAMap = {};
+  String newQmId = '';
+  String selectSiteName = '';
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -67,7 +73,6 @@ class QualityManagementBloc
     on<SaveReportNewQualityManagement>(_saveQualityManagementReporting);
     on<SaveReportNewQualityManagementPhotos>(_saveQualityManagementPhotos);
     on<FetchQualityManagementMaster>(_fetchMaster);
-
   }
 
   _applyFilter(QualityManagementApplyFilter event,
@@ -345,6 +350,7 @@ class QualityManagementBloc
             event.fetchQualityManagementClassificationModel,
         classificationId: event.classificationId));
   }
+
   FutureOr<void> _fetchMaster(FetchQualityManagementMaster event,
       Emitter<QualityManagementStates> emit) async {
     emit(FetchingQualityManagementMaster());
