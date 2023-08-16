@@ -197,7 +197,7 @@ class AppRoutes {
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
-        return _createRoute(const CalendarScreen());
+        return _createRoute(CalendarScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

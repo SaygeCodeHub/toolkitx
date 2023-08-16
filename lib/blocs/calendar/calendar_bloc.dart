@@ -30,10 +30,9 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      String selectedDateFromCalendar = '';
+
       final DateFormat formatter = DateFormat('dd.MM.yyyy');
-      List formattedList = [];
-      CalendarFormat format = CalendarFormat.month;
+
       String pageChangeMonth = "${DateTime.now().month}-${DateTime.now().year}";
       FetchCalendarEventsModel fetchCalendarEventsModel =
           await _calendarRepository.fetchCalendarEvents(
@@ -41,11 +40,14 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
               'vbdvrj9aN/gnmG9HRZBOV137+VBlDH1innvdsfSI8lOHTShvQP8iAcfeuRbflSG0|3|1|1|west_2',
               '01/6/2023',
               'month');
-      log("model data====>$fetchCalendarEventsModel");
       emit(CalendarEventsFetched(
           fetchCalendarEventsModel: fetchCalendarEventsModel));
     } catch (e) {}
   }
+
+  List formattedList = [];
+  String? selectedDateFromCalendar;
+  CalendarFormat format = CalendarFormat.month;
 
   List<Object> getEventsForDay(
       DateTime day, FetchCalendarEventsModel fetchCalendarEventsModel) {
@@ -53,9 +55,20 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
     for (int i = 0; i < fetchCalendarEventsModel.data!.length; i++) {
       if (fetchCalendarEventsModel.data![i].fulldate == formatter.format(day)) {
         calendarEvents.addAll(fetchCalendarEventsModel.data![i].events);
-        log("string=====>$calendarEvents");
       }
     }
     return calendarEvents;
+  }
+
+  onTapOfDay(date, fetchCalendarEventsModel) async {
+    formattedList.clear();
+    selectedDateFromCalendar = formatter.format(date);
+    log("on tap event======>$selectedDateFromCalendar");
+    for (var item in fetchCalendarEventsModel.data!) {
+      if (item.fulldate == selectedDateFromCalendar) {
+        formattedList.addAll(item.events);
+        log("formatted list=======>$formattedList");
+      }
+    }
   }
 }
