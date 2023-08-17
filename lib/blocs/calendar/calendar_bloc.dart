@@ -27,20 +27,21 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
   List eventsList = [];
   String? selectedDateFromCalendar;
   CalendarFormat format = CalendarFormat.month;
-  String pageChangeMonth = "${DateTime.now().month}-${DateTime.now().year}";
 
   FutureOr<void> _fetchCalendarEvents(
       FetchCalendarEvents event, Emitter<CalendarStates> emit) async {
+    emit(FetchingCalendarEvents());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FetchCalendarEventsModel fetchCalendarEventsModel =
           await _calendarRepository.fetchCalendarEvents(
-              userId!, hashCode!, formatter.format(DateTime.now()), 'month');
+              userId!, hashCode!, event.currentDate, 'month');
       emit(CalendarEventsFetched(
           fetchCalendarEventsModel: fetchCalendarEventsModel,
           calendarEvents: eventsList,
-          selectedDate: DateTime.now()));
+          selectedDate: DateTime.now(),
+          currentDate: ''));
     } catch (e) {
       emit(CalendarEventsNotFetched(eventsNotFetched: e.toString()));
     }
@@ -48,21 +49,25 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
 
   _selectCalendarDate(SelectCalendarDate event, Emitter<CalendarStates> emit) {
     eventsList.clear();
-    selectedDateFromCalendar = formatter.format(event.calendarDate);
+    selectedDateFromCalendar = formatter.format(event.selectedDate);
     for (var item in event.fetchCalendarEventsModel.data!) {
       if (item.fulldate == selectedDateFromCalendar) {
         eventsList.addAll(item.events);
       }
     }
+    String currentDate =
+        "${event.selectedDate.day}/${event.selectedDate.month}/${event.selectedDate.year}";
     emit(CalendarEventsFetched(
         fetchCalendarEventsModel: event.fetchCalendarEventsModel,
         calendarEvents: eventsList,
-        selectedDate: event.calendarDate));
+        selectedDate: event.selectedDate,
+        currentDate: currentDate));
   }
 
   List<Object> getEventsForDay(
       DateTime day, FetchCalendarEventsModel fetchCalendarEventsModel) {
     List<CalendarEvent> calendarEvents = [];
+    calendarEvents.clear();
     for (int i = 0; i < fetchCalendarEventsModel.data!.length; i++) {
       if (fetchCalendarEventsModel.data![i].fulldate == formatter.format(day)) {
         calendarEvents.addAll(fetchCalendarEventsModel.data![i].events);

@@ -15,9 +15,11 @@ class CalendarEventsFetched extends CalendarStates {
   final FetchCalendarEventsModel fetchCalendarEventsModel;
   final List calendarEvents;
   final DateTime selectedDate;
+  final String currentDate;
 
   CalendarEventsFetched(
-      {required this.selectedDate,
+      {required this.currentDate,
+      required this.selectedDate,
       required this.calendarEvents,
       required this.fetchCalendarEventsModel});
 
