@@ -1,12 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:toolkit/blocs/calendar/calendar_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -18,6 +18,7 @@ class CalendarScreen extends StatelessWidget {
   static const routeName = 'CalendarScreen';
 
   CalendarScreen({Key? key}) : super(key: key);
+
   final DateFormat formatter = DateFormat('dd.MM.yyyy');
 
   @override
@@ -52,16 +53,7 @@ class CalendarScreen extends StatelessWidget {
                                   availableGestures:
                                       AvailableGestures.horizontalSwipe,
                                   onPageChanged: (page) {},
-                                  focusedDay: DateFormat("dd.MM.yyy").parse(
-                                      (context
-                                                  .read<CalendarBloc>()
-                                                  .selectedDateFromCalendar
-                                                  .toString() ==
-                                              'null')
-                                          ? formatter.format(DateTime.now())
-                                          : context
-                                              .read<CalendarBloc>()
-                                              .selectedDateFromCalendar!),
+                                  focusedDay: state.selectedDate,
                                   firstDay: DateTime(1900),
                                   lastDay: DateTime(9000),
                                   calendarFormat:
@@ -76,22 +68,14 @@ class CalendarScreen extends StatelessWidget {
                                     DateTime date,
                                     events,
                                   ) {
-                                    context.read<CalendarBloc>().onTapOfDay(
-                                        date, state.fetchCalendarEventsModel);
+                                    context.read<CalendarBloc>().add(
+                                        SelectCalendarDate(
+                                            calendarDate: date,
+                                            fetchCalendarEventsModel: state
+                                                .fetchCalendarEventsModel));
                                   },
                                   selectedDayPredicate: (DateTime date) {
-                                    log("on selected day=====>${context.read<CalendarBloc>().selectedDateFromCalendar.toString()}");
-                                    return isSameDay(
-                                        DateFormat('dd.MM.yyy').parse((context
-                                                    .read<CalendarBloc>()
-                                                    .selectedDateFromCalendar
-                                                    .toString() ==
-                                                'null')
-                                            ? formatter.format(DateTime.now())
-                                            : context
-                                                .read<CalendarBloc>()
-                                                .selectedDateFromCalendar!),
-                                        date);
+                                    return isSameDay(state.selectedDate, date);
                                   },
                                   eventLoader: (day) {
                                     return context
@@ -109,7 +93,7 @@ class CalendarScreen extends StatelessWidget {
                                         TextStyle(color: AppColor.white),
                                     todayDecoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: AppColor.orange),
+                                        color: AppColor.deepBlue),
                                   ),
                                   headerStyle: const HeaderStyle(
                                     formatButtonVisible: false,
@@ -119,7 +103,95 @@ class CalendarScreen extends StatelessWidget {
                                 )),
                             SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.width * 0.02)
+                                    MediaQuery.of(context).size.width * 0.02),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.width * 0.03,
+                                  bottom:
+                                      MediaQuery.of(context).size.width * 0.03),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '',
+                                    style: Theme.of(context).textTheme.small,
+                                  ),
+                                  const Expanded(
+                                    child: Divider(
+                                      indent: 10,
+                                      endIndent: 10,
+                                      thickness: 0.8,
+                                      color: AppColor.grey,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            (state.calendarEvents.isEmpty)
+                                ? Padding(
+                                    padding: EdgeInsets.only(
+                                        top: MediaQuery.of(context).size.width *
+                                            0.03),
+                                    child: Center(
+                                      child: Text(
+                                        'No records found!',
+                                        style:
+                                            Theme.of(context).textTheme.small,
+                                      ),
+                                    ),
+                                  )
+                                : ListView.separated(
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: state.calendarEvents.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CustomCard(
+                                        color: AppColor.lightGrey,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: ListTile(
+                                          onTap: () {},
+                                          dense: true,
+                                          contentPadding:
+                                              const EdgeInsets.all(10),
+                                          title: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                state
+                                                    .calendarEvents[index].name,
+                                                style: const TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis),
+                                              ),
+                                              const SizedBox(
+                                                  height: xxTinierSpacing),
+                                              Text(state.calendarEvents[index]
+                                                  .startDate),
+                                              const SizedBox(
+                                                  height: xxTinierSpacing),
+                                              Text(state.calendarEvents[index]
+                                                  .endDate),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                      return SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.02);
+                                    },
+                                  ),
                           ]));
                 } else if (state is CalendarEventsNotFetched) {
                   return GenericReloadButton(

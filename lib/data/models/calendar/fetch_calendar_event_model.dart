@@ -66,8 +66,8 @@ class CalendarEvent {
   final String type;
   final String name;
   final String id;
-  final DateTime startDate;
-  final DateTime endDate;
+  final String startDate;
+  final String endDate;
   final String time;
   final String color;
 
@@ -82,23 +82,22 @@ class CalendarEvent {
   });
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) => CalendarEvent(
-        type: json["type"],
+    type: json["type"],
         name: json["name"],
         id: json["id"],
-        startDate: DateTime.parse(json["startDate"]),
-        endDate: DateTime.parse(json["endDate"]),
-        time: json["time"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        time: json["time"] ?? '',
         color: json["color"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "type": type,
         "name": name,
         "id": id,
-        "startDate":
-            "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
-        "endDate":
-            "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+        "startDate": startDate,
+        "endDate": endDate,
         "time": time,
         "color": color,
       };

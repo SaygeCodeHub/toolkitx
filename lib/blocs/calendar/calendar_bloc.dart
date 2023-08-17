@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -21,33 +20,45 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
 
   CalendarBloc() : super(CalendarInitialState()) {
     on<FetchCalendarEvents>(_fetchCalendarEvents);
+    on<SelectCalendarDate>(_selectCalendarDate);
   }
 
-  final DateFormat formatter = DateFormat('dd.MM.yyyy');
+  DateFormat formatter = DateFormat('dd.MM.yyyy');
+  List eventsList = [];
+  String? selectedDateFromCalendar;
+  CalendarFormat format = CalendarFormat.month;
+  String pageChangeMonth = "${DateTime.now().month}-${DateTime.now().year}";
 
   FutureOr<void> _fetchCalendarEvents(
       FetchCalendarEvents event, Emitter<CalendarStates> emit) async {
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-
-      final DateFormat formatter = DateFormat('dd.MM.yyyy');
-
-      String pageChangeMonth = "${DateTime.now().month}-${DateTime.now().year}";
       FetchCalendarEventsModel fetchCalendarEventsModel =
           await _calendarRepository.fetchCalendarEvents(
-              '2ATY8mLx8MjkcnrmiRLvrA==',
-              'vbdvrj9aN/gnmG9HRZBOV137+VBlDH1innvdsfSI8lOHTShvQP8iAcfeuRbflSG0|3|1|1|west_2',
-              '01/6/2023',
-              'month');
+              userId!, hashCode!, formatter.format(DateTime.now()), 'month');
       emit(CalendarEventsFetched(
-          fetchCalendarEventsModel: fetchCalendarEventsModel));
-    } catch (e) {}
+          fetchCalendarEventsModel: fetchCalendarEventsModel,
+          calendarEvents: eventsList,
+          selectedDate: DateTime.now()));
+    } catch (e) {
+      emit(CalendarEventsNotFetched(eventsNotFetched: e.toString()));
+    }
   }
 
-  List formattedList = [];
-  String? selectedDateFromCalendar;
-  CalendarFormat format = CalendarFormat.month;
+  _selectCalendarDate(SelectCalendarDate event, Emitter<CalendarStates> emit) {
+    eventsList.clear();
+    selectedDateFromCalendar = formatter.format(event.calendarDate);
+    for (var item in event.fetchCalendarEventsModel.data!) {
+      if (item.fulldate == selectedDateFromCalendar) {
+        eventsList.addAll(item.events);
+      }
+    }
+    emit(CalendarEventsFetched(
+        fetchCalendarEventsModel: event.fetchCalendarEventsModel,
+        calendarEvents: eventsList,
+        selectedDate: event.calendarDate));
+  }
 
   List<Object> getEventsForDay(
       DateTime day, FetchCalendarEventsModel fetchCalendarEventsModel) {
@@ -58,17 +69,5 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
       }
     }
     return calendarEvents;
-  }
-
-  onTapOfDay(date, fetchCalendarEventsModel) async {
-    formattedList.clear();
-    selectedDateFromCalendar = formatter.format(date);
-    log("on tap event======>$selectedDateFromCalendar");
-    for (var item in fetchCalendarEventsModel.data!) {
-      if (item.fulldate == selectedDateFromCalendar) {
-        formattedList.addAll(item.events);
-        log("formatted list=======>$formattedList");
-      }
-    }
   }
 }
