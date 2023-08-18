@@ -158,7 +158,8 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, WorkForceListScreen.routeName);
         break;
       case 'sl':
-        Navigator.pushNamed(context, LogbookListScreen.routeName);
+        Navigator.pushNamed(context, LogbookListScreen.routeName,
+            arguments: true);
         break;
       case 'todo':
         Navigator.pushNamed(
@@ -171,7 +172,8 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         break;
       case 'qareport':
-        Navigator.pushNamed(context, QualityManagementListScreen.routeName);
+        Navigator.pushNamed(context, QualityManagementListScreen.routeName,
+            arguments: true);
         break;
       case 'calendar':
         Navigator.pushNamed(context, CalendarScreen.routeName);

@@ -3,6 +3,7 @@ import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
+import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
@@ -29,6 +30,7 @@ import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
+import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -46,9 +48,11 @@ import '../screens/profile/profile_edit_screen.dart';
 import '../screens/permit/permit_details_screen.dart';
 import '../screens/permit/permit_list_screen.dart';
 import '../screens/permit/get_permit_roles_screen.dart';
+import '../screens/qualityManagement/qm_add_comments_screen.dart';
 import '../screens/qualityManagement/qm_details_screen.dart';
 import '../screens/qualityManagement/qm_list_screen.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
+import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -162,7 +166,8 @@ class AppRoutes {
         return _createRoute(
             IncidentInjuriesScreen(addIncidentMap: settings.arguments as Map));
       case LogbookListScreen.routeName:
-        return _createRoute(const LogbookListScreen());
+        return _createRoute(
+            LogbookListScreen(isFromHome: settings.arguments as bool));
       case TodoAssignedByMeAndToMeListScreen.routeName:
         return _createRoute(TodoAssignedByMeAndToMeListScreen());
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
@@ -190,14 +195,23 @@ class AppRoutes {
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
       case QualityManagementListScreen.routeName:
-        return _createRoute(const QualityManagementListScreen());
+        return _createRoute(QualityManagementListScreen(
+            isFromHome: settings.arguments as bool));
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
+      case LogBookFilterScreen.routeName:
+        return _createRoute(LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
         return _createRoute(CalendarScreen());
+      case QualityManagementAddCommentsScreen.routeName:
+        return _createRoute(QualityManagementAddCommentsScreen(
+            fetchQualityManagementDetailsModel:
+                settings.arguments as FetchQualityManagementDetailsModel));
+      case QualityManagementFilterScreen.routeName:
+        return _createRoute(QualityManagementFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -2,8 +2,9 @@ abstract class LogbookEvents {}
 
 class FetchLogbookList extends LogbookEvents {
   final int pageNo;
+  final bool isFromHome;
 
-  FetchLogbookList({required this.pageNo});
+  FetchLogbookList({required this.isFromHome, required this.pageNo});
 }
 
 class FetchLogBookDetails extends LogbookEvents {
@@ -50,4 +51,44 @@ class ReportNewLogBook extends LogbookEvents {
   final Map reportLogbook;
 
   ReportNewLogBook({required this.reportLogbook});
+}
+
+class ApplyLogBookFilter extends LogbookEvents {
+  final Map filterMap;
+
+  ApplyLogBookFilter({required this.filterMap});
+}
+
+class ClearLogBookFilter extends LogbookEvents {}
+
+class SelectLogBookActivityFilter extends LogbookEvents {
+  final String selectedIndex;
+
+  SelectLogBookActivityFilter({required this.selectedIndex});
+}
+
+class SelectLogBookFilter extends LogbookEvents {
+  final String selectedIndex;
+
+  SelectLogBookFilter({required this.selectedIndex});
+}
+
+class SelectLogBookPriorityFilter extends LogbookEvents {
+  final String selectedIndex;
+
+  SelectLogBookPriorityFilter({required this.selectedIndex});
+}
+
+class SelectLogBookStatusFilter extends LogbookEvents {
+  final String selectedIndex;
+
+  SelectLogBookStatusFilter({required this.selectedIndex});
+}
+
+class SelectLogBookTypeFilter extends LogbookEvents {
+  final List selectTypeList;
+  final String typesName;
+
+  SelectLogBookTypeFilter(
+      {required this.selectTypeList, required this.typesName});
 }

@@ -19,7 +19,7 @@ class UploadImageMenu extends StatelessWidget {
   final void Function()? removeSignPad;
   final bool? showSignPad;
   final bool? isSignature;
-  final bool? isFromIncident;
+  final bool? isUpload;
   final List uploadImageList = [];
 
   UploadImageMenu(
@@ -29,7 +29,7 @@ class UploadImageMenu extends StatelessWidget {
       this.isSignature = false,
       this.showSignPad = false,
       this.removeSignPad,
-      this.isFromIncident = false})
+      this.isUpload = false})
       : super(key: key);
 
   @override
@@ -59,8 +59,7 @@ class UploadImageMenu extends StatelessWidget {
                           isImageAttached: state.isImageAttached,
                           uploadPictureModel: state.uploadPictureModel),
                       Visibility(
-                        visible:
-                            imagesList.length <= 5 && isFromIncident == true,
+                        visible: imagesList.length <= 5 && isUpload == true,
                         replacement: const SizedBox.shrink(),
                         child: SecondaryButton(
                             onPressed: () {
