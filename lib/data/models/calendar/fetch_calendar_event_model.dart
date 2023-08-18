@@ -82,7 +82,7 @@ class CalendarEvent {
   });
 
   factory CalendarEvent.fromJson(Map<String, dynamic> json) => CalendarEvent(
-    type: json["type"],
+        type: json["type"],
         name: json["name"],
         id: json["id"],
         startDate: json["startDate"],
@@ -91,8 +91,7 @@ class CalendarEvent {
         color: json["color"],
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "type": type,
         "name": name,
         "id": id,

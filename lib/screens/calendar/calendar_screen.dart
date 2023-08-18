@@ -49,7 +49,7 @@ class CalendarScreen extends StatelessWidget {
                             children: <Widget>[
                               Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.blue.shade50,
+                                      color: AppColor.pastelBlue,
                                       borderRadius: BorderRadius.circular(
                                           kCalendarRadius)),
                                   width: kCalendarContainerWidth,
