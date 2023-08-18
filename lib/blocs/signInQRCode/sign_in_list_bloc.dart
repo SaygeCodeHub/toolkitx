@@ -11,7 +11,7 @@ import '../../repositories/SignInQRCode/signin_repository.dart';
 part 'sign_in_list_event.dart';
 part 'sign_in_list_state.dart';
 
-class SignInListBloc extends Bloc<SignInListEvent, SignInListState> {
+class SignInListBloc extends Bloc<SignInList, SignInListState> {
   final SignInRepository _signInRepository = getIt<SignInRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
@@ -20,16 +20,12 @@ class SignInListBloc extends Bloc<SignInListEvent, SignInListState> {
   }
 
   FutureOr<void> _fetchSignInList(
-      SignInListEvent event, Emitter<SignInListState> emit) async {
+      SignInList event, Emitter<SignInListState> emit) async {
     emit(FetchingSignInList());
-    // try {
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
     FetchCurrentSignInModel currentSignInListModel =
         await _signInRepository.signInList(userId!, hashCode!);
     emit(SignInListFetched(currentSignInListModel: currentSignInListModel));
-    // } catch (e) {
-    //   emit(SignInListError(e.toString()));
-    // }
   }
 }

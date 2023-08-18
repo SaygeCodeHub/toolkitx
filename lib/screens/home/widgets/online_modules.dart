@@ -176,8 +176,7 @@ class OnLineModules extends StatelessWidget {
             arguments: true);
         break;
       case 'tracking':
-        Navigator.pushNamed(context, SignInListScreen.routeName,
-            arguments: true);
+        Navigator.pushNamed(context, SignInListScreen.routeName);
         break;
     }
   }
