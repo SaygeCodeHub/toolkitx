@@ -63,6 +63,5 @@ configurableDependencies() {
       () => LeavesAndHolidaysRepositoryImpl());
   getIt.registerLazySingleton<QualityManagementRepository>(
       () => QualityManagementRepositoryImpl());
-  getIt.registerLazySingleton<SignInRepository>(
-          () => SignInImpl());
+  getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
 }

@@ -4,14 +4,11 @@ abstract class SignInListState {}
 
 class SignInListInitial extends SignInListState {}
 
-class FetchingSignInList extends SignInListState {
-
-}
+class FetchingSignInList extends SignInListState {}
 
 class SignInListFetched extends SignInListState {
-final FetchCurrentSignInModel currentSignInListModel;
-SignInListFetched({required this.currentSignInListModel});
-
+  final FetchCurrentSignInModel currentSignInListModel;
+  SignInListFetched({required this.currentSignInListModel});
 }
 
 class SignInListError extends SignInListState {
