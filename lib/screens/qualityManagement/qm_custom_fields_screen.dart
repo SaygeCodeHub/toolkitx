@@ -115,7 +115,8 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                     reportNewQAMap['customfields'] = customInfoFieldList;
                     context.read<QualityManagementBloc>().add(
                         SaveReportNewQualityManagement(
-                            role: '', reportNewQAMap: reportNewQAMap));
+                            role: context.read<QualityManagementBloc>().roleId,
+                            reportNewQAMap: reportNewQAMap));
                   },
                   textValue: DatabaseUtil.getText('buttonSave')),
             ),

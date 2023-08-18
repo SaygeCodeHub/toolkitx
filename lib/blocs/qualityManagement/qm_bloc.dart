@@ -469,7 +469,7 @@ class QualityManagementBloc
         "responsible_person": reportNewQAMap['responsible_person'] ?? '',
         "site": reportNewQAMap['site'] ?? '',
         "location": reportNewQAMap['location'] ?? '',
-        "role": "",
+        "role": roleId,
         "site_name": reportNewQAMap['site_name'],
         "location_name": reportNewQAMap['location_name'],
         "companyid": reportNewQAMap['companyid'] ?? '',

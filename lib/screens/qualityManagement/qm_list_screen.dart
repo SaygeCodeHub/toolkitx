@@ -55,8 +55,8 @@ class _QualityManagementListScreenState
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, ReportNewQA.routeName);
-
-            }, child: const Icon(Icons.add)),
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

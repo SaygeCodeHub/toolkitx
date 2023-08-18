@@ -74,6 +74,7 @@ class GenerateQualityManagementPDF extends QualityManagementEvent {
 
 class FetchQualityManagementClassificationValue
     extends QualityManagementEvent {}
+
 class ReportNewQAAnonymously extends QualityManagementEvent {
   final String anonymousId;
 
