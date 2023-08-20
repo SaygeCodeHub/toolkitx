@@ -21,4 +21,5 @@ class AppColor {
   static const Color green = Color(0xFF8fc238);
   static const Color transparent = Color(0x00000000);
   static const Color paleGrey = Color(0xF5F5F5FF);
+  static const Color pastelBlue = Color(0xFFE3F2FD);
 }
