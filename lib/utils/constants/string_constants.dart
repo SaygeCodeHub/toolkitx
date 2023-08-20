@@ -227,4 +227,5 @@ abstract class StringConstants {
   static const String kNameValidation = 'Please enter name';
   static const String kSelectPermits = 'Select Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
+  static const String kSignInHere = 'Sign in here';
 }
