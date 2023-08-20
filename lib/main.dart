@@ -41,6 +41,7 @@ import 'blocs/permit/permit_bloc.dart';
 import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/qualityManagement/qm_bloc.dart';
+import 'blocs/signInQRCode/sign_in_list_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
 import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
@@ -157,7 +158,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
           BlocProvider(
               lazy: false,
-              create: (context) => OnBoardingBloc()..add(CheckClientSelected()))
+              create: (context) =>
+                  OnBoardingBloc()..add(CheckClientSelected())),
+          BlocProvider(
+              lazy: false,
+              create: (context) => SignInListBloc()..add(SignInList())),
         ],
         child: GestureDetector(
             onTap: () {

@@ -39,7 +39,16 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
   }
 
   _applyLogbookFilter(ApplyLogBookFilter event, Emitter<LogbookStates> emit) {
-    filters = event.filterMap;
+    filters = {
+      "kword": event.filterMap['kword'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "types": event.filterMap['types'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "act": event.filterMap['act'] ?? '',
+      "status": event.filterMap['status'] ?? ''
+    };
   }
 
   _clearLogbookFilter(ClearLogBookFilter event, Emitter<LogbookStates> emit) {
@@ -50,21 +59,21 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
       FetchLogbookList event, Emitter<LogbookStates> emit) async {
     emit(FetchingLogbookList());
     try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       if (event.isFromHome == true) {
         add((ClearLogBookFilter()));
         FetchLogBookListModel fetchLogBookListModel = await _logbookRepository
-            .fetchLogbookList(userId!, hashCode!, '', event.pageNo);
+            .fetchLogbookList(event.pageNo, userId!, hashCode!, '');
         emit(LogbookListFetched(
             fetchLogBookListModel: fetchLogBookListModel,
             privateApiKey: privateKey!,
-            filtersMap: {}));
+            filtersMap: const {}));
       } else {
         FetchLogBookListModel fetchLogBookListModel =
             await _logbookRepository.fetchLogbookList(
-                userId!, hashCode!, jsonEncode(filters), event.pageNo);
+                event.pageNo, userId!, hashCode!, jsonEncode(filters));
         emit(LogbookListFetched(
             fetchLogBookListModel: fetchLogBookListModel,
             privateApiKey: privateKey!,
