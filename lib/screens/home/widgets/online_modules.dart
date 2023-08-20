@@ -19,6 +19,7 @@ import '../../leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../../logBook/logbook_list_screen.dart';
 import '../../permit/permit_list_screen.dart';
 import '../../qualityManagement/qm_list_screen.dart';
+import '../../signInQRCode/signin_list_screen.dart';
 import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 
 class OnLineModules extends StatelessWidget {
@@ -173,6 +174,9 @@ class OnLineModules extends StatelessWidget {
       case 'qareport':
         Navigator.pushNamed(context, QualityManagementListScreen.routeName,
             arguments: true);
+        break;
+      case 'tracking':
+        Navigator.pushNamed(context, SignInListScreen.routeName);
         break;
     }
   }
