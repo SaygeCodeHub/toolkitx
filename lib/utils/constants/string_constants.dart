@@ -9,6 +9,10 @@ abstract class StringConstants {
   static const String kSelectTimeZone = 'Select Your TimeZone';
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
+  static const String kNoWorkOrder = 'No workorder!'; //
+  static const String kNoChecklist = 'No checklist!'; //
+  static const String kNoLoto = 'No loto!'; //
+  static const String kNoPermit = 'No permit!'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
