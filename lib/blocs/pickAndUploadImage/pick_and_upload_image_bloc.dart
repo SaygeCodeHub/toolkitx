@@ -37,6 +37,7 @@ class PickAndUploadImageBloc
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
     isInitial = true;
+    number = 0;
     emit(PermissionInitial());
   }
 
@@ -60,6 +61,7 @@ class PickAndUploadImageBloc
         bool isAttached = false;
         List cameraPathsList =
             List.from((isInitial == false) ? event.cameraImageList : []);
+        number = isInitial == true ? 0 : number;
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
@@ -117,6 +119,8 @@ class PickAndUploadImageBloc
         bool isAttached = false;
         List galleryPathsList =
             List.from((isInitial == false) ? event.galleryImagesList : []);
+        number = isInitial == true ? 0 : number;
+
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);

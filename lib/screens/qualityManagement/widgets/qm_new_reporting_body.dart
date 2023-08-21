@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
@@ -21,6 +24,7 @@ class QMNewReportingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Padding(
       padding: const EdgeInsets.only(
           left: leftRightMargin, right: leftRightMargin, top: xxTinySpacing),
