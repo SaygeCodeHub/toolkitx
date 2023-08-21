@@ -15,7 +15,6 @@ import 'qm_details_screen.dart';
 import 'report_new_qm.dart';
 import 'qm_roles_screen.dart';
 import 'qm_filters_screen.dart';
-import 'report_new_qm.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 

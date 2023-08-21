@@ -201,7 +201,7 @@ class AppRoutes {
         return _createRoute(const AddLogBookScreen());
 
       case ReportNewQA.routeName:
-        return _createRoute(ReportNewQA());
+        return _createRoute(const ReportNewQA());
 
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(

@@ -8,7 +8,6 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/qualityManagement/qm_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/enums/qm_classification_enum.dart';
 
 class QualityManagementClassificationExpansionTile extends StatelessWidget {
   final Map qmCommentsMap;
@@ -21,7 +20,7 @@ class QualityManagementClassificationExpansionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     context
         .read<QualityManagementBloc>()
-        .add(SelectQualityManagementClassification(classificationId: ''));
+        .add(FetchQualityManagementClassificationValue());
     String classificationStatus = '';
     return BlocBuilder<QualityManagementBloc, QualityManagementStates>(
         buildWhen: (previousState, currentState) =>
@@ -44,8 +43,6 @@ class QualityManagementClassificationExpansionTile extends StatelessWidget {
                       ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount:
-                              QualityManagementClassificationEnum.values.length,
                           itemCount: state
                               .fetchQualityManagementClassificationModel
                               .data[0]

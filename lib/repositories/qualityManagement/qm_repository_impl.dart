@@ -8,6 +8,8 @@ import 'package:toolkit/data/models/qualityManagement/save_new_qm_reporting_mode
 import 'package:toolkit/data/models/qualityManagement/save_qm_photos_model.dart';
 import 'package:toolkit/data/models/qualityManagement/update_quality_management_details_model.dart';
 
+import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'qm_repository.dart';
@@ -83,5 +85,21 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}qaincident/update", updateDetailsMap);
     return UpdateQualityManagementDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQualityManagementClassificationModel> fetchClassification(
+      String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/getclassifications?hashcode=$hashCode");
+    return FetchQualityManagementClassificationModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
+      String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}qaincident/getroles?hashcode=$hashCode&userid=$userId");
+    return FetchQualityManagementRolesModel.fromJson(response);
   }
 }
