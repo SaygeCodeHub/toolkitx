@@ -390,6 +390,7 @@ class QualityManagementBloc
     emit(FetchingQualityManagementMaster());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       fetchQualityManagementMasterModel = await _qualityManagementRepository
           .fetchQualityManagementMaster(hashCode!, '');
       fetchQualityManagementMasterModel.data![0].insert(
@@ -398,8 +399,8 @@ class QualityManagementBloc
           QMMasterDatum.fromJson({"location": DatabaseUtil.getText('Other')}));
       emit(QualityManagementMasterFetched(
           fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
-          clientId: '',
-          number: 1));
+          clientId: clientId!,
+          number: 0));
     } catch (e) {
       emit(QualityManagementMasterNotFetched(masterNotFetched: e.toString()));
     }
