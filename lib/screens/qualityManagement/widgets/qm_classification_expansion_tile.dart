@@ -46,35 +46,45 @@ class QualityManagementClassificationExpansionTile extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount:
                               QualityManagementClassificationEnum.values.length,
+                          itemCount: state
+                              .fetchQualityManagementClassificationModel
+                              .data[0]
+                              .length,
                           itemBuilder: (BuildContext context, int index) {
                             return RadioListTile(
                                 contentPadding: const EdgeInsets.only(
                                     left: xxxTinierSpacing),
                                 activeColor: AppColor.deepBlue,
                                 title: Text(
-                                    QualityManagementClassificationEnum.values
-                                        .elementAt(index)
-                                        .status,
+                                    state
+                                        .fetchQualityManagementClassificationModel
+                                        .data[0][index]
+                                        .name,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                value: QualityManagementClassificationEnum
-                                    .values
-                                    .elementAt(index)
-                                    .value,
+                                value: state
+                                    .fetchQualityManagementClassificationModel
+                                    .data[0][index]
+                                    .id
+                                    .toString(),
                                 groupValue: state.classificationId,
                                 onChanged: (value) {
-                                  value = QualityManagementClassificationEnum
-                                      .values
-                                      .elementAt(index)
-                                      .value;
-                                  classificationStatus =
-                                      QualityManagementClassificationEnum.values
-                                          .elementAt(index)
-                                          .status;
+                                  value = state
+                                      .fetchQualityManagementClassificationModel
+                                      .data[0][index]
+                                      .id
+                                      .toString();
+                                  classificationStatus = state
+                                      .fetchQualityManagementClassificationModel
+                                      .data[0][index]
+                                      .name;
                                   context.read<QualityManagementBloc>().add(
                                       SelectQualityManagementClassification(
-                                          classificationId: value));
+                                          classificationId: value,
+                                          fetchQualityManagementClassificationModel:
+                                              state
+                                                  .fetchQualityManagementClassificationModel));
                                 });
                           })
                     ]));

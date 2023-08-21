@@ -13,13 +13,18 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
 import 'qm_details_screen.dart';
 import 'report_new_qm.dart';
+import 'qm_roles_screen.dart';
+import 'qm_filters_screen.dart';
+import 'report_new_qm.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 
 class QualityManagementListScreen extends StatefulWidget {
   static const routeName = 'QualityManagementListScreen';
+  final bool isFromHome;
 
-  const QualityManagementListScreen({Key? key}) : super(key: key);
+  const QualityManagementListScreen({Key? key, this.isFromHome = false})
+      : super(key: key);
 
   @override
   State<QualityManagementListScreen> createState() =>
@@ -44,9 +49,8 @@ class _QualityManagementListScreenState
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<QualityManagementBloc>()
-        .add(FetchQualityManagementList(pageNo: 1));
+    context.read<QualityManagementBloc>().add(
+        FetchQualityManagementList(pageNo: 1, isFromHome: widget.isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
@@ -62,13 +66,43 @@ class _QualityManagementListScreenState
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                CustomIconButtonRow(
-                    primaryOnPress: () {},
-                    secondaryOnPress: () {},
-                    isEnabled: true,
-                    clearOnPress: () {})
-              ]),
+              BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+                  buildWhen: (previousState, currentState) {
+                if (currentState is FetchingQualityManagementList &&
+                    widget.isFromHome == true) {
+                  return true;
+                } else if (currentState is QualityManagementListFetched) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
+                if (state is QualityManagementListFetched) {
+                  return CustomIconButtonRow(
+                      secondaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, QualityManagementRolesScreen.routeName);
+                      },
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, QualityManagementFilterScreen.routeName);
+                      },
+                      isEnabled: true,
+                      clearVisible: state.filtersMap.isNotEmpty,
+                      clearOnPress: () {
+                        page = 1;
+                        qmListData.clear();
+                        noMoreData = false;
+                        context
+                            .read<QualityManagementBloc>()
+                            .add(QualityManagementClearFilter());
+                        context.read<QualityManagementBloc>().add(
+                            FetchQualityManagementList(
+                                isFromHome: widget.isFromHome, pageNo: 1));
+                      });
+                } else {
+                  return const SizedBox();
+                }
+              }),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<QualityManagementBloc, QualityManagementStates>(
                   buildWhen: (previousState, currentState) =>
@@ -121,7 +155,8 @@ class _QualityManagementListScreenState
                                         context
                                             .read<QualityManagementBloc>()
                                             .add(FetchQualityManagementList(
-                                                pageNo: page));
+                                                pageNo: page,
+                                                isFromHome: false));
                                         waitForData = true;
                                       }
                                     }
@@ -156,10 +191,15 @@ class _QualityManagementListScreenState
                       } else {
                         if (state.fetchQualityManagementListModel.status ==
                             204) {
-                          return NoRecordsText(
-                              text: DatabaseUtil.getText('no_records_found'));
+                          if (state.filtersMap.isEmpty) {
+                            return const NoRecordsText(
+                                text: StringConstants.kNoRecordsFilter);
+                          } else {
+                            return NoRecordsText(
+                                text: DatabaseUtil.getText('no_records_found'));
+                          }
                         } else {
-                          return const SizedBox.shrink();
+                          return const SizedBox();
                         }
                       }
                     } else {

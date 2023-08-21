@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
@@ -31,6 +32,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

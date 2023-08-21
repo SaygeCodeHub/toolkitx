@@ -74,9 +74,8 @@ class _LogbookListState extends State<LogbookList> {
                         waitForData == false) {
                       if (controller.position.extentAfter < 500) {
                         LogbookList.page++;
-                        context
-                            .read<LogbookBloc>()
-                            .add(FetchLogbookList(pageNo: LogbookList.page));
+                        context.read<LogbookBloc>().add(FetchLogbookList(
+                            pageNo: LogbookList.page, isFromHome: false));
                         waitForData = true;
                       }
                     }
@@ -150,8 +149,17 @@ class _LogbookListState extends State<LogbookList> {
                   return const SizedBox(height: tinierSpacing);
                 });
           } else {
-            return NoRecordsText(
-                text: DatabaseUtil.getText('no_records_found'));
+            if (state.fetchLogBookListModel.status == 204) {
+              if (state.filtersMap.isEmpty) {
+                return const NoRecordsText(
+                    text: StringConstants.kNoRecordsFilter);
+              } else {
+                return NoRecordsText(
+                    text: DatabaseUtil.getText('no_records_found'));
+              }
+            } else {
+              return const SizedBox();
+            }
           }
         } else {
           return const SizedBox();

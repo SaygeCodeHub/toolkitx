@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -16,6 +17,7 @@ import 'logbook_states.dart';
 class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
   final LogbookRepository _logbookRepository = getIt<LogbookRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  static Map filters = {};
 
   LogbookBloc() : super(LogbookInitial()) {
     on<FetchLogbookList>(_fetchLogbookList);
@@ -27,21 +29,56 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     on<SelectLogBookPriority>(_selectLogBookPriority);
     on<SelectLogBookHandoverLog>(_selectLogBookHandover);
     on<ReportNewLogBook>(_reportNewLogbook);
+    on<ApplyLogBookFilter>(_applyLogbookFilter);
+    on<ClearLogBookFilter>(_clearLogbookFilter);
+    on<SelectLogBookActivityFilter>(_selectLogbookActivityFilter);
+    on<SelectLogBookFilter>(_selectLogbookFilter);
+    on<SelectLogBookPriorityFilter>(_selectLogbookPriorityFilter);
+    on<SelectLogBookStatusFilter>(_selectLogbookStatusFilter);
+    on<SelectLogBookTypeFilter>(_selectLogbookTypesFilter);
+  }
+
+  _applyLogbookFilter(ApplyLogBookFilter event, Emitter<LogbookStates> emit) {
+    filters = {
+      "kword": event.filterMap['kword'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "types": event.filterMap['types'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "act": event.filterMap['act'] ?? '',
+      "status": event.filterMap['status'] ?? ''
+    };
+  }
+
+  _clearLogbookFilter(ClearLogBookFilter event, Emitter<LogbookStates> emit) {
+    filters = {};
   }
 
   FutureOr<void> _fetchLogbookList(
       FetchLogbookList event, Emitter<LogbookStates> emit) async {
     emit(FetchingLogbookList());
     try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
-      String? filter = "";
-      FetchLogBookListModel fetchLogBookListModel = await _logbookRepository
-          .fetchLogbookList(userId!, hashCode!, filter, event.pageNo);
-      emit(LogbookListFetched(
-          fetchLogBookListModel: fetchLogBookListModel,
-          privateApiKey: privateKey!));
+      if (event.isFromHome == true) {
+        add((ClearLogBookFilter()));
+        FetchLogBookListModel fetchLogBookListModel = await _logbookRepository
+            .fetchLogbookList(event.pageNo, userId!, hashCode!, '');
+        emit(LogbookListFetched(
+            fetchLogBookListModel: fetchLogBookListModel,
+            privateApiKey: privateKey!,
+            filtersMap: const {}));
+      } else {
+        FetchLogBookListModel fetchLogBookListModel =
+            await _logbookRepository.fetchLogbookList(
+                event.pageNo, userId!, hashCode!, jsonEncode(filters));
+        emit(LogbookListFetched(
+            fetchLogBookListModel: fetchLogBookListModel,
+            privateApiKey: privateKey!,
+            filtersMap: filters));
+      }
     } catch (e) {
       emit(LogbookFetchError());
     }
@@ -55,7 +92,8 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
       LogBookFetchMasterModel logBookFetchMasterModel =
           await _logbookRepository.fetchLogBookMaster(hashCode!);
       emit(LogBookMasterFetched(
-          logBookFetchMasterModel: logBookFetchMasterModel));
+          logBookFetchMasterModel: logBookFetchMasterModel,
+          filterMap: filters));
     } catch (e) {
       emit(LogBookMasterNotFetched(masterNotFetched: e.toString()));
     }
@@ -173,5 +211,37 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
     } catch (e) {
       emit(LogBookDetailsNotFetched(detailsNotFetched: e.toString()));
     }
+  }
+
+  _selectLogbookActivityFilter(
+      SelectLogBookActivityFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookActivityFilterSelected(selectIndex: event.selectedIndex));
+  }
+
+  _selectLogbookFilter(SelectLogBookFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterSelected(selectIndex: event.selectedIndex));
+  }
+
+  _selectLogbookPriorityFilter(
+      SelectLogBookPriorityFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterPrioritySelected(selectIndex: event.selectedIndex));
+  }
+
+  _selectLogbookStatusFilter(
+      SelectLogBookStatusFilter event, Emitter<LogbookStates> emit) {
+    emit(LogBookFilterStatusSelected(selectIndex: event.selectedIndex));
+  }
+
+  _selectLogbookTypesFilter(
+      SelectLogBookTypeFilter event, Emitter<LogbookStates> emit) {
+    List selectedTypeList = List.from(event.selectTypeList);
+    if (event.typesName != '') {
+      if (event.selectTypeList.contains(event.typesName) != true) {
+        selectedTypeList.add(event.typesName);
+      } else {
+        selectedTypeList.remove(event.typesName);
+      }
+    }
+    emit(LogBookFilterTypesSelected(selectedTypesList: selectedTypeList));
   }
 }
