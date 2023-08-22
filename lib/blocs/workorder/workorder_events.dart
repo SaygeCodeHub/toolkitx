@@ -5,3 +5,5 @@ class FetchWorkOrders extends WorkOrderEvents {
 
   FetchWorkOrders({required this.pageNo});
 }
+
+class FetchWorkOrderMaster extends WorkOrderEvents {}

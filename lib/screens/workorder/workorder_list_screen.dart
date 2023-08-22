@@ -11,6 +11,7 @@ import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'widgets/workorder_list_card.dart';
+import 'workorder_filter_screen.dart';
 
 class WorkOrderListScreen extends StatelessWidget {
   static const routeName = 'WorkOrderListScreen';
@@ -38,7 +39,10 @@ class WorkOrderListScreen extends StatelessWidget {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
                       secondaryOnPress: () {},
-                      primaryOnPress: () {},
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, WorkOrderFilterScreen.routeName);
+                      },
                       secondaryVisible: false,
                       isEnabled: true,
                       clearVisible: false,

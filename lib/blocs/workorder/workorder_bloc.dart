@@ -7,6 +7,7 @@ import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
+import '../../data/models/workorder/fetch_workorder_master_model.dart';
 import '../../data/models/workorder/fetch_workorders_model.dart';
 
 class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
@@ -19,6 +20,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
 
   WorkOrderBloc() : super(WorkOrderInitial()) {
     on<FetchWorkOrders>(_fetchWorkOrders);
+    on<FetchWorkOrderMaster>(_fetchMaster);
   }
 
   FutureOr _fetchWorkOrders(
@@ -36,5 +38,20 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
     } catch (e) {
       emit(WorkOrdersNotFetched(listNotFetched: e.toString()));
     }
+  }
+
+  FutureOr _fetchMaster(
+      FetchWorkOrderMaster event, Emitter<WorkOrderStates> emit) async {
+    emit(FetchingWorkOrderMaster());
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    FetchWorkOrdersMasterModel fetchWorkOrdersMasterModel =
+        await _workOrderRepository.fetchWorkOrderMaster(hashCode!, userId!);
+    emit(WorkOrderMasterFetched(
+        fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel));
+    // } catch (e) {
+    //   emit(WorkOrderMasterNotFetched(masterNotFetched: e.toString()));
+    // }
   }
 }
