@@ -80,8 +80,7 @@ class WorkOrderListScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 if (index < state.data.length) {
                                   return WorkOrderListCard(
-                                      data: state
-                                          .fetchWorkOrdersModel.data[index]);
+                                      data: state.data[index]);
                                 } else if (!state.hasReachedMax) {
                                   pageNo++;
                                   context
