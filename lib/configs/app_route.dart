@@ -204,7 +204,8 @@ class AppRoutes {
       case ReportNewQA.routeName:
         return _createRoute(ReportNewQA());
       case WorkOrderListScreen.routeName:
-        return _createRoute(const WorkOrderListScreen());
+        return _createRoute(
+            WorkOrderListScreen(isFromHome: settings.arguments as bool));
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(
             reportNewQMMap: settings.arguments as Map));
@@ -230,7 +231,7 @@ class AppRoutes {
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
-        return _createRoute(const WorkOrderFilterScreen());
+        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       default:

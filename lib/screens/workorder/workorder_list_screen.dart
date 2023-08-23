@@ -3,27 +3,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
 import 'package:toolkit/blocs/workorder/workorder_states.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
-import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/generic_app_bar.dart';
-import 'widgets/workorder_list_card.dart';
+import 'widgets/workorder_list_body.dart';
 import 'workorder_filter_screen.dart';
 
 class WorkOrderListScreen extends StatelessWidget {
   static const routeName = 'WorkOrderListScreen';
+  final bool isFromHome;
 
-  const WorkOrderListScreen({Key? key}) : super(key: key);
+  const WorkOrderListScreen({Key? key, this.isFromHome = false})
+      : super(key: key);
   static int pageNo = 1;
 
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderBloc>().data.clear();
     context.read<WorkOrderBloc>().hasReachedMax = false;
-    context.read<WorkOrderBloc>().add(FetchWorkOrders(pageNo: pageNo));
+    context
+        .read<WorkOrderBloc>()
+        .add(FetchWorkOrders(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
         floatingActionButton: FloatingActionButton(
@@ -35,7 +36,14 @@ class WorkOrderListScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child: Column(children: [
               BlocBuilder<WorkOrderBloc, WorkOrderStates>(
-                  builder: (context, state) {
+                  buildWhen: (previousState, currentState) {
+                if (currentState is FetchingWorkOrders && isFromHome == true) {
+                  return true;
+                } else if (currentState is WorkOrdersFetched) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
                       secondaryOnPress: () {},
@@ -45,72 +53,23 @@ class WorkOrderListScreen extends StatelessWidget {
                       },
                       secondaryVisible: false,
                       isEnabled: true,
-                      clearVisible: false,
-                      clearOnPress: () {});
+                      clearVisible: state.filterMap.isNotEmpty,
+                      clearOnPress: () {
+                        WorkOrderListScreen.pageNo = 1;
+                        context.read<WorkOrderBloc>().data.clear();
+                        context.read<WorkOrderBloc>().hasReachedMax = false;
+                        context
+                            .read<WorkOrderBloc>()
+                            .add(WorkOrderClearFilter());
+                        context.read<WorkOrderBloc>().add(
+                            FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));
+                      });
                 } else {
                   return const SizedBox();
                 }
               }),
               const SizedBox(height: xxTinierSpacing),
-              BlocConsumer<WorkOrderBloc, WorkOrderStates>(
-                  buildWhen: (previousState, currentState) =>
-                      ((currentState is WorkOrdersFetched) ||
-                          (currentState is FetchingWorkOrders && pageNo == 1)),
-                  listener: (context, state) {
-                    if (state is WorkOrdersFetched) {
-                      if (state.fetchWorkOrdersModel.status == 204) {
-                        showCustomSnackBar(
-                            context, StringConstants.kAllDataLoaded, '');
-                        context.read<WorkOrderBloc>().hasReachedMax = true;
-                      }
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is FetchingWorkOrders) {
-                      return Center(
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height / 3.5),
-                              child: const CircularProgressIndicator()));
-                    } else if (state is WorkOrdersFetched) {
-                      return Expanded(
-                          child: ListView.separated(
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: state.hasReachedMax
-                                  ? state.data.length
-                                  : state.data.length + 1,
-                              itemBuilder: (context, index) {
-                                if (index < state.data.length) {
-                                  return WorkOrderListCard(
-                                      data: state.data[index]);
-                                } else if (!state.hasReachedMax) {
-                                  pageNo++;
-                                  context
-                                      .read<WorkOrderBloc>()
-                                      .add(FetchWorkOrders(pageNo: pageNo));
-                                  return const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                          kCircularProgressIndicatorPadding),
-                                      child: SizedBox(
-                                          width:
-                                              kCircularProgressIndicatorWidth,
-                                          child: CircularProgressIndicator()),
-                                    ),
-                                  );
-                                } else {
-                                  return const SizedBox.shrink();
-                                }
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(height: xxTinySpacing);
-                              }));
-                    } else {
-                      return const SizedBox();
-                    }
-                  }),
+              const WorkOrderListBody()
             ])));
   }
 }

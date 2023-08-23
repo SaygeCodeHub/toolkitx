@@ -11,8 +11,11 @@ class WorkOrdersFetched extends WorkOrderStates {
   final FetchWorkOrdersModel fetchWorkOrdersModel;
   final List<WorkOrderDatum> data;
   final bool hasReachedMax;
+  final Map filterMap;
 
-  WorkOrdersFetched({required this.data,
+  WorkOrdersFetched(
+      {required this.filterMap,
+      required this.data,
       required this.fetchWorkOrdersModel,
       required this.hasReachedMax});
 }
@@ -35,4 +38,16 @@ class WorkOrderMasterNotFetched extends WorkOrderStates {
   final String masterNotFetched;
 
   WorkOrderMasterNotFetched({required this.masterNotFetched});
+}
+
+class WorkOrderTypeSelected extends WorkOrderStates {
+  final String id;
+
+  WorkOrderTypeSelected({required this.id});
+}
+
+class WorkOrderStatusSelected extends WorkOrderStates {
+  final String value;
+
+  WorkOrderStatusSelected({required this.value});
 }

@@ -35,7 +35,7 @@ class FetchWorkOrdersMasterModel {
 }
 
 class WorkOrderMasterDatum {
-  final int id;
+  final dynamic id;
   final String name;
   final String location;
   final dynamic groupId;
@@ -46,19 +46,19 @@ class WorkOrderMasterDatum {
   final String workordertype;
   final String currency;
   final String certificateList;
-  final int type;
+  final dynamic type;
   final String title;
-  final int ismandatory;
-  final int isallowchar;
-  final int isallownumber;
-  final int isallowspchar;
+  final dynamic ismandatory;
+  final dynamic isallowchar;
+  final dynamic isallownumber;
+  final dynamic isallowspchar;
   final dynamic maxlength;
   final dynamic minval;
   final dynamic maxval;
   final String fileextension;
-  final int active;
-  final int createdby;
-  final DateTime createddate;
+  final dynamic active;
+  final dynamic createdby;
+  final String createddate;
   final dynamic updateddate;
   final String moduletype;
   final dynamic sortorder;
@@ -106,8 +106,8 @@ class WorkOrderMasterDatum {
   factory WorkOrderMasterDatum.fromJson(Map<String, dynamic> json) =>
       WorkOrderMasterDatum(
         id: json["id"],
-        name: json["name"],
-        location: json["location"],
+        name: json["name"] ?? '',
+        location: json["location"] ?? '',
         groupId: json["group_id"],
         groupName: json["group_name"] ?? '',
         costcenter: json["costcenter"] ?? '',
@@ -115,9 +115,9 @@ class WorkOrderMasterDatum {
         origination: json["origination"] ?? '',
         workordertype: json["workordertype"] ?? '',
         currency: json["currency"] ?? '',
-        certificateList: json["certificate_list"],
+        certificateList: json["certificate_list"] ?? '',
         type: json["type"],
-        title: json["title"],
+        title: json["title"] ?? '',
         ismandatory: json["ismandatory"],
         isallowchar: json["isallowchar"],
         isallownumber: json["isallownumber"],
@@ -125,18 +125,19 @@ class WorkOrderMasterDatum {
         maxlength: json["maxlength"],
         minval: json["minval"],
         maxval: json["maxval"],
-        fileextension: json["fileextension"],
+        fileextension: json["fileextension"] ?? '',
         active: json["active"],
         createdby: json["createdby"],
-        createddate: DateTime.parse(json["createddate"]),
+        createddate: json["createddate"] ?? '',
         updateddate: json["updateddate"],
-        moduletype: json["moduletype"],
+        moduletype: json["moduletype"] ?? '',
         sortorder: json["sortorder"],
-        moreinfo: json["moreinfo"],
+        moreinfo: json["moreinfo"] ?? '',
         moreinfoLink: json["moreinfo_link"],
         moduletype2: json["moduletype_2"],
         rowvalue: json["rowvalue"],
-        queoptions: List<dynamic>.from(json["queoptions"].map((x) => x)),
+        queoptions: List<dynamic>.from(
+            json["queoptions"] == null ? [] : json["queoptions"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -163,7 +164,7 @@ class WorkOrderMasterDatum {
         "fileextension": fileextension,
         "active": active,
         "createdby": createdby,
-        "createddate": createddate.toIso8601String(),
+        "createddate": createddate,
         "updateddate": updateddate,
         "moduletype": moduletype,
         "sortorder": sortorder,
