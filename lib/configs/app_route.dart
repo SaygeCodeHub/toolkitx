@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
+import 'package:toolkit/screens/signInQRCode/process_signin.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
@@ -212,6 +213,9 @@ class AppRoutes {
         return _createRoute(QualityManagementFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
+      case ProcessSignInScreen.routeName:
+        return _createRoute(const ProcessSignInScreen());
+
       default:
         return _createRoute(const WelcomeScreen());
     }
