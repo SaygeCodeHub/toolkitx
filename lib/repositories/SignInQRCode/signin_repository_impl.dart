@@ -1,9 +1,7 @@
-import 'dart:developer';
-
-import 'package:toolkit/data/models/SignInQRCode/process_singin_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository.dart';
 
 import '../../data/models/SignInQRCode/current_signin_model.dart';
+import '../../data/models/SignInQRCode/process_singin_model.dart';
 import '../../data/models/SignInQRCode/signin_unathorized_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -27,10 +25,11 @@ class SignInImpl extends SignInRepository {
   }
 
   @override
-  Future<SignInUnathorizedModel> unathorizedSignIn(Map unathorizedSingInMap) async {
-    final response = await DioClient()
-        .post("${ApiConstants.baseUrl}common/processunauthorizedsignin", unathorizedSingInMap);
-    log("response======>$response");
+  Future<SignInUnathorizedModel> unathorizedSignIn(
+      Map unathorizedSingInMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}common/processunauthorizedsignin",
+        unathorizedSingInMap);
     return SignInUnathorizedModel.fromJson(response);
   }
 }

@@ -7,6 +7,7 @@ class AndroidPopUp extends StatelessWidget {
   final String titleValue;
   final String contentValue;
   final void Function() onPressed;
+  final void Function()? onNoPressed;
   final EdgeInsetsGeometry? contentPadding;
   final bool isNoVisible;
   final String textValue;
@@ -18,7 +19,8 @@ class AndroidPopUp extends StatelessWidget {
       required this.onPressed,
       this.contentPadding,
       this.isNoVisible = true,
-      this.textValue = 'Yes'})
+      this.textValue = 'Yes',
+      this.onNoPressed})
       : super(key: key);
 
   @override
@@ -42,9 +44,7 @@ class AndroidPopUp extends StatelessWidget {
             visible: isNoVisible,
             child: TextButton(
                 child: Text(DatabaseUtil.getText('No')),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }),
+                onPressed: onNoPressed),
           ),
           TextButton(onPressed: onPressed, child: Text(textValue))
         ]);

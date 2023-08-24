@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:toolkit/blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
+import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
@@ -45,16 +46,16 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
               onQRViewCreated: _onQRViewCreated,
               overlay: QrScannerOverlayShape(
                   borderColor: AppColor.blueGrey,
-                  borderRadius: 10,
-                  borderLength: 30,
-                  borderWidth: 10),
+                  borderRadius: kQRBorderRadius,
+                  borderLength: kQRBorderLength,
+                  borderWidth: kQRBorderWidth),
             ),
           ),
           Expanded(
             flex: 1,
             child: Center(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
                   child: MultiBlocListener(
                     listeners: [
                       BlocListener<SignInProcessBloc, SignInProcessState>(
@@ -63,18 +64,22 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             ProgressBar.show(context);
                           }
                           if (state is SignInProcessed) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text(StringConstants.kLoginSuccess)));
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(
+                                context, StringConstants.kLoginSuccess, '');
                             Navigator.pop(context);
                             Navigator.pop(context);
                           }
                           if (state is SignInUnauthorizedPop) {
+                            ProgressBar.dismiss(context);
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AndroidPopUp(
+                                  onNoPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
                                   titleValue: StringConstants.kWarning,
                                   contentValue: StringConstants.kUnauthorized,
                                   onPressed: () {
@@ -87,6 +92,7 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             );
                           }
                           if (state is SignInProcessingError) {
+                            ProgressBar.dismiss(context);
                             showCustomSnackBar(context, state.errorMsg, '');
                           }
                         },
@@ -98,7 +104,9 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                               context: context,
                               builder: (context) {
                                 return const Center(
-                                  child: CircularProgressIndicator(color: AppColor.deepBlue,),
+                                  child: CircularProgressIndicator(
+                                    color: AppColor.deepBlue,
+                                  ),
                                 );
                               },
                             );
@@ -110,7 +118,8 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             Navigator.pop(context);
                           }
                           if (state is SignInUnathorizedError) {
-                            showCustomSnackBar(context, StringConstants.kUnauthorizedError, '');
+                            showCustomSnackBar(context,
+                                StringConstants.kUnauthorizedError, '');
                           }
                         },
                       ),

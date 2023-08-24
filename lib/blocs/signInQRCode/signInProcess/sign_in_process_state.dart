@@ -11,7 +11,6 @@ class SignInProcessed extends SignInProcessState {
   SignInProcessed({required this.processSignInModel});
 }
 
-
 class SignInProcessingError extends SignInProcessState {
   final String errorMsg;
   SignInProcessingError({required this.errorMsg});

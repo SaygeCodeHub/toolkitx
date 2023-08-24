@@ -63,3 +63,6 @@ const double kNotificationBadgePadding = 20;
 const double kToggleSwitchMinWidth = 120;
 const double kToggleSwitchCornerRadius = 20;
 const double kGridViewMainAxisExtent = 215;
+const double kQRBorderRadius = 10;
+const double kQRBorderLength = 30;
+const double kQRBorderWidth = 10;

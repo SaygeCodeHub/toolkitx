@@ -59,14 +59,13 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
         "hashcode": hashCode
       };
       SignInUnathorizedModel signInUnathorizedModel =
-      await _signInRepository.unathorizedSignIn(unathorizedSingInMap);
+          await _signInRepository.unathorizedSignIn(unathorizedSingInMap);
       if (signInUnathorizedModel.status == 200) {
-        emit(SignInUnauthorized(signInUnathorizedModel: signInUnathorizedModel));
-      }else {
+        emit(
+            SignInUnauthorized(signInUnathorizedModel: signInUnathorizedModel));
+      } else {
         emit(SignInUnathorizedError(errorMsg: StringConstants.kQRError));
       }
     }
   }
 }
-
-
