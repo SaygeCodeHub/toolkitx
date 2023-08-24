@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
@@ -155,6 +156,7 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => EditIncidentDetailsBloc()),
           BlocProvider(
               lazy: true, create: (context) => QualityManagementBloc()),
+          BlocProvider(lazy: true, create: (context) => CalendarBloc()),
           BlocProvider(
               lazy: false,
               create: (context) =>
