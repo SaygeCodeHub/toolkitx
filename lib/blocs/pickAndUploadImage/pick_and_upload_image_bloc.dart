@@ -21,8 +21,8 @@ class PickAndUploadImageBloc
       getIt<UploadImageRepository>();
   final ImagePicker _imagePicker = ImagePicker();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-  bool isInitial = true;
-  int number = 0;
+  bool isUploadInitial = true;
+  int imageNumber = 0;
 
   PickAndUploadImageStates get initialState => PermissionInitial();
 
@@ -36,8 +36,8 @@ class PickAndUploadImageBloc
   }
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
-    isInitial = true;
-    number = 0;
+    isUploadInitial = true;
+    imageNumber = 0;
     emit(PermissionInitial());
   }
 
@@ -58,39 +58,39 @@ class PickAndUploadImageBloc
       if (!hasPermission) {
         return;
       } else {
-        bool isAttached = false;
+        bool isImageAttached = false;
         List cameraPathsList =
-            List.from((isInitial == false) ? event.cameraImageList : []);
-        number = isInitial == true ? 0 : number;
+            List.from((isUploadInitial == false) ? event.cameraImageList : []);
+        imageNumber = isUploadInitial == true ? 0 : imageNumber;
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
-        isInitial = false;
+        isUploadInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
-          isAttached = true;
+          isImageAttached = true;
           cameraPathsList.add(pickedFile.path);
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
           }
           for (int i = 0; i <= cameraPathsList.length; i++) {
-            number = i;
+            imageNumber = i;
           }
-          if (isAttached == true) {
+          if (isImageAttached == true) {
             if (event.isSignature == true) {
               add(CropImage(imagePath: imagePath));
             } else {
               add(UploadImageEvent(
                   imageFile: imagePath,
-                  isImageAttached: isAttached,
+                  isImageAttached: isImageAttached,
                   imagesList: cameraPathsList));
             }
           }
         } else {
-          isAttached = false;
+          isImageAttached = false;
           add(UploadImageEvent(
               imageFile: '',
-              isImageAttached: isAttached,
+              isImageAttached: isImageAttached,
               imagesList: cameraPathsList));
         }
       }
@@ -116,40 +116,40 @@ class PickAndUploadImageBloc
       if (!hasPermission) {
         return;
       } else {
-        bool isAttached = false;
-        List galleryPathsList =
-            List.from((isInitial == false) ? event.galleryImagesList : []);
-        number = isInitial == true ? 0 : number;
+        bool isImageAttached = false;
+        List galleryPathsList = List.from(
+            (isUploadInitial == false) ? event.galleryImagesList : []);
+        imageNumber = isUploadInitial == true ? 0 : imageNumber;
 
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);
-        isInitial = false;
+        isUploadInitial = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
-          isAttached = true;
+          isImageAttached = true;
           galleryPathsList.add(pickedFile.path);
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
           }
           for (int i = 0; i <= galleryPathsList.length; i++) {
-            number = i;
+            imageNumber = i;
           }
-          if (isAttached == true) {
+          if (isImageAttached == true) {
             if (event.isSignature == true) {
               add(CropImage(imagePath: imagePath));
             } else {
               add(UploadImageEvent(
                   imageFile: imagePath,
-                  isImageAttached: isAttached,
+                  isImageAttached: isImageAttached,
                   imagesList: galleryPathsList));
             }
           }
         } else {
-          isAttached = false;
+          isImageAttached = false;
           add(UploadImageEvent(
               imageFile: '',
-              isImageAttached: isAttached,
+              isImageAttached: isImageAttached,
               imagesList: galleryPathsList));
         }
       }
@@ -170,7 +170,7 @@ class PickAndUploadImageBloc
             imagePathsList: event.imagesList,
             imagePath: event.imageFile,
             uploadPictureModel: uploadPictureModel,
-            incrementNumber: number));
+            incrementNumber: imageNumber));
       } else {
         emit(ImageNotUploaded(
             imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -182,18 +182,18 @@ class PickAndUploadImageBloc
   }
 
   _removeImage(RemoveImage event, Emitter<PickAndUploadImageStates> emit) {
-    bool isAttached = true;
+    bool isImageAttached = true;
     List images = List.from(event.imagesList);
     if (event.index >= 0 && event.index < images.length) {
       images.removeAt(event.index);
-      number--;
-      images.isEmpty ? isAttached = false : isAttached = true;
+      imageNumber--;
+      images.isEmpty ? isImageAttached = false : isImageAttached = true;
       emit(ImagePickerLoaded(
-          isImageAttached: isAttached,
+          isImageAttached: isImageAttached,
           imagePathsList: images,
           imagePath: '',
           uploadPictureModel: event.uploadPictureModel,
-          incrementNumber: number));
+          incrementNumber: imageNumber));
     }
   }
 
