@@ -80,12 +80,12 @@ class FetchingQualityManagementMaster extends QualityManagementStates {}
 
 class QualityManagementMasterFetched extends QualityManagementStates {
   final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
-  final int number;
+  final int imageNumber;
   final String clientId;
 
   QualityManagementMasterFetched(
       {required this.clientId,
-      required this.number,
+      required this.imageNumber,
       required this.fetchQualityManagementMasterModel});
 }
 

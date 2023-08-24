@@ -74,7 +74,7 @@ class PickAndUploadImageBloc
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
           }
-          if (editedCameraList.toString() != "[null]") {
+          if (editedCameraList.toString() != "[]") {
             number = editedCameraList.length - 1;
             for (int j = 0; j <= cameraPathsList.length; j++) {
               number = number + 1;
@@ -142,7 +142,7 @@ class PickAndUploadImageBloc
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
           }
-          if (editedGalleryList.toString() != "[null]") {
+          if (editedGalleryList.toString() != "[]") {
             number = editedGalleryList.length - 1;
             for (int j = 0; j <= galleryPathsList.length; j++) {
               number = number + 1;

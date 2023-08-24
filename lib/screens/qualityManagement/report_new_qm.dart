@@ -46,7 +46,7 @@ class ReportNewQA extends StatelessWidget {
               if (state is FetchingQualityManagementMaster) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is QualityManagementMasterFetched) {
-                int incrementNum = state.number;
+                int incrementNum = state.imageNumber;
                 return Padding(
                     padding: const EdgeInsets.only(
                         left: leftRightMargin,

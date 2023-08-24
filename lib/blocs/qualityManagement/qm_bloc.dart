@@ -40,6 +40,7 @@ class QualityManagementBloc
   String commentId = '';
   String nextStatus = '';
   String encryptQmId = '';
+  int imageNumber = 0;
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -143,6 +144,7 @@ class QualityManagementBloc
                 .data.customfields[i].fieldvalue
           });
         }
+        imageNumber = fetchQualityManagementDetailsModel.data.files.length;
         Map editQMDetailsMap = {
           "description": fetchQualityManagementDetailsModel.data.description,
           "responsible_person": "",
@@ -400,7 +402,7 @@ class QualityManagementBloc
       emit(QualityManagementMasterFetched(
           fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
           clientId: clientId!,
-          number: 0));
+          imageNumber: imageNumber));
     } catch (e) {
       emit(QualityManagementMasterNotFetched(masterNotFetched: e.toString()));
     }
