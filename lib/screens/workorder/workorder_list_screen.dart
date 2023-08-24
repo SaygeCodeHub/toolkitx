@@ -20,8 +20,6 @@ class WorkOrderListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderBloc>().data.clear();
-    context.read<WorkOrderBloc>().hasReachedMax = false;
     context
         .read<WorkOrderBloc>()
         .add(FetchWorkOrders(pageNo: pageNo, isFromHome: isFromHome));
