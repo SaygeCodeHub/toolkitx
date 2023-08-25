@@ -66,6 +66,7 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
+import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
 class AppRoutes {
@@ -234,6 +235,9 @@ class AppRoutes {
         return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
+      case WorkOrderDetailsTabScreen.routeName:
+        return _createRoute(
+            WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

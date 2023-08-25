@@ -48,6 +48,7 @@ import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_states.dart';
+import 'blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'configs/app_theme.dart';
 import 'di/app_module.dart';
 import 'configs/app_route.dart';
@@ -158,6 +159,8 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => QualityManagementBloc()),
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => WorkOrderTabDetailsBloc()),
           BlocProvider(
               lazy: false,
               create: (context) =>
