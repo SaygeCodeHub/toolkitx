@@ -7,6 +7,7 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -200,10 +201,8 @@ class AppRoutes {
             LogBookDetailsScreen(logId: settings.arguments.toString()));
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
-
       case ReportNewQA.routeName:
         return _createRoute(ReportNewQA());
-
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(
             reportNewQMMap: settings.arguments as Map));
@@ -230,6 +229,11 @@ class AppRoutes {
         return _createRoute(QualityManagementFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
+      case CertificatesListScreen.routeName:
+        return _createRoute(const CertificatesListScreen());
+      case ProcessSignInScreen.routeName:
+        return _createRoute(const ProcessSignInScreen());
+
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
 

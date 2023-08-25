@@ -25,13 +25,12 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
     emit(SignInProcessing());
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     String? userid = await _customerCache.getUserId(CacheKeys.userId);
-    String? qrCode = event.qRCode;
-    if (qrCode == null || qrCode.isEmpty) {
+    if (event.qRCode == null || event.qRCode!.isEmpty) {
       emit((SignInProcessingError(errorMsg: StringConstants.kQRError)));
     } else {
       Map signInMap = {
         "userid": userid,
-        "qrcode": qrCode,
+        "qrcode": event.qRCode,
         "hashcode": hashCode
       };
       ProcessSignInModel processSignInModel =
@@ -49,13 +48,12 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
     emit(SignInUnauthorizedProcessing());
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     String? userid = await _customerCache.getUserId(CacheKeys.userId);
-    String? qrCode = event.qRCode;
-    if (qrCode.isEmpty) {
+    if (event.qRCode.isEmpty) {
       emit(SignInUnathorizedError(errorMsg: StringConstants.kQRError));
     } else {
       Map unathorizedSingInMap = {
         "userid": userid,
-        "qrcode": qrCode,
+        "qrcode": event.qRCode,
         "hashcode": hashCode
       };
       SignInUnathorizedModel signInUnathorizedModel =

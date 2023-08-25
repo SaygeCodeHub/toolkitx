@@ -67,7 +67,7 @@ class SignInListScreen extends StatelessWidget {
                       ),
                       trailing: IconButton(
                           onPressed: () {
-                            // Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                           icon: const Icon(
                             Icons.logout,

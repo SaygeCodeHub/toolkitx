@@ -76,13 +76,13 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                               context: context,
                               builder: (context) {
                                 return AndroidPopUp(
-                                  onNoPressed: () {
+                                  onSecondarybtn: () {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
                                   titleValue: StringConstants.kWarning,
                                   contentValue: StringConstants.kUnauthorized,
-                                  onPressed: () {
+                                  onPrimarybtn: () {
                                     context.read<SignInProcessBloc>().add(
                                         UnauthorizedSignIn(qRCode: result));
                                   },

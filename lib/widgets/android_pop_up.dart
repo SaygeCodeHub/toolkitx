@@ -6,8 +6,8 @@ import 'package:toolkit/utils/database_utils.dart';
 class AndroidPopUp extends StatelessWidget {
   final String titleValue;
   final String contentValue;
-  final void Function() onPressed;
-  final void Function()? onNoPressed;
+  final void Function() onPrimarybtn;
+  final void Function()? onSecondarybtn;
   final EdgeInsetsGeometry? contentPadding;
   final bool isNoVisible;
   final String textValue;
@@ -16,11 +16,11 @@ class AndroidPopUp extends StatelessWidget {
       {Key? key,
       required this.titleValue,
       required this.contentValue,
-      required this.onPressed,
+      required this.onPrimarybtn,
       this.contentPadding,
       this.isNoVisible = true,
       this.textValue = 'Yes',
-      this.onNoPressed})
+      this.onSecondarybtn})
       : super(key: key);
 
   @override
@@ -43,10 +43,12 @@ class AndroidPopUp extends StatelessWidget {
           Visibility(
             visible: isNoVisible,
             child: TextButton(
-                onPressed: onNoPressed,
+                onPressed: onSecondarybtn ?? (){
+                  Navigator.pop(context);
+                },
                 child: Text(DatabaseUtil.getText('No'))),
           ),
-          TextButton(onPressed: onPressed, child: Text(textValue))
+          TextButton(onPressed: onPrimarybtn, child: Text(textValue))
         ]);
   }
 }

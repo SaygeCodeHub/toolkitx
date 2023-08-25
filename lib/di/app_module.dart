@@ -11,6 +11,8 @@ import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
 import '../repositories/calendar/calendar_repository.dart';
 import '../repositories/calendar/calendar_repository_impl.dart';
+import '../repositories/certificates/certificates_repository.dart';
+import '../repositories/certificates/certificates_repository_impl.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
@@ -68,4 +70,6 @@ configurableDependencies() {
   getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
   getIt.registerLazySingleton<CalendarRepository>(
       () => CalendarRepositoryImpl());
+  getIt.registerLazySingleton<CertificateRepository>(
+          () => CertificateRepositoryImpl());
 }
