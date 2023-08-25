@@ -184,7 +184,8 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, CalendarScreen.routeName);
         break;
       case 'workorder':
-        Navigator.pushNamed(context, WorkOrderListScreen.routeName);
+        Navigator.pushNamed(context, WorkOrderListScreen.routeName,
+            arguments: true);
         break;
     }
   }
