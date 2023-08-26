@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
+import 'package:toolkit/repositories/certificates/certificates_repository.dart';
+import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
@@ -72,4 +74,6 @@ configurableDependencies() {
       () => CalendarRepositoryImpl());
   getIt.registerLazySingleton<WorkOrderRepository>(
       () => WorkOrderRepositoryImpl());
+  getIt.registerLazySingleton<CertificateRepository>(
+          () => CertificateRepositoryImpl());
 }
