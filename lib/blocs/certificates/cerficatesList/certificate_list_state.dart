@@ -7,12 +7,12 @@ class CertificateListInitial extends CertificateListState {}
 class FetchingCertificateList extends CertificateListState {}
 
 class FetchedCertificateList extends CertificateListState {
-  final FetchCertificateListModel fetchCertificateListModel;
+  final FetchCertificatesModel fetchCertificatesModel;
   final List<CertificateListDatum> data;
   final bool hasReachedMax;
 
   FetchedCertificateList(
-      {required this.fetchCertificateListModel,
+      {required this.fetchCertificatesModel,
       required this.data,
       required this.hasReachedMax});
 }

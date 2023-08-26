@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
@@ -27,19 +28,20 @@ class CertificateListBloc
   Future<FutureOr<void>> _fetchCertificateList(
       FetchCertificateList event, Emitter<CertificateListState> emit) async {
     emit(FetchingCertificateList());
-    try {
+    // try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchCertificateListModel fetchCertificateListModel =
-          await _certificateRepository.fetchCertificateListRepository(
+      FetchCertificatesModel fetchCertificatesModel =
+          await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
-      data.addAll(fetchCertificateListModel.data);
+      data.addAll(fetchCertificatesModel.data);
+      log('FetchedCertificateList====>${fetchCertificatesModel.data}');
       emit(FetchedCertificateList(
-          fetchCertificateListModel: fetchCertificateListModel,
+          fetchCertificatesModel: fetchCertificatesModel,
           data: data,
           hasReachedMax: hasReachedMax));
-    } catch (e) {
-      emit(CertificateListError(errorMsg: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(CertificateListError(errorMsg: e.toString()));
+    // }
   }
 }

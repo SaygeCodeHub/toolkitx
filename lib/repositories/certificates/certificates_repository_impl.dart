@@ -5,11 +5,13 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 
 class CertificateRepositoryImpl extends CertificateRepository {
+
   @override
-  Future<FetchCertificateListModel> fetchCertificateListRepository(
-      int pageNo, String hashCode, String userId) async {
+  Future<FetchCertificatesModel> fetchCertificatesRepository(int pageNo, String hashCode, String userId) async {
+
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/get?pageno=$pageNo&hashcode=$hashCode&workforceid=$userId");
-    return FetchCertificateListModel.fromJson(response);
+    return FetchCertificatesModel.fromJson(response);
+
   }
 }

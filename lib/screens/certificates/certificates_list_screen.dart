@@ -42,7 +42,7 @@ class CertificatesListScreen extends StatelessWidget {
                         CertificatesListScreen.pageNo == 1)),
             listener: (context, state) {
               if (state is FetchedCertificateList) {
-                if (state.fetchCertificateListModel.status == 204) {
+                if (state.fetchCertificatesModel.status == 204) {
                   context.read<CertificateListBloc>().hasReachedMax = true;
                   showCustomSnackBar(
                       context, StringConstants.kAllDataLoaded, '');
@@ -55,7 +55,7 @@ class CertificatesListScreen extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (state is FetchedCertificateList) {
-                if (state.fetchCertificateListModel.data.isNotEmpty) {
+                if (state.fetchCertificatesModel.data.isNotEmpty) {
                   return Column(
                     children: [
                       Expanded(
