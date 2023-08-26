@@ -75,5 +75,5 @@ configurableDependencies() {
   getIt.registerLazySingleton<WorkOrderRepository>(
       () => WorkOrderRepositoryImpl());
   getIt.registerLazySingleton<CertificateRepository>(
-          () => CertificateRepositoryImpl());
+      () => CertificateRepositoryImpl());
 }

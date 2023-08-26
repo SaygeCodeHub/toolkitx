@@ -192,7 +192,6 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, CertificatesListScreen.routeName,
             arguments: true);
         break;
-
     }
   }
 }

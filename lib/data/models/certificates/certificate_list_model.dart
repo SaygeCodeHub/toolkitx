@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchCertificateListModel fetchCertificateListModelFromJson(String str) => FetchCertificateListModel.fromJson(json.decode(str));
+FetchCertificateListModel fetchCertificateListModelFromJson(String str) =>
+    FetchCertificateListModel.fromJson(json.decode(str));
 
-String fetchCertificateListModelToJson(FetchCertificateListModel data) => json.encode(data.toJson());
+String fetchCertificateListModelToJson(FetchCertificateListModel data) =>
+    json.encode(data.toJson());
 
 class FetchCertificateListModel {
   final int status;
@@ -16,17 +17,19 @@ class FetchCertificateListModel {
     required this.data,
   });
 
-  factory FetchCertificateListModel.fromJson(Map<String, dynamic> json) => FetchCertificateListModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<CertificateListDatum>.from(json["Data"].map((x) => CertificateListDatum.fromJson(x))),
-  );
+  factory FetchCertificateListModel.fromJson(Map<String, dynamic> json) =>
+      FetchCertificateListModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<CertificateListDatum>.from(
+            json["Data"].map((x) => CertificateListDatum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class CertificateListDatum {
@@ -56,33 +59,34 @@ class CertificateListDatum {
     required this.accessfeedbackedit,
   });
 
-  factory CertificateListDatum.fromJson(Map<String, dynamic> json) => CertificateListDatum(
-    id: json["id"],
-    name: json["name"],
-    actualDates: json["actual_dates"]??'',
-    newDates: json["new_dates"]??'',
-    actualCertificate: json["actual_certificate"],
-    newCertificate: newCertificateValues.map[json["new_certificate"]]!,
-    status: json["status"]??'',
-    expired: json["expired"],
-    accesscertificate: json["accesscertificate"],
-    accessfeedback: json["accessfeedback"],
-    accessfeedbackedit: json["accessfeedbackedit"],
-  );
+  factory CertificateListDatum.fromJson(Map<String, dynamic> json) =>
+      CertificateListDatum(
+        id: json["id"],
+        name: json["name"],
+        actualDates: json["actual_dates"] ?? '',
+        newDates: json["new_dates"] ?? '',
+        actualCertificate: json["actual_certificate"],
+        newCertificate: newCertificateValues.map[json["new_certificate"]]!,
+        status: json["status"] ?? '',
+        expired: json["expired"],
+        accesscertificate: json["accesscertificate"],
+        accessfeedback: json["accessfeedback"],
+        accessfeedbackedit: json["accessfeedbackedit"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "actual_dates": actualDates,
-    "new_dates": newDates,
-    "actual_certificate": actualCertificate,
-    "new_certificate": newCertificateValues.reverse[newCertificate],
-    "status": status,
-    "expired": expired,
-    "accesscertificate": accesscertificate,
-    "accessfeedback": accessfeedback,
-    "accessfeedbackedit": accessfeedbackedit,
-  };
+        "id": id,
+        "name": name,
+        "actual_dates": actualDates,
+        "new_dates": newDates,
+        "actual_certificate": actualCertificate,
+        "new_certificate": newCertificateValues.reverse[newCertificate],
+        "status": status,
+        "expired": expired,
+        "accesscertificate": accesscertificate,
+        "accessfeedback": accessfeedback,
+        "accessfeedbackedit": accessfeedbackedit,
+      };
 }
 
 enum NewCertificate {
@@ -93,8 +97,10 @@ enum NewCertificate {
 
 final newCertificateValues = EnumValues({
   "": NewCertificate.EMPTY,
-  "6BkTEaOfoHBljFO3GWsj2zsRtPd/y0npJpQImTJPzkk=": NewCertificate.THE_6_BK_T_EA_OFO_H_BLJ_FO3_G_WSJ2_ZS_RT_PD_Y0_NP_JP_Q_IM_TJ_PZKK,
-  "unYg93wCkDoCv4eGwhj6aqE+su2R1ccVHKwKEdyVFwg=": NewCertificate.UN_YG93_W_CK_DO_CV4_E_GWHJ6_AQ_E_SU2_R1_CC_VH_KW_K_EDY_V_FWG
+  "6BkTEaOfoHBljFO3GWsj2zsRtPd/y0npJpQImTJPzkk=": NewCertificate
+      .THE_6_BK_T_EA_OFO_H_BLJ_FO3_G_WSJ2_ZS_RT_PD_Y0_NP_JP_Q_IM_TJ_PZKK,
+  "unYg93wCkDoCv4eGwhj6aqE+su2R1ccVHKwKEdyVFwg=": NewCertificate
+      .UN_YG93_W_CK_DO_CV4_E_GWHJ6_AQ_E_SU2_R1_CC_VH_KW_K_EDY_V_FWG
 });
 
 class EnumValues<T> {
