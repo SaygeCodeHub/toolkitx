@@ -5,7 +5,7 @@ import '../../data/models/LogBook/report_new_logbook_model.dart';
 
 abstract class LogbookRepository {
   Future<FetchLogBookListModel> fetchLogbookList(
-      String userId, String hashCode, String filter, int page);
+      int page, String userId, String hashCode, String filter);
 
   Future<FetchLogBookDetailsModel> fetchLogBookDetails(
       String logId, String hashCode);

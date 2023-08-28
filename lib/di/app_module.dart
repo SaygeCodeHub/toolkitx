@@ -9,6 +9,8 @@ import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
+import '../repositories/calendar/calendar_repository.dart';
+import '../repositories/calendar/calendar_repository_impl.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
@@ -32,6 +34,8 @@ import '../repositories/todo/todo_repository.dart';
 import '../repositories/todo/todo_repository_impl.dart';
 import '../repositories/uploadImage/upload_image_repository.dart';
 import '../repositories/uploadImage/upload_image_repository_impl.dart';
+import '../repositories/workorder/workorder_reposiotry.dart';
+import '../repositories/workorder/workorder_repository_impl.dart';
 
 final getIt = GetIt.instance;
 
@@ -64,4 +68,8 @@ configurableDependencies() {
   getIt.registerLazySingleton<QualityManagementRepository>(
       () => QualityManagementRepositoryImpl());
   getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
+  getIt.registerLazySingleton<CalendarRepository>(
+      () => CalendarRepositoryImpl());
+  getIt.registerLazySingleton<WorkOrderRepository>(
+      () => WorkOrderRepositoryImpl());
 }

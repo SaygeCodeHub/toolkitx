@@ -10,9 +10,9 @@ import 'logbook_repository.dart';
 class LogbookRepositoryImpl extends LogbookRepository {
   @override
   Future<FetchLogBookListModel> fetchLogbookList(
-      String userId, String hashCode, String filter, int page) async {
+      int page, String userId, String hashCode, String filter) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}sllog/get?pageno=$page&userid=$userId&hashcode=$hashCode&filter=");
+        "${ApiConstants.baseUrl}sllog/get?pageno=$page&userid=$userId&hashcode=$hashCode&filter=$filter");
     return FetchLogBookListModel.fromJson(response);
   }
 
