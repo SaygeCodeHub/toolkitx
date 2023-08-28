@@ -65,3 +65,5 @@ const double kToggleSwitchCornerRadius = 20;
 const double kCalendarRadius = 30;
 const double kGridViewMainAxisExtent = 215;
 const double kCalendarContainerWidth = 450;
+const double kCircularProgressIndicatorWidth = 35;
+const double kCircularProgressIndicatorPadding = 8.0;
