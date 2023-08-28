@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
@@ -35,7 +34,6 @@ class CertificateListBloc
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
       data.addAll(fetchCertificatesModel.data);
-      log('FetchedCertificateList====>${fetchCertificatesModel.data}');
       emit(FetchedCertificateList(
           fetchCertificatesModel: fetchCertificatesModel,
           data: data,
