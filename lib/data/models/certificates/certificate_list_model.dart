@@ -1,6 +1,10 @@
 import 'dart:convert';
-FetchCertificatesModel fetchCertificatesModelFromJson(String str) => FetchCertificatesModel.fromJson(json.decode(str));
-String fetchCertificatesModelToJson(FetchCertificatesModel data) => json.encode(data.toJson());
+
+FetchCertificatesModel fetchCertificatesModelFromJson(String str) =>
+    FetchCertificatesModel.fromJson(json.decode(str));
+String fetchCertificatesModelToJson(FetchCertificatesModel data) =>
+    json.encode(data.toJson());
+
 class FetchCertificatesModel {
   final int status;
   final String message;
@@ -10,17 +14,20 @@ class FetchCertificatesModel {
     required this.message,
     required this.data,
   });
-  factory FetchCertificatesModel.fromJson(Map<String, dynamic> json) => FetchCertificatesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<CertificateListDatum>.from(json["Data"].map((x) => CertificateListDatum.fromJson(x))),
-  );
+  factory FetchCertificatesModel.fromJson(Map<String, dynamic> json) =>
+      FetchCertificatesModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<CertificateListDatum>.from(
+            json["Data"].map((x) => CertificateListDatum.fromJson(x))),
+      );
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
+
 class CertificateListDatum {
   final String id;
   final String name;
@@ -46,30 +53,31 @@ class CertificateListDatum {
     required this.accessfeedback,
     required this.accessfeedbackedit,
   });
-  factory CertificateListDatum.fromJson(Map<String, dynamic> json) => CertificateListDatum(
-    id: json["id"],
-    name: json["name"],
-    actualDates: json["actual_dates"],
-    newDates: json["new_dates"],
-    actualCertificate: json["actual_certificate"],
-    newCertificate: json["new_certificate"],
-    status: json["status"],
-    expired: json["expired"],
-    accesscertificate: json["accesscertificate"],
-    accessfeedback: json["accessfeedback"],
-    accessfeedbackedit: json["accessfeedbackedit"],
-  );
+  factory CertificateListDatum.fromJson(Map<String, dynamic> json) =>
+      CertificateListDatum(
+        id: json["id"],
+        name: json["name"],
+        actualDates: json["actual_dates"],
+        newDates: json["new_dates"],
+        actualCertificate: json["actual_certificate"],
+        newCertificate: json["new_certificate"],
+        status: json["status"],
+        expired: json["expired"],
+        accesscertificate: json["accesscertificate"],
+        accessfeedback: json["accessfeedback"],
+        accessfeedbackedit: json["accessfeedbackedit"],
+      );
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "actual_dates": actualDates,
-    "new_dates": newDates,
-    "actual_certificate": actualCertificate,
-    "new_certificate": newCertificate,
-    "status": status,
-    "expired": expired,
-    "accesscertificate": accesscertificate,
-    "accessfeedback": accessfeedback,
-    "accessfeedbackedit": accessfeedbackedit,
-  };
+        "id": id,
+        "name": name,
+        "actual_dates": actualDates,
+        "new_dates": newDates,
+        "actual_certificate": actualCertificate,
+        "new_certificate": newCertificate,
+        "status": status,
+        "expired": expired,
+        "accesscertificate": accesscertificate,
+        "accessfeedback": accessfeedback,
+        "accessfeedbackedit": accessfeedbackedit,
+      };
 }

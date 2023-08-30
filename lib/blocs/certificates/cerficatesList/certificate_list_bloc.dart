@@ -27,17 +27,17 @@ class CertificateListBloc
   Future<FutureOr<void>> _fetchCertificateList(
       FetchCertificateList event, Emitter<CertificateListState> emit) async {
     emit(FetchingCertificateList());
-    try{ 
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    String? userId = await _customerCache.getHashCode(CacheKeys.hashcode);
-    FetchCertificatesModel fetchCertificateListModel =
-        await _certificateRepository.fetchCertificateListRepository(
-            event.pageNo, hashCode!, userId!);
-    emit(FetchedCertificateList(
-        fetchCertificateListModel: fetchCertificateListModel,
-        data: data,
-        hasReachedMax: hasReachedMax));
-    }catch(e){
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchCertificatesModel fetchCertificateListModel =
+          await _certificateRepository.fetchCertificateListRepository(
+              event.pageNo, hashCode!, userId!);
+      emit(FetchedCertificateList(
+          fetchCertificateListModel: fetchCertificateListModel,
+          data: data,
+          hasReachedMax: hasReachedMax));
+    } catch (e) {
       emit(CertificateListError(errorMsg: e.toString()));
     }
   }

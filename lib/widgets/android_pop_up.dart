@@ -43,9 +43,10 @@ class AndroidPopUp extends StatelessWidget {
           Visibility(
             visible: isNoVisible,
             child: TextButton(
-                onPressed: onSecondarybtn ?? (){
-                  Navigator.pop(context);
-                },
+                onPressed: onSecondarybtn ??
+                    () {
+                      Navigator.pop(context);
+                    },
                 child: Text(DatabaseUtil.getText('No'))),
           ),
           TextButton(onPressed: onPrimarybtn, child: Text(textValue))

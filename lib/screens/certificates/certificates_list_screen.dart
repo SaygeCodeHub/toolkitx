@@ -37,8 +37,8 @@ class CertificatesListScreen extends StatelessWidget {
                 ((currentState is FetchedCertificateList ||
                     currentState is FetchingCertificateList && pageNo == 1)),
             listener: (context, state) {
-              if(state is FetchedCertificateList){
-                if(state.fetchCertificateListModel.status == 204){
+              if (state is FetchedCertificateList) {
+                if (state.fetchCertificateListModel.status == 204) {
                   showCustomSnackBar(
                       context, StringConstants.kAllDataLoaded, '');
                   context.read<CertificateListBloc>().hasReachedMax = true;
