@@ -12,12 +12,17 @@ import '../../../utils/database_utils.dart';
 import 'signin_location_details_cards.dart';
 
 class SignInLocationDetailsBody extends StatelessWidget {
-  const SignInLocationDetailsBody({Key? key}) : super(key: key);
+  final String locationId;
+
+  const SignInLocationDetailsBody({Key? key, required this.locationId})
+      : super(key: key);
   static int indexSelected = 0;
 
   @override
   Widget build(BuildContext context) {
-    context.read<SignInLocationDetailsBloc>().add(FetchSignInLocationDetails());
+    context
+        .read<SignInLocationDetailsBloc>()
+        .add(FetchSignInLocationDetails(locationId: locationId));
 
     return Expanded(
       child: Column(
@@ -26,19 +31,19 @@ class SignInLocationDetailsBody extends StatelessWidget {
               builder: (context, state) {
             if (state is SignInLocationDetailsFetched) {
               return Visibility(
-                visible: state.fetchLocationDetailsSignInModel.data.permit
+                visible: state.fetchLocationDetailsSignInModel.data.permit!
                         .isNotEmpty ||
-                    state.fetchLocationDetailsSignInModel.data.workorder
+                    state.fetchLocationDetailsSignInModel.data.workorder!
                         .isNotEmpty ||
-                    state
-                        .fetchLocationDetailsSignInModel.data.loto.isNotEmpty ||
-                    state.fetchLocationDetailsSignInModel.data.checklist
+                    state.fetchLocationDetailsSignInModel.data.loto!
+                        .isNotEmpty ||
+                    state.fetchLocationDetailsSignInModel.data.checklist!
                         .isNotEmpty,
                 child: ToggleSwitch(
                   animate: true,
                   minWidth: kToggleSwitchMinWidth,
                   initialLabelIndex: indexSelected,
-                  cornerRadius: 10,
+                  cornerRadius: kSignInToggleCornerRadius,
                   activeFgColor: AppColor.black,
                   inactiveBgColor: AppColor.blueGrey,
                   inactiveFgColor: AppColor.black,
@@ -70,7 +75,7 @@ class SignInLocationDetailsBody extends StatelessWidget {
             }
           }),
           const SizedBox(height: xxTinySpacing),
-          const SignInLocationDetailsCards()
+          SignInLocationDetailsCards(locationId: locationId)
         ],
       ),
     );

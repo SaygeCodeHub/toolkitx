@@ -20,7 +20,7 @@ class SignInImpl extends SignInRepository {
   Future<FetchLocationDetailsSignInModel> signInLocationDetails(
       String hashCode, String locationId, String userId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}common/getlocationdetails?hashcode=$hashCode&locationid=Ema+c++ehfgiM5Gpd7T6pg==&userid=$userId");
+        "${ApiConstants.baseUrl}common/getlocationdetails?hashcode=$hashCode&locationid=$locationId&userid=$userId");
     return FetchLocationDetailsSignInModel.fromJson(response);
   }
 }

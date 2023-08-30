@@ -7,7 +7,11 @@ abstract class SignInDetailsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchSignInLocationDetails extends SignInDetailsEvent {}
+class FetchSignInLocationDetails extends SignInDetailsEvent {
+  final String locationId;
+
+  FetchSignInLocationDetails({required this.locationId});
+}
 
 class ToggleSwitchIndex extends SignInDetailsEvent {
   final int selectedIndex;

@@ -19,7 +19,6 @@ class SignInListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<SignInListBloc>().add(SignInList());
-
     return Scaffold(
       appBar: GenericAppBar(
         title: DatabaseUtil.getText('ticket_signin'),
@@ -77,7 +76,9 @@ class SignInListScreen extends StatelessWidget {
                     const SizedBox(
                       height: xxxSmallerSpacing,
                     ),
-                    const SignInLocationDetailsBody()
+                    SignInLocationDetailsBody(
+                        locationId:
+                            state.currentSignInListModel.data.locationid)
                   ],
                 );
               }
