@@ -24,6 +24,7 @@ class QMNewReportingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isUploadInitial = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Padding(
       padding: const EdgeInsets.only(
@@ -84,7 +85,7 @@ class QMNewReportingBody extends StatelessWidget {
                   reportNewQMMap['description'] = textField;
                 }),
             const SizedBox(height: xxTinySpacing),
-            const QMNewReportingImageSection(),
+            QMNewReportingImageSection(),
             const SizedBox(height: xxTinierSpacing),
             UploadImageMenu(
               isUpload: true,

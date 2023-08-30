@@ -25,7 +25,8 @@ class QMNewReportingImageSection extends StatelessWidget {
                         .textTheme
                         .xSmall
                         .copyWith(fontWeight: FontWeight.w600)),
-                Text('${state.incrementNumber}/6',
+                Text(
+                    '${(context.read<PickAndUploadImageBloc>().isUploadInitial == true) ? 0 : state.incrementNumber}/6',
                     style: Theme.of(context).textTheme.small.copyWith(
                         color: AppColor.black, fontWeight: FontWeight.w500)),
               ],
