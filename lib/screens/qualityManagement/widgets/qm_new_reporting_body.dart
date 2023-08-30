@@ -85,7 +85,7 @@ class QMNewReportingBody extends StatelessWidget {
                   reportNewQMMap['description'] = textField;
                 }),
             const SizedBox(height: xxTinySpacing),
-            QMNewReportingImageSection(),
+            const QMNewReportingImageSection(),
             const SizedBox(height: xxTinierSpacing),
             UploadImageMenu(
               isUpload: true,
