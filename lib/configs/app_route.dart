@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
-import 'package:toolkit/screens/signInQRCode/process_signin.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
-import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -61,6 +59,7 @@ import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -229,14 +228,8 @@ class AppRoutes {
         return _createRoute(QualityManagementFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
-      case CertificatesListScreen.routeName:
-        return _createRoute(const CertificatesListScreen());
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
-
-      case ProcessSignInScreen.routeName:
-        return _createRoute(const ProcessSignInScreen());
-
       default:
         return _createRoute(const WelcomeScreen());
     }
