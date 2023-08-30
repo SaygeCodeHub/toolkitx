@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -99,7 +100,20 @@ class CertificatesListScreen extends StatelessWidget {
                                           children: [
                                             Expanded(
                                                 child: CustomTextButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      Map certificateMap = {
+                                                        "title": state
+                                                            .data[index].name,
+                                                        "id":
+                                                            state.data[index].id
+                                                      };
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          UploadCertificateScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              certificateMap);
+                                                    },
                                                     textValue: 'Upload')),
                                             Expanded(
                                                 child: CustomTextButton(

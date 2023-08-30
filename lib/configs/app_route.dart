@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -237,6 +238,8 @@ class AppRoutes {
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
+      case UploadCertificateScreen.routeName:
+        return _createRoute( UploadCertificateScreen(certificateItemsMap: settings.arguments as Map,));
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -21,6 +21,7 @@ class UploadImageMenu extends StatelessWidget {
   final bool? isSignature;
   final bool? isUpload;
   final List uploadImageList = [];
+  final bool? isFromCertificate;
 
   UploadImageMenu(
       {Key? key,
@@ -29,7 +30,8 @@ class UploadImageMenu extends StatelessWidget {
       this.isSignature = false,
       this.showSignPad = false,
       this.removeSignPad,
-      this.isUpload = false})
+      this.isUpload = false,
+      this.isFromCertificate = false})
       : super(key: key);
 
   @override
@@ -177,9 +179,13 @@ class UploadImageMenu extends StatelessWidget {
                         );
                       });
                 },
-                textValue: (isSignature == false)
+                textValue: (isFromCertificate == false && isSignature == false)
                     ? StringConstants.kUpload
-                    : StringConstants.kEditSignature);
+                    : (isFromCertificate == true)
+                        ? StringConstants.kUploadCertificate
+                        : (isSignature == false)
+                            ? StringConstants.kUpload
+                            : StringConstants.kEditSignature);
           }
         }),
     ]);
