@@ -239,7 +239,9 @@ class AppRoutes {
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
       case UploadCertificateScreen.routeName:
-        return _createRoute( UploadCertificateScreen(certificateItemsMap: settings.arguments as Map,));
+        return _createRoute(UploadCertificateScreen(
+          certificateItemsMap: settings.arguments as Map,
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

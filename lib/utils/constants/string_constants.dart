@@ -230,5 +230,6 @@ abstract class StringConstants {
   static const String kSignInHere = 'Sign in here';
   static const String kUploadCertificate = 'Upload Certificate';
   static const String kCertificateUploaded = 'Certificate Uploaded ';
-  static const String kFillAllDetails = 'Please select start date, expiry date and valid certificate copy to continue';
+  static const String kFillAllDetails =
+      'Please select start date, expiry date and valid certificate copy to continue';
 }
