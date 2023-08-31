@@ -69,6 +69,7 @@ abstract class StringConstants {
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
+  static const String kAssignToMe = 'Assign to me'; //
   static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //

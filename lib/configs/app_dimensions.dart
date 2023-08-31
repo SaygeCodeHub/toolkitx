@@ -67,3 +67,4 @@ const double kGridViewMainAxisExtent = 215;
 const double kCalendarContainerWidth = 450;
 const double kCircularProgressIndicatorWidth = 35;
 const double kCircularProgressIndicatorPadding = 8.0;
+const double kSignInToggleCornerRadius = 10.0;

@@ -29,7 +29,7 @@ class SignInLocationDetailsBloc
     FetchLocationDetailsSignInModel fetchLocationDetailsSignInModel =
         await _signInRepository.signInLocationDetails(
       hashCode!,
-      '',
+      event.locationId,
       userId!,
     );
     emit(SignInLocationDetailsFetched(
