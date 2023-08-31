@@ -48,7 +48,7 @@ class SubmitToDoButton extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       titleValue: StringConstants.kSubmitTodoPopUp,
                       contentValue: '',
-                      onPressed: () {
+                      onPrimarybtn: () {
                         context
                             .read<ToDoBloc>()
                             .add(SubmitToDo(todoMap: todoMap));
