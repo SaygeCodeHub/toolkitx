@@ -58,7 +58,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
                         state.fetchLocationDetailsSignInModel.data.workorder!);
           } else if (context.read<SignInLocationDetailsBloc>().indexSelected ==
               2) {
-                return (state.fetchLocationDetailsSignInModel.data.loto!.isEmpty)
+            return (state.fetchLocationDetailsSignInModel.data.loto!.isEmpty)
                 ? Padding(
                     padding: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height / 3.5),
