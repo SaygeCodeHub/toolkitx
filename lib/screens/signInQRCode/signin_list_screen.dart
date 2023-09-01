@@ -12,7 +12,6 @@ import 'package:toolkit/widgets/custom_floating_action_button.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../configs/app_dimensions.dart';
-import '../../widgets/primary_button.dart';
 import 'widgets/signin_location_details_body.dart';
 
 class SignInListScreen extends StatelessWidget {
