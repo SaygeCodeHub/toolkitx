@@ -34,8 +34,6 @@ import '../repositories/todo/todo_repository.dart';
 import '../repositories/todo/todo_repository_impl.dart';
 import '../repositories/uploadImage/upload_image_repository.dart';
 import '../repositories/uploadImage/upload_image_repository_impl.dart';
-import '../repositories/workorder/workorder_reposiotry.dart';
-import '../repositories/workorder/workorder_repository_impl.dart';
 
 final getIt = GetIt.instance;
 
@@ -70,6 +68,4 @@ configurableDependencies() {
   getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
   getIt.registerLazySingleton<CalendarRepository>(
       () => CalendarRepositoryImpl());
-  getIt.registerLazySingleton<WorkOrderRepository>(
-      () => WorkOrderRepositoryImpl());
 }

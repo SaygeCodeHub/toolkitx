@@ -9,9 +9,11 @@ class PickCameraImage extends PickAndUploadImage {
   final List cameraImageList;
   final int? index;
   final bool isSignature;
+  final List? editedCameraList;
 
   PickCameraImage(
-      {this.isSignature = false,
+      {this.editedCameraList,
+      this.isSignature = false,
       this.index,
       required this.cameraImageList,
       required this.isImageAttached});
@@ -22,8 +24,10 @@ class PickGalleryImage extends PickAndUploadImage {
   final List galleryImagesList;
   final int? index;
   final bool isSignature;
+  final List? editedGalleryList;
 
   PickGalleryImage({
+    this.editedGalleryList,
     this.isSignature = false,
     this.index,
     required this.isImageAttached,
