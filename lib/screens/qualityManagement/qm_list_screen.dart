@@ -12,9 +12,9 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
 import 'qm_details_screen.dart';
+import 'report_new_qm.dart';
 import 'qm_roles_screen.dart';
 import 'qm_filters_screen.dart';
-import 'report_new_qm.dart';
 import 'widgets/qm_list_tile_subtitle.dart';
 import 'widgets/qm_list_tile_titile.dart';
 
@@ -54,6 +54,8 @@ class _QualityManagementListScreenState
         appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              ReportNewQA.isFromEdit = false;
+              ReportNewQA.reportAndEditQMMap = {};
               Navigator.pushNamed(context, ReportNewQA.routeName);
             },
             child: const Icon(Icons.add)),

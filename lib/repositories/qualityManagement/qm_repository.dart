@@ -1,13 +1,14 @@
-import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
+import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
 
 abstract class QualityManagementRepository {
   Future<FetchQualityManagementListModel> fetchQualityManagementList(
@@ -16,8 +17,6 @@ abstract class QualityManagementRepository {
   Future<FetchQualityManagementDetailsModel> fetchQualityManagementDetails(
       String qmId, String hashCode, String userId, String role);
 
-  Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
-      String hashCode, String userId);
   Future<SaveIncidentAndQMCommentsModel> saveComments(Map saveCommentsMap);
 
   Future<SaveIncidentAndQMCommentsFilesModel> saveCommentsFile(
@@ -25,8 +24,6 @@ abstract class QualityManagementRepository {
 
   Future<PdfGenerationModel> generatePdf(String qmId, String hashCode);
 
-  Future<FetchQualityManagementClassificationModel> fetchClassification(
-      String hashCode);
   Future<FetchQualityManagementMasterModel> fetchQualityManagementMaster(
       String hashCode, String role);
 
@@ -35,4 +32,13 @@ abstract class QualityManagementRepository {
 
   Future<SaveQualityManagementPhotos> saveQualityManagementPhotos(
       Map savePhotosMap);
+
+  Future<UpdateQualityManagementDetailsModel> updateQualityManagementDetails(
+      Map updateDetailsMap);
+
+  Future<FetchQualityManagementClassificationModel> fetchClassification(
+      String hashCode);
+
+  Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
+      String hashCode, String userId);
 }

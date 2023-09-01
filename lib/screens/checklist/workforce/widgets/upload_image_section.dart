@@ -61,7 +61,9 @@ class UploadImageMenu extends StatelessWidget {
                           isImageAttached: state.isImageAttached,
                           uploadPictureModel: state.uploadPictureModel),
                       Visibility(
-                        visible: imagesList.length <= 5 && isUpload == true,
+                        visible: state.incrementNumber <= 5 &&
+                            imagesList.length <= 5 &&
+                            isUpload == true,
                         replacement: const SizedBox.shrink(),
                         child: SecondaryButton(
                             onPressed: () {
@@ -79,7 +81,9 @@ class UploadImageMenu extends StatelessWidget {
                                             .add(PickCameraImage(
                                                 cameraImageList: imagesList,
                                                 isImageAttached: null,
-                                                isSignature: isSignature!));
+                                                isSignature: isSignature!,
+                                                editedCameraList:
+                                                    editedImageList));
                                         Navigator.pop(context);
                                       },
                                       onDevice: () {
@@ -91,7 +95,9 @@ class UploadImageMenu extends StatelessWidget {
                                             .add(PickGalleryImage(
                                                 isImageAttached: null,
                                                 galleryImagesList: imagesList,
-                                                isSignature: isSignature!));
+                                                isSignature: isSignature!,
+                                                editedGalleryList:
+                                                    editedImageList));
                                         Navigator.pop(context);
                                       },
                                       onSign: onSign,
@@ -119,7 +125,8 @@ class UploadImageMenu extends StatelessWidget {
                                     PickCameraImage(
                                         cameraImageList: imagesList,
                                         isImageAttached: null,
-                                        isSignature: isSignature!));
+                                        isSignature: isSignature!,
+                                        editedCameraList: editedImageList));
                                 Navigator.pop(context);
                               },
                               onDevice: () {
@@ -130,7 +137,8 @@ class UploadImageMenu extends StatelessWidget {
                                     PickGalleryImage(
                                         isImageAttached: null,
                                         galleryImagesList: imagesList,
-                                        isSignature: isSignature!));
+                                        isSignature: isSignature!,
+                                        editedGalleryList: editedImageList));
                                 Navigator.pop(context);
                               },
                               onSign: onSign,
@@ -161,7 +169,8 @@ class UploadImageMenu extends StatelessWidget {
                                 PickCameraImage(
                                     cameraImageList: imagesList,
                                     isImageAttached: null,
-                                    isSignature: isSignature!));
+                                    isSignature: isSignature!,
+                                    editedCameraList: editedImageList));
                             Navigator.pop(context);
                           },
                           onDevice: () {
@@ -172,7 +181,8 @@ class UploadImageMenu extends StatelessWidget {
                                 PickGalleryImage(
                                     isImageAttached: null,
                                     galleryImagesList: imagesList,
-                                    isSignature: isSignature!));
+                                    isSignature: isSignature!,
+                                    editedGalleryList: editedImageList));
                             Navigator.pop(context);
                           },
                           onSign: onSign,
