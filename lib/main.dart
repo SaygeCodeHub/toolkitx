@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
-import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -42,7 +41,7 @@ import 'blocs/permit/permit_bloc.dart';
 import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/qualityManagement/qm_bloc.dart';
-import 'blocs/signInQRCode/sign_in_list_bloc.dart';
+import 'blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
 import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
@@ -157,7 +156,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => QualityManagementBloc()),
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
-          BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
           BlocProvider(
               lazy: false,
               create: (context) =>

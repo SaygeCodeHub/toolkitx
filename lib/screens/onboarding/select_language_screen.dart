@@ -84,7 +84,7 @@ class SelectLanguageScreen extends StatelessWidget {
                                   DatabaseUtil.getText('ApproveLotoTitle'),
                               contentValue:
                                   'Language file doesnt exist or an old version. please download the language file',
-                              onPressed: () {
+                              onPrimarybtn: () {
                                 context.read<LanguageBloc>().add(
                                     FetchLanguageKeys(
                                         isFromProfile: true,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/signInQRCode/sign_in_list_bloc.dart';
+import 'package:toolkit/blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/signInQRCode/process_signin.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -27,7 +28,10 @@ class SignInListScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CustomFloatingActionButton(
-              textValue: StringConstants.kSignInHere, onPressed: () {}),
+              textValue: StringConstants.kSignInHere,
+              onPressed: () {
+                Navigator.pushNamed(context, ProcessSignInScreen.routeName);
+              }),
         ],
       ),
       body: Padding(

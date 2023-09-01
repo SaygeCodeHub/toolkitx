@@ -84,7 +84,7 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
                                                 titleValue:
                                                     DatabaseUtil.getText(
                                                         'DeleteRecord'),
-                                                onPressed: () {
+                                                onPrimarybtn: () {
                                                   todoMap['todoDocId'] =
                                                       documentDetailsDatum[
                                                               index]
