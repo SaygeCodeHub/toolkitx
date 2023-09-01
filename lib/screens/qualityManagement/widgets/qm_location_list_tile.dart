@@ -21,9 +21,11 @@ class QualityManagementLocationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<QualityManagementBloc>()
-        .add(ReportNewQualityManagementLocationChange(selectLocationName: ''));
+    context.read<QualityManagementBloc>().add(
+        ReportNewQualityManagementLocationChange(
+            selectLocationName: (reportNewQMMap['location_name'] == null)
+                ? ''
+                : reportNewQMMap['location_name']));
     return BlocBuilder<QualityManagementBloc, QualityManagementStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewQualityManagementLocationSelected,

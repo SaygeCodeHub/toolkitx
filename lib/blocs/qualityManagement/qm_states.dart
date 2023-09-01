@@ -4,10 +4,11 @@ import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
+import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
 
 abstract class QualityManagementStates {}
 
@@ -26,16 +27,40 @@ class QualityManagementListFetched extends QualityManagementStates {
 
 class FetchingQualityManagementDetails extends QualityManagementStates {}
 
+class FetchingQualityManagementRoles extends QualityManagementStates {}
+
+class QualityManagementRolesFetched extends QualityManagementStates {
+  final FetchQualityManagementRolesModel fetchQualityManagementRolesModel;
+  final String roleId;
+
+  QualityManagementRolesFetched(
+      {required this.fetchQualityManagementRolesModel, required this.roleId});
+}
+
+class QualityManagementRolesNotFetched extends QualityManagementStates {
+  final String rolesNotFetched;
+
+  QualityManagementRolesNotFetched({required this.rolesNotFetched});
+}
+
+class QualityManagementFilterStatusSelected extends QualityManagementStates {
+  final List selectedStatusList;
+
+  QualityManagementFilterStatusSelected({required this.selectedStatusList});
+}
+
 class QualityManagementDetailsFetched extends QualityManagementStates {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
   final String clientId;
   final List qmPopUpMenu;
   final bool showPopUpMenu;
+  final Map editQMDetailsMap;
 
   QualityManagementDetailsFetched(
       {required this.qmPopUpMenu,
       required this.showPopUpMenu,
       required this.clientId,
+      required this.editQMDetailsMap,
       required this.fetchQualityManagementDetailsModel});
 }
 
@@ -45,112 +70,29 @@ class QualityManagementDetailsNotFetched extends QualityManagementStates {
   QualityManagementDetailsNotFetched({required this.detailsNotFetched});
 }
 
-class FetchingQualityManagementRoles extends QualityManagementStates {}
+class ReportedNewQAAnonymously extends QualityManagementStates {
+  final String anonymousId;
 
-class QualityManagementRolesFetched extends QualityManagementStates {
-  final FetchQualityManagementRolesModel fetchQualityManagementRolesModel;
-  final String roleId;
-
-  QualityManagementRolesFetched(
-      {required this.roleId, required this.fetchQualityManagementRolesModel});
-}
-
-class QualityManagementRolesNotFetched extends QualityManagementStates {
-  final String rolesNotFetched;
-
-  QualityManagementRolesNotFetched({required this.rolesNotFetched});
-}
-
-class QualityManagementRoleChanged extends QualityManagementStates {
-  final String roleId;
-
-  QualityManagementRoleChanged({required this.roleId});
-}
-
-class QualityManagementFilterStatusSelected extends QualityManagementStates {
-  final List selectedStatusList;
-
-  QualityManagementFilterStatusSelected({required this.selectedStatusList});
-}
-
-class QualityManagementSavingComments extends QualityManagementStates {}
-
-class QualityManagementCommentsSaved extends QualityManagementStates {
-  final SaveIncidentAndQMCommentsModel saveIncidentAndQMCommentsModel;
-  final SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel;
-  final String qmId;
-
-  QualityManagementCommentsSaved(
-      {required this.qmId,
-      required this.saveIncidentAndQMCommentsModel,
-      required this.saveIncidentAndQMCommentsFilesModel});
-}
-
-class QualityManagementCommentsNotSaved extends QualityManagementStates {
-  final String commentsNotSaved;
-
-  QualityManagementCommentsNotSaved({required this.commentsNotSaved});
-}
-
-class GeneratingQualityManagementPDF extends QualityManagementStates {
-  GeneratingQualityManagementPDF();
-}
-
-class QualityManagementPDFGenerated extends QualityManagementStates {
-  final PdfGenerationModel? pdfGenerationModel;
-  final String pdfLink;
-
-  QualityManagementPDFGenerated(
-      {this.pdfGenerationModel, required this.pdfLink});
-}
-
-class QualityManagementPDFGenerationFailed extends QualityManagementStates {
-  final String pdfNoteGenerated;
-
-  QualityManagementPDFGenerationFailed({required this.pdfNoteGenerated});
-}
-
-class FetchingQualityManagementClassificationValue
-    extends QualityManagementStates {}
-
-class QualityManagementClassificationValueFetched
-    extends QualityManagementStates {
-  final FetchQualityManagementClassificationModel
-      fetchQualityManagementClassificationModel;
-  final String classificationId;
-
-  QualityManagementClassificationValueFetched(
-      {required this.classificationId,
-      required this.fetchQualityManagementClassificationModel});
-}
-
-class QualityManagementClassificationValueNotFetched
-    extends QualityManagementStates {
-  final String classificationNotFetched;
-
-  QualityManagementClassificationValueNotFetched(
-      {required this.classificationNotFetched});
+  ReportedNewQAAnonymously({required this.anonymousId});
 }
 
 class FetchingQualityManagementMaster extends QualityManagementStates {}
 
 class QualityManagementMasterFetched extends QualityManagementStates {
   final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
+  final int imageNumber;
+  final String clientId;
 
   QualityManagementMasterFetched(
-      {required this.fetchQualityManagementMasterModel});
+      {required this.clientId,
+      required this.imageNumber,
+      required this.fetchQualityManagementMasterModel});
 }
 
 class QualityManagementMasterNotFetched extends QualityManagementStates {
   final String masterNotFetched;
 
   QualityManagementMasterNotFetched({required this.masterNotFetched});
-}
-
-class ReportedNewQAAnonymously extends QualityManagementStates {
-  final String anonymousId;
-
-  ReportedNewQAAnonymously({required this.anonymousId});
 }
 
 class ReportNewQualityManagementContractorSelected
@@ -269,4 +211,94 @@ class ReportNewQualityManagementPhotoSaved extends QualityManagementStates {
 
   ReportNewQualityManagementPhotoSaved(
       {required this.saveQualityManagementPhotos});
+}
+
+class QualityManagementClassificationSelected extends QualityManagementStates {
+  final String classificationId;
+  final FetchQualityManagementClassificationModel
+      fetchQualityManagementClassificationModel;
+
+  QualityManagementClassificationSelected(
+      {required this.fetchQualityManagementClassificationModel,
+      required this.classificationId});
+}
+
+class QualityManagementSavingComments extends QualityManagementStates {}
+
+class QualityManagementCommentsSaved extends QualityManagementStates {
+  final SaveIncidentAndQMCommentsModel saveIncidentAndQMCommentsModel;
+  final SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel;
+  final String qmId;
+
+  QualityManagementCommentsSaved(
+      {required this.qmId,
+      required this.saveIncidentAndQMCommentsModel,
+      required this.saveIncidentAndQMCommentsFilesModel});
+}
+
+class QualityManagementCommentsNotSaved extends QualityManagementStates {
+  final String commentsNotSaved;
+
+  QualityManagementCommentsNotSaved({required this.commentsNotSaved});
+}
+
+class GeneratingQualityManagementPDF extends QualityManagementStates {
+  GeneratingQualityManagementPDF();
+}
+
+class QualityManagementPDFGenerated extends QualityManagementStates {
+  final PdfGenerationModel? pdfGenerationModel;
+  final String pdfLink;
+
+  QualityManagementPDFGenerated(
+      {this.pdfGenerationModel, required this.pdfLink});
+}
+
+class QualityManagementPDFGenerationFailed extends QualityManagementStates {
+  final String pdfNoteGenerated;
+
+  QualityManagementPDFGenerationFailed({required this.pdfNoteGenerated});
+}
+
+class UpdatingQualityManagementDetails extends QualityManagementStates {}
+
+class QualityManagementRoleChanged extends QualityManagementStates {
+  final String roleId;
+
+  QualityManagementRoleChanged({required this.roleId});
+}
+
+class QualityManagementDetailsUpdated extends QualityManagementStates {
+  final UpdateQualityManagementDetailsModel updateQualityManagementDetailsModel;
+
+  QualityManagementDetailsUpdated(
+      {required this.updateQualityManagementDetailsModel});
+}
+
+class QualityManagementDetailsNotUpdated extends QualityManagementStates {
+  final String editDetailsNotUpdated;
+
+  QualityManagementDetailsNotUpdated({required this.editDetailsNotUpdated});
+}
+
+class FetchingQualityManagementClassificationValue
+    extends QualityManagementStates {}
+
+class QualityManagementClassificationValueFetched
+    extends QualityManagementStates {
+  final FetchQualityManagementClassificationModel
+      fetchQualityManagementClassificationModel;
+  final String classificationId;
+
+  QualityManagementClassificationValueFetched(
+      {required this.classificationId,
+      required this.fetchQualityManagementClassificationModel});
+}
+
+class QualityManagementClassificationValueNotFetched
+    extends QualityManagementStates {
+  final String classificationNotFetched;
+
+  QualityManagementClassificationValueNotFetched(
+      {required this.classificationNotFetched});
 }

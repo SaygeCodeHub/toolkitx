@@ -1,6 +1,6 @@
 part of 'certificate_list_bloc.dart';
 
-class CertificateListEvent {}
+abstract class CertificateListEvent {}
 
 class FetchCertificateList extends CertificateListEvent {
   final int pageNo;
