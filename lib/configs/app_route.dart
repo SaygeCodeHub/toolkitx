@@ -66,8 +66,6 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
-import '../screens/workorder/workorder_filter_screen.dart';
-import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
 class AppRoutes {
@@ -232,8 +230,6 @@ class AppRoutes {
                 settings.arguments as FetchQualityManagementDetailsModel));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
-      case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:

@@ -232,4 +232,12 @@ abstract class StringConstants {
   static const String kCertificateUploaded = 'Certificate Uploaded ';
   static const String kFillAllDetails =
       'Please select start date, expiry date and valid certificate copy to continue';
+  static const String kSignInError = 'Invalid Data';
+  static const String kWarning = 'Warning';
+  static const String kCapture = 'Capture';
+  static const String kQRError = 'Invalid Location';
+  static const String kLoginSuccess = 'Logged in Successfully';
+  static const String kUnauthorized =
+      'You are not authorized to access the location. Do you still want to continue ? ';
+  static const String kUnauthorizedError = 'oops we got unknown error';
 }
