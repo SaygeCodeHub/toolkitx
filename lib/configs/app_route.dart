@@ -203,7 +203,7 @@ class AppRoutes {
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
       case ReportNewQA.routeName:
-        return _createRoute(ReportNewQA());
+        return _createRoute(const ReportNewQA());
       case WorkOrderListScreen.routeName:
         return _createRoute(
             WorkOrderListScreen(isFromHome: settings.arguments as bool));
