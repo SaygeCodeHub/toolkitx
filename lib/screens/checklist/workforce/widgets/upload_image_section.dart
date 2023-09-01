@@ -22,6 +22,7 @@ class UploadImageMenu extends StatelessWidget {
   final bool? isUpload;
   final List uploadImageList = [];
   final bool? isFromCertificate;
+  final List? editedImageList;
 
   UploadImageMenu(
       {Key? key,
@@ -31,7 +32,8 @@ class UploadImageMenu extends StatelessWidget {
       this.showSignPad = false,
       this.removeSignPad,
       this.isUpload = false,
-      this.isFromCertificate = false})
+      this.isFromCertificate = false,
+      this.editedImageList = const []})
       : super(key: key);
 
   @override
