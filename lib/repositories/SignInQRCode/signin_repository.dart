@@ -1,4 +1,3 @@
-
 import 'package:toolkit/data/models/SignInQRCode/assign_to_me_workorder_model.dart';
 
 import '../../data/models/SignInQRCode/assign_to_me_checklist_model.dart';
@@ -16,14 +15,10 @@ abstract class SignInRepository {
   Future<AssignToMeWorkOrderModel> assignToMeWorkOrder(
       Map assignToMeWorkorderMap);
 
-  Future<AssignToMePermitModel> assignToMePermit(
-      Map assignToMePermitMap);
+  Future<AssignToMePermitModel> assignToMePermit(Map assignToMePermitMap);
 
-  Future<AssignToMeLotoModel> assignToMeLOTO(
-      Map assignToMeLOTOMap);
+  Future<AssignToMeLotoModel> assignToMeLOTO(Map assignToMeLOTOMap);
 
   Future<AssignToMeChecklistModel> assignToMeChecklist(
       Map assignToMeChecklistMap);
-
-
 }

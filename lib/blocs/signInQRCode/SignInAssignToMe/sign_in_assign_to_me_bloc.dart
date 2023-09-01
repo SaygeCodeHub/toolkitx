@@ -70,8 +70,7 @@ class SignInAssignToMeBloc
       AssignToMePermitModel assignToMePermitModel =
           await _signInRepository.assignToMePermit(assignToMePermitMap);
       if (assignToMePermitModel.status == 200) {
-        emit(
-            PermitAssigned(assignToMePermitModel: assignToMePermitModel));
+        emit(PermitAssigned(assignToMePermitModel: assignToMePermitModel));
       } else {
         emit(PermitAssignError(
             permitError:
@@ -116,14 +115,13 @@ class SignInAssignToMeBloc
       String? userid = await _customerCache.getHashCode(CacheKeys.userId);
 
       Map assignToMeChecklistMap = {
-        "checklistid": event.assignToMeChecklistsMap,
+        "checklistid": event.assignToMeChecklistsMap["checklistid"],
         "userid": userid,
         "hashcode": hashCode
       };
 
       AssignToMeChecklistModel assignToMeChecklistModel =
           await _signInRepository.assignToMeChecklist(assignToMeChecklistMap);
-
       if (assignToMeChecklistModel.status == 200) {
         emit(ChecklistAssigned(
             assignToMeChecklistModel: assignToMeChecklistModel));

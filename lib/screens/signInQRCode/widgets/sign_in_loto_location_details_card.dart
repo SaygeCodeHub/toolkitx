@@ -19,8 +19,10 @@ import '../../../widgets/status_tag.dart';
 
 class SignInLoToLocationDetailsCard extends StatelessWidget {
   final List<Loto> loTo;
+  final String locationId;
 
-  const SignInLoToLocationDetailsCard({Key? key, required this.loTo})
+  const SignInLoToLocationDetailsCard(
+      {Key? key, required this.loTo, required this.locationId})
       : super(key: key);
 
   @override
@@ -71,16 +73,23 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
                                     Text(loTo[index].date),
                                   ]),
                                   const SizedBox(height: tinierSpacing),
-                                  BlocListener<SignInAssignToMeBloc, SignInAssignToMeState>(
+                                  BlocListener<SignInAssignToMeBloc,
+                                      SignInAssignToMeState>(
                                     listener: (context, state) {
-                                      if(state is LOTOAssigning){
+                                      if (state is LOTOAssigning) {
                                         ProgressBar.show(context);
-                                      } else if(state is LOTOAssigned){
+                                      } else if (state is LOTOAssigned) {
                                         ProgressBar.dismiss(context);
-                                        showCustomSnackBar(context, 'LOTO Assigned', '');
-                                        context.read<SignInLocationDetailsBloc>().add(FetchSignInLocationDetails(locationId: ''));
-                                      } else if(state is LOTOAssignError){
-                                        showCustomSnackBar(context, 'LOTO Error', '');
+                                        showCustomSnackBar(context,
+                                            StringConstants.kLOTOAssigned, '');
+                                        context
+                                            .read<SignInLocationDetailsBloc>()
+                                            .add(FetchSignInLocationDetails(
+                                                locationId: locationId));
+                                      } else if (state is LOTOAssignError) {
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(context,
+                                            StringConstants.kLOTOError, '');
                                       }
                                     },
                                     child: PrimaryButton(
@@ -88,7 +97,11 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
                                           Map assignToMeLOTOMap = {
                                             "lotoid": loTo[index].id,
                                           };
-                                          context.read<SignInAssignToMeBloc>().add(AssignToMeLOTO(assignToMeLOTOsMap: assignToMeLOTOMap));
+                                          context
+                                              .read<SignInAssignToMeBloc>()
+                                              .add(AssignToMeLOTO(
+                                                  assignToMeLOTOsMap:
+                                                      assignToMeLOTOMap));
                                         },
                                         textValue: StringConstants.kAssignToMe),
                                   ),

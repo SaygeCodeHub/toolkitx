@@ -19,8 +19,10 @@ import '../../../widgets/status_tag.dart';
 
 class SignInPermitLocationDetailsCard extends StatelessWidget {
   final List<Permit> permit;
+  final String locationId;
 
-  const SignInPermitLocationDetailsCard({Key? key, required this.permit})
+  const SignInPermitLocationDetailsCard(
+      {Key? key, required this.permit, required this.locationId})
       : super(key: key);
 
   @override
@@ -40,13 +42,12 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(permit[index].pcompany,
-                                style: Theme
-                                    .of(context)
+                                style: Theme.of(context)
                                     .textTheme
                                     .small
                                     .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.black)),
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColor.black)),
                             StatusTag(tags: [
                               StatusTagModel(
                                   title: permit[index].status,
@@ -74,16 +75,25 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                                     Text(permit[index].schedule),
                                   ]),
                                   const SizedBox(height: tinierSpacing),
-                                  BlocListener<SignInAssignToMeBloc, SignInAssignToMeState>(
+                                  BlocListener<SignInAssignToMeBloc,
+                                      SignInAssignToMeState>(
                                     listener: (context, state) {
-                                      if(state is PermitAssigning){
+                                      if (state is PermitAssigning) {
                                         ProgressBar.show(context);
-                                      } else if(state is PermitAssigned){
+                                      } else if (state is PermitAssigned) {
                                         ProgressBar.dismiss(context);
-                                        showCustomSnackBar(context, 'Pemrit Assigned', '');
-                                        context.read<SignInLocationDetailsBloc>().add(FetchSignInLocationDetails(locationId: ''));
-                                      } else if(state is PermitAssignError){
-                                        showCustomSnackBar(context, 'Permit Error', '');
+                                        showCustomSnackBar(
+                                            context,
+                                            StringConstants.kPermitAssigned,
+                                            '');
+                                        context
+                                            .read<SignInLocationDetailsBloc>()
+                                            .add(FetchSignInLocationDetails(
+                                                locationId: locationId));
+                                      } else if (state is PermitAssignError) {
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(context,
+                                            StringConstants.kPermitError, '');
                                       }
                                     },
                                     child: PrimaryButton(
@@ -91,7 +101,11 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                                           Map assignToMePermitMap = {
                                             "permitid": permit[index].id,
                                           };
-                                          context.read<SignInAssignToMeBloc>().add(AssignToMePermit(assignToMePermitsMap: assignToMePermitMap));
+                                          context
+                                              .read<SignInAssignToMeBloc>()
+                                              .add(AssignToMePermit(
+                                                  assignToMePermitsMap:
+                                                      assignToMePermitMap));
                                         },
                                         textValue: StringConstants.kAssignToMe),
                                   ),

@@ -233,4 +233,12 @@ abstract class StringConstants {
   static const String kSelectPermits = 'Select Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
+  static const String kPermitAssigned = 'Permit assigned to you';
+  static const String kPermitError = 'Permit assigning error';
+  static const String kWorkOrderAssigned = 'Work Order assigned to you';
+  static const String kWorkOrderError = 'Work Order assigning error';
+  static const String kLOTOAssigned = 'LOTO assigned to you';
+  static const String kLOTOError = 'LOTO assigning error';
+  static const String kChecklistAssigned = 'Checklist assigned to you';
+  static const String kChecklistError = 'Checklist assigning error';
 }

@@ -19,8 +19,10 @@ import '../../../widgets/status_tag.dart';
 
 class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
   final List<Workorder> workOrder;
+  final String locationId;
 
-  const SignInWorkOrderLocationDetailsCard({Key? key, required this.workOrder})
+  const SignInWorkOrderLocationDetailsCard(
+      {Key? key, required this.workOrder, required this.locationId})
       : super(key: key);
 
   @override
@@ -73,25 +75,41 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
                                     Text(workOrder[index].schedule),
                                   ]),
                                   const SizedBox(height: tinierSpacing),
-                                  BlocListener<SignInAssignToMeBloc, SignInAssignToMeState>(
+                                  BlocListener<SignInAssignToMeBloc,
+                                      SignInAssignToMeState>(
                                     listener: (context, state) {
-                                      if(state is WorkOrderAssigning){
+                                      if (state is WorkOrderAssigning) {
                                         ProgressBar.show(context);
-                                      } else if(state is WorkOrderAssigned){
+                                      } else if (state is WorkOrderAssigned) {
                                         ProgressBar.dismiss(context);
-                                        showCustomSnackBar(context, 'Workorder Assigned', '');
-                                        context.read<SignInLocationDetailsBloc>().add(FetchSignInLocationDetails(locationId: ''));
-                                      } else if(state is WorkOrderAssignError){
-                                        showCustomSnackBar(context, 'Workorder Error', '');
+                                        showCustomSnackBar(
+                                            context,
+                                            StringConstants.kWorkOrderAssigned,
+                                            '');
+                                        context
+                                            .read<SignInLocationDetailsBloc>()
+                                            .add(FetchSignInLocationDetails(
+                                                locationId: locationId));
+                                      } else if (state
+                                          is WorkOrderAssignError) {
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(
+                                            context,
+                                            StringConstants.kWorkOrderError,
+                                            '');
                                       }
                                     },
                                     child: PrimaryButton(
                                         onPressed: () {
                                           Map assignToMeWorkOrderMap = {
-                                          "woid": workOrder[index].id,
-                                        };
-                                          context.read<SignInAssignToMeBloc>().add(AssignToMeWorkOrder(assignToMeWorkOrdersMap: assignToMeWorkOrderMap));
-                                          },
+                                            "woid": workOrder[index].id,
+                                          };
+                                          context
+                                              .read<SignInAssignToMeBloc>()
+                                              .add(AssignToMeWorkOrder(
+                                                  assignToMeWorkOrdersMap:
+                                                      assignToMeWorkOrderMap));
+                                        },
                                         textValue: StringConstants.kAssignToMe),
                                   ),
                                   const SizedBox(height: tiniestSpacing),

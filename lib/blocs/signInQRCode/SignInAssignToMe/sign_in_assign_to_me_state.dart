@@ -7,7 +7,7 @@ class SignInAssignToMeInitial extends SignInAssignToMeState {}
 class WorkOrderAssigning extends SignInAssignToMeState {}
 
 class WorkOrderAssigned extends SignInAssignToMeState {
-  final AssignToMeWorkOrderModel assignToMeWorkOrderModel ;
+  final AssignToMeWorkOrderModel assignToMeWorkOrderModel;
 
   WorkOrderAssigned({required this.assignToMeWorkOrderModel});
 }
@@ -21,7 +21,7 @@ class WorkOrderAssignError extends SignInAssignToMeState {
 class PermitAssigning extends SignInAssignToMeState {}
 
 class PermitAssigned extends SignInAssignToMeState {
-  final AssignToMePermitModel assignToMePermitModel ;
+  final AssignToMePermitModel assignToMePermitModel;
 
   PermitAssigned({required this.assignToMePermitModel});
 }
@@ -32,11 +32,10 @@ class PermitAssignError extends SignInAssignToMeState {
   PermitAssignError({required this.permitError});
 }
 
-
 class LOTOAssigning extends SignInAssignToMeState {}
 
 class LOTOAssigned extends SignInAssignToMeState {
-  final AssignToMeLotoModel assignToMeLotoModel ;
+  final AssignToMeLotoModel assignToMeLotoModel;
 
   LOTOAssigned({required this.assignToMeLotoModel});
 }
@@ -47,11 +46,10 @@ class LOTOAssignError extends SignInAssignToMeState {
   LOTOAssignError({required this.permitError});
 }
 
-
 class ChecklistAssigning extends SignInAssignToMeState {}
 
 class ChecklistAssigned extends SignInAssignToMeState {
-  final AssignToMeChecklistModel assignToMeChecklistModel ;
+  final AssignToMeChecklistModel assignToMeChecklistModel;
 
   ChecklistAssigned({required this.assignToMeChecklistModel});
 }

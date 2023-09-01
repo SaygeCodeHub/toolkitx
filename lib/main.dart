@@ -168,11 +168,9 @@ class MyApp extends StatelessWidget {
               lazy: false,
               create: (context) => SignInListBloc()..add(SignInList())),
           BlocProvider(
-              lazy: false,
-              create: (context) => SignInAssignToMeBloc()),
+              lazy: false, create: (context) => SignInAssignToMeBloc()),
           BlocProvider(
-              lazy: false,
-              create: (context) => SignInLocationDetailsBloc()),
+              lazy: false, create: (context) => SignInLocationDetailsBloc()),
         ],
         child: GestureDetector(
             onTap: () {

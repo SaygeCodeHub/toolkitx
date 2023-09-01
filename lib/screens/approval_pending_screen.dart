@@ -44,9 +44,7 @@ class ApprovalPendingScreen extends StatelessWidget {
             ),
             Text('Last Uploaded : ',
                 style: Theme.of(context).textTheme.xSmall.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.mediumBlack)),
-
+                    fontWeight: FontWeight.bold, color: AppColor.mediumBlack)),
             const SizedBox(
               height: tinierSpacing,
             ),
@@ -68,8 +66,7 @@ class ApprovalPendingScreen extends StatelessWidget {
             ),
             Text('View Certificate : ',
                 style: Theme.of(context).textTheme.xSmall.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.mediumBlack)),
+                    fontWeight: FontWeight.bold, color: AppColor.mediumBlack)),
             const SizedBox(
               height: tinierSpacing,
             ),
@@ -79,8 +76,7 @@ class ApprovalPendingScreen extends StatelessWidget {
             ),
             Text('Upload new Certificate : ',
                 style: Theme.of(context).textTheme.xSmall.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.mediumBlack)),
+                    fontWeight: FontWeight.bold, color: AppColor.mediumBlack)),
             const SizedBox(
               height: tinierSpacing,
             ),

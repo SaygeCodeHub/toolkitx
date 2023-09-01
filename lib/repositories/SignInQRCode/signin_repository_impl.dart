@@ -29,30 +29,36 @@ class SignInImpl extends SignInRepository {
   }
 
   @override
-  Future<AssignToMeChecklistModel> assignToMeChecklist(Map assignToMeChecklistMap) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}checklist/assignchecklist",assignToMeChecklistMap);
+  Future<AssignToMeChecklistModel> assignToMeChecklist(
+      Map assignToMeChecklistMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}checklist/assignchecklist",
+        assignToMeChecklistMap);
     return AssignToMeChecklistModel.fromJson(response);
   }
 
   @override
   Future<AssignToMeLotoModel> assignToMeLOTO(Map assignToMeLOTOMap) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}loto/selfassignworkforce",assignToMeLOTOMap);
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/selfassignworkforce", assignToMeLOTOMap);
     return AssignToMeLotoModel.fromJson(response);
   }
 
   @override
-  Future<AssignToMePermitModel> assignToMePermit(Map assignToMePermitMap) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}permit/assignworkforce",assignToMePermitMap);
+  Future<AssignToMePermitModel> assignToMePermit(
+      Map assignToMePermitMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/assignworkforce", assignToMePermitMap);
     return AssignToMePermitModel.fromJson(response);
   }
 
   @override
-  Future<AssignToMeWorkOrderModel> assignToMeWorkOrder(Map assignToMeWorkorderMap) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}workorder/selfassignworkforce",assignToMeWorkorderMap);
+  Future<AssignToMeWorkOrderModel> assignToMeWorkOrder(
+      Map assignToMeWorkorderMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/selfassignworkforce",
+        assignToMeWorkorderMap);
+
     return AssignToMeWorkOrderModel.fromJson(response);
   }
 }
