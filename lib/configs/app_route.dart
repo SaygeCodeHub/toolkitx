@@ -60,6 +60,7 @@ import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -204,7 +205,7 @@ class AppRoutes {
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
       case ReportNewQA.routeName:
-        return _createRoute(ReportNewQA());
+        return _createRoute(const ReportNewQA());
       case WorkOrderListScreen.routeName:
         return _createRoute(
             WorkOrderListScreen(isFromHome: settings.arguments as bool));
