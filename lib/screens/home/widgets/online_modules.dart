@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
+import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
@@ -181,6 +182,10 @@ class OnLineModules extends StatelessWidget {
         break;
       case 'calendar':
         Navigator.pushNamed(context, CalendarScreen.routeName);
+        break;
+      case 'workorder':
+        Navigator.pushNamed(context, WorkOrderListScreen.routeName,
+            arguments: true);
         break;
     }
   }
