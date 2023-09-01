@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
+import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -156,6 +158,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => QualityManagementBloc()),
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
+          BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => SignInLocationDetailsBloc()),
           BlocProvider(
               lazy: false,
               create: (context) =>
