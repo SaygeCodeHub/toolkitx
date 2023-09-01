@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 
 import '../../data/models/workorder/fetch_workorders_model.dart';
@@ -20,5 +21,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchWorkOrdersMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
+      String hashCode, String workOrderId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
+    return FetchWorkOrderTabDetailsModel.fromJson(response);
   }
 }
