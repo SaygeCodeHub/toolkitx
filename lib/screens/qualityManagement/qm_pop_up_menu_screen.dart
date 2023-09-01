@@ -8,17 +8,21 @@ import '../../configs/app_spacing.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../utils/database_utils.dart';
 import 'qm_add_comments_screen.dart';
+import 'report_new_qm.dart';
+import 'widgets/qm_contractor_list_tile.dart';
 
 class QualityManagementPopUpMenuScreen extends StatelessWidget {
   final List popUpMenuItems;
   final QMDetailsData data;
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
+  final Map editQMDetailsMap;
 
   const QualityManagementPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuItems,
       required this.data,
-      required this.fetchQualityManagementDetailsModel})
+      required this.fetchQualityManagementDetailsModel,
+      required this.editQMDetailsMap})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -42,9 +46,12 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                 arguments: fetchQualityManagementDetailsModel);
           }
           if (value == DatabaseUtil.getText('EditIncident')) {
-            Navigator.pushNamed(
-                context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+            ReportNewQA.isFromEdit = true;
+            ReportNewQA.reportAndEditQMMap = editQMDetailsMap;
+            QualityManagementContractorListTile.contractorName =
+                (data.companyname != 'null') ? data.companyname : '';
+            Navigator.pushNamed(context, ReportNewQA.routeName,
+                arguments: editQMDetailsMap);
           }
           if (value == DatabaseUtil.getText('Report')) {
             Navigator.pushNamed(

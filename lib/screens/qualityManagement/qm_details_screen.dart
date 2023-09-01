@@ -48,7 +48,8 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                         popUpMenuItems: state.qmPopUpMenu,
                         data: state.fetchQualityManagementDetailsModel.data,
                         fetchQualityManagementDetailsModel:
-                            state.fetchQualityManagementDetailsModel);
+                            state.fetchQualityManagementDetailsModel,
+                        editQMDetailsMap: state.editQMDetailsMap);
                   } else {
                     return const SizedBox.shrink();
                   }

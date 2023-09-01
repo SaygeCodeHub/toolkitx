@@ -6,7 +6,7 @@ import '../widgets/generic_text_field.dart';
 
 class QualityManagementCustomFieldInfoUtil {
   Widget addCustomFieldsCaseWidget(
-      index, customFieldDatum, customFieldList, addAndEditIncidentMap) {
+      index, customFieldDatum, customFieldList, addAndEditQMMap) {
     customFieldList.add({
       "id": '',
       "value": '',
@@ -14,6 +14,10 @@ class QualityManagementCustomFieldInfoUtil {
     switch (customFieldDatum[index].type) {
       case 1:
         return TextFieldWidget(
+            value: (addAndEditQMMap['customfields'] == null ||
+                    addAndEditQMMap['customfields'].isEmpty)
+                ? ""
+                : addAndEditQMMap['customfields'][index]['value'],
             maxLength: 250,
             onTextFieldChanged: (String textField) {
               customFieldList[index]['id'] =
@@ -22,6 +26,10 @@ class QualityManagementCustomFieldInfoUtil {
             });
       case 2:
         return TextFieldWidget(
+            value: (addAndEditQMMap['customfields'] == null ||
+                    addAndEditQMMap['customfields'].isEmpty)
+                ? ""
+                : addAndEditQMMap['customfields'][index]['value'],
             maxLength: 250,
             maxLines: 3,
             onTextFieldChanged: (String textField) {
@@ -37,7 +45,7 @@ class QualityManagementCustomFieldInfoUtil {
             customFieldList[index]['value'] = customFieldOptionId.toString();
           },
           index: index,
-          addAndEditIncidentMap: addAndEditIncidentMap,
+          addAndEditIncidentMap: addAndEditQMMap,
         );
 
       default:
