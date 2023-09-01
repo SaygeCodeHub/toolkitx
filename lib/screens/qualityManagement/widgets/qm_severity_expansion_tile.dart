@@ -18,10 +18,14 @@ class QualityManagementSeverityExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<QualityManagementBloc>()
-        .add(ReportNewQualityManagementSeverityChange(severityId: ''));
-    String severityValue = '';
+    context.read<QualityManagementBloc>().add(
+        ReportNewQualityManagementSeverityChange(
+            severityId: (reportNewQMMap['severity'] == null)
+                ? ''
+                : reportNewQMMap['severity']));
+    String severityValue = (reportNewQMMap['severityname'] == null)
+        ? ''
+        : reportNewQMMap['severityname'];
     return BlocBuilder<QualityManagementBloc, QualityManagementStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewQualityManagementSeveritySelected,

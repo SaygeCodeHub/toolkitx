@@ -17,10 +17,14 @@ class QualityManagementImpactExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<QualityManagementBloc>()
-        .add(ReportNewQualityManagementImpactChange(impactId: ''));
-    String impactValue = '';
+    context.read<QualityManagementBloc>().add(
+        ReportNewQualityManagementImpactChange(
+            impactId: (reportNewQMMap['impact'] == null)
+                ? ''
+                : reportNewQMMap['impact']));
+    String impactValue = (reportNewQMMap['impactname'] == null)
+        ? ''
+        : reportNewQMMap['impactname'];
     return BlocBuilder<QualityManagementBloc, QualityManagementStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewQualityManagementImpactSelected,

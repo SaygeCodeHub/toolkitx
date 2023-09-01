@@ -1,26 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
-import 'package:toolkit/data/models/qualityManagement/fetch_qm_master_model.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
-import '../../data/models/encrypt_class.dart';
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_classification_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
-import '../../utils/database_utils.dart';
-
+import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
+import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
 import '../../data/models/qualityManagement/save_qm_photos_model.dart';
-import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
+import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
+import '../../utils/database_utils.dart';
 
 class QualityManagementBloc
     extends Bloc<QualityManagementEvent, QualityManagementStates> {
@@ -29,18 +28,19 @@ class QualityManagementBloc
   final SaveIncidentAndQMCommentsFilesModel
       saveIncidentAndQMCommentsFilesModel =
       SaveIncidentAndQMCommentsFilesModel();
+  final CustomerCache _customerCache = getIt<CustomerCache>();
   FetchQualityManagementMasterModel fetchQualityManagementMasterModel =
       FetchQualityManagementMasterModel();
-  final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
   String roleId = '';
   int qmTabIndex = 0;
+  Map reportNewQAMap = {};
+  String selectSiteName = '';
+  String newQmId = '';
   String commentId = '';
   String nextStatus = '';
   String encryptQmId = '';
-  Map reportNewQAMap = {};
-  String newQmId = '';
-  String selectSiteName = '';
+  int imageNumber = 0;
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -51,12 +51,7 @@ class QualityManagementBloc
     on<SaveQualityManagementComments>(_saveComments);
     on<SaveQualityManagementCommentsFiles>(_saveCommentsFile);
     on<GenerateQualityManagementPDF>(_generatePdf);
-    on<FetchQualityManagementClassificationValue>(_fetchClassification);
-    on<FetchQualityManagementRoles>(_fetchRoles);
-    on<SelectQualityManagementRole>(_selectRoles);
-    on<QualityManagementApplyFilter>(_applyFilter);
-    on<QualityManagementClearFilter>(_clearFilter);
-    on<SelectQualityManagementStatusFilter>(_selectFilterStatus);
+    on<FetchQualityManagementMaster>(_fetchMaster);
     on<ReportNewQAAnonymously>(_selectAnonymous);
     on<ReportNewQualityManagementContractorListChange>(_reportContractor);
     on<ReportNewQualityManagementDateTimeDescriptionValidation>(
@@ -72,7 +67,13 @@ class QualityManagementBloc
         _selectCustomFieldInfo);
     on<SaveReportNewQualityManagement>(_saveQualityManagementReporting);
     on<SaveReportNewQualityManagementPhotos>(_saveQualityManagementPhotos);
-    on<FetchQualityManagementMaster>(_fetchMaster);
+    on<UpdateQualityManagementDetails>(_updateQualityManagementDetails);
+    on<FetchQualityManagementRoles>(_fetchRoles);
+    on<SelectQualityManagementStatusFilter>(_selectFilterStatus);
+    on<SelectQualityManagementRole>(_selectRoles);
+    on<FetchQualityManagementClassificationValue>(_fetchClassification);
+    on<QualityManagementClearFilter>(_clearFilter);
+    on<QualityManagementApplyFilter>(_applyFilter);
   }
 
   _applyFilter(QualityManagementApplyFilter event,
@@ -121,6 +122,7 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
       String? privateKey = await _customerCache.getApiKey(CacheKeys.apiKey);
+      qmTabIndex = event.initialIndex;
       List popUpMenuItems = [
         DatabaseUtil.getText('AddComments'),
       ];
@@ -128,37 +130,71 @@ class QualityManagementBloc
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
               event.qmId, hashCode!, userId!, roleId);
-      nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
       encryptQmId = EncryptData.encryptAESPrivateKey(
           fetchQualityManagementDetailsModel.data.id, privateKey);
-      if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
-        popUpMenuItems.add(DatabaseUtil.getText('Edit'));
+      List customFields = [];
+      if (fetchQualityManagementDetailsModel.status == 200) {
+        for (int i = 0;
+            i < fetchQualityManagementDetailsModel.data.customfields.length;
+            i++) {
+          customFields.add({
+            'id':
+                fetchQualityManagementDetailsModel.data.customfields[i].fieldid,
+            'value': fetchQualityManagementDetailsModel
+                .data.customfields[i].fieldvalue
+          });
+        }
+        imageNumber = fetchQualityManagementDetailsModel.data.files.length;
+        Map editQMDetailsMap = {
+          "description": fetchQualityManagementDetailsModel.data.description,
+          "responsible_person": "",
+          "site": fetchQualityManagementDetailsModel.data.site,
+          "location": fetchQualityManagementDetailsModel.data.location,
+          "site_name": fetchQualityManagementDetailsModel.data.sitename,
+          "location_name": fetchQualityManagementDetailsModel.data.locationname,
+          "severity": fetchQualityManagementDetailsModel.data.severity,
+          "impact": fetchQualityManagementDetailsModel.data.impact,
+          "companyid": fetchQualityManagementDetailsModel.data.companyid,
+          "customfields": customFields,
+          "incidentid": encryptQmId,
+          "files": fetchQualityManagementDetailsModel.data.files,
+          "eventdatetime":
+              fetchQualityManagementDetailsModel.data.eventdatetime,
+          "severityname": fetchQualityManagementDetailsModel.data.severityname,
+          "impactname": fetchQualityManagementDetailsModel.data.impactname
+        };
+
+        nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
+        if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
+          popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
+        }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '0') {
+          popUpMenuItems.add(DatabaseUtil.getText('Report'));
+        }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '1') {
+          popUpMenuItems.add(DatabaseUtil.getText('Acknowledge'));
+        }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '2') {
+          popUpMenuItems.add(DatabaseUtil.getText('DefineMitigation'));
+        }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '3') {
+          popUpMenuItems.add(DatabaseUtil.getText('ApproveMitigation'));
+        }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '4') {
+          popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
+        }
+        if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
+          popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
+        }
+        popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
+        emit(QualityManagementDetailsFetched(
+            fetchQualityManagementDetailsModel:
+                fetchQualityManagementDetailsModel,
+            clientId: hashKey!,
+            qmPopUpMenu: popUpMenuItems,
+            showPopUpMenu: true,
+            editQMDetailsMap: editQMDetailsMap));
       }
-      if (fetchQualityManagementDetailsModel.data.nextStatus == '0') {
-        popUpMenuItems.add(DatabaseUtil.getText('Report'));
-      }
-      if (fetchQualityManagementDetailsModel.data.nextStatus == '1') {
-        popUpMenuItems.add(DatabaseUtil.getText('Acknowledge'));
-      }
-      if (fetchQualityManagementDetailsModel.data.nextStatus == '2') {
-        popUpMenuItems.add(DatabaseUtil.getText('DefineMitigation'));
-      }
-      if (fetchQualityManagementDetailsModel.data.nextStatus == '3') {
-        popUpMenuItems.add(DatabaseUtil.getText('ApproveMitigation'));
-      }
-      if (fetchQualityManagementDetailsModel.data.nextStatus == '4') {
-        popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
-      }
-      if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
-        popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
-      }
-      popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
-      emit(QualityManagementDetailsFetched(
-          fetchQualityManagementDetailsModel:
-              fetchQualityManagementDetailsModel,
-          clientId: hashKey!,
-          qmPopUpMenu: popUpMenuItems,
-          showPopUpMenu: true));
     } catch (e) {
       emit(QualityManagementDetailsNotFetched(detailsNotFetched: e.toString()));
     }
@@ -356,6 +392,7 @@ class QualityManagementBloc
     emit(FetchingQualityManagementMaster());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       fetchQualityManagementMasterModel = await _qualityManagementRepository
           .fetchQualityManagementMaster(hashCode!, '');
       fetchQualityManagementMasterModel.data![0].insert(
@@ -363,8 +400,9 @@ class QualityManagementBloc
       fetchQualityManagementMasterModel.data![1].insert(0,
           QMMasterDatum.fromJson({"location": DatabaseUtil.getText('Other')}));
       emit(QualityManagementMasterFetched(
-          fetchQualityManagementMasterModel:
-              fetchQualityManagementMasterModel));
+          fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
+          clientId: clientId!,
+          imageNumber: imageNumber));
     } catch (e) {
       emit(QualityManagementMasterNotFetched(masterNotFetched: e.toString()));
     }
@@ -524,6 +562,50 @@ class QualityManagementBloc
     } catch (e) {
       emit(ReportNewQualityManagementNotSaved(
           qualityManagementNotSavedMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _updateQualityManagementDetails(
+      UpdateQualityManagementDetails event,
+      Emitter<QualityManagementStates> emit) async {
+    emit(UpdatingQualityManagementDetails());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map updateQMDetailsMap = {
+        "description": event.editQMDetailsMap['description'],
+        "responsible_person": event.editQMDetailsMap['responsible_person'],
+        "site": event.editQMDetailsMap['site'],
+        "location": event.editQMDetailsMap['location'],
+        "site_name": event.editQMDetailsMap['site_name'],
+        "location_name": event.editQMDetailsMap['location_name'],
+        "severity": event.editQMDetailsMap['severity'],
+        "impact": event.editQMDetailsMap['impact'],
+        "companyid": event.editQMDetailsMap['companyid'],
+        "customfields": event.editQMDetailsMap['customfields'],
+        "userid": userId,
+        "incidentid": encryptQmId,
+        "hashcode": hashCode
+      };
+      UpdateQualityManagementDetailsModel updateQualityManagementDetailsModel =
+          await _qualityManagementRepository
+              .updateQualityManagementDetails(updateQMDetailsMap);
+      if (updateQualityManagementDetailsModel.status == 200) {
+        (event.editQMDetailsMap['filenames'] != null)
+            ? add(SaveReportNewQualityManagementPhotos(
+                reportNewQAMap: event.editQMDetailsMap))
+            : null;
+        emit(QualityManagementDetailsUpdated(
+            updateQualityManagementDetailsModel:
+                updateQualityManagementDetailsModel));
+      } else {
+        emit(QualityManagementDetailsNotUpdated(
+            editDetailsNotUpdated:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(QualityManagementDetailsNotUpdated(
+          editDetailsNotUpdated: e.toString()));
     }
   }
 }
