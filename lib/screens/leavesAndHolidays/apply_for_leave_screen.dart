@@ -52,7 +52,7 @@ class ApplyForLeaveScreen extends StatelessWidget {
                           textValue: StringConstants.kOk,
                           titleValue: StringConstants.kAlert,
                           contentValue: state.confirmationMessage,
-                          onPressed: () {
+                          onPrimarybtn: () {
                             Navigator.pop(context);
                           },
                         );
