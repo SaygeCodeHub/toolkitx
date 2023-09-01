@@ -21,6 +21,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignInLocationDetailsBloc, SignInLocationDetailsStates>(
+      buildWhen: (previousState, currentState) => currentState is SignInLocationDetailsFetched,
         builder: (context, state) {
       if (state is SignInLocationDetailsFetched) {
         if (state.fetchLocationDetailsSignInModel.data.permit!.isNotEmpty ||

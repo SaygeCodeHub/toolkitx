@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,6 +12,7 @@ class DioClient {
     try {
       final response = await dio.get(requestUrl, options: Options());
       jsonResponse = (response.data);
+      log("jsonResponse===================> $jsonResponse");
     } on DioException catch (e) {
       if (e.response != null) {
         e.response!.statusCode;
