@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
+import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
