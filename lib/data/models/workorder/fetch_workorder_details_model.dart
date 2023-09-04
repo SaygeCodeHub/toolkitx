@@ -389,7 +389,7 @@ class Customfield {
   });
 
   factory Customfield.fromJson(Map<String, dynamic> json) => Customfield(
-    title: json["title"],
+        title: json["title"],
         fieldvalue: json["fieldvalue"] ?? '',
         fieldtype: json["fieldtype"],
         fieldid: json["fieldid"],
