@@ -8,7 +8,8 @@ import 'workorder_reposiotry.dart';
 
 class WorkOrderRepositoryImpl extends WorkOrderRepository {
   @override
-  Future<FetchWorkOrdersModel> fetchWorkOrders(int pageNo, String hashCode, String filter) async {
+  Future<FetchWorkOrdersModel> fetchWorkOrders(
+      int pageNo, String hashCode, String filter) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
     return FetchWorkOrdersModel.fromJson(response);
