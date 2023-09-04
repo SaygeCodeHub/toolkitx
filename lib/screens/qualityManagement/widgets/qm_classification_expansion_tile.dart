@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../blocs/qualityManagement/qm_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -23,12 +24,9 @@ class QualityManagementClassificationExpansionTile extends StatelessWidget {
     String classificationStatus = '';
     return BlocBuilder<QualityManagementBloc, QualityManagementStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is FetchingQualityManagementClassificationValue ||
-            currentState is QualityManagementClassificationValueFetched,
+            currentState is QualityManagementClassificationSelected,
         builder: (context, state) {
-          if (state is FetchingQualityManagementClassificationValue) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is QualityManagementClassificationValueFetched) {
+          if (state is QualityManagementClassificationSelected) {
             qmCommentsMap['classification'] = state.classificationId;
             return Theme(
                 data: Theme.of(context)

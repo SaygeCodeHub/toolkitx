@@ -4,11 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/SignInQRCode/current_signin_model.dart';
 import 'package:toolkit/di/app_module.dart';
 
-import '../../data/cache/cache_keys.dart';
-import '../../data/cache/customer_cache.dart';
-import '../../repositories/SignInQRCode/signin_repository.dart';
+import '../../../data/cache/cache_keys.dart';
+import '../../../data/cache/customer_cache.dart';
+import '../../../repositories/SignInQRCode/signin_repository.dart';
 
 part 'sign_in_list_event.dart';
+
 part 'sign_in_list_state.dart';
 
 class SignInListBloc extends Bloc<SignInList, SignInListState> {

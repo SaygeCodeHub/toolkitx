@@ -69,7 +69,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                                 contentPadding: EdgeInsets.zero,
                                 titleValue:
                                     DatabaseUtil.getText('todoConfirmMsgDone'),
-                                onPressed: () {
+                                onPrimarybtn: () {
                                   todoMap['todoId'] = assignToMeListDatum.id;
                                   context
                                       .read<ToDoBloc>()

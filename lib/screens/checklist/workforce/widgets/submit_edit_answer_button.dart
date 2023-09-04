@@ -48,7 +48,7 @@ class SubmitEditAnswerButton extends StatelessWidget {
                         return AndroidPopUp(
                             titleValue: StringConstants.kChecklist,
                             contentValue: StringConstants.kChecklistNotEditable,
-                            onPressed: () {
+                            onPrimarybtn: () {
                               context.read<SubmitAnswerBloc>().add(
                                   SubmitAnswers(
                                       editQuestionsList: answerList,

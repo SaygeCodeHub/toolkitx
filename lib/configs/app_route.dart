@@ -59,12 +59,13 @@ import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
-import '../screens/workorder/workorder_filter_screen.dart';
+import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
@@ -201,11 +202,12 @@ class AppRoutes {
             LogBookDetailsScreen(logId: settings.arguments.toString()));
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
+
       case ReportNewQA.routeName:
-        return _createRoute(ReportNewQA());
+        return _createRoute(const ReportNewQA());
+
       case WorkOrderListScreen.routeName:
-        return _createRoute(
-            WorkOrderListScreen(isFromHome: settings.arguments as bool));
+        return _createRoute(const WorkOrderListScreen());
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(
             reportNewQMMap: settings.arguments as Map));
@@ -230,10 +232,13 @@ class AppRoutes {
                 settings.arguments as FetchQualityManagementDetailsModel));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
-      case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
+      case ProcessSignInScreen.routeName:
+        return _createRoute(const ProcessSignInScreen());
+      case WorkOrderDetailsTabScreen.routeName:
+        return _createRoute(
+            WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

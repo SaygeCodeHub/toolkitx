@@ -24,7 +24,7 @@ class QMNewReportingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isUploadInitial = true;
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Padding(
       padding: const EdgeInsets.only(

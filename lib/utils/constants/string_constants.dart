@@ -9,6 +9,10 @@ abstract class StringConstants {
   static const String kSelectTimeZone = 'Select Your TimeZone';
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
+  static const String kNoWorkOrder = 'No workorder!'; //
+  static const String kNoChecklist = 'No checklist!'; //
+  static const String kNoLoto = 'No loto!'; //
+  static const String kNoPermit = 'No permit!'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
@@ -65,6 +69,7 @@ abstract class StringConstants {
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
+  static const String kAssignToMe = 'Assign to me'; //
   static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
@@ -228,4 +233,12 @@ abstract class StringConstants {
   static const String kSelectPermits = 'Select Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
+  static const String kSignInError = 'Invalid Data';
+  static const String kWarning = 'Warning';
+  static const String kCapture = 'Capture';
+  static const String kQRError = 'Invalid Location';
+  static const String kLoginSuccess = 'Logged in Successfully';
+  static const String kUnauthorized =
+      'You are not authorized to access the location. Do you still want to continue ? ';
+  static const String kUnauthorizedError = 'oops we got unknown error';
 }
