@@ -22,7 +22,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
   static const routeName = 'ReportNewIncidentScreen';
   final Map addAndEditIncidentMap;
   static String eventDate = '';
-  static int numberIndex = 0;
+  static int imageIndex = 0;
   static String clientId = '';
 
   const ReportNewIncidentScreen({Key? key, required this.addAndEditIncidentMap})
@@ -66,11 +66,11 @@ class ReportNewIncidentScreen extends StatelessWidget {
                             addAndEditIncidentMap['eventdatetime'] == null,
                         replacement: TextFieldWidget(
                             value:
-                            (addAndEditIncidentMap['eventdatetime'] == null)
-                                ? ""
-                                : addAndEditIncidentMap['eventdatetime']
-                                .toString()
-                                .substring(0, 10),
+                                (addAndEditIncidentMap['eventdatetime'] == null)
+                                    ? ""
+                                    : addAndEditIncidentMap['eventdatetime']
+                                        .toString()
+                                        .substring(0, 10),
                             readOnly: true,
                             onTextFieldChanged: (String textField) {}),
                         child: DatePickerTextField(
@@ -92,18 +92,18 @@ class ReportNewIncidentScreen extends StatelessWidget {
                             addAndEditIncidentMap['eventdatetime'] == null,
                         replacement: TextFieldWidget(
                             value:
-                            (addAndEditIncidentMap['eventdatetime'] == null)
-                                ? ""
-                                : addAndEditIncidentMap['eventdatetime']
-                                .toString()
-                                .substring(12, 19),
+                                (addAndEditIncidentMap['eventdatetime'] == null)
+                                    ? ""
+                                    : addAndEditIncidentMap['eventdatetime']
+                                        .toString()
+                                        .substring(12, 19),
                             readOnly: true,
                             onTextFieldChanged: (String textField) {}),
                         child: TimePickerTextField(
                           hintText: StringConstants.kSelectTime,
                           onTimeChanged: (String time) {
                             addAndEditIncidentMap['eventdatetime'] =
-                            '$eventDate $time';
+                                '$eventDate $time';
                           },
                         ),
                       ),
@@ -116,7 +116,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
                           value: (CategoryScreen.isFromEdit == true &&
-                              addAndEditIncidentMap['description'] != null)
+                                  addAndEditIncidentMap['description'] != null)
                               ? addAndEditIncidentMap['description']
                               : '',
                           maxLength: 250,
@@ -131,7 +131,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                           addAndEditIncidentMap: addAndEditIncidentMap,
                           clientId: ''),
                       const SizedBox(height: xxTinySpacing),
-                      IncidentShowImageNumber(numberIndex: numberIndex),
+                      IncidentShowImageNumber(numberIndex: imageIndex),
                       const SizedBox(height: xxxTinierSpacing),
                       UploadImageMenu(
                         isUpload: true,

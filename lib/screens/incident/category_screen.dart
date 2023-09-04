@@ -74,7 +74,7 @@ class CategoryScreen extends StatelessWidget {
                               Expanded(
                                 child: PrimaryButton(
                                     onPressed: () {
-                                      ReportNewIncidentScreen.numberIndex =
+                                      ReportNewIncidentScreen.imageIndex =
                                           state.imageIndex;
                                       ReportNewIncidentScreen.clientId =
                                           state.clientId;
