@@ -74,6 +74,10 @@ class CategoryScreen extends StatelessWidget {
                               Expanded(
                                 child: PrimaryButton(
                                     onPressed: () {
+                                      ReportNewIncidentScreen.numberIndex =
+                                          state.imageIndex;
+                                      ReportNewIncidentScreen.clientId =
+                                          state.clientId;
                                       Navigator.pushNamed(context,
                                           ReportNewIncidentScreen.routeName,
                                           arguments: addAndEditIncidentMap);
