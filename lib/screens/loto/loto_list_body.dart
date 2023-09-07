@@ -22,11 +22,10 @@ class LotoListBody extends StatelessWidget {
         buildWhen: (previousState, currentState) =>
             ((currentState is LotoListFetched &&
                     context.read<LotoListBloc>().hasReachedMax == false) ||
-                (currentState is FetchingLotoList &&
-                    pageNo == 1)),
+                (currentState is FetchingLotoList && pageNo == 1)),
         listener: (context, state) {
           if (state is LotoListFetched) {
-            if (state.fetchLotoListModel.status == 204 ) {
+            if (state.fetchLotoListModel.status == 204) {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
               context.read<LotoListBloc>().hasReachedMax = true;
               pageNo = 1;
