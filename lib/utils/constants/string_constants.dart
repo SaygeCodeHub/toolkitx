@@ -13,6 +13,8 @@ abstract class StringConstants {
   static const String kNoChecklist = 'No checklist!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kNoMisCost = 'No Misc.Cost!'; //
+  static const String kNoDowntown = 'No downtime!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNext = 'NEXT';
