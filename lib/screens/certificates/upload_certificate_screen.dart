@@ -46,7 +46,7 @@ class UploadCertificateScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Start Date',
+                StringConstants.kStartDate,
                 style: Theme.of(context).textTheme.small.copyWith(
                     fontWeight: FontWeight.w500, color: AppColor.black),
               ),
@@ -63,7 +63,7 @@ class UploadCertificateScreen extends StatelessWidget {
                 height: xxTinySpacing,
               ),
               Text(
-                'Expiry Date',
+                StringConstants.kExpiryDate ,
                 style: Theme.of(context).textTheme.small.copyWith(
                     fontWeight: FontWeight.w500, color: AppColor.black),
               ),
@@ -117,7 +117,7 @@ class UploadCertificateScreen extends StatelessWidget {
                           .read<UploadCertificateBloc>()
                           .add(UploadCertificates(uploadCertificateMap));
                     },
-                    textValue: 'Save'),
+                    textValue: StringConstants.kSave),
               ),
             ],
           ),

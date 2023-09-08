@@ -229,10 +229,22 @@ abstract class StringConstants {
   static const String kAppVersion = 'App version';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
+  static const String k1 = '1';
+  static const String kQ = 'Q';
+  static const String kTopic = 'Topic';
+  static const String kQuiz = 'Quiz';
+  static const String kDownload = 'Download';
+  static const String kStartDate = 'Start Date';
+  static const String kExpiryDate = 'Expiry Date';
+  static const String kStartCourse = 'Start Course';
+  static const String kFeedback = 'Feedback';
+  static const String kPagesInside = 'Pages inside';
+  static const String kQuestionsInside = 'Questions inside';
   static const String kNameValidation = 'Please enter name';
   static const String kSelectPermits = 'Select Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
+  static const String kGettingStarted = "Getting Started";
   static const String kUploadCertificate = 'Upload Certificate';
   static const String kCertificateUploaded = 'Certificate Uploaded ';
   static const String kFillAllDetails =
@@ -245,4 +257,5 @@ abstract class StringConstants {
   static const String kUnauthorized =
       'You are not authorized to access the location. Do you still want to continue ? ';
   static const String kUnauthorizedError = 'oops we got unknown error';
+  static const String kYouHaveCoursesToComplete = 'You have 1 courses to complete this certificate, keep it up!';
 }
