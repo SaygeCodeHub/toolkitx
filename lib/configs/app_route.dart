@@ -204,6 +204,7 @@ class AppRoutes {
             LogBookDetailsScreen(logId: settings.arguments.toString()));
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
+
       case ReportNewQA.routeName:
         return _createRoute(const ReportNewQA());
       case WorkOrderListScreen.routeName:
