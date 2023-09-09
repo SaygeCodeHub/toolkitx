@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-GetCourseCertificateModel getCourseCertificateModelFromJson(String str) => GetCourseCertificateModel.fromJson(json.decode(str));
+GetCourseCertificateModel getCourseCertificateModelFromJson(String str) =>
+    GetCourseCertificateModel.fromJson(json.decode(str));
 
-String getCourseCertificateModelToJson(GetCourseCertificateModel data) => json.encode(data.toJson());
+String getCourseCertificateModelToJson(GetCourseCertificateModel data) =>
+    json.encode(data.toJson());
 
 class GetCourseCertificateModel {
   final int status;
@@ -16,17 +17,19 @@ class GetCourseCertificateModel {
     required this.data,
   });
 
-  factory GetCourseCertificateModel.fromJson(Map<String, dynamic> json) => GetCourseCertificateModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<GetCourseDatum>.from(json["Data"].map((x) => GetCourseDatum.fromJson(x))),
-  );
+  factory GetCourseCertificateModel.fromJson(Map<String, dynamic> json) =>
+      GetCourseCertificateModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<GetCourseDatum>.from(
+            json["Data"].map((x) => GetCourseDatum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class GetCourseDatum {
@@ -57,30 +60,30 @@ class GetCourseDatum {
   });
 
   factory GetCourseDatum.fromJson(Map<String, dynamic> json) => GetCourseDatum(
-    id: json["id"],
-    name: json["name"],
-    description: json["description"],
-    certificatename: json["certificatename"],
-    topiccount: json["topiccount"],
-    quizcount: json["quizcount"],
-    notescount: json["notescount"],
-    completedcount: json["completedcount"],
-    quizstartcount: json["quizstartcount"],
-    quizendcount: json["quizendcount"],
-    completedstatus: json["completedstatus"],
-  );
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        certificatename: json["certificatename"],
+        topiccount: json["topiccount"],
+        quizcount: json["quizcount"],
+        notescount: json["notescount"],
+        completedcount: json["completedcount"],
+        quizstartcount: json["quizstartcount"],
+        quizendcount: json["quizendcount"],
+        completedstatus: json["completedstatus"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "description": description,
-    "certificatename": certificatename,
-    "topiccount": topiccount,
-    "quizcount": quizcount,
-    "notescount": notescount,
-    "completedcount": completedcount,
-    "quizstartcount": quizstartcount,
-    "quizendcount": quizendcount,
-    "completedstatus": completedstatus,
-  };
+        "id": id,
+        "name": name,
+        "description": description,
+        "certificatename": certificatename,
+        "topiccount": topiccount,
+        "quizcount": quizcount,
+        "notescount": notescount,
+        "completedcount": completedcount,
+        "quizstartcount": quizstartcount,
+        "quizendcount": quizendcount,
+        "completedstatus": completedstatus,
+      };
 }

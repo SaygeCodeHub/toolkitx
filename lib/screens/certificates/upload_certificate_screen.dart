@@ -63,7 +63,7 @@ class UploadCertificateScreen extends StatelessWidget {
                 height: xxTinySpacing,
               ),
               Text(
-                StringConstants.kExpiryDate ,
+                StringConstants.kExpiryDate,
                 style: Theme.of(context).textTheme.small.copyWith(
                     fontWeight: FontWeight.w500, color: AppColor.black),
               ),

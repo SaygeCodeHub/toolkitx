@@ -257,5 +257,6 @@ abstract class StringConstants {
   static const String kUnauthorized =
       'You are not authorized to access the location. Do you still want to continue ? ';
   static const String kUnauthorizedError = 'oops we got unknown error';
-  static const String kYouHaveCoursesToComplete = 'You have 1 courses to complete this certificate, keep it up!';
+  static const String kYouHaveCoursesToComplete =
+      'You have 1 courses to complete this certificate, keep it up!';
 }

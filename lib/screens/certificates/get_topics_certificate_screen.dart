@@ -22,9 +22,9 @@ class GetTopicCertificateScreen extends StatelessWidget {
       body:
           BlocBuilder<StartCourseCertificateBloc, StartCourseCertificateState>(
         buildWhen: (previousState, currentState) =>
-          currentState is FetchingGetTopicCertificate ||
-              currentState is GetTopicCertificateFetched ||
-              currentState is GetTopicCertificateError,
+            currentState is FetchingGetTopicCertificate ||
+            currentState is GetTopicCertificateFetched ||
+            currentState is GetTopicCertificateError,
         builder: (context, state) {
           if (state is FetchingGetTopicCertificate) {
             return const Center(

@@ -13,7 +13,9 @@ abstract class CertificateRepository {
 
   Future<UploadCertificateModel> uploadCertificates(Map uploadCertificateMap);
 
-  Future<GetCourseCertificateModel> getCourseCertificates(String hashCode, String certificateId);
+  Future<GetCourseCertificateModel> getCourseCertificates(
+      String hashCode, String certificateId);
 
-  Future<GetTopicCertificateModel> getTopicCertificates(String hashCode, String userId, String courseId);
+  Future<GetTopicCertificateModel> getTopicCertificates(
+      String hashCode, String userId, String courseId);
 }

@@ -27,9 +27,9 @@ class GetCourseCertificateScreen extends StatelessWidget {
       body:
           BlocBuilder<StartCourseCertificateBloc, StartCourseCertificateState>(
         buildWhen: (previousState, currentState) =>
-          currentState is FetchingGetCourseCertificate ||
-              currentState is GetCourseCertificateFetched ||
-              currentState is GetCourseCertificateError,
+            currentState is FetchingGetCourseCertificate ||
+            currentState is GetCourseCertificateFetched ||
+            currentState is GetCourseCertificateError,
         builder: (context, state) {
           if (state is FetchingGetCourseCertificate) {
             return const Center(
@@ -63,7 +63,8 @@ class GetCourseCertificateScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.pushNamed(
                             context, GetTopicCertificateScreen.routeName,
-                            arguments: state.getCourseCertificateModel.data[0].id);
+                            arguments:
+                                state.getCourseCertificateModel.data[0].id);
                       },
                       contentPadding: const EdgeInsets.all(kCardPadding),
                       title: Text(state.getCourseCertificateModel.data[0].name,

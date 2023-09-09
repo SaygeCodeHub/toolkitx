@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextButton extends StatelessWidget {
-  final  Function()? onPressed;
+  final Function()? onPressed;
   final String textValue;
 
   const CustomTextButton(

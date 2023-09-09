@@ -6,8 +6,12 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/certificates/get_topic_certificate_model.dart';
+
 class GetTopicCertificateBody extends StatelessWidget {
-  const GetTopicCertificateBody({super.key, required this.data,});
+  const GetTopicCertificateBody({
+    super.key,
+    required this.data,
+  });
   final GetTopicData data;
 
   @override
@@ -16,8 +20,10 @@ class GetTopicCertificateBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(StringConstants.kGettingStarted,
-            style: Theme.of(context).textTheme.xSmall.copyWith(
-                fontWeight: FontWeight.w600, color: AppColor.black)),
+            style: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(fontWeight: FontWeight.w600, color: AppColor.black)),
         const SizedBox(
           height: tinierSpacing,
         ),
@@ -29,22 +35,22 @@ class GetTopicCertificateBody extends StatelessWidget {
                 height: kModuleIconSize,
                 decoration: const BoxDecoration(
                     color: AppColor.blueGrey,
-                    borderRadius: BorderRadius.all(Radius.circular(kSmallBorderRadius))),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(kSmallBorderRadius))),
                 child: const Center(child: Text(StringConstants.k1))),
             title: Text(data.topiclist[0].name,
                 style: Theme.of(context).textTheme.small.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.mediumBlack)),
+                    fontWeight: FontWeight.w600, color: AppColor.mediumBlack)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: xxxTinierSpacing,
                 ),
-                Text("${data.topiclist[0].notescount} ${StringConstants.kPagesInside}",
+                Text(
+                    "${data.topiclist[0].notescount} ${StringConstants.kPagesInside}",
                     style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.grey)),
+                        fontWeight: FontWeight.w400, color: AppColor.grey)),
               ],
             ),
             trailing: Container(
@@ -67,22 +73,22 @@ class GetTopicCertificateBody extends StatelessWidget {
                 height: kModuleIconSize,
                 decoration: const BoxDecoration(
                     color: AppColor.blueGrey,
-                    borderRadius: BorderRadius.all(Radius.circular(kCardRadius))),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(kCardRadius))),
                 child: const Center(child: Text(StringConstants.kQ))),
             title: Text(data.quizlist[0].name,
                 style: Theme.of(context).textTheme.small.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.mediumBlack)),
+                    fontWeight: FontWeight.w600, color: AppColor.mediumBlack)),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: xxxTinierSpacing,
                 ),
-                Text("${data.quizlist[0].questionscount} ${StringConstants.kQuestionsInside}",
+                Text(
+                    "${data.quizlist[0].questionscount} ${StringConstants.kQuestionsInside}",
                     style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.grey)),
+                        fontWeight: FontWeight.w400, color: AppColor.grey)),
               ],
             ),
             trailing: Container(

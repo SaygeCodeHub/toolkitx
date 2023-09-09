@@ -15,7 +15,7 @@ part 'start_course_certificate_state.dart';
 class StartCourseCertificateBloc
     extends Bloc<StartCourseCertificateEvent, StartCourseCertificateState> {
   final CertificateRepository _certificateRepository =
-  getIt<CertificateRepository>();
+      getIt<CertificateRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
   StartCourseCertificateState get initialState =>
@@ -32,11 +32,12 @@ class StartCourseCertificateBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       GetCourseCertificateModel getCourseCertificateModel =
-      await _certificateRepository.getCourseCertificates(
-          hashCode!, event.certificateId);
+          await _certificateRepository.getCourseCertificates(
+              hashCode!, event.certificateId);
       if (getCourseCertificateModel.status == 200) {
         emit(GetCourseCertificateFetched(
-          getCourseCertificateModel: getCourseCertificateModel,));
+          getCourseCertificateModel: getCourseCertificateModel,
+        ));
       }
     } catch (e) {
       emit(GetCourseCertificateError(getCourseError: e.toString()));
@@ -46,7 +47,7 @@ class StartCourseCertificateBloc
   Future<FutureOr<void>> _getTopicCertificate(GetTopicCertificate event,
       Emitter<StartCourseCertificateState> emit) async {
     emit(FetchingGetTopicCertificate());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       GetTopicCertificateModel getTopicCertificateModel =
@@ -56,7 +57,7 @@ class StartCourseCertificateBloc
         emit(GetTopicCertificateFetched(
             getTopicCertificateModel: getTopicCertificateModel));
       }
-    } catch(e){
+    } catch (e) {
       emit(GetTopicCertificateError(getTopicError: e.toString()));
     }
   }

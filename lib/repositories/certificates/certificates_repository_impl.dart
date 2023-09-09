@@ -1,4 +1,3 @@
-
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
@@ -27,16 +26,18 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
-  Future<GetCourseCertificateModel> getCourseCertificates(String hashCode, String certificateId) async {
-    final response = await DioClient().get("${ApiConstants.baseUrl}certificate/GetCourses?hashcode=$hashCode&certificateid=$certificateId");
+  Future<GetCourseCertificateModel> getCourseCertificates(
+      String hashCode, String certificateId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetCourses?hashcode=$hashCode&certificateid=$certificateId");
     return GetCourseCertificateModel.fromJson(response);
   }
 
   @override
-  Future<GetTopicCertificateModel> getTopicCertificates(String hashCode, String userId, String courseId) async {
-    final response = await DioClient().get("${ApiConstants.baseUrl}certificate/GetTopics?hashcode=$hashCode&courseid=$courseId&workforceid=$userId");
+  Future<GetTopicCertificateModel> getTopicCertificates(
+      String hashCode, String userId, String courseId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetTopics?hashcode=$hashCode&courseid=$courseId&workforceid=$userId");
     return GetTopicCertificateModel.fromJson(response);
   }
-
-
 }

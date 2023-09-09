@@ -256,9 +256,13 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case GetCourseCertificateScreen.routeName:
-        return _createRoute(GetCourseCertificateScreen(certificateId: settings.arguments.toString(),));
+        return _createRoute(GetCourseCertificateScreen(
+          certificateId: settings.arguments.toString(),
+        ));
       case GetTopicCertificateScreen.routeName:
-        return _createRoute(GetTopicCertificateScreen(courseId: settings.arguments.toString(),));
+        return _createRoute(GetTopicCertificateScreen(
+          courseId: settings.arguments.toString(),
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }
