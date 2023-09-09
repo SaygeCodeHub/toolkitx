@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,7 +71,6 @@ class CertificatesListScreen extends StatelessWidget {
                                 ? state.data.length
                                 : state.data.length + 1,
                             itemBuilder: (context, index) {
-                              log("status=====>${state.data[index].accesscertificate}");
                               if (index < state.data.length) {
                                 return CustomCard(
                                   elevation: 2,
