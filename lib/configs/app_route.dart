@@ -259,8 +259,6 @@ class AppRoutes {
         return _createRoute(GetCourseCertificateScreen(certificateId: settings.arguments.toString(),));
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(courseId: settings.arguments.toString(),));
-      case CertificatesListScreen.routeName:
-        return _createRoute(const CertificatesListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
