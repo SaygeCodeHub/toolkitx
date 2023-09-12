@@ -183,6 +183,7 @@ abstract class StringConstants {
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
+  static const String kNoData = 'No data!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
@@ -233,6 +234,10 @@ abstract class StringConstants {
   static const String kSelectPermits = 'Select Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
+  static const String kUploadCertificate = 'Upload Certificate';
+  static const String kCertificateUploaded = 'Certificate Uploaded ';
+  static const String kFillAllDetails =
+      'Please select start date, expiry date and valid certificate copy to continue';
   static const String kSignInError = 'Invalid Data';
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
