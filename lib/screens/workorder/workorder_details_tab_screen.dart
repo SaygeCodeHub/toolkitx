@@ -16,6 +16,7 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/workorder_details_tab_one.dart';
 import 'widgets/workorder_tab_three_details.dart';
+import 'widgets/workorder_tab_two_details.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
@@ -75,7 +76,10 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                           data: state.fetchWorkOrderDetailsModel.data),
                       WorkOrderTabThreeDetails(
                           data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 2)
+                          tabIndex: 2),
+                      WorkOrderTabTwoDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 1)
                     ])
               ]));
         } else if (state is WorkOrderTabDetailsNotFetched) {

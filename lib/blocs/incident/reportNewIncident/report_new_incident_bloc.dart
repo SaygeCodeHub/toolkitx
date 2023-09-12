@@ -20,6 +20,7 @@ class ReportNewIncidentBloc
   Map reportNewIncidentMap = {};
   String selectSiteName = '';
   String incidentId = '';
+  int imageIndex = 0;
 
   ReportNewIncidentStates get initialState => ReportNewIncidentInitial();
 
@@ -68,8 +69,9 @@ class ReportNewIncidentBloc
     }
   }
 
-  _selectIncidentCategory(
-      SelectIncidentCategory event, Emitter<ReportNewIncidentStates> emit) {
+  _selectIncidentCategory(SelectIncidentCategory event,
+      Emitter<ReportNewIncidentStates> emit) async {
+    String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
     List showCategory = [];
     showCategory = [
       {
@@ -129,7 +131,9 @@ class ReportNewIncidentBloc
     emit(IncidentMasterFetched(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         categoryList: showCategory,
-        categorySelectedList: selectedCategoryList));
+        categorySelectedList: selectedCategoryList,
+        imageIndex: imageIndex,
+        clientId: clientId!));
   }
 
   _reportIncidentAnonymously(ReportNewIncidentAnonymousExpansionChange event,
