@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
@@ -39,5 +40,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetTopics?hashcode=$hashCode&courseid=$courseId&workforceid=$userId");
     return GetTopicCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchGetNotesModel> getNotesCertificates(String hashCode, String userId, String topicId, int pageNo) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
+    return FetchGetNotesModel.fromJson(response);
   }
 }

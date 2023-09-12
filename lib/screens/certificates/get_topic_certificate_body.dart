@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../configs/app_color.dart';
@@ -29,6 +30,15 @@ class GetTopicCertificateBody extends StatelessWidget {
         ),
         Card(
           child: ListTile(
+            onTap: () {
+              Map getNotesMap = {
+                "coursename" : data.coursename,
+                "certificatename": data.certificatename,
+                "name" : data.topiclist[0].name,
+                "id":data.topiclist[0].id
+              };
+              Navigator.pushNamed(context, GetNotesCertificateScreen.routeName,arguments: getNotesMap);
+            },
             contentPadding: const EdgeInsets.all(kCardPadding),
             leading: Container(
                 width: kModuleIconSize,

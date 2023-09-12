@@ -11,7 +11,6 @@ import '../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
-
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_card.dart';
 

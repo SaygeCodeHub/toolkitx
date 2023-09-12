@@ -14,6 +14,8 @@ abstract class StringConstants {
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNext = 'NEXT';
+  static const String kPREVIOUS = 'PREVIOUS';
+  static const String kFINISH = 'FINISH';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
   static const String kCamera = 'Camera';
@@ -259,4 +261,6 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kPPTWillBriefAbout =
+      'The PPT will brief about process management tool';
 }

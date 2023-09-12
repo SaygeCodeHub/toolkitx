@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
@@ -263,6 +264,8 @@ class AppRoutes {
         return _createRoute(GetTopicCertificateScreen(
           courseId: settings.arguments.toString(),
         ));
+      case GetNotesCertificateScreen.routeName:
+        return _createRoute( GetNotesCertificateScreen(getNotesMap: settings.arguments as Map,));
       default:
         return _createRoute(const WelcomeScreen());
     }

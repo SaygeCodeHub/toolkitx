@@ -33,3 +33,19 @@ class GetTopicCertificateError extends StartCourseCertificateState {
 
   GetTopicCertificateError({required this.getTopicError});
 }
+
+
+class FetchingGetNotesCertificate extends StartCourseCertificateState {}
+
+class GetNotesCertificateFetched extends StartCourseCertificateState {
+  final FetchGetNotesModel fetchGetNotesModel;
+  GetNotesCertificateFetched({
+    required this.fetchGetNotesModel,
+  });
+}
+
+class GetNotesCertificateError extends StartCourseCertificateState {
+  final String getNotesError;
+
+  GetNotesCertificateError({required this.getNotesError});
+}

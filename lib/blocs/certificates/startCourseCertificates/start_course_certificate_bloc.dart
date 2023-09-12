@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/certificates/get_course_certificate_model.da
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/certificates/get_notes_certificate_model.dart';
 import '../../../data/models/certificates/get_topic_certificate_model.dart';
 import '../../../di/app_module.dart';
 import '../../../repositories/certificates/certificates_repository.dart';
@@ -24,6 +25,7 @@ class StartCourseCertificateBloc
   StartCourseCertificateBloc() : super(StartCourseCertificateInitial()) {
     on<GetCourseCertificate>(_getCourseCertificate);
     on<GetTopicCertificate>(_getTopicCertificate);
+    on<GetNotesCertificate>(_getNotesCertificate);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -59,6 +61,20 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(GetTopicCertificateError(getTopicError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _getNotesCertificate(GetNotesCertificate event, Emitter<StartCourseCertificateState> emit) async {
+    emit(FetchingGetNotesCertificate());
+    try{
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      FetchGetNotesModel fetchGetNotesModel = await _certificateRepository.getNotesCertificates(hashCode!, userId!, event.topicId, event.pageNo);
+      if(fetchGetNotesModel.status == 200){
+        emit(GetNotesCertificateFetched(fetchGetNotesModel: fetchGetNotesModel));
+      }
+    }catch(e){
+      emit(GetNotesCertificateError(getNotesError: e.toString()));
     }
   }
 }

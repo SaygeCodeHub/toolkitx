@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 
 import '../../data/models/certificates/certificate_list_model.dart';
 import '../../data/models/certificates/get_course_certificate_model.dart';
+import '../../data/models/certificates/get_notes_certificate_model.dart';
 import '../../data/models/certificates/get_topic_certificate_model.dart';
 
 abstract class CertificateRepository {
@@ -18,4 +19,7 @@ abstract class CertificateRepository {
 
   Future<GetTopicCertificateModel> getTopicCertificates(
       String hashCode, String userId, String courseId);
+
+  Future<FetchGetNotesModel> getNotesCertificates(
+      String hashCode, String userId, String topicId, int pageNo);
 }

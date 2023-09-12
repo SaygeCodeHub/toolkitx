@@ -13,3 +13,10 @@ class GetTopicCertificate extends StartCourseCertificateEvent {
 
   GetTopicCertificate({required this.courseId});
 }
+
+class GetNotesCertificate extends StartCourseCertificateEvent {
+  final String topicId;
+  final int pageNo;
+
+  GetNotesCertificate({required this.topicId, required this.pageNo,});
+}
