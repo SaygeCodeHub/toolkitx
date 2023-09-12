@@ -183,6 +183,7 @@ abstract class StringConstants {
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
+  static const String kNoData = 'No data!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
