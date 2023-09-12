@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
+import 'package:toolkit/screens/loto/loto_list_screen.dart';
+import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
 import '../../../blocs/client/client_bloc.dart';
@@ -185,6 +187,13 @@ class OnLineModules extends StatelessWidget {
         break;
       case 'workorder':
         Navigator.pushNamed(context, WorkOrderListScreen.routeName,
+            arguments: true);
+        break;
+      case 'loto':
+        Navigator.pushNamed(context, LotoListScreen.routeName, arguments: true);
+        break;
+      case 'certificates':
+        Navigator.pushNamed(context, CertificatesListScreen.routeName,
             arguments: true);
         break;
     }
