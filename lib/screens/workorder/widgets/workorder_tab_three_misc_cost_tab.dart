@@ -35,17 +35,21 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                   child: ListTile(
                       contentPadding: const EdgeInsets.all(tinierSpacing),
                       onTap: () {},
-                      title: Text(data.items[index].item,
+                      title: Text(data.misccost[index].service,
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColor.black)),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         CustomIconButton(
+                            dx: 1,
+                            dy: -28,
                             icon: Icons.delete,
                             onPressed: () {},
                             size: kEditAndDeleteIconTogether),
                         const SizedBox(width: xxxTinierSpacing),
                         CustomIconButton(
+                            dx: 1,
+                            dy: -28,
                             icon: Icons.edit,
                             onPressed: () {},
                             size: kEditAndDeleteIconTogether)
@@ -57,31 +61,13 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Row(children: [
-                                  Text('${data.items[index].type}: '),
-                                  const SizedBox(width: xxxTinierSpacing),
-                                  Text(data.items[index].code),
+                                  Text('${DatabaseUtil.getText('Quantity')}: '),
+                                  Text(data.misccost[index].quan.toString()),
                                 ]),
                                 const SizedBox(height: xxxTinierSpacing),
                                 Row(children: [
-                                  Text(
-                                      '${DatabaseUtil.getText('PlannedQuan')}: '),
-                                  const SizedBox(width: xxxTinierSpacing),
-                                  Text((data.items[index].plannedquan
-                                              .toString() ==
-                                          'null')
-                                      ? ''
-                                      : data.items[index].plannedquan
-                                          .toString())
-                                ]),
-                                const SizedBox(height: xxxTinierSpacing),
-                                Row(children: [
-                                  Text('${DatabaseUtil.getText('UsedQuan')}: '),
-                                  const SizedBox(width: xxxTinierSpacing),
-                                  Text((data.items[index].actualquan
-                                              .toString() ==
-                                          'null')
-                                      ? ''
-                                      : data.items[index].actualquan.toString())
+                                  Text('${DatabaseUtil.getText('Amount')}: '),
+                                  Text(data.misccost[index].amount)
                                 ])
                               ]))));
             },
