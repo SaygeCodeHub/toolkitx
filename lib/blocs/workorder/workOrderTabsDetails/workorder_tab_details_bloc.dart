@@ -27,13 +27,15 @@ class WorkOrderTabDetailsBloc
     emit(FetchingWorkOrderTabDetails());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
               hashCode!, event.workOrderId);
       tabIndex = event.initialTabIndex;
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
-          tabInitialIndex: tabIndex));
+          tabInitialIndex: tabIndex,
+          clientId: clientId!));
     } catch (e) {
       emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
     }

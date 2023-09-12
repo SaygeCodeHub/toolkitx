@@ -17,6 +17,7 @@ import '../../widgets/status_tag.dart';
 import 'widgets/workorder_details_tab_one.dart';
 import 'widgets/workorder_tab_two_details.dart';
 import 'widgets/workorder_tab_four_details.dart';
+import 'widgets/workorder_tab_five_details.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
@@ -79,7 +80,11 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                           tabIndex: 1),
                       WorkOrderTabFourDetails(
                           data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 3)
+                          tabIndex: 3),
+                      WorkOrderTabFiveDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 4,
+                          clientId: state.clientId)
                     ])
               ]));
         } else if (state is WorkOrderTabDetailsNotFetched) {
