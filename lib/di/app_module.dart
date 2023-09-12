@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
+import 'package:toolkit/repositories/certificates/certificates_repository.dart';
+import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
@@ -17,6 +19,8 @@ import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
+import '../repositories/loto/loto_repository.dart';
+import '../repositories/loto/loto_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
 import '../repositories/permit/permit_repository_impl.dart';
 import '../data/cache/customer_cache.dart';
@@ -72,4 +76,7 @@ configurableDependencies() {
       () => CalendarRepositoryImpl());
   getIt.registerLazySingleton<WorkOrderRepository>(
       () => WorkOrderRepositoryImpl());
+  getIt.registerLazySingleton<LotoRepository>(() => LotoRepositoryImpl());
+  getIt.registerLazySingleton<CertificateRepository>(
+      () => CertificateRepositoryImpl());
 }

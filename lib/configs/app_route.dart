@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -6,6 +7,7 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -33,6 +35,7 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -202,12 +205,11 @@ class AppRoutes {
             LogBookDetailsScreen(logId: settings.arguments.toString()));
       case AddLogBookScreen.routeName:
         return _createRoute(const AddLogBookScreen());
-
       case ReportNewQA.routeName:
         return _createRoute(const ReportNewQA());
-
       case WorkOrderListScreen.routeName:
-        return _createRoute(const WorkOrderListScreen());
+        return _createRoute(
+            WorkOrderListScreen(isFromHome: settings.arguments as bool));
       case QualityManagementLocationScreen.routeName:
         return _createRoute(QualityManagementLocationScreen(
             reportNewQMMap: settings.arguments as Map));
@@ -234,11 +236,19 @@ class AppRoutes {
         return _createRoute(QualityManagementFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
+      case CertificatesListScreen.routeName:
+        return _createRoute(const CertificatesListScreen());
+      case UploadCertificateScreen.routeName:
+        return _createRoute(UploadCertificateScreen(
+          certificateItemsMap: settings.arguments as Map,
+        ));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
+      case LotoListScreen.routeName:
+        return _createRoute(const LotoListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
