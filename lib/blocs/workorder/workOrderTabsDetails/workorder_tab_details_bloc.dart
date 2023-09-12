@@ -40,7 +40,7 @@ class WorkOrderTabDetailsBloc
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
-          clientId: clientId!));
+          clientId: clientId));
       add(WorkOrderToggleSwitchIndex(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
