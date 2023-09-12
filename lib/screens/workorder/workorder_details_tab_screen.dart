@@ -76,8 +76,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                           data: state.fetchWorkOrderDetailsModel.data),
                       WorkOrderTabTwoDetails(
                           data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 1)
-                          data: state.fetchWorkOrderDetailsModel.data),
+                          tabIndex: 1),
                       WorkOrderTabFourDetails(
                           data: state.fetchWorkOrderDetailsModel.data,
                           tabIndex: 3)
