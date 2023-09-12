@@ -74,12 +74,12 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                       WorkOrderDetailsTabOne(
                           tabIndex: 0,
                           data: state.fetchWorkOrderDetailsModel.data),
-                      WorkOrderTabThreeDetails(
-                          data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 2),
                       WorkOrderTabTwoDetails(
                           data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 1)
+                          tabIndex: 1),
+                      WorkOrderTabThreeDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 2)
                     ])
               ]));
         } else if (state is WorkOrderTabDetailsNotFetched) {
