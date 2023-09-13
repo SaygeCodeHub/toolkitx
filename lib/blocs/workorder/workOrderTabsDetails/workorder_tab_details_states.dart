@@ -13,7 +13,8 @@ class WorkOrderTabDetailsFetched extends WorkOrderTabDetailsStates {
   final int tabInitialIndex;
   final String? clientId;
 
-  WorkOrderTabDetailsFetched({this.clientId = '',
+  WorkOrderTabDetailsFetched(
+      {this.clientId = '',
       required this.tabInitialIndex,
       required this.fetchWorkOrderDetailsModel});
 }
