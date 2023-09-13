@@ -18,16 +18,21 @@ class WorkOrderTabDetailsBloc
 
   WorkOrderTabDetailsBloc() : super(WorkOrderTabDetailsInitial()) {
     on<WorkOrderDetails>(_fetchWorkOrderDetails);
+    on<WorkOrderToggleSwitchIndex>(_toggleSwitchIndexChanged);
   }
 
   int tabIndex = 0;
+  int toggleSwitchIndex = 0;
+  String clientId = '';
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderTabDetails());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      String? getClientId =
+          await _customerCache.getClientId(CacheKeys.clientId);
+      clientId = getClientId!;
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
               hashCode!, event.workOrderId);
@@ -35,9 +40,22 @@ class WorkOrderTabDetailsBloc
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
-          clientId: clientId!));
+          clientId: clientId));
+      add(WorkOrderToggleSwitchIndex(
+          fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
+          tabInitialIndex: tabIndex,
+          toggleIndex: 0));
     } catch (e) {
       emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
     }
+  }
+
+  _toggleSwitchIndexChanged(WorkOrderToggleSwitchIndex event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    toggleSwitchIndex = event.toggleIndex;
+    emit(WorkOrderTabDetailsFetched(
+        tabInitialIndex: event.tabInitialIndex,
+        fetchWorkOrderDetailsModel: event.fetchWorkOrderDetailsModel,
+        clientId: clientId));
   }
 }
