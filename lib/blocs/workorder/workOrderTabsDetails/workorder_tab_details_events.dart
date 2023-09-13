@@ -19,3 +19,15 @@ class WorkOrderToggleSwitchIndex extends WorkOrderTabsDetailsEvent {
       required this.tabInitialIndex,
       required this.toggleIndex});
 }
+
+class WorkOrderItemTabDeleteItem extends WorkOrderTabsDetailsEvent {
+  final String itemId;
+
+  WorkOrderItemTabDeleteItem({required this.itemId});
+}
+
+class WorkOrderDeleteDocument extends WorkOrderTabsDetailsEvent {
+  final String docId;
+
+  WorkOrderDeleteDocument({required this.docId});
+}

@@ -10,9 +10,11 @@ import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/workorder_tabs_util.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/error_section.dart';
 import '../../widgets/generic_app_bar.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/workorder_details_tab_one.dart';
 import 'widgets/workorder_tab_two_details.dart';
@@ -33,8 +35,30 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
         initialTabIndex: 0, workOrderId: workOrderMap['workOrderId']));
     return Scaffold(
       appBar: const GenericAppBar(),
-      body: BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
-          builder: (context, state) {
+      body: BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+          listener: (context, state) {
+        if (state is DeletingItemTabItem) {
+          ProgressBar.show(context);
+        } else if (state is ItemTabItemDeleted) {
+          ProgressBar.dismiss(context);
+          context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+              initialTabIndex: 2, workOrderId: workOrderMap['workOrderId']));
+        } else if (state is ItemTabItemNotDeleted) {
+          ProgressBar.dismiss(context);
+          showCustomSnackBar(context, state.cannotDeleteItem, '');
+        }
+
+        if (state is DeletingDocument) {
+          ProgressBar.show(context);
+        } else if (state is DocumentDeleted) {
+          ProgressBar.dismiss(context);
+          context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+              initialTabIndex: 2, workOrderId: workOrderMap['workOrderId']));
+        } else if (state is DocumentNotDeleted) {
+          ProgressBar.dismiss(context);
+          showCustomSnackBar(context, state.documentNotDeleted, '');
+        }
+      }, builder: (context, state) {
         if (state is FetchingWorkOrderTabDetails) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is WorkOrderTabDetailsFetched) {
