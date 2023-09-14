@@ -10,9 +10,11 @@ class WorkOrderTabDetailsFetched extends WorkOrderTabDetailsStates {
   final FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel;
   final int tabInitialIndex;
   final String? clientId;
+  final List popUpMenuList;
 
   WorkOrderTabDetailsFetched(
-      {this.clientId = '',
+      {required this.popUpMenuList,
+      this.clientId = '',
       required this.tabInitialIndex,
       required this.fetchWorkOrderDetailsModel});
 }
