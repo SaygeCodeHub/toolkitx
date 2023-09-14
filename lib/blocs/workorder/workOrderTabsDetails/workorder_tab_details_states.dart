@@ -11,9 +11,11 @@ class WorkOrderTabDetailsFetched extends WorkOrderTabDetailsStates {
   final int tabInitialIndex;
   final String? clientId;
   final List popUpMenuList;
+  final Map workOrderDetailsMap;
 
   WorkOrderTabDetailsFetched(
-      {required this.popUpMenuList,
+      {required this.workOrderDetailsMap,
+      required this.popUpMenuList,
       this.clientId = '',
       required this.tabInitialIndex,
       required this.fetchWorkOrderDetailsModel});
@@ -23,4 +25,20 @@ class WorkOrderTabDetailsNotFetched extends WorkOrderTabDetailsStates {
   final String tabDetailsNotFetched;
 
   WorkOrderTabDetailsNotFetched({required this.tabDetailsNotFetched});
+}
+
+class WorkOrderCompanyOptionSelected extends WorkOrderTabDetailsStates {
+  final String companyId;
+  final String companyName;
+
+  WorkOrderCompanyOptionSelected(
+      {required this.companyId, required this.companyName});
+}
+
+class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
+  final String locationId;
+  final String locationName;
+
+  WorkOrderLocationOptionSelected(
+      {required this.locationId, required this.locationName});
 }
