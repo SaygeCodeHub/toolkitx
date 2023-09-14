@@ -18,11 +18,10 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
-  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(String hashCode,
-      String userId) async {
+  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(
+      String hashCode, String userId) async {
     final response = await DioClient().get(
-        "${ApiConstants
-            .baseUrl}workorder/getmaster?hashcode=$hashCode&userid=$userId");
+        "${ApiConstants.baseUrl}workorder/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchWorkOrdersMasterModel.fromJson(response);
   }
 

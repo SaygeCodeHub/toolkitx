@@ -88,7 +88,7 @@ class WorkOrderTabFourDetails extends StatelessWidget {
             const SizedBox(width: xxTiniestSpacing),
             Text(dateTime[1])
           ],
-        )
+        ),
       ],
     );
   }
