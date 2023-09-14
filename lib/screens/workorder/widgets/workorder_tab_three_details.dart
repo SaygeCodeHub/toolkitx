@@ -12,6 +12,8 @@ import '../../../configs/app_dimensions.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import 'workorder_tab_three_document_tab.dart';
 import 'workorder_tab_three_items_tab.dart';
+import 'workorder_tab_three_misc_cost_tab.dart';
+import 'workorder_tab_three_show_downtime_tab.dart';
 
 class WorkOrderTabThreeDetails extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -72,6 +74,12 @@ class WorkOrderTabThreeDetails extends StatelessWidget {
               : const SizedBox.shrink(),
           (toggleIndex == 1)
               ? WorkOrderTabThreeItemsTab(data: data)
+              : const SizedBox.shrink(),
+          (toggleIndex == 2)
+              ? WorkOrderTabThreeMiscCostTab(data: data)
+              : const SizedBox.shrink(),
+          (toggleIndex == 3)
+              ? WorkOrderTabThreeShowDowntimeTab(data: data)
               : const SizedBox.shrink()
         ]);
       } else {

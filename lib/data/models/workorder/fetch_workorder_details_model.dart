@@ -541,14 +541,6 @@ class Maplink {
       };
 }
 
-class Misccost {
-  Misccost();
-
-  factory Misccost.fromJson(Map<String, dynamic> json) => Misccost();
-
-  Map<String, dynamic> toJson() => {};
-}
-
 class Workforce {
   final String id;
   final String workforceid;
@@ -586,5 +578,37 @@ class Workforce {
         "certificatecode": certificatecode,
         "plannedhrs": plannedhrs,
         "actualhrs": actualhrs,
+      };
+}
+
+class Misccost {
+  final String id;
+  final String service;
+  final String vendorname;
+  final int quan;
+  final String amount;
+
+  Misccost({
+    required this.id,
+    required this.service,
+    required this.vendorname,
+    required this.quan,
+    required this.amount,
+  });
+
+  factory Misccost.fromJson(Map<String, dynamic> json) => Misccost(
+        id: json["id"] ?? '',
+        service: json["service"] ?? '',
+        vendorname: json["vendorname"] ?? '',
+        quan: json["quan"],
+        amount: json["amount"] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "service": service,
+        "vendorname": vendorname,
+        "quan": quan,
+        "amount": amount,
       };
 }
