@@ -19,3 +19,19 @@ class WorkOrderToggleSwitchIndex extends WorkOrderTabsDetailsEvent {
       required this.tabInitialIndex,
       required this.toggleIndex});
 }
+
+class SelectWorkOrderCompanyOptions extends WorkOrderTabsDetailsEvent {
+  final String companyId;
+  final String companyName;
+
+  SelectWorkOrderCompanyOptions(
+      {required this.companyId, required this.companyName});
+}
+
+class SelectWorkOrderLocationOptions extends WorkOrderTabsDetailsEvent {
+  final String locationId;
+  final String locationName;
+
+  SelectWorkOrderLocationOptions(
+      {required this.locationId, required this.locationName});
+}

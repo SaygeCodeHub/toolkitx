@@ -20,12 +20,15 @@ class WorkOrderTabDetailsBloc
   WorkOrderTabDetailsBloc() : super(WorkOrderTabDetailsInitial()) {
     on<WorkOrderDetails>(_fetchWorkOrderDetails);
     on<WorkOrderToggleSwitchIndex>(_toggleSwitchIndexChanged);
+    on<SelectWorkOrderCompanyOptions>(_selectCompanyOptions);
+    on<SelectWorkOrderLocationOptions>(_selectLocationOptions);
   }
 
   int tabIndex = 0;
   int toggleSwitchIndex = 0;
   String clientId = '';
   static List popUpMenuItemsList = [];
+  Map workOrderDetailsMap = {};
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -56,11 +59,18 @@ class WorkOrderTabDetailsBloc
       if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
         popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
       }
+      workOrderDetailsMap = {
+        'companyid': fetchWorkOrderDetailsModel.data.contractorname,
+        'locationid': fetchWorkOrderDetailsModel.data.locationid,
+        'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
+        'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
+      };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
           clientId: clientId,
-          popUpMenuList: popUpMenuItemsList));
+          popUpMenuList: popUpMenuItemsList,
+          workOrderDetailsMap: workOrderDetailsMap));
       add(WorkOrderToggleSwitchIndex(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
@@ -77,6 +87,19 @@ class WorkOrderTabDetailsBloc
         tabInitialIndex: event.tabInitialIndex,
         fetchWorkOrderDetailsModel: event.fetchWorkOrderDetailsModel,
         clientId: clientId,
-        popUpMenuList: popUpMenuItemsList));
+        popUpMenuList: popUpMenuItemsList,
+        workOrderDetailsMap: workOrderDetailsMap));
+  }
+
+  _selectCompanyOptions(SelectWorkOrderCompanyOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCompanyOptionSelected(
+        companyId: event.companyId, companyName: event.companyName));
+  }
+
+  _selectLocationOptions(SelectWorkOrderLocationOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderLocationOptionSelected(
+        locationId: event.locationId, locationName: event.locationName));
   }
 }
