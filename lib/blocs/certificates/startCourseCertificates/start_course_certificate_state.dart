@@ -34,7 +34,6 @@ class GetTopicCertificateError extends StartCourseCertificateState {
   GetTopicCertificateError({required this.getTopicError});
 }
 
-
 class FetchingGetNotesCertificate extends StartCourseCertificateState {}
 
 class GetNotesCertificateFetched extends StartCourseCertificateState {
@@ -49,7 +48,6 @@ class GetNotesCertificateError extends StartCourseCertificateState {
 
   GetNotesCertificateError({required this.getNotesError});
 }
-
 
 class UserTrackUpdating extends StartCourseCertificateState {}
 

@@ -237,15 +237,10 @@ class AppRoutes {
                 settings.arguments as FetchQualityManagementDetailsModel));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
-      case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
-      case CreateSimilarWorkOrderScreen.routeName:
-        return _createRoute(CreateSimilarWorkOrderScreen(
-            workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
           certificateItemsMap: settings.arguments as Map,
@@ -266,7 +261,9 @@ class AppRoutes {
           courseId: settings.arguments.toString(),
         ));
       case GetNotesCertificateScreen.routeName:
-        return _createRoute( GetNotesCertificateScreen(getNotesMap: settings.arguments as Map,));
+        return _createRoute(GetNotesCertificateScreen(
+          getNotesMap: settings.arguments as Map,
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -49,7 +49,8 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
   @override
   Widget build(BuildContext context) {
     log("message====>${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
-    var link = '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
+    var link =
+        '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
     var unescape = HtmlUnescape();
     var text = unescape.convert(widget.data.description);
     bool visible = true;
@@ -67,25 +68,24 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         Visibility(
             visible: widget.pageNo == 2 ? visible : !visible,
             child: Container(
-                height: kContainerHeight,
-                width: kContainerWidth,
-                color: AppColor.blueGrey,
-                child: CachedNetworkImage(
-                    height: kContainerHeight,
-                    imageUrl: link,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: AppColor.paleGrey,
-                        highlightColor: AppColor.white,
-                        child: Container(
-                            height: kNetworkImageContainerTogether,
-                            width: kNetworkImageContainerTogether,
-                            decoration: BoxDecoration(
-                                color: AppColor.white,
-                                borderRadius:
-                                BorderRadius.circular(kCardRadius)))),
-                    errorWidget: (context, url, error) => const Icon(
-                        Icons.error_outline_sharp,
-                        size: kIconSize)),
+              height: kContainerHeight,
+              width: kContainerWidth,
+              color: AppColor.blueGrey,
+              child: CachedNetworkImage(
+                  height: kContainerHeight,
+                  imageUrl: link,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: AppColor.paleGrey,
+                      highlightColor: AppColor.white,
+                      child: Container(
+                          height: kNetworkImageContainerTogether,
+                          width: kNetworkImageContainerTogether,
+                          decoration: BoxDecoration(
+                              color: AppColor.white,
+                              borderRadius:
+                                  BorderRadius.circular(kCardRadius)))),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error_outline_sharp, size: kIconSize)),
             )),
         Visibility(
             visible: widget.pageNo == 1 ? visible : !visible,

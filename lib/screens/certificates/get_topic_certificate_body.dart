@@ -32,12 +32,13 @@ class GetTopicCertificateBody extends StatelessWidget {
           child: ListTile(
             onTap: () {
               Map getNotesMap = {
-                "coursename" : data.coursename,
+                "coursename": data.coursename,
                 "certificatename": data.certificatename,
-                "name" : data.topiclist[0].name,
-                "id":data.topiclist[0].id
+                "name": data.topiclist[0].name,
+                "id": data.topiclist[0].id
               };
-              Navigator.pushNamed(context, GetNotesCertificateScreen.routeName,arguments: getNotesMap);
+              Navigator.pushNamed(context, GetNotesCertificateScreen.routeName,
+                  arguments: getNotesMap);
             },
             contentPadding: const EdgeInsets.all(kCardPadding),
             leading: Container(

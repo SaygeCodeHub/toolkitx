@@ -122,8 +122,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
                                                 .fetchGetNotesModel.data.id,
                                             idm: getNotesMap["id"]));
                                   },
-                                  textValue: StringConstants.kNext)
-                                      )),
+                                  textValue: StringConstants.kNext))),
                     ],
                   )
                 ],

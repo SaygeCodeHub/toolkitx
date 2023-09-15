@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-UpdateUserTrackModel updateUserTrackModelFromJson(String str) => UpdateUserTrackModel.fromJson(json.decode(str));
+UpdateUserTrackModel updateUserTrackModelFromJson(String str) =>
+    UpdateUserTrackModel.fromJson(json.decode(str));
 
-String updateUserTrackModelToJson(UpdateUserTrackModel data) => json.encode(data.toJson());
+String updateUserTrackModelToJson(UpdateUserTrackModel data) =>
+    json.encode(data.toJson());
 
 class UpdateUserTrackModel {
   final int status;
@@ -16,25 +17,24 @@ class UpdateUserTrackModel {
     required this.data,
   });
 
-  factory UpdateUserTrackModel.fromJson(Map<String, dynamic> json) => UpdateUserTrackModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory UpdateUserTrackModel.fromJson(Map<String, dynamic> json) =>
+      UpdateUserTrackModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
   Data();
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-  );
+  factory Data.fromJson(Map<String, dynamic> json) => Data();
 
-  Map<String, dynamic> toJson() => {
-  };
+  Map<String, dynamic> toJson() => {};
 }

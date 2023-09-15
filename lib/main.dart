@@ -172,9 +172,7 @@ class MyApp extends StatelessWidget {
               lazy: false,
               create: (context) =>
                   OnBoardingBloc()..add(CheckClientSelected())),
-          BlocProvider(
-              lazy: false,
-              create: (context) => SignInListBloc()),
+          BlocProvider(lazy: false, create: (context) => SignInListBloc()),
           BlocProvider(lazy: false, create: (context) => LotoListBloc()),
           BlocProvider(lazy: true, create: (context) => CertificateListBloc()),
           BlocProvider(

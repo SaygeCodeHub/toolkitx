@@ -29,5 +29,6 @@ class UpdateUserTrack extends StartCourseCertificateEvent {
   final String noteId;
   final String idm;
 
-  UpdateUserTrack({required this.certificateId, required this.noteId, required this.idm});
+  UpdateUserTrack(
+      {required this.certificateId, required this.noteId, required this.idm});
 }

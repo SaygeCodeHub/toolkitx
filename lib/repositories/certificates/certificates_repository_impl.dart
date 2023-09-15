@@ -44,16 +44,19 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
-  Future<FetchGetNotesModel> getNotesCertificates(String hashCode, String userId, String topicId, int pageNo) async {
+  Future<FetchGetNotesModel> getNotesCertificates(
+      String hashCode, String userId, String topicId, int pageNo) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
     return FetchGetNotesModel.fromJson(response);
   }
 
   @override
-  Future<UpdateUserTrackModel> updateUserTrackRepo(Map updateUserTrackMap) async {
+  Future<UpdateUserTrackModel> updateUserTrackRepo(
+      Map updateUserTrackMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}certificate/UpdateUserTrack",updateUserTrackMap);
+        "${ApiConstants.baseUrl}certificate/UpdateUserTrack",
+        updateUserTrackMap);
     return UpdateUserTrackModel.fromJson(response);
   }
 }

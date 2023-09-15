@@ -67,23 +67,28 @@ class StartCourseCertificateBloc
     }
   }
 
-  Future<FutureOr<void>> _getNotesCertificate(GetNotesCertificate event, Emitter<StartCourseCertificateState> emit) async {
+  Future<FutureOr<void>> _getNotesCertificate(GetNotesCertificate event,
+      Emitter<StartCourseCertificateState> emit) async {
     emit(FetchingGetNotesCertificate());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      FetchGetNotesModel fetchGetNotesModel = await _certificateRepository.getNotesCertificates(hashCode!, userId!, event.topicId, event.pageNo);
-      if(fetchGetNotesModel.status == 200){
-        emit(GetNotesCertificateFetched(fetchGetNotesModel: fetchGetNotesModel));
+      FetchGetNotesModel fetchGetNotesModel =
+          await _certificateRepository.getNotesCertificates(
+              hashCode!, userId!, event.topicId, event.pageNo);
+      if (fetchGetNotesModel.status == 200) {
+        emit(
+            GetNotesCertificateFetched(fetchGetNotesModel: fetchGetNotesModel));
       }
-    }catch(e){
+    } catch (e) {
       emit(GetNotesCertificateError(getNotesError: e.toString()));
     }
   }
 
-  Future<FutureOr<void>> _updateUserTrack(UpdateUserTrack event, Emitter<StartCourseCertificateState> emit) async {
+  Future<FutureOr<void>> _updateUserTrack(
+      UpdateUserTrack event, Emitter<StartCourseCertificateState> emit) async {
     emit(UserTrackUpdating());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
 
@@ -100,7 +105,7 @@ class StartCourseCertificateBloc
       if (updateUserTrackModel.status == 200) {
         emit(UserTrackUpdated(updateUserTrackModel: updateUserTrackModel));
       }
-    } catch(e){
+    } catch (e) {
       emit(UserTrackUpdateError(error: e.toString()));
     }
   }
