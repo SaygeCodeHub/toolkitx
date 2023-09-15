@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/workorder/widgets/workorder_list_card.dart';
@@ -31,8 +29,6 @@ class WorkOrderListBody extends StatelessWidget {
         listener: (context, state) {
           if (state is WorkOrdersFetched) {
             if (state.fetchWorkOrdersModel.status == 204) {
-              log("yaha kisne aane ko bola bsdk========>");
-              // context.read<WorkOrderBloc>().hasReachedMax = true;
               WorkOrderListScreen.pageNo = 1;
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
@@ -59,8 +55,6 @@ class WorkOrderListBody extends StatelessWidget {
                         if (index < state.data.length) {
                           return WorkOrderListCard(data: state.data[index]);
                         } else if (!state.hasReachedMax) {
-                          log("i am here======>");
-                          log("istate.hasReachedMax======>${state.hasReachedMax}");
                           WorkOrderListScreen.pageNo++;
                           context.read<WorkOrderBloc>().add(FetchWorkOrders(
                               pageNo: WorkOrderListScreen.pageNo,
@@ -83,7 +77,6 @@ class WorkOrderListBody extends StatelessWidget {
                       }));
             } else if (state.fetchWorkOrdersModel.status == 204 &&
                 context.read<WorkOrderBloc>().data.isEmpty) {
-              log("are you mf stupid========>");
               if (state.filterMap.isEmpty) {
                 return const NoRecordsText(
                     text: StringConstants.kNoRecordsFilter);
