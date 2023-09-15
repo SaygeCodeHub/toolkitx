@@ -15,6 +15,11 @@ import '../../widgets/error_section.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/workorder_details_tab_one.dart';
+import 'widgets/workorder_tab_two_details.dart';
+import 'widgets/workorder_tab_four_details.dart';
+import 'widgets/workorder_tab_five_details.dart';
+import 'widgets/workorder_tab_three_details.dart';
+import 'workorder_pop_up_menu_screen.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
@@ -28,7 +33,21 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
     context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
         initialTabIndex: 0, workOrderId: workOrderMap['workOrderId']));
     return Scaffold(
-      appBar: const GenericAppBar(),
+      appBar: GenericAppBar(
+        actions: [
+          BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is WorkOrderTabDetailsFetched,
+              builder: (context, state) {
+                if (state is WorkOrderTabDetailsFetched) {
+                  return WorkOrderPopUpMenuScreen(
+                      popUpMenuOptions: state.popUpMenuList);
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
+        ],
+      ),
       body: BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
           builder: (context, state) {
         if (state is FetchingWorkOrderTabDetails) {
@@ -71,7 +90,20 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                     tabBarViewWidgets: [
                       WorkOrderDetailsTabOne(
                           tabIndex: 0,
-                          data: state.fetchWorkOrderDetailsModel.data)
+                          data: state.fetchWorkOrderDetailsModel.data),
+                      WorkOrderTabTwoDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 1),
+                      WorkOrderTabThreeDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 2),
+                      WorkOrderTabFourDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 3),
+                      WorkOrderTabFiveDetails(
+                          data: state.fetchWorkOrderDetailsModel.data,
+                          tabIndex: 4,
+                          clientId: state.clientId!)
                     ])
               ]));
         } else if (state is WorkOrderTabDetailsNotFetched) {
