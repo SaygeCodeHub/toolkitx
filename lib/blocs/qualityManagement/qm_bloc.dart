@@ -301,7 +301,7 @@ class QualityManagementBloc
         "incidentid": encryptQmId,
         "commentid": commentId,
         "filenames": saveFilesMap['filenames'],
-        "hashcode": hashCode
+        "hashcode": hashCode,
       };
       SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel =
           await _qualityManagementRepository
