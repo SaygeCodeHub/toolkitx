@@ -41,7 +41,8 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
               builder: (context, state) {
                 if (state is WorkOrderTabDetailsFetched) {
                   return WorkOrderPopUpMenuScreen(
-                      popUpMenuOptions: state.popUpMenuList);
+                      popUpMenuOptions: state.popUpMenuList,
+                      workOrderDetailsMap: state.workOrderDetailsMap);
                 } else {
                   return const SizedBox.shrink();
                 }
