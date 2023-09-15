@@ -169,6 +169,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  chewie:
+    dependency: "direct main"
+    description:
+      name: chewie
+      sha256: ccfce3350ae9fd419cd336cdf3380f77a08e45171e1e3cb3d499d204de5e7ea8
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.7.1"
   clock:
     dependency: transitive
     description:
@@ -269,10 +277,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      sha256: a9d76e72985d7087eb7c5e7903224ae52b337131518d127c554b9405936752b8
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.6"
+    version: "5.2.1+1"
   encrypt:
     dependency: "direct main"
     description:
@@ -1293,6 +1301,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  video_player:
+    dependency: "direct main"
+    description:
+      name: video_player
+      sha256: d3910a8cefc0de8a432a4411dcf85030e885d8fef3ddea291f162253a05dbf01
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.1"
+  video_player_android:
+    dependency: transitive
+    description:
+      name: video_player_android
+      sha256: "3fe89ab07fdbce786e7eb25b58532d6eaf189ceddc091cb66cba712f8d9e8e55"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.10"
+  video_player_avfoundation:
+    dependency: transitive
+    description:
+      name: video_player_avfoundation
+      sha256: c3b123a5a56c9812b9029f840c65b92fd65083eb08d69be016b01e8aa018f77d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.10"
+  video_player_platform_interface:
+    dependency: transitive
+    description:
+      name: video_player_platform_interface
+      sha256: be72301bf2c0150ab35a8c34d66e5a99de525f6de1e8d27c0672b836fe48f73a
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.1"
+  video_player_web:
+    dependency: transitive
+    description:
+      name: video_player_web
+      sha256: "66fc0d56554143fee4c623f70e45e4272b94fd246283cb67edabb9d1e4122a4f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  wakelock_plus:
+    dependency: transitive
+    description:
+      name: wakelock_plus
+      sha256: aac3f3258f01781ec9212df94eecef1eb9ba9350e106728def405baa096ba413
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: "40fabed5da06caff0796dc638e1f07ee395fb18801fbff3255a2372db2d80385"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   watcher:
     dependency: transitive
     description:
@@ -1350,5 +1414,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=3.7.0-0"
+  dart: ">=3.1.0 <4.0.0"
+  flutter: ">=3.13.0"

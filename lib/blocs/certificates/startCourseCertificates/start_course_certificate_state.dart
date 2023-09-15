@@ -49,3 +49,19 @@ class GetNotesCertificateError extends StartCourseCertificateState {
 
   GetNotesCertificateError({required this.getNotesError});
 }
+
+
+class UserTrackUpdating extends StartCourseCertificateState {}
+
+class UserTrackUpdated extends StartCourseCertificateState {
+  final UpdateUserTrackModel updateUserTrackModel;
+  UserTrackUpdated({
+    required this.updateUserTrackModel,
+  });
+}
+
+class UserTrackUpdateError extends StartCourseCertificateState {
+  final String error;
+
+  UserTrackUpdateError({required this.error});
+}

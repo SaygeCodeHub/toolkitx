@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -18,7 +19,7 @@ class StartCourseCertificateBloc
   final CertificateRepository _certificateRepository =
       getIt<CertificateRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-
+  String certificateId = '';
   StartCourseCertificateState get initialState =>
       StartCourseCertificateInitial();
 
@@ -26,6 +27,7 @@ class StartCourseCertificateBloc
     on<GetCourseCertificate>(_getCourseCertificate);
     on<GetTopicCertificate>(_getTopicCertificate);
     on<GetNotesCertificate>(_getNotesCertificate);
+    on<UpdateUserTrack>(_updateUserTrack);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -33,6 +35,7 @@ class StartCourseCertificateBloc
     emit(FetchingGetCourseCertificate());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      certificateId = event.certificateId;
       GetCourseCertificateModel getCourseCertificateModel =
           await _certificateRepository.getCourseCertificates(
               hashCode!, event.certificateId);
@@ -75,6 +78,30 @@ class StartCourseCertificateBloc
       }
     }catch(e){
       emit(GetNotesCertificateError(getNotesError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _updateUserTrack(UpdateUserTrack event, Emitter<StartCourseCertificateState> emit) async {
+    emit(UserTrackUpdating());
+    try{
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userid = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map userTrackMap = {
+        "idm": event.idm,
+        "hashcode": hashCode,
+        "workforceid": userid,
+        "noteid": event.noteId,
+        "certificateid": event.certificateId
+      };
+
+      UpdateUserTrackModel updateUserTrackModel =
+          await _certificateRepository.updateUserTrackRepo(userTrackMap);
+      if (updateUserTrackModel.status == 200) {
+        emit(UserTrackUpdated(updateUserTrackModel: updateUserTrackModel));
+      }
+    } catch(e){
+      emit(UserTrackUpdateError(error: e.toString()));
     }
   }
 }

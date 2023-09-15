@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 
 import '../../data/models/certificates/certificate_list_model.dart';
@@ -22,4 +23,6 @@ abstract class CertificateRepository {
 
   Future<FetchGetNotesModel> getNotesCertificates(
       String hashCode, String userId, String topicId, int pageNo);
+
+  Future<UpdateUserTrackModel> updateUserTrackRepo(Map updateUserTrackMap);
 }

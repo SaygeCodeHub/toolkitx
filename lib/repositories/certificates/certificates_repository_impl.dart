@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 
@@ -47,5 +48,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
     return FetchGetNotesModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateUserTrackModel> updateUserTrackRepo(Map updateUserTrackMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/UpdateUserTrack",updateUserTrackMap);
+    return UpdateUserTrackModel.fromJson(response);
   }
 }

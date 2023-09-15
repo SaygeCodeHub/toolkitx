@@ -20,6 +20,7 @@ class CertificateListBloc
   CertificateListState get initialState => CertificateListInitial();
   final List<CertificateListDatum> data = [];
   bool hasReachedMax = false;
+
   CertificateListBloc() : super(CertificateListInitial()) {
     on<FetchCertificateList>(_fetchCertificateList);
   }
