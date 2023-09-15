@@ -76,3 +76,7 @@ const double kCircularProgressIndicatorWidth = 35;
 const double kCircularProgressIndicatorPadding = 8.0;
 const double kSignInToggleCornerRadius = 10.0;
 const double kDotContianerSize = 10.0;
+const double kNextButtonWidth = 100.0;
+const double kPreviousButtonWidth = 150.0;
+const double kContainerWidth = 380.0;
+const double kContainerHeight = 300.0;

@@ -1,13 +1,18 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../configs/app_dimensions.dart';
 import '../../utils/constants/api_constants.dart';
 
 class GetNotesCertificateBody extends StatefulWidget {
@@ -30,7 +35,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
     _chewieController = ChewieController(
         videoPlayerController: VideoPlayerController.networkUrl(Uri(
             path:
-                "${ApiConstants.viewDocBaseUrl}${widget.data.link}${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}")),
+                "${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}")),
         aspectRatio: 3 / 2,
         autoInitialize: true);
   }
@@ -43,6 +48,8 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
 
   @override
   Widget build(BuildContext context) {
+    log("message====>${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
+    var link = '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
     var unescape = HtmlUnescape();
     var text = unescape.convert(widget.data.description);
     bool visible = true;
@@ -54,29 +61,44 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         Visibility(
             visible: widget.pageNo == 3 ? visible : !visible,
             child: SizedBox(
-                height: 500,
-                width: 380,
+                height: kContainerHeight,
+                width: kContainerWidth,
                 child: Html(shrinkWrap: true, data: text))),
         Visibility(
             visible: widget.pageNo == 2 ? visible : !visible,
             child: Container(
-                height: 300,
-                width: 380,
+                height: kContainerHeight,
+                width: kContainerWidth,
                 color: AppColor.blueGrey,
-                child: Image.network(
-                    "${ApiConstants.viewDocBaseUrl}${widget.data.link}${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}"))),
+                child: CachedNetworkImage(
+                    height: kContainerHeight,
+                    imageUrl: link,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: AppColor.paleGrey,
+                        highlightColor: AppColor.white,
+                        child: Container(
+                            height: kNetworkImageContainerTogether,
+                            width: kNetworkImageContainerTogether,
+                            decoration: BoxDecoration(
+                                color: AppColor.white,
+                                borderRadius:
+                                BorderRadius.circular(kCardRadius)))),
+                    errorWidget: (context, url, error) => const Icon(
+                        Icons.error_outline_sharp,
+                        size: kIconSize)),
+            )),
         Visibility(
             visible: widget.pageNo == 1 ? visible : !visible,
             child: Container(
-                height: 300,
-                width: 380,
+                height: kContainerHeight,
+                width: kContainerWidth,
                 color: AppColor.blueGrey,
                 child: const Text(''))),
         Visibility(
             visible: widget.pageNo == 4 ? visible : !visible,
             child: Container(
-                height: 250,
-                width: 380,
+                height: kLoadingPopUpWidth,
+                width: kContainerWidth,
                 color: AppColor.blueGrey,
                 child: Center(child: Chewie(controller: _chewieController))))
       ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
+import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -23,6 +24,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isVisible = false;
+    pageNo = 1;
     context
         .read<StartCourseCertificateBloc>()
         .add(GetNotesCertificate(topicId: getNotesMap["id"], pageNo: 1));
@@ -67,7 +69,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
                       Visibility(
                           visible: (pageNo > 1) ? !isVisible : isVisible,
                           child: SizedBox(
-                              width: 150,
+                              width: kPreviousButtonWidth,
                               child: PrimaryButton(
                                   onPressed: () {
                                     pageNo -= 1;
@@ -83,7 +85,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
                           visible: pageNo.toString() !=
                               state.fetchGetNotesModel.data.notescount,
                           replacement: SizedBox(
-                              width: 100,
+                              width: kNextButtonWidth,
                               child: PrimaryButton(
                                   onPressed: () {
                                     context
@@ -100,7 +102,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
                                   },
                                   textValue: StringConstants.kFINISH)),
                           child: SizedBox(
-                              width: 100,
+                              width: kNextButtonWidth,
                               child: PrimaryButton(
                                   onPressed: () {
                                     pageNo++;
@@ -120,9 +122,8 @@ class GetNotesCertificateScreen extends StatelessWidget {
                                                 .fetchGetNotesModel.data.id,
                                             idm: getNotesMap["id"]));
                                   },
-                                  textValue: (pageNo < 4)
-                                      ? StringConstants.kNext
-                                      : "Finish"))),
+                                  textValue: StringConstants.kNext)
+                                      )),
                     ],
                   )
                 ],
