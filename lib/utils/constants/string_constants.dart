@@ -15,6 +15,7 @@ abstract class StringConstants {
   static const String kNoParts = 'No items/parts!'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
+  static const String kSelectType = 'Select type'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kSelectCompany = 'Select Company'; //

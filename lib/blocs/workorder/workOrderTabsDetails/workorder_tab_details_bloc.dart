@@ -22,6 +22,7 @@ class WorkOrderTabDetailsBloc
     on<WorkOrderToggleSwitchIndex>(_toggleSwitchIndexChanged);
     on<SelectWorkOrderCompanyOptions>(_selectCompanyOptions);
     on<SelectWorkOrderLocationOptions>(_selectLocationOptions);
+    on<SelectWorkOrderTypeOptions>(_selectTypeOptions);
   }
 
   int tabIndex = 0;
@@ -64,6 +65,8 @@ class WorkOrderTabDetailsBloc
         'locationid': fetchWorkOrderDetailsModel.data.locationid,
         'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
         'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
+        'type': fetchWorkOrderDetailsModel.data.type,
+        'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -101,5 +104,11 @@ class WorkOrderTabDetailsBloc
       Emitter<WorkOrderTabDetailsStates> emit) {
     emit(WorkOrderLocationOptionSelected(
         locationId: event.locationId, locationName: event.locationName));
+  }
+
+  _selectTypeOptions(SelectWorkOrderTypeOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderTypeOptionSelected(
+        typeId: event.typeId, typeName: event.typeName));
   }
 }

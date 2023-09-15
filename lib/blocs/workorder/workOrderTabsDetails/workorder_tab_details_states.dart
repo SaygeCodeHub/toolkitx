@@ -42,3 +42,10 @@ class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
   WorkOrderLocationOptionSelected(
       {required this.locationId, required this.locationName});
 }
+
+class WorkOrderTypeOptionSelected extends WorkOrderTabDetailsStates {
+  final String typeId;
+  final String typeName;
+
+  WorkOrderTypeOptionSelected({required this.typeId, required this.typeName});
+}

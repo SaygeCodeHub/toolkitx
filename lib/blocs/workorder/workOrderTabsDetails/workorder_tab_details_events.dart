@@ -35,3 +35,10 @@ class SelectWorkOrderLocationOptions extends WorkOrderTabsDetailsEvent {
   SelectWorkOrderLocationOptions(
       {required this.locationId, required this.locationName});
 }
+
+class SelectWorkOrderTypeOptions extends WorkOrderTabsDetailsEvent {
+  final String typeId;
+  final String typeName;
+
+  SelectWorkOrderTypeOptions({required this.typeId, required this.typeName});
+}
