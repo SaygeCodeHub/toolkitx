@@ -25,7 +25,7 @@ class WorkOrderItemTabDeleteButton extends StatelessWidget {
                 return AndroidPopUp(
                     titleValue: DatabaseUtil.getText('DeleteRecord'),
                     contentValue: '',
-                    onPrimarybtn: () {
+                    onPrimaryButton: () {
                       context
                           .read<WorkOrderTabDetailsBloc>()
                           .add(WorkOrderItemTabDeleteItem(itemId: itemId));

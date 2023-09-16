@@ -55,7 +55,7 @@ class WorkOrderTabThreeDocumentTab extends StatelessWidget {
                                     titleValue:
                                         DatabaseUtil.getText('DeleteRecord'),
                                     contentValue: '',
-                                    onPrimarybtn: () {
+                                    onPrimaryButton: () {
                                       context
                                           .read<WorkOrderTabDetailsBloc>()
                                           .add(WorkOrderDeleteDocument(
