@@ -16,6 +16,7 @@ ThemeData appTheme = ThemeData(
     elevatedButtonTheme: elevatedButtonThemeData,
     floatingActionButtonTheme: floatingActionButtonThemeData,
     expansionTileTheme: expansionTileThemeData,
+    iconButtonTheme: iconButtonThemeData,
     iconTheme: iconThemeData);
 
 FloatingActionButtonThemeData floatingActionButtonThemeData =
@@ -28,6 +29,8 @@ OutlinedButtonThemeData outlinedButtonThemeData = OutlinedButtonThemeData(
         minimumSize: const Size(double.maxFinite, kOutlineButtonWidth),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius))));
+IconButtonThemeData iconButtonThemeData = const IconButtonThemeData(
+    style: ButtonStyle(splashFactory: NoSplash.splashFactory));
 ExpansionTileThemeData expansionTileThemeData = ExpansionTileThemeData(
     collapsedBackgroundColor: AppColor.white,
     backgroundColor: AppColor.offWhite,

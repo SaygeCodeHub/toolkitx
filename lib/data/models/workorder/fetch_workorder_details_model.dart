@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModelFromJson(String str) =>
+FetchWorkOrderTabDetailsModel fetchWorkOrderTabDetailsModelFromJson(
+        String str) =>
     FetchWorkOrderTabDetailsModel.fromJson(json.decode(str));
 
-String fetchWorkOrderTabsDetailsModelToJson(
+String fetchWorkOrderTabDetailsModelToJson(
         FetchWorkOrderTabDetailsModel data) =>
     json.encode(data.toJson());
 
@@ -77,6 +78,8 @@ class WorkOrderDetailsData {
   final String specialwork;
   final String istender;
   final String locationnames;
+  final String safetymeasurenames;
+  final String specialworknames;
   final String isassignedwf;
   final String isstart;
   final String ishold;
@@ -93,6 +96,17 @@ class WorkOrderDetailsData {
   final String plannedfinishtime;
   final List<Maplink> maplinks;
   final List<Customfield> customfields;
+  final List<Log> logs;
+  final List<Comment> comments;
+  final List<Workforce> workforce;
+  final List<Item> items;
+  final List<Downtime> downtime;
+  final List<Document> documents;
+  final String service;
+  final String vendorname;
+  final int? quan;
+  final String amount;
+  final List<Misccost> misccost;
 
   WorkOrderDetailsData({
     required this.id,
@@ -139,6 +153,8 @@ class WorkOrderDetailsData {
     required this.specialwork,
     required this.istender,
     required this.locationnames,
+    required this.safetymeasurenames,
+    required this.specialworknames,
     required this.isassignedwf,
     required this.isstart,
     required this.ishold,
@@ -155,6 +171,17 @@ class WorkOrderDetailsData {
     required this.plannedfinishtime,
     required this.maplinks,
     required this.customfields,
+    required this.logs,
+    required this.comments,
+    required this.workforce,
+    required this.items,
+    required this.downtime,
+    required this.documents,
+    required this.service,
+    required this.vendorname,
+    this.quan,
+    required this.amount,
+    required this.misccost,
   });
 
   factory WorkOrderDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -203,13 +230,15 @@ class WorkOrderDetailsData {
         specialwork: json["specialwork"],
         istender: json["istender"],
         locationnames: json["locationnames"],
+        safetymeasurenames: json["safetymeasurenames"] ?? '',
+        specialworknames: json["specialworknames"] ?? '',
         isassignedwf: json["isassignedwf"],
         isstart: json["isstart"],
         ishold: json["ishold"],
         iscomplete: json["iscomplete"],
         isacceptreject: json["isacceptreject"],
-        isstarttender: json["isstarttender"],
-        isstoptender: json["isstoptender"],
+        isstarttender: json["isstarttender"] ?? '',
+        isstoptender: json["isstoptender"] ?? '',
         istenderacceptreject: json["istenderacceptreject"],
         workorder: json["workorder"],
         status: json["status"],
@@ -221,6 +250,22 @@ class WorkOrderDetailsData {
             json["maplinks"].map((x) => Maplink.fromJson(x))),
         customfields: List<Customfield>.from(
             json["customfields"].map((x) => Customfield.fromJson(x))),
+        logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+        comments: List<Comment>.from(
+            json["comments"].map((x) => Comment.fromJson(x))),
+        workforce: List<Workforce>.from(
+            json["workforce"].map((x) => Workforce.fromJson(x))),
+        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        downtime: List<Downtime>.from(
+            json["downtime"].map((x) => Downtime.fromJson(x))),
+        documents: List<Document>.from(
+            json["documents"].map((x) => Document.fromJson(x))),
+        service: json["service"] ?? '',
+        vendorname: json["vendorname"] ?? '',
+        quan: json["quan"],
+        amount: json["amount"] ?? '',
+        misccost: List<Misccost>.from(
+            json["misccost"].map((x) => Misccost.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -268,6 +313,8 @@ class WorkOrderDetailsData {
         "specialwork": specialwork,
         "istender": istender,
         "locationnames": locationnames,
+        "safetymeasurenames": safetymeasurenames,
+        "specialworknames": specialworknames,
         "isassignedwf": isassignedwf,
         "isstart": isstart,
         "ishold": ishold,
@@ -284,19 +331,58 @@ class WorkOrderDetailsData {
         "plannedfinishtime": plannedfinishtime,
         "maplinks": List<dynamic>.from(maplinks.map((x) => x.toJson())),
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
+        "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
+        "workforce": List<dynamic>.from(workforce.map((x) => x.toJson())),
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "downtime": List<dynamic>.from(downtime.map((x) => x.toJson())),
+        "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
+        "service": service,
+        "vendorname": vendorname,
+        "quan": quan,
+        "amount": amount,
+        "misccost": List<dynamic>.from(misccost.map((x) => x.toJson())),
+      };
+}
+
+class Comment {
+  final String ownername;
+  final String created;
+  final String files;
+  final String comments;
+
+  Comment({
+    required this.ownername,
+    required this.created,
+    required this.files,
+    required this.comments,
+  });
+
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        ownername: json["ownername"],
+        created: json["created"],
+        files: json["files"] ?? '',
+        comments: json["comments"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ownername": ownername,
+        "created": created,
+        "files": files,
+        "comments": comments,
       };
 }
 
 class Customfield {
   final String title;
-  final dynamic fieldvalue;
+  final String fieldvalue;
   final int fieldtype;
   final int fieldid;
   final String optionid;
 
   Customfield({
     required this.title,
-    this.fieldvalue,
+    required this.fieldvalue,
     required this.fieldtype,
     required this.fieldid,
     required this.optionid,
@@ -307,7 +393,7 @@ class Customfield {
         fieldvalue: json["fieldvalue"] ?? '',
         fieldtype: json["fieldtype"],
         fieldid: json["fieldid"],
-        optionid: json["optionid"],
+        optionid: json["optionid"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -316,6 +402,118 @@ class Customfield {
         "fieldtype": fieldtype,
         "fieldid": fieldid,
         "optionid": optionid,
+      };
+}
+
+class Document {
+  final String id;
+  final String name;
+  final String type;
+  final String files;
+
+  Document({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.files,
+  });
+
+  factory Document.fromJson(Map<String, dynamic> json) => Document(
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
+        type: json["type"] ?? '',
+        files: json["files"] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "type": type,
+        "files": files,
+      };
+}
+
+class Downtime {
+  final String id;
+  final String start;
+  final String end;
+
+  Downtime({
+    required this.id,
+    required this.start,
+    required this.end,
+  });
+
+  factory Downtime.fromJson(Map<String, dynamic> json) => Downtime(
+        id: json["id"] ?? '',
+        start: json["start"] ?? '',
+        end: json["end"] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "start": start,
+        "end": end,
+      };
+}
+
+class Item {
+  final String id;
+  final String item;
+  final String type;
+  final String code;
+  final int plannedquan;
+  final int? actualquan;
+
+  Item({
+    required this.id,
+    required this.item,
+    required this.type,
+    required this.code,
+    required this.plannedquan,
+    this.actualquan,
+  });
+
+  factory Item.fromJson(Map<String, dynamic> json) => Item(
+        id: json["id"] ?? '',
+        item: json["item"] ?? '',
+        type: json["type"] ?? '',
+        code: json["code"] ?? '',
+        plannedquan: json["plannedquan"],
+        actualquan: json["actualquan"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "item": item,
+        "type": type,
+        "code": code,
+        "plannedquan": plannedquan,
+        "actualquan": actualquan,
+      };
+}
+
+class Log {
+  final String createdAt;
+  final String action;
+  final String createdBy;
+
+  Log({
+    required this.createdAt,
+    required this.action,
+    required this.createdBy,
+  });
+
+  factory Log.fromJson(Map<String, dynamic> json) => Log(
+        createdAt: json["created_at"] ?? '',
+        action: json["action"] ?? '',
+        createdBy: json["created_by"] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "created_at": createdAt,
+        "action": action,
+        "created_by": createdBy,
       };
 }
 
@@ -331,14 +529,86 @@ class Maplink {
   });
 
   factory Maplink.fromJson(Map<String, dynamic> json) => Maplink(
-        location: json["location"],
-        name: json["name"],
-        link: json["link"],
+        location: json["location"] ?? '',
+        name: json["name"] ?? '',
+        link: json["link"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "location": location,
         "name": name,
         "link": link,
+      };
+}
+
+class Workforce {
+  final String id;
+  final String workforceid;
+  final String name;
+  final String jobTitle;
+  final String certificatecode;
+  final int plannedhrs;
+  final dynamic actualhrs;
+
+  Workforce({
+    required this.id,
+    required this.workforceid,
+    required this.name,
+    required this.jobTitle,
+    required this.certificatecode,
+    required this.plannedhrs,
+    this.actualhrs,
+  });
+
+  factory Workforce.fromJson(Map<String, dynamic> json) => Workforce(
+        id: json["id"] ?? '',
+        workforceid: json["workforceid"] ?? '',
+        name: json["name"] ?? '',
+        jobTitle: json["job_title"] ?? '',
+        certificatecode: json["certificatecode"] ?? '',
+        plannedhrs: json["plannedhrs"],
+        actualhrs: json["actualhrs"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "workforceid": workforceid,
+        "name": name,
+        "job_title": jobTitle,
+        "certificatecode": certificatecode,
+        "plannedhrs": plannedhrs,
+        "actualhrs": actualhrs,
+      };
+}
+
+class Misccost {
+  final String id;
+  final String service;
+  final String vendorname;
+  final int quan;
+  final String amount;
+
+  Misccost({
+    required this.id,
+    required this.service,
+    required this.vendorname,
+    required this.quan,
+    required this.amount,
+  });
+
+  factory Misccost.fromJson(Map<String, dynamic> json) => Misccost(
+        id: json["id"] ?? '',
+        service: json["service"] ?? '',
+        vendorname: json["vendorname"] ?? '',
+        quan: json["quan"],
+        amount: json["amount"] ?? '',
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "service": service,
+        "vendorname": vendorname,
+        "quan": quan,
+        "amount": amount,
       };
 }

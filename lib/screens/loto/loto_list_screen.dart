@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
@@ -22,12 +20,8 @@ class LotoListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('pageNo=================>$pageNo');
-    // context.read<LotoListBloc>().data.clear();
-    // context.read<LotoListBloc>().hasReachedMax = false;
     context.read<LotoListBloc>().add(FetchLotoList(pageNo: pageNo));
     return Scaffold(
-      backgroundColor: AppColor.lightestGrey,
       appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
       body: Padding(
         padding: const EdgeInsets.only(
