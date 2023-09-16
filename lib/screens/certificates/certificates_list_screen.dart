@@ -12,6 +12,7 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_card.dart';
+import 'feedback_certificate_screen.dart';
 
 class CertificatesListScreen extends StatelessWidget {
   static const routeName = 'CertificatesListScreen';
@@ -26,7 +27,7 @@ class CertificatesListScreen extends StatelessWidget {
         .add(FetchCertificateList(pageNo: pageNo));
     return Scaffold(
       backgroundColor: AppColor.lightestGrey,
-      appBar: GenericAppBar(title: DatabaseUtil.getText('certificates')),
+      appBar: GenericAppBar(title: DatabaseUtil.getText('Certificates')),
       body: Padding(
         padding: const EdgeInsets.only(
           left: leftRightMargin,
@@ -125,7 +126,15 @@ class CertificatesListScreen extends StatelessWidget {
                                                     textValue: 'Start Course')),
                                             Expanded(
                                                 child: CustomTextButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      Map certificateMap = {
+                                                        "title": state
+                                                            .data[index].name,
+                                                        "id":
+                                                        state.data[index].id
+                                                      };
+                                                      Navigator.pushNamed(context, FeedbackCertificateScreen.routeName,arguments: certificateMap);
+                                                    },
                                                     textValue: 'Feedback')),
                                           ],
                                         )

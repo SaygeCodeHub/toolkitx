@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
+import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 
@@ -21,5 +22,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
         "${ApiConstants.baseUrl}certificate/uploadcertificate",
         uploadCertificateMap);
     return UploadCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FeedbackCertificateModel> feedbackCertificate(String hashCode, String userId, String certificateId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/getfeedbackquestionwithresponse?hashcode=$hashCode&workforceid=$userId&certificateid=$certificateId");
+    return FeedbackCertificateModel.fromJson(response);
   }
 }
