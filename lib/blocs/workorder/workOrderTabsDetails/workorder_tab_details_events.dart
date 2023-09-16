@@ -35,3 +35,15 @@ class SelectWorkOrderLocationOptions extends WorkOrderTabsDetailsEvent {
   SelectWorkOrderLocationOptions(
       {required this.locationId, required this.locationName});
 }
+
+class WorkOrderItemTabDeleteItem extends WorkOrderTabsDetailsEvent {
+  final String itemId;
+
+  WorkOrderItemTabDeleteItem({required this.itemId});
+}
+
+class WorkOrderDeleteDocument extends WorkOrderTabsDetailsEvent {
+  final String docId;
+
+  WorkOrderDeleteDocument({required this.docId});
+}

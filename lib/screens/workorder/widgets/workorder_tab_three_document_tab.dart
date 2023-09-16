@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../utils/database_utils.dart';
+import '../../../widgets/android_pop_up.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
 import 'workorder_view_document.dart';
@@ -35,7 +40,6 @@ class WorkOrderTabThreeDocumentTab extends StatelessWidget {
             return CustomCard(
                 child: ListTile(
                     contentPadding: const EdgeInsets.all(xxxTinierSpacing),
-                    onTap: () {},
                     title: Text(data.documents[index].name,
                         style: Theme.of(context).textTheme.small.copyWith(
                             fontWeight: FontWeight.bold,
@@ -43,7 +47,23 @@ class WorkOrderTabThreeDocumentTab extends StatelessWidget {
                             overflow: TextOverflow.ellipsis)),
                     trailing: CustomIconButton(
                         icon: Icons.delete,
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AndroidPopUp(
+                                    titleValue:
+                                        DatabaseUtil.getText('DeleteRecord'),
+                                    contentValue: '',
+                                    onPrimarybtn: () {
+                                      context
+                                          .read<WorkOrderTabDetailsBloc>()
+                                          .add(WorkOrderDeleteDocument(
+                                              docId: data.documents[index].id));
+                                      Navigator.pop(context);
+                                    });
+                              });
+                        },
                         size: kEditAndDeleteIconTogether),
                     subtitle: Padding(
                         padding: const EdgeInsets.only(top: tinierSpacing),
