@@ -5,7 +5,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_event.dart';
-import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -21,14 +20,7 @@ class SignInCheckListLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInCheckListLocationDetailsCard(
-      {Key? key, required this.checkList, required this.locationId})
-import '../../../widgets/primary_button.dart';
-
-class SignInCheckListLocationDetailsCard extends StatelessWidget {
-  final List<Checklist> checkList;
-
-  const SignInCheckListLocationDetailsCard({Key? key, required this.checkList})
-      : super(key: key);
+      {Key? key, required this.checkList, required this.locationId}):super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +84,11 @@ class SignInCheckListLocationDetailsCard extends StatelessWidget {
                                                   assignToMeChecklistsMap:
                                                       assignToMeChecklistMap));
                                         },
-                                        textValue: StringConstants.kAssignToMe),
+                                        textValue: StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},
-                                      textValue: StringConstants.kAssignToMe),
+                                      textValue: StringConstants.kAssignedToMe),
                                   const SizedBox(height: tiniestSpacing),
                                 ])))));
           },

@@ -64,13 +64,6 @@ class SignInImpl extends SignInRepository {
     return AssignToMeWorkOrderModel.fromJson(response);
   }
 
-  @override
-  Future<FetchLocationDetailsSignInModel> signInLocationDetails(
-      String hashCode, String locationId, String userId) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}common/getlocationdetails?hashcode=$hashCode&locationid=$locationId&userid=$userId");
-    return FetchLocationDetailsSignInModel.fromJson(response);
-  }
 
   @override
   Future<ProcessSignInModel> processSignIn(Map processSingInMap) async {

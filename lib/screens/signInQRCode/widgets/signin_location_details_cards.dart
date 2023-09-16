@@ -39,7 +39,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
                                 color: AppColor.mediumBlack))),
                   )
                 : SignInPermitLocationDetailsCard(
-                    permit: state.fetchLocationDetailsSignInModel.data.permit!);
+                    permit: state.fetchLocationDetailsSignInModel.data.permit!, locationId: locationId,);
           } else if (context.read<SignInLocationDetailsBloc>().indexSelected ==
               1) {
             return (state
@@ -55,7 +55,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
                   )
                 : SignInWorkOrderLocationDetailsCard(
                     workOrder:
-                        state.fetchLocationDetailsSignInModel.data.workorder!);
+                        state.fetchLocationDetailsSignInModel.data.workorder!, locationId: locationId,);
           } else if (context.read<SignInLocationDetailsBloc>().indexSelected ==
               2) {
             return (state.fetchLocationDetailsSignInModel.data.loto!.isEmpty)
@@ -69,7 +69,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
                                 color: AppColor.mediumBlack))),
                   )
                 : SignInLoToLocationDetailsCard(
-                    loTo: state.fetchLocationDetailsSignInModel.data.loto!);
+                    loTo: state.fetchLocationDetailsSignInModel.data.loto!, locationId: locationId,);
           } else {
             return (state
                     .fetchLocationDetailsSignInModel.data.checklist!.isEmpty)
@@ -84,7 +84,7 @@ class SignInLocationDetailsCards extends StatelessWidget {
                   )
                 : SignInCheckListLocationDetailsCard(
                     checkList:
-                        state.fetchLocationDetailsSignInModel.data.checklist!);
+                        state.fetchLocationDetailsSignInModel.data.checklist!, locationId: locationId,);
           }
         } else {
           return const SizedBox.shrink();

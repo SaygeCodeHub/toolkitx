@@ -5,7 +5,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_event.dart';
-import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -25,8 +24,6 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
 
   const SignInLoToLocationDetailsCard(
       {Key? key, required this.loTo, required this.locationId})
-
-  const SignInLoToLocationDetailsCard({Key? key, required this.loTo})
       : super(key: key);
 
   @override
@@ -107,11 +104,11 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
                                                   assignToMeLOTOsMap:
                                                       assignToMeLOTOMap));
                                         },
-                                        textValue: StringConstants.kAssignToMe),
+                                        textValue: StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},
-                                      textValue: StringConstants.kAssignToMe),
+                                      textValue: StringConstants.kAssignedToMe),
                                   const SizedBox(height: tiniestSpacing),
                                 ])))));
           },
