@@ -42,25 +42,24 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
     emit(FetchingWorkOrders());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.isFromHome == true) {
-        add(WorkOrderClearFilter());
-        FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-            .fetchWorkOrders(event.pageNo, hashCode!, '{}');
-        data.addAll(fetchWorkOrdersModel.data);
-        emit(WorkOrdersFetched(
-            fetchWorkOrdersModel: fetchWorkOrdersModel,
-            data: data,
-            hasReachedMax: hasReachedMax,
-            filterMap: {}));
-      } else {
-        FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-            .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
-        data.addAll(fetchWorkOrdersModel.data);
-        emit(WorkOrdersFetched(
-            fetchWorkOrdersModel: fetchWorkOrdersModel,
-            data: data,
-            hasReachedMax: hasReachedMax,
-            filterMap: filtersMap));
+      if (!hasReachedMax) {
+        if (event.isFromHome == true) {
+          add(WorkOrderClearFilter());
+          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+              .fetchWorkOrders(event.pageNo, hashCode!, '{}');
+          data.addAll(fetchWorkOrdersModel.data);
+          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+          emit(WorkOrdersFetched(
+              fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
+        } else {
+          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+              .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
+          data.addAll(fetchWorkOrdersModel.data);
+          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+          emit(WorkOrdersFetched(
+              fetchWorkOrdersModel: fetchWorkOrdersModel,
+              filterMap: filtersMap));
+        }
       }
     } catch (e) {
       emit(WorkOrdersNotFetched(listNotFetched: e.toString()));

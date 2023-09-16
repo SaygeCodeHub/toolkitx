@@ -7,18 +7,22 @@ class CustomIconButton extends StatelessWidget {
   final IconData icon;
   final Function() onPressed;
   final double? size;
+  final double? dx;
+  final double? dy;
 
   const CustomIconButton(
       {Key? key,
       required this.icon,
       required this.onPressed,
-      this.size = kIconSize})
+      this.size = kIconSize,
+      this.dx = 0,
+      this.dy = -15})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: const Offset(0, -15),
+      offset: Offset(dx!, dy!),
       child: IconButton(
           highlightColor: AppColor.transparent,
           constraints: const BoxConstraints(),

@@ -21,6 +21,7 @@ import 'widgets/workorder_tab_two_details.dart';
 import 'widgets/workorder_tab_four_details.dart';
 import 'widgets/workorder_tab_five_details.dart';
 import 'widgets/workorder_tab_three_details.dart';
+import 'workorder_pop_up_menu_screen.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
@@ -34,6 +35,24 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
     context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
         initialTabIndex: 0, workOrderId: workOrderMap['workOrderId']));
     return Scaffold(
+      appBar: GenericAppBar(
+        actions: [
+          BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is WorkOrderTabDetailsFetched,
+              builder: (context, state) {
+                if (state is WorkOrderTabDetailsFetched) {
+                  return WorkOrderPopUpMenuScreen(
+                      popUpMenuOptions: state.popUpMenuList,
+                      workOrderDetailsMap: state.workOrderDetailsMap);
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
+        ],
+      ),
+      body: BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+          builder: (context, state) {
       appBar: const GenericAppBar(),
       body: BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
           listener: (context, state) {

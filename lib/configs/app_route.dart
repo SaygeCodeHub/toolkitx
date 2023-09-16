@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -8,6 +7,7 @@ import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
+import '../screens/certificates/upload_certificate_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -35,7 +35,6 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
-import '../screens/loto/loto_list_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -68,6 +67,8 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/workorder/create_similar_work_order_screen_one.dart';
+import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
@@ -234,10 +235,15 @@ class AppRoutes {
                 settings.arguments as FetchQualityManagementDetailsModel));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
+      case WorkOrderFilterScreen.routeName:
+        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
+      case CreateSimilarWorkOrderScreen.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreen(
+            workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
           certificateItemsMap: settings.arguments as Map,
@@ -247,8 +253,6 @@ class AppRoutes {
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
-      case LotoListScreen.routeName:
-        return _createRoute(const LotoListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
