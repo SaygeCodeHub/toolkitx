@@ -7,6 +7,8 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../../blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
+import 'package:toolkit/configs/app_theme.dart';
+
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -19,6 +21,8 @@ import '../../../widgets/status_tag.dart';
 
 class SignInPermitLocationDetailsCard extends StatelessWidget {
   final List<Permit> permit;
+
+  const SignInPermitLocationDetailsCard({Key? key, required this.permit})
   final String locationId;
 
   const SignInPermitLocationDetailsCard(
@@ -109,6 +113,9 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                                         },
                                         textValue: StringConstants.kAssignToMe),
                                   ),
+                                  PrimaryButton(
+                                      onPressed: () {},
+                                      textValue: StringConstants.kAssignToMe),
                                   const SizedBox(height: tiniestSpacing),
                                 ])))));
           },

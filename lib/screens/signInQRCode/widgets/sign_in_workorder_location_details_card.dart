@@ -5,6 +5,8 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import '../../../blocs/signInQRCode/signInLocationDetails/sign_in_location_details_event.dart';
+import 'package:toolkit/configs/app_theme.dart';
+
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -23,6 +25,8 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
 
   const SignInWorkOrderLocationDetailsCard(
       {Key? key, required this.workOrder, required this.locationId})
+
+  const SignInWorkOrderLocationDetailsCard({Key? key, required this.workOrder})
       : super(key: key);
 
   @override
@@ -112,6 +116,9 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
                                         },
                                         textValue: StringConstants.kAssignToMe),
                                   ),
+                                  PrimaryButton(
+                                      onPressed: () {},
+                                      textValue: StringConstants.kAssignToMe),
                                   const SizedBox(height: tiniestSpacing),
                                 ])))));
           },

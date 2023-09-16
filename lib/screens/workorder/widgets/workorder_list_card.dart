@@ -6,6 +6,7 @@ import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorders_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../workorder_details_tab_screen.dart';
 
 class WorkOrderListCard extends StatelessWidget {
   final WorkOrderDatum data;
@@ -16,6 +17,15 @@ class WorkOrderListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       child: ListTile(
+        onTap: () {
+          Map workOrderMap = {
+            'workOrderId': data.id,
+            'status': data.status,
+            'workOrderName': data.woname
+          };
+          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
+              arguments: workOrderMap);
+        },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
             padding: const EdgeInsets.only(bottom: xxTinierSpacing),
