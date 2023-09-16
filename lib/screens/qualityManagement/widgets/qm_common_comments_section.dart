@@ -21,13 +21,15 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
   final TextFieldListCallBack onTextFieldValue;
   final FetchQualityManagementDetailsModel? fetchQualityManagementDetailsModel;
   final Map qmCommentsMap;
+  final int imageIndex;
 
   const QualityManagementCommonCommentsSection(
       {Key? key,
       required this.onPhotosUploaded,
       required this.onTextFieldValue,
       this.fetchQualityManagementDetailsModel,
-      required this.qmCommentsMap})
+      required this.qmCommentsMap,
+      required this.imageIndex})
       : super(key: key);
 
   @override
@@ -75,7 +77,8 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
-                      Text('${state.incrementNumber}/6',
+                      Text(
+                          '${(context.read<PickAndUploadImageBloc>().isInitial == true) ? 0 : state.incrementNumber}/6',
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
@@ -89,7 +92,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
-                      Text('0/6',
+                      Text('$imageIndex/6',
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
