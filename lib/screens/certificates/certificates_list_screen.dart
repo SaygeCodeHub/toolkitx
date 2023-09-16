@@ -89,7 +89,8 @@ class CertificatesListScreen extends StatelessWidget {
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       color: AppColor.black)),
-                                          subtitle: const Text(StringConstants.kNotAvailable),
+                                          subtitle: const Text(
+                                              StringConstants.kNotAvailable),
                                           trailing: Image.asset(
                                               'assets/icons/certificate.png',
                                               height: kImageHeight,
