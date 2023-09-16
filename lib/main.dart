@@ -49,6 +49,7 @@ import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/qualityManagement/qm_bloc.dart';
 import 'blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
+import 'blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
 import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
@@ -165,6 +166,7 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => QualityManagementBloc()),
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
+          BlocProvider(lazy: true, create: (context) => SignInProcessBloc()),
           BlocProvider(
               lazy: true, create: (context) => SignInLocationDetailsBloc()),
           BlocProvider(

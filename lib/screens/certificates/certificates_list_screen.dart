@@ -29,7 +29,6 @@ class CertificatesListScreen extends StatelessWidget {
         .read<CertificateListBloc>()
         .add(FetchCertificateList(pageNo: pageNo));
     return Scaffold(
-      backgroundColor: AppColor.lightestGrey,
       appBar: GenericAppBar(title: DatabaseUtil.getText('Certificates')),
       body: Padding(
         padding: const EdgeInsets.only(
