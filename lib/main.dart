@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.dart';
+import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
@@ -181,6 +182,8 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => StartCourseCertificateBloc()),
           BlocProvider(
               lazy: true, create: (context) => UploadCertificateBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => FeedbackCertificateBloc()),
         ],
         child: GestureDetector(
             onTap: () {
