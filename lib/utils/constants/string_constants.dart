@@ -11,12 +11,12 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kNoLoto = 'No loto!'; //
+  static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
-  static const String kNoLoto = 'No loto!'; //
-  static const String kNoPermit = 'No permit!'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
@@ -74,7 +74,6 @@ abstract class StringConstants {
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
-  static const String kAssignToMe = 'Assign to me'; //
   static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
@@ -256,6 +255,14 @@ abstract class StringConstants {
   static const String kCertificateUploaded = 'Certificate Uploaded ';
   static const String kFillAllDetails =
       'Please select start date, expiry date and valid certificate copy to continue';
+  static const String kPermitAssigned = 'Permit assigned to you';
+  static const String kPermitError = 'Permit assigning error';
+  static const String kWorkOrderAssigned = 'Work Order assigned to you';
+  static const String kWorkOrderError = 'Work Order assigning error';
+  static const String kLOTOAssigned = 'LOTO assigned to you';
+  static const String kLOTOError = 'LOTO assigning error';
+  static const String kChecklistAssigned = 'Checklist assigned to you';
+  static const String kChecklistError = 'Checklist assigning error';
   static const String kSignInError = 'Invalid Data';
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
