@@ -166,7 +166,7 @@ class QualityManagementBloc
 
         nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
         if (fetchQualityManagementDetailsModel.data.canEdit == '1') {
-          popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
+          popUpMenuItems.add(DatabaseUtil.getText('Edit'));
         }
         if (fetchQualityManagementDetailsModel.data.nextStatus == '0') {
           popUpMenuItems.add(DatabaseUtil.getText('Report'));
