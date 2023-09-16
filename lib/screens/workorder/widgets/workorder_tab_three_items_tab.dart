@@ -14,8 +14,8 @@ import 'workorder_item_tab_delete_button.dart';
 class WorkOrderTabThreeItemsTab extends StatelessWidget {
   final WorkOrderDetailsData data;
 
-  WorkOrderTabThreeItemsTab({Key? key, required this.data}) : super(key: key);
-  final Map deleteItemTabItemMap = {};
+  const WorkOrderTabThreeItemsTab({Key? key, required this.data})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
