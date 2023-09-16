@@ -10,7 +10,6 @@ import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
-import '../screens/certificates/upload_certificate_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -73,7 +72,6 @@ import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/create_similar_work_order_screen_one.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
-import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
 
@@ -257,8 +255,6 @@ class AppRoutes {
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
-      case LotoListScreen.routeName:
-        return _createRoute(const LotoListScreen());
       case GetCourseCertificateScreen.routeName:
         return _createRoute(GetCourseCertificateScreen(
           certificateId: settings.arguments.toString(),
