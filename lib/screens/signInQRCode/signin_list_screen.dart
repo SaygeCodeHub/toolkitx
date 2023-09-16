@@ -10,7 +10,6 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../configs/app_dimensions.dart';
 import '../../widgets/primary_button.dart';
 import 'widgets/signin_location_details_body.dart';
-import 'widgets/signin_location_details_body.dart';
 
 class SignInListScreen extends StatelessWidget {
   static const routeName = 'SignInListScreen';

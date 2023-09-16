@@ -20,7 +20,8 @@ class SignInCheckListLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInCheckListLocationDetailsCard(
-      {Key? key, required this.checkList, required this.locationId}):super(key: key);
+      {Key? key, required this.checkList, required this.locationId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,8 @@ class SignInCheckListLocationDetailsCard extends StatelessWidget {
                                                   assignToMeChecklistsMap:
                                                       assignToMeChecklistMap));
                                         },
-                                        textValue: StringConstants.kAssignedToMe),
+                                        textValue:
+                                            StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},

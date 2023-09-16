@@ -104,7 +104,8 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
                                                   assignToMeLOTOsMap:
                                                       assignToMeLOTOMap));
                                         },
-                                        textValue: StringConstants.kAssignedToMe),
+                                        textValue:
+                                            StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},

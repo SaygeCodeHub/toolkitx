@@ -108,7 +108,8 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                                                   assignToMePermitsMap:
                                                       assignToMePermitMap));
                                         },
-                                        textValue: StringConstants.kAssignedToMe),
+                                        textValue:
+                                            StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},

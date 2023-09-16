@@ -23,7 +23,8 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInWorkOrderLocationDetailsCard(
-      {Key? key, required this.workOrder, required this.locationId}): super(key: key);
+      {Key? key, required this.workOrder, required this.locationId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +111,8 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
                                                   assignToMeWorkOrdersMap:
                                                       assignToMeWorkOrderMap));
                                         },
-                                        textValue: StringConstants.kAssignedToMe),
+                                        textValue:
+                                            StringConstants.kAssignedToMe),
                                   ),
                                   PrimaryButton(
                                       onPressed: () {},

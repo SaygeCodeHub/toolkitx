@@ -64,7 +64,6 @@ class SignInImpl extends SignInRepository {
     return AssignToMeWorkOrderModel.fromJson(response);
   }
 
-
   @override
   Future<ProcessSignInModel> processSignIn(Map processSingInMap) async {
     final response = await DioClient()

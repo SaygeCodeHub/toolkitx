@@ -27,5 +27,4 @@ abstract class SignInRepository {
   Future<ProcessSignInModel> processSignIn(Map processSingInMap);
 
   Future<SignInUnathorizedModel> unathorizedSignIn(Map unathorizedSingInMap);
-
 }
