@@ -51,9 +51,6 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
               })
         ],
       ),
-      body: BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
-          builder: (context, state) {
-      appBar: const GenericAppBar(),
       body: BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
           listener: (context, state) {
         if (state is DeletingItemTabItem) {
