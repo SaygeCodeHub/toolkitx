@@ -12,9 +12,13 @@ class IncidentMasterFetched extends ReportNewIncidentStates {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
   final List categoryList;
   final List categorySelectedList;
+  final int imageIndex;
+  final String clientId;
 
   IncidentMasterFetched(
-      {required this.categorySelectedList,
+      {required this.clientId,
+      required this.imageIndex,
+      required this.categorySelectedList,
       required this.categoryList,
       required this.fetchIncidentMasterModel});
 }

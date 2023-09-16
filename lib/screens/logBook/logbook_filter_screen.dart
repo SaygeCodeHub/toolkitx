@@ -49,140 +49,148 @@ class LogBookFilterScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is LogBookMasterFetched) {
                 logbookFilterMap.addAll(state.filterMap);
-                return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: leftRightMargin,
-                            right: leftRightMargin,
-                            top: topBottomPadding),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(StringConstants.kDateRange,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxTinySpacing),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                        child: DatePickerTextField(
-                                            editDate:
-                                                (logbookFilterMap['st'] == null)
-                                                    ? ''
-                                                    : logbookFilterMap['st'],
-                                            hintText:
-                                                StringConstants.kSelectDate,
-                                            onDateChanged: (String date) {
-                                              logbookFilterMap['st'] = date;
-                                            })),
-                                    const SizedBox(width: xxTinierSpacing),
-                                    const Text(StringConstants.kBis),
-                                    const SizedBox(width: xxTinierSpacing),
-                                    Expanded(
-                                        child: DatePickerTextField(
-                                            editDate:
-                                                (logbookFilterMap['et'] == null)
-                                                    ? ''
-                                                    : logbookFilterMap['et'],
-                                            hintText:
-                                                StringConstants.kSelectDate,
-                                            onDateChanged: (String date) {
-                                              logbookFilterMap['et'] = date;
-                                            }))
-                                  ]),
-                              const SizedBox(height: xxTinySpacing),
-                              Text('Keyword',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              TextFieldWidget(
-                                  value: (logbookFilterMap['kword'] == null)
-                                      ? ''
-                                      : logbookFilterMap['kword'],
-                                  hintText: 'Keyword',
-                                  onTextFieldChanged: (String textField) {
-                                    logbookFilterMap['kword'] = textField;
-                                  }),
-                              const SizedBox(height: xxTinySpacing),
-                              Text(DatabaseUtil.getText('type'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              LogbookTypeFilter(
-                                  data: state.logBookFetchMasterModel.data,
-                                  logbookFilterMap: logbookFilterMap),
-                              const SizedBox(height: xxTinySpacing),
-                              Text(DatabaseUtil.getText('Activity'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              LogBookActivityFilter(
-                                  data: state.logBookFetchMasterModel.data,
-                                  logbookFilterMap: logbookFilterMap),
-                              const SizedBox(height: xxTinySpacing),
-                              Text(DatabaseUtil.getText('LogBook'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              LogbookFilter(
-                                  data: state.logBookFetchMasterModel.data,
-                                  logbookFilterMap: logbookFilterMap),
-                              const SizedBox(height: xxTinySpacing),
-                              Text(DatabaseUtil.getText('Priority'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              LogbookPriorityFilter(
-                                  logbookFilterMap: logbookFilterMap),
-                              const SizedBox(height: xxTinySpacing),
-                              Text(DatabaseUtil.getText('Status'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxxTinierSpacing),
-                              LogbookStatusFilter(
-                                  logbookFilterMap: logbookFilterMap),
-                              const SizedBox(height: xxTinySpacing),
-                              PrimaryButton(
-                                  onPressed: () {
-                                    if (logbookFilterMap['st'] != null &&
-                                            logbookFilterMap['et'] == null ||
-                                        logbookFilterMap['st'] == null &&
-                                            logbookFilterMap['et'] != null) {
-                                      showCustomSnackBar(
-                                          context,
-                                          DatabaseUtil.getText(
-                                              'TimeDateValidate'),
-                                          '');
-                                    } else {
-                                      context.read<LogbookBloc>().add(
-                                          ApplyLogBookFilter(
-                                              filterMap: logbookFilterMap));
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacementNamed(
-                                          context, LogbookListScreen.routeName,
-                                          arguments: false);
-                                    }
-                                  },
-                                  textValue: StringConstants.kApply)
-                            ])));
+                if (state.logBookFetchMasterModel.data.isNotEmpty) {
+                  return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: leftRightMargin,
+                              right: leftRightMargin,
+                              top: topBottomPadding),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(StringConstants.kDateRange,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxTinySpacing),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          child: DatePickerTextField(
+                                              editDate:
+                                                  (logbookFilterMap['st'] ==
+                                                          null)
+                                                      ? ''
+                                                      : logbookFilterMap['st'],
+                                              hintText:
+                                                  StringConstants.kSelectDate,
+                                              onDateChanged: (String date) {
+                                                logbookFilterMap['st'] = date;
+                                              })),
+                                      const SizedBox(width: xxTinierSpacing),
+                                      const Text(StringConstants.kBis),
+                                      const SizedBox(width: xxTinierSpacing),
+                                      Expanded(
+                                          child: DatePickerTextField(
+                                              editDate:
+                                                  (logbookFilterMap['et'] ==
+                                                          null)
+                                                      ? ''
+                                                      : logbookFilterMap['et'],
+                                              hintText:
+                                                  StringConstants.kSelectDate,
+                                              onDateChanged: (String date) {
+                                                logbookFilterMap['et'] = date;
+                                              }))
+                                    ]),
+                                const SizedBox(height: xxTinySpacing),
+                                Text('Keyword',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                TextFieldWidget(
+                                    value: (logbookFilterMap['kword'] == null)
+                                        ? ''
+                                        : logbookFilterMap['kword'],
+                                    hintText: 'Keyword',
+                                    onTextFieldChanged: (String textField) {
+                                      logbookFilterMap['kword'] = textField;
+                                    }),
+                                const SizedBox(height: xxTinySpacing),
+                                Text(DatabaseUtil.getText('type'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                LogbookTypeFilter(
+                                    data: state.logBookFetchMasterModel.data,
+                                    logbookFilterMap: logbookFilterMap),
+                                const SizedBox(height: xxTinySpacing),
+                                Text(DatabaseUtil.getText('Activity'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                LogBookActivityFilter(
+                                    data: state.logBookFetchMasterModel.data,
+                                    logbookFilterMap: logbookFilterMap),
+                                const SizedBox(height: xxTinySpacing),
+                                Text(DatabaseUtil.getText('LogBook'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                LogbookFilter(
+                                    data: state.logBookFetchMasterModel.data,
+                                    logbookFilterMap: logbookFilterMap),
+                                const SizedBox(height: xxTinySpacing),
+                                Text(DatabaseUtil.getText('Priority'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                LogbookPriorityFilter(
+                                    logbookFilterMap: logbookFilterMap),
+                                const SizedBox(height: xxTinySpacing),
+                                Text(DatabaseUtil.getText('Status'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: xxxTinierSpacing),
+                                LogbookStatusFilter(
+                                    logbookFilterMap: logbookFilterMap),
+                                const SizedBox(height: xxTinySpacing),
+                                PrimaryButton(
+                                    onPressed: () {
+                                      if (logbookFilterMap['st'] != null &&
+                                              logbookFilterMap['et'] == null ||
+                                          logbookFilterMap['st'] == null &&
+                                              logbookFilterMap['et'] != null) {
+                                        showCustomSnackBar(
+                                            context,
+                                            DatabaseUtil.getText(
+                                                'TimeDateValidate'),
+                                            '');
+                                      } else {
+                                        context.read<LogbookBloc>().add(
+                                            ApplyLogBookFilter(
+                                                filterMap: logbookFilterMap));
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacementNamed(context,
+                                            LogbookListScreen.routeName,
+                                            arguments: false);
+                                      }
+                                    },
+                                    textValue: StringConstants.kApply)
+                              ])));
+                } else {
+                  return Center(
+                      child: Text(StringConstants.kNoData,
+                          style: Theme.of(context).textTheme.medium));
+                }
               } else {
                 return const SizedBox();
               }

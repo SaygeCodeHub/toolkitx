@@ -11,8 +11,13 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kNoDocuments = 'No documents!'; //
+  static const String kNoParts = 'No items/parts!'; //
+  static const String kNoMisCost = 'No Misc.Cost!'; //
+  static const String kNoDowntown = 'No downtime!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
+  static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
@@ -183,6 +188,7 @@ abstract class StringConstants {
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
+  static const String kNoData = 'No data!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
