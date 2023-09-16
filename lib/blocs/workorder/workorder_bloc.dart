@@ -50,10 +50,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
           data.addAll(fetchWorkOrdersModel.data);
           hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
           emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel,
-              data: data,
-              hasReachedMax: hasReachedMax,
-              filterMap: {}));
+              fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
         } else {
           FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
               .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
@@ -61,8 +58,6 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
           hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
           emit(WorkOrdersFetched(
               fetchWorkOrdersModel: fetchWorkOrdersModel,
-              data: data,
-              hasReachedMax: hasReachedMax,
               filterMap: filtersMap));
         }
       }

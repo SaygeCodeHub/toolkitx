@@ -42,19 +42,22 @@ class WorkOrderListBody extends StatelessWidget {
                         top: MediaQuery.of(context).size.height / 3.5),
                     child: const CircularProgressIndicator()));
           } else if (state is WorkOrdersFetched) {
-            if (state.fetchWorkOrdersModel.data.isNotEmpty) {
+            if (context.read<WorkOrderBloc>().data.isNotEmpty) {
               return Expanded(
                   child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount:
                           context.read<WorkOrderBloc>().hasReachedMax == true
-                              ? state.data.length
-                              : state.data.length + 1,
+                              ? context.read<WorkOrderBloc>().data.length
+                              : context.read<WorkOrderBloc>().data.length + 1,
                       itemBuilder: (context, index) {
-                        if (index < state.data.length) {
-                          return WorkOrderListCard(data: state.data[index]);
-                        } else if (!state.hasReachedMax) {
+                        if (index < context.read<WorkOrderBloc>().data.length) {
+                          return WorkOrderListCard(
+                              data: context.read<WorkOrderBloc>().data[index]);
+                        } else if (!context
+                            .read<WorkOrderBloc>()
+                            .hasReachedMax) {
                           WorkOrderListScreen.pageNo++;
                           context.read<WorkOrderBloc>().add(FetchWorkOrders(
                               pageNo: WorkOrderListScreen.pageNo,
