@@ -29,7 +29,7 @@ class CertificateListBloc
     emit(FetchingCertificateList());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FetchCertificatesModel fetchCertificatesModel =
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
