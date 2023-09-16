@@ -11,6 +11,7 @@ import '../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_card.dart';
 import 'feedback_certificate_screen.dart';
@@ -73,102 +74,102 @@ class CertificatesListScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               if (index < state.data.length) {
                                 return CustomCard(
-                                    elevation: 2,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: tinierSpacing),
-                                        child: Column(children: [
-                                          ListTile(
-                                            onTap: () {},
-                                            title: Text(state.data[index].name,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .small
-                                                    .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: AppColor.black)),
-                                            subtitle:
-                                                const Text('Not Available'),
-                                            trailing: Image.asset(
-                                                'assets/icons/certificate.png',
-                                                height: kImageHeight,
-                                                width: kImageWidth),
-                                          ),
-                                          const Divider(
-                                            color: AppColor.lightestGrey,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Expanded(
-                                                  child: CustomTextButton(
-                                                      onPressed: () {
-                                                        Map certificateMap = {
-                                                          "title": state
-                                                              .data[index].name,
-                                                          "id": state
-                                                              .data[index].id
-                                                        };
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            UploadCertificateScreen
-                                                                .routeName,
-                                                            arguments:
-                                                                certificateMap);
-                                                      },
-                                                      textValue: StringConstants
-                                                          .kUpload)),
-                                              Expanded(
-                                                  child: CustomTextButton(
-                                                      onPressed: () {},
-                                                      textValue: StringConstants
-                                                          .kDownload)),
-                                              Expanded(
-                                                  child: CustomTextButton(
-                                                      onPressed: (state
-                                                                  .data[index]
-                                                                  .accesscertificate ==
-                                                              "1")
-                                                          ? () {
-                                                              String
-                                                                  certificateId =
-                                                                  state
-                                                                      .data[
-                                                                          index]
-                                                                      .id;
-                                                              Navigator.pushNamed(
-                                                                  context,
-                                                                  GetCourseCertificateScreen
-                                                                      .routeName,
-                                                                  arguments:
-                                                                      certificateId);
-                                                            }
-                                                          : null,
-                                                      textValue: StringConstants
-                                                          .kStartCourse)),
-                                              Expanded(
-                                                  child: CustomTextButton(
-                                                      onPressed: () {
-                                                        Map certificateMap = {
-                                                          "title": state
-                                                              .data[index].name,
-                                                          "id": state
-                                                              .data[index].id
-                                                        };
-                                                        Navigator.pushNamed(
-                                                            context,
-                                                            FeedbackCertificateScreen
-                                                                .routeName,
-                                                            arguments:
-                                                                certificateMap);
-                                                      },
-                                                      textValue: StringConstants
-                                                          .kFeedback)),
-                                            ],
-                                          )
-                                        ])));
+                                  elevation: 2,
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: tinierSpacing),
+                                      child: Column(children: [
+                                        ListTile(
+                                          onTap: () {},
+                                          title: Text(state.data[index].name,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .small
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color: AppColor.black)),
+                                          subtitle: const Text(
+                                              StringConstants.kNotAvailable),
+                                          trailing: Image.asset(
+                                              'assets/icons/certificate.png',
+                                              height: kImageHeight,
+                                              width: kImageWidth),
+                                        ),
+                                        const Divider(
+                                          color: AppColor.lightestGrey,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Expanded(
+                                                child: CustomTextButton(
+                                                    onPressed: () {
+                                                      Map certificateMap = {
+                                                        "title": state
+                                                            .data[index].name,
+                                                        "id":
+                                                            state.data[index].id
+                                                      };
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          UploadCertificateScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              certificateMap);
+                                                    },
+                                                    textValue: StringConstants
+                                                        .kUpload)),
+                                            Expanded(
+                                                child: CustomTextButton(
+                                                    onPressed: () {},
+                                                    textValue: StringConstants
+                                                        .kDownload)),
+                                            Expanded(
+                                                child: CustomTextButton(
+                                                    onPressed: (state
+                                                                .data[index]
+                                                                .accesscertificate ==
+                                                            "1")
+                                                        ? () {
+                                                            String
+                                                                certificateId =
+                                                                state
+                                                                    .data[index]
+                                                                    .id;
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                GetCourseCertificateScreen
+                                                                    .routeName,
+                                                                arguments:
+                                                                    certificateId);
+                                                          }
+                                                        : null,
+                                                    textValue: StringConstants
+                                                        .kStartCourse)),
+                                            Expanded(
+                                                child: CustomTextButton(
+                                                    onPressed: () {
+                                                      Map certificateMap = {
+                                                        "title": state
+                                                            .data[index].name,
+                                                        "id":
+                                                            state.data[index].id
+                                                      };
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          FeedbackCertificateScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              certificateMap);
+                                                    },
+                                                    textValue: StringConstants
+                                                        .kFeedback)),
+                                          ],
+                                        )
+                                      ])),
+                                );
                               } else if (!state.hasReachedMax) {
                                 CertificatesListScreen.pageNo++;
                                 context.read<CertificateListBloc>().add(
