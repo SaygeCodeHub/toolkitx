@@ -53,7 +53,7 @@ class EditOptionsSection extends StatelessWidget {
                   return AndroidPopUp(
                       titleValue: DatabaseUtil.getText('Logout'),
                       contentValue: DatabaseUtil.getText('LogoutMessage'),
-                      onPrimarybtn: () {
+                      onPrimaryButton: () {
                         Navigator.of(context);
                         context.read<ProfileBloc>().add(Logout());
                       });
