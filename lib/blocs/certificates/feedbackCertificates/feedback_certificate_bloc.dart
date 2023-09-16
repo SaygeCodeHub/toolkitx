@@ -1,6 +1,3 @@
-
-
-
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +13,7 @@ import 'feedback_certificate_state.dart';
 class FeedbackCertificateBloc
     extends Bloc<FeedbackCertificateEvent, FeedbackCertificateState> {
   final CertificateRepository _certificateRepository =
-  getIt<CertificateRepository>();
+      getIt<CertificateRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
   FeedbackCertificateState get initialState => FeedbackCertificateInitial();
@@ -24,9 +21,10 @@ class FeedbackCertificateBloc
     on<FetchFeedbackCertificate>(_feedbackCertificate);
   }
 
-  Future<FutureOr<void>> _feedbackCertificate(FetchFeedbackCertificate event, Emitter<FeedbackCertificateState> emit) async {
+  Future<FutureOr<void>> _feedbackCertificate(FetchFeedbackCertificate event,
+      Emitter<FeedbackCertificateState> emit) async {
     emit(FeedbackCertificateFetching());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FeedbackCertificateModel feedbackCertificateModel =
@@ -36,7 +34,7 @@ class FeedbackCertificateBloc
         emit(FeedbackCertificateFetched(
             feedbackCertificateModel: feedbackCertificateModel));
       }
-    } catch(e){
+    } catch (e) {
       emit(FeedbackCertificateError(e.toString()));
     }
   }

@@ -25,7 +25,8 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
-  Future<FeedbackCertificateModel> feedbackCertificate(String hashCode, String userId, String certificateId) async {
+  Future<FeedbackCertificateModel> feedbackCertificate(
+      String hashCode, String userId, String certificateId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/getfeedbackquestionwithresponse?hashcode=$hashCode&workforceid=$userId&certificateid=$certificateId");
     return FeedbackCertificateModel.fromJson(response);

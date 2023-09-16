@@ -17,9 +17,13 @@ class FeedbackCertificateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<FeedbackCertificateBloc>().add(FetchFeedbackCertificate(certificateId: getdetailsMap["id"]));
+    context
+        .read<FeedbackCertificateBloc>()
+        .add(FetchFeedbackCertificate(certificateId: getdetailsMap["id"]));
     return Scaffold(
-      appBar: GenericAppBar(title: getdetailsMap["title"],),
+      appBar: GenericAppBar(
+        title: getdetailsMap["title"],
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -27,46 +31,39 @@ class FeedbackCertificateScreen extends StatelessWidget {
             top: xxTinierSpacing),
         child: SafeArea(
           child: BlocBuilder<FeedbackCertificateBloc, FeedbackCertificateState>(
-            builder: (context, state){
-              if(state is FeedbackCertificateFetching){
-                return const Center(child: CircularProgressIndicator(),);
-              } else if(state is FeedbackCertificateFetched){
+              builder: (context, state) {
+            if (state is FeedbackCertificateFetching) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is FeedbackCertificateFetched) {
               return ListView.separated(
-                itemCount: state.feedbackCertificateModel.data.questions.length, itemBuilder: (context, index) {
-                return CustomCard(
-                    child: ListTile(
-                      onTap: () {},
-                      title: Text("${index+1}. ${state.feedbackCertificateModel.data.questions[index].questiontext}",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .small
-                            .copyWith(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: AppColor.black),
-                      ),
-                      subtitle: Text(state.feedbackCertificateModel.data.questions[index].answer,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(
-                            fontWeight:
-                            FontWeight.w500,
-                            color: AppColor.grey),
-                      ),
-                    )
-                );
-              }, separatorBuilder: (context, index) {
-                return const SizedBox(
-                    height: tinierSpacing);
-              },);
-              } else{
-                return const SizedBox.shrink();
-              }
+                itemCount: state.feedbackCertificateModel.data.questions.length,
+                itemBuilder: (context, index) {
+                  return CustomCard(
+                      child: ListTile(
+                    onTap: () {},
+                    title: Text(
+                      "${index + 1}. ${state.feedbackCertificateModel.data.questions[index].questiontext}",
+                      style: Theme.of(context).textTheme.small.copyWith(
+                          fontWeight: FontWeight.w500, color: AppColor.black),
+                    ),
+                    subtitle: Text(
+                      state.feedbackCertificateModel.data.questions[index]
+                          .answer,
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                          fontWeight: FontWeight.w500, color: AppColor.grey),
+                    ),
+                  ));
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: tinierSpacing);
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
             }
-          ),
+          }),
         ),
       ),
     );

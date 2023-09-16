@@ -12,6 +12,6 @@ abstract class CertificateRepository {
 
   Future<UploadCertificateModel> uploadCertificates(Map uploadCertificateMap);
 
-  Future<FeedbackCertificateModel> feedbackCertificate(String hashCode,String userId, String certificateId);
-
+  Future<FeedbackCertificateModel> feedbackCertificate(
+      String hashCode, String userId, String certificateId);
 }

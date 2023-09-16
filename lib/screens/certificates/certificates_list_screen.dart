@@ -131,9 +131,14 @@ class CertificatesListScreen extends StatelessWidget {
                                                         "title": state
                                                             .data[index].name,
                                                         "id":
-                                                        state.data[index].id
+                                                            state.data[index].id
                                                       };
-                                                      Navigator.pushNamed(context, FeedbackCertificateScreen.routeName,arguments: certificateMap);
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          FeedbackCertificateScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              certificateMap);
                                                     },
                                                     textValue: 'Feedback')),
                                           ],

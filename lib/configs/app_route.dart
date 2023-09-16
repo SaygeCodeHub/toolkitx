@@ -255,7 +255,9 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case FeedbackCertificateScreen.routeName:
-        return _createRoute(FeedbackCertificateScreen(getdetailsMap: settings.arguments as Map,));
+        return _createRoute(FeedbackCertificateScreen(
+          getdetailsMap: settings.arguments as Map,
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }
