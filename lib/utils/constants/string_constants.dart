@@ -241,6 +241,7 @@ abstract class StringConstants {
   static const String kQuiz = 'Quiz';
   static const String kDownload = 'Download';
   static const String kStartDate = 'Start Date';
+  static const String kNotAvailable = 'Not Available';
   static const String kExpiryDate = 'Expiry Date';
   static const String kStartCourse = 'Start Course';
   static const String kFeedback = 'Feedback';
