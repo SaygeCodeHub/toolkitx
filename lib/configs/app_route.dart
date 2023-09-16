@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -6,7 +7,9 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
+import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/upload_certificate_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
@@ -254,6 +257,14 @@ class AppRoutes {
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
+      case GetCourseCertificateScreen.routeName:
+        return _createRoute(GetCourseCertificateScreen(
+          certificateId: settings.arguments.toString(),
+        ));
+      case GetTopicCertificateScreen.routeName:
+        return _createRoute(GetTopicCertificateScreen(
+          courseId: settings.arguments.toString(),
+        ));
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(
           getdetailsMap: settings.arguments as Map,
