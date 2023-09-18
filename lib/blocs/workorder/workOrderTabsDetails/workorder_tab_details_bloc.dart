@@ -27,6 +27,9 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderTypeOptions>(_selectTypeOptions);
     on<WorkOrderItemTabDeleteItem>(_deleteItemTabItem);
     on<WorkOrderDeleteDocument>(_deleteDocument);
+    on<SelectWorkOrderPriorityOptions>(_selectPriorityOptions);
+    on<SelectWorkOrderCategoryOptions>(_selectCategoryOptions);
+    on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
   }
 
   int tabIndex = 0;
@@ -71,6 +74,11 @@ class WorkOrderTabDetailsBloc
         'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
         'type': fetchWorkOrderDetailsModel.data.type,
         'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
+        'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
+        'category': fetchWorkOrderDetailsModel.data.category,
+        'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
+        'origination': fetchWorkOrderDetailsModel.data.origination,
+        'originationid': fetchWorkOrderDetailsModel.data.originationid,
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -114,20 +122,6 @@ class WorkOrderTabDetailsBloc
       Emitter<WorkOrderTabDetailsStates> emit) {
     emit(WorkOrderTypeOptionSelected(
         typeId: event.typeId, typeName: event.typeName));
-        popUpMenuList: popUpMenuItemsList,
-        workOrderDetailsMap: workOrderDetailsMap));
-  }
-
-  _selectCompanyOptions(SelectWorkOrderCompanyOptions event,
-      Emitter<WorkOrderTabDetailsStates> emit) {
-    emit(WorkOrderCompanyOptionSelected(
-        companyId: event.companyId, companyName: event.companyName));
-  }
-
-  _selectLocationOptions(SelectWorkOrderLocationOptions event,
-      Emitter<WorkOrderTabDetailsStates> emit) {
-    emit(WorkOrderLocationOptionSelected(
-        locationId: event.locationId, locationName: event.locationName));
   }
 
   FutureOr _deleteItemTabItem(WorkOrderItemTabDeleteItem event,
@@ -177,5 +171,24 @@ class WorkOrderTabDetailsBloc
     } catch (e) {
       emit(DocumentNotDeleted(documentNotDeleted: e.toString()));
     }
+  }
+
+  _selectPriorityOptions(SelectWorkOrderPriorityOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderPriorityOptionSelected(
+        priorityId: event.priorityId, priorityValue: event.priorityValue));
+  }
+
+  _selectCategoryOptions(SelectWorkOrderCategoryOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryOptionSelected(
+        categoryId: event.categoryId, categoryName: event.categoryName));
+  }
+
+  _selectOriginationOptions(SelectWorkOrderOriginationOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryOriginationSelected(
+        originationId: event.originationId,
+        originationName: event.originationName));
   }
 }

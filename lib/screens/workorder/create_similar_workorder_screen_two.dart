@@ -6,6 +6,9 @@ import '../../utils/database_utils.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
 import 'create_similar_work_order_screen_one.dart';
+import 'widgets/workorder_company_expansion_tile.dart';
+import 'widgets/workorder_origination_expansion_tile.dart';
+import 'widgets/workorder_priority_expansion_tile.dart';
 import 'widgets/workorder_type_expansion_tile.dart';
 
 class CreateWorkOrderScreenTwo extends StatelessWidget {
@@ -18,7 +21,7 @@ class CreateWorkOrderScreenTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const GenericAppBar(),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
         bottomNavigationBar: BottomAppBar(
           child: Row(
             children: [
@@ -65,6 +68,30 @@ class CreateWorkOrderScreenTwo extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
+                      WorkOrderPriorityExpansionTile(
+                          workOrderDetailsMap: workOrderDetailsMap),
+                      const SizedBox(height: xxTinySpacing),
+                      Text(DatabaseUtil.getText('Category'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      WorkOrderCompanyExpansionTile(
+                          data:
+                              CreateSimilarWorkOrderScreen.workOrderMasterData,
+                          workOrderDetailsMap: workOrderDetailsMap),
+                      const SizedBox(height: xxTinySpacing),
+                      Text(DatabaseUtil.getText('Origination'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      WorkOrderOriginationExpansionTile(
+                          data:
+                              CreateSimilarWorkOrderScreen.workOrderMasterData,
+                          workOrderDetailsMap: workOrderDetailsMap)
                     ]))));
   }
 }

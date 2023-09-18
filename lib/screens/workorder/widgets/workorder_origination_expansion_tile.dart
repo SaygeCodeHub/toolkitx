@@ -9,24 +9,26 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_even
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 
-class WorkOrderTypeExpansionTile extends StatelessWidget {
+class WorkOrderOriginationExpansionTile extends StatelessWidget {
   final List data;
   final Map workOrderDetailsMap;
 
-  const WorkOrderTypeExpansionTile(
+  const WorkOrderOriginationExpansionTile(
       {Key? key, required this.data, required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderTypeOptions(
-        typeId: workOrderDetailsMap['type'],
-        typeName: workOrderDetailsMap['workordertype']));
+    context.read<WorkOrderTabDetailsBloc>().add(
+        SelectWorkOrderOriginationOptions(
+            originationId: workOrderDetailsMap['originationid'] ?? '',
+            originationName: workOrderDetailsMap['origination'] ?? ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is WorkOrderTypeOptionSelected,
+            currentState is WorkOrderCategoryOriginationSelected,
         builder: (context, state) {
-          if (state is WorkOrderTypeOptionSelected) {
+          if (state is WorkOrderCategoryOriginationSelected) {
+            workOrderDetailsMap['originationid'] = state.originationId;
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
@@ -34,33 +36,33 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
-                        (state.typeName.isEmpty)
-                            ? StringConstants.kSelectType
-                            : state.typeName,
+                        (state.originationName.isEmpty)
+                            ? StringConstants.kSelectOrigination
+                            : state.originationName,
                         style: Theme.of(context).textTheme.xSmall),
                     children: [
                       ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: data[6].length,
-                          itemBuilder: (BuildContext context, int itemIndex) {
+                          itemCount: data[4].length,
+                          itemBuilder: (BuildContext context, int index) {
                             return RadioListTile(
                                 contentPadding: const EdgeInsets.only(
                                     left: xxxTinierSpacing),
                                 activeColor: AppColor.deepBlue,
-                                title: Text(data[6][itemIndex].workordertype,
+                                title: Text(data[4][index].origination,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                value: data[6][itemIndex].id.toString(),
-                                groupValue: state.typeId,
+                                value: data[4][index].id.toString(),
+                                groupValue: state.originationId,
                                 onChanged: (value) {
                                   context.read<WorkOrderTabDetailsBloc>().add(
-                                      SelectWorkOrderTypeOptions(
-                                          typeId:
-                                              data[6][itemIndex].id.toString(),
-                                          typeName: data[6][itemIndex]
-                                              .workordertype));
+                                      SelectWorkOrderOriginationOptions(
+                                          originationId:
+                                              data[4][index].id.toString(),
+                                          originationName:
+                                              data[4][index].origination));
                                 });
                           })
                     ]));

@@ -8,25 +8,26 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/enums/workorder_priority_enum.dart';
 
-class WorkOrderTypeExpansionTile extends StatelessWidget {
-  final List data;
+class WorkOrderPriorityExpansionTile extends StatelessWidget {
   final Map workOrderDetailsMap;
 
-  const WorkOrderTypeExpansionTile(
-      {Key? key, required this.data, required this.workOrderDetailsMap})
+  const WorkOrderPriorityExpansionTile(
+      {Key? key, required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderTypeOptions(
-        typeId: workOrderDetailsMap['type'],
-        typeName: workOrderDetailsMap['workordertype']));
+    context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderPriorityOptions(
+        priorityId: workOrderDetailsMap['priorityid'] ?? '',
+        priorityValue: ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is WorkOrderTypeOptionSelected,
+            currentState is WorkOrderPriorityOptionSelected,
         builder: (context, state) {
-          if (state is WorkOrderTypeOptionSelected) {
+          if (state is WorkOrderPriorityOptionSelected) {
+            workOrderDetailsMap['priorityid'] = state.priorityId;
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
@@ -34,33 +35,42 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
-                        (state.typeName.isEmpty)
-                            ? StringConstants.kSelectType
-                            : state.typeName,
+                        (state.priorityValue.isEmpty)
+                            ? StringConstants.kSelectPriority
+                            : state.priorityValue,
                         style: Theme.of(context).textTheme.xSmall),
                     children: [
                       ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: data[6].length,
-                          itemBuilder: (BuildContext context, int itemIndex) {
+                          itemCount: WorkOrderPriorityEnum.values.length,
+                          itemBuilder: (BuildContext context, int index) {
                             return RadioListTile(
                                 contentPadding: const EdgeInsets.only(
                                     left: xxxTinierSpacing),
                                 activeColor: AppColor.deepBlue,
-                                title: Text(data[6][itemIndex].workordertype,
+                                title: Text(
+                                    WorkOrderPriorityEnum.values
+                                        .elementAt(index)
+                                        .priority,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                value: data[6][itemIndex].id.toString(),
-                                groupValue: state.typeId,
+                                value: WorkOrderPriorityEnum.values
+                                    .elementAt(index)
+                                    .value,
+                                groupValue: state.priorityId,
                                 onChanged: (value) {
                                   context.read<WorkOrderTabDetailsBloc>().add(
-                                      SelectWorkOrderTypeOptions(
-                                          typeId:
-                                              data[6][itemIndex].id.toString(),
-                                          typeName: data[6][itemIndex]
-                                              .workordertype));
+                                      SelectWorkOrderPriorityOptions(
+                                          priorityId: WorkOrderPriorityEnum
+                                              .values
+                                              .elementAt(index)
+                                              .value,
+                                          priorityValue: WorkOrderPriorityEnum
+                                              .values
+                                              .elementAt(index)
+                                              .priority));
                                 });
                           })
                     ]));

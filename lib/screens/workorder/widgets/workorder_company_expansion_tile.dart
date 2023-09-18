@@ -9,24 +9,25 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_even
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 
-class WorkOrderTypeExpansionTile extends StatelessWidget {
+class WorkOrderCompanyExpansionTile extends StatelessWidget {
   final List data;
   final Map workOrderDetailsMap;
 
-  const WorkOrderTypeExpansionTile(
+  const WorkOrderCompanyExpansionTile(
       {Key? key, required this.data, required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderTypeOptions(
-        typeId: workOrderDetailsMap['type'],
-        typeName: workOrderDetailsMap['workordertype']));
+    context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderCategoryOptions(
+        categoryId: workOrderDetailsMap['categoryid'] ?? '',
+        categoryName: workOrderDetailsMap['category'] ?? ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is WorkOrderTypeOptionSelected,
+            currentState is WorkOrderCategoryOptionSelected,
         builder: (context, state) {
-          if (state is WorkOrderTypeOptionSelected) {
+          if (state is WorkOrderCategoryOptionSelected) {
+            workOrderDetailsMap['categoryid'] = state.categoryId;
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
@@ -34,33 +35,33 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
-                        (state.typeName.isEmpty)
-                            ? StringConstants.kSelectType
-                            : state.typeName,
+                        (state.categoryName.isEmpty)
+                            ? StringConstants.kSelectCategory
+                            : state.categoryName,
                         style: Theme.of(context).textTheme.xSmall),
                     children: [
                       ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: data[6].length,
-                          itemBuilder: (BuildContext context, int itemIndex) {
+                          itemCount: data[3].length,
+                          itemBuilder: (BuildContext context, int index) {
                             return RadioListTile(
                                 contentPadding: const EdgeInsets.only(
                                     left: xxxTinierSpacing),
                                 activeColor: AppColor.deepBlue,
-                                title: Text(data[6][itemIndex].workordertype,
+                                title: Text(data[3][index].category,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                value: data[6][itemIndex].id.toString(),
-                                groupValue: state.typeId,
+                                value: data[3][index].id.toString(),
+                                groupValue: state.categoryId,
                                 onChanged: (value) {
                                   context.read<WorkOrderTabDetailsBloc>().add(
-                                      SelectWorkOrderTypeOptions(
-                                          typeId:
-                                              data[6][itemIndex].id.toString(),
-                                          typeName: data[6][itemIndex]
-                                              .workordertype));
+                                      SelectWorkOrderCategoryOptions(
+                                          categoryId:
+                                              data[3][index].id.toString(),
+                                          categoryName:
+                                              data[3][index].category));
                                 });
                           })
                     ]));
