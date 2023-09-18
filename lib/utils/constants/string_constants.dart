@@ -244,6 +244,11 @@ abstract class StringConstants {
   static const String kExpiryDate = 'Expiry Date';
   static const String kStartCourse = 'Start Course';
   static const String kFeedback = 'Feedback';
+  static const String kSkip = 'Skip';
+  static const String kSaveAndNext = 'Save and Next';
+  static const String kSaveAnswer = 'Save Answer';
+  static const String kFinishQuiz = 'Finish Quiz';
+  static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
   static const String kNameValidation = 'Please enter name';

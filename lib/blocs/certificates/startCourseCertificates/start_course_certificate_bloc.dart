@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -11,6 +12,7 @@ import '../../../di/app_module.dart';
 import '../../../repositories/certificates/certificates_repository.dart';
 
 part 'start_course_certificate_event.dart';
+
 part 'start_course_certificate_state.dart';
 
 class StartCourseCertificateBloc
@@ -21,11 +23,14 @@ class StartCourseCertificateBloc
 
   StartCourseCertificateState get initialState =>
       StartCourseCertificateInitial();
+  String answerId = '';
 
   StartCourseCertificateBloc() : super(StartCourseCertificateInitial()) {
     on<GetCourseCertificate>(_getCourseCertificate);
     on<GetTopicCertificate>(_getTopicCertificate);
     on<GetWorkforceQuiz>(_getWorkforceQuiz);
+    on<GetQuizQuestions>(_getQuizQuestions);
+    on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -80,5 +85,28 @@ class StartCourseCertificateBloc
     } catch (e) {
       emit(WorkforceQuizError(getError: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _getQuizQuestions(
+      GetQuizQuestions event, Emitter<StartCourseCertificateState> emit) async {
+    emit(QuizQuestionsFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      GetQuizQuestionsModel getQuizQuestionsModel = await _certificateRepository
+          .getQuizQuestions(hashCode!, event.pageNo, event.workforcequizId);
+      if (getQuizQuestionsModel.status == 200) {
+        emit(QuizQuestionsFetched(
+            getQuizQuestionsModel: getQuizQuestionsModel, answerId: ''));
+      }
+    } catch (e) {
+      emit(QuizQuestionsError(getError: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectQuizAnswer(SelectedQuizAnswerEvent event,
+      Emitter<StartCourseCertificateState> emit) {
+    emit(QuizQuestionsFetched(
+        getQuizQuestionsModel: event.getQuizQuestionsModel,
+        answerId: event.answerId));
   }
 }
