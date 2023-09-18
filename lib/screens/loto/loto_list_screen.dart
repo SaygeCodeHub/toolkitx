@@ -22,7 +22,6 @@ class LotoListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<LotoListBloc>().add(FetchLotoList(pageNo: pageNo));
     return Scaffold(
-      backgroundColor: AppColor.lightestGrey,
       appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
       body: Padding(
         padding: const EdgeInsets.only(

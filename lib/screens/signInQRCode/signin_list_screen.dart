@@ -4,19 +4,15 @@ import 'package:toolkit/blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/signInQRCode/process_signin.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-import 'package:toolkit/widgets/custom_floating_action_button.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-
 import '../../configs/app_dimensions.dart';
+import '../../widgets/primary_button.dart';
 import 'widgets/signin_location_details_body.dart';
 
 class SignInListScreen extends StatelessWidget {
   static const routeName = 'SignInListScreen';
-
   const SignInListScreen({super.key});
 
   @override
@@ -26,15 +22,9 @@ class SignInListScreen extends StatelessWidget {
       appBar: GenericAppBar(
         title: DatabaseUtil.getText('ticket_signin'),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomFloatingActionButton(
-              textValue: StringConstants.kSignInHere,
-              onPressed: () {
-                Navigator.pushNamed(context, ProcessSignInScreen.routeName);
-              }),
-        ],
+      bottomNavigationBar: BottomAppBar(
+        child: PrimaryButton(
+            textValue: DatabaseUtil.getText('ticket_signin'), onPressed: () {}),
       ),
       body: Padding(
         padding: const EdgeInsets.only(

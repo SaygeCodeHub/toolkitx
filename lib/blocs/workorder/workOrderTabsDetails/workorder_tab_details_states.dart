@@ -1,3 +1,5 @@
+import '../../../data/models/workorder/delete_document_model.dart';
+import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
@@ -48,4 +50,48 @@ class WorkOrderTypeOptionSelected extends WorkOrderTabDetailsStates {
   final String typeName;
 
   WorkOrderTypeOptionSelected({required this.typeId, required this.typeName});
+}
+
+class DeletingItemTabItem extends WorkOrderTabDetailsStates {}
+
+class ItemTabItemDeleted extends WorkOrderTabDetailsStates {
+  final DeleteItemTabItemModel deleteItemTabItemModel;
+
+  ItemTabItemDeleted({required this.deleteItemTabItemModel});
+}
+
+class ItemTabItemNotDeleted extends WorkOrderTabDetailsStates {
+  final String cannotDeleteItem;
+
+  ItemTabItemNotDeleted({required this.cannotDeleteItem});
+}
+
+class DeletingDocument extends WorkOrderTabDetailsStates {}
+
+class DocumentDeleted extends WorkOrderTabDetailsStates {
+  final DeleteDocumentModel deleteDocumentModel;
+
+  DocumentDeleted({required this.deleteDocumentModel});
+}
+
+class DocumentNotDeleted extends WorkOrderTabDetailsStates {
+  final String documentNotDeleted;
+
+  DocumentNotDeleted({required this.documentNotDeleted});
+}
+
+class WorkOrderCompanyOptionSelected extends WorkOrderTabDetailsStates {
+  final String companyId;
+  final String companyName;
+
+  WorkOrderCompanyOptionSelected(
+      {required this.companyId, required this.companyName});
+}
+
+class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
+  final String locationId;
+  final String locationName;
+
+  WorkOrderLocationOptionSelected(
+      {required this.locationId, required this.locationName});
 }
