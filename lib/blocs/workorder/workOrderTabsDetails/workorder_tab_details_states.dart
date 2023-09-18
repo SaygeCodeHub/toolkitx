@@ -29,6 +29,29 @@ class WorkOrderTabDetailsNotFetched extends WorkOrderTabDetailsStates {
   WorkOrderTabDetailsNotFetched({required this.tabDetailsNotFetched});
 }
 
+class WorkOrderCompanyOptionSelected extends WorkOrderTabDetailsStates {
+  final String companyId;
+  final String companyName;
+
+  WorkOrderCompanyOptionSelected(
+      {required this.companyId, required this.companyName});
+}
+
+class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
+  final String locationId;
+  final String locationName;
+
+  WorkOrderLocationOptionSelected(
+      {required this.locationId, required this.locationName});
+}
+
+class WorkOrderTypeOptionSelected extends WorkOrderTabDetailsStates {
+  final String typeId;
+  final String typeName;
+
+  WorkOrderTypeOptionSelected({required this.typeId, required this.typeName});
+}
+
 class DeletingItemTabItem extends WorkOrderTabDetailsStates {}
 
 class ItemTabItemDeleted extends WorkOrderTabDetailsStates {
@@ -57,18 +80,26 @@ class DocumentNotDeleted extends WorkOrderTabDetailsStates {
   DocumentNotDeleted({required this.documentNotDeleted});
 }
 
-class WorkOrderCompanyOptionSelected extends WorkOrderTabDetailsStates {
-  final String companyId;
-  final String companyName;
+class WorkOrderPriorityOptionSelected extends WorkOrderTabDetailsStates {
+  final String priorityId;
+  final String priorityValue;
 
-  WorkOrderCompanyOptionSelected(
-      {required this.companyId, required this.companyName});
+  WorkOrderPriorityOptionSelected(
+      {required this.priorityValue, required this.priorityId});
 }
 
-class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
-  final String locationId;
-  final String locationName;
+class WorkOrderCategoryOptionSelected extends WorkOrderTabDetailsStates {
+  final String categoryId;
+  final String categoryName;
 
-  WorkOrderLocationOptionSelected(
-      {required this.locationId, required this.locationName});
+  WorkOrderCategoryOptionSelected(
+      {required this.categoryId, required this.categoryName});
+}
+
+class WorkOrderCategoryOriginationSelected extends WorkOrderTabDetailsStates {
+  final String originationId;
+  final String originationName;
+
+  WorkOrderCategoryOriginationSelected(
+      {required this.originationId, required this.originationName});
 }

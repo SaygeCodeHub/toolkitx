@@ -36,6 +36,13 @@ class SelectWorkOrderLocationOptions extends WorkOrderTabsDetailsEvent {
       {required this.locationId, required this.locationName});
 }
 
+class SelectWorkOrderTypeOptions extends WorkOrderTabsDetailsEvent {
+  final String typeId;
+  final String typeName;
+
+  SelectWorkOrderTypeOptions({required this.typeId, required this.typeName});
+}
+
 class WorkOrderItemTabDeleteItem extends WorkOrderTabsDetailsEvent {
   final String itemId;
 
@@ -46,4 +53,28 @@ class WorkOrderDeleteDocument extends WorkOrderTabsDetailsEvent {
   final String docId;
 
   WorkOrderDeleteDocument({required this.docId});
+}
+
+class SelectWorkOrderPriorityOptions extends WorkOrderTabsDetailsEvent {
+  final String priorityId;
+  final String priorityValue;
+
+  SelectWorkOrderPriorityOptions(
+      {required this.priorityId, required this.priorityValue});
+}
+
+class SelectWorkOrderCategoryOptions extends WorkOrderTabsDetailsEvent {
+  final String categoryId;
+  final String categoryName;
+
+  SelectWorkOrderCategoryOptions(
+      {required this.categoryId, required this.categoryName});
+}
+
+class SelectWorkOrderOriginationOptions extends WorkOrderTabsDetailsEvent {
+  final String originationId;
+  final String originationName;
+
+  SelectWorkOrderOriginationOptions(
+      {required this.originationId, required this.originationName});
 }

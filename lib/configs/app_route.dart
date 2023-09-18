@@ -74,6 +74,7 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/create_similar_work_order_screen_one.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
+import '../screens/workorder/create_similar_workorder_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
@@ -255,6 +256,9 @@ class AppRoutes {
         ));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
+      case CreateWorkOrderScreenTwo.routeName:
+        return _createRoute(CreateWorkOrderScreenTwo(
+            workOrderDetailsMap: settings.arguments as Map));
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
