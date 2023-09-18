@@ -6,6 +6,7 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/certificates/get_topic_certificate_model.dart';
+import 'get_workforce_quiz_screen.dart';
 
 class GetTopicCertificateBody extends StatelessWidget {
   const GetTopicCertificateBody({
@@ -67,6 +68,10 @@ class GetTopicCertificateBody extends StatelessWidget {
         ),
         Card(
           child: ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, GetWorkforceScreen.routeName,
+                  arguments: data.quizlist[0].id);
+            },
             contentPadding: const EdgeInsets.all(kCardPadding),
             leading: Container(
                 width: kModuleIconSize,

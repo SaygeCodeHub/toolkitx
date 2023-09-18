@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/certificates/get_course_certificate_model.da
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/certificates/get_topic_certificate_model.dart';
+import '../../../data/models/certificates/get_workforce_quiz_model.dart';
 import '../../../di/app_module.dart';
 import '../../../repositories/certificates/certificates_repository.dart';
 
@@ -24,6 +25,7 @@ class StartCourseCertificateBloc
   StartCourseCertificateBloc() : super(StartCourseCertificateInitial()) {
     on<GetCourseCertificate>(_getCourseCertificate);
     on<GetTopicCertificate>(_getTopicCertificate);
+    on<GetWorkforceQuiz>(_getWorkforceQuiz);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -59,6 +61,24 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(GetTopicCertificateError(getTopicError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _getWorkforceQuiz(
+      GetWorkforceQuiz event, Emitter<StartCourseCertificateState> emit) async {
+    emit(WorkforceQuizFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      GetWorkforceQuizModel getWorkforceQuizModel = await _certificateRepository
+          .getWorkforceQuiz(hashCode!, userId!, event.quizId);
+      if (getWorkforceQuizModel.status == 200) {
+        emit(
+            WorkforceQuizFetched(getWorkforceQuizModel: getWorkforceQuizModel));
+      }
+    } catch (e) {
+      emit(WorkforceQuizError(getError: e.toString()));
     }
   }
 }

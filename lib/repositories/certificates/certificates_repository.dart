@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 
 import '../../data/models/certificates/certificate_list_model.dart';
@@ -22,4 +23,7 @@ abstract class CertificateRepository {
 
   Future<GetTopicCertificateModel> getTopicCertificates(
       String hashCode, String userId, String courseId);
+
+  Future<GetWorkforceQuizModel> getWorkforceQuiz(
+      String hashCode, String userId, String quizId);
 }
