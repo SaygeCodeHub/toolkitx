@@ -34,15 +34,15 @@ class GetTopicCertificateError extends StartCourseCertificateState {
   GetTopicCertificateError({required this.getTopicError});
 }
 
-class GetWorkforceQuizFetching extends StartCourseCertificateState {}
+class WorkforceQuizFetching extends StartCourseCertificateState {}
 
-class GetWorkforceQuizFetched extends StartCourseCertificateState {
+class WorkforceQuizFetched extends StartCourseCertificateState {
   final GetWorkforceQuizModel getWorkforceQuizModel;
-  GetWorkforceQuizFetched({required this.getWorkforceQuizModel});
+  WorkforceQuizFetched({required this.getWorkforceQuizModel});
 }
 
-class GetWorkforceQuizError extends StartCourseCertificateState {
+class WorkforceQuizError extends StartCourseCertificateState {
   final String getError;
 
-  GetWorkforceQuizError({required this.getError});
+  WorkforceQuizError({required this.getError});
 }

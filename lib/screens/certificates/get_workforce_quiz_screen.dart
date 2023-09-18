@@ -29,13 +29,13 @@ class GetWorkforceScreen extends StatelessWidget {
         child: BlocBuilder<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           buildWhen: (previousState, currentState) =>
-              currentState is GetWorkforceQuizFetching ||
-              currentState is GetWorkforceQuizFetched ||
-              currentState is GetCourseCertificateError,
+              currentState is WorkforceQuizFetching ||
+              currentState is WorkforceQuizFetched ||
+              currentState is WorkforceQuizError,
           builder: (context, state) {
-            if (state is GetWorkforceQuizFetching) {
+            if (state is WorkforceQuizFetching) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is GetWorkforceQuizFetched) {
+            } else if (state is WorkforceQuizFetched) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

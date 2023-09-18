@@ -66,7 +66,7 @@ class StartCourseCertificateBloc
 
   Future<FutureOr<void>> _getWorkforceQuiz(
       GetWorkforceQuiz event, Emitter<StartCourseCertificateState> emit) async {
-    emit(GetWorkforceQuizFetching());
+    emit(WorkforceQuizFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
@@ -74,11 +74,11 @@ class StartCourseCertificateBloc
       GetWorkforceQuizModel getWorkforceQuizModel = await _certificateRepository
           .getWorkforceQuiz(hashCode!, userId!, event.quizId);
       if (getWorkforceQuizModel.status == 200) {
-        emit(GetWorkforceQuizFetched(
-            getWorkforceQuizModel: getWorkforceQuizModel));
+        emit(
+            WorkforceQuizFetched(getWorkforceQuizModel: getWorkforceQuizModel));
       }
     } catch (e) {
-      emit(GetCourseCertificateError(getCourseError: e.toString()));
+      emit(WorkforceQuizError(getError: e.toString()));
     }
   }
 }
