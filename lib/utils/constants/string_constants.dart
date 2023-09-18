@@ -265,6 +265,7 @@ abstract class StringConstants {
   static const String kLOTOError = 'LOTO assigning error';
   static const String kChecklistAssigned = 'Checklist assigned to you';
   static const String kSelectOrigination = 'Select origination'; //
+  static const String kSelectCostCenter = 'Select Cost Center'; //
   static const String kChecklistError = 'Checklist assigning error';
   static const String kSignInError = 'Invalid Data';
   static const String kWarning = 'Warning';
