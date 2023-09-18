@@ -45,7 +45,7 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                 context, QualityManagementAddCommentsScreen.routeName,
                 arguments: fetchQualityManagementDetailsModel);
           }
-          if (value == DatabaseUtil.getText('EditIncident')) {
+          if (value == DatabaseUtil.getText('Edit')) {
             ReportNewQA.isFromEdit = true;
             ReportNewQA.reportAndEditQMMap = editQMDetailsMap;
             QualityManagementContractorListTile.contractorName =

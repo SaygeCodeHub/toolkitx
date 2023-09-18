@@ -44,7 +44,7 @@ class ToDoPopUpMenu extends StatelessWidget {
                           return AndroidPopUp(
                               contentPadding: EdgeInsets.zero,
                               titleValue: DatabaseUtil.getText('DeleteRecord'),
-                              onPrimarybtn: () {
+                              onPrimaryButton: () {
                                 context.read<ToDoBloc>().add(
                                     ToDoPopUpMenuMarkAsDone(todoMap: todoMap));
                                 Navigator.pop(context);

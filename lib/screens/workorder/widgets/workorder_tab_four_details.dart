@@ -88,7 +88,7 @@ class WorkOrderTabFourDetails extends StatelessWidget {
             const SizedBox(width: xxTiniestSpacing),
             Text(dateTime[1])
           ],
-        )
+        ),
       ],
     );
   }
@@ -104,15 +104,16 @@ class WorkOrderTabFourDetails extends StatelessWidget {
         ),
         const SizedBox(height: xxTiniestSpacing),
         SizedBox(
-            width: MediaQuery.of(context).size.width * 0.490,
-            child: Text(
-              data.logs[index].action,
-              style: Theme.of(context)
-                  .textTheme
-                  .xSmall
-                  .copyWith(color: AppColor.grey),
-              maxLines: 7,
-            )),
+          width: MediaQuery.of(context).size.width * 0.490,
+          child: Text(
+            data.logs[index].action,
+            style: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(color: AppColor.grey),
+            maxLines: 7,
+          ),
+        ),
       ],
     );
   }
