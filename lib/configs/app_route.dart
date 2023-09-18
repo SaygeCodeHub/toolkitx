@@ -7,7 +7,11 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
+import '../screens/certificates/get_course_certificate_screen.dart';
+import '../screens/certificates/feedback_certificate_screen.dart';
+import '../screens/certificates/get_workforce_quiz_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -69,6 +73,8 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/workorder/create_similar_work_order_screen_one.dart';
+import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
@@ -235,10 +241,15 @@ class AppRoutes {
                 settings.arguments as FetchQualityManagementDetailsModel));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
+      case WorkOrderFilterScreen.routeName:
+        return _createRoute(WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
+      case CreateSimilarWorkOrderScreen.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreen(
+            workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
           certificateItemsMap: settings.arguments as Map,
@@ -252,6 +263,22 @@ class AppRoutes {
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
         return _createRoute(LotoFilterScreen());
+      case GetCourseCertificateScreen.routeName:
+        return _createRoute(GetCourseCertificateScreen(
+          certificateId: settings.arguments.toString(),
+        ));
+      case GetTopicCertificateScreen.routeName:
+        return _createRoute(GetTopicCertificateScreen(
+          courseId: settings.arguments.toString(),
+        ));
+      case FeedbackCertificateScreen.routeName:
+        return _createRoute(FeedbackCertificateScreen(
+          getdetailsMap: settings.arguments as Map,
+        ));
+      case GetWorkforceScreen.routeName:
+        return _createRoute(GetWorkforceScreen(
+          quizId: settings.arguments.toString(),
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

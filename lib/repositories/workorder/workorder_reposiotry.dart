@@ -1,3 +1,5 @@
+import '../../data/models/workorder/delete_document_model.dart';
+import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../data/models/workorder/fetch_workorder_master_model.dart';
 import '../../data/models/workorder/fetch_workorders_model.dart';
@@ -11,4 +13,8 @@ abstract class WorkOrderRepository {
 
   Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
       String hashCode, String workOrderId);
+
+  Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
+
+  Future<DeleteDocumentModel> deleteDocument(Map deleteDocumentMap);
 }

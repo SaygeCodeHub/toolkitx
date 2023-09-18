@@ -19,65 +19,154 @@ class LotoListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LotoListBloc>()
-        .add(FetchLotoList(pageNo: 1, isFromHome: isFromHome));
+    context.read<LotoListBloc>().add(FetchLotoList(pageNo: pageNo));
     return Scaffold(
+      backgroundColor: AppColor.lightestGrey,
       appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
             right: leftRightMargin,
             top: xxTinierSpacing),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                BlocBuilder<LotoListBloc, LotoListState>(
-                  buildWhen: (previousState, currentState) {
-                    if (currentState is FetchingLotoList &&
-                        isFromHome == true) {
-                      return true;
-                    } else if (currentState is LotoListFetched) {
-                      return true;
-                    }
-                    return false;
-                  },
-                  builder: (context, state) {
-                    if (state is LotoListFetched) {
-                      return Visibility(
-                          visible: state.filtersMap.isNotEmpty,
-                          child: CustomTextButton(
-                              onPressed: () {
-                                LotoListBody.pageNo = 1;
-                                lotoListData.clear();
-                                context
-                                    .read<LotoListBloc>()
-                                    .add(ClearLotoListFilter());
-                                context.read<LotoListBloc>().add(FetchLotoList(
-                                    pageNo: 1, isFromHome: isFromHome));
-                              },
-                              textValue: DatabaseUtil.getText('Clear')));
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-                CustomIconButtonRow(
-                  isEnabled: true,
-                  primaryOnPress: () {
-                    Navigator.pushNamed(context, LotoFilterScreen.routeName);
-                  },
-                  secondaryVisible: false,
-                  clearVisible: false,
-                  secondaryOnPress: () {},
-                  clearOnPress: () {},
-                ),
-              ],
-            ),
-            const LotoListBody(),
-          ],
+        child: SafeArea(
+          child: BlocConsumer<LotoListBloc, LotoListState>(
+            buildWhen: (previousState, currentState) =>
+                ((currentState is LotoListFetched &&
+                        context.read<LotoListBloc>().hasReachedMax == false ||
+                    currentState is FetchingLotoList && pageNo == 1)),
+            listener: (context, state) {
+              if (state is LotoListFetched) {
+                if (state.fetchLotoListModel.status == 204) {
+                  showCustomSnackBar(
+                      context, StringConstants.kAllDataLoaded, '');
+                  context.read<LotoListBloc>().hasReachedMax = true;
+                  pageNo = 1;
+                }
+              }
+            },
+            builder: (context, state) {
+              if (state is FetchingLotoList) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is LotoListFetched) {
+                if (state.fetchLotoListModel.data.isNotEmpty) {
+                  return ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.hasReachedMax
+                          ? state.data.length
+                          : state.data.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index < state.data.length) {
+                          return CustomCard(
+                            elevation: 2,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: tinierSpacing),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    onTap: () {},
+                                    title: Text(state.data[index].name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .small
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColor.black)),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          height: xxxTinierSpacing,
+                                        ),
+                                        Text(
+                                          state.data[index].date,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.grey),
+                                        ),
+                                        const SizedBox(
+                                          height: xxxTinierSpacing,
+                                        ),
+                                        Text(
+                                          state.data[index].location,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.grey),
+                                        ),
+                                        const SizedBox(
+                                          height: xxxTinierSpacing,
+                                        ),
+                                        Text(
+                                          state.data[index].purpose,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.grey),
+                                        ),
+                                        const SizedBox(
+                                          height: xxxTinierSpacing,
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Text(
+                                      state.data[index].status,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .xSmall
+                                          .copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: AppColor.deepBlue),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else if (!state.hasReachedMax) {
+                          pageNo++;
+                          context.read<LotoListBloc>().add(FetchLotoList(
+                                pageNo: pageNo,
+                              ));
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  kCircularProgressIndicatorPadding),
+                              child: SizedBox(
+                                  width: kCircularProgressIndicatorWidth,
+                                  child: CircularProgressIndicator()),
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(height: tinierSpacing);
+                      });
+                } else {
+                  if (state.fetchLotoListModel.status == 204) {
+                    return NoRecordsText(
+                        text: DatabaseUtil.getText('no_records_found'));
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
