@@ -17,6 +17,7 @@ abstract class StringConstants {
   static const String kNoParts = 'No items/parts!'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
+  static const String kSelectType = 'Select type'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
@@ -106,6 +107,7 @@ abstract class StringConstants {
   static const String kToDoHistory = 'ToDo History'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
+  static const String kSelectCategory = 'Select category'; //
   static const String kResolve = 'Resolve'; //
   static const String kSelectYourLanguage = 'Select Your Language';
   static const String kClearFilter = 'Clear';
@@ -132,7 +134,6 @@ abstract class StringConstants {
       'https://www.toolkitx.com/campaign/permit-to-work/';
   static const String kToolkitXEmail = 'info@toolkit.com';
   static const String kSelectBloodGroup = 'Select Blood Group'; //
-  static const String kSelectCategory = 'Select Category';
   static const String kSignature = 'Signature';
   static const String kEditSignature = 'Edit Signature';
   static const String kSignatureNotFound = 'Signature Not Found';
@@ -239,7 +240,8 @@ abstract class StringConstants {
   static const String kTopic = 'Topic';
   static const String kQuiz = 'Quiz';
   static const String kDownload = 'Download';
-  static const String kStartDate = 'Start Date';
+  static const String kStartDate = 'Start Date'; //
+  static const String kSelectPriority = 'Select Priority'; //
   static const String kNotAvailable = 'Not Available';
   static const String kExpiryDate = 'Expiry Date';
   static const String kStartCourse = 'Start Course';
@@ -262,6 +264,7 @@ abstract class StringConstants {
   static const String kLOTOAssigned = 'LOTO assigned to you';
   static const String kLOTOError = 'LOTO assigning error';
   static const String kChecklistAssigned = 'Checklist assigned to you';
+  static const String kSelectOrigination = 'Select origination'; //
   static const String kChecklistError = 'Checklist assigning error';
   static const String kSignInError = 'Invalid Data';
   static const String kWarning = 'Warning';

@@ -14,6 +14,7 @@ import '../../widgets/generic_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../incident/widgets/date_picker.dart';
 import '../incident/widgets/time_picker.dart';
+import 'create_similar_workorder_screen_two.dart';
 import 'widgets/workorder_company_list_tile.dart';
 import 'widgets/workorder_location_list_tile.dart';
 
@@ -24,6 +25,7 @@ class CreateSimilarWorkOrderScreen extends StatelessWidget {
   const CreateSimilarWorkOrderScreen(
       {Key? key, required this.workOrderDetailsMap})
       : super(key: key);
+  static List workOrderMasterData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,11 @@ class CreateSimilarWorkOrderScreen extends StatelessWidget {
               const SizedBox(width: xxTinierSpacing),
               Expanded(
                 child: PrimaryButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(
+                          context, CreateWorkOrderScreenTwo.routeName,
+                          arguments: workOrderDetailsMap);
+                    },
                     textValue: DatabaseUtil.getText('nextButtonText')),
               ),
             ],
@@ -54,6 +60,7 @@ class CreateSimilarWorkOrderScreen extends StatelessWidget {
           if (state is FetchingWorkOrderMaster) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is WorkOrderMasterFetched) {
+            workOrderMasterData = state.fetchWorkOrdersMasterModel.data;
             return Padding(
                 padding: const EdgeInsets.only(
                     left: leftRightMargin,
