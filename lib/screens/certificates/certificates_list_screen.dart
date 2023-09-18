@@ -128,24 +128,16 @@ class CertificatesListScreen extends StatelessWidget {
                                                         .kDownload)),
                                             Expanded(
                                                 child: CustomTextButton(
-                                                    onPressed: (state
-                                                                .data[index]
-                                                                .accesscertificate ==
-                                                            "1")
-                                                        ? () {
-                                                            String
-                                                                certificateId =
-                                                                state
-                                                                    .data[index]
-                                                                    .id;
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                GetCourseCertificateScreen
-                                                                    .routeName,
-                                                                arguments:
-                                                                    certificateId);
-                                                          }
-                                                        : null,
+                                                    onPressed: () {
+                                                      String certificateId =
+                                                          state.data[index].id;
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          GetCourseCertificateScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              certificateId);
+                                                    },
                                                     textValue: StringConstants
                                                         .kStartCourse)),
                                             Expanded(

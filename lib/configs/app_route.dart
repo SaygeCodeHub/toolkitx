@@ -11,6 +11,7 @@ import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
+import '../screens/certificates/get_workforce_quiz_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
@@ -267,6 +268,10 @@ class AppRoutes {
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(
           getdetailsMap: settings.arguments as Map,
+        ));
+      case GetWorkforceScreen.routeName:
+        return _createRoute(GetWorkforceScreen(
+          quizId: settings.arguments.toString(),
         ));
       default:
         return _createRoute(const WelcomeScreen());

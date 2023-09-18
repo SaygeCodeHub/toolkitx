@@ -13,3 +13,9 @@ class GetTopicCertificate extends StartCourseCertificateEvent {
 
   GetTopicCertificate({required this.courseId});
 }
+
+class GetWorkforceQuiz extends StartCourseCertificateEvent {
+  final String quizId;
+
+  GetWorkforceQuiz({required this.quizId});
+}
