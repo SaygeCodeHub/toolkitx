@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
@@ -52,7 +54,19 @@ class GetWorkforceScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w600, color: AppColor.grey)),
                   const SizedBox(height: xxxSmallestSpacing),
-                  PrimaryButton(onPressed: () {}, textValue: 'Start quiz')
+                  PrimaryButton(
+                      onPressed: () {
+                        Map quizMap = {
+                          "userquizid":
+                              state.getWorkforceQuizModel.data.userquizid,
+                          "questioncount":
+                              state.getWorkforceQuizModel.data.questioncount
+                        };
+                        Navigator.pushNamed(
+                            context, QuizQuestionsScreen.routeName,
+                            arguments: quizMap);
+                      },
+                      textValue: StringConstants.kStartQuiz)
                 ],
               );
             } else {
