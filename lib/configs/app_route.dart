@@ -7,6 +7,7 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/get_quiz_questions_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
@@ -280,6 +281,10 @@ class AppRoutes {
       case GetWorkforceScreen.routeName:
         return _createRoute(GetWorkforceScreen(
           quizId: settings.arguments.toString(),
+        ));
+      case QuizQuestionsScreen.routeName:
+        return _createRoute(QuizQuestionsScreen(
+          quizMap: settings.arguments as Map,
         ));
       default:
         return _createRoute(const WelcomeScreen());

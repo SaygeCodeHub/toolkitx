@@ -46,3 +46,17 @@ class WorkforceQuizError extends StartCourseCertificateState {
 
   WorkforceQuizError({required this.getError});
 }
+
+class QuizQuestionsFetching extends StartCourseCertificateState {}
+
+class QuizQuestionsFetched extends StartCourseCertificateState {
+  final GetQuizQuestionsModel getQuizQuestionsModel;
+  final String answerId;
+  QuizQuestionsFetched(
+      {required this.getQuizQuestionsModel, required this.answerId});
+}
+
+class QuizQuestionsError extends StartCourseCertificateState {
+  final String getError;
+  QuizQuestionsError({required this.getError});
+}
