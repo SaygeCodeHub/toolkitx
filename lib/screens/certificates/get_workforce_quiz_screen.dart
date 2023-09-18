@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
@@ -65,7 +66,7 @@ class GetWorkforceScreen extends StatelessWidget {
                             context, QuizQuestionsScreen.routeName,
                             arguments: quizMap);
                       },
-                      textValue: 'Start quiz')
+                      textValue: StringConstants.kStartQuiz)
                 ],
               );
             } else {

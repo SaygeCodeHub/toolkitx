@@ -249,6 +249,7 @@ abstract class StringConstants {
   static const String kSkip = 'Skip';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
+  static const String kStartQuiz = 'Start Quiz';
   static const String kFinishQuiz = 'Finish Quiz';
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
