@@ -7,7 +7,9 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../../repositories/SignInQRCode/signin_repository.dart';
+
 part 'sign_in_process_event.dart';
+
 part 'sign_in_process_state.dart';
 
 class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
@@ -15,6 +17,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
   SignInProcessState get initialState => SignInProcessInitial();
+
   SignInProcessBloc() : super(SignInProcessInitial()) {
     on<SignInProcess>(_processSignInProcess);
     on<UnauthorizedSignIn>(_signInUnathorized);

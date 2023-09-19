@@ -5,6 +5,7 @@ import 'dart:convert';
 
 FetchCertificatesModel fetchCertificatesModelFromJson(String str) =>
     FetchCertificatesModel.fromJson(json.decode(str));
+
 String fetchCertificatesModelToJson(FetchCertificatesModel data) =>
     json.encode(data.toJson());
 
@@ -12,11 +13,13 @@ class FetchCertificatesModel {
   final int status;
   final String message;
   final List<CertificateListDatum> data;
+
   FetchCertificatesModel({
     required this.status,
     required this.message,
     required this.data,
   });
+
   factory FetchCertificatesModel.fromJson(Map<String, dynamic> json) =>
       FetchCertificatesModel(
         status: json["Status"],
@@ -24,6 +27,7 @@ class FetchCertificatesModel {
         data: List<CertificateListDatum>.from(
             json["Data"].map((x) => CertificateListDatum.fromJson(x))),
       );
+
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
@@ -43,6 +47,7 @@ class CertificateListDatum {
   final String accesscertificate;
   final String accessfeedback;
   final String accessfeedbackedit;
+
   CertificateListDatum({
     required this.id,
     required this.name,
@@ -56,6 +61,7 @@ class CertificateListDatum {
     required this.accessfeedback,
     required this.accessfeedbackedit,
   });
+
   factory CertificateListDatum.fromJson(Map<String, dynamic> json) =>
       CertificateListDatum(
         id: json["id"],
@@ -70,6 +76,7 @@ class CertificateListDatum {
         accessfeedback: json["accessfeedback"],
         accessfeedbackedit: json["accessfeedbackedit"],
       );
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,

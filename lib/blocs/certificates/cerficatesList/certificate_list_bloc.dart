@@ -9,6 +9,7 @@ import '../../../data/models/certificates/certificate_list_model.dart';
 import '../../../di/app_module.dart';
 
 part 'certificate_list_event.dart';
+
 part 'certificate_list_state.dart';
 
 class CertificateListBloc
@@ -20,6 +21,7 @@ class CertificateListBloc
   CertificateListState get initialState => CertificateListInitial();
   final List<CertificateListDatum> data = [];
   bool hasReachedMax = false;
+
   CertificateListBloc() : super(CertificateListInitial()) {
     on<FetchCertificateList>(_fetchCertificateList);
   }

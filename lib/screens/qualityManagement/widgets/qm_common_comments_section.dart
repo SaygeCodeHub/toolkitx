@@ -78,7 +78,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
                       Text(
-                          '${(context.read<PickAndUploadImageBloc>().isInitial == true) ? 0 : state.incrementNumber}/6',
+                          '${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),

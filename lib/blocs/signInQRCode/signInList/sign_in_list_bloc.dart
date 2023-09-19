@@ -9,6 +9,7 @@ import '../../../data/cache/customer_cache.dart';
 import '../../../repositories/SignInQRCode/signin_repository.dart';
 
 part 'sign_in_list_event.dart';
+
 part 'sign_in_list_state.dart';
 
 class SignInListBloc extends Bloc<SignInList, SignInListState> {
