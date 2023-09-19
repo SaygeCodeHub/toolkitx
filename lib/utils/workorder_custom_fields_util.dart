@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 
 import '../widgets/generic_text_field.dart';
@@ -20,8 +18,6 @@ class WorkOrderCustomFieldsUtil {
                   customFieldDatum[10][index].id.toString();
               workOrderDetailsMap['customfields'][index]['value'] =
                   textField.toString();
-              log("custom fields=====>${workOrderDetailsMap['customfields'][index]['id']}");
-              log("custom value=====>${workOrderDetailsMap['customfields'][index]['value']}");
             });
       default:
         return const SizedBox.shrink();
