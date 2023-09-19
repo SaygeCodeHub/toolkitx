@@ -30,6 +30,7 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderPriorityOptions>(_selectPriorityOptions);
     on<SelectWorkOrderCategoryOptions>(_selectCategoryOptions);
     on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
+    on<SelectWorkOrderCostCenterOptions>(_selectCostCenterOptions);
   }
 
   int tabIndex = 0;
@@ -79,6 +80,10 @@ class WorkOrderTabDetailsBloc
         'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
         'origination': fetchWorkOrderDetailsModel.data.origination,
         'originationid': fetchWorkOrderDetailsModel.data.originationid,
+        'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
+        'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
+        'subject': fetchWorkOrderDetailsModel.data.subject,
+        'description': fetchWorkOrderDetailsModel.data.description
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -190,5 +195,12 @@ class WorkOrderTabDetailsBloc
     emit(WorkOrderCategoryOriginationSelected(
         originationId: event.originationId,
         originationName: event.originationName));
+  }
+
+  _selectCostCenterOptions(SelectWorkOrderCostCenterOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryCostCenterSelected(
+        costCenterId: event.costCenterId,
+        costCenterValue: event.costCenterValue));
   }
 }

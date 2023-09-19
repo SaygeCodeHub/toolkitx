@@ -103,3 +103,11 @@ class WorkOrderCategoryOriginationSelected extends WorkOrderTabDetailsStates {
   WorkOrderCategoryOriginationSelected(
       {required this.originationId, required this.originationName});
 }
+
+class WorkOrderCategoryCostCenterSelected extends WorkOrderTabDetailsStates {
+  final String costCenterId;
+  final String costCenterValue;
+
+  WorkOrderCategoryCostCenterSelected(
+      {required this.costCenterId, required this.costCenterValue});
+}

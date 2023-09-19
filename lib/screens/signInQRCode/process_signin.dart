@@ -14,7 +14,9 @@ import '../../configs/app_color.dart';
 
 class ProcessSignInScreen extends StatefulWidget {
   static const routeName = 'ProcessSignInScreen';
+
   const ProcessSignInScreen({Key? key}) : super(key: key);
+
   @override
   State<ProcessSignInScreen> createState() => _ProcessSignInScreenState();
 }
@@ -24,6 +26,7 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
   String result = '';
   Barcode? qrCode;
   QRViewController? qRcontroller;
+
   @override
   void reassemble() {
     super.reassemble();

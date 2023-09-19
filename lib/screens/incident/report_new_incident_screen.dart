@@ -30,7 +30,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isInitial = true;
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: const GenericAppBar(
