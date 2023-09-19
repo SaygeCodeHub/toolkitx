@@ -6,6 +6,7 @@ import '../../utils/database_utils.dart';
 import '../../utils/workorder_custom_fields_util.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'create_similar_work_order_screen_one.dart';
+import 'widgets/workorder_save_button.dart';
 
 class CreateSimilarWorkOrderScreenFour extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreenFour';
@@ -19,6 +20,8 @@ class CreateSimilarWorkOrderScreenFour extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
+        bottomNavigationBar:
+            WorkOrderSaveButton(workOrderDetailsMap: workOrderDetailsMap),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
