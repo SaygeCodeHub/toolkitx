@@ -78,3 +78,11 @@ class SelectWorkOrderOriginationOptions extends WorkOrderTabsDetailsEvent {
   SelectWorkOrderOriginationOptions(
       {required this.originationId, required this.originationName});
 }
+
+class SelectWorkOrderCostCenterOptions extends WorkOrderTabsDetailsEvent {
+  final String costCenterId;
+  final String costCenterValue;
+
+  SelectWorkOrderCostCenterOptions(
+      {required this.costCenterId, required this.costCenterValue});
+}
