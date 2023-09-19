@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
+import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
+
+import '../../../blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -13,8 +20,10 @@ import '../../../widgets/status_tag.dart';
 
 class SignInPermitLocationDetailsCard extends StatelessWidget {
   final List<Permit> permit;
+  final String locationId;
 
-  const SignInPermitLocationDetailsCard({Key? key, required this.permit})
+  const SignInPermitLocationDetailsCard(
+      {Key? key, required this.permit, required this.locationId})
       : super(key: key);
 
   @override
@@ -67,9 +76,44 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
                                     Text(permit[index].schedule),
                                   ]),
                                   const SizedBox(height: tinierSpacing),
+                                  BlocListener<SignInAssignToMeBloc,
+                                      SignInAssignToMeState>(
+                                    listener: (context, state) {
+                                      if (state is PermitAssigning) {
+                                        ProgressBar.show(context);
+                                      } else if (state is PermitAssigned) {
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(
+                                            context,
+                                            StringConstants.kPermitAssigned,
+                                            '');
+                                        context
+                                            .read<SignInLocationDetailsBloc>()
+                                            .add(FetchSignInLocationDetails(
+                                                locationId: locationId));
+                                      } else if (state is PermitAssignError) {
+                                        ProgressBar.dismiss(context);
+                                        showCustomSnackBar(context,
+                                            StringConstants.kPermitError, '');
+                                      }
+                                    },
+                                    child: PrimaryButton(
+                                        onPressed: () {
+                                          Map assignToMePermitMap = {
+                                            "permitid": permit[index].id,
+                                          };
+                                          context
+                                              .read<SignInAssignToMeBloc>()
+                                              .add(AssignToMePermit(
+                                                  assignToMePermitsMap:
+                                                      assignToMePermitMap));
+                                        },
+                                        textValue:
+                                            StringConstants.kAssignedToMe),
+                                  ),
                                   PrimaryButton(
                                       onPressed: () {},
-                                      textValue: StringConstants.kAssignToMe),
+                                      textValue: StringConstants.kAssignedToMe),
                                   const SizedBox(height: tiniestSpacing),
                                 ])))));
           },

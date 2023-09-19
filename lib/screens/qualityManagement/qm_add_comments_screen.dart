@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -21,9 +23,12 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
       {Key? key, required this.fetchQualityManagementDetailsModel})
       : super(key: key);
   final Map qmCommentsMap = {};
+  static int imageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isInitial = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('Comments')),
       body: Padding(
@@ -47,7 +52,8 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   },
                   qmCommentsMap: qmCommentsMap,
                   fetchQualityManagementDetailsModel:
-                      fetchQualityManagementDetailsModel),
+                      fetchQualityManagementDetailsModel,
+                  imageIndex: imageIndex),
               BlocListener<QualityManagementBloc, QualityManagementStates>(
                   listener: (context, state) {
                     if (state is QualityManagementSavingComments) {

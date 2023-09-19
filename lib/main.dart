@@ -6,9 +6,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
+import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.dart';
+import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
+import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
+import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import 'package:toolkit/blocs/loto/loto_list_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
+import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -44,6 +50,7 @@ import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/qualityManagement/qm_bloc.dart';
 import 'blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
+import 'blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
 import 'blocs/todo/todo_bloc.dart';
 import 'blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
@@ -160,6 +167,8 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => QualityManagementBloc()),
           BlocProvider(lazy: true, create: (context) => CalendarBloc()),
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
+          BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
+          BlocProvider(lazy: true, create: (context) => SignInProcessBloc()),
           BlocProvider(
               lazy: true, create: (context) => SignInLocationDetailsBloc()),
           BlocProvider(
@@ -171,6 +180,18 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false,
               create: (context) => SignInListBloc()..add(SignInList())),
+          BlocProvider(
+              lazy: false, create: (context) => SignInAssignToMeBloc()),
+          BlocProvider(
+              lazy: false, create: (context) => SignInLocationDetailsBloc()),
+          BlocProvider(lazy: false, create: (context) => LotoListBloc()),
+          BlocProvider(lazy: true, create: (context) => CertificateListBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => StartCourseCertificateBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => UploadCertificateBloc()),
+          BlocProvider(
+              lazy: true, create: (context) => FeedbackCertificateBloc()),
         ],
         child: GestureDetector(
             onTap: () {

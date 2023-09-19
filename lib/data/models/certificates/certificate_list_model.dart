@@ -1,3 +1,6 @@
+// To parse this JSON data, do
+//
+//     final fetchCertificatesModel = fetchCertificatesModelFromJson(jsonString);
 import 'dart:convert';
 
 FetchCertificatesModel fetchCertificatesModelFromJson(String str) =>
@@ -39,7 +42,7 @@ class CertificateListDatum {
   final dynamic newDates;
   final String actualCertificate;
   final String newCertificate;
-  final int status;
+  final dynamic status;
   final String expired;
   final String accesscertificate;
   final String accessfeedback;
@@ -49,7 +52,7 @@ class CertificateListDatum {
     required this.id,
     required this.name,
     required this.actualDates,
-    this.newDates,
+    required this.newDates,
     required this.actualCertificate,
     required this.newCertificate,
     required this.status,
@@ -63,11 +66,11 @@ class CertificateListDatum {
       CertificateListDatum(
         id: json["id"],
         name: json["name"],
-        actualDates: json["actual_dates"],
-        newDates: json["new_dates"],
+        actualDates: json["actual_dates"] ?? '',
+        newDates: json["new_dates"] ?? '',
         actualCertificate: json["actual_certificate"],
         newCertificate: json["new_certificate"],
-        status: json["status"],
+        status: json["status"] ?? '',
         expired: json["expired"],
         accesscertificate: json["accesscertificate"],
         accessfeedback: json["accessfeedback"],

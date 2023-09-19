@@ -28,49 +28,49 @@ class WorkOrderListScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {}, child: const Icon(Icons.add)),
         body: Padding(
-            padding: const EdgeInsets.only(
-                left: leftRightMargin,
-                right: leftRightMargin,
-                top: xxTinierSpacing),
-            child: Column(
-              children: [
-                BlocBuilder<WorkOrderBloc, WorkOrderStates>(
-                    buildWhen: (previousState, currentState) {
-                  if (currentState is FetchingWorkOrders &&
-                      isFromHome == true) {
-                    return true;
-                  } else if (currentState is WorkOrdersFetched) {
-                    return true;
-                  }
-                  return false;
-                }, builder: (context, state) {
-                  if (state is WorkOrdersFetched) {
-                    return CustomIconButtonRow(
-                        secondaryOnPress: () {},
-                        primaryOnPress: () {
-                          Navigator.pushNamed(
-                              context, WorkOrderFilterScreen.routeName);
-                        },
-                        secondaryVisible: false,
-                        isEnabled: true,
-                        clearVisible: state.filterMap.isNotEmpty,
-                        clearOnPress: () {
-                          WorkOrderListScreen.pageNo = 1;
-                          context.read<WorkOrderBloc>().data.clear();
-                          context.read<WorkOrderBloc>().hasReachedMax = false;
-                          context
-                              .read<WorkOrderBloc>()
-                              .add(WorkOrderClearFilter());
-                          context.read<WorkOrderBloc>().add(FetchWorkOrders(
-                              pageNo: 1, isFromHome: isFromHome));
-                        });
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
-                const SizedBox(height: xxTinierSpacing),
-                const WorkOrderListBody()
-              ],
-            )));
+          padding: const EdgeInsets.only(
+              left: leftRightMargin,
+              right: leftRightMargin,
+              top: xxTinierSpacing),
+          child: Column(
+            children: [
+              BlocBuilder<WorkOrderBloc, WorkOrderStates>(
+                  buildWhen: (previousState, currentState) {
+                if (currentState is FetchingWorkOrders && isFromHome == true) {
+                  return true;
+                } else if (currentState is WorkOrdersFetched) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
+                if (state is WorkOrdersFetched) {
+                  return CustomIconButtonRow(
+                      secondaryOnPress: () {},
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, WorkOrderFilterScreen.routeName);
+                      },
+                      secondaryVisible: false,
+                      isEnabled: true,
+                      clearVisible: state.filterMap.isNotEmpty,
+                      clearOnPress: () {
+                        WorkOrderListScreen.pageNo = 1;
+                        context.read<WorkOrderBloc>().data.clear();
+                        context.read<WorkOrderBloc>().hasReachedMax = false;
+                        context
+                            .read<WorkOrderBloc>()
+                            .add(WorkOrderClearFilter());
+                        context.read<WorkOrderBloc>().add(
+                            FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));
+                      });
+                } else {
+                  return const SizedBox();
+                }
+              }),
+              const SizedBox(height: xxTinierSpacing),
+              const WorkOrderListBody()
+            ],
+          ),
+        ));
   }
 }
