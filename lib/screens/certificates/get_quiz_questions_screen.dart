@@ -93,7 +93,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                       pageNo++;
                                       context
                                           .read<StartCourseCertificateBloc>()
-                                          .add(QuestionAnswerEvent(
+                                          .add(SaveQuizQuestionAnswer(
                                               questionAnswerMap:
                                                   questionAnswerMap));
                                       context
@@ -132,7 +132,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                           child: PrimaryButton(
                               onPressed: () {
                                 context.read<StartCourseCertificateBloc>().add(
-                                    QuestionAnswerEvent(
+                                    SaveQuizQuestionAnswer(
                                         questionAnswerMap: questionAnswerMap));
                               },
                               textValue: StringConstants.kSaveAnswer)),

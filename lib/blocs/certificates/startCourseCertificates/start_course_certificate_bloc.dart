@@ -32,7 +32,7 @@ class StartCourseCertificateBloc
     on<GetWorkforceQuiz>(_getWorkforceQuiz);
     on<GetQuizQuestions>(_getQuizQuestions);
     on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
-    on<QuestionAnswerEvent>(_saveQuestionAnswer);
+    on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -112,7 +112,7 @@ class StartCourseCertificateBloc
         answerId: event.answerId));
   }
 
-  Future<FutureOr<void>> _saveQuestionAnswer(QuestionAnswerEvent event,
+  Future<FutureOr<void>> _saveQuestionAnswer(SaveQuizQuestionAnswer event,
       Emitter<StartCourseCertificateState> emit) async {
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
