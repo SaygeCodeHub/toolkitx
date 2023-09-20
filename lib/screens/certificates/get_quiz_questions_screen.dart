@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/certificates/get_quiz_questions_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
@@ -11,7 +12,9 @@ import '../../configs/app_spacing.dart';
 
 class QuizQuestionsScreen extends StatelessWidget {
   static const routeName = 'QuizQuestionsScreen';
+
   const QuizQuestionsScreen({super.key, required this.quizMap});
+
   final Map quizMap;
   static int pageNo = 1;
 
@@ -33,8 +36,15 @@ class QuizQuestionsScreen extends StatelessWidget {
           right: leftRightMargin,
           top: xxTinierSpacing,
         ),
-        child: BlocBuilder<StartCourseCertificateBloc,
+        child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
+          listener: (context, state) {
+            if (state is QuizQuestionAnswerSaved) {
+              showCustomSnackBar(context, StringConstants.kAnswerSaved, "");
+            } else if (state is QuizQuestionAnswerError) {
+              showCustomSnackBar(context, StringConstants.kAnswerNotSaved, "");
+            }
+          },
           buildWhen: (previousState, currentState) =>
               currentState is QuizQuestionsFetching ||
               currentState is QuizQuestionsFetched ||
@@ -43,6 +53,12 @@ class QuizQuestionsScreen extends StatelessWidget {
             if (state is QuizQuestionsFetching) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is QuizQuestionsFetched) {
+              Map questionAnswerMap = {
+                "idm": quizMap["userquizid"],
+                "workforcequizid": quizMap["userquizid"],
+                "answer": state.getQuizQuestionsModel.data.optionlist[0].id,
+                "questionid": state.getQuizQuestionsModel.data.questionid
+              };
               return Column(
                 children: [
                   GetQuizQuestionsBody(
@@ -79,6 +95,11 @@ class QuizQuestionsScreen extends StatelessWidget {
                                       pageNo++;
                                       context
                                           .read<StartCourseCertificateBloc>()
+                                          .add(SaveQuizQuestionAnswer(
+                                              questionAnswerMap:
+                                                  questionAnswerMap));
+                                      context
+                                          .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
                                               pageNo: pageNo,
                                               workforcequizId:
@@ -111,7 +132,11 @@ class QuizQuestionsScreen extends StatelessWidget {
                       SizedBox(
                           width: xSizedBoxWidth,
                           child: PrimaryButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<StartCourseCertificateBloc>().add(
+                                    SaveQuizQuestionAnswer(
+                                        questionAnswerMap: questionAnswerMap));
+                              },
                               textValue: StringConstants.kSaveAnswer)),
                     ],
                   ),

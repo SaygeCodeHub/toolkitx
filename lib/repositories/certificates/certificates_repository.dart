@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
+import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 
 import '../../data/models/certificates/certificate_list_model.dart';
@@ -30,4 +31,6 @@ abstract class CertificateRepository {
 
   Future<GetQuizQuestionsModel> getQuizQuestions(
       String hashCode, int pageNo, String workforcequizId);
+
+  Future<SaveQuestionAnswerModel> saveQuestionAnswer(Map questionAnswerMap);
 }
