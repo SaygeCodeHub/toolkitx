@@ -9,6 +9,7 @@ import '../../../../di/app_module.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -31,6 +32,7 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderCategoryOptions>(_selectCategoryOptions);
     on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
     on<SelectWorkOrderCostCenterOptions>(_selectCostCenterOptions);
+    on<SaveSimilarAndNewWorkOrder>(_saveNewAndSimilarWorkOrder);
   }
 
   int tabIndex = 0;
@@ -93,7 +95,12 @@ class WorkOrderTabDetailsBloc
         'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
         'subject': fetchWorkOrderDetailsModel.data.subject,
         'description': fetchWorkOrderDetailsModel.data.description,
-        'customfields': customFieldList
+        'workorderId': fetchWorkOrderDetailsModel.data.id,
+        'customfields': customFieldList,
+        "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
+        "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
+        "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
+        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -212,5 +219,49 @@ class WorkOrderTabDetailsBloc
     emit(WorkOrderCategoryCostCenterSelected(
         costCenterId: event.costCenterId,
         costCenterValue: event.costCenterValue));
+  }
+
+  FutureOr _saveNewAndSimilarWorkOrder(SaveSimilarAndNewWorkOrder event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingNewAndSimilarWorkOrder());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveNewAndSimilarWorkOrderMap = {
+        "companyid": event.workOrderDetailsMap['companyid'] ?? '',
+        "locationid": event.workOrderDetailsMap['locationid'] ?? '',
+        "priorityid": event.workOrderDetailsMap['priorityid'] ?? '',
+        "categoryid": event.workOrderDetailsMap['categoryid'] ?? '',
+        "type": event.workOrderDetailsMap['type'] ?? '',
+        "subject": event.workOrderDetailsMap['subject'] ?? '',
+        "description": event.workOrderDetailsMap['description'] ?? '',
+        "specialtyid": event.workOrderDetailsMap['specialtyid'] ?? '',
+        "plannedstartdate": event.workOrderDetailsMap['plannedstartdate'] ?? '',
+        "plannedstarttime": event.workOrderDetailsMap['plannedstarttime'] ?? '',
+        "plannedfinishdate":
+            event.workOrderDetailsMap['plannedfinishdate'] ?? '',
+        "plannedfinishtime":
+            event.workOrderDetailsMap['plannedfinishtime'] ?? '',
+        "otherlocation": event.workOrderDetailsMap['otherlocation'] ?? '',
+        "customfields": event.workOrderDetailsMap['customfields'] ?? '',
+        "originationid": event.workOrderDetailsMap['originationid'] ?? '',
+        "costcenterid": event.workOrderDetailsMap['costcenterid'] ?? '',
+        "oldworkorderid": event.workOrderDetailsMap['workorderId'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      SaveNewAndSimilarWorkOrderModel saveNewAndSimilarWorkOrderModel =
+          await _workOrderRepository
+              .saveNewAndSimilarWorkOrder(saveNewAndSimilarWorkOrderMap);
+      if (saveNewAndSimilarWorkOrderModel.status == 200) {
+        emit(NewAndSimilarWorkOrderSaved(
+            saveNewAndSimilarWorkOrderModel: saveNewAndSimilarWorkOrderModel));
+      } else {
+        emit(NewAndSimilarWorkOrderNotSaved(
+            workOrderNotSaved: saveNewAndSimilarWorkOrderModel.message));
+      }
+    } catch (e) {
+      emit(NewAndSimilarWorkOrderNotSaved(workOrderNotSaved: e.toString()));
+    }
   }
 }

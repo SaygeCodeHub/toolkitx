@@ -86,3 +86,9 @@ class SelectWorkOrderCostCenterOptions extends WorkOrderTabsDetailsEvent {
   SelectWorkOrderCostCenterOptions(
       {required this.costCenterId, required this.costCenterValue});
 }
+
+class SaveSimilarAndNewWorkOrder extends WorkOrderTabsDetailsEvent {
+  final Map workOrderDetailsMap;
+
+  SaveSimilarAndNewWorkOrder({required this.workOrderDetailsMap});
+}
