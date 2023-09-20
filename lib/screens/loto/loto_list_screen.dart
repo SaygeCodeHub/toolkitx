@@ -36,6 +36,10 @@ class LotoListScreen extends StatelessWidget {
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               BlocBuilder<LotoListBloc, LotoListState>(
+                buildWhen: (previous, current) {
+                  return current is LotoListFetched ||
+                      current is FetchingLotoList;
+                },
                 builder: (context, state) {
                   if (state is LotoListFetched || state is FetchingLotoList) {
                     return CustomIconButtonRow(
