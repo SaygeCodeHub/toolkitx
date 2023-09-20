@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
+import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -31,6 +32,7 @@ class StartCourseCertificateBloc
     on<GetWorkforceQuiz>(_getWorkforceQuiz);
     on<GetQuizQuestions>(_getQuizQuestions);
     on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
+    on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -108,5 +110,27 @@ class StartCourseCertificateBloc
     emit(QuizQuestionsFetched(
         getQuizQuestionsModel: event.getQuizQuestionsModel,
         answerId: event.answerId));
+  }
+
+  Future<FutureOr<void>> _saveQuestionAnswer(SaveQuizQuestionAnswer event,
+      Emitter<StartCourseCertificateState> emit) async {
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map questionAnswerMap = {
+        "idm": event.questionAnswerMap["idm"],
+        "hashcode": hashCode,
+        "workforcequizid": event.questionAnswerMap["workforcequizid"],
+        "answer": event.questionAnswerMap["answer"],
+        "questionid": event.questionAnswerMap["questionid"]
+      };
+      SaveQuestionAnswerModel saveQuestionAnswerModel =
+          await _certificateRepository.saveQuestionAnswer(questionAnswerMap);
+      if (saveQuestionAnswerModel.status == 200) {
+        emit(QuizQuestionAnswerSaved(
+            saveQuestionAnswerModel: saveQuestionAnswerModel));
+      }
+    } catch (e) {
+      emit(QuizQuestionAnswerError(getError: e.toString()));
+    }
   }
 }
