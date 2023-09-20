@@ -1,27 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/loto/loto_list_body.dart';
+import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/loto/loto_list_bloc.dart';
+import '../../configs/app_color.dart';
+import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
-import '../../widgets/custom_icon_button_row.dart';
-import '../../widgets/text_button.dart';
-import 'loto_filter_screen.dart';
+import '../../utils/constants/string_constants.dart';
+import '../../widgets/custom_card.dart';
+import '../../widgets/custom_snackbar.dart';
+import '../../widgets/generic_no_records_text.dart';
 
 class LotoListScreen extends StatelessWidget {
   static const routeName = 'LotoListScreen';
+  static int pageNo = 1;
 
   const LotoListScreen({super.key, this.isFromHome = false});
+
   static List lotoListData = [];
   final bool isFromHome;
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoListBloc>().add(FetchLotoList(pageNo: pageNo));
+    context
+        .read<LotoListBloc>()
+        .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-      backgroundColor: AppColor.lightestGrey,
       appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -137,7 +143,8 @@ class LotoListScreen extends StatelessWidget {
                         } else if (!state.hasReachedMax) {
                           pageNo++;
                           context.read<LotoListBloc>().add(FetchLotoList(
-                                pageNo: pageNo,
+                            pageNo: pageNo,
+                                isFromHome: isFromHome,
                               ));
                           return const Center(
                             child: Padding(
