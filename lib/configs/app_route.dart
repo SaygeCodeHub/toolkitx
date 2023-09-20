@@ -283,9 +283,8 @@ class AppRoutes {
           getdetailsMap: settings.arguments as Map,
         ));
       case GetWorkforceScreen.routeName:
-        return _createRoute(GetWorkforceScreen(
-          quizId: settings.arguments.toString(),
-        ));
+        return _createRoute(
+            GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
       case QuizQuestionsScreen.routeName:
         return _createRoute(QuizQuestionsScreen(
           quizMap: settings.arguments as Map,

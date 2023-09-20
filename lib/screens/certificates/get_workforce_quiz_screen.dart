@@ -12,14 +12,14 @@ import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
-  const GetWorkforceScreen({super.key, required this.quizId});
-  final String quizId;
+  const GetWorkforceScreen({super.key, required this.workforceQuizMap});
+  final Map workforceQuizMap;
 
   @override
   Widget build(BuildContext context) {
     context
         .read<StartCourseCertificateBloc>()
-        .add(GetWorkforceQuiz(quizId: quizId));
+        .add(GetWorkforceQuiz(quizId: workforceQuizMap["quizId"]));
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(
@@ -60,7 +60,10 @@ class GetWorkforceScreen extends StatelessWidget {
                           "userquizid":
                               state.getWorkforceQuizModel.data.userquizid,
                           "questioncount":
-                              state.getWorkforceQuizModel.data.questioncount
+                              state.getWorkforceQuizModel.data.questioncount,
+                          "certificateId": workforceQuizMap["certificateId"],
+                          "topicId": workforceQuizMap["topicId"],
+                          "quizId": workforceQuizMap["quizId"]
                         };
                         Navigator.pushNamed(
                             context, QuizQuestionsScreen.routeName,
