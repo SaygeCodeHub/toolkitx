@@ -60,3 +60,16 @@ class QuizQuestionsError extends StartCourseCertificateState {
   final String getError;
   QuizQuestionsError({required this.getError});
 }
+
+class QuestionAnswerSaving extends StartCourseCertificateState {}
+
+class QuestionAnswerSaved extends StartCourseCertificateState {
+  final SaveQuestionAnswerModel saveQuestionAnswerModel;
+  QuestionAnswerSaved(
+      {required this.saveQuestionAnswerModel,});
+}
+
+class QuestionAnswerError extends StartCourseCertificateState {
+  final String getError;
+  QuestionAnswerError({required this.getError});
+}

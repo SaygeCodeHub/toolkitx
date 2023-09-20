@@ -33,3 +33,8 @@ class SelectedQuizAnswerEvent extends StartCourseCertificateEvent {
   SelectedQuizAnswerEvent(
       {required this.answerId, required this.getQuizQuestionsModel});
 }
+
+class QuestionAnswerEvent extends StartCourseCertificateEvent{
+  final Map questionAnswerMap;
+  QuestionAnswerEvent({required this.questionAnswerMap});
+}
