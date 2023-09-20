@@ -9,14 +9,15 @@ import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'widgets/workorder_list_body.dart';
 import 'workorder_filter_screen.dart';
+import 'workorder_form_one_screen.dart';
 
 class WorkOrderListScreen extends StatelessWidget {
   static const routeName = 'WorkOrderListScreen';
   final bool isFromHome;
 
-  const WorkOrderListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  WorkOrderListScreen({Key? key, this.isFromHome = false}) : super(key: key);
   static int pageNo = 1;
+  final addWorkOrderMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,12 @@ class WorkOrderListScreen extends StatelessWidget {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              WorkOrderFormScreenOne.isSimilarWorkOrder = false;
+              Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
+                  arguments: addWorkOrderMap);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,

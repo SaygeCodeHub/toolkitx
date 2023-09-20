@@ -21,6 +21,9 @@ class WorkOrderFormScreenOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isSimilarWorkOrder == false
+        ? workOrderDetailsMap.clear()
+        : workOrderDetailsMap;
     context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
@@ -32,18 +35,18 @@ class WorkOrderFormScreenOne extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is WorkOrderMasterFetched) {
             workOrderMasterData = state.fetchWorkOrdersMasterModel.data;
-            return WorkOrderFormOneBody(
-                data: state.fetchWorkOrdersMasterModel.data,
-                workOrderDetailsMap: workOrderDetailsMap);
-          } else if (state is WorkOrderMasterNotFetched) {
-            return GenericReloadButton(
-                onPressed: () {
-                  context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
-                },
-                textValue: StringConstants.kReload);
-          } else {
-            return const SizedBox.shrink();
-          }
-        }));
+                return WorkOrderFormOneBody(
+                    data: state.fetchWorkOrdersMasterModel.data,
+                    workOrderDetailsMap: workOrderDetailsMap);
+              } else if (state is WorkOrderMasterNotFetched) {
+                return GenericReloadButton(
+                    onPressed: () {
+                      context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
+                    },
+                    textValue: StringConstants.kReload);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }));
   }
 }

@@ -4,7 +4,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../utils/workorder_custom_fields_util.dart';
 import '../../widgets/generic_app_bar.dart';
-import 'workorder_form_one.dart';
+import 'workorder_form_one_screen.dart';
 import 'widgets/workorder_save_button.dart';
 
 class WorkOrderFormScreenFour extends StatelessWidget {
@@ -13,6 +13,7 @@ class WorkOrderFormScreenFour extends StatelessWidget {
 
   const WorkOrderFormScreenFour({Key? key, required this.workOrderDetailsMap})
       : super(key: key);
+  static List customFieldList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,7 @@ class WorkOrderFormScreenFour extends StatelessWidget {
                         const SizedBox(height: xxxTinierSpacing),
                         WorkOrderCustomFieldsUtil().customFieldWidget(
                             index,
+                            customFieldList,
                             WorkOrderFormScreenOne.workOrderMasterData,
                             workOrderDetailsMap)
                       ]);
