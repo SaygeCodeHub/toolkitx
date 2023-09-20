@@ -7,6 +7,7 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/get_quiz_questions_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
@@ -22,6 +23,7 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/documents_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -73,8 +75,11 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/workorder/create_simiar_workorder_screen_four.dart';
 import '../screens/workorder/create_similar_work_order_screen_one.dart';
+import '../screens/workorder/create_similar_workorder_screen_three.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
+import '../screens/workorder/create_similar_workorder_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
@@ -256,6 +261,9 @@ class AppRoutes {
         ));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
+      case CreateWorkOrderScreenTwo.routeName:
+        return _createRoute(CreateWorkOrderScreenTwo(
+            workOrderDetailsMap: settings.arguments as Map));
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
@@ -267,6 +275,12 @@ class AppRoutes {
         return _createRoute(GetCourseCertificateScreen(
           certificateId: settings.arguments.toString(),
         ));
+      case CreateSimilarWorkOrderScreenThree.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreenThree(
+            workOrderDetailsMap: settings.arguments as Map));
+      case CreateSimilarWorkOrderScreenFour.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreenFour(
+            workOrderDetailsMap: settings.arguments as Map));
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(
           courseId: settings.arguments.toString(),
@@ -278,6 +292,14 @@ class AppRoutes {
       case GetWorkforceScreen.routeName:
         return _createRoute(GetWorkforceScreen(
           quizId: settings.arguments.toString(),
+        ));
+      case QuizQuestionsScreen.routeName:
+        return _createRoute(QuizQuestionsScreen(
+          quizMap: settings.arguments as Map,
+        ));
+      case DocumentsListScreen.routeName:
+        return _createRoute(DocumentsListScreen(
+          isFromHome: settings.arguments as bool,
         ));
       default:
         return _createRoute(const WelcomeScreen());

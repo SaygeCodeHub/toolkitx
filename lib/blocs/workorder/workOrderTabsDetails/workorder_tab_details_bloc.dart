@@ -24,8 +24,13 @@ class WorkOrderTabDetailsBloc
     on<WorkOrderToggleSwitchIndex>(_toggleSwitchIndexChanged);
     on<SelectWorkOrderCompanyOptions>(_selectCompanyOptions);
     on<SelectWorkOrderLocationOptions>(_selectLocationOptions);
+    on<SelectWorkOrderTypeOptions>(_selectTypeOptions);
     on<WorkOrderItemTabDeleteItem>(_deleteItemTabItem);
     on<WorkOrderDeleteDocument>(_deleteDocument);
+    on<SelectWorkOrderPriorityOptions>(_selectPriorityOptions);
+    on<SelectWorkOrderCategoryOptions>(_selectCategoryOptions);
+    on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
+    on<SelectWorkOrderCostCenterOptions>(_selectCostCenterOptions);
   }
 
   int tabIndex = 0;
@@ -63,11 +68,32 @@ class WorkOrderTabDetailsBloc
       if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
         popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
       }
+      List customFieldList = [];
+      for (int i = 0;
+          i < fetchWorkOrderDetailsModel.data.customfields.length;
+          i++) {
+        customFieldList.add({
+          'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
+          'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
+        });
+      }
       workOrderDetailsMap = {
         'companyid': fetchWorkOrderDetailsModel.data.contractorname,
         'locationid': fetchWorkOrderDetailsModel.data.locationid,
         'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
         'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
+        'type': fetchWorkOrderDetailsModel.data.type,
+        'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
+        'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
+        'category': fetchWorkOrderDetailsModel.data.category,
+        'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
+        'origination': fetchWorkOrderDetailsModel.data.origination,
+        'originationid': fetchWorkOrderDetailsModel.data.originationid,
+        'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
+        'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
+        'subject': fetchWorkOrderDetailsModel.data.subject,
+        'description': fetchWorkOrderDetailsModel.data.description,
+        'customfields': customFieldList
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -105,6 +131,12 @@ class WorkOrderTabDetailsBloc
       Emitter<WorkOrderTabDetailsStates> emit) {
     emit(WorkOrderLocationOptionSelected(
         locationId: event.locationId, locationName: event.locationName));
+  }
+
+  _selectTypeOptions(SelectWorkOrderTypeOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderTypeOptionSelected(
+        typeId: event.typeId, typeName: event.typeName));
   }
 
   FutureOr _deleteItemTabItem(WorkOrderItemTabDeleteItem event,
@@ -154,5 +186,31 @@ class WorkOrderTabDetailsBloc
     } catch (e) {
       emit(DocumentNotDeleted(documentNotDeleted: e.toString()));
     }
+  }
+
+  _selectPriorityOptions(SelectWorkOrderPriorityOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderPriorityOptionSelected(
+        priorityId: event.priorityId, priorityValue: event.priorityValue));
+  }
+
+  _selectCategoryOptions(SelectWorkOrderCategoryOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryOptionSelected(
+        categoryId: event.categoryId, categoryName: event.categoryName));
+  }
+
+  _selectOriginationOptions(SelectWorkOrderOriginationOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryOriginationSelected(
+        originationId: event.originationId,
+        originationName: event.originationName));
+  }
+
+  _selectCostCenterOptions(SelectWorkOrderCostCenterOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCategoryCostCenterSelected(
+        costCenterId: event.costCenterId,
+        costCenterValue: event.costCenterValue));
   }
 }

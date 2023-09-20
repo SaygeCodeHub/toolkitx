@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/generic_text_field.dart';
 
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
+import 'create_simiar_workorder_screen_four.dart';
 import 'create_similar_work_order_screen_one.dart';
-import 'create_similar_workorder_screen_three.dart';
-import 'widgets/workorder_company_expansion_tile.dart';
-import 'widgets/workorder_origination_expansion_tile.dart';
-import 'widgets/workorder_priority_expansion_tile.dart';
-import 'widgets/workorder_type_expansion_tile.dart';
+import 'widgets/workorder_cost_center_list_tile.dart';
 
-class CreateWorkOrderScreenTwo extends StatelessWidget {
-  static const routeName = 'CreateWorkOrderScreenTwo';
+class CreateSimilarWorkOrderScreenThree extends StatelessWidget {
+  static const routeName = 'CreateSimilarWorkOrderScreenThree';
   final Map workOrderDetailsMap;
 
-  const CreateWorkOrderScreenTwo({Key? key, required this.workOrderDetailsMap})
+  const CreateSimilarWorkOrderScreenThree(
+      {Key? key, required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
@@ -38,12 +37,17 @@ class CreateWorkOrderScreenTwo extends StatelessWidget {
               Expanded(
                 child: PrimaryButton(
                     onPressed: () {
-                      if (workOrderDetailsMap['type'] == null ||
-                          workOrderDetailsMap['type'].isEmpty) {
-                        showCustomSnackBar(context, 'Please select type!', '');
+                      if (workOrderDetailsMap['subject'] == null ||
+                          workOrderDetailsMap['subject'].isEmpty ||
+                          workOrderDetailsMap['description'] == null ||
+                          workOrderDetailsMap['description'].isEmpty) {
+                        showCustomSnackBar(
+                            context,
+                            DatabaseUtil.getText('SubjectDescriptionMandatory'),
+                            '');
                       } else {
-                        Navigator.pushNamed(context,
-                            CreateSimilarWorkOrderScreenThree.routeName,
+                        Navigator.pushNamed(
+                            context, CreateSimilarWorkOrderScreenFour.routeName,
                             arguments: workOrderDetailsMap);
                       }
                     },
@@ -62,47 +66,35 @@ class CreateWorkOrderScreenTwo extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(DatabaseUtil.getText('type'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      WorkOrderTypeExpansionTile(
+                      WorkOrderCostCenterListTile(
                           data:
                               CreateSimilarWorkOrderScreen.workOrderMasterData,
                           workOrderDetailsMap: workOrderDetailsMap),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('type'),
+                      Text(DatabaseUtil.getText('Subject'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      WorkOrderPriorityExpansionTile(
-                          workOrderDetailsMap: workOrderDetailsMap),
+                      TextFieldWidget(
+                          value: workOrderDetailsMap['subject'] ?? '',
+                          onTextFieldChanged: (String textField) {
+                            workOrderDetailsMap['subject'] = textField;
+                          }),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('Category'),
+                      Text(DatabaseUtil.getText('Description'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      WorkOrderCompanyExpansionTile(
-                          data:
-                              CreateSimilarWorkOrderScreen.workOrderMasterData,
-                          workOrderDetailsMap: workOrderDetailsMap),
-                      const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('Origination'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      WorkOrderOriginationExpansionTile(
-                          data:
-                              CreateSimilarWorkOrderScreen.workOrderMasterData,
-                          workOrderDetailsMap: workOrderDetailsMap)
+                      TextFieldWidget(
+                          value: workOrderDetailsMap['description'] ?? '',
+                          onTextFieldChanged: (String textField) {
+                            workOrderDetailsMap['description'] = textField;
+                          }),
+                      const SizedBox(height: xxTinySpacing)
                     ]))));
   }
 }

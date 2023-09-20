@@ -19,3 +19,17 @@ class GetWorkforceQuiz extends StartCourseCertificateEvent {
 
   GetWorkforceQuiz({required this.quizId});
 }
+
+class GetQuizQuestions extends StartCourseCertificateEvent {
+  final String workforcequizId;
+  final int pageNo;
+
+  GetQuizQuestions({required this.workforcequizId, required this.pageNo});
+}
+
+class SelectedQuizAnswerEvent extends StartCourseCertificateEvent {
+  final String answerId;
+  final GetQuizQuestionsModel getQuizQuestionsModel;
+  SelectedQuizAnswerEvent(
+      {required this.answerId, required this.getQuizQuestionsModel});
+}
