@@ -68,6 +68,15 @@ class WorkOrderTabDetailsBloc
       if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
         popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
       }
+      List customFieldList = [];
+      for (int i = 0;
+          i < fetchWorkOrderDetailsModel.data.customfields.length;
+          i++) {
+        customFieldList.add({
+          'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
+          'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
+        });
+      }
       workOrderDetailsMap = {
         'companyid': fetchWorkOrderDetailsModel.data.contractorname,
         'locationid': fetchWorkOrderDetailsModel.data.locationid,
@@ -83,7 +92,8 @@ class WorkOrderTabDetailsBloc
         'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
         'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
         'subject': fetchWorkOrderDetailsModel.data.subject,
-        'description': fetchWorkOrderDetailsModel.data.description
+        'description': fetchWorkOrderDetailsModel.data.description,
+        'customfields': customFieldList
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,

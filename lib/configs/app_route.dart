@@ -73,6 +73,7 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/workorder/create_simiar_workorder_screen_four.dart';
 import '../screens/workorder/create_similar_work_order_screen_one.dart';
 import '../screens/workorder/create_similar_workorder_screen_three.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
@@ -270,6 +271,9 @@ class AppRoutes {
         ));
       case CreateSimilarWorkOrderScreenThree.routeName:
         return _createRoute(CreateSimilarWorkOrderScreenThree(
+            workOrderDetailsMap: settings.arguments as Map));
+      case CreateSimilarWorkOrderScreenFour.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreenFour(
             workOrderDetailsMap: settings.arguments as Map));
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(
