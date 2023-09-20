@@ -195,8 +195,7 @@ class OnLineModules extends StatelessWidget {
             arguments: true);
         break;
       case 'loto':
-        Navigator.pushNamed(context, LotoListScreen.routeName,
-            arguments: true);
+        Navigator.pushNamed(context, LotoListScreen.routeName, arguments: true);
         break;
       case 'dms':
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
