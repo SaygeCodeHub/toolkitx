@@ -4,6 +4,8 @@ import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
+import 'package:toolkit/repositories/documents/documents_repository.dart';
+import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
@@ -79,4 +81,6 @@ configurableDependencies() {
   getIt.registerLazySingleton<LotoRepository>(() => LotoRepositoryImpl());
   getIt.registerLazySingleton<CertificateRepository>(
       () => CertificateRepositoryImpl());
+  getIt.registerLazySingleton<DocumentsRepository>(
+      () => DocumentsRepositoryImpl());
 }

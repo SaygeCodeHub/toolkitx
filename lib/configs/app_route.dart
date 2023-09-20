@@ -23,6 +23,7 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/documents_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -72,6 +73,7 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/workorder/create_simiar_workorder_screen_four.dart';
 import '../screens/workorder/create_similar_work_order_screen_one.dart';
 import '../screens/workorder/create_similar_workorder_screen_three.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
@@ -270,6 +272,9 @@ class AppRoutes {
       case CreateSimilarWorkOrderScreenThree.routeName:
         return _createRoute(CreateSimilarWorkOrderScreenThree(
             workOrderDetailsMap: settings.arguments as Map));
+      case CreateSimilarWorkOrderScreenFour.routeName:
+        return _createRoute(CreateSimilarWorkOrderScreenFour(
+            workOrderDetailsMap: settings.arguments as Map));
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(
           courseId: settings.arguments.toString(),
@@ -285,6 +290,10 @@ class AppRoutes {
       case QuizQuestionsScreen.routeName:
         return _createRoute(QuizQuestionsScreen(
           quizMap: settings.arguments as Map,
+        ));
+      case DocumentsListScreen.routeName:
+        return _createRoute(DocumentsListScreen(
+          isFromHome: settings.arguments as bool,
         ));
       default:
         return _createRoute(const WelcomeScreen());
