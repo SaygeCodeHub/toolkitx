@@ -254,6 +254,9 @@ abstract class StringConstants {
       "Couldn't Save your answer, Please try Again!";
   static const String kStartQuiz = 'Start Quiz';
   static const String kFinishQuiz = 'Finish Quiz';
+  static const String kQuizSubmitted = "Quiz Submitted";
+  static const String kSubmitQuiz = 'Submit Quiz';
+  static const String kSureToSubmitTheQuiz = 'Are you sure to submit the quiz?';
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';

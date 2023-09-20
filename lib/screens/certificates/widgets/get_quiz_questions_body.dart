@@ -3,22 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
-import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
-import '../../configs/app_spacing.dart';
-import '../../data/models/certificates/get_quiz_questions_model.dart';
-import '../../widgets/custom_card.dart';
+import '../../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
+import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
+import '../../../configs/app_spacing.dart';
+import '../../../data/models/certificates/get_quiz_questions_model.dart';
+import '../../../widgets/custom_card.dart';
 
 class GetQuizQuestionsBody extends StatelessWidget {
   const GetQuizQuestionsBody(
       {super.key,
       required this.data,
       required this.answerId,
-      required this.getQuizQuestionsModel});
+      required this.getQuizQuestionsModel,
+      required this.questionAnswerMap});
+
   final QuizData data;
   final String answerId;
   final GetQuizQuestionsModel getQuizQuestionsModel;
+  final Map questionAnswerMap;
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -46,6 +50,7 @@ class GetQuizQuestionsBody extends StatelessWidget {
           itemCount: data.optionlist.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
+            questionAnswerMap['answer'] = data.optionlist[index].id;
             return CustomCard(
               child: RadioListTile(
                   dense: true,

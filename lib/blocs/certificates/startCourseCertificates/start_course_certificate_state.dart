@@ -74,3 +74,17 @@ class QuizQuestionAnswerError extends StartCourseCertificateState {
   final String getError;
   QuizQuestionAnswerError({required this.getError});
 }
+
+class CertificateQuizSubmitting extends StartCourseCertificateState {}
+
+class CertificateQuizSubmitted extends StartCourseCertificateState {
+  final FinishQuizCertificateModel finishQuizCertificateModel;
+  CertificateQuizSubmitted({
+    required this.finishQuizCertificateModel,
+  });
+}
+
+class CertificateQuizSubmitError extends StartCourseCertificateState {
+  final String getError;
+  CertificateQuizSubmitError({required this.getError});
+}

@@ -38,3 +38,8 @@ class SaveQuizQuestionAnswer extends StartCourseCertificateEvent {
   final Map questionAnswerMap;
   SaveQuizQuestionAnswer({required this.questionAnswerMap});
 }
+
+class SubmitCertificateQuiz extends StartCourseCertificateEvent {
+  final Map finishQuizMap;
+  SubmitCertificateQuiz({required this.finishQuizMap});
+}
