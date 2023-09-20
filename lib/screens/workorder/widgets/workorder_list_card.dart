@@ -23,8 +23,8 @@ class WorkOrderListCard extends StatelessWidget {
             'status': data.status,
             'workOrderName': data.woname
           };
-          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
-              arguments: workOrderMap);
+          WorkOrderDetailsTabScreen.workOrderMap = workOrderMap;
+          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName);
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
