@@ -33,5 +33,4 @@ abstract class CertificateRepository {
       String hashCode, int pageNo, String workforcequizId);
 
   Future<SaveQuestionAnswerModel> saveQuestionAnswer(Map questionAnswerMap);
-
 }

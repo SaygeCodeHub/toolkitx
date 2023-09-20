@@ -65,8 +65,9 @@ class QuestionAnswerSaving extends StartCourseCertificateState {}
 
 class QuestionAnswerSaved extends StartCourseCertificateState {
   final SaveQuestionAnswerModel saveQuestionAnswerModel;
-  QuestionAnswerSaved(
-      {required this.saveQuestionAnswerModel,});
+  QuestionAnswerSaved({
+    required this.saveQuestionAnswerModel,
+  });
 }
 
 class QuestionAnswerError extends StartCourseCertificateState {

@@ -112,8 +112,9 @@ class StartCourseCertificateBloc
         answerId: event.answerId));
   }
 
-  Future<FutureOr<void>> _saveQuestionAnswer(QuestionAnswerEvent event, Emitter<StartCourseCertificateState> emit) async {
-  try{
+  Future<FutureOr<void>> _saveQuestionAnswer(QuestionAnswerEvent event,
+      Emitter<StartCourseCertificateState> emit) async {
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map questionAnswerMap = {
         "idm": event.questionAnswerMap["idm"],
@@ -128,8 +129,8 @@ class StartCourseCertificateBloc
         emit(QuestionAnswerSaved(
             saveQuestionAnswerModel: saveQuestionAnswerModel));
       }
-    } catch(e){
-    emit(QuestionAnswerError(getError: e.toString()));
-  }
+    } catch (e) {
+      emit(QuestionAnswerError(getError: e.toString()));
+    }
   }
 }

@@ -70,9 +70,11 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
-  Future<SaveQuestionAnswerModel> saveQuestionAnswer(Map questionAnswerMap) async {
+  Future<SaveQuestionAnswerModel> saveQuestionAnswer(
+      Map questionAnswerMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}certificate/SaveQuestionAnswer",questionAnswerMap);
+        "${ApiConstants.baseUrl}certificate/SaveQuestionAnswer",
+        questionAnswerMap);
     return SaveQuestionAnswerModel.fromJson(response);
   }
 }
