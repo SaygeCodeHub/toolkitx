@@ -11,42 +11,43 @@ import '../../utils/database_utils.dart';
 import '../../widgets/custom_card.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'loto_list_screen.dart';
 
-class LotoListBody extends StatelessWidget {
-  const LotoListBody({Key? key}) : super(key: key);
-  static int pageNo = 1;
+class LotoList extends StatelessWidget {
+  final bool isFromHome;
+
+  const LotoList({Key? key, required this.isFromHome}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocConsumer<LotoListBloc, LotoListState>(
-        buildWhen: (previousState, currentState) =>
-            ((currentState is LotoListFetched &&
-                    context.read<LotoListBloc>().hasReachedMax == false) ||
-                (currentState is FetchingLotoList && pageNo == 1)),
-        listener: (context, state) {
-          if (state is LotoListFetched) {
-            if (state.fetchLotoListModel.status == 204) {
-              showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
-              context.read<LotoListBloc>().hasReachedMax = true;
-              pageNo = 1;
-            }
+    return BlocConsumer<LotoListBloc, LotoListState>(
+      buildWhen: (previousState, currentState) =>
+          ((currentState is LotoListFetched) ||
+              (currentState is FetchingLotoList && LotoListScreen.pageNo == 1)),
+      listener: (context, state) {
+        if (state is LotoListFetched) {
+          if (state.fetchLotoListModel.status == 204 &&
+              context.read<LotoListBloc>().data.isNotEmpty) {
+            showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
           }
-        },
-        builder: (context, state) {
-          if (state is FetchingLotoList) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is LotoListFetched) {
-            if (state.fetchLotoListModel.data.isNotEmpty) {
-              return ListView.separated(
+        }
+      },
+      builder: (context, state) {
+        if (state is FetchingLotoList) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is LotoListFetched) {
+          if (context.read<LotoListBloc>().data.isNotEmpty) {
+            return Expanded(
+              child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: state.hasReachedMax
-                      ? state.data.length
-                      : state.data.length + 1,
+                  itemCount: context.read<LotoListBloc>().hasReachedMax
+                      ? context.read<LotoListBloc>().data.length
+                      : context.read<LotoListBloc>().data.length + 1,
                   itemBuilder: (context, index) {
-                    if (index < state.data.length) {
+                    if (index < context.read<LotoListBloc>().data.length) {
                       return CustomCard(
                         elevation: 2,
                         child: Padding(
@@ -55,7 +56,11 @@ class LotoListBody extends StatelessWidget {
                             children: [
                               ListTile(
                                 onTap: () {},
-                                title: Text(state.data[index].name,
+                                title: Text(
+                                    context
+                                        .read<LotoListBloc>()
+                                        .data[index]
+                                        .name,
                                     style: Theme.of(context)
                                         .textTheme
                                         .small
@@ -69,7 +74,10 @@ class LotoListBody extends StatelessWidget {
                                       height: xxxTinierSpacing,
                                     ),
                                     Text(
-                                      state.data[index].date,
+                                      context
+                                          .read<LotoListBloc>()
+                                          .data[index]
+                                          .date,
                                       style: Theme.of(context)
                                           .textTheme
                                           .xSmall
@@ -81,7 +89,10 @@ class LotoListBody extends StatelessWidget {
                                       height: xxxTinierSpacing,
                                     ),
                                     Text(
-                                      state.data[index].location,
+                                      context
+                                          .read<LotoListBloc>()
+                                          .data[index]
+                                          .location,
                                       style: Theme.of(context)
                                           .textTheme
                                           .xSmall
@@ -93,7 +104,10 @@ class LotoListBody extends StatelessWidget {
                                       height: xxxTinierSpacing,
                                     ),
                                     Text(
-                                      state.data[index].purpose,
+                                      context
+                                          .read<LotoListBloc>()
+                                          .data[index]
+                                          .purpose,
                                       style: Theme.of(context)
                                           .textTheme
                                           .xSmall
@@ -107,7 +121,10 @@ class LotoListBody extends StatelessWidget {
                                   ],
                                 ),
                                 trailing: Text(
-                                  state.data[index].status,
+                                  context
+                                      .read<LotoListBloc>()
+                                      .data[index]
+                                      .status,
                                   style: Theme.of(context)
                                       .textTheme
                                       .xSmall
@@ -121,10 +138,10 @@ class LotoListBody extends StatelessWidget {
                         ),
                       );
                     } else if (!state.hasReachedMax) {
-                      pageNo++;
+                      LotoListScreen.pageNo++;
                       context.read<LotoListBloc>().add(FetchLotoList(
-                            pageNo: pageNo,
-                            isFromHome: false,
+                            pageNo: LotoListScreen.pageNo,
+                            isFromHome: isFromHome,
                           ));
                       return const Center(
                         child: Padding(
@@ -141,24 +158,21 @@ class LotoListBody extends StatelessWidget {
                   },
                   separatorBuilder: (context, index) {
                     return const SizedBox(height: tinierSpacing);
-                  });
+                  }),
+            );
+          } else if (state.fetchLotoListModel.status == 204 &&
+              context.read<LotoListBloc>().data.isEmpty) {
+            if (context.read<LotoListBloc>().filters.isNotEmpty) {
+              return const NoRecordsText(
+                  text: StringConstants.kNoRecordsFilter);
             } else {
-              if (state.fetchLotoListModel.status == 204) {
-                if (state.filtersMap.isEmpty) {
-                  return const NoRecordsText(
-                      text: StringConstants.kNoRecordsFilter);
-                } else {
-                  return NoRecordsText(
-                      text: DatabaseUtil.getText('no_records_found'));
-                }
-              } else {
-                return const SizedBox.shrink();
-              }
+              return NoRecordsText(
+                  text: DatabaseUtil.getText('no_records_found'));
             }
           }
-          return const SizedBox.shrink();
-        },
-      ),
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }

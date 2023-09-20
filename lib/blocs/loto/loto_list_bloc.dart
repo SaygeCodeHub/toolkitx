@@ -16,11 +16,12 @@ part 'loto_list_state.dart';
 class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-  static Map filters = {};
+  Map filters = {};
 
   LotoListState get initialState => LotoListInitial();
   final List<LotoListDatum> data = [];
   bool hasReachedMax = false;
+
   LotoListBloc() : super(LotoListInitial()) {
     on<FetchLotoList>(_fetchLotoList);
     on<FetchLotoMaster>(_fetchLotoMaster);
@@ -48,10 +49,11 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
 
       if (event.isFromHome == true) {
-        add(ClearLotoListFilter());
+        filters = {};
         FetchLotoListModel fetchLotoListModel = await _lotoRepository
             .fetchLotoListRepo(event.pageNo, hashCode!, userId!, '');
         data.addAll(fetchLotoListModel.data);
+        hasReachedMax = fetchLotoListModel.data.isEmpty;
         emit(LotoListFetched(
             fetchLotoListModel: fetchLotoListModel,
             data: data,
@@ -62,6 +64,7 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
             await _lotoRepository.fetchLotoListRepo(
                 event.pageNo, hashCode!, userId!, jsonEncode(filters));
         data.addAll(fetchLotoListModel.data);
+        hasReachedMax = fetchLotoListModel.data.isEmpty;
         emit(LotoListFetched(
             fetchLotoListModel: fetchLotoListModel,
             data: data,

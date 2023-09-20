@@ -101,6 +101,7 @@ class LotoFilterScreen extends StatelessWidget {
                     const SizedBox(height: xxxSmallerSpacing),
                     PrimaryButton(
                         onPressed: () {
+                          context.read<LotoListBloc>().data.clear();
                           context.read<LotoListBloc>().add(
                               ApplyLotoListFilter(filterMap: lotoFilterMap));
                           Navigator.pop(context);

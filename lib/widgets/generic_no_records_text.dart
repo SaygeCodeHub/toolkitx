@@ -7,10 +7,8 @@ class NoRecordsText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
-            child: Text(text)));
+    return Expanded(
+      child: Center(child: Text(text)),
+    );
   }
 }
