@@ -5,25 +5,22 @@ import 'package:toolkit/widgets/generic_text_field.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/generic_app_bar.dart';
-import '../../widgets/primary_button.dart';
-import 'create_simiar_workorder_screen_four.dart';
-import 'create_similar_work_order_screen_one.dart';
-import 'widgets/workoder_save_button_bottom_nav_bar.dart';
+import 'widgets/workorder_form_three_screen_button.dart';
+import 'workorder_form_one.dart';
 import 'widgets/workorder_cost_center_list_tile.dart';
 
-class CreateSimilarWorkOrderScreenThree extends StatelessWidget {
+class WorkOrderFormScreenThree extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreenThree';
   final Map workOrderDetailsMap;
 
-  const CreateSimilarWorkOrderScreenThree(
-      {Key? key, required this.workOrderDetailsMap})
+  const WorkOrderFormScreenThree({Key? key, required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
-        bottomNavigationBar: WorkOrderSaveButtonBottomNavBar(
+        bottomNavigationBar: WorkOrderFormThreeScreenButton(
             workOrderDetailsMap: workOrderDetailsMap),
         body: Padding(
             padding: const EdgeInsets.only(
@@ -36,8 +33,7 @@ class CreateSimilarWorkOrderScreenThree extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       WorkOrderCostCenterListTile(
-                          data:
-                              CreateSimilarWorkOrderScreen.workOrderMasterData,
+                          data: WorkOrderFormScreenOne.workOrderMasterData,
                           workOrderDetailsMap: workOrderDetailsMap),
                       const SizedBox(height: xxTinySpacing),
                       Text(DatabaseUtil.getText('Subject'),
@@ -47,6 +43,7 @@ class CreateSimilarWorkOrderScreenThree extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
+                          maxLength: 70,
                           value: workOrderDetailsMap['subject'] ?? '',
                           onTextFieldChanged: (String textField) {
                             workOrderDetailsMap['subject'] = textField;
@@ -59,6 +56,7 @@ class CreateSimilarWorkOrderScreenThree extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
+                          maxLength: 250,
                           value: workOrderDetailsMap['description'] ?? '',
                           onTextFieldChanged: (String textField) {
                             workOrderDetailsMap['description'] = textField;

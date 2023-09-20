@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
+import '../workorder_details_tab_screen.dart';
+import '../workorder_form_one.dart';
 
 class WorkOrderSaveButton extends StatelessWidget {
   final Map workOrderDetailsMap;
@@ -23,9 +31,36 @@ class WorkOrderSaveButton extends StatelessWidget {
             textValue: DatabaseUtil.getText('buttonBack'),
           )),
           const SizedBox(width: xxTinierSpacing),
-          Expanded(
-              child: PrimaryButton(
-                  onPressed: () {}, textValue: DatabaseUtil.getText('Save')))
+          BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+              listener: (context, state) {
+                if (state is SavingNewAndSimilarWorkOrder) {
+                  ProgressBar.show(context);
+                } else if (state is NewAndSimilarWorkOrderSaved) {
+                  if (WorkOrderFormScreenOne.isSimilarWorkOrder == true) {
+                    ProgressBar.dismiss(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    context.read<WorkOrderTabDetailsBloc>().add(
+                        WorkOrderDetails(
+                            initialTabIndex: 0,
+                            workOrderId: WorkOrderDetailsTabScreen
+                                .workOrderMap['workOrderId']));
+                  }
+                } else if (state is NewAndSimilarWorkOrderNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.workOrderNotSaved, '');
+                }
+              },
+              child: Expanded(
+                  child: PrimaryButton(
+                      onPressed: () {
+                        context.read<WorkOrderTabDetailsBloc>().add(
+                            SaveSimilarAndNewWorkOrder(
+                                workOrderDetailsMap: workOrderDetailsMap));
+                      },
+                      textValue: DatabaseUtil.getText('Save')))),
         ],
       ),
     );

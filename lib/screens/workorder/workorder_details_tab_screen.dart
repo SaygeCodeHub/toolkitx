@@ -25,10 +25,9 @@ import 'workorder_pop_up_menu_screen.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
-  final Map workOrderMap;
+  static Map workOrderMap = {};
 
-  const WorkOrderDetailsTabScreen({Key? key, required this.workOrderMap})
-      : super(key: key);
+  const WorkOrderDetailsTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,99 +51,109 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
         ],
       ),
       body: BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+          buildWhen: (previousState, currentState) =>
+              currentState is FetchingWorkOrderTabDetails ||
+              currentState is WorkOrderTabDetailsFetched ||
+              currentState is WorkOrderTabDetailsNotFetched,
           listener: (context, state) {
-        if (state is DeletingItemTabItem) {
-          ProgressBar.show(context);
-        } else if (state is ItemTabItemDeleted) {
-          ProgressBar.dismiss(context);
-          context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-              initialTabIndex: 2, workOrderId: workOrderMap['workOrderId']));
-        } else if (state is ItemTabItemNotDeleted) {
-          ProgressBar.dismiss(context);
-          showCustomSnackBar(context, state.cannotDeleteItem, '');
-        }
+            if (state is DeletingItemTabItem) {
+              ProgressBar.show(context);
+            } else if (state is ItemTabItemDeleted) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 2,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is ItemTabItemNotDeleted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.cannotDeleteItem, '');
+            }
 
-        if (state is DeletingDocument) {
-          ProgressBar.show(context);
-        } else if (state is DocumentDeleted) {
-          ProgressBar.dismiss(context);
-          context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-              initialTabIndex: 2, workOrderId: workOrderMap['workOrderId']));
-        } else if (state is DocumentNotDeleted) {
-          ProgressBar.dismiss(context);
-          showCustomSnackBar(context, state.documentNotDeleted, '');
-        }
-      }, builder: (context, state) {
-        if (state is FetchingWorkOrderTabDetails) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is WorkOrderTabDetailsFetched) {
-          return Padding(
-              padding: const EdgeInsets.only(
-                  left: leftRightMargin,
-                  right: leftRightMargin,
-                  top: xxTinierSpacing),
-              child: Column(children: [
-                Card(
-                    color: AppColor.white,
-                    elevation: kCardElevation,
-                    child: ListTile(
-                        title: Padding(
-                            padding:
-                                const EdgeInsets.only(top: xxTinierSpacing),
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(workOrderMap['workOrderName'],
-                                      style:
-                                          Theme.of(context).textTheme.medium),
-                                  StatusTag(tags: [
-                                    StatusTagModel(
-                                        title: workOrderMap['status'],
-                                        bgColor: AppColor.deepBlue)
-                                  ])
-                                ])))),
-                const SizedBox(height: xxTinierSpacing),
-                const Divider(height: kDividerHeight, thickness: kDividerWidth),
-                CustomTabBarView(
-                    lengthOfTabs: 5,
-                    tabBarViewIcons: WorkOrderTabsUtil().tabBarViewIcons,
-                    initialIndex:
-                        context.read<WorkOrderTabDetailsBloc>().tabIndex,
-                    tabBarViewWidgets: [
-                      WorkOrderDetailsTabOne(
-                          tabIndex: 0,
-                          data: state.fetchWorkOrderDetailsModel.data),
-                      WorkOrderTabTwoDetails(
-                          data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 1),
-                      WorkOrderTabThreeDetails(
-                          data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 2),
-                      WorkOrderTabFourDetails(
-                          data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 3),
-                      WorkOrderTabFiveDetails(
-                          data: state.fetchWorkOrderDetailsModel.data,
-                          tabIndex: 4,
-                          clientId: state.clientId!)
-                    ])
-              ]));
-        } else if (state is WorkOrderTabDetailsNotFetched) {
-          return Center(
-              child: GenericReloadButton(
-                  onPressed: () {
-                    context.read<WorkOrderTabDetailsBloc>().add(
-                        WorkOrderDetails(
-                            workOrderId: workOrderMap['workOrderId'],
-                            initialTabIndex: 0));
-                  },
-                  textValue: StringConstants.kReload));
-        } else {
-          return const SizedBox.shrink();
-        }
-      }),
+            if (state is DeletingDocument) {
+              ProgressBar.show(context);
+            } else if (state is DocumentDeleted) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 2,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is DocumentNotDeleted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.documentNotDeleted, '');
+            }
+          },
+          builder: (context, state) {
+            if (state is FetchingWorkOrderTabDetails) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is WorkOrderTabDetailsFetched) {
+              return Padding(
+                  padding: const EdgeInsets.only(
+                      left: leftRightMargin,
+                      right: leftRightMargin,
+                      top: xxTinierSpacing),
+                  child: Column(children: [
+                    Card(
+                        color: AppColor.white,
+                        elevation: kCardElevation,
+                        child: ListTile(
+                            title: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: xxTinierSpacing),
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(workOrderMap['workOrderName'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .medium),
+                                      StatusTag(tags: [
+                                        StatusTagModel(
+                                            title: workOrderMap['status'],
+                                            bgColor: AppColor.deepBlue)
+                                      ])
+                                    ])))),
+                    const SizedBox(height: xxTinierSpacing),
+                    const Divider(
+                        height: kDividerHeight, thickness: kDividerWidth),
+                    CustomTabBarView(
+                        lengthOfTabs: 5,
+                        tabBarViewIcons: WorkOrderTabsUtil().tabBarViewIcons,
+                        initialIndex:
+                            context.read<WorkOrderTabDetailsBloc>().tabIndex,
+                        tabBarViewWidgets: [
+                          WorkOrderDetailsTabOne(
+                              tabIndex: 0,
+                              data: state.fetchWorkOrderDetailsModel.data),
+                          WorkOrderTabTwoDetails(
+                              data: state.fetchWorkOrderDetailsModel.data,
+                              tabIndex: 1),
+                          WorkOrderTabThreeDetails(
+                              data: state.fetchWorkOrderDetailsModel.data,
+                              tabIndex: 2),
+                          WorkOrderTabFourDetails(
+                              data: state.fetchWorkOrderDetailsModel.data,
+                              tabIndex: 3),
+                          WorkOrderTabFiveDetails(
+                              data: state.fetchWorkOrderDetailsModel.data,
+                              tabIndex: 4,
+                              clientId: state.clientId!)
+                        ])
+                  ]));
+            } else if (state is WorkOrderTabDetailsNotFetched) {
+              return Center(
+                  child: GenericReloadButton(
+                      onPressed: () {
+                        context.read<WorkOrderTabDetailsBloc>().add(
+                            WorkOrderDetails(
+                                workOrderId: workOrderMap['workOrderId'],
+                                initialTabIndex: 0));
+                      },
+                      textValue: StringConstants.kReload));
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
     );
   }
 }
