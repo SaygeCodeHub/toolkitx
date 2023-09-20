@@ -11,38 +11,32 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/generic_text_field.dart';
 
 class LotoLocationFilter extends StatelessWidget {
-  final Map lotoLocationMap;
+  final Map lotoFilterMap;
   final List locationList;
 
   const LotoLocationFilter(
-      {Key? key, required this.lotoLocationMap, required this.locationList})
+      {Key? key, required this.lotoFilterMap, required this.locationList})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<LotoListBloc>().add(SelectLotoLocationFilter(
-        selectLocationName: (lotoLocationMap['location_name'] == null)
-            ? ''
-            : lotoLocationMap['location_name']));
+        selectLocationName:
+            (lotoFilterMap['loc'] == null) ? '' : lotoFilterMap['loc']));
     return BlocBuilder<LotoListBloc, LotoListState>(
         buildWhen: (previousState, currentState) =>
             currentState is LotoLocationFilterSelected,
         builder: (context, state) {
           if (state is LotoLocationFilterSelected) {
-            lotoLocationMap['location_name'] = state.selectLocationName;
+            lotoFilterMap['loc'] = state.selectLocationName;
             return Column(
               children: [
                 ListTile(
                     contentPadding: EdgeInsets.zero,
                     onTap: () async {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LotoLocationFilterList(
-                                    selectLocationName:
-                                        state.selectLocationName,
-                                    data: locationList,
-                                  )));
+                      await Navigator.pushNamed(
+                          context, LotoLocationFilterList.routeName,
+                          arguments: state.selectLocationName);
                     },
                     title: Text(DatabaseUtil.getText('Location'),
                         style: Theme.of(context)
@@ -77,7 +71,7 @@ class LotoLocationFilter extends StatelessWidget {
                           TextFieldWidget(
                               hintText: DatabaseUtil.getText('OtherLocation'),
                               onTextFieldChanged: (String textField) {
-                                lotoLocationMap['location'] =
+                                lotoFilterMap['loc'] =
                                     (state.selectLocationName == 'Other'
                                         ? textField
                                         : '');

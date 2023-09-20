@@ -17,6 +17,7 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   Map filters = {};
+  List masterData = [];
 
   LotoListState get initialState => LotoListInitial();
   final List<LotoListDatum> data = [];
@@ -36,7 +37,7 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
     filters = {
       "st": event.filterMap["st"] ?? '',
       "et": event.filterMap["et"] ?? '',
-      "location_name": event.filterMap["location_name"] ?? '',
+      "loc": event.filterMap["loc"] ?? '',
       "status": event.filterMap["status"] ?? '',
     };
   }
@@ -83,6 +84,7 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoMasterModel fetchLotoMasterModel =
           await _lotoRepository.fetchLotoMasterRepo(hashCode!);
+      masterData = fetchLotoMasterModel.data;
       emit(LotoMasterFetched(
           fetchLotoMasterModel: fetchLotoMasterModel, lotoMasterMap: filters));
     } catch (e) {

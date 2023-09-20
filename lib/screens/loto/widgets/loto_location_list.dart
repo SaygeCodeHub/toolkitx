@@ -7,11 +7,11 @@ import '../../../configs/app_spacing.dart';
 import '../../../widgets/generic_app_bar.dart';
 
 class LotoLocationFilterList extends StatelessWidget {
-  final List data;
+  static const String routeName = "LotoLocationFilterList";
+
   final String selectLocationName;
 
-  const LotoLocationFilterList(
-      {Key? key, required this.data, required this.selectLocationName})
+  const LotoLocationFilterList({Key? key, required this.selectLocationName})
       : super(key: key);
 
   @override
@@ -30,20 +30,32 @@ class LotoLocationFilterList extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        itemCount: data[0].length,
+                        itemCount:
+                            context.read<LotoListBloc>().masterData[0].length,
                         itemBuilder: (context, index) {
                           return RadioListTile(
                               contentPadding: EdgeInsets.zero,
                               activeColor: AppColor.deepBlue,
                               controlAffinity: ListTileControlAffinity.trailing,
-                              title: Text(data[0][index].name),
-                              value: data[0][index].name,
+                              title: Text(context
+                                  .read<LotoListBloc>()
+                                  .masterData[0][index]
+                                  .name),
+                              value: context
+                                  .read<LotoListBloc>()
+                                  .masterData[0][index]
+                                  .id
+                                  .toString(),
                               groupValue: selectLocationName,
                               onChanged: (value) {
                                 context
                                     .read<LotoListBloc>()
                                     .add(SelectLotoLocationFilter(
-                                      selectLocationName: data[0][index].name,
+                                      selectLocationName: context
+                                          .read<LotoListBloc>()
+                                          .masterData[0][index]
+                                          .id
+                                          .toString(),
                                     ));
                                 Navigator.pop(context);
                               });

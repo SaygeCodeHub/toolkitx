@@ -86,7 +86,7 @@ class LotoFilterScreen extends StatelessWidget {
                         ]),
                     const SizedBox(height: xxxTinySpacing),
                     LotoLocationFilter(
-                      lotoLocationMap: lotoFilterMap,
+                      lotoFilterMap: lotoFilterMap,
                       locationList: state.fetchLotoMasterModel.data,
                     ),
                     const SizedBox(height: xxTinySpacing),

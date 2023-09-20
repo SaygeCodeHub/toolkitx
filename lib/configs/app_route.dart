@@ -43,6 +43,7 @@ import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
+import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -271,6 +272,9 @@ class AppRoutes {
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
         return _createRoute(LotoFilterScreen());
+      case LotoLocationFilterList.routeName:
+        return _createRoute(LotoLocationFilterList(
+            selectLocationName: settings.arguments as String));
       case GetCourseCertificateScreen.routeName:
         return _createRoute(GetCourseCertificateScreen(
           certificateId: settings.arguments.toString(),
