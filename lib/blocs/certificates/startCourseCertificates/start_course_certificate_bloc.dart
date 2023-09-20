@@ -126,11 +126,11 @@ class StartCourseCertificateBloc
       SaveQuestionAnswerModel saveQuestionAnswerModel =
           await _certificateRepository.saveQuestionAnswer(questionAnswerMap);
       if (saveQuestionAnswerModel.status == 200) {
-        emit(QuestionAnswerSaved(
+        emit(QuizQuestionAnswerSaved(
             saveQuestionAnswerModel: saveQuestionAnswerModel));
       }
     } catch (e) {
-      emit(QuestionAnswerError(getError: e.toString()));
+      emit(QuizQuestionAnswerError(getError: e.toString()));
     }
   }
 }

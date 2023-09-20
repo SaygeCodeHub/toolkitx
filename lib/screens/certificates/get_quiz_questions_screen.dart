@@ -39,8 +39,10 @@ class QuizQuestionsScreen extends StatelessWidget {
         child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           listener: (context, state) {
-            if (state is QuestionAnswerSaved) {
+            if (state is QuizQuestionAnswerSaved) {
               showCustomSnackBar(context, StringConstants.kAnswerSaved, "");
+            } else if (state is QuizQuestionAnswerError) {
+              showCustomSnackBar(context, StringConstants.kAnswerNotSaved, "");
             }
           },
           buildWhen: (previousState, currentState) =>
