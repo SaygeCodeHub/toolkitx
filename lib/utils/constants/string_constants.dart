@@ -256,6 +256,8 @@ abstract class StringConstants {
   static const String kStartQuiz = 'Start Quiz';
   static const String kFinishQuiz = 'Finish Quiz';
   static const String kQuizSubmitted = "Quiz Submitted";
+  static const String kQuizSubmittingError =
+      "Your Quiz is not submitted, please try again!";
   static const String kSubmitQuiz = 'Submit Quiz';
   static const String kSureToSubmitTheQuiz = 'Are you sure to submit the quiz?';
   static const String kMarks = 'Marks';
