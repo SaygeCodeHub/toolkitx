@@ -12,9 +12,13 @@ import '../../../widgets/generic_app_bar.dart';
 class WorkOrderLocationList extends StatelessWidget {
   final List<List<WorkOrderMasterDatum>> data;
   final String locationId;
+  final Map workOrderDetailsMap;
 
   const WorkOrderLocationList(
-      {Key? key, required this.data, required this.locationId})
+      {Key? key,
+      required this.data,
+      required this.locationId,
+      required this.workOrderDetailsMap})
       : super(key: key);
 
   @override
@@ -43,6 +47,8 @@ class WorkOrderLocationList extends StatelessWidget {
                               value: data[0][index].id.toString(),
                               groupValue: locationId,
                               onChanged: (value) {
+                                workOrderDetailsMap['locationid'] =
+                                    data[0][index].id.toString();
                                 context.read<WorkOrderTabDetailsBloc>().add(
                                     SelectWorkOrderLocationOptions(
                                         locationId:

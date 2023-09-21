@@ -30,7 +30,6 @@ class CompanyListTile extends StatelessWidget {
             currentState is WorkOrderCompanyOptionSelected,
         builder: (context, state) {
           if (state is WorkOrderCompanyOptionSelected) {
-            workOrderDetailsMap['companyid'] = state.companyId;
             return ListTile(
                 contentPadding: EdgeInsets.zero,
                 onTap: () async {
@@ -38,9 +37,9 @@ class CompanyListTile extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => WorkOrderCompanyList(
-                                data: data,
-                                companyId: state.companyId,
-                              )));
+                              data: data,
+                              companyId: state.companyId,
+                              workOrderDetailsMap: workOrderDetailsMap)));
                 },
                 title: Text(DatabaseUtil.getText('Company'),
                     style: Theme.of(context).textTheme.xSmall.copyWith(

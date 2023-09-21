@@ -20,8 +20,8 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderTypeOptions(
-        typeId: workOrderDetailsMap['type'],
-        typeName: workOrderDetailsMap['workordertype']));
+        typeId: workOrderDetailsMap['type'] ?? '',
+        typeName: workOrderDetailsMap['workordertype'] ?? ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderTypeOptionSelected,
@@ -55,6 +55,8 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
                                 value: data[6][itemIndex].id.toString(),
                                 groupValue: state.typeId,
                                 onChanged: (value) {
+                                  workOrderDetailsMap['type'] =
+                                      data[6][itemIndex].id.toString();
                                   context.read<WorkOrderTabDetailsBloc>().add(
                                       SelectWorkOrderTypeOptions(
                                           typeId:

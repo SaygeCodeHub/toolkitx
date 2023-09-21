@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
@@ -33,6 +34,7 @@ class StartCourseCertificateBloc
     on<GetQuizQuestions>(_getQuizQuestions);
     on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
     on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
+    on<SubmitCertificateQuiz>(_submitCertificateQuiz);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -131,6 +133,33 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(QuizQuestionAnswerError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _submitCertificateQuiz(SubmitCertificateQuiz event,
+      Emitter<StartCourseCertificateState> emit) async {
+    emit(CertificateQuizSubmitting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map finishQuizMap = {
+        "idm": event.finishQuizMap["idm"],
+        "hashcode": hashCode,
+        "workforcequizid": event.finishQuizMap["workforcequizid"],
+        "answer": event.finishQuizMap["answer"],
+        "questionid": event.finishQuizMap["questionid"],
+        "workforceid": userId,
+        "quizid": event.finishQuizMap["quizid"],
+        "certificateid": event.finishQuizMap["certificateid"]
+      };
+      FinishQuizCertificateModel finishQuizCertificateModel =
+          await _certificateRepository.finishQuizCertificate(finishQuizMap);
+      if (finishQuizCertificateModel.status == 200) {
+        emit(CertificateQuizSubmitted(
+            finishQuizCertificateModel: finishQuizCertificateModel));
+      }
+    } catch (e) {
+      emit(CertificateQuizSubmitError(getError: e.toString()));
     }
   }
 }

@@ -18,6 +18,7 @@ abstract class StringConstants {
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
+  static const String kSelectTypeValidation = 'Please Select type'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
@@ -254,6 +255,11 @@ abstract class StringConstants {
       "Couldn't Save your answer, Please try Again!";
   static const String kStartQuiz = 'Start Quiz';
   static const String kFinishQuiz = 'Finish Quiz';
+  static const String kQuizSubmitted = "Quiz Submitted";
+  static const String kQuizSubmittingError =
+      "Your Quiz is not submitted, please try again!";
+  static const String kSubmitQuiz = 'Submit Quiz';
+  static const String kSureToSubmitTheQuiz = 'Are you sure to submit the quiz?';
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
@@ -275,6 +281,8 @@ abstract class StringConstants {
   static const String kChecklistAssigned = 'Checklist assigned to you';
   static const String kSelectOrigination = 'Select origination'; //
   static const String kSelectCostCenter = 'Select Cost Center'; //
+  static const String kPlannedDateValidation =
+      "Planned finished date can't be greater than planned start date!"; //
   static const String kChecklistError = 'Checklist assigning error';
   static const String kSignInError = 'Invalid Data';
   static const String kWarning = 'Warning';

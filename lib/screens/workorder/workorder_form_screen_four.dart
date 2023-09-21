@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../utils/workorder_custom_fields_util.dart';
 import '../../widgets/generic_app_bar.dart';
-import 'create_similar_work_order_screen_one.dart';
+import 'workorder_form_one_screen.dart';
 import 'widgets/workorder_save_button.dart';
 
-class CreateSimilarWorkOrderScreenFour extends StatelessWidget {
+class WorkOrderFormScreenFour extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreenFour';
   final Map workOrderDetailsMap;
 
-  const CreateSimilarWorkOrderScreenFour(
-      {Key? key, required this.workOrderDetailsMap})
+  const WorkOrderFormScreenFour({Key? key, required this.workOrderDetailsMap})
       : super(key: key);
+  static List customFieldList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +30,13 @@ class CreateSimilarWorkOrderScreenFour extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount:
-                    CreateSimilarWorkOrderScreen.workOrderMasterData[10].length,
+                    WorkOrderFormScreenOne.workOrderMasterData[10].length,
                 itemBuilder: (context, index) {
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            CreateSimilarWorkOrderScreen
+                            WorkOrderFormScreenOne
                                 .workOrderMasterData[10][index].title,
                             style: Theme.of(context)
                                 .textTheme
@@ -46,7 +45,8 @@ class CreateSimilarWorkOrderScreenFour extends StatelessWidget {
                         const SizedBox(height: xxxTinierSpacing),
                         WorkOrderCustomFieldsUtil().customFieldWidget(
                             index,
-                            CreateSimilarWorkOrderScreen.workOrderMasterData,
+                            customFieldList,
+                            WorkOrderFormScreenOne.workOrderMasterData,
                             workOrderDetailsMap)
                       ]);
                 })));

@@ -4,12 +4,11 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
-import 'create_similar_work_order_screen_one.dart';
+import 'workorder_form_one_screen.dart';
 
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
   final List popUpMenuOptions;
   final Map workOrderDetailsMap;
-
   const WorkOrderPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuOptions,
@@ -32,7 +31,9 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
           if (value == DatabaseUtil.getText('CreateSimillar')) {
-            Navigator.pushNamed(context, CreateSimilarWorkOrderScreen.routeName,
+            WorkOrderFormScreenOne.isSimilarWorkOrder = true;
+
+            Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                 arguments: workOrderDetailsMap);
           }
         },

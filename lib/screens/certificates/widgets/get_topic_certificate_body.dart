@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
-import '../../configs/app_spacing.dart';
-import '../../data/models/certificates/get_topic_certificate_model.dart';
-import 'get_workforce_quiz_screen.dart';
+import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
+import '../../../configs/app_spacing.dart';
+import '../../../data/models/certificates/get_topic_certificate_model.dart';
+import '../get_workforce_quiz_screen.dart';
 
 class GetTopicCertificateBody extends StatelessWidget {
   const GetTopicCertificateBody({
     super.key,
     required this.data,
+    required this.certificateId,
   });
   final GetTopicData data;
+  final String certificateId;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +71,13 @@ class GetTopicCertificateBody extends StatelessWidget {
         Card(
           child: ListTile(
             onTap: () {
+              Map workforceQuizMap = {
+                "certificateId": certificateId,
+                "topicId": data.topiclist[0].id,
+                "quizId": data.quizlist[0].id
+              };
               Navigator.pushNamed(context, GetWorkforceScreen.routeName,
-                  arguments: data.quizlist[0].id);
+                  arguments: workforceQuizMap);
             },
             contentPadding: const EdgeInsets.all(kCardPadding),
             leading: Container(

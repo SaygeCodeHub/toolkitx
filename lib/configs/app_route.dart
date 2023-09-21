@@ -76,11 +76,11 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
-import '../screens/workorder/create_simiar_workorder_screen_four.dart';
-import '../screens/workorder/create_similar_work_order_screen_one.dart';
-import '../screens/workorder/create_similar_workorder_screen_three.dart';
+import '../screens/workorder/workorder_form_screen_four.dart';
+import '../screens/workorder/workorder_form_one_screen.dart';
+import '../screens/workorder/workorder_form_screen_three.dart';
 import '../screens/workorder/workorder_filter_screen.dart';
-import '../screens/workorder/create_similar_workorder_screen_two.dart';
+import '../screens/workorder/workorder_form_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
@@ -253,8 +253,8 @@ class AppRoutes {
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
         return _createRoute(const CertificatesListScreen());
-      case CreateSimilarWorkOrderScreen.routeName:
-        return _createRoute(CreateSimilarWorkOrderScreen(
+      case WorkOrderFormScreenOne.routeName:
+        return _createRoute(WorkOrderFormScreenOne(
             workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
@@ -262,10 +262,11 @@ class AppRoutes {
         ));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
-      case CreateWorkOrderScreenTwo.routeName:
-        return _createRoute(CreateWorkOrderScreenTwo(
+      case WorkOrderFormScreenTwo.routeName:
+        return _createRoute(WorkOrderFormScreenTwo(
             workOrderDetailsMap: settings.arguments as Map));
       case WorkOrderDetailsTabScreen.routeName:
+        return _createRoute(const WorkOrderDetailsTabScreen());
         return _createRoute(
             WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
       case LotoListScreen.routeName:
@@ -279,11 +280,11 @@ class AppRoutes {
         return _createRoute(GetCourseCertificateScreen(
           certificateId: settings.arguments.toString(),
         ));
-      case CreateSimilarWorkOrderScreenThree.routeName:
-        return _createRoute(CreateSimilarWorkOrderScreenThree(
+      case WorkOrderFormScreenThree.routeName:
+        return _createRoute(WorkOrderFormScreenThree(
             workOrderDetailsMap: settings.arguments as Map));
-      case CreateSimilarWorkOrderScreenFour.routeName:
-        return _createRoute(CreateSimilarWorkOrderScreenFour(
+      case WorkOrderFormScreenFour.routeName:
+        return _createRoute(WorkOrderFormScreenFour(
             workOrderDetailsMap: settings.arguments as Map));
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(
@@ -294,9 +295,8 @@ class AppRoutes {
           getdetailsMap: settings.arguments as Map,
         ));
       case GetWorkforceScreen.routeName:
-        return _createRoute(GetWorkforceScreen(
-          quizId: settings.arguments.toString(),
-        ));
+        return _createRoute(
+            GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
       case QuizQuestionsScreen.routeName:
         return _createRoute(QuizQuestionsScreen(
           quizMap: settings.arguments as Map,

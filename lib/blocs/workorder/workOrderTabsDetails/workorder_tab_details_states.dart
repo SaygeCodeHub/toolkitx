@@ -1,6 +1,7 @@
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
 
@@ -110,4 +111,18 @@ class WorkOrderCategoryCostCenterSelected extends WorkOrderTabDetailsStates {
 
   WorkOrderCategoryCostCenterSelected(
       {required this.costCenterId, required this.costCenterValue});
+}
+
+class SavingNewAndSimilarWorkOrder extends WorkOrderTabDetailsStates {}
+
+class NewAndSimilarWorkOrderSaved extends WorkOrderTabDetailsStates {
+  final SaveNewAndSimilarWorkOrderModel saveNewAndSimilarWorkOrderModel;
+
+  NewAndSimilarWorkOrderSaved({required this.saveNewAndSimilarWorkOrderModel});
+}
+
+class NewAndSimilarWorkOrderNotSaved extends WorkOrderTabDetailsStates {
+  final String workOrderNotSaved;
+
+  NewAndSimilarWorkOrderNotSaved({required this.workOrderNotSaved});
 }

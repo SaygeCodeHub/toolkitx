@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/certificates/get_quiz_questions_body.dart';
+import 'package:toolkit/screens/certificates/widgets/finish_button_body.dart';
+import 'package:toolkit/screens/certificates/widgets/get_quiz_questions_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -13,10 +14,11 @@ import '../../configs/app_spacing.dart';
 class QuizQuestionsScreen extends StatelessWidget {
   static const routeName = 'QuizQuestionsScreen';
 
-  const QuizQuestionsScreen({super.key, required this.quizMap});
+  QuizQuestionsScreen({super.key, required this.quizMap});
 
   final Map quizMap;
   static int pageNo = 1;
+  final Map questionAnswerMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +29,7 @@ class QuizQuestionsScreen extends StatelessWidget {
       appBar: const GenericAppBar(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(tinySpacing),
-        child: PrimaryButton(
-            onPressed: () {}, textValue: StringConstants.kFinishQuiz),
+        child: FinishButtonBody(questionAnswerMap: questionAnswerMap),
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -53,19 +54,19 @@ class QuizQuestionsScreen extends StatelessWidget {
             if (state is QuizQuestionsFetching) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is QuizQuestionsFetched) {
-              Map questionAnswerMap = {
-                "idm": quizMap["userquizid"],
-                "workforcequizid": quizMap["userquizid"],
-                "answer": state.getQuizQuestionsModel.data.optionlist[0].id,
-                "questionid": state.getQuizQuestionsModel.data.questionid
-              };
+              questionAnswerMap['questionid'] =
+                  state.getQuizQuestionsModel.data.questionid;
+              questionAnswerMap['idm'] = quizMap["topicId"];
+              questionAnswerMap['workforcequizid'] = quizMap["userquizid"];
+              questionAnswerMap["certificateId"] = quizMap["certificateId"];
+              questionAnswerMap["quizId"] = quizMap["quizId"];
               return Column(
                 children: [
                   GetQuizQuestionsBody(
-                    data: state.getQuizQuestionsModel.data,
-                    answerId: state.answerId,
-                    getQuizQuestionsModel: state.getQuizQuestionsModel,
-                  ),
+                      data: state.getQuizQuestionsModel.data,
+                      answerId: state.answerId,
+                      getQuizQuestionsModel: state.getQuizQuestionsModel,
+                      questionAnswerMap: questionAnswerMap),
                   const SizedBox(height: mediumSpacing),
                   Row(
                     children: [
@@ -106,7 +107,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                                   quizMap["userquizid"]));
                                     }
                                   : null,
-                              textValue: StringConstants.kSaveAndNext)),
+                              textValue: StringConstants.kSaveAndNext))
                     ],
                   ),
                   const SizedBox(height: tinierSpacing),
