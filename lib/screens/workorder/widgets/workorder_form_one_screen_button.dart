@@ -34,11 +34,14 @@ class WorkOrderFormOneButton extends StatelessWidget {
                       workOrderDetailsMap['companyid'].isEmpty) {
                     showCustomSnackBar(
                         context, DatabaseUtil.getText('SelectCompany'), '');
-                  } else if (DateFormat('dd.MM.yyyy')
-                          .parse(workOrderDetailsMap['plannedstartdate'])
-                          .compareTo(DateFormat('dd.MM.yyyy').parse(
-                              workOrderDetailsMap['plannedfinishdate'])) >
-                      0) {
+                  } else if ((workOrderDetailsMap['plannedstartdate'] != null ||
+                          workOrderDetailsMap['plannedfinishdate'] != null)
+                      ? DateFormat('dd.MM.yyyy')
+                              .parse(workOrderDetailsMap['plannedstartdate'])
+                              .compareTo(DateFormat('dd.MM.yyyy').parse(
+                                  workOrderDetailsMap['plannedfinishdate'])) >
+                          0
+                      : false) {
                     showCustomSnackBar(
                         context, StringConstants.kPlannedDateValidation, '');
                   } else {

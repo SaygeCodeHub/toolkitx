@@ -30,7 +30,6 @@ class LocationListTile extends StatelessWidget {
             currentState is WorkOrderLocationOptionSelected,
         builder: (context, state) {
           if (state is WorkOrderLocationOptionSelected) {
-            workOrderDetailsMap['locationid'] = state.locationId;
             return ListTile(
                 contentPadding: EdgeInsets.zero,
                 onTap: () async {
@@ -38,7 +37,9 @@ class LocationListTile extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => WorkOrderLocationList(
-                              data: data, locationId: state.locationId)));
+                              data: data,
+                              locationId: state.locationId,
+                              workOrderDetailsMap: workOrderDetailsMap)));
                 },
                 title: Text(DatabaseUtil.getText('Location'),
                     style: Theme.of(context).textTheme.xSmall.copyWith(

@@ -10,7 +10,9 @@ import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
 import '../workorder_details_tab_screen.dart';
-import '../workorder_form_one.dart';
+import '../workorder_form_one_screen.dart';
+import '../workorder_form_screen_four.dart';
+import '../workorder_list_screen.dart';
 
 class WorkOrderSaveButton extends StatelessWidget {
   final Map workOrderDetailsMap;
@@ -47,6 +49,14 @@ class WorkOrderSaveButton extends StatelessWidget {
                             initialTabIndex: 0,
                             workOrderId: WorkOrderDetailsTabScreen
                                 .workOrderMap['workOrderId']));
+                  } else {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, WorkOrderListScreen.routeName,
+                        arguments: false);
                   }
                 } else if (state is NewAndSimilarWorkOrderNotSaved) {
                   ProgressBar.dismiss(context);
@@ -56,6 +66,8 @@ class WorkOrderSaveButton extends StatelessWidget {
               child: Expanded(
                   child: PrimaryButton(
                       onPressed: () {
+                        workOrderDetailsMap['customfields'] =
+                            WorkOrderFormScreenFour.customFieldList;
                         context.read<WorkOrderTabDetailsBloc>().add(
                             SaveSimilarAndNewWorkOrder(
                                 workOrderDetailsMap: workOrderDetailsMap));

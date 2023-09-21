@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../widgets/generic_text_field.dart';
 
 class WorkOrderCustomFieldsUtil {
-  Widget customFieldWidget(index, customFieldDatum, workOrderDetailsMap) {
+  Widget customFieldWidget(
+      index, customFieldList, customFieldDatum, workOrderDetailsMap) {
+    customFieldList.add({'id': '', 'value': ''});
     switch (customFieldDatum[10][index].type) {
       case 1:
         return TextFieldWidget(
@@ -14,10 +16,9 @@ class WorkOrderCustomFieldsUtil {
             maxLength: 10,
             textInputType: TextInputType.number,
             onTextFieldChanged: (String textField) {
-              workOrderDetailsMap['customfields'][index]['id'] =
+              customFieldList[index]['id'] =
                   customFieldDatum[10][index].id.toString();
-              workOrderDetailsMap['customfields'][index]['value'] =
-                  textField.toString();
+              customFieldList[index]['value'] = textField.toString();
             });
       default:
         return const SizedBox.shrink();

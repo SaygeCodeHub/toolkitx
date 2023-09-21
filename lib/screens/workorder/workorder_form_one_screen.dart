@@ -21,29 +21,33 @@ class WorkOrderFormScreenOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isSimilarWorkOrder == false
+        ? workOrderDetailsMap.clear()
+        : workOrderDetailsMap;
     context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
         bottomNavigationBar:
             WorkOrderFormOneButton(workOrderDetailsMap: workOrderDetailsMap),
         body: BlocBuilder<WorkOrderBloc, WorkOrderStates>(
-            builder: (context, state) {
-          if (state is FetchingWorkOrderMaster) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is WorkOrderMasterFetched) {
-            workOrderMasterData = state.fetchWorkOrdersMasterModel.data;
-            return WorkOrderFormOneBody(
-                data: state.fetchWorkOrdersMasterModel.data,
-                workOrderDetailsMap: workOrderDetailsMap);
-          } else if (state is WorkOrderMasterNotFetched) {
-            return GenericReloadButton(
-                onPressed: () {
-                  context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
-                },
-                textValue: StringConstants.kReload);
-          } else {
-            return const SizedBox.shrink();
-          }
-        }));
+          builder: (context, state) {
+            if (state is FetchingWorkOrderMaster) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is WorkOrderMasterFetched) {
+              workOrderMasterData = state.fetchWorkOrdersMasterModel.data;
+              return WorkOrderFormOneBody(
+                  data: state.fetchWorkOrdersMasterModel.data,
+                  workOrderDetailsMap: workOrderDetailsMap);
+            } else if (state is WorkOrderMasterNotFetched) {
+              return GenericReloadButton(
+                  onPressed: () {
+                    context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
+                  },
+                  textValue: StringConstants.kReload);
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ));
   }
 }
