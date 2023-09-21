@@ -124,3 +124,9 @@ class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
       required this.specialWorkIdList,
       required this.specialWorkNameList});
 }
+
+class ManageWorkOrderDownTime extends WorkOrderTabsDetailsEvent {
+  final Map manageDownTimeMap;
+
+  ManageWorkOrderDownTime({required this.manageDownTimeMap});
+}

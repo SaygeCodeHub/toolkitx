@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/workorder/delete_document_model.dart';
 import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
+import 'package:toolkit/data/models/workorder/manage_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
 
@@ -64,5 +65,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/update", updateWorkOrderDetailsMap);
     return UpdateWorkOrderDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<ManageWorkOrderDownTimeModel> manageDownTime(
+      Map manageDownTimeMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/managedowntime", manageDownTimeMap);
+    return ManageWorkOrderDownTimeModel.fromJson(response);
   }
 }

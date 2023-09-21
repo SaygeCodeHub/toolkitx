@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'workorder_add_down_time_screen.dart';
 import 'workorder_form_one_screen.dart';
 
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
@@ -42,6 +43,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
 
             Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                 arguments: workOrderDetailsMap);
+          }
+          if (value == DatabaseUtil.getText('AddDowntime')) {
+            WorkOrderAddDownTimeScreen.addDownTimeMap['workorderId'] =
+                workOrderDetailsMap['workorderId'];
+            Navigator.pushNamed(context, WorkOrderAddDownTimeScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,
