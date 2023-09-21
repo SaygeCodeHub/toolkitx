@@ -267,8 +267,6 @@ class AppRoutes {
             workOrderDetailsMap: settings.arguments as Map));
       case WorkOrderDetailsTabScreen.routeName:
         return _createRoute(const WorkOrderDetailsTabScreen());
-        return _createRoute(
-            WorkOrderDetailsTabScreen(workOrderMap: settings.arguments as Map));
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
