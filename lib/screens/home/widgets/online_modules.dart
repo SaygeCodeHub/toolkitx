@@ -21,6 +21,7 @@ import '../../checklist/workforce/workforce_list_screen.dart';
 import '../../incident/incident_list_screen.dart';
 import '../../leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../../logBook/logbook_list_screen.dart';
+import '../../loto/loto_list_screen.dart';
 import '../../permit/permit_list_screen.dart';
 import '../../qualityManagement/qm_list_screen.dart';
 import '../../signInQRCode/signin_list_screen.dart';
@@ -192,6 +193,9 @@ class OnLineModules extends StatelessWidget {
       case 'certificates':
         Navigator.pushNamed(context, CertificatesListScreen.routeName,
             arguments: true);
+        break;
+      case 'loto':
+        Navigator.pushNamed(context, LotoListScreen.routeName, arguments: true);
         break;
       case 'dms':
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
