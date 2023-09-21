@@ -19,6 +19,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   final List<WorkOrderDatum> data = [];
   bool hasReachedMax = false;
   Map filtersMap = {};
+  List<List<WorkOrderMasterDatum>> workOrderMasterDatum = [];
 
   WorkOrderBloc() : super(WorkOrderInitial()) {
     on<FetchWorkOrders>(_fetchWorkOrders);
@@ -74,6 +75,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FetchWorkOrdersMasterModel fetchWorkOrdersMasterModel =
           await _workOrderRepository.fetchWorkOrderMaster(hashCode!, userId!);
+      workOrderMasterDatum = fetchWorkOrdersMasterModel.data;
       emit(WorkOrderMasterFetched(
           fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel));
     } catch (e) {

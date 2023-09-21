@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../blocs/workorder/workorder_bloc.dart';
+import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'workorder_add_mis_cost_screen.dart';
 import 'workorder_form_one_screen.dart';
 
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
@@ -24,6 +28,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return PopupMenuButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCardRadius)),
@@ -43,12 +48,18 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
             Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                 arguments: workOrderDetailsMap);
           }
+          if (value == DatabaseUtil.getText('AddMiscCost')) {
+            WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
+            WorkOrderAddMisCostScreen.workOrderMasterDatum =
+                context.read<WorkOrderBloc>().workOrderMasterDatum;
+            Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
-              for (int i = 0; i < popUpMenuOptions.length; i++)
-                _buildPopupMenuItem(
-                    context, popUpMenuOptions[i], popUpMenuOptions[i])
-            ]);
+          for (int i = 0; i < popUpMenuOptions.length; i++)
+            _buildPopupMenuItem(
+                context, popUpMenuOptions[i], popUpMenuOptions[i])
+        ]);
   }
 }

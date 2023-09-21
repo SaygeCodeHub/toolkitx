@@ -109,6 +109,8 @@ abstract class StringConstants {
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
+  static const String kSelectVendor = 'Select vendor'; //
+  static const String kSelectCurrency = 'Select currency'; //
   static const String kResolve = 'Resolve'; //
   static const String kSelectYourLanguage = 'Select Your Language';
   static const String kClearFilter = 'Clear';
@@ -281,6 +283,7 @@ abstract class StringConstants {
   static const String kChecklistAssigned = 'Checklist assigned to you';
   static const String kSelectOrigination = 'Select origination'; //
   static const String kSelectCostCenter = 'Select Cost Center'; //
+  static const String kMiscCostValidation = 'Please enter all data'; //
   static const String kPlannedDateValidation =
       "Planned finished date can't be greater than planned start date!"; //
   static const String kChecklistError = 'Checklist assigning error';
