@@ -30,36 +30,36 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return PopupMenuButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kCardRadius)),
-        iconSize: kIconSize,
-        icon: const Icon(Icons.more_vert_outlined),
-        offset: const Offset(0, xxTinierSpacing),
-        onSelected: (value) {
-          if (value == DatabaseUtil.getText('CreateSimillar')) {
-            WorkOrderFormScreenOne.isSimilarWorkOrder = true;
-            WorkOrderFormScreenOne.isFromEdit = false;
-            Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-                arguments: workOrderDetailsMap);
-          }
-          if (value == DatabaseUtil.getText('Edit')) {
-            WorkOrderFormScreenOne.isFromEdit = true;
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kCardRadius)),
+      iconSize: kIconSize,
+      icon: const Icon(Icons.more_vert_outlined),
+      offset: const Offset(0, xxTinierSpacing),
+      onSelected: (value) {
+        if (value == DatabaseUtil.getText('CreateSimillar')) {
+          WorkOrderFormScreenOne.isSimilarWorkOrder = true;
+          WorkOrderFormScreenOne.isFromEdit = false;
+          Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
+              arguments: workOrderDetailsMap);
+        }
+        if (value == DatabaseUtil.getText('Edit')) {
+          WorkOrderFormScreenOne.isFromEdit = true;
 
-            Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-                arguments: workOrderDetailsMap);
-          }
-          if (value == DatabaseUtil.getText('AddMiscCost')) {
-            WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
-            WorkOrderAddMisCostScreen.workOrderMasterDatum =
-                context.read<WorkOrderBloc>().workOrderMasterDatum;
-            Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
-          }
-        },
-        position: PopupMenuPosition.under,
-        itemBuilder: (BuildContext context) => [
-          for (int i = 0; i < popUpMenuOptions.length; i++)
-            _buildPopupMenuItem(
-                context, popUpMenuOptions[i], popUpMenuOptions[i])
-        ]);
+          Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
+              arguments: workOrderDetailsMap);
+        }
+        if (value == DatabaseUtil.getText('AddMiscCost')) {
+          WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
+          WorkOrderAddMisCostScreen.workOrderMasterDatum =
+              context.read<WorkOrderBloc>().workOrderMasterDatum;
+          Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
+        }
+      },
+      position: PopupMenuPosition.under,
+      itemBuilder: (BuildContext context) => [
+        for (int i = 0; i < popUpMenuOptions.length; i++)
+          _buildPopupMenuItem(context, popUpMenuOptions[i], popUpMenuOptions[i])
+      ],
+    );
   }
 }

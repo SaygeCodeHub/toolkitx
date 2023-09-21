@@ -20,7 +20,6 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   bool hasReachedMax = false;
   Map filtersMap = {};
   List<List<WorkOrderMasterDatum>> workOrderMasterDatum = [];
-
   WorkOrderBloc() : super(WorkOrderInitial()) {
     on<FetchWorkOrders>(_fetchWorkOrders);
     on<FetchWorkOrderMaster>(_fetchMaster);

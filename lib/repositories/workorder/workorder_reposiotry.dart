@@ -20,7 +20,6 @@ abstract class WorkOrderRepository {
   Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
 
   Future<DeleteDocumentModel> deleteDocument(Map deleteDocumentMap);
-
   Future<ManageWorkOrderMiscCostModel> manageMiscCost(Map manageMiscCostMap);
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
