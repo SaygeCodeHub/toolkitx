@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_certificate_details_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
@@ -85,5 +86,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}certificate/FinishQuiz", finishQuizMap);
     return FinishQuizCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchCertificateDetailsModel> fetchCertificateDetails(String hashCode, String userId, String certificateId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/getcertificate?certificateid=$certificateId&hashcode=$hashCode&workforceid=$userId");
+    return FetchCertificateDetailsModel.fromJson(response);
   }
 }
