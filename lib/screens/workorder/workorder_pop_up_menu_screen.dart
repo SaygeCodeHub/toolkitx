@@ -9,6 +9,7 @@ import 'workorder_form_one_screen.dart';
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
   final List popUpMenuOptions;
   final Map workOrderDetailsMap;
+
   const WorkOrderPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuOptions,
@@ -32,6 +33,12 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         onSelected: (value) {
           if (value == DatabaseUtil.getText('CreateSimillar')) {
             WorkOrderFormScreenOne.isSimilarWorkOrder = true;
+            WorkOrderFormScreenOne.isFromEdit = false;
+            Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
+                arguments: workOrderDetailsMap);
+          }
+          if (value == DatabaseUtil.getText('Edit')) {
+            WorkOrderFormScreenOne.isFromEdit = true;
 
             Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                 arguments: workOrderDetailsMap);

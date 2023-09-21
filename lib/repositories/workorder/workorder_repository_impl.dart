@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
 
 import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -55,5 +56,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/save", saveNewAndSimilarWorkOrderMap);
     return SaveNewAndSimilarWorkOrderModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateWorkOrderDetailsModel> updateWorkOrderDetails(
+      Map updateWorkOrderDetailsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/update", updateWorkOrderDetailsMap);
+    return UpdateWorkOrderDetailsModel.fromJson(response);
   }
 }

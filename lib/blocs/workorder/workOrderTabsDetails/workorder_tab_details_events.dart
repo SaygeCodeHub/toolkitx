@@ -92,3 +92,35 @@ class SaveSimilarAndNewWorkOrder extends WorkOrderTabsDetailsEvent {
 
   SaveSimilarAndNewWorkOrder({required this.workOrderDetailsMap});
 }
+
+class UpdateWorkOrderDetails extends WorkOrderTabsDetailsEvent {
+  final Map updateWorkOrderDetailsMap;
+
+  UpdateWorkOrderDetails({required this.updateWorkOrderDetailsMap});
+}
+
+class SelectSafetyMeasureOptions extends WorkOrderTabsDetailsEvent {
+  final String safetyMeasureId;
+  final List safetyMeasureIdList;
+  final List safetyMeasureNameList;
+  final String safetyMeasureName;
+
+  SelectSafetyMeasureOptions(
+      {required this.safetyMeasureName,
+      required this.safetyMeasureNameList,
+      required this.safetyMeasureId,
+      required this.safetyMeasureIdList});
+}
+
+class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
+  final String specialWorkId;
+  final String specialWorkName;
+  final List specialWorkIdList;
+  final List specialWorkNameList;
+
+  SelectSpecialWorkOptions(
+      {required this.specialWorkId,
+      required this.specialWorkName,
+      required this.specialWorkIdList,
+      required this.specialWorkNameList});
+}

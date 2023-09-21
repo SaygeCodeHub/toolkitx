@@ -5,7 +5,16 @@ import '../widgets/generic_text_field.dart';
 class WorkOrderCustomFieldsUtil {
   Widget customFieldWidget(
       index, customFieldList, customFieldDatum, workOrderDetailsMap) {
-    customFieldList.add({'id': '', 'value': ''});
+    customFieldList.add({
+      'id': workOrderDetailsMap['customfields'] == null ||
+              workOrderDetailsMap['customfields'].isEmpty
+          ? []
+          : workOrderDetailsMap['customfields'][index]['id'],
+      'value': workOrderDetailsMap['customfields'] == null ||
+              workOrderDetailsMap['customfields'].isEmpty
+          ? []
+          : workOrderDetailsMap['customfields'][index]['value']
+    });
     switch (customFieldDatum[10][index].type) {
       case 1:
         return TextFieldWidget(

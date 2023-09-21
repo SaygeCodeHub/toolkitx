@@ -2,6 +2,7 @@ import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/update_workorder_details_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
 
@@ -125,4 +126,34 @@ class NewAndSimilarWorkOrderNotSaved extends WorkOrderTabDetailsStates {
   final String workOrderNotSaved;
 
   NewAndSimilarWorkOrderNotSaved({required this.workOrderNotSaved});
+}
+
+class UpdatingWorkOrderDetails extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDetailsUpdated extends WorkOrderTabDetailsStates {
+  final UpdateWorkOrderDetailsModel updateWorkOrderDetailsModel;
+
+  WorkOrderDetailsUpdated({required this.updateWorkOrderDetailsModel});
+}
+
+class WorkOrderDetailsCouldNotUpdate extends WorkOrderTabDetailsStates {
+  final String detailsNotFetched;
+
+  WorkOrderDetailsCouldNotUpdate({required this.detailsNotFetched});
+}
+
+class SafetyMeasuresOptionsSelected extends WorkOrderTabDetailsStates {
+  final List safetyMeasureIdList;
+  final List safetyMeasureNameList;
+
+  SafetyMeasuresOptionsSelected(
+      {required this.safetyMeasureIdList, required this.safetyMeasureNameList});
+}
+
+class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
+  final List specialWorkIdList;
+  final List specialWorkNameList;
+
+  SpecialWorkOptionsSelected(
+      {required this.specialWorkIdList, required this.specialWorkNameList});
 }
