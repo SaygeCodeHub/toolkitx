@@ -14,6 +14,7 @@ class WorkOrderFormScreenOne extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreen';
   final Map workOrderDetailsMap;
   static bool isSimilarWorkOrder = false;
+  static bool isFromEdit = false;
 
   const WorkOrderFormScreenOne({Key? key, required this.workOrderDetailsMap})
       : super(key: key);
@@ -21,12 +22,15 @@ class WorkOrderFormScreenOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    isSimilarWorkOrder == false
+    isSimilarWorkOrder == false && isFromEdit == false
         ? workOrderDetailsMap.clear()
         : workOrderDetailsMap;
     context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
+        appBar: GenericAppBar(
+            title: (isFromEdit == true)
+                ? DatabaseUtil.getText('EditWorkOrder')
+                : DatabaseUtil.getText('NewWorkOrder')),
         bottomNavigationBar:
             WorkOrderFormOneButton(workOrderDetailsMap: workOrderDetailsMap),
         body: BlocBuilder<WorkOrderBloc, WorkOrderStates>(

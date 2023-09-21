@@ -23,8 +23,8 @@ class CompanyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderCompanyOptions(
-        companyId: workOrderDetailsMap['contractorname'] ?? '',
-        companyName: workOrderDetailsMap['companyid'] ?? ''));
+        companyId: workOrderDetailsMap['companyid'] ?? '',
+        companyName: workOrderDetailsMap['contractorname'] ?? ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderCompanyOptionSelected,

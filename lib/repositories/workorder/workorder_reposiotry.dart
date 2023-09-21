@@ -4,6 +4,7 @@ import '../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../data/models/workorder/fetch_workorder_master_model.dart';
 import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../data/models/workorder/update_workorder_details_model.dart';
 
 abstract class WorkOrderRepository {
   Future<FetchWorkOrdersModel> fetchWorkOrders(
@@ -21,4 +22,7 @@ abstract class WorkOrderRepository {
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
       Map saveNewAndSimilarWorkOrderMap);
+
+  Future<UpdateWorkOrderDetailsModel> updateWorkOrderDetails(
+      Map updateWorkOrderDetailsMap);
 }

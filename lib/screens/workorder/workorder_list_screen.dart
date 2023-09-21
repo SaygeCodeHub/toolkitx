@@ -29,6 +29,7 @@ class WorkOrderListScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               WorkOrderFormScreenOne.isSimilarWorkOrder = false;
+              WorkOrderFormScreenOne.isFromEdit = false;
               Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                   arguments: addWorkOrderMap);
             },

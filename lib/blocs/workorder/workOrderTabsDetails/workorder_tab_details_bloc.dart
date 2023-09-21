@@ -10,6 +10,7 @@ import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/update_workorder_details_model.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -33,6 +34,9 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
     on<SelectWorkOrderCostCenterOptions>(_selectCostCenterOptions);
     on<SaveSimilarAndNewWorkOrder>(_saveNewAndSimilarWorkOrder);
+    on<UpdateWorkOrderDetails>(_updateWorkOrderDetails);
+    on<SelectSafetyMeasureOptions>(_selectSafetyMeasuresOptions);
+    on<SelectSpecialWorkOptions>(_selectSpecialWorkOptions);
   }
 
   int tabIndex = 0;
@@ -80,7 +84,7 @@ class WorkOrderTabDetailsBloc
         });
       }
       workOrderDetailsMap = {
-        'companyid': fetchWorkOrderDetailsModel.data.contractorname,
+        'companyid': fetchWorkOrderDetailsModel.data.companyid,
         'locationid': fetchWorkOrderDetailsModel.data.locationid,
         'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
         'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
@@ -100,7 +104,11 @@ class WorkOrderTabDetailsBloc
         "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
         "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
         "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
-        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime
+        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime,
+        "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
+        "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
+        "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
+        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -258,10 +266,96 @@ class WorkOrderTabDetailsBloc
             saveNewAndSimilarWorkOrderModel: saveNewAndSimilarWorkOrderModel));
       } else {
         emit(NewAndSimilarWorkOrderNotSaved(
-            workOrderNotSaved: saveNewAndSimilarWorkOrderModel.message));
+            workOrderNotSaved:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(NewAndSimilarWorkOrderNotSaved(workOrderNotSaved: e.toString()));
     }
+  }
+
+  FutureOr _updateWorkOrderDetails(UpdateWorkOrderDetails event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(UpdatingWorkOrderDetails());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map updateWorkOrderDetailsMap = {
+        "idm": '',
+        "id": event.updateWorkOrderDetailsMap['workorderId'] ?? '',
+        "companyid": event.updateWorkOrderDetailsMap['companyid'] ?? '',
+        "locationid": event.updateWorkOrderDetailsMap['locationid'] ?? '',
+        "priorityid": event.updateWorkOrderDetailsMap['priorityid'] ?? '',
+        "categoryid": event.updateWorkOrderDetailsMap['categoryid'] ?? '',
+        "type": event.updateWorkOrderDetailsMap['type'] ?? '',
+        "subject": event.updateWorkOrderDetailsMap['subject'] ?? '',
+        "description": event.updateWorkOrderDetailsMap['description'] ?? '',
+        "specialtyid": event.updateWorkOrderDetailsMap['specialtyid'] ?? '',
+        "plannedstartdate":
+            event.updateWorkOrderDetailsMap['plannedstartdate'] ?? '',
+        "plannedstarttime":
+            event.updateWorkOrderDetailsMap['plannedstarttime'] ?? '',
+        "plannedfinishdate":
+            event.updateWorkOrderDetailsMap['plannedfinishdate'] ?? '',
+        "plannedfinishtime":
+            event.updateWorkOrderDetailsMap['plannedfinishtime'] ?? '',
+        "otherlocation": event.updateWorkOrderDetailsMap['otherlocation'] ?? '',
+        "customfields": event.updateWorkOrderDetailsMap['customfields'] ?? '',
+        "originationid": event.updateWorkOrderDetailsMap['originationid'] ?? '',
+        "costcenterid": event.updateWorkOrderDetailsMap['costcenterid'] ?? '',
+        "steps": event.updateWorkOrderDetailsMap['steps'] ?? '',
+        "measure": event.updateWorkOrderDetailsMap['measure'] ?? '',
+        "specialwork": event.updateWorkOrderDetailsMap['specialwork'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      UpdateWorkOrderDetailsModel updateWorkOrderDetailsModel =
+          await _workOrderRepository
+              .updateWorkOrderDetails(updateWorkOrderDetailsMap);
+      if (updateWorkOrderDetailsModel.status == 200) {
+        emit(WorkOrderDetailsUpdated(
+            updateWorkOrderDetailsModel: updateWorkOrderDetailsModel));
+      } else {
+        emit(WorkOrderDetailsCouldNotUpdate(
+            detailsNotFetched:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkOrderDetailsCouldNotUpdate(detailsNotFetched: e.toString()));
+    }
+  }
+
+  _selectSafetyMeasuresOptions(SelectSafetyMeasureOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    List idsList = List.from(event.safetyMeasureIdList);
+    List namesList = List.from(event.safetyMeasureNameList);
+    if (event.safetyMeasureId.isNotEmpty) {
+      if (event.safetyMeasureIdList.contains(event.safetyMeasureId)) {
+        idsList.remove(event.safetyMeasureId);
+        namesList.remove(event.safetyMeasureName);
+      } else {
+        idsList.add(event.safetyMeasureId);
+        namesList.add(event.safetyMeasureName);
+      }
+    }
+    emit(SafetyMeasuresOptionsSelected(
+        safetyMeasureIdList: idsList, safetyMeasureNameList: namesList));
+  }
+
+  _selectSpecialWorkOptions(
+      SelectSpecialWorkOptions event, Emitter<WorkOrderTabDetailsStates> emit) {
+    List idsList = List.from(event.specialWorkIdList);
+    List namesList = List.from(event.specialWorkNameList);
+    if (event.specialWorkId.isNotEmpty) {
+      if (event.specialWorkIdList.contains(event.specialWorkId)) {
+        idsList.remove(event.specialWorkId);
+        namesList.remove(event.specialWorkName);
+      } else {
+        idsList.add(event.specialWorkId);
+        namesList.add(event.specialWorkName);
+      }
+    }
+    emit(SpecialWorkOptionsSelected(
+        specialWorkIdList: idsList, specialWorkNameList: namesList));
   }
 }
