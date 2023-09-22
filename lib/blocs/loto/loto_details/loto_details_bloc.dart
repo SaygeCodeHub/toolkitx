@@ -19,6 +19,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoData> lotoData = [];
   String lotoId = '';
+  int lotoTabIndex = 0;
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
   }
@@ -27,6 +28,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       FetchLotoDetails event, Emitter<LotoDetailsState> emit) async {
     emit(LotoDetailsFetching());
     try {
+      lotoTabIndex = event.lotTabIndex;
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('assign_workforce'),
