@@ -124,3 +124,9 @@ class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
       required this.specialWorkIdList,
       required this.specialWorkNameList});
 }
+
+class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  AcceptWorkOrder({required this.workOrderId});
+}

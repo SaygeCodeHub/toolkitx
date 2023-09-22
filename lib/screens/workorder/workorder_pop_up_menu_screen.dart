@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import '../../widgets/android_pop_up.dart';
 import 'workorder_form_one_screen.dart';
 
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
@@ -42,6 +46,22 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
 
             Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                 arguments: workOrderDetailsMap);
+          }
+          if (value == DatabaseUtil.getText('Accept')) {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AndroidPopUp(
+                      titleValue: DatabaseUtil.getText('AcceptWO'),
+                      contentValue: '',
+                      onPrimaryButton: () {
+                        context.read<WorkOrderTabDetailsBloc>().add(
+                            AcceptWorkOrder(
+                                workOrderId:
+                                    workOrderDetailsMap['workorderId'] ?? ''));
+                        Navigator.pop(context);
+                      });
+                });
           }
         },
         position: PopupMenuPosition.under,

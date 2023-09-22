@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
+
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/fetch_workorder_details_model.dart';
@@ -7,22 +9,19 @@ import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../data/models/workorder/update_workorder_details_model.dart';
 
 abstract class WorkOrderRepository {
-  Future<FetchWorkOrdersModel> fetchWorkOrders(
-      int pageNo, String hashCode, String filter);
+  Future<FetchWorkOrdersModel> fetchWorkOrders(int pageNo, String hashCode, String filter);
 
-  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(
-      String hashCode, String userId);
+  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(String hashCode, String userId);
 
-  Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
-      String hashCode, String workOrderId);
+  Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(String hashCode, String workOrderId);
 
   Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
 
   Future<DeleteDocumentModel> deleteDocument(Map deleteDocumentMap);
 
-  Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
-      Map saveNewAndSimilarWorkOrderMap);
+  Future<AcceptWorkOrderModel> acceptWorkOrder(Map acceptWorkOrderMap);
 
-  Future<UpdateWorkOrderDetailsModel> updateWorkOrderDetails(
-      Map updateWorkOrderDetailsMap);
+  Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(Map saveNewAndSimilarWorkOrderMap);
+
+  Future<UpdateWorkOrderDetailsModel> updateWorkOrderDetails(Map updateWorkOrderDetailsMap);
 }
