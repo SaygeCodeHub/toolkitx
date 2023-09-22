@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -10,6 +12,8 @@ import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/manage_misc_cost_model.dart';
+import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import 'workorder_tab_details_events.dart';
@@ -38,6 +42,10 @@ class WorkOrderTabDetailsBloc
     on<UpdateWorkOrderDetails>(_updateWorkOrderDetails);
     on<SelectSafetyMeasureOptions>(_selectSafetyMeasuresOptions);
     on<SelectSpecialWorkOptions>(_selectSpecialWorkOptions);
+    on<ManageWorkOrderDownTime>(_manageDownTime);
+    on<WorkOrderSelectVendorOption>(_selectVendorOptions);
+    on<WorkOrderSelectCurrencyOption>(_selectCurrencyOptions);
+    on<ManageWorkOrderMiscCost>(_manageMiscCost);
     on<AcceptWorkOrder>(_acceptWorkOrder);
   }
 
@@ -60,7 +68,6 @@ class WorkOrderTabDetailsBloc
         DatabaseUtil.getText('CreateSimillar'),
         DatabaseUtil.getText('AddParts'),
         DatabaseUtil.getText('AddDocuments'),
-        DatabaseUtil.getText('AddMiscCost'),
         DatabaseUtil.getText('AddMiscCost'),
         DatabaseUtil.getText('AddDowntime'),
         DatabaseUtil.getText('AddComment'),
@@ -116,7 +123,10 @@ class WorkOrderTabDetailsBloc
         "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
         "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
         "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
-        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames
+        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
+        "service": fetchWorkOrderDetailsModel.data.service,
+        "vendor": fetchWorkOrderDetailsModel.data.vendorname,
+        "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -365,6 +375,98 @@ class WorkOrderTabDetailsBloc
     }
     emit(SpecialWorkOptionsSelected(
         specialWorkIdList: idsList, specialWorkNameList: namesList));
+  }
+
+  FutureOr _manageDownTime(ManageWorkOrderDownTime event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(ManagingWorkOrderDownTime());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (event.manageDownTimeMap['startdate'] == null ||
+          event.manageDownTimeMap['enddate'] == null) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('TimeDateValidate')));
+      } else if (DateFormat('dd.MM.yyyy')
+              .parse(event.manageDownTimeMap['startdate'])
+              .compareTo(DateFormat('dd.MM.yyyy')
+                  .parse(event.manageDownTimeMap['enddate'])) >
+          0) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('shouldbegreater')));
+      } else {
+        Map manageDownTimeMap = {
+          "startdate": event.manageDownTimeMap['startdate'] ?? '',
+          "starttime": event.manageDownTimeMap['starttime'] ?? '',
+          "enddate": event.manageDownTimeMap['enddate'] ?? '',
+          "endtime": event.manageDownTimeMap['endtime'] ?? '',
+          "notes": event.manageDownTimeMap['notes'] ?? '',
+          "hashcode": hashCode,
+          "woid": event.manageDownTimeMap['workorderId'] ?? '',
+          "id": ""
+        };
+        ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel =
+            await _workOrderRepository.manageDownTime(manageDownTimeMap);
+        if (manageWorkOrderDownTimeModel.status == 200) {
+          emit(WorkOrderDownTimeManaged(
+              manageWorkOrderDownTimeModel: manageWorkOrderDownTimeModel));
+        } else {
+          emit(WorkOrderDownTimeCannotManage(
+              downTimeCannotManage:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderDownTimeCannotManage(downTimeCannotManage: e.toString()));
+    }
+  }
+
+  _selectVendorOptions(WorkOrderSelectVendorOption event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderVendorOptionSelected(vendorName: event.vendorName));
+  }
+
+  _selectCurrencyOptions(WorkOrderSelectCurrencyOption event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCurrencyOptionSelected(currencyName: event.currencyName));
+  }
+
+  FutureOr _manageMiscCost(ManageWorkOrderMiscCost event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(ManagingWorkOrderMisCost());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (event.manageMisCostMap['service'] == null ||
+          event.manageMisCostMap['vendor'] == null ||
+          event.manageMisCostMap['quan'] == null ||
+          event.manageMisCostMap['currency'] == null ||
+          event.manageMisCostMap['amount'] == null) {
+        emit(WorkOrderMisCostCannotManage(
+            cannotManageMiscCost: StringConstants.kMiscCostValidation));
+      } else {
+        Map manageMiscCostMap = {
+          "service": event.manageMisCostMap['service'] ?? '',
+          "vendor": event.manageMisCostMap['vendor'] ?? '',
+          "quan": event.manageMisCostMap['quan'] ?? '',
+          "currency": event.manageMisCostMap['currency'] ?? '',
+          "amount": event.manageMisCostMap['amount'] ?? '',
+          "hashcode": hashCode,
+          "woid": event.manageMisCostMap['workorderId'] ?? '',
+          "id": ""
+        };
+        ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
+            await _workOrderRepository.manageMiscCost(manageMiscCostMap);
+        if (manageWorkOrderMiscCostModel.status == 200) {
+          emit(WorkOrderMisCostManaged(
+              manageWorkOrderMiscCostModel: manageWorkOrderMiscCostModel));
+        } else {
+          emit(WorkOrderMisCostCannotManage(
+              cannotManageMiscCost:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderMisCostCannotManage(cannotManageMiscCost: e.toString()));
+    }
   }
 
   FutureOr _acceptWorkOrder(
