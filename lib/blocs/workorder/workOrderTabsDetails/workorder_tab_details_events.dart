@@ -148,3 +148,9 @@ class ManageWorkOrderMiscCost extends WorkOrderTabsDetailsEvent {
 
   ManageWorkOrderMiscCost({required this.manageMisCostMap});
 }
+
+class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  AcceptWorkOrder({required this.workOrderId});
+}

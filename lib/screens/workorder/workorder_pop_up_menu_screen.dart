@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
 import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
@@ -9,6 +11,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import 'workorder_add_down_time_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
+import '../../widgets/android_pop_up.dart';
 import 'workorder_form_one_screen.dart';
 
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
@@ -59,6 +62,22 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderAddDownTimeScreen.addDownTimeMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, WorkOrderAddDownTimeScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('Accept')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('AcceptWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(
+                          AcceptWorkOrder(
+                              workOrderId:
+                                  workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
         }
       },
       position: PopupMenuPosition.under,

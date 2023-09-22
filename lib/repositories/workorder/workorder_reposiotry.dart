@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
+
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/fetch_workorder_details_model.dart';
@@ -21,9 +23,12 @@ abstract class WorkOrderRepository {
   Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
 
   Future<DeleteDocumentModel> deleteDocument(Map deleteDocumentMap);
+
   Future<ManageWorkOrderMiscCostModel> manageMiscCost(Map manageMiscCostMap);
 
   Future<ManageWorkOrderDownTimeModel> manageDownTime(Map manageDownTimeMap);
+
+  Future<AcceptWorkOrderModel> acceptWorkOrder(Map acceptWorkOrderMap);
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
       Map saveNewAndSimilarWorkOrderMap);

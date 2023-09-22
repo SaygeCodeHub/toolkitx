@@ -1,3 +1,4 @@
+import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
@@ -158,6 +159,20 @@ class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
 
   SpecialWorkOptionsSelected(
       {required this.specialWorkIdList, required this.specialWorkNameList});
+}
+
+class AcceptingWorkOrder extends WorkOrderTabDetailsStates {}
+
+class WorkOrderAccepted extends WorkOrderTabDetailsStates {
+  final AcceptWorkOrderModel acceptWorkOrderModel;
+
+  WorkOrderAccepted({required this.acceptWorkOrderModel});
+}
+
+class WorkOrderNotAccepted extends WorkOrderTabDetailsStates {
+  final String workOrderNotAccepted;
+
+  WorkOrderNotAccepted({required this.workOrderNotAccepted});
 }
 
 class WorkOrderVendorOptionSelected extends WorkOrderTabDetailsStates {
