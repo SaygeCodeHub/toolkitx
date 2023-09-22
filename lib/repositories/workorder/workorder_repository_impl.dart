@@ -15,28 +15,32 @@ import 'workorder_reposiotry.dart';
 
 class WorkOrderRepositoryImpl extends WorkOrderRepository {
   @override
-  Future<FetchWorkOrdersModel> fetchWorkOrders(int pageNo, String hashCode, String filter) async {
+  Future<FetchWorkOrdersModel> fetchWorkOrders(
+      int pageNo, String hashCode, String filter) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
     return FetchWorkOrdersModel.fromJson(response);
   }
 
   @override
-  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(String hashCode, String userId) async {
+  Future<FetchWorkOrdersMasterModel> fetchWorkOrderMaster(
+      String hashCode, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchWorkOrdersMasterModel.fromJson(response);
   }
 
   @override
-  Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(String hashCode, String workOrderId) async {
+  Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
+      String hashCode, String workOrderId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
     return FetchWorkOrderTabDetailsModel.fromJson(response);
   }
 
   @override
-  Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap) async {
+  Future<DeleteItemTabItemModel> deleteItemTabItem(
+      Map deleteItemTabItemMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/deleteplan", deleteItemTabItemMap);
     return DeleteItemTabItemModel.fromJson(response);
@@ -50,7 +54,8 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
-  Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(Map saveNewAndSimilarWorkOrderMap) async {
+  Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
+      Map saveNewAndSimilarWorkOrderMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/save", saveNewAndSimilarWorkOrderMap);
     return SaveNewAndSimilarWorkOrderModel.fromJson(response);

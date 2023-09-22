@@ -74,7 +74,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                       context.read<WorkOrderTabDetailsBloc>().add(
                           AcceptWorkOrder(
                               workOrderId:
-                              workOrderDetailsMap['workorderId'] ?? ''));
+                                  workOrderDetailsMap['workorderId'] ?? ''));
                       Navigator.pop(context);
                     });
               });

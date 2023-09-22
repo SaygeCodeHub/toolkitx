@@ -20,11 +20,12 @@ class WorkOrderTabDetailsFetched extends WorkOrderTabDetailsStates {
   final List popUpMenuList;
   final Map workOrderDetailsMap;
 
-  WorkOrderTabDetailsFetched({required this.workOrderDetailsMap,
-    required this.popUpMenuList,
-    this.clientId = '',
-    required this.tabInitialIndex,
-    required this.fetchWorkOrderDetailsModel});
+  WorkOrderTabDetailsFetched(
+      {required this.workOrderDetailsMap,
+      required this.popUpMenuList,
+      this.clientId = '',
+      required this.tabInitialIndex,
+      required this.fetchWorkOrderDetailsModel});
 }
 
 class WorkOrderTabDetailsNotFetched extends WorkOrderTabDetailsStates {
@@ -37,14 +38,16 @@ class WorkOrderCompanyOptionSelected extends WorkOrderTabDetailsStates {
   final String companyId;
   final String companyName;
 
-  WorkOrderCompanyOptionSelected({required this.companyId, required this.companyName});
+  WorkOrderCompanyOptionSelected(
+      {required this.companyId, required this.companyName});
 }
 
 class WorkOrderLocationOptionSelected extends WorkOrderTabDetailsStates {
   final String locationId;
   final String locationName;
 
-  WorkOrderLocationOptionSelected({required this.locationId, required this.locationName});
+  WorkOrderLocationOptionSelected(
+      {required this.locationId, required this.locationName});
 }
 
 class WorkOrderTypeOptionSelected extends WorkOrderTabDetailsStates {
@@ -86,28 +89,32 @@ class WorkOrderPriorityOptionSelected extends WorkOrderTabDetailsStates {
   final String priorityId;
   final String priorityValue;
 
-  WorkOrderPriorityOptionSelected({required this.priorityValue, required this.priorityId});
+  WorkOrderPriorityOptionSelected(
+      {required this.priorityValue, required this.priorityId});
 }
 
 class WorkOrderCategoryOptionSelected extends WorkOrderTabDetailsStates {
   final String categoryId;
   final String categoryName;
 
-  WorkOrderCategoryOptionSelected({required this.categoryId, required this.categoryName});
+  WorkOrderCategoryOptionSelected(
+      {required this.categoryId, required this.categoryName});
 }
 
 class WorkOrderCategoryOriginationSelected extends WorkOrderTabDetailsStates {
   final String originationId;
   final String originationName;
 
-  WorkOrderCategoryOriginationSelected({required this.originationId, required this.originationName});
+  WorkOrderCategoryOriginationSelected(
+      {required this.originationId, required this.originationName});
 }
 
 class WorkOrderCategoryCostCenterSelected extends WorkOrderTabDetailsStates {
   final String costCenterId;
   final String costCenterValue;
 
-  WorkOrderCategoryCostCenterSelected({required this.costCenterId, required this.costCenterValue});
+  WorkOrderCategoryCostCenterSelected(
+      {required this.costCenterId, required this.costCenterValue});
 }
 
 class SavingNewAndSimilarWorkOrder extends WorkOrderTabDetailsStates {}
@@ -142,7 +149,8 @@ class SafetyMeasuresOptionsSelected extends WorkOrderTabDetailsStates {
   final List safetyMeasureIdList;
   final List safetyMeasureNameList;
 
-  SafetyMeasuresOptionsSelected({required this.safetyMeasureIdList, required this.safetyMeasureNameList});
+  SafetyMeasuresOptionsSelected(
+      {required this.safetyMeasureIdList, required this.safetyMeasureNameList});
 }
 
 class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
