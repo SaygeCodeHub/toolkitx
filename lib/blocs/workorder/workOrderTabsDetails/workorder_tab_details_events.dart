@@ -124,3 +124,21 @@ class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
       required this.specialWorkIdList,
       required this.specialWorkNameList});
 }
+
+class WorkOrderSelectVendorOption extends WorkOrderTabsDetailsEvent {
+  final String vendorName;
+
+  WorkOrderSelectVendorOption({required this.vendorName});
+}
+
+class WorkOrderSelectCurrencyOption extends WorkOrderTabsDetailsEvent {
+  final String currencyName;
+
+  WorkOrderSelectCurrencyOption({required this.currencyName});
+}
+
+class ManageWorkOrderMiscCost extends WorkOrderTabsDetailsEvent {
+  final Map manageMisCostMap;
+
+  ManageWorkOrderMiscCost({required this.manageMisCostMap});
+}

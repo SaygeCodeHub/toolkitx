@@ -1,6 +1,7 @@
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 
@@ -156,4 +157,30 @@ class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
 
   SpecialWorkOptionsSelected(
       {required this.specialWorkIdList, required this.specialWorkNameList});
+}
+
+class WorkOrderVendorOptionSelected extends WorkOrderTabDetailsStates {
+  final String vendorName;
+
+  WorkOrderVendorOptionSelected({required this.vendorName});
+}
+
+class WorkOrderCurrencyOptionSelected extends WorkOrderTabDetailsStates {
+  final String currencyName;
+
+  WorkOrderCurrencyOptionSelected({required this.currencyName});
+}
+
+class ManagingWorkOrderMisCost extends WorkOrderTabDetailsStates {}
+
+class WorkOrderMisCostManaged extends WorkOrderTabDetailsStates {
+  final ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel;
+
+  WorkOrderMisCostManaged({required this.manageWorkOrderMiscCostModel});
+}
+
+class WorkOrderMisCostCannotManage extends WorkOrderTabDetailsStates {
+  final String cannotManageMiscCost;
+
+  WorkOrderMisCostCannotManage({required this.cannotManageMiscCost});
 }
