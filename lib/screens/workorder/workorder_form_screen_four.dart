@@ -18,7 +18,10 @@ class WorkOrderFormScreenFour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('NewWorkOrder')),
+        appBar: GenericAppBar(
+            title: (WorkOrderFormScreenOne.isFromEdit == true)
+                ? DatabaseUtil.getText('EditWorkOrder')
+                : DatabaseUtil.getText('NewWorkOrder')),
         bottomNavigationBar:
             WorkOrderSaveButton(workOrderDetailsMap: workOrderDetailsMap),
         body: Padding(

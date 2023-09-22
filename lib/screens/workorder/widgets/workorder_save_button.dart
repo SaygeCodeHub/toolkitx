@@ -62,15 +62,38 @@ class WorkOrderSaveButton extends StatelessWidget {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.workOrderNotSaved, '');
                 }
+                if (state is UpdatingWorkOrderDetails) {
+                  ProgressBar.show(context);
+                } else if (state is WorkOrderDetailsUpdated) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                      initialTabIndex: 0,
+                      workOrderId: WorkOrderDetailsTabScreen
+                          .workOrderMap['workOrderId']));
+                } else if (state is WorkOrderDetailsCouldNotUpdate) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.detailsNotFetched, '');
+                }
               },
               child: Expanded(
                   child: PrimaryButton(
                       onPressed: () {
                         workOrderDetailsMap['customfields'] =
                             WorkOrderFormScreenFour.customFieldList;
-                        context.read<WorkOrderTabDetailsBloc>().add(
-                            SaveSimilarAndNewWorkOrder(
-                                workOrderDetailsMap: workOrderDetailsMap));
+                        if (WorkOrderFormScreenOne.isFromEdit != true) {
+                          context.read<WorkOrderTabDetailsBloc>().add(
+                              SaveSimilarAndNewWorkOrder(
+                                  workOrderDetailsMap: workOrderDetailsMap));
+                        } else {
+                          context.read<WorkOrderTabDetailsBloc>().add(
+                              UpdateWorkOrderDetails(
+                                  updateWorkOrderDetailsMap:
+                                      workOrderDetailsMap));
+                        }
                       },
                       textValue: DatabaseUtil.getText('Save')))),
         ],

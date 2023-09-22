@@ -1,7 +1,11 @@
+import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/manage_misc_cost_model.dart';
+import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/update_workorder_details_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
 
@@ -125,4 +129,88 @@ class NewAndSimilarWorkOrderNotSaved extends WorkOrderTabDetailsStates {
   final String workOrderNotSaved;
 
   NewAndSimilarWorkOrderNotSaved({required this.workOrderNotSaved});
+}
+
+class UpdatingWorkOrderDetails extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDetailsUpdated extends WorkOrderTabDetailsStates {
+  final UpdateWorkOrderDetailsModel updateWorkOrderDetailsModel;
+
+  WorkOrderDetailsUpdated({required this.updateWorkOrderDetailsModel});
+}
+
+class WorkOrderDetailsCouldNotUpdate extends WorkOrderTabDetailsStates {
+  final String detailsNotFetched;
+
+  WorkOrderDetailsCouldNotUpdate({required this.detailsNotFetched});
+}
+
+class SafetyMeasuresOptionsSelected extends WorkOrderTabDetailsStates {
+  final List safetyMeasureIdList;
+  final List safetyMeasureNameList;
+
+  SafetyMeasuresOptionsSelected(
+      {required this.safetyMeasureIdList, required this.safetyMeasureNameList});
+}
+
+class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
+  final List specialWorkIdList;
+  final List specialWorkNameList;
+
+  SpecialWorkOptionsSelected(
+      {required this.specialWorkIdList, required this.specialWorkNameList});
+}
+
+class AcceptingWorkOrder extends WorkOrderTabDetailsStates {}
+
+class WorkOrderAccepted extends WorkOrderTabDetailsStates {
+  final AcceptWorkOrderModel acceptWorkOrderModel;
+
+  WorkOrderAccepted({required this.acceptWorkOrderModel});
+}
+
+class WorkOrderNotAccepted extends WorkOrderTabDetailsStates {
+  final String workOrderNotAccepted;
+
+  WorkOrderNotAccepted({required this.workOrderNotAccepted});
+}
+
+class WorkOrderVendorOptionSelected extends WorkOrderTabDetailsStates {
+  final String vendorName;
+
+  WorkOrderVendorOptionSelected({required this.vendorName});
+}
+
+class WorkOrderCurrencyOptionSelected extends WorkOrderTabDetailsStates {
+  final String currencyName;
+
+  WorkOrderCurrencyOptionSelected({required this.currencyName});
+}
+
+class ManagingWorkOrderMisCost extends WorkOrderTabDetailsStates {}
+
+class WorkOrderMisCostManaged extends WorkOrderTabDetailsStates {
+  final ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel;
+
+  WorkOrderMisCostManaged({required this.manageWorkOrderMiscCostModel});
+}
+
+class WorkOrderMisCostCannotManage extends WorkOrderTabDetailsStates {
+  final String cannotManageMiscCost;
+
+  WorkOrderMisCostCannotManage({required this.cannotManageMiscCost});
+}
+
+class ManagingWorkOrderDownTime extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDownTimeManaged extends WorkOrderTabDetailsStates {
+  final ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel;
+
+  WorkOrderDownTimeManaged({required this.manageWorkOrderDownTimeModel});
+}
+
+class WorkOrderDownTimeCannotManage extends WorkOrderTabDetailsStates {
+  final String downTimeCannotManage;
+
+  WorkOrderDownTimeCannotManage({required this.downTimeCannotManage});
 }

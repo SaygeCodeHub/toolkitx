@@ -1,15 +1,21 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
+import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/manage_misc_cost_model.dart';
+import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/update_workorder_details_model.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -33,6 +39,14 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderOriginationOptions>(_selectOriginationOptions);
     on<SelectWorkOrderCostCenterOptions>(_selectCostCenterOptions);
     on<SaveSimilarAndNewWorkOrder>(_saveNewAndSimilarWorkOrder);
+    on<UpdateWorkOrderDetails>(_updateWorkOrderDetails);
+    on<SelectSafetyMeasureOptions>(_selectSafetyMeasuresOptions);
+    on<SelectSpecialWorkOptions>(_selectSpecialWorkOptions);
+    on<ManageWorkOrderDownTime>(_manageDownTime);
+    on<WorkOrderSelectVendorOption>(_selectVendorOptions);
+    on<WorkOrderSelectCurrencyOption>(_selectCurrencyOptions);
+    on<ManageWorkOrderMiscCost>(_manageMiscCost);
+    on<AcceptWorkOrder>(_acceptWorkOrder);
   }
 
   int tabIndex = 0;
@@ -55,7 +69,6 @@ class WorkOrderTabDetailsBloc
         DatabaseUtil.getText('AddParts'),
         DatabaseUtil.getText('AddDocuments'),
         DatabaseUtil.getText('AddMiscCost'),
-        DatabaseUtil.getText('AddMiscCost'),
         DatabaseUtil.getText('AddDowntime'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('ShowRouts')
@@ -70,6 +83,12 @@ class WorkOrderTabDetailsBloc
       if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
         popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
       }
+      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
+      }
+      if (fetchWorkOrderDetailsModel.data.isstart == '1') {
+        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
+      }
       List customFieldList = [];
       for (int i = 0;
           i < fetchWorkOrderDetailsModel.data.customfields.length;
@@ -80,7 +99,7 @@ class WorkOrderTabDetailsBloc
         });
       }
       workOrderDetailsMap = {
-        'companyid': fetchWorkOrderDetailsModel.data.contractorname,
+        'companyid': fetchWorkOrderDetailsModel.data.companyid,
         'locationid': fetchWorkOrderDetailsModel.data.locationid,
         'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
         'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
@@ -100,7 +119,14 @@ class WorkOrderTabDetailsBloc
         "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
         "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
         "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
-        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime
+        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime,
+        "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
+        "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
+        "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
+        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
+        "service": fetchWorkOrderDetailsModel.data.service,
+        "vendor": fetchWorkOrderDetailsModel.data.vendorname,
+        "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
       };
       emit(WorkOrderTabDetailsFetched(
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
@@ -258,10 +284,213 @@ class WorkOrderTabDetailsBloc
             saveNewAndSimilarWorkOrderModel: saveNewAndSimilarWorkOrderModel));
       } else {
         emit(NewAndSimilarWorkOrderNotSaved(
-            workOrderNotSaved: saveNewAndSimilarWorkOrderModel.message));
+            workOrderNotSaved:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(NewAndSimilarWorkOrderNotSaved(workOrderNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr _updateWorkOrderDetails(UpdateWorkOrderDetails event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(UpdatingWorkOrderDetails());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map updateWorkOrderDetailsMap = {
+        "idm": '',
+        "id": event.updateWorkOrderDetailsMap['workorderId'] ?? '',
+        "companyid": event.updateWorkOrderDetailsMap['companyid'] ?? '',
+        "locationid": event.updateWorkOrderDetailsMap['locationid'] ?? '',
+        "priorityid": event.updateWorkOrderDetailsMap['priorityid'] ?? '',
+        "categoryid": event.updateWorkOrderDetailsMap['categoryid'] ?? '',
+        "type": event.updateWorkOrderDetailsMap['type'] ?? '',
+        "subject": event.updateWorkOrderDetailsMap['subject'] ?? '',
+        "description": event.updateWorkOrderDetailsMap['description'] ?? '',
+        "specialtyid": event.updateWorkOrderDetailsMap['specialtyid'] ?? '',
+        "plannedstartdate":
+            event.updateWorkOrderDetailsMap['plannedstartdate'] ?? '',
+        "plannedstarttime":
+            event.updateWorkOrderDetailsMap['plannedstarttime'] ?? '',
+        "plannedfinishdate":
+            event.updateWorkOrderDetailsMap['plannedfinishdate'] ?? '',
+        "plannedfinishtime":
+            event.updateWorkOrderDetailsMap['plannedfinishtime'] ?? '',
+        "otherlocation": event.updateWorkOrderDetailsMap['otherlocation'] ?? '',
+        "customfields": event.updateWorkOrderDetailsMap['customfields'] ?? '',
+        "originationid": event.updateWorkOrderDetailsMap['originationid'] ?? '',
+        "costcenterid": event.updateWorkOrderDetailsMap['costcenterid'] ?? '',
+        "steps": event.updateWorkOrderDetailsMap['steps'] ?? '',
+        "measure": event.updateWorkOrderDetailsMap['measure'] ?? '',
+        "specialwork": event.updateWorkOrderDetailsMap['specialwork'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      UpdateWorkOrderDetailsModel updateWorkOrderDetailsModel =
+          await _workOrderRepository
+              .updateWorkOrderDetails(updateWorkOrderDetailsMap);
+      if (updateWorkOrderDetailsModel.status == 200) {
+        emit(WorkOrderDetailsUpdated(
+            updateWorkOrderDetailsModel: updateWorkOrderDetailsModel));
+      } else {
+        emit(WorkOrderDetailsCouldNotUpdate(
+            detailsNotFetched:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkOrderDetailsCouldNotUpdate(detailsNotFetched: e.toString()));
+    }
+  }
+
+  _selectSafetyMeasuresOptions(SelectSafetyMeasureOptions event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    List idsList = List.from(event.safetyMeasureIdList);
+    List namesList = List.from(event.safetyMeasureNameList);
+    if (event.safetyMeasureId.isNotEmpty) {
+      if (event.safetyMeasureIdList.contains(event.safetyMeasureId)) {
+        idsList.remove(event.safetyMeasureId);
+        namesList.remove(event.safetyMeasureName);
+      } else {
+        idsList.add(event.safetyMeasureId);
+        namesList.add(event.safetyMeasureName);
+      }
+    }
+    emit(SafetyMeasuresOptionsSelected(
+        safetyMeasureIdList: idsList, safetyMeasureNameList: namesList));
+  }
+
+  _selectSpecialWorkOptions(
+      SelectSpecialWorkOptions event, Emitter<WorkOrderTabDetailsStates> emit) {
+    List idsList = List.from(event.specialWorkIdList);
+    List namesList = List.from(event.specialWorkNameList);
+    if (event.specialWorkId.isNotEmpty) {
+      if (event.specialWorkIdList.contains(event.specialWorkId)) {
+        idsList.remove(event.specialWorkId);
+        namesList.remove(event.specialWorkName);
+      } else {
+        idsList.add(event.specialWorkId);
+        namesList.add(event.specialWorkName);
+      }
+    }
+    emit(SpecialWorkOptionsSelected(
+        specialWorkIdList: idsList, specialWorkNameList: namesList));
+  }
+
+  FutureOr _manageDownTime(ManageWorkOrderDownTime event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(ManagingWorkOrderDownTime());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (event.manageDownTimeMap['startdate'] == null ||
+          event.manageDownTimeMap['enddate'] == null) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('TimeDateValidate')));
+      } else if (DateFormat('dd.MM.yyyy')
+              .parse(event.manageDownTimeMap['startdate'])
+              .compareTo(DateFormat('dd.MM.yyyy')
+                  .parse(event.manageDownTimeMap['enddate'])) >
+          0) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('shouldbegreater')));
+      } else {
+        Map manageDownTimeMap = {
+          "startdate": event.manageDownTimeMap['startdate'] ?? '',
+          "starttime": event.manageDownTimeMap['starttime'] ?? '',
+          "enddate": event.manageDownTimeMap['enddate'] ?? '',
+          "endtime": event.manageDownTimeMap['endtime'] ?? '',
+          "notes": event.manageDownTimeMap['notes'] ?? '',
+          "hashcode": hashCode,
+          "woid": event.manageDownTimeMap['workorderId'] ?? '',
+          "id": ""
+        };
+        ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel =
+            await _workOrderRepository.manageDownTime(manageDownTimeMap);
+        if (manageWorkOrderDownTimeModel.status == 200) {
+          emit(WorkOrderDownTimeManaged(
+              manageWorkOrderDownTimeModel: manageWorkOrderDownTimeModel));
+        } else {
+          emit(WorkOrderDownTimeCannotManage(
+              downTimeCannotManage:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderDownTimeCannotManage(downTimeCannotManage: e.toString()));
+    }
+  }
+
+  _selectVendorOptions(WorkOrderSelectVendorOption event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderVendorOptionSelected(vendorName: event.vendorName));
+  }
+
+  _selectCurrencyOptions(WorkOrderSelectCurrencyOption event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderCurrencyOptionSelected(currencyName: event.currencyName));
+  }
+
+  FutureOr _manageMiscCost(ManageWorkOrderMiscCost event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(ManagingWorkOrderMisCost());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (event.manageMisCostMap['service'] == null ||
+          event.manageMisCostMap['vendor'] == null ||
+          event.manageMisCostMap['quan'] == null ||
+          event.manageMisCostMap['currency'] == null ||
+          event.manageMisCostMap['amount'] == null) {
+        emit(WorkOrderMisCostCannotManage(
+            cannotManageMiscCost: StringConstants.kMiscCostValidation));
+      } else {
+        Map manageMiscCostMap = {
+          "service": event.manageMisCostMap['service'] ?? '',
+          "vendor": event.manageMisCostMap['vendor'] ?? '',
+          "quan": event.manageMisCostMap['quan'] ?? '',
+          "currency": event.manageMisCostMap['currency'] ?? '',
+          "amount": event.manageMisCostMap['amount'] ?? '',
+          "hashcode": hashCode,
+          "woid": event.manageMisCostMap['workorderId'] ?? '',
+          "id": ""
+        };
+        ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
+            await _workOrderRepository.manageMiscCost(manageMiscCostMap);
+        if (manageWorkOrderMiscCostModel.status == 200) {
+          emit(WorkOrderMisCostManaged(
+              manageWorkOrderMiscCostModel: manageWorkOrderMiscCostModel));
+        } else {
+          emit(WorkOrderMisCostCannotManage(
+              cannotManageMiscCost:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderMisCostCannotManage(cannotManageMiscCost: e.toString()));
+    }
+  }
+
+  FutureOr _acceptWorkOrder(
+      AcceptWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(AcceptingWorkOrder());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map acceptWorkOrderMap = {
+        "woid": event.workOrderId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      AcceptWorkOrderModel acceptWorkOrderModel =
+          await _workOrderRepository.acceptWorkOrder(acceptWorkOrderMap);
+      if (acceptWorkOrderModel.status == 200) {
+        emit(WorkOrderAccepted(acceptWorkOrderModel: acceptWorkOrderModel));
+      } else {
+        emit(WorkOrderNotAccepted(
+            workOrderNotAccepted:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkOrderNotAccepted(workOrderNotAccepted: e.toString()));
     }
   }
 }
