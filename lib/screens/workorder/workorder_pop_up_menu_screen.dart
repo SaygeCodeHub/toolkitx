@@ -57,7 +57,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
           WorkOrderAddDownTimeScreen.addDownTimeMap['workorderId'] =
-          workOrderDetailsMap['workorderId'];
+              workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, WorkOrderAddDownTimeScreen.routeName);
         }
       },
