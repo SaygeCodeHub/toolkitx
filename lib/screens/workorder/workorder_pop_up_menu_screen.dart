@@ -9,6 +9,7 @@ import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'start_workorder_screen.dart';
 import 'workorder_add_down_time_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
 import '../../widgets/android_pop_up.dart';
@@ -78,6 +79,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                       Navigator.pop(context);
                     });
               });
+        }
+        if (value == DatabaseUtil.getText('Start')) {
+          StartWorkOrderScreen.startWorkOrderMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,
