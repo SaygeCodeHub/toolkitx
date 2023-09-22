@@ -43,6 +43,7 @@ import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
+import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -302,6 +303,10 @@ class AppRoutes {
       case DocumentsListScreen.routeName:
         return _createRoute(DocumentsListScreen(
           isFromHome: settings.arguments as bool,
+        ));
+      case LotoDetailsScreen.routeName:
+        return _createRoute(LotoDetailsScreen(
+          lotoDetailsMap: settings.arguments as Map,
         ));
       default:
         return _createRoute(const WelcomeScreen());
