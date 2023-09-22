@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -11,6 +12,7 @@ import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
+import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import 'workorder_tab_details_events.dart';
@@ -39,6 +41,7 @@ class WorkOrderTabDetailsBloc
     on<UpdateWorkOrderDetails>(_updateWorkOrderDetails);
     on<SelectSafetyMeasureOptions>(_selectSafetyMeasuresOptions);
     on<SelectSpecialWorkOptions>(_selectSpecialWorkOptions);
+    on<ManageWorkOrderDownTime>(_manageDownTime);
     on<WorkOrderSelectVendorOption>(_selectVendorOptions);
     on<WorkOrderSelectCurrencyOption>(_selectCurrencyOptions);
     on<ManageWorkOrderMiscCost>(_manageMiscCost);
@@ -364,6 +367,49 @@ class WorkOrderTabDetailsBloc
     }
     emit(SpecialWorkOptionsSelected(
         specialWorkIdList: idsList, specialWorkNameList: namesList));
+  }
+
+  FutureOr _manageDownTime(ManageWorkOrderDownTime event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(ManagingWorkOrderDownTime());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (event.manageDownTimeMap['startdate'] == null ||
+          event.manageDownTimeMap['enddate'] == null) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('TimeDateValidate')));
+      } else if (DateFormat('dd.MM.yyyy')
+              .parse(event.manageDownTimeMap['startdate'])
+              .compareTo(DateFormat('dd.MM.yyyy')
+                  .parse(event.manageDownTimeMap['enddate'])) >
+          0) {
+        emit(WorkOrderDownTimeCannotManage(
+            downTimeCannotManage: DatabaseUtil.getText('shouldbegreater')));
+      } else {
+        Map manageDownTimeMap = {
+          "startdate": event.manageDownTimeMap['startdate'] ?? '',
+          "starttime": event.manageDownTimeMap['starttime'] ?? '',
+          "enddate": event.manageDownTimeMap['enddate'] ?? '',
+          "endtime": event.manageDownTimeMap['endtime'] ?? '',
+          "notes": event.manageDownTimeMap['notes'] ?? '',
+          "hashcode": hashCode,
+          "woid": event.manageDownTimeMap['workorderId'] ?? '',
+          "id": ""
+        };
+        ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel =
+            await _workOrderRepository.manageDownTime(manageDownTimeMap);
+        if (manageWorkOrderDownTimeModel.status == 200) {
+          emit(WorkOrderDownTimeManaged(
+              manageWorkOrderDownTimeModel: manageWorkOrderDownTimeModel));
+        } else {
+          emit(WorkOrderDownTimeCannotManage(
+              downTimeCannotManage:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderDownTimeCannotManage(downTimeCannotManage: e.toString()));
+    }
   }
 
   _selectVendorOptions(WorkOrderSelectVendorOption event,

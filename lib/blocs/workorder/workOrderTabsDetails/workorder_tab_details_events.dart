@@ -125,6 +125,12 @@ class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
       required this.specialWorkNameList});
 }
 
+class ManageWorkOrderDownTime extends WorkOrderTabsDetailsEvent {
+  final Map manageDownTimeMap;
+
+  ManageWorkOrderDownTime({required this.manageDownTimeMap});
+}
+
 class WorkOrderSelectVendorOption extends WorkOrderTabsDetailsEvent {
   final String vendorName;
 
