@@ -4,6 +4,7 @@ import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
+import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 
@@ -213,4 +214,18 @@ class WorkOrderDownTimeCannotManage extends WorkOrderTabDetailsStates {
   final String downTimeCannotManage;
 
   WorkOrderDownTimeCannotManage({required this.downTimeCannotManage});
+}
+
+class RejectingWorkOrder extends WorkOrderTabDetailsStates {}
+
+class WorkOrderRejected extends WorkOrderTabDetailsStates {
+  final RejectWorkOrderModel rejectWorkOrderModel;
+
+  WorkOrderRejected({required this.rejectWorkOrderModel});
+}
+
+class WorkOrderNotRejected extends WorkOrderTabDetailsStates {
+  final String workOrderNotRejected;
+
+  WorkOrderNotRejected({required this.workOrderNotRejected});
 }

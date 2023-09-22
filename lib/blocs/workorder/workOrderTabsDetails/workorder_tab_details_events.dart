@@ -154,3 +154,9 @@ class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
 
   AcceptWorkOrder({required this.workOrderId});
 }
+
+class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  RejectWorkOrder({required this.workOrderId});
+}

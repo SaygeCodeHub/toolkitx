@@ -79,6 +79,22 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
+        if (value == DatabaseUtil.getText('Reject')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('RejectWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(
+                          RejectWorkOrder(
+                              workOrderId:
+                                  workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
+        }
       },
       position: PopupMenuPosition.under,
       itemBuilder: (BuildContext context) => [

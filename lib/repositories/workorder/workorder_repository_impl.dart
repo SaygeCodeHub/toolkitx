@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/manage_downtime_model.dart';
+import 'package:toolkit/data/models/workorder/reject_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
 
@@ -90,5 +91,12 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/acceptworkorder", acceptWorkOrderMap);
     return AcceptWorkOrderModel.fromJson(response);
+  }
+
+  @override
+  Future<RejectWorkOrderModel> rejectWorkOrder(Map rejectWorkOrderMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/rejectworkorder", rejectWorkOrderMap);
+    return RejectWorkOrderModel.fromJson(response);
   }
 }

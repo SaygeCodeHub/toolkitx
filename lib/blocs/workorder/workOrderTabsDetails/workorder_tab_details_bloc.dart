@@ -14,6 +14,7 @@ import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
+import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import 'workorder_tab_details_events.dart';
@@ -47,6 +48,7 @@ class WorkOrderTabDetailsBloc
     on<WorkOrderSelectCurrencyOption>(_selectCurrencyOptions);
     on<ManageWorkOrderMiscCost>(_manageMiscCost);
     on<AcceptWorkOrder>(_acceptWorkOrder);
+    on<RejectWorkOrder>(_rejectWorkOrder);
   }
 
   int tabIndex = 0;
@@ -85,6 +87,9 @@ class WorkOrderTabDetailsBloc
       }
       if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
         popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
+      }
+      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+        popUpMenuItemsList.insert(9, DatabaseUtil.getText('Reject'));
       }
       if (fetchWorkOrderDetailsModel.data.isstart == '1') {
         popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
@@ -491,6 +496,31 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderNotAccepted(workOrderNotAccepted: e.toString()));
+    }
+  }
+
+  FutureOr _rejectWorkOrder(
+      RejectWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(RejectingWorkOrder());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map rejectWorkOrderMap = {
+        "woid": event.workOrderId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      RejectWorkOrderModel rejectWorkOrderModel =
+          await _workOrderRepository.rejectWorkOrder(rejectWorkOrderMap);
+      if (rejectWorkOrderModel.status == 200) {
+        emit(WorkOrderRejected(rejectWorkOrderModel: rejectWorkOrderModel));
+      } else {
+        emit(WorkOrderNotRejected(
+            workOrderNotRejected:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkOrderNotRejected(workOrderNotRejected: e.toString()));
     }
   }
 }
