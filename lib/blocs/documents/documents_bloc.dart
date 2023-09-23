@@ -55,24 +55,25 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     }
   }
 
-  Future<FutureOr<void>> _getDocumentsRoles(GetDocumentRoles event, Emitter<DocumentsStates> emit) async {
+  Future<FutureOr<void>> _getDocumentsRoles(
+      GetDocumentRoles event, Emitter<DocumentsStates> emit) async {
     emit(const FetchingDocumentRoles());
     try {
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-    DocumentRolesModel documentRolesModel =
-    await _documentsRepository.getDocumentsRoles(userId,hashCode);
-    emit(DocumentRolesFetched(
-        documentRolesModel: documentRolesModel, roleId: roleId));
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      DocumentRolesModel documentRolesModel =
+          await _documentsRepository.getDocumentsRoles(userId, hashCode);
+      emit(DocumentRolesFetched(
+          documentRolesModel: documentRolesModel, roleId: roleId));
     } catch (e) {
-    emit(const CouldNotFetchDocumentRoles());
-    rethrow;
+      emit(const CouldNotFetchDocumentRoles());
+      rethrow;
     }
   }
 
-
-  FutureOr<void> _selectDocumentRoleEvent(SelectDocumentRoleEvent event, Emitter<DocumentsStates> emit) {
+  FutureOr<void> _selectDocumentRoleEvent(
+      SelectDocumentRoleEvent event, Emitter<DocumentsStates> emit) {
     roleId = event.roleId;
-  emit(const DocumentRoleSelected());
+    emit(const DocumentRoleSelected());
   }
 }

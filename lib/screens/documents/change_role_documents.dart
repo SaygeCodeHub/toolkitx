@@ -29,11 +29,12 @@ class ChangeRoleDocuments extends StatelessWidget {
           child: BlocConsumer<DocumentsBloc, DocumentsStates>(
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentRoles ||
-                currentState is DocumentRolesFetched ,
+                currentState is DocumentRolesFetched,
             listener: (context, state) {
               if (state is DocumentRoleSelected) {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, DocumentsListScreen.routeName,arguments: false);
+                Navigator.pushNamed(context, DocumentsListScreen.routeName,
+                    arguments: false);
               }
             },
             builder: (context, state) {

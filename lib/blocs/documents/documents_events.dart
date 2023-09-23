@@ -16,5 +16,5 @@ class GetDocumentRoles extends DocumentsEvents {
 class SelectDocumentRoleEvent extends DocumentsEvents {
   final String roleId;
 
-   SelectDocumentRoleEvent(this.roleId);
+  SelectDocumentRoleEvent(this.roleId);
 }

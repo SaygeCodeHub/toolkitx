@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-DocumentRolesModel documentRolesModelFromJson(String str) => DocumentRolesModel.fromJson(json.decode(str));
+DocumentRolesModel documentRolesModelFromJson(String str) =>
+    DocumentRolesModel.fromJson(json.decode(str));
 
-String documentRolesModelToJson(DocumentRolesModel data) => json.encode(data.toJson());
+String documentRolesModelToJson(DocumentRolesModel data) =>
+    json.encode(data.toJson());
 
 class DocumentRolesModel {
   final int status;
@@ -19,22 +21,23 @@ class DocumentRolesModel {
     required this.data,
   });
 
-  factory DocumentRolesModel.fromJson(Map<String, dynamic> json) => DocumentRolesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-  );
+  factory DocumentRolesModel.fromJson(Map<String, dynamic> json) =>
+      DocumentRolesModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
   final String? groupId;
-  final String ?groupName;
+  final String? groupName;
 
   Datum({
     this.groupId,
@@ -42,12 +45,12 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    groupId: json["group_id"],
-    groupName: json["group_name"],
-  );
+        groupId: json["group_id"],
+        groupName: json["group_name"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "group_id": groupId,
-    "group_name": groupName,
-  };
+        "group_id": groupId,
+        "group_name": groupName,
+      };
 }

@@ -38,7 +38,7 @@ class FetchingDocumentRoles extends DocumentsStates {
 }
 
 class DocumentRolesFetched extends DocumentsStates {
-  final DocumentRolesModel documentRolesModel ;
+  final DocumentRolesModel documentRolesModel;
   final String? roleId;
 
   const DocumentRolesFetched(

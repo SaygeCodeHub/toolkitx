@@ -1,4 +1,3 @@
-
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
 import '../../data/models/documents/documents_list_model.dart';
@@ -16,7 +15,8 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<DocumentRolesModel> getDocumentsRoles(String userId, String hashCode) async {
+  Future<DocumentRolesModel> getDocumentsRoles(
+      String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getroles?hashcode=$hashCode&userid=$userId");
     return DocumentRolesModel.fromJson(response);
