@@ -8,3 +8,13 @@ class GetDocumentsList extends DocumentsEvents {
 
   GetDocumentsList({required this.page, this.isFromHome = false});
 }
+
+class GetDocumentRoles extends DocumentsEvents {
+  GetDocumentRoles();
+}
+
+class SelectDocumentRoleEvent extends DocumentsEvents {
+  final String roleId;
+
+   SelectDocumentRoleEvent(this.roleId);
+}
