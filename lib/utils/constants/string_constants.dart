@@ -180,6 +180,7 @@ abstract class StringConstants {
   static const String kLocation = 'Location';
   static const String kWorkforce = 'Workforce';
   static const String kSystemUser = 'System User';
+  static const String kAssignedFor = 'Assigned for: ';
   static const String kReportToAuthorities = 'Report to authorities';
   static const String kSelectSite = 'Select Site';
   static const String kSelectLocation = 'Select Location';

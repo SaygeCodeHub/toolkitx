@@ -8,11 +8,12 @@ import '../../../data/models/loto/loto_details_model.dart';
 import '../../../utils/database_utils.dart';
 
 class LotoDetails extends StatelessWidget {
-  const LotoDetails({
-    super.key,
-    required this.fetchLotoDetailsModel,
-  });
+  const LotoDetails(
+      {super.key,
+      required this.fetchLotoDetailsModel,
+      required this.lotoTabIndex});
   final FetchLotoDetailsModel fetchLotoDetailsModel;
+  final int lotoTabIndex;
 
   @override
   Widget build(BuildContext context) {

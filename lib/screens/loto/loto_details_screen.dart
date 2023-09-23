@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
+import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
 import 'package:toolkit/utils/loto_util.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -16,9 +17,10 @@ class LotoDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LotoDetailsBloc>()
-        .add(FetchLotoDetails(lotoId: lotoDetailsMap["id"]));
+    context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+          lotoId: lotoDetailsMap["id"],
+          lotTabIndex: 0,
+        ));
     return Scaffold(
       appBar: GenericAppBar(
         title: lotoDetailsMap["name"],
@@ -57,16 +59,21 @@ class LotoDetailsScreen extends StatelessWidget {
                   CustomTabBarView(
                     lengthOfTabs: 6,
                     tabBarViewIcons: LotoUtil().tabBarViewIcons,
-                    initialIndex: 0,
+                    initialIndex: context.read<LotoDetailsBloc>().lotoTabIndex,
                     tabBarViewWidgets: [
                       LotoDetails(
                         fetchLotoDetailsModel: state.fetchLotoDetailsModel,
+                        lotoTabIndex:
+                            context.read<LotoDetailsBloc>().lotoTabIndex,
                       ),
                       const Text("Tab 2"),
                       const Text("Tab 3"),
                       const Text("Tab 4"),
                       const Text("Tab 5"),
-                      const Text("Tab 6"),
+                      LotoTabSixScreen(
+                        fetchLotoDetailsModel: state.fetchLotoDetailsModel,
+                        lotoTabIndex: 5,
+                      ),
                     ],
                   ),
                 ],
