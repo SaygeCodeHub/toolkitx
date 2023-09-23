@@ -79,6 +79,21 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
+        if (value == DatabaseUtil.getText('Hold')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('OnHoldWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(HoldWorkOrder(
+                          workOrderId:
+                              workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
+        }
       },
       position: PopupMenuPosition.under,
       itemBuilder: (BuildContext context) => [

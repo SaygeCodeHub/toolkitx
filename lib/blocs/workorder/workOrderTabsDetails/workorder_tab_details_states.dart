@@ -2,6 +2,7 @@ import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
@@ -213,4 +214,18 @@ class WorkOrderDownTimeCannotManage extends WorkOrderTabDetailsStates {
   final String downTimeCannotManage;
 
   WorkOrderDownTimeCannotManage({required this.downTimeCannotManage});
+}
+
+class WorkOrderGettingOnHold extends WorkOrderTabDetailsStates {}
+
+class WorkOrderGotOnHold extends WorkOrderTabDetailsStates {
+  final HoldWorkOrderModel holdWorkOrderModel;
+
+  WorkOrderGotOnHold({required this.holdWorkOrderModel});
+}
+
+class WorkOrderCannotHold extends WorkOrderTabDetailsStates {
+  final String workOrderCannotHold;
+
+  WorkOrderCannotHold({required this.workOrderCannotHold});
 }
