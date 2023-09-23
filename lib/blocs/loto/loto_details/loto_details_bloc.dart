@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
 
@@ -22,6 +23,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int lotoTabIndex = 0;
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
+    on<RemoveAssignWorkforce>(_removeAssignWorkforce);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -48,6 +50,29 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoDetailsNotFetched(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeAssignWorkforce(
+      RemoveAssignWorkforce event, Emitter<LotoDetailsState> emit) async {
+    emit(AssignWorkforceRemoving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map workforceRemoveMap = {
+        "hashcode": hashCode,
+        "lotoid": lotoId,
+        "peopleid": event.peopleId,
+        "userid": userId
+      };
+      AssignWorkForceForRemoveModel assignWorkForceForRemoveModel =
+          await _lotoRepository.assignWorkforceRemove(workforceRemoveMap);
+      if (assignWorkForceForRemoveModel.status == 200) {
+        emit(AssignWorkforceRemoved(
+            assignWorkForceForRemoveModel: assignWorkForceForRemoveModel));
+      }
+    } catch (e) {
+      emit(AssignWorkforceRemoveError(getError: e.toString()));
     }
   }
 }

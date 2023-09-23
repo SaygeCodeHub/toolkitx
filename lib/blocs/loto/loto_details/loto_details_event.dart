@@ -8,3 +8,8 @@ class FetchLotoDetails extends LotoDetailsEvent {
 
   FetchLotoDetails({required this.lotoId, required this.lotTabIndex});
 }
+
+class RemoveAssignWorkforce extends LotoDetailsEvent {
+  final String peopleId;
+  RemoveAssignWorkforce({required this.peopleId});
+}
