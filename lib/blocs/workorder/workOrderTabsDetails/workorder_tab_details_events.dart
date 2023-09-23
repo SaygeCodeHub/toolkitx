@@ -154,3 +154,9 @@ class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
 
   AcceptWorkOrder({required this.workOrderId});
 }
+
+class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
+  final String downTimeId;
+
+  FetchWorkOrderSingleDownTime({required this.downTimeId});
+}
