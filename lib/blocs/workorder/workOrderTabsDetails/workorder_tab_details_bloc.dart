@@ -12,6 +12,7 @@ import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
@@ -49,6 +50,7 @@ class WorkOrderTabDetailsBloc
     on<WorkOrderSelectCurrencyOption>(_selectCurrencyOptions);
     on<ManageWorkOrderMiscCost>(_manageMiscCost);
     on<AcceptWorkOrder>(_acceptWorkOrder);
+    on<HoldWorkOrder>(_holdWorkOrder);
     on<FetchWorkOrderSingleDownTime>(_fetchWorkOrderSingleDownTime);
   }
 
@@ -91,6 +93,9 @@ class WorkOrderTabDetailsBloc
       }
       if (fetchWorkOrderDetailsModel.data.isstart == '1') {
         popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
+      }
+      if (fetchWorkOrderDetailsModel.data.ishold == '1') {
+        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Hold'));
       }
       List customFieldList = [];
       for (int i = 0;
@@ -494,6 +499,31 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderNotAccepted(workOrderNotAccepted: e.toString()));
+    }
+  }
+
+  FutureOr _holdWorkOrder(
+      HoldWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(WorkOrderGettingOnHold());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map holdWorkOrderMap = {
+        "woid": event.workOrderId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      HoldWorkOrderModel holdWorkOrderModel =
+          await _workOrderRepository.holdWorkOrder(holdWorkOrderMap);
+      if (holdWorkOrderModel.status == 200) {
+        emit(WorkOrderGotOnHold(holdWorkOrderModel: holdWorkOrderModel));
+      } else {
+        emit(WorkOrderCannotHold(
+            workOrderCannotHold:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkOrderCannotHold(workOrderCannotHold: e.toString()));
     }
   }
 
