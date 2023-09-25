@@ -9,6 +9,7 @@ import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
 import 'workorder_add_down_time_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
@@ -60,9 +61,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
-          WorkOrderAddDownTimeScreen.addDownTimeMap['workorderId'] =
+          WorkOrderAddAndEditDownTimeScreen
+                  .addAndEditDownTimeMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
-          Navigator.pushNamed(context, WorkOrderAddDownTimeScreen.routeName);
+          Navigator.pushNamed(
+              context, WorkOrderAddAndEditDownTimeScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Accept')) {
           showDialog(

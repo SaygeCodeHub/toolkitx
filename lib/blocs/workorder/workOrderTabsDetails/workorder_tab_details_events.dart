@@ -161,4 +161,10 @@ class HoldWorkOrder extends WorkOrderTabsDetailsEvent {
   HoldWorkOrder({required this.workOrderId});
 }
 
+class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
+  final String downTimeId;
+
+  FetchWorkOrderSingleDownTime({required this.downTimeId});
+}
+
 class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {}

@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart'
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/manage_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
@@ -99,6 +100,14 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/holdworkorder", holdWorkOrderMap);
     return HoldWorkOrderModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderSingleDownTimeModel> fetchWorkOrderSingleDownTime(
+      String hashCode, String downTimeId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/getsingledowntime?hashcode=$hashCode&downtimeid=$downTimeId");
+    return FetchWorkOrderSingleDownTimeModel.fromJson(response);
   }
 
   @override

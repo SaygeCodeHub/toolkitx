@@ -14,11 +14,13 @@ import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
+import '../../../data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
+import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -51,6 +53,7 @@ class WorkOrderTabDetailsBloc
     on<ManageWorkOrderMiscCost>(_manageMiscCost);
     on<AcceptWorkOrder>(_acceptWorkOrder);
     on<HoldWorkOrder>(_holdWorkOrder);
+    on<FetchWorkOrderSingleDownTime>(_fetchWorkOrderSingleDownTime);
     on<FetchAssignWorkForceList>(_fetchAssignWorkForce);
   }
 
@@ -410,7 +413,7 @@ class WorkOrderTabDetailsBloc
           "notes": event.manageDownTimeMap['notes'] ?? '',
           "hashcode": hashCode,
           "woid": event.manageDownTimeMap['workorderId'] ?? '',
-          "id": ""
+          "id": event.manageDownTimeMap['downTimeId'] ?? ''
         };
         ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel =
             await _workOrderRepository.manageDownTime(manageDownTimeMap);
@@ -524,6 +527,32 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderCannotHold(workOrderCannotHold: e.toString()));
+    }
+  }
+
+  FutureOr _fetchWorkOrderSingleDownTime(FetchWorkOrderSingleDownTime event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingWorkOrderSingleDownTime());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchWorkOrderSingleDownTimeModel fetchWorkOrderSingleDownTimeModel =
+          await _workOrderRepository.fetchWorkOrderSingleDownTime(
+              hashCode!, event.downTimeId);
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['startdate'] =
+          fetchWorkOrderSingleDownTimeModel.data.startdate;
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['starttime'] =
+          fetchWorkOrderSingleDownTimeModel.data.starttime;
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['enddate'] =
+          fetchWorkOrderSingleDownTimeModel.data.enddate;
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['endtime'] =
+          fetchWorkOrderSingleDownTimeModel.data.endtime;
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['notes'] =
+          fetchWorkOrderSingleDownTimeModel.data.notes;
+      WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['downTimeId'] =
+          fetchWorkOrderSingleDownTimeModel.data.id;
+      emit(WorkOrderSingleDownTimeFetched());
+    } catch (e) {
+      emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
     }
   }
 

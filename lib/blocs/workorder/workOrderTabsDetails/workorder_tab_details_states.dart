@@ -217,6 +217,18 @@ class WorkOrderDownTimeCannotManage extends WorkOrderTabDetailsStates {
   WorkOrderDownTimeCannotManage({required this.downTimeCannotManage});
 }
 
+class FetchingWorkOrderSingleDownTime extends WorkOrderTabDetailsStates {}
+
+class WorkOrderSingleDownTimeFetched extends WorkOrderTabDetailsStates {
+  WorkOrderSingleDownTimeFetched();
+}
+
+class WorkOrderSingleDownTimeNotFetched extends WorkOrderTabDetailsStates {
+  final String downTimeNotFetched;
+
+  WorkOrderSingleDownTimeNotFetched({required this.downTimeNotFetched});
+}
+
 class WorkOrderGettingOnHold extends WorkOrderTabDetailsStates {}
 
 class WorkOrderGotOnHold extends WorkOrderTabDetailsStates {

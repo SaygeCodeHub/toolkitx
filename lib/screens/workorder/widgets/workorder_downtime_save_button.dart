@@ -9,7 +9,7 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_even
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
-import '../workorder_add_down_time_screen.dart';
+import '../workorder_add_and_edit_down_time_screen.dart';
 
 class WorkOrderDownTimeSaveButton extends StatelessWidget {
   const WorkOrderDownTimeSaveButton({Key? key}) : super(key: key);
@@ -36,8 +36,8 @@ class WorkOrderDownTimeSaveButton extends StatelessWidget {
                 Navigator.pop(context);
                 context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
                     initialTabIndex: 0,
-                    workOrderId: WorkOrderAddDownTimeScreen
-                        .addDownTimeMap['workorderId']));
+                    workOrderId: WorkOrderAddAndEditDownTimeScreen
+                        .addAndEditDownTimeMap['workorderId']));
               } else if (state is WorkOrderDownTimeCannotManage) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.downTimeCannotManage, '');
@@ -48,8 +48,8 @@ class WorkOrderDownTimeSaveButton extends StatelessWidget {
                   onPressed: () {
                     context.read<WorkOrderTabDetailsBloc>().add(
                         ManageWorkOrderDownTime(
-                            manageDownTimeMap:
-                                WorkOrderAddDownTimeScreen.addDownTimeMap));
+                            manageDownTimeMap: WorkOrderAddAndEditDownTimeScreen
+                                .addAndEditDownTimeMap));
                   },
                   textValue: DatabaseUtil.getText('Save')),
             ),
