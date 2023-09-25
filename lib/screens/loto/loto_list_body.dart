@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/loto/widgets/loto_list_tile.dart';
-import '../../blocs/loto/loto_list_bloc.dart';
+import '../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import '../../blocs/loto/loto_list_bloc.dart';
+import '../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import 'loto_filter_screen.dart';

@@ -92,6 +92,18 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
               showCustomSnackBar(context, state.workOrderNotAccepted, '');
             }
 
+            if (state is WorkOrderGettingOnHold) {
+              ProgressBar.show(context);
+            } else if (state is WorkOrderGotOnHold) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 0,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is WorkOrderCannotHold) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.workOrderCannotHold, '');
+            }
+
             if (state is RejectingWorkOrder) {
               ProgressBar.show(context);
             } else if (state is WorkOrderRejected) {
