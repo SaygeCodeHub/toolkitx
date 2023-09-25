@@ -168,3 +168,9 @@ class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
 }
 
 class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {}
+
+class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
+  final int pageNo;
+
+  FetchAssignPartsList({required this.pageNo});
+}
