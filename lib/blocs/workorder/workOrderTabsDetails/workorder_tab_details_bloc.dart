@@ -11,12 +11,14 @@ import '../../../../di/app_module.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -49,6 +51,7 @@ class WorkOrderTabDetailsBloc
     on<ManageWorkOrderMiscCost>(_manageMiscCost);
     on<AcceptWorkOrder>(_acceptWorkOrder);
     on<HoldWorkOrder>(_holdWorkOrder);
+    on<FetchAssignWorkForceList>(_fetchAssignWorkForce);
   }
 
   int tabIndex = 0;
@@ -521,6 +524,21 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderCannotHold(workOrderCannotHold: e.toString()));
+    }
+  }
+
+  FutureOr _fetchAssignWorkForce(FetchAssignWorkForceList event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingAssignWorkOrder());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssignWorkForceModel fetchAssignWorkForceModel =
+          await _workOrderRepository.fetchAssignWorkForce('1', hashCode!,
+              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'], '');
+      emit(AssignWorkOrderFetched(
+          fetchAssignWorkForceModel: fetchAssignWorkForceModel));
+    } catch (e) {
+      emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
     }
   }
 }

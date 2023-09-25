@@ -160,3 +160,5 @@ class HoldWorkOrder extends WorkOrderTabsDetailsEvent {
 
   HoldWorkOrder({required this.workOrderId});
 }
+
+class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {}
