@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -72,7 +70,6 @@ class DocumentListTile extends StatelessWidget {
                             .read<DocumentsBloc>()
                             .docListReachedMax) {
                           DocumentsListScreen.page++;
-                          log('dms increment====>${DocumentsListScreen.page}');
                           context.read<DocumentsBloc>().add((GetDocumentsList(
                               page: DocumentsListScreen.page,
                               isFromHome: false)));
