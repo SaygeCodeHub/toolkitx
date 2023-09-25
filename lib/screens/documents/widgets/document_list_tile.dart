@@ -22,9 +22,9 @@ class DocumentListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<DocumentsBloc, DocumentsStates>(
         buildWhen: (previousState, currentState) =>
-        ((currentState is DocumentsListFetched) ||
-            (currentState is FetchingDocumentsList &&
-                DocumentsListScreen.page == 1)) ||
+            ((currentState is DocumentsListFetched) ||
+                (currentState is FetchingDocumentsList &&
+                    DocumentsListScreen.page == 1)) ||
             currentState is DocumentsListError,
         listener: (context, state) {
           if (state is DocumentsListFetched) {
@@ -47,17 +47,17 @@ class DocumentListTile extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount:
-                      context.read<DocumentsBloc>().docListReachedMax ==
-                          true
-                          ? context
-                          .read<DocumentsBloc>()
-                          .documentsListDatum
-                          .length
-                          : context
-                          .read<DocumentsBloc>()
-                          .documentsListDatum
-                          .length +
-                          1,
+                          context.read<DocumentsBloc>().docListReachedMax ==
+                                  true
+                              ? context
+                                  .read<DocumentsBloc>()
+                                  .documentsListDatum
+                                  .length
+                              : context
+                                      .read<DocumentsBloc>()
+                                      .documentsListDatum
+                                      .length +
+                                  1,
                       itemBuilder: (context, index) {
                         if (index <
                             context
