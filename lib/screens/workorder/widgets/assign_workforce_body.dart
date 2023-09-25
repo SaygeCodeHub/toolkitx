@@ -5,16 +5,13 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../assign_workforce_screen.dart';
 import 'assign_workforce_status_tags.dart';
 
 class AssignWorkForceBody extends StatelessWidget {
-  final List<AssignWorkForceDatum> data;
-
-  const AssignWorkForceBody({Key? key, required this.data}) : super(key: key);
+  const AssignWorkForceBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

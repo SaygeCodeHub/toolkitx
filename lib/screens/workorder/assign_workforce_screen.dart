@@ -46,10 +46,7 @@ class AssignWorkForceScreen extends StatelessWidget {
                     .read<WorkOrderTabDetailsBloc>()
                     .assignWorkForceDatum
                     .isNotEmpty) {
-                  return AssignWorkForceBody(
-                      data: context
-                          .read<WorkOrderTabDetailsBloc>()
-                          .assignWorkForceDatum);
+                  return const AssignWorkForceBody();
                 } else if (state.fetchAssignWorkForceModel.status == 204 &&
                     context
                         .read<WorkOrderTabDetailsBloc>()
