@@ -45,7 +45,8 @@ class DocumentsListScreen extends StatelessWidget {
                   isEnabled: true,
                   primaryOnPress: () {},
                   secondaryOnPress: () {
-                    Navigator.pushNamed(context, ChangeRoleDocuments.routeName);
+                    Navigator.pushNamed(
+                        context, ChangeRoleDocumentsScreen.routeName);
                   },
                   clearOnPress: () {})
             ]),

@@ -315,8 +315,8 @@ class AppRoutes {
         return _createRoute(LotoDetailsScreen(
           lotoDetailsMap: settings.arguments as Map,
         ));
-      case ChangeRoleDocuments.routeName:
-        return _createRoute(const ChangeRoleDocuments());
+      case ChangeRoleDocumentsScreen.routeName:
+        return _createRoute(const ChangeRoleDocumentsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

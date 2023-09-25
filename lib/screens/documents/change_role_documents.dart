@@ -10,10 +10,10 @@ import '../../blocs/documents/documents_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 
-class ChangeRoleDocuments extends StatelessWidget {
+class ChangeRoleDocumentsScreen extends StatelessWidget {
   static const routeName = 'ChangeRoleDocuments';
 
-  const ChangeRoleDocuments({super.key});
+  const ChangeRoleDocumentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
