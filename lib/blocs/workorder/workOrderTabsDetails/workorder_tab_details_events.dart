@@ -166,3 +166,5 @@ class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
 
   FetchWorkOrderSingleDownTime({required this.downTimeId});
 }
+
+class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {}

@@ -1,6 +1,7 @@
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
@@ -240,4 +241,18 @@ class WorkOrderCannotHold extends WorkOrderTabDetailsStates {
   final String workOrderCannotHold;
 
   WorkOrderCannotHold({required this.workOrderCannotHold});
+}
+
+class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
+
+class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
+  final FetchAssignWorkForceModel fetchAssignWorkForceModel;
+
+  AssignWorkOrderFetched({required this.fetchAssignWorkForceModel});
+}
+
+class AssignWorkOrderNotFetched extends WorkOrderTabDetailsStates {
+  final String workOrderNotAssigned;
+
+  AssignWorkOrderNotFetched({required this.workOrderNotAssigned});
 }
