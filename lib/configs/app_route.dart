@@ -79,7 +79,7 @@ import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
-import '../screens/workorder/workorder_add_down_time_screen.dart';
+import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
 import '../screens/workorder/workorder_form_screen_three.dart';
@@ -301,8 +301,8 @@ class AppRoutes {
       case GetWorkforceScreen.routeName:
         return _createRoute(
             GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
-      case WorkOrderAddDownTimeScreen.routeName:
-        return _createRoute(const WorkOrderAddDownTimeScreen());
+      case WorkOrderAddAndEditDownTimeScreen.routeName:
+        return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
       case QuizQuestionsScreen.routeName:
         return _createRoute(QuizQuestionsScreen(
           quizMap: settings.arguments as Map,
