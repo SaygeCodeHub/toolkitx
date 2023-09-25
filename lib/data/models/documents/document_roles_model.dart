@@ -1,6 +1,3 @@
-// To parse this JSON data, do
-//
-//     final documentRolesModel = documentRolesModelFromJson(jsonString);
 
 import 'dart:convert';
 
