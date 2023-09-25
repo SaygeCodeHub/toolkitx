@@ -12,7 +12,7 @@ import 'widgets/workorder_add_and_edit_down_time_body.dart';
 import 'widgets/workorder_downtime_save_button.dart';
 
 class WorkOrderAddAndEditDownTimeScreen extends StatelessWidget {
-  static const routeName = 'WorkOrderAddDownTimeScreen';
+  static const routeName = 'WorkOrderAddAndEditDownTimeScreen';
   static Map addAndEditDownTimeMap = {};
 
   const WorkOrderAddAndEditDownTimeScreen({Key? key}) : super(key: key);

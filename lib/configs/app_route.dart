@@ -304,8 +304,6 @@ class AppRoutes {
             GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
       case WorkOrderAddAndEditDownTimeScreen.routeName:
         return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
-      case WorkOrderAddDownTimeScreen.routeName:
-        return _createRoute(const WorkOrderAddDownTimeScreen());
       case AssignWorkForceScreen.routeName:
         return _createRoute(const AssignWorkForceScreen());
       case QuizQuestionsScreen.routeName:
