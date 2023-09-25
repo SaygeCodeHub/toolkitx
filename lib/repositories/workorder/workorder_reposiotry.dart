@@ -40,7 +40,7 @@ abstract class WorkOrderRepository {
       String hashCode, String downTimeId);
 
   Future<FetchAssignWorkForceModel> fetchAssignWorkForce(
-      String pageNo, String hashCode, String workOrderId, String name);
+      int pageNo, String hashCode, String workOrderId, String name);
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
       Map saveNewAndSimilarWorkOrderMap);

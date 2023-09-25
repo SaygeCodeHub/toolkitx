@@ -113,7 +113,7 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
 
   @override
   Future<FetchAssignWorkForceModel> fetchAssignWorkForce(
-      String pageNo, String hashCode, String workOrderId, String name) async {
+      int pageNo, String hashCode, String workOrderId, String name) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getworkforceforassign?pageno=$pageNo&hashcode=$hashCode&workorderid=$workOrderId&name=$name");
     return FetchAssignWorkForceModel.fromJson(response);
