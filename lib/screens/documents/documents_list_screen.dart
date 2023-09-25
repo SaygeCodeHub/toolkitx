@@ -9,6 +9,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/text_button.dart';
+import 'change_role_documents.dart';
 
 class DocumentsListScreen extends StatelessWidget {
   static const routeName = 'DocumentsListScreen';
@@ -43,7 +44,10 @@ class DocumentsListScreen extends StatelessWidget {
               CustomIconButtonRow(
                   isEnabled: true,
                   primaryOnPress: () {},
-                  secondaryOnPress: () {},
+                  secondaryOnPress: () {
+                    Navigator.pushNamed(
+                        context, ChangeRoleDocumentsScreen.routeName);
+                  },
                   clearOnPress: () {})
             ]),
             const SizedBox(height: xxTinierSpacing),
