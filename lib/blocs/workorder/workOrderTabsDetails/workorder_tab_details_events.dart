@@ -172,3 +172,9 @@ class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
 
   FetchAssignWorkForceList({required this.pageNo});
 }
+
+class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
+  final int pageNo;
+
+  FetchAssignPartsList({required this.pageNo});
+}

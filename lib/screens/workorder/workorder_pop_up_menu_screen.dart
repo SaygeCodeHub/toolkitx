@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_screen.dart';
 
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
@@ -99,6 +100,9 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         }
         if (value == DatabaseUtil.getText('assign_workforce')) {
           Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('AddParts')) {
+          Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,

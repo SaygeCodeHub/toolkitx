@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -55,6 +56,7 @@ class WorkOrderTabDetailsBloc
     on<HoldWorkOrder>(_holdWorkOrder);
     on<FetchWorkOrderSingleDownTime>(_fetchWorkOrderSingleDownTime);
     on<FetchAssignWorkForceList>(_fetchAssignWorkForce);
+    on<FetchAssignPartsList>(_fetchAssignPartsList);
   }
 
   int tabIndex = 0;
@@ -577,6 +579,25 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingAssignParts());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssignPartsModel fetchAssignPartsModel =
+          await _workOrderRepository.fetchAssignPartsModel(
+              event.pageNo,
+              hashCode!,
+              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              "");
+      if (fetchAssignPartsModel.status == 200) {
+        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
+      }
+    } catch (e) {
+      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
     }
   }
 }
