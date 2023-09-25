@@ -62,6 +62,8 @@ class WorkOrderTabDetailsBloc
   String clientId = '';
   static List popUpMenuItemsList = [];
   Map workOrderDetailsMap = {};
+  bool assignWorkForceListReachedMax = false;
+  List<AssignWorkForceDatum> assignWorkForceDatum = [];
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -561,11 +563,18 @@ class WorkOrderTabDetailsBloc
     emit(FetchingAssignWorkOrder());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAssignWorkForceModel fetchAssignWorkForceModel =
-          await _workOrderRepository.fetchAssignWorkForce('1', hashCode!,
-              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'], '');
-      emit(AssignWorkOrderFetched(
-          fetchAssignWorkForceModel: fetchAssignWorkForceModel));
+      if (!assignWorkForceListReachedMax) {
+        FetchAssignWorkForceModel fetchAssignWorkForceModel =
+            await _workOrderRepository.fetchAssignWorkForce(
+                event.pageNo,
+                hashCode!,
+                WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+                '');
+        assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
+        assignWorkForceListReachedMax = fetchAssignWorkForceModel.data.isEmpty;
+        emit(AssignWorkOrderFetched(
+            fetchAssignWorkForceModel: fetchAssignWorkForceModel));
+      }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
     }

@@ -9,9 +9,10 @@ import '../../../widgets/status_tag.dart';
 
 class AssignWorkForceStatusTags extends StatelessWidget {
   final AssignWorkForceDatum assignWorkForceDatum;
+  final int index;
 
   const AssignWorkForceStatusTags(
-      {Key? key, required this.assignWorkForceDatum})
+      {Key? key, required this.assignWorkForceDatum, required this.index})
       : super(key: key);
 
   @override
@@ -29,6 +30,7 @@ class AssignWorkForceStatusTags extends StatelessWidget {
                   : AppColor.green),
         ]),
         FloatingActionButton.small(
+            heroTag: "btn$index",
             backgroundColor: AppColor.blueGrey,
             onPressed: () {},
             child:

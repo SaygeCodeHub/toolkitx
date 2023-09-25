@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,9 +22,9 @@ class DocumentListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<DocumentsBloc, DocumentsStates>(
         buildWhen: (previousState, currentState) =>
-            ((currentState is DocumentsListFetched) ||
-                (currentState is FetchingDocumentsList &&
-                    DocumentsListScreen.page == 1)) ||
+        ((currentState is DocumentsListFetched) ||
+            (currentState is FetchingDocumentsList &&
+                DocumentsListScreen.page == 1)) ||
             currentState is DocumentsListError,
         listener: (context, state) {
           if (state is DocumentsListFetched) {
@@ -45,17 +47,17 @@ class DocumentListTile extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount:
-                          context.read<DocumentsBloc>().docListReachedMax ==
-                                  true
-                              ? context
-                                  .read<DocumentsBloc>()
-                                  .documentsListDatum
-                                  .length
-                              : context
-                                      .read<DocumentsBloc>()
-                                      .documentsListDatum
-                                      .length +
-                                  1,
+                      context.read<DocumentsBloc>().docListReachedMax ==
+                          true
+                          ? context
+                          .read<DocumentsBloc>()
+                          .documentsListDatum
+                          .length
+                          : context
+                          .read<DocumentsBloc>()
+                          .documentsListDatum
+                          .length +
+                          1,
                       itemBuilder: (context, index) {
                         if (index <
                             context
@@ -70,6 +72,7 @@ class DocumentListTile extends StatelessWidget {
                             .read<DocumentsBloc>()
                             .docListReachedMax) {
                           DocumentsListScreen.page++;
+                          log('dms increment====>${DocumentsListScreen.page}');
                           context.read<DocumentsBloc>().add((GetDocumentsList(
                               page: DocumentsListScreen.page,
                               isFromHome: false)));
