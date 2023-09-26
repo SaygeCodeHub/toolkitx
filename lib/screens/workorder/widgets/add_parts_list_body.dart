@@ -103,7 +103,7 @@ class AddPartsListBody extends StatelessWidget {
                         .docListReachedMax) {
                       WorkOrderAddPartsScreen.pageNo++;
                       context.read<WorkOrderTabDetailsBloc>().add((FetchAssignPartsList(
-                          pageNo: WorkOrderAddPartsScreen.pageNo)));
+                          pageNo: WorkOrderAddPartsScreen.pageNo,)));
                       return const Center(
                           child: Padding(
                               padding: EdgeInsets.all(
