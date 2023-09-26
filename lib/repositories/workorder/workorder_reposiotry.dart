@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 
+import '../../data/models/workorder/assign_workforce_model.dart';
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/fetch_assign_workforce_model.dart';
@@ -35,6 +36,8 @@ abstract class WorkOrderRepository {
   Future<AcceptWorkOrderModel> acceptWorkOrder(Map acceptWorkOrderMap);
 
   Future<HoldWorkOrderModel> holdWorkOrder(Map holdWorkOrderMap);
+
+  Future<AssignWorkOrderModel> assignWorkForce(Map assignWorkForceMap);
 
   Future<FetchWorkOrderSingleDownTimeModel> fetchWorkOrderSingleDownTime(
       String hashCode, String downTimeId);

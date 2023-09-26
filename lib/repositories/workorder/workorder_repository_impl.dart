@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/delete_document_model.dart';
 import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
@@ -125,5 +126,12 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getitemstoassign?pageno=$pageNo&hashcode=$hashCode&workorderid=$workOrderId&name=$name");
     return FetchAssignPartsModel.fromJson(response);
+  }
+
+  @override
+  Future<AssignWorkOrderModel> assignWorkForce(Map assignWorkForceMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/assignworkforce", assignWorkForceMap);
+    return AssignWorkOrderModel.fromJson(response);
   }
 }

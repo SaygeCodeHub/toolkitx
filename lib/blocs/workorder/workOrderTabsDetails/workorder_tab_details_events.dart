@@ -178,3 +178,9 @@ class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
 
   FetchAssignPartsList({required this.pageNo});
 }
+
+class AssignWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map assignWorkOrderMap;
+
+  AssignWorkForce({required this.assignWorkOrderMap});
+}

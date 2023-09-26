@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
+import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
@@ -271,4 +272,18 @@ class AssignPartsNotFetched extends WorkOrderTabDetailsStates {
   final String partsNotAssigned;
 
   AssignPartsNotFetched({required this.partsNotAssigned});
+}
+
+class AssigningWorkForce extends WorkOrderTabDetailsStates {}
+
+class WorkForceAssigned extends WorkOrderTabDetailsStates {
+  final AssignWorkOrderModel assignWorkOrderModel;
+
+  WorkForceAssigned({required this.assignWorkOrderModel});
+}
+
+class WorkForceNotAssigned extends WorkOrderTabDetailsStates {
+  final String workForceNotFetched;
+
+  WorkForceNotAssigned({required this.workForceNotFetched});
 }
