@@ -178,3 +178,9 @@ class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
 
   FetchAssignPartsList({required this.pageNo});
 }
+
+class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  RejectWorkOrder({required this.workOrderId});
+}
