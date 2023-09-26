@@ -23,6 +23,7 @@ abstract class StringConstants {
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
+  static const String kPlannedQuantity = "Planned Quantity: ";
   static const String kCamera = 'Camera';
   static const String kOther = 'Other';
   static const String kDevice = 'Device';

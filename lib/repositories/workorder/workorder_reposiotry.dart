@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
@@ -40,7 +41,7 @@ abstract class WorkOrderRepository {
       String hashCode, String downTimeId);
 
   Future<FetchAssignWorkForceModel> fetchAssignWorkForce(
-      String pageNo, String hashCode, String workOrderId, String name);
+      int pageNo, String hashCode, String workOrderId, String name);
 
   Future<RejectWorkOrderModel> rejectWorkOrder(Map rejectWorkOrderMap);
 
@@ -49,4 +50,7 @@ abstract class WorkOrderRepository {
 
   Future<UpdateWorkOrderDetailsModel> updateWorkOrderDetails(
       Map updateWorkOrderDetailsMap);
+
+  Future<FetchAssignPartsModel> fetchAssignPartsModel(
+      int pageNo, String hashCode, String workOrderId, String name);
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -56,6 +57,7 @@ class WorkOrderTabDetailsBloc
     on<HoldWorkOrder>(_holdWorkOrder);
     on<FetchWorkOrderSingleDownTime>(_fetchWorkOrderSingleDownTime);
     on<FetchAssignWorkForceList>(_fetchAssignWorkForce);
+    on<FetchAssignPartsList>(_fetchAssignPartsList);
     on<RejectWorkOrder>(_rejectWorkOrder);
   }
 
@@ -64,6 +66,8 @@ class WorkOrderTabDetailsBloc
   String clientId = '';
   static List popUpMenuItemsList = [];
   Map workOrderDetailsMap = {};
+  bool assignWorkForceListReachedMax = false;
+  List<AssignWorkForceDatum> assignWorkForceDatum = [];
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -566,11 +570,18 @@ class WorkOrderTabDetailsBloc
     emit(FetchingAssignWorkOrder());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAssignWorkForceModel fetchAssignWorkForceModel =
-          await _workOrderRepository.fetchAssignWorkForce('1', hashCode!,
-              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'], '');
-      emit(AssignWorkOrderFetched(
-          fetchAssignWorkForceModel: fetchAssignWorkForceModel));
+      if (!assignWorkForceListReachedMax) {
+        FetchAssignWorkForceModel fetchAssignWorkForceModel =
+            await _workOrderRepository.fetchAssignWorkForce(
+                event.pageNo,
+                hashCode!,
+                WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+                '');
+        assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
+        assignWorkForceListReachedMax = fetchAssignWorkForceModel.data.isEmpty;
+        emit(AssignWorkOrderFetched(
+            fetchAssignWorkForceModel: fetchAssignWorkForceModel));
+      }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
     }
@@ -598,6 +609,25 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderNotRejected(workOrderNotRejected: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingAssignParts());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssignPartsModel fetchAssignPartsModel =
+          await _workOrderRepository.fetchAssignPartsModel(
+              event.pageNo,
+              hashCode!,
+              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              "");
+      if (fetchAssignPartsModel.status == 200) {
+        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
+      }
+    } catch (e) {
+      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
     }
   }
 }
