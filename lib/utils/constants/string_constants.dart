@@ -213,6 +213,7 @@ abstract class StringConstants {
   static const String kNoRecordsFound = 'No records found';
   static const String kSearchLanguage = 'Search language';
   static const String kSearchTimezone = 'Search timezone';
+  static const String kSearchPartName = 'Search Part Name...';
   static const String kPermitType = 'Permit Type';
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';

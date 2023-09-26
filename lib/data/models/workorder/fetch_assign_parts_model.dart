@@ -9,7 +9,7 @@ String fetchAssignPartsModelToJson(FetchAssignPartsModel data) =>
 class FetchAssignPartsModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<AddPartsDatum> data;
 
   FetchAssignPartsModel({
     required this.status,
@@ -21,7 +21,7 @@ class FetchAssignPartsModel {
       FetchAssignPartsModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<AddPartsDatum>.from(json["Data"].map((x) => AddPartsDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,14 +31,14 @@ class FetchAssignPartsModel {
       };
 }
 
-class Datum {
+class AddPartsDatum {
   final String id;
   final String item;
   final String type;
   final String code;
   final dynamic plannedquan;
 
-  Datum({
+  AddPartsDatum({
     required this.id,
     required this.item,
     required this.type,
@@ -46,7 +46,7 @@ class Datum {
     required this.plannedquan,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory AddPartsDatum.fromJson(Map<String, dynamic> json) => AddPartsDatum(
         id: json["id"],
         item: json["item"],
         type: json["type"],

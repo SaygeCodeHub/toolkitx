@@ -29,6 +29,8 @@ class WorkOrderTabDetailsBloc
     extends Bloc<WorkOrderTabsDetailsEvent, WorkOrderTabDetailsStates> {
   final WorkOrderRepository _workOrderRepository = getIt<WorkOrderRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  bool docListReachedMax = false;
+  List<AddPartsDatum> addPartsDatum = [];
 
   WorkOrderTabDetailsStates get initialState => WorkOrderTabDetailsInitial();
 
@@ -587,14 +589,17 @@ class WorkOrderTabDetailsBloc
     emit(FetchingAssignParts());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAssignPartsModel fetchAssignPartsModel =
-          await _workOrderRepository.fetchAssignPartsModel(
-              event.pageNo,
-              hashCode!,
-              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-              "");
-      if (fetchAssignPartsModel.status == 200) {
-        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
+      if(!docListReachedMax) {
+        FetchAssignPartsModel fetchAssignPartsModel =
+        await _workOrderRepository.fetchAssignPartsModel(
+            event.pageNo,
+            hashCode!,
+            WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+            "");
+        addPartsDatum.addAll(fetchAssignPartsModel.data);
+        docListReachedMax = fetchAssignPartsModel.data.isEmpty;
+          emit(
+              AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
       }
     } catch (e) {
       emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
