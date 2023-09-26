@@ -20,6 +20,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
@@ -59,6 +60,7 @@ class WorkOrderTabDetailsBloc
     on<FetchAssignWorkForceList>(_fetchAssignWorkForce);
     on<FetchAssignPartsList>(_fetchAssignPartsList);
     on<RejectWorkOrder>(_rejectWorkOrder);
+    on<StartWorkOrder>(_startWorkOrder);
   }
 
   int tabIndex = 0;
@@ -628,6 +630,40 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
+    }
+  }
+
+  FutureOr _startWorkOrder(
+      StartWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(StartingWorkOder());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (event.startWorkOrderMap['date'] == null ||
+          event.startWorkOrderMap['time'] == null) {
+        emit(WorkOderNotStarted(
+            workOrderNotStarted: DatabaseUtil.getText('InsertDateTime')));
+      } else {
+        Map startWorkOrderMap = {
+          "woid": event.startWorkOrderMap['workorderId'],
+          "userid": userId,
+          "date": event.startWorkOrderMap['date'],
+          "time": event.startWorkOrderMap['time'],
+          "comments": event.startWorkOrderMap['comments'],
+          "hashcode": hashCode
+        };
+        StartWorkOrderModel startWorkOrderModel =
+            await _workOrderRepository.startWorkOrder(startWorkOrderMap);
+        if (startWorkOrderModel.status == 200) {
+          emit(WorkOderStarted(startWorkOrderModel: startWorkOrderModel));
+        } else {
+          emit(WorkOderNotStarted(
+              workOrderNotStarted:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOderNotStarted(workOrderNotStarted: e.toString()));
     }
   }
 }

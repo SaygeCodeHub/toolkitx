@@ -184,3 +184,9 @@ class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
 
   RejectWorkOrder({required this.workOrderId});
 }
+
+class StartWorkOrder extends WorkOrderTabsDetailsEvent {
+  final Map startWorkOrderMap;
+
+  StartWorkOrder({required this.startWorkOrderMap});
+}

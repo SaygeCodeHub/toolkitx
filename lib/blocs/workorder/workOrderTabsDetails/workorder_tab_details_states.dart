@@ -10,6 +10,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
@@ -286,4 +287,18 @@ class WorkOrderNotRejected extends WorkOrderTabDetailsStates {
   final String workOrderNotRejected;
 
   WorkOrderNotRejected({required this.workOrderNotRejected});
+}
+
+class StartingWorkOder extends WorkOrderTabDetailsStates {}
+
+class WorkOderStarted extends WorkOrderTabDetailsStates {
+  final StartWorkOrderModel startWorkOrderModel;
+
+  WorkOderStarted({required this.startWorkOrderModel});
+}
+
+class WorkOderNotStarted extends WorkOrderTabDetailsStates {
+  final String workOrderNotStarted;
+
+  WorkOderNotStarted({required this.workOrderNotStarted});
 }
