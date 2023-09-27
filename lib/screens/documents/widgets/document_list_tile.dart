@@ -15,18 +15,21 @@ import 'documents_list_card.dart';
 
 class DocumentListTile extends StatelessWidget {
   const DocumentListTile({super.key});
+  static bool noMoreData = false;
 
   @override
   Widget build(BuildContext context) {
+    context.read<DocumentsBloc>().documentsListDatum.clear();
     return BlocConsumer<DocumentsBloc, DocumentsStates>(
         buildWhen: (previousState, currentState) =>
-            ((currentState is DocumentsListFetched) ||
+            ((currentState is DocumentsListFetched && noMoreData != true) ||
                 (currentState is FetchingDocumentsList &&
-                    DocumentsListScreen.page == 1)) ||
+                    DocumentsListScreen.page == 1 && context.read<DocumentsBloc>().documentsListDatum.isEmpty)) ||
             currentState is DocumentsListError,
         listener: (context, state) {
           if (state is DocumentsListFetched) {
-            if (state.documentsListModel.status == 204) {
+            if (state.documentsListModel.status == 204 && context.read<DocumentsBloc>().documentsListDatum.isNotEmpty) {
+              noMoreData = true;
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
           }

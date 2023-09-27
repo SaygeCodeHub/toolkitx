@@ -18,3 +18,25 @@ class SelectDocumentRoleEvent extends DocumentsEvents {
 
   SelectDocumentRoleEvent(this.roleId);
 }
+
+class FetchDocumentMaster extends DocumentsEvents {}
+
+class SelectDocumentStatusFilter extends DocumentsEvents {
+  final String selectedIndex;
+
+  SelectDocumentStatusFilter({required this.selectedIndex});
+}
+
+class SelectDocumentLocationFilter extends DocumentsEvents {
+  final String selectedLocation;
+
+  SelectDocumentLocationFilter({required this.selectedLocation});
+}
+
+class ApplyDocumentFilter extends DocumentsEvents {
+  final Map filterMap;
+
+  ApplyDocumentFilter({required this.filterMap});
+}
+
+class ClearDocumentFilter extends DocumentsEvents {}
