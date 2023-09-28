@@ -58,11 +58,8 @@ class FetchingDocumentMaster extends DocumentsStates {}
 
 class DocumentMasterFetched extends DocumentsStates {
   final FetchDocumentMasterModel fetchDocumentMasterModel;
-  final Map documentFilterMap;
 
-  const DocumentMasterFetched(
-      {required this.documentFilterMap,
-      required this.fetchDocumentMasterModel});
+  const DocumentMasterFetched({required this.fetchDocumentMasterModel});
 }
 
 class DocumentMasterError extends DocumentsStates {
@@ -81,10 +78,10 @@ class DocumentStatusFilterSelected extends DocumentsStates {
 }
 
 class DocumentTypeFilterSelected extends DocumentsStates {
-  final String selectedLocation;
+  final String selectedType;
 
-  const DocumentTypeFilterSelected({required this.selectedLocation});
+  const DocumentTypeFilterSelected({required this.selectedType});
 
   @override
-  List<Object?> get props => [selectedLocation];
+  List<Object?> get props => [selectedType];
 }

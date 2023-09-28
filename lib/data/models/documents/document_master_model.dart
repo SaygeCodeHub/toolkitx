@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchDocumentMasterModel fetchDocumentMasterModelFromJson(String str) => FetchDocumentMasterModel.fromJson(json.decode(str));
+FetchDocumentMasterModel fetchDocumentMasterModelFromJson(String str) =>
+    FetchDocumentMasterModel.fromJson(json.decode(str));
 
-String fetchDocumentMasterModelToJson(FetchDocumentMasterModel data) => json.encode(data.toJson());
+String fetchDocumentMasterModelToJson(FetchDocumentMasterModel data) =>
+    json.encode(data.toJson());
 
 class FetchDocumentMasterModel {
   final int status;
@@ -16,17 +17,20 @@ class FetchDocumentMasterModel {
     required this.data,
   });
 
-  factory FetchDocumentMasterModel.fromJson(Map<String, dynamic> json) => FetchDocumentMasterModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<List<Datum>>.from(json["Data"].map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
-  );
+  factory FetchDocumentMasterModel.fromJson(Map<String, dynamic> json) =>
+      FetchDocumentMasterModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<List<Datum>>.from(json["Data"]
+            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(
+            data.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+      };
 }
 
 class Datum {
@@ -41,14 +45,14 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    notes: json["notes"],
-  );
+        id: json["id"],
+        name: json["name"],
+        notes: json["notes"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "notes": notes,
-  };
+        "id": id,
+        "name": name,
+        "notes": notes,
+      };
 }

@@ -8,8 +8,8 @@ import 'documents_repository.dart';
 
 class DocumentsRepositoryImpl extends DocumentsRepository {
   @override
-  Future<DocumentsListModel> getDocumentsList(
-      String userId, String hashCode, String filter, String role, int page) async {
+  Future<DocumentsListModel> getDocumentsList(String userId, String hashCode,
+      String filter, String role, int page) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/get?pageno=$page&hashcode=$hashCode&userid=$userId&filter=$filter");
     return DocumentsListModel.fromJson(response);
@@ -24,7 +24,8 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<FetchDocumentMasterModel> fetchDocumentMaster(String userId, String hashCode) async {
+  Future<FetchDocumentMasterModel> fetchDocumentMaster(
+      String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchDocumentMasterModel.fromJson(response);

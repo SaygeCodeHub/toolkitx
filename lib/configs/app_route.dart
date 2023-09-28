@@ -331,7 +331,9 @@ class AppRoutes {
       case DocumentFilterScreen.routeName:
         return _createRoute(const DocumentFilterScreen());
       case DocumentLocationFilterList.routeName:
-        return _createRoute(DocumentLocationFilterList(selectLocation: settings.arguments.toString(),));
+        return _createRoute(DocumentLocationFilterList(
+          selectLocation: settings.arguments.toString(),
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -14,7 +14,7 @@ class LotoLocationFilter extends StatelessWidget {
   final Map lotoFilterMap;
   final List locationList;
 
-  const   LotoLocationFilter(
+  const LotoLocationFilter(
       {Key? key, required this.lotoFilterMap, required this.locationList})
       : super(key: key);
 

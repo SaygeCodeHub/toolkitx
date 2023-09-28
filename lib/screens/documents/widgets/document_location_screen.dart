@@ -22,7 +22,7 @@ class DocumentLocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<DocumentsBloc>().add(SelectDocumentLocationFilter(
-        selectedLocation: documentFilterMap['type'] ?? ''));
+        selectedType: documentFilterMap['type'] ?? ''));
     return BlocBuilder<DocumentsBloc, DocumentsStates>(
       buildWhen: (previousState, currentState) =>
           currentState is DocumentTypeFilterSelected,
@@ -35,21 +35,20 @@ class DocumentLocationScreen extends StatelessWidget {
                   onTap: () async {
                     await Navigator.pushNamed(
                         context, DocumentLocationFilterList.routeName,
-                        arguments: state.selectedLocation);
+                        arguments: state.selectedType);
                   },
                   title: Text(DatabaseUtil.getText('type'),
                       style: Theme.of(context)
                           .textTheme
                           .xSmall
                           .copyWith(fontWeight: FontWeight.w600)),
-                  subtitle: (state.selectedLocation == '')
+                  subtitle: (context.read<DocumentsBloc>().selectedType == '')
                       ? null
-                      : Text(state.selectedLocation),
+                      : Text(context.read<DocumentsBloc>().selectedType),
                   trailing:
                       const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
-                  visible:
-                      state.selectedLocation == DatabaseUtil.getText('Other'),
+                  visible: state.selectedType == DatabaseUtil.getText('Other'),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -63,7 +62,7 @@ class DocumentLocationScreen extends StatelessWidget {
                             hintText: DatabaseUtil.getText('Other'),
                             onTextFieldChanged: (String textField) {
                               documentFilterMap['type'] =
-                                  (state.selectedLocation == 'Other'
+                                  (state.selectedType == 'Other'
                                       ? textField
                                       : '');
                             })

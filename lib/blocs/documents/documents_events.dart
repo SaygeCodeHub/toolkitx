@@ -28,9 +28,9 @@ class SelectDocumentStatusFilter extends DocumentsEvents {
 }
 
 class SelectDocumentLocationFilter extends DocumentsEvents {
-  final String selectedLocation;
+  final String selectedType;
 
-  SelectDocumentLocationFilter({required this.selectedLocation});
+  SelectDocumentLocationFilter({required this.selectedType});
 }
 
 class ApplyDocumentFilter extends DocumentsEvents {

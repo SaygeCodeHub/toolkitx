@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
@@ -50,17 +49,24 @@ class DocumentLocationFilterList extends StatelessWidget {
                                   .toString(),
                               groupValue: selectLocation,
                               onChanged: (value) {
-                                DocumentFilterScreen.documentFilterMap["type"] = context
-                                    .read<DocumentsBloc>()
-                                    .masterData[0][index]
-                                    .id
-                                    .toString();
+                                DocumentFilterScreen.documentFilterMap["type"] =
+                                    context
+                                        .read<DocumentsBloc>()
+                                        .masterData[0][index]
+                                        .id
+                                        .toString();
                                 context.read<DocumentsBloc>().add(
                                     SelectDocumentLocationFilter(
-                                        selectedLocation: context
+                                        selectedType: context
                                             .read<DocumentsBloc>()
                                             .masterData[0][index]
-                                            .name));
+                                            .id
+                                            .toString()));
+                                context.read<DocumentsBloc>().selectedType =
+                                    context
+                                        .read<DocumentsBloc>()
+                                        .masterData[0][index]
+                                        .name;
                                 Navigator.pop(context);
                               });
                         }),

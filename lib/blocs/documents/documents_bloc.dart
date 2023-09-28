@@ -20,7 +20,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   List type = [];
   List masterData = [];
   bool docListReachedMax = false;
-  String selectedLocation = '';
+  String selectedType = '';
   List<DocumentsListDatum> documentsListDatum = [];
 
   DocumentsStates get initialState => const DocumentsInitial();
@@ -98,7 +98,6 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       masterData = fetchDocumentMasterModel.data;
       if (fetchDocumentMasterModel.status == 200) {
         emit(DocumentMasterFetched(
-            documentFilterMap: filters,
             fetchDocumentMasterModel: fetchDocumentMasterModel));
       }
     } catch (e) {
@@ -113,8 +112,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   FutureOr<void> _selectDocumentLocationFilter(
       SelectDocumentLocationFilter event, Emitter<DocumentsStates> emit) {
-    selectedLocation = event.selectedLocation;
-    emit(DocumentTypeFilterSelected(selectedLocation: event.selectedLocation));
+    emit(DocumentTypeFilterSelected(selectedType: event.selectedType));
   }
 
   FutureOr<void> _applyDocumentFilter(
@@ -126,12 +124,12 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       'type': event.filterMap["type"],
       "status": event.filterMap["status"]
     };
-
   }
 
   FutureOr<void> _clearDocumentFilter(
       ClearDocumentFilter event, Emitter<DocumentsStates> emit) {
     filters = {};
     type = [];
+    add(GetDocumentsList(page: 1, isFromHome: false));
   }
 }

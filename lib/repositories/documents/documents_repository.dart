@@ -8,6 +8,6 @@ abstract class DocumentsRepository {
 
   Future<DocumentRolesModel> getDocumentsRoles(String userId, String hashCode);
 
-  Future<FetchDocumentMasterModel> fetchDocumentMaster(String userId, String hashCode);
-
+  Future<FetchDocumentMasterModel> fetchDocumentMaster(
+      String userId, String hashCode);
 }

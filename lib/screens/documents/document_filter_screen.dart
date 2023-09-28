@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
@@ -52,7 +51,7 @@ class DocumentFilterScreen extends StatelessWidget {
             if (state is FetchingDocumentMaster) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is DocumentMasterFetched) {
-              documentFilterMap.addAll(state.documentFilterMap);
+              documentFilterMap.addAll(context.read<DocumentsBloc>().filters);
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Column(
@@ -115,7 +114,7 @@ class DocumentFilterScreen extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.pushReplacementNamed(
                               context, DocumentsListScreen.routeName,
-                              arguments: true);
+                              arguments: false);
                         },
                         textValue: StringConstants.kApply),
                   ],
