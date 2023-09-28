@@ -23,14 +23,14 @@ class CertificateListError extends CertificateListState {
   CertificateListError({required this.errorMsg});
 }
 
-
 class CertificateDetailsFetching extends CertificateListState {}
 
 class CertificateDetailsFetched extends CertificateListState {
   final FetchCertificateDetailsModel fetchCertificateDetailsModel;
 
-  CertificateDetailsFetched(
-      {required this.fetchCertificateDetailsModel,});
+  CertificateDetailsFetched({
+    required this.fetchCertificateDetailsModel,
+  });
 }
 
 class CertificateDetailsError extends CertificateListState {

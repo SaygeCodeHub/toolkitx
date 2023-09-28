@@ -89,7 +89,8 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
-  Future<FetchCertificateDetailsModel> fetchCertificateDetails(String hashCode, String userId, String certificateId) async {
+  Future<FetchCertificateDetailsModel> fetchCertificateDetails(
+      String hashCode, String userId, String certificateId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/getcertificate?certificateid=$certificateId&hashcode=$hashCode&workforceid=$userId");
     return FetchCertificateDetailsModel.fromJson(response);

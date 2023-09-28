@@ -18,6 +18,8 @@ class CertificateListBloc
   final CertificateRepository _certificateRepository =
       getIt<CertificateRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final FetchCertificateDetailsModel fetchCertificateDetailsModel =
+      FetchCertificateDetailsModel();
 
   CertificateListState get initialState => CertificateListInitial();
   final List<CertificateListDatum> data = [];
@@ -47,16 +49,20 @@ class CertificateListBloc
     }
   }
 
-  Future<FutureOr<void>> _fetchCertificateDetails(FetchCertificateDetails event, Emitter<CertificateListState> emit) async {
+  Future<FutureOr<void>> _fetchCertificateDetails(
+      FetchCertificateDetails event, Emitter<CertificateListState> emit) async {
     emit(CertificateDetailsFetching());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      FetchCertificateDetailsModel fetchCertificateDetailsModel = await _certificateRepository.fetchCertificateDetails(hashCode!, userId!, event.certificateId);
-      if(fetchCertificateDetailsModel.status == 200){
-        emit(CertificateDetailsFetched(fetchCertificateDetailsModel: fetchCertificateDetailsModel));
+      FetchCertificateDetailsModel fetchCertificateDetailsModel =
+          await _certificateRepository.fetchCertificateDetails(
+              hashCode!, userId!, event.certificateId);
+      if (fetchCertificateDetailsModel.status == 200) {
+        emit(CertificateDetailsFetched(
+            fetchCertificateDetailsModel: fetchCertificateDetailsModel));
       }
-    }catch(e){
+    } catch (e) {
       emit(CertificateDetailsError(errorMsg: e.toString()));
     }
   }

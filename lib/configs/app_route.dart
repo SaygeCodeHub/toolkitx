@@ -7,6 +7,7 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
 import '../screens/certificates/certificates_list_screen.dart';
@@ -292,6 +293,10 @@ class AppRoutes {
       case DocumentsListScreen.routeName:
         return _createRoute(DocumentsListScreen(
           isFromHome: settings.arguments as bool,
+        ));
+      case GetCertificateDetailsScreen.routeName:
+        return _createRoute(GetCertificateDetailsScreen(
+          certificateMap: settings.arguments as Map,
         ));
       default:
         return _createRoute(const WelcomeScreen());

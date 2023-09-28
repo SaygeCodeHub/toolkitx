@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/certificates/get_certificate_details_screen.dart';
 import 'package:toolkit/screens/certificates/get_course_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -51,6 +52,11 @@ class CertificatesListScreen extends StatelessWidget {
                   context.read<CertificateListBloc>().hasReachedMax = true;
                   showCustomSnackBar(
                       context, StringConstants.kAllDataLoaded, '');
+                }
+              }
+              if (state is CertificateDetailsFetched) {
+                if (state.fetchCertificateDetailsModel.data?.status != "1") {
+                  showCustomSnackBar(context, "No Data Available", '');
                 }
               }
             },
@@ -111,12 +117,28 @@ class CertificatesListScreen extends StatelessWidget {
                                                         "id":
                                                             state.data[index].id
                                                       };
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          UploadCertificateScreen
-                                                              .routeName,
-                                                          arguments:
-                                                              certificateMap);
+
+                                                      if (context
+                                                              .read<
+                                                                  CertificateListBloc>()
+                                                              .fetchCertificateDetailsModel
+                                                              .data
+                                                              ?.status ==
+                                                          "1") {
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            GetCertificateDetailsScreen
+                                                                .routeName,
+                                                            arguments:
+                                                                certificateMap);
+                                                      } else {
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            UploadCertificateScreen
+                                                                .routeName,
+                                                            arguments:
+                                                                certificateMap);
+                                                      }
                                                     },
                                                     textValue: StringConstants
                                                         .kUpload)),
