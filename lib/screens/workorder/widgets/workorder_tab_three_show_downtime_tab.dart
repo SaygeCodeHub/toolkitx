@@ -8,6 +8,7 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
+import '../workorder_add_and_edit_down_time_screen.dart';
 
 class WorkOrderTabThreeShowDowntimeTab extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -37,7 +38,6 @@ class WorkOrderTabThreeShowDowntimeTab extends StatelessWidget {
                           left: tinierSpacing,
                           right: tinierSpacing,
                           bottom: tinierSpacing),
-                      onTap: () {},
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +63,16 @@ class WorkOrderTabThreeShowDowntimeTab extends StatelessWidget {
                         const SizedBox(width: xxxTinierSpacing),
                         CustomIconButton(
                             icon: Icons.edit,
-                            onPressed: () {},
+                            onPressed: () {
+                              WorkOrderAddAndEditDownTimeScreen
+                                      .addAndEditDownTimeMap['downTimeId'] =
+                                  data.downtime[index].id;
+                              WorkOrderAddAndEditDownTimeScreen
+                                      .addAndEditDownTimeMap['workorderId'] =
+                                  data.id;
+                              Navigator.pushNamed(context,
+                                  WorkOrderAddAndEditDownTimeScreen.routeName);
+                            },
                             size: kEditAndDeleteIconTogether)
                       ])));
             },

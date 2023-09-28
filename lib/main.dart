@@ -12,7 +12,8 @@ import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
-import 'package:toolkit/blocs/loto/loto_list_bloc.dart';
+import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
+import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
@@ -178,9 +179,7 @@ class MyApp extends StatelessWidget {
               lazy: false,
               create: (context) =>
                   OnBoardingBloc()..add(CheckClientSelected())),
-          BlocProvider(
-              lazy: false,
-              create: (context) => SignInListBloc()..add(SignInList())),
+          BlocProvider(lazy: false, create: (context) => SignInListBloc()),
           BlocProvider(
               lazy: false, create: (context) => SignInAssignToMeBloc()),
           BlocProvider(
@@ -194,6 +193,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: true, create: (context) => FeedbackCertificateBloc()),
           BlocProvider(lazy: true, create: (context) => DocumentsBloc()),
+          BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
         ],
         child: GestureDetector(
             onTap: () {

@@ -23,6 +23,7 @@ abstract class StringConstants {
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
+  static const String kPlannedQuantity = "Planned Quantity: ";
   static const String kCamera = 'Camera';
   static const String kOther = 'Other';
   static const String kDevice = 'Device';
@@ -109,6 +110,8 @@ abstract class StringConstants {
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
+  static const String kSelectVendor = 'Select vendor'; //
+  static const String kSelectCurrency = 'Select currency'; //
   static const String kResolve = 'Resolve'; //
   static const String kSelectYourLanguage = 'Select Your Language';
   static const String kClearFilter = 'Clear';
@@ -124,6 +127,7 @@ abstract class StringConstants {
   static const String kReload = 'RELOAD'; //
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
+  static const String kNo = 'No';
   static const String kApprovalPending = 'Approval Pending';
   static const String kLastUploaded = 'Last Uploaded : ';
   static const String kViewCertificate = 'View Certificate : ';
@@ -183,6 +187,7 @@ abstract class StringConstants {
   static const String kLocation = 'Location';
   static const String kWorkforce = 'Workforce';
   static const String kSystemUser = 'System User';
+  static const String kAssignedFor = 'Assigned for: ';
   static const String kReportToAuthorities = 'Report to authorities';
   static const String kSelectSite = 'Select Site';
   static const String kSelectLocation = 'Select Location';
@@ -287,6 +292,7 @@ abstract class StringConstants {
   static const String kChecklistAssigned = 'Checklist assigned to you';
   static const String kSelectOrigination = 'Select origination'; //
   static const String kSelectCostCenter = 'Select Cost Center'; //
+  static const String kMiscCostValidation = 'Please enter all data'; //
   static const String kPlannedDateValidation =
       "Planned finished date can't be greater than planned start date!"; //
   static const String kChecklistError = 'Checklist assigning error';
@@ -294,7 +300,9 @@ abstract class StringConstants {
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
+  static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
+  static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
   static const String kUnauthorized =
       'You are not authorized to access the location. Do you still want to continue ? ';
   static const String kUnauthorizedError = 'oops we got unknown error';

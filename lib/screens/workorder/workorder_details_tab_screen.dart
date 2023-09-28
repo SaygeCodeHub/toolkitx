@@ -79,6 +79,42 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.documentNotDeleted, '');
             }
+
+            if (state is AcceptingWorkOrder) {
+              ProgressBar.show(context);
+            } else if (state is WorkOrderAccepted) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 0,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is WorkOrderNotAccepted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.workOrderNotAccepted, '');
+            }
+
+            if (state is WorkOrderGettingOnHold) {
+              ProgressBar.show(context);
+            } else if (state is WorkOrderGotOnHold) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 0,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is WorkOrderCannotHold) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.workOrderCannotHold, '');
+            }
+
+            if (state is RejectingWorkOrder) {
+              ProgressBar.show(context);
+            } else if (state is WorkOrderRejected) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 0,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is WorkOrderNotRejected) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.workOrderNotRejected, '');
+            }
           },
           builder: (context, state) {
             if (state is FetchingWorkOrderTabDetails) {
