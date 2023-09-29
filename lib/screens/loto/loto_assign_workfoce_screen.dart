@@ -98,7 +98,8 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                                       elevation: kElevation,
                                       color: AppColor.paleGrey,
                                       child: Padding(
-                                        padding: EdgeInsets.all(5.0),
+                                        padding:
+                                            EdgeInsets.all(xxTiniestSpacing),
                                         child: Icon(Icons.add),
                                       )))));
                     },
