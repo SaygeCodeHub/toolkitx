@@ -6,6 +6,7 @@ import 'package:toolkit/repositories/loto/loto_repository.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database_utils.dart';
@@ -24,11 +25,13 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
+    on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
       FetchLotoDetails event, Emitter<LotoDetailsState> emit) async {
     emit(LotoDetailsFetching());
+    lotoId = event.lotoId;
     try {
       lotoTabIndex = event.lotTabIndex;
       List popUpMenuItems = [
@@ -67,6 +70,23 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoAssignWorkforceError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchLotoAssignTeam(
+      FetchLotoAssignTeam event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoAssignTeamFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchLotoAssignTeamModel fetchLotoAssignTeamModel =
+          await _lotoRepository.fetchLotoAssignTeam(
+              hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
+      if (fetchLotoAssignTeamModel.status == 200) {
+        emit(LotoAssignTeamFetched(
+            fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
+      }
+    } catch (e) {
+      emit(LotoAssignTeamError(getError: e.toString()));
     }
   }
 }

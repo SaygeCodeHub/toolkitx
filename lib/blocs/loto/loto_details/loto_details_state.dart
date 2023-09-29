@@ -36,3 +36,17 @@ class LotoAssignWorkforceError extends LotoDetailsState {
 
   LotoAssignWorkforceError({required this.getError});
 }
+
+class LotoAssignTeamFetching extends LotoDetailsState {}
+
+class LotoAssignTeamFetched extends LotoDetailsState {
+  final FetchLotoAssignTeamModel fetchLotoAssignTeamModel;
+
+  LotoAssignTeamFetched({required this.fetchLotoAssignTeamModel});
+}
+
+class LotoAssignTeamError extends LotoDetailsState {
+  final String getError;
+
+  LotoAssignTeamError({required this.getError});
+}

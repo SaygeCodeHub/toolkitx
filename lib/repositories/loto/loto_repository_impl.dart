@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
 
+import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'loto_repository.dart';
@@ -41,5 +42,13 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}/loto/getworkforceforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
     return FetchLotoAssignWorkforceModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLotoAssignTeamModel> fetchLotoAssignTeam(String hashCode,
+      String lotoId, int pageNo, String name, int isRemove) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}/loto/getteamforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
+    return FetchLotoAssignTeamModel.fromJson(response);
   }
 }
