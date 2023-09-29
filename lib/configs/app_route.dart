@@ -44,6 +44,7 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_assign_team_screen.dart';
 import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
@@ -331,6 +332,8 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddPartsScreen());
       case DocumentFilterScreen.routeName:
         return _createRoute(const DocumentFilterScreen());
+      case LotoAssignTeamScreen.routeName:
+        return _createRoute(const LotoAssignTeamScreen());
       case DocumentLocationFilterList.routeName:
         return _createRoute(DocumentLocationFilterList(
           selectLocation: settings.arguments.toString(),

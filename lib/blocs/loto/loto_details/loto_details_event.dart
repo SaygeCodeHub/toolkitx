@@ -21,3 +21,12 @@ class FetchLotoAssignWorkforce extends LotoDetailsEvent {
       required this.isRemove,
       required this.name});
 }
+
+class FetchLotoAssignTeam extends LotoDetailsEvent {
+  final int pageNo;
+  final int isRemove;
+  final String name;
+
+  FetchLotoAssignTeam(
+      {required this.pageNo, required this.isRemove, required this.name});
+}

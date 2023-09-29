@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import '../../../utils/database_utils.dart';
+import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
 
 class LotoPopupMenuButton extends StatelessWidget {
@@ -25,6 +26,9 @@ class LotoPopupMenuButton extends StatelessWidget {
           if (value == DatabaseUtil.getText('assign_workforce')) {
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                 arguments: fetchLotoDetailsModel.data.id);
+          }
+          if (value == DatabaseUtil.getText('assign_team')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,
