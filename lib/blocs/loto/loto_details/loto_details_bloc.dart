@@ -76,17 +76,17 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   Future<FutureOr<void>> _fetchLotoAssignTeam(
       FetchLotoAssignTeam event, Emitter<LotoDetailsState> emit) async {
     emit(LotoAssignTeamFetching());
-    // try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    FetchLotoAssignTeamModel fetchLotoAssignTeamModel =
-        await _lotoRepository.fetchLotoAssignTeam(
-            hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
-    if (fetchLotoAssignTeamModel.status == 200) {
-      emit(LotoAssignTeamFetched(
-          fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchLotoAssignTeamModel fetchLotoAssignTeamModel =
+          await _lotoRepository.fetchLotoAssignTeam(
+              hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
+      if (fetchLotoAssignTeamModel.status == 200) {
+        emit(LotoAssignTeamFetched(
+            fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
+      }
+    } catch (e) {
+      emit(LotoAssignTeamError(getError: e.toString()));
     }
-    // } catch (e) {
-    //   emit(LotoAssignTeamError(getError: e.toString()));
-    // }
   }
 }
