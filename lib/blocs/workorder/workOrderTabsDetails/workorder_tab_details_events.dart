@@ -154,3 +154,39 @@ class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
 
   AcceptWorkOrder({required this.workOrderId});
 }
+
+class HoldWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  HoldWorkOrder({required this.workOrderId});
+}
+
+class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
+  final String downTimeId;
+
+  FetchWorkOrderSingleDownTime({required this.downTimeId});
+}
+
+class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
+  final int pageNo;
+
+  FetchAssignWorkForceList({required this.pageNo});
+}
+
+class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
+  final int pageNo;
+
+  FetchAssignPartsList({required this.pageNo});
+}
+
+class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
+  final String workOrderId;
+
+  RejectWorkOrder({required this.workOrderId});
+}
+
+class StartWorkOrder extends WorkOrderTabsDetailsEvent {
+  final Map startWorkOrderMap;
+
+  StartWorkOrder({required this.startWorkOrderMap});
+}

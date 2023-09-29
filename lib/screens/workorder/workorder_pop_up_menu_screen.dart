@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_screen.dart';
 
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
@@ -9,7 +10,9 @@ import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
-import 'workorder_add_down_time_screen.dart';
+import 'workorder_add_and_edit_down_time_screen.dart';
+import 'assign_workforce_screen.dart';
+import 'start_workorder_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
 import '../../widgets/android_pop_up.dart';
 import 'workorder_form_one_screen.dart';
@@ -59,9 +62,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
-          WorkOrderAddDownTimeScreen.addDownTimeMap['workorderId'] =
+          WorkOrderAddAndEditDownTimeScreen
+                  .addAndEditDownTimeMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
-          Navigator.pushNamed(context, WorkOrderAddDownTimeScreen.routeName);
+          Navigator.pushNamed(
+              context, WorkOrderAddAndEditDownTimeScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Accept')) {
           showDialog(
@@ -78,6 +83,48 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                       Navigator.pop(context);
                     });
               });
+        }
+        if (value == DatabaseUtil.getText('Reject')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('RejectWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(
+                          RejectWorkOrder(
+                              workOrderId:
+                                  workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
+        }
+        if (value == DatabaseUtil.getText('Hold')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('OnHoldWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(HoldWorkOrder(
+                          workOrderId:
+                              workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
+        }
+        if (value == DatabaseUtil.getText('assign_workforce')) {
+          Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('AddParts')) {
+          Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('Start')) {
+          StartWorkOrderScreen.startWorkOrderMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,

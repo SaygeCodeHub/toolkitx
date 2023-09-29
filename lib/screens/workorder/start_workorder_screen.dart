@@ -8,19 +8,19 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 import '../incident/widgets/date_picker.dart';
 import '../incident/widgets/time_picker.dart';
-import 'widgets/workorder_downtime_save_button.dart';
+import 'widgets/start_workorder_button.dart';
 
-class WorkOrderAddDownTimeScreen extends StatelessWidget {
-  static const routeName = 'WorkOrderAddDownTimeScreen';
-  static Map addDownTimeMap = {};
+class StartWorkOrderScreen extends StatelessWidget {
+  static const routeName = 'StartWorkOrderScreen';
 
-  const WorkOrderAddDownTimeScreen({Key? key}) : super(key: key);
+  const StartWorkOrderScreen({Key? key}) : super(key: key);
+  static Map startWorkOrderMap = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('ScheduleDowntime')),
-        bottomNavigationBar: const WorkOrderDownTimeSaveButton(),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
+        bottomNavigationBar: const StartWorkOrderButton(),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -31,7 +31,7 @@ class WorkOrderAddDownTimeScreen extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(DatabaseUtil.getText('StartDate'),
+                      Text(DatabaseUtil.getText('Date'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -40,11 +40,11 @@ class WorkOrderAddDownTimeScreen extends StatelessWidget {
                       DatePickerTextField(
                         hintText: StringConstants.kSelectDate,
                         onDateChanged: (String date) {
-                          addDownTimeMap['startdate'] = date;
+                          startWorkOrderMap['date'] = date;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('startTimePlaceHolder'),
+                      Text(DatabaseUtil.getText('Time'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -53,37 +53,11 @@ class WorkOrderAddDownTimeScreen extends StatelessWidget {
                       TimePickerTextField(
                         hintText: StringConstants.kSelectTime,
                         onTimeChanged: (String time) {
-                          addDownTimeMap['starttime'] = time;
+                          startWorkOrderMap['time'] = time;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('EndDate'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      DatePickerTextField(
-                        hintText: StringConstants.kSelectDate,
-                        onDateChanged: (String date) {
-                          addDownTimeMap['enddate'] = date;
-                        },
-                      ),
-                      const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('endTimePlaceHolder'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      TimePickerTextField(
-                        hintText: StringConstants.kSelectTime,
-                        onTimeChanged: (String time) {
-                          addDownTimeMap['endtime'] = time;
-                        },
-                      ),
-                      const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('ReasonofDowntime'),
+                      Text(DatabaseUtil.getText('Comments'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -95,7 +69,7 @@ class WorkOrderAddDownTimeScreen extends StatelessWidget {
                           maxLines: 2,
                           textInputType: TextInputType.text,
                           onTextFieldChanged: (String textField) {
-                            addDownTimeMap['notes'] = textField;
+                            startWorkOrderMap['comments'] = textField;
                           }),
                     ]))));
   }
