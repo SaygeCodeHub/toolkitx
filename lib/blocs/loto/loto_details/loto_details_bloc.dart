@@ -6,6 +6,7 @@ import 'package:toolkit/repositories/loto/loto_repository.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database_utils.dart';
 
@@ -22,6 +23,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int lotoTabIndex = 0;
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
+    on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -48,6 +50,23 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoDetailsNotFetched(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchLotoAssignWorkforce(
+      FetchLotoAssignWorkforce event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoAssignWorkforceFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchLotoAssignWorkforceModel fetchLotoAssignWorkforceModel =
+          await _lotoRepository.fetchLotoAssignWorkforceModel(hashCode!,
+              event.lotoId, event.pageNo, event.name, event.isRemove);
+      if (fetchLotoAssignWorkforceModel.status == 200) {
+        emit(LotoAssignWorkforceFetched(
+            fetchLotoAssignWorkforceModel: fetchLotoAssignWorkforceModel));
+      }
+    } catch (e) {
+      emit(LotoAssignWorkforceError(getError: e.toString()));
     }
   }
 }

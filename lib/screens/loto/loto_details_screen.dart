@@ -46,6 +46,9 @@ class LotoDetailsScreen extends StatelessWidget {
         ],
       ),
       body: BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
+        buildWhen: (previousState, currentState) =>
+            currentState is LotoDetailsFetching ||
+            currentState is LotoDetailsFetched,
         builder: (context, state) {
           if (state is LotoDetailsFetching) {
             return const Center(child: CircularProgressIndicator());
