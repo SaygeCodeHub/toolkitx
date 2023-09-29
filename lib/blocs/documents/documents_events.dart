@@ -1,5 +1,5 @@
 class DocumentsEvents {
-  DocumentsEvents();
+  const DocumentsEvents();
 }
 
 class GetDocumentsList extends DocumentsEvents {
@@ -40,3 +40,7 @@ class ApplyDocumentFilter extends DocumentsEvents {
 }
 
 class ClearDocumentFilter extends DocumentsEvents {}
+
+class GetDocumentsDetails extends DocumentsEvents {
+  const GetDocumentsDetails();
+}

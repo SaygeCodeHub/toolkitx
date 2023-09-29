@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
+import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -29,5 +30,13 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchDocumentMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<DocumentDetailsModel> getDocumentsDetails(
+      String userId, String hashCode, String roleId, String documentId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId");
+    return DocumentDetailsModel.fromJson(response);
   }
 }

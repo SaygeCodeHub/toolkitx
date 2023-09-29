@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/documents/documents_repository.dart';
@@ -22,6 +23,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   bool docListReachedMax = false;
   String selectedType = '';
   List<DocumentsListDatum> documentsListDatum = [];
+  String documentId = '';
 
   DocumentsStates get initialState => const DocumentsInitial();
 
@@ -34,6 +36,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<SelectDocumentLocationFilter>(_selectDocumentLocationFilter);
     on<ApplyDocumentFilter>(_applyDocumentFilter);
     on<ClearDocumentFilter>(_clearDocumentFilter);
+    on<GetDocumentsDetails>(_getDocumentsDetails);
   }
 
   Future<void> _getDocumentsList(
@@ -131,5 +134,47 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     filters = {};
     type = [];
     add(GetDocumentsList(page: 1, isFromHome: false));
+  }
+
+  Future<FutureOr<void>> _getDocumentsDetails(
+      GetDocumentsDetails event, Emitter<DocumentsStates> emit) async {
+    emit(const FetchingDocumentsDetails());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      List documentsPopUpMenu = ['Link Documents'];
+      DocumentDetailsModel documentDetailsModel = await _documentsRepository
+          .getDocumentsDetails(userId, hashCode, roleId, documentId);
+      if (documentDetailsModel.data.canaddcomments == '1') {
+        documentsPopUpMenu.add('Add comments');
+      }
+      if (documentDetailsModel.data.canaddmoredocs == '1') {
+        documentsPopUpMenu.add('Attach Documents');
+      }
+      if (documentDetailsModel.data.canapprove == '1') {
+        documentsPopUpMenu.add('Approve Documents');
+      }
+      if (documentDetailsModel.data.canclose == '1') {
+        documentsPopUpMenu.add('Close Documents');
+      }
+      if (documentDetailsModel.data.canedit == '1') {
+        documentsPopUpMenu.add('Edit');
+      }
+      if (documentDetailsModel.data.canopen == '1') {
+        documentsPopUpMenu.add('Open Documents');
+      }
+      if (documentDetailsModel.data.canreject == '1') {
+        documentsPopUpMenu.add('Reject Documents');
+      }
+      if (documentDetailsModel.data.canwithdraw == '1') {
+        documentsPopUpMenu.add('Withdraw Documents');
+      }
+      emit(DocumentsDetailsFetched(
+          documentDetailsModel: documentDetailsModel,
+          documentsPopUpMenu: documentsPopUpMenu));
+    } catch (e) {
+      emit(DocumentsDetailsError(message: e.toString()));
+    }
   }
 }

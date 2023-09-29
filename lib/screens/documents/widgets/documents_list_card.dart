@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_list_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../documents_details_screen.dart';
 
 class DocumentsListCard extends StatelessWidget {
   final DocumentsListDatum documentsListData;
@@ -15,7 +18,10 @@ class DocumentsListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
         child: ListTile(
-            onTap: () {},
+            onTap: () {
+              context.read<DocumentsBloc>().documentId = documentsListData.id;
+              Navigator.pushNamed(context, DocumentsDetailsScreen.routeName);
+            },
             contentPadding: const EdgeInsets.all(xxTinierSpacing),
             title: Padding(
                 padding: const EdgeInsets.only(bottom: xxTinierSpacing),
