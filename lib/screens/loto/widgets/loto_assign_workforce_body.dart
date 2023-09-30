@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
-import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
-import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_no_records_text.dart';
 import '../../../widgets/progress_bar.dart';
