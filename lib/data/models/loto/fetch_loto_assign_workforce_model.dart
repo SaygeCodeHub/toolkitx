@@ -11,7 +11,7 @@ String fetchLotoAssignWorkforceModelToJson(
 class FetchLotoAssignWorkforceModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<LotoWorkforceDatum> data;
 
   FetchLotoAssignWorkforceModel({
     required this.status,
@@ -23,7 +23,8 @@ class FetchLotoAssignWorkforceModel {
       FetchLotoAssignWorkforceModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<LotoWorkforceDatum>.from(
+            json["Data"].map((x) => LotoWorkforceDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,18 +34,19 @@ class FetchLotoAssignWorkforceModel {
       };
 }
 
-class Datum {
+class LotoWorkforceDatum {
   final int id;
   final String name;
   final String jobTitle;
 
-  Datum({
+  LotoWorkforceDatum({
     required this.id,
     required this.name,
     required this.jobTitle,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory LotoWorkforceDatum.fromJson(Map<String, dynamic> json) =>
+      LotoWorkforceDatum(
         id: json["id"],
         name: json["name"],
         jobTitle: json["job_title"] ?? '',
