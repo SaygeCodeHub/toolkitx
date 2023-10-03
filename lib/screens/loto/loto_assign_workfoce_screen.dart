@@ -12,16 +12,15 @@ import '../../configs/app_spacing.dart';
 
 class LotoAssignWorkforceScreen extends StatelessWidget {
   static const routeName = 'LotoAssignWorkforceScreen';
-
-  const LotoAssignWorkforceScreen({super.key});
-
   static String name = '';
   static int isRemove = 0;
   static int pageNo = 1;
+  const LotoAssignWorkforceScreen({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
-    pageNo = 1;
     context
         .read<LotoDetailsBloc>()
         .add(FetchLotoAssignWorkforce(pageNo: 1, isRemove: isRemove, name: ''));
@@ -47,11 +46,13 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                     width: kApplyButtonWidth,
                     child: PrimaryButton(
                         onPressed: () {
+                          LotoAssignWorkforceBody.isFirst = true;
+                          pageNo = 1;
+                          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
+                          context.read<LotoDetailsBloc>().lotoListReachedMax = false;
                           context.read<LotoDetailsBloc>().add(
                               FetchLotoAssignWorkforce(
-                                  pageNo: pageNo,
-                                  isRemove: isRemove,
-                                  name: name));
+                                  pageNo: 1, isRemove: isRemove, name: name));
                         },
                         textValue: StringConstants.kApply)),
               ],

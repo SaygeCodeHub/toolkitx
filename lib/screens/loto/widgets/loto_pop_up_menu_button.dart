@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/screens/loto/widgets/loto_assign_workforce_body.dart';
 import '../../../utils/database_utils.dart';
 import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
@@ -29,6 +30,8 @@ class LotoPopupMenuButton extends StatelessWidget {
           if (value == DatabaseUtil.getText('assign_workforce')) {
             context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
             context.read<LotoDetailsBloc>().lotoListReachedMax = false;
+            LotoAssignWorkforceScreen.pageNo = 1;
+            LotoAssignWorkforceBody.isFirst=true;
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                 arguments: fetchLotoDetailsModel.data.id);
           }

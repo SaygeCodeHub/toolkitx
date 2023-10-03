@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
@@ -12,20 +13,22 @@ import '../loto_assign_workfoce_screen.dart';
 import 'loto_assign_workforce_card.dart';
 
 class LotoAssignWorkforceBody extends StatelessWidget {
+  static bool isFirst = true;
+
   const LotoAssignWorkforceBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-    LotoAssignWorkforceScreen.pageNo = 1;
-    bool isFirst = true;
     return BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
       listener: (context, state) {
         if (state is LotoAssignWorkforceSaving) {
           ProgressBar.show(context);
         } else if (state is LotoAssignWorkforceSaved) {
           ProgressBar.dismiss(context);
+          LotoAssignWorkforceScreen.pageNo = 1;
+          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
-              pageNo: LotoAssignWorkforceScreen.pageNo,
+              pageNo: 1,
               isRemove: LotoAssignWorkforceScreen.isRemove,
               name: ''));
           showCustomSnackBar(context, StringConstants.kWorkforceAssigned, '');
@@ -42,18 +45,18 @@ class LotoAssignWorkforceBody extends StatelessWidget {
       },
       buildWhen: (previousState, currentState) =>
           (currentState is LotoAssignWorkforceFetching &&
-              isFirst == true &&
               LotoAssignWorkforceScreen.pageNo == 1 &&
               context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) ||
           currentState is LotoAssignWorkforceFetched ||
           currentState is LotoAssignWorkforceError,
       builder: (context, state) {
+
         if (state is LotoAssignWorkforceFetching) {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         } else if (state is LotoAssignWorkforceFetched) {
+          isFirst = false;
           if (context.read<LotoDetailsBloc>().assignWorkforceDatum.isNotEmpty) {
-            isFirst = false;
             return Expanded(
               child: ListView.separated(
                 itemCount:
