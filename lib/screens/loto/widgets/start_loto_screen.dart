@@ -14,6 +14,7 @@ class StartLotoScreen extends StatelessWidget {
   static const routeName = "StartLotoScreen";
   static int isRemove = 0;
   const StartLotoScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
