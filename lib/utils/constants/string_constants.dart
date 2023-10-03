@@ -240,6 +240,7 @@ abstract class StringConstants {
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
+  static const String kWorkforceAssigned = 'Workforce Assigned';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';

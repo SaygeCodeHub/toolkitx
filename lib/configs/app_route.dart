@@ -323,9 +323,7 @@ class AppRoutes {
           isFromHome: settings.arguments as bool,
         ));
       case LotoDetailsScreen.routeName:
-        return _createRoute(LotoDetailsScreen(
-          lotoDetailsMap: settings.arguments as Map,
-        ));
+        return _createRoute(const LotoDetailsScreen());
       case ChangeRoleDocumentsScreen.routeName:
         return _createRoute(const ChangeRoleDocumentsScreen());
       case WorkOrderAddPartsScreen.routeName:
@@ -339,9 +337,7 @@ class AppRoutes {
           selectLocation: settings.arguments.toString(),
         ));
       case LotoAssignWorkforceScreen.routeName:
-        return _createRoute(LotoAssignWorkforceScreen(
-          lotoId: settings.arguments.toString(),
-        ));
+        return _createRoute(const LotoAssignWorkforceScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
