@@ -17,8 +17,6 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
   static int pageNo = 1;
   const LotoAssignWorkforceScreen({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     context
@@ -48,8 +46,10 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                         onPressed: () {
                           LotoAssignWorkforceBody.isFirst = true;
                           pageNo = 1;
-                          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
-                          context.read<LotoDetailsBloc>().lotoListReachedMax = false;
+                          context.read<LotoDetailsBloc>().assignWorkforceDatum =
+                              [];
+                          context.read<LotoDetailsBloc>().lotoListReachedMax =
+                              false;
                           context.read<LotoDetailsBloc>().add(
                               FetchLotoAssignWorkforce(
                                   pageNo: 1, isRemove: isRemove, name: name));

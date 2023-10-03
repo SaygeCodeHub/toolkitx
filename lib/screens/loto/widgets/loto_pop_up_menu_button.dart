@@ -31,7 +31,7 @@ class LotoPopupMenuButton extends StatelessWidget {
             context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
             context.read<LotoDetailsBloc>().lotoListReachedMax = false;
             LotoAssignWorkforceScreen.pageNo = 1;
-            LotoAssignWorkforceBody.isFirst=true;
+            LotoAssignWorkforceBody.isFirst = true;
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                 arguments: fetchLotoDetailsModel.data.id);
           }

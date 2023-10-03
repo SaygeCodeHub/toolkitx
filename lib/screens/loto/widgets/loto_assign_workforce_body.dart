@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
@@ -50,7 +49,6 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           currentState is LotoAssignWorkforceFetched ||
           currentState is LotoAssignWorkforceError,
       builder: (context, state) {
-
         if (state is LotoAssignWorkforceFetching) {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
