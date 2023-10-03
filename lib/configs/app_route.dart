@@ -24,7 +24,9 @@ import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/documents/change_role_documents.dart';
+import '../screens/documents/document_filter_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
+import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -42,6 +44,8 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_assign_team_screen.dart';
+import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
@@ -80,6 +84,7 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
+import '../screens/workorder/start_workorder_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
@@ -300,6 +305,8 @@ class AppRoutes {
         ));
       case WorkOrderAddMisCostScreen.routeName:
         return _createRoute(const WorkOrderAddMisCostScreen());
+      case StartWorkOrderScreen.routeName:
+        return _createRoute(const StartWorkOrderScreen());
       case GetWorkforceScreen.routeName:
         return _createRoute(
             GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
@@ -316,13 +323,21 @@ class AppRoutes {
           isFromHome: settings.arguments as bool,
         ));
       case LotoDetailsScreen.routeName:
-        return _createRoute(LotoDetailsScreen(
-          lotoDetailsMap: settings.arguments as Map,
-        ));
+        return _createRoute(const LotoDetailsScreen());
       case ChangeRoleDocumentsScreen.routeName:
         return _createRoute(const ChangeRoleDocumentsScreen());
       case WorkOrderAddPartsScreen.routeName:
         return _createRoute(const WorkOrderAddPartsScreen());
+      case DocumentFilterScreen.routeName:
+        return _createRoute(const DocumentFilterScreen());
+      case LotoAssignTeamScreen.routeName:
+        return _createRoute(const LotoAssignTeamScreen());
+      case DocumentLocationFilterList.routeName:
+        return _createRoute(DocumentLocationFilterList(
+          selectLocation: settings.arguments.toString(),
+        ));
+      case LotoAssignWorkforceScreen.routeName:
+        return _createRoute(const LotoAssignWorkforceScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

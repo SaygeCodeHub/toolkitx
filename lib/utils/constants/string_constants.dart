@@ -180,6 +180,7 @@ abstract class StringConstants {
   static const String kResponded = 'Responded';
   static const String kLocation = 'Location';
   static const String kWorkforce = 'Workforce';
+  static const String kTeam = 'Teams';
   static const String kSystemUser = 'System User';
   static const String kAssignedFor = 'Assigned for: ';
   static const String kReportToAuthorities = 'Report to authorities';
@@ -240,6 +241,7 @@ abstract class StringConstants {
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
+  static const String kWorkforceAssigned = 'Workforce Assigned';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';

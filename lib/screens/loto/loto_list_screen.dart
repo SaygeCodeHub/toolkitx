@@ -24,23 +24,21 @@ class LotoListScreen extends StatelessWidget {
         .read<LotoListBloc>()
         .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-      appBar: GenericAppBar(
-        title: DatabaseUtil.getText('LOTO'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-            left: leftRightMargin,
-            right: leftRightMargin,
-            top: xxTinierSpacing),
-        child: Column(
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              BlocBuilder<LotoListBloc, LotoListState>(
-                buildWhen: (previous, current) {
+        appBar: GenericAppBar(
+          title: DatabaseUtil.getText('LOTO'),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing),
+            child: Column(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                BlocBuilder<LotoListBloc, LotoListState>(
+                    buildWhen: (previous, current) {
                   return current is LotoListFetched ||
                       current is FetchingLotoList;
-                },
-                builder: (context, state) {
+                }, builder: (context, state) {
                   if (state is LotoListFetched || state is FetchingLotoList) {
                     return CustomIconButtonRow(
                         secondaryVisible: false,
@@ -64,14 +62,10 @@ class LotoListScreen extends StatelessWidget {
                   } else {
                     return const SizedBox.shrink();
                   }
-                },
-              )
-            ]),
-            const SizedBox(height: xxTinierSpacing),
-            LotoList(isFromHome: isFromHome)
-          ],
-        ),
-      ),
-    );
+                })
+              ]),
+              const SizedBox(height: xxTinierSpacing),
+              const LotoList()
+            ])));
   }
 }
