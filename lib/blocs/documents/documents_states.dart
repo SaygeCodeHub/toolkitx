@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
 import '../../data/models/documents/documents_list_model.dart';
@@ -51,4 +52,36 @@ class CouldNotFetchDocumentRoles extends DocumentsStates {
 
 class DocumentRoleSelected extends DocumentsStates {
   const DocumentRoleSelected();
+}
+
+class FetchingDocumentMaster extends DocumentsStates {}
+
+class DocumentMasterFetched extends DocumentsStates {
+  final FetchDocumentMasterModel fetchDocumentMasterModel;
+
+  const DocumentMasterFetched({required this.fetchDocumentMasterModel});
+}
+
+class DocumentMasterError extends DocumentsStates {
+  final String fetchError;
+
+  const DocumentMasterError({required this.fetchError});
+}
+
+class DocumentStatusFilterSelected extends DocumentsStates {
+  final String selectedIndex;
+
+  const DocumentStatusFilterSelected({required this.selectedIndex});
+
+  @override
+  List<Object?> get props => [selectedIndex];
+}
+
+class DocumentTypeFilterSelected extends DocumentsStates {
+  final String selectedType;
+
+  const DocumentTypeFilterSelected({required this.selectedType});
+
+  @override
+  List<Object?> get props => [selectedType];
 }

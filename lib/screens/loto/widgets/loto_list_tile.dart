@@ -1,39 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
-import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/loto/loto_list_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../loto_details_screen.dart';
 
 class LotoListTile extends StatelessWidget {
-  final int index;
+  final LotoListDatum lotoListDatum;
 
   const LotoListTile({
     super.key,
-    required this.index,
+    required this.lotoListDatum,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomCard(
-      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.only(top: tinierSpacing),
         child: Column(
           children: [
             ListTile(
               onTap: () {
-                Map lotoDetailsMap = {
-                  "id": context.read<LotoListBloc>().data[index].id,
-                  "name": context.read<LotoListBloc>().data[index].name
-                };
-                Navigator.pushNamed(context, LotoDetailsScreen.routeName,
-                    arguments: lotoDetailsMap);
+                context.read<LotoDetailsBloc>().lotoId = lotoListDatum.id;
+                Navigator.pushNamed(context, LotoDetailsScreen.routeName);
               },
-              title: Text(context.read<LotoListBloc>().data[index].name,
+              title: Text(lotoListDatum.name,
                   style: Theme.of(context).textTheme.small.copyWith(
                       fontWeight: FontWeight.w500, color: AppColor.black)),
               subtitle: Column(
@@ -43,7 +38,7 @@ class LotoListTile extends StatelessWidget {
                     height: xxxTinierSpacing,
                   ),
                   Text(
-                    context.read<LotoListBloc>().data[index].date,
+                    lotoListDatum.date,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                         fontWeight: FontWeight.w500, color: AppColor.grey),
                   ),
@@ -51,7 +46,7 @@ class LotoListTile extends StatelessWidget {
                     height: xxxTinierSpacing,
                   ),
                   Text(
-                    context.read<LotoListBloc>().data[index].location,
+                    lotoListDatum.location,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                         fontWeight: FontWeight.w500, color: AppColor.grey),
                   ),
@@ -59,7 +54,7 @@ class LotoListTile extends StatelessWidget {
                     height: xxxTinierSpacing,
                   ),
                   Text(
-                    context.read<LotoListBloc>().data[index].purpose,
+                    lotoListDatum.purpose,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                         fontWeight: FontWeight.w500, color: AppColor.grey),
                   ),
@@ -69,7 +64,7 @@ class LotoListTile extends StatelessWidget {
                 ],
               ),
               trailing: Text(
-                context.read<LotoListBloc>().data[index].status,
+                lotoListDatum.status,
                 style: Theme.of(context).textTheme.xSmall.copyWith(
                     fontWeight: FontWeight.w500, color: AppColor.deepBlue),
               ),
