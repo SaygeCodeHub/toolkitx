@@ -13,6 +13,7 @@ import '../../utils/database_utils.dart';
 import 'widgets/assign_workforce_body.dart';
 import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
+import 'start_workorder_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
 import '../../widgets/android_pop_up.dart';
 import 'workorder_form_one_screen.dart';
@@ -84,6 +85,22 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
+        if (value == DatabaseUtil.getText('Reject')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('RejectWO'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<WorkOrderTabDetailsBloc>().add(
+                          RejectWorkOrder(
+                              workOrderId:
+                                  workOrderDetailsMap['workorderId'] ?? ''));
+                      Navigator.pop(context);
+                    });
+              });
+        }
         if (value == DatabaseUtil.getText('Hold')) {
           showDialog(
               context: context,
@@ -106,6 +123,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         }
         if (value == DatabaseUtil.getText('AddParts')) {
           Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('Start')) {
+          StartWorkOrderScreen.startWorkOrderMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,
