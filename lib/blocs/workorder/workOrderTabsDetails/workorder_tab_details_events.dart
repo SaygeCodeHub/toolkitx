@@ -1,4 +1,5 @@
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
 
 abstract class WorkOrderTabsDetailsEvent {}
 
@@ -189,4 +190,43 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
   final Map startWorkOrderMap;
 
   StartWorkOrder({required this.startWorkOrderMap});
+}
+
+class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
+  FetchWorkOrderDocuments();
+}
+
+class SelectWorkOrderDocument extends WorkOrderTabsDetailsEvent {
+  final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
+  final List documentList;
+  final String docId;
+
+  SelectWorkOrderDocument(
+      {required this.fetchWorkOrderDocumentsModel,
+      required this.docId,
+      required this.documentList});
+}
+
+class SelectWorkOrderDocumentType extends WorkOrderTabsDetailsEvent {
+  final String docTypeId;
+  final String docTypeName;
+
+  SelectWorkOrderDocumentType(
+      {required this.docTypeId, required this.docTypeName});
+}
+
+class SelectWorkOrderDocumentStatusOption extends WorkOrderTabsDetailsEvent {
+  final String statusId;
+  final String statusOption;
+
+  SelectWorkOrderDocumentStatusOption(
+      {required this.statusId, required this.statusOption});
+}
+
+class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ApplyWorkOrderDocumentFilter();
+}
+
+class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ClearWorkOrderDocumentFilter();
 }
