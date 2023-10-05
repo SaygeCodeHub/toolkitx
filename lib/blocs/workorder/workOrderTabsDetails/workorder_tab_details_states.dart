@@ -5,6 +5,7 @@ import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
@@ -302,3 +303,44 @@ class WorkOderNotStarted extends WorkOrderTabDetailsStates {
 
   WorkOderNotStarted({required this.workOrderNotStarted});
 }
+
+class FetchingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDocumentsFetched extends WorkOrderTabDetailsStates {
+  final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
+  final List documentList;
+  final Map filterMap;
+
+  WorkOrderDocumentsFetched(
+      {required this.filterMap,
+      required this.documentList,
+      required this.fetchWorkOrderDocumentsModel});
+}
+
+class WorkOrderDocumentsNotFetched extends WorkOrderTabDetailsStates {
+  final String documentsNotFetched;
+
+  WorkOrderDocumentsNotFetched({required this.documentsNotFetched});
+}
+
+class WorkOrderDocumentTypeSelected extends WorkOrderTabDetailsStates {
+  final String docTypeId;
+  final String docTypeName;
+
+  WorkOrderDocumentTypeSelected(
+      {required this.docTypeId, required this.docTypeName});
+}
+
+class WorkOrderDocumentStatusSelected extends WorkOrderTabDetailsStates {
+  final String statusId;
+  final String statusOption;
+
+  WorkOrderDocumentStatusSelected(
+      {required this.statusId, required this.statusOption});
+}
+
+class WorkOrderDocumentApplyingFilter extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDocumentFilterApplied extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDocumentDidNotFilter extends WorkOrderTabDetailsStates {}
