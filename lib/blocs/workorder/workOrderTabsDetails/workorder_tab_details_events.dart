@@ -230,3 +230,5 @@ class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
 class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
   ClearWorkOrderDocumentFilter();
 }
+
+class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}

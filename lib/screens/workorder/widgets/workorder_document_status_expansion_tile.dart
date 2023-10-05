@@ -18,18 +18,19 @@ class WorkOrderDocumentStatusExpansionTile extends StatelessWidget {
     context.read<WorkOrderTabDetailsBloc>().add(
         SelectWorkOrderDocumentStatusOption(
             statusId:
-                WorkOrderAddDocumentScreen.documentFilterMap['status'] ?? '',
-            statusOption:
-                WorkOrderAddDocumentScreen.documentFilterMap['status'] != null
-                    ? WorkOrderAddDocumentScreen
-                        .documentFilterMap['statusOption']
-                    : ''));
+                WorkOrderAssignDocumentScreen.documentFilterMap['status'] ?? '',
+            statusOption: WorkOrderAssignDocumentScreen
+                        .documentFilterMap['status'] !=
+                    null
+                ? WorkOrderAssignDocumentScreen
+                    .documentFilterMap['statusOption']
+                : ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderDocumentStatusSelected,
         builder: (context, state) {
           if (state is WorkOrderDocumentStatusSelected) {
-            WorkOrderAddDocumentScreen.documentFilterMap['statusOption'] =
+            WorkOrderAssignDocumentScreen.documentFilterMap['statusOption'] =
                 state.statusOption;
             return Theme(
                 data: Theme.of(context)
@@ -60,7 +61,7 @@ class WorkOrderDocumentStatusExpansionTile extends StatelessWidget {
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
                                 onChanged: (val) {
-                                  WorkOrderAddDocumentScreen
+                                  WorkOrderAssignDocumentScreen
                                           .documentFilterMap['status'] =
                                       WorkOrderStatusEnum.values
                                           .elementAt(index)

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +23,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
@@ -70,6 +72,7 @@ class WorkOrderTabDetailsBloc
     on<SelectWorkOrderDocumentStatusOption>(_selectWorkOrderDocumentStatus);
     on<ApplyWorkOrderDocumentFilter>(_applyWorkOrderDocumentFilter);
     on<ClearWorkOrderDocumentFilter>(_clearWorkOrderDocumentFilter);
+    on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
   }
 
   int tabIndex = 0;
@@ -689,11 +692,11 @@ class WorkOrderTabDetailsBloc
               hashCode!,
               WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
               '',
-              jsonEncode(WorkOrderAddDocumentScreen.documentFilterMap));
+              jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       emit(WorkOrderDocumentsFetched(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           documentList: [],
-          filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+          filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
       add(SelectWorkOrderDocument(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           docId: '',
@@ -717,7 +720,7 @@ class WorkOrderTabDetailsBloc
     emit(WorkOrderDocumentsFetched(
         documentList: documentList,
         fetchWorkOrderDocumentsModel: event.fetchWorkOrderDocumentsModel,
-        filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+        filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
   }
 
   _selectWorkOrderDocumentType(SelectWorkOrderDocumentType event,
@@ -740,6 +743,31 @@ class WorkOrderTabDetailsBloc
 
   _clearWorkOrderDocumentFilter(ClearWorkOrderDocumentFilter event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    WorkOrderAddDocumentScreen.documentFilterMap.clear();
+    WorkOrderAssignDocumentScreen.documentFilterMap.clear();
+  }
+
+  FutureOr _saveWorkOrderDocuments(SaveWorkOrderDocuments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingWorkOrderDocuments());
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    Map saveDocumentsMap = {
+      "hashcode": hashCode,
+      "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+      "documents":
+          WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
+      "userid": userId
+    };
+    log("map data======>$saveDocumentsMap");
+    SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
+        await _workOrderRepository.saveDocuments(saveDocumentsMap);
+    if (saveWorkOrderDocumentsModel.status == 200) {
+      emit(WorkOrderDocumentsSaved(
+          saveWorkOrderDocuments: saveWorkOrderDocumentsModel));
+    } else {
+      emit(WorkOrderDocumentsNotSaved(
+          documentsNotSaved:
+              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+    }
   }
 }

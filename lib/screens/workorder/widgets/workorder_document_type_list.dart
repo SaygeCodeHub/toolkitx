@@ -28,36 +28,37 @@ class WorkOrderDocumentTypeList extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        itemCount:
-                            WorkOrderAddDocumentScreen.documentDataList.length,
+                        itemCount: WorkOrderAssignDocumentScreen
+                            .documentDataList.length,
                         itemBuilder: (context, index) {
                           return RadioListTile(
                               contentPadding: EdgeInsets.zero,
                               activeColor: AppColor.deepBlue,
                               controlAffinity: ListTileControlAffinity.trailing,
-                              title: Text(WorkOrderAddDocumentScreen
+                              title: Text(WorkOrderAssignDocumentScreen
                                   .documentDataList[index].doctypename),
-                              value: WorkOrderAddDocumentScreen
+                              value: WorkOrderAssignDocumentScreen
                                   .documentDataList[index].docid,
                               groupValue: context
                                   .read<WorkOrderTabDetailsBloc>()
                                   .docTypeId,
                               onChanged: (value) {
-                                WorkOrderAddDocumentScreen
+                                WorkOrderAssignDocumentScreen
                                         .documentFilterMap['type'] =
-                                    WorkOrderAddDocumentScreen
+                                    WorkOrderAssignDocumentScreen
                                         .documentDataList[index].docid;
-                                WorkOrderAddDocumentScreen
+                                WorkOrderAssignDocumentScreen
                                         .documentFilterMap['typeName'] =
-                                    WorkOrderAddDocumentScreen
+                                    WorkOrderAssignDocumentScreen
                                         .documentDataList[index].doctypename;
                                 context.read<WorkOrderTabDetailsBloc>().add(
                                     SelectWorkOrderDocumentType(
-                                        docTypeId: WorkOrderAddDocumentScreen
+                                        docTypeId: WorkOrderAssignDocumentScreen
                                             .documentDataList[index].docid,
-                                        docTypeName: WorkOrderAddDocumentScreen
-                                            .documentDataList[index]
-                                            .doctypename));
+                                        docTypeName:
+                                            WorkOrderAssignDocumentScreen
+                                                .documentDataList[index]
+                                                .doctypename));
                                 Navigator.pop(context);
                               });
                         }),

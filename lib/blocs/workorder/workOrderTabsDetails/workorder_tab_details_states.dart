@@ -11,6 +11,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 
@@ -344,3 +345,17 @@ class WorkOrderDocumentApplyingFilter extends WorkOrderTabDetailsStates {}
 class WorkOrderDocumentFilterApplied extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentDidNotFilter extends WorkOrderTabDetailsStates {}
+
+class SavingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDocumentsSaved extends WorkOrderTabDetailsStates {
+  final SaveWorkOrderDocumentsModel saveWorkOrderDocuments;
+
+  WorkOrderDocumentsSaved({required this.saveWorkOrderDocuments});
+}
+
+class WorkOrderDocumentsNotSaved extends WorkOrderTabDetailsStates {
+  final String documentsNotSaved;
+
+  WorkOrderDocumentsNotSaved({required this.documentsNotSaved});
+}
