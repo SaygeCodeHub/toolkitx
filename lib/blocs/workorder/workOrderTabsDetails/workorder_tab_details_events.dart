@@ -193,6 +193,8 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
 
 class AssignWorkForce extends WorkOrderTabsDetailsEvent {
   final Map assignWorkOrderMap;
+  final String showWarningCount;
 
-  AssignWorkForce({required this.assignWorkOrderMap});
+  AssignWorkForce(
+      {required this.showWarningCount, required this.assignWorkOrderMap});
 }

@@ -647,7 +647,7 @@ class WorkOrderTabDetailsBloc
         "peopleid": event.assignWorkOrderMap['peopleid'] ?? '',
         "userid": userId,
         "hrs": event.assignWorkOrderMap['hrs'] ?? '',
-        "showswwarning": '0'
+        "showswwarning": event.showWarningCount
       };
       AssignWorkOrderModel assignWorkOrderModel =
           await _workOrderRepository.assignWorkForce(assignWorkForceMap);
