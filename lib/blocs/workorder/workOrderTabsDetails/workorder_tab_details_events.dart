@@ -253,3 +253,5 @@ class AssignWorkForce extends WorkOrderTabsDetailsEvent {
 }
 
 class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
