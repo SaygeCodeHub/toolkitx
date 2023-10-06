@@ -16,6 +16,7 @@ import 'package:toolkit/data/models/workorder/reject_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/start_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_save_comments_model.dart';
 
 import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -167,5 +168,14 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getsinglemisccost?hashcode=$hashCode&misccostid=$misCostId");
     return FetchWorkOrderSingleMiscCostModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
+      Map saveWorkOrderCommentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/savecomments",
+        saveWorkOrderCommentsMap);
+    return SaveWorkOrderCommentsModel.fromJson(response);
   }
 }

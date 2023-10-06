@@ -15,6 +15,7 @@ import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../data/models/workorder/workorder_save_comments_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
 
@@ -380,4 +381,18 @@ class WorkForceNotAssigned extends WorkOrderTabDetailsStates {
   final String workForceNotFetched;
 
   WorkForceNotAssigned({required this.workForceNotFetched});
+}
+
+class SavingWorkOrderComments extends WorkOrderTabDetailsStates {}
+
+class WorkOrderCommentsSaved extends WorkOrderTabDetailsStates {
+  final SaveWorkOrderCommentsModel saveWorkOrderCommentsModel;
+
+  WorkOrderCommentsSaved({required this.saveWorkOrderCommentsModel});
+}
+
+class WorkOrderCommentsNotSaved extends WorkOrderTabDetailsStates {
+  final String commentsNotSaved;
+
+  WorkOrderCommentsNotSaved({required this.commentsNotSaved});
 }
