@@ -83,7 +83,7 @@ import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
-import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
+import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_workorder_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
@@ -315,7 +315,7 @@ class AppRoutes {
       case WorkOrderAddAndEditDownTimeScreen.routeName:
         return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
       case AssignWorkForceScreen.routeName:
-        return _createRoute(const AssignWorkForceScreen());
+        return _createRoute(AssignWorkForceScreen());
       case WorkOrderAddDocumentScreen.routeName:
         return _createRoute(const WorkOrderAddDocumentScreen());
       case WorkOrderDocumentFilterScreen.routeName:
