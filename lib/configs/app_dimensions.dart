@@ -31,6 +31,7 @@ const double kClientListShimmerHeight = 150;
 const double kLanguageFlagHeight = 35;
 const double kLanguageFlagWidth = 52;
 const double kTagsHeight = 26;
+const double kSearchIconHeight = 28;
 const double kDateTimePickerContainerHeight = 220;
 const double kDateTimePickerHeight = 170;
 const double kLoadingPopUpHeight = 50;

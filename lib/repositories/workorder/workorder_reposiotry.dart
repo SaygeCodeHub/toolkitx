@@ -6,7 +6,9 @@ import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../data/models/workorder/fetch_workorder_documents_model.dart';
 import '../../data/models/workorder/fetch_workorder_master_model.dart';
+import '../../data/models/workorder/fetch_workorder_misc_cost_model.dart';
 import '../../data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../data/models/workorder/hold_workorder_model.dart';
@@ -59,4 +61,10 @@ abstract class WorkOrderRepository {
 
   Future<FetchAssignPartsModel> fetchAssignPartsModel(
       int pageNo, String hashCode, String workOrderId, String name);
+
+  Future<FetchWorkOrderDocumentsModel> fetchWorkOrderDocuments(int pageNo,
+      String hashCode, String workOrderId, String name, String filter);
+
+  Future<FetchWorkOrderSingleMiscCostModel> fetchWorkOrderSingleMiscCost(
+      String hashCode, String misCostId);
 }

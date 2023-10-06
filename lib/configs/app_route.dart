@@ -50,6 +50,7 @@ import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/widgets/loto_location_list.dart';
+import '../screens/loto/widgets/start_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -85,8 +86,10 @@ import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_workorder_screen.dart';
+import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
+import '../screens/workorder/workorder_document_filter_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
 import '../screens/workorder/workorder_form_screen_three.dart';
@@ -314,6 +317,10 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
       case AssignWorkForceScreen.routeName:
         return _createRoute(const AssignWorkForceScreen());
+      case WorkOrderAddDocumentScreen.routeName:
+        return _createRoute(const WorkOrderAddDocumentScreen());
+      case WorkOrderDocumentFilterScreen.routeName:
+        return _createRoute(const WorkOrderDocumentFilterScreen());
       case QuizQuestionsScreen.routeName:
         return _createRoute(QuizQuestionsScreen(
           quizMap: settings.arguments as Map,
@@ -338,6 +345,8 @@ class AppRoutes {
         ));
       case LotoAssignWorkforceScreen.routeName:
         return _createRoute(const LotoAssignWorkforceScreen());
+      case StartLotoScreen.routeName:
+        return _createRoute(const StartLotoScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
