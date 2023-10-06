@@ -18,6 +18,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   WorkOrderStates get initialState => WorkOrderInitial();
   final List<WorkOrderDatum> data = [];
   bool hasReachedMax = false;
+  String workOrderId = '';
   Map filtersMap = {};
   List<List<WorkOrderMasterDatum>> workOrderMasterDatum = [];
   WorkOrderBloc() : super(WorkOrderInitial()) {
@@ -47,6 +48,9 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
           add(WorkOrderClearFilter());
           FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
               .fetchWorkOrders(event.pageNo, hashCode!, '{}');
+          for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
+            workOrderId = fetchWorkOrdersModel.data[i].id;
+          }
           data.addAll(fetchWorkOrdersModel.data);
           hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
           emit(WorkOrdersFetched(

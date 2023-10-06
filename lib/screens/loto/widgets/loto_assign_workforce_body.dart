@@ -19,6 +19,12 @@ class LotoAssignWorkforceBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
+      buildWhen: (previousState, currentState) =>
+          (currentState is LotoAssignWorkforceFetching &&
+              LotoAssignWorkforceScreen.pageNo == 1 &&
+              context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) ||
+          currentState is LotoAssignWorkforceFetched ||
+          currentState is LotoAssignWorkforceError,
       listener: (context, state) {
         if (state is LotoAssignWorkforceSaving) {
           ProgressBar.show(context);
@@ -42,12 +48,6 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           }
         }
       },
-      buildWhen: (previousState, currentState) =>
-          (currentState is LotoAssignWorkforceFetching &&
-              LotoAssignWorkforceScreen.pageNo == 1 &&
-              context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) ||
-          currentState is LotoAssignWorkforceFetched ||
-          currentState is LotoAssignWorkforceError,
       builder: (context, state) {
         if (state is LotoAssignWorkforceFetching) {
           return const Expanded(
@@ -56,55 +56,54 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           isFirst = false;
           if (context.read<LotoDetailsBloc>().assignWorkforceDatum.isNotEmpty) {
             return Expanded(
-              child: ListView.separated(
-                itemCount:
-                    context.read<LotoDetailsBloc>().lotoListReachedMax == true
-                        ? context
-                            .read<LotoDetailsBloc>()
-                            .assignWorkforceDatum
-                            .length
-                        : context
+                child: ListView.separated(
+                    itemCount:
+                        context.read<LotoDetailsBloc>().lotoListReachedMax ==
+                                true
+                            ? context
                                 .read<LotoDetailsBloc>()
                                 .assignWorkforceDatum
-                                .length +
-                            1,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  if (index <
-                      context
+                                .length
+                            : context
+                                    .read<LotoDetailsBloc>()
+                                    .assignWorkforceDatum
+                                    .length +
+                                1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index <
+                          context
+                              .read<LotoDetailsBloc>()
+                              .assignWorkforceDatum
+                              .length) {
+                        return LotoAssignWorkforceCard(
+                          workForceDatum: context
+                              .read<LotoDetailsBloc>()
+                              .assignWorkforceDatum[index],
+                        );
+                      } else if (!context
                           .read<LotoDetailsBloc>()
-                          .assignWorkforceDatum
-                          .length) {
-                    return LotoAssignWorkforceCard(
-                      workForceDatum: context
-                          .read<LotoDetailsBloc>()
-                          .assignWorkforceDatum[index],
-                    );
-                  } else if (!context
-                      .read<LotoDetailsBloc>()
-                      .lotoListReachedMax) {
-                    LotoAssignWorkforceScreen.pageNo++;
-                    context.read<LotoDetailsBloc>().add(
-                        FetchLotoAssignWorkforce(
-                            pageNo: LotoAssignWorkforceScreen.pageNo,
-                            isRemove: LotoAssignWorkforceScreen.isRemove,
-                            name: ''));
-                    return const Center(
-                        child: Padding(
-                            padding: EdgeInsets.all(
-                                kCircularProgressIndicatorPadding),
-                            child: SizedBox(
-                                width: kCircularProgressIndicatorWidth,
-                                child: CircularProgressIndicator())));
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: tiniestSpacing);
-                },
-              ),
-            );
+                          .lotoListReachedMax) {
+                        LotoAssignWorkforceScreen.pageNo++;
+                        context.read<LotoDetailsBloc>().add(
+                            FetchLotoAssignWorkforce(
+                                pageNo: LotoAssignWorkforceScreen.pageNo,
+                                isRemove: LotoAssignWorkforceScreen.isRemove,
+                                name: ''));
+                        return const Center(
+                            child: Padding(
+                                padding: EdgeInsets.all(
+                                    kCircularProgressIndicatorPadding),
+                                child: SizedBox(
+                                    width: kCircularProgressIndicatorWidth,
+                                    child: CircularProgressIndicator())));
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: tiniestSpacing);
+                    }));
           } else if (state.fetchLotoAssignWorkforceModel.status == 204 &&
               context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) {
             return NoRecordsText(
