@@ -8,6 +8,7 @@ const double kDividerWidth = 1.0;
 const double kCircleAvatarRadius = 58.0;
 const double kCardElevation = 1.0;
 const double kImageHeight = 20.0;
+const double xImageHeight = 50.0;
 const double kImageWidth = 20.0;
 const double kEditAndDeleteIconTogether = 20.0;
 const double kProgressIndicatorTogether = 20.0;
