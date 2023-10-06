@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
@@ -22,6 +24,7 @@ import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import 'workorder_tab_details_events.dart';
@@ -63,6 +66,12 @@ class WorkOrderTabDetailsBloc
     on<FetchAssignPartsList>(_fetchAssignPartsList);
     on<RejectWorkOrder>(_rejectWorkOrder);
     on<StartWorkOrder>(_startWorkOrder);
+    on<FetchWorkOrderDocuments>(_fetchWorkOrderDocuments);
+    on<SelectWorkOrderDocument>(_selectWorkOrderDocuments);
+    on<SelectWorkOrderDocumentType>(_selectWorkOrderDocumentType);
+    on<SelectWorkOrderDocumentStatusOption>(_selectWorkOrderDocumentStatus);
+    on<ApplyWorkOrderDocumentFilter>(_applyWorkOrderDocumentFilter);
+    on<ClearWorkOrderDocumentFilter>(_clearWorkOrderDocumentFilter);
   }
 
   int tabIndex = 0;
@@ -72,6 +81,8 @@ class WorkOrderTabDetailsBloc
   Map workOrderDetailsMap = {};
   bool assignWorkForceListReachedMax = false;
   List<AssignWorkForceDatum> assignWorkForceDatum = [];
+  String docTypeId = '';
+  List documentList = [];
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -670,5 +681,70 @@ class WorkOrderTabDetailsBloc
     } catch (e) {
       emit(WorkOderNotStarted(workOrderNotStarted: e.toString()));
     }
+  }
+
+  FutureOr _fetchWorkOrderDocuments(FetchWorkOrderDocuments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingWorkOrderDocuments());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel =
+          await _workOrderRepository.fetchWorkOrderDocuments(
+              1,
+              hashCode!,
+              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              '',
+              jsonEncode(WorkOrderAddDocumentScreen.documentFilterMap));
+      emit(WorkOrderDocumentsFetched(
+          fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
+          documentList: [],
+          filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+      add(SelectWorkOrderDocument(
+          fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
+          docId: '',
+          documentList: []));
+    } catch (e) {
+      emit(WorkOderNotStarted(workOrderNotStarted: e.toString()));
+    }
+  }
+
+  _selectWorkOrderDocuments(
+      SelectWorkOrderDocument event, Emitter<WorkOrderTabDetailsStates> emit) {
+    List selectedDocumentList = List.from(event.documentList);
+    if (event.docId != '') {
+      if (event.documentList.contains(event.docId) != true) {
+        selectedDocumentList.add(event.docId);
+      } else {
+        selectedDocumentList.remove(event.docId);
+      }
+    }
+    documentList = selectedDocumentList;
+    emit(WorkOrderDocumentsFetched(
+        documentList: documentList,
+        fetchWorkOrderDocumentsModel: event.fetchWorkOrderDocumentsModel,
+        filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+  }
+
+  _selectWorkOrderDocumentType(SelectWorkOrderDocumentType event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    docTypeId = event.docTypeId;
+    emit(WorkOrderDocumentTypeSelected(
+        docTypeId: event.docTypeId, docTypeName: event.docTypeName));
+  }
+
+  _selectWorkOrderDocumentStatus(SelectWorkOrderDocumentStatusOption event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderDocumentStatusSelected(
+        statusId: event.statusId, statusOption: event.statusOption));
+  }
+
+  _applyWorkOrderDocumentFilter(ApplyWorkOrderDocumentFilter event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    emit(WorkOrderDocumentFilterApplied());
+  }
+
+  _clearWorkOrderDocumentFilter(ClearWorkOrderDocumentFilter event,
+      Emitter<WorkOrderTabDetailsStates> emit) {
+    WorkOrderAddDocumentScreen.documentFilterMap.clear();
   }
 }
