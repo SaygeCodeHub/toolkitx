@@ -252,4 +252,6 @@ class AssignWorkForce extends WorkOrderTabsDetailsEvent {
       {required this.showWarningCount, required this.assignWorkOrderMap});
 }
 
+class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
 class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -83,6 +85,7 @@ class WorkOrderTabDetailsBloc
     on<ApplyWorkOrderDocumentFilter>(_applyWorkOrderDocumentFilter);
     on<ClearWorkOrderDocumentFilter>(_clearWorkOrderDocumentFilter);
     on<FetchWorkOrderSingleMiscCost>(_fetchSingleMiscCost);
+    on<DeleteWorkOrderSingleMiscCost>(_deleteSingleMiscCost);
     on<AssignWorkForce>(_assignWorkForce);
     on<SaveWorkOrderComments>(_saveDocuments);
   }
@@ -98,6 +101,7 @@ class WorkOrderTabDetailsBloc
   List documentList = [];
   String currencyName = '';
   String vendorName = '';
+  String misCostId = '';
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -894,6 +898,34 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderCommentsNotSaved(commentsNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr _deleteSingleMiscCost(DeleteWorkOrderSingleMiscCost event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(DeletingWorkOrderSingleMiscCost());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map deleteSingleMiscCostMap = {
+        "misccostid": misCostId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      log("map=======>$deleteSingleMiscCostMap");
+      DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel =
+          await _workOrderRepository
+              .deleteWorkOrderSingleMiscCost(deleteSingleMiscCostMap);
+      if (deleteWorkOrderSingleMiscCostModel.status == 200) {
+        emit(WorkOrderSingleMiscCostDeleted(
+            deleteWorkOrderSingleMiscCostModel:
+                deleteWorkOrderSingleMiscCostModel));
+      } else {
+        emit(WorkOrderSingleMiscCostNotDeleted(
+            miscCostNotDeleted: deleteWorkOrderSingleMiscCostModel.message));
+      }
+    } catch (e) {
+      emit(ItemTabItemNotDeleted(cannotDeleteItem: e.toString()));
     }
   }
 }
