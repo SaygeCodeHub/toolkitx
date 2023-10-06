@@ -12,6 +12,7 @@ import 'assign_workforce_status_tags.dart';
 
 class AssignWorkForceBody extends StatelessWidget {
   const AssignWorkForceBody({Key? key}) : super(key: key);
+  static Map assignWorkForceMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +65,14 @@ class AssignWorkForceBody extends StatelessWidget {
                                   .jobTitle),
                               const SizedBox(height: xxTinierSpacing),
                               TextFieldWidget(
+                                  textInputAction: TextInputAction.done,
+                                  textInputType: TextInputType.number,
+                                  maxLength: 2,
                                   hintText: DatabaseUtil.getText(
                                       'PlannedWorkingHours'),
-                                  onTextFieldChanged: (String textField) {}),
+                                  onTextFieldChanged: (String textField) {
+                                    assignWorkForceMap['hrs'] = textField;
+                                  }),
                               const SizedBox(height: xxTinierSpacing),
                               AssignWorkForceStatusTags(
                                   assignWorkForceDatum: context

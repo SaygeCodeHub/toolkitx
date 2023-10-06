@@ -10,6 +10,7 @@ import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'widgets/assign_workforce_body.dart';
 import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
 import 'start_workorder_screen.dart';
@@ -117,6 +118,8 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
               });
         }
         if (value == DatabaseUtil.getText('assign_workforce')) {
+          AssignWorkForceBody.assignWorkForceMap['workorderId'] =
+              workOrderDetailsMap['workorderId'] ?? '';
           Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddParts')) {

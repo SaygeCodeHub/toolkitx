@@ -11,6 +11,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
+import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
@@ -80,6 +81,7 @@ class WorkOrderTabDetailsBloc
     on<ApplyWorkOrderDocumentFilter>(_applyWorkOrderDocumentFilter);
     on<ClearWorkOrderDocumentFilter>(_clearWorkOrderDocumentFilter);
     on<FetchWorkOrderSingleMiscCost>(_fetchSingleMiscCost);
+    on<AssignWorkForce>(_assignWorkForce);
   }
 
   int tabIndex = 0;
@@ -687,6 +689,37 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _assignWorkForce(
+      AssignWorkForce event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(AssigningWorkForce());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map assignWorkForceMap = {
+        "hashcode": hashCode,
+        "woid": event.assignWorkOrderMap['workorderId'] ?? '',
+        "peopleid": event.assignWorkOrderMap['peopleid'] ?? '',
+        "userid": userId,
+        "hrs": event.assignWorkOrderMap['hrs'] ?? '',
+        "showswwarning": event.showWarningCount
+      };
+      AssignWorkOrderModel assignWorkOrderModel =
+          await _workOrderRepository.assignWorkForce(assignWorkForceMap);
+      if (assignWorkOrderModel.status == 200) {
+        emit(WorkForceAssigned(assignWorkOrderModel: assignWorkOrderModel));
+      } else if (assignWorkOrderModel.status == 300) {
+        emit(WorkForceNotAssigned(
+            workForceNotFetched: assignWorkOrderModel.message));
+      } else {
+        emit(WorkForceNotAssigned(
+            workForceNotFetched:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkForceNotAssigned(workForceNotFetched: e.toString()));
     }
   }
 
