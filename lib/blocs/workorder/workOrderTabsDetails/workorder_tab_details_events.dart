@@ -1,4 +1,5 @@
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
 
 abstract class WorkOrderTabsDetailsEvent {}
 
@@ -175,8 +176,13 @@ class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
 
 class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
+  final String workOrderId;
+  final String partName;
 
-  FetchAssignPartsList({required this.pageNo});
+  FetchAssignPartsList(
+      {required this.pageNo,
+      required this.partName,
+      required this.workOrderId});
 }
 
 class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
@@ -190,3 +196,50 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
 
   StartWorkOrder({required this.startWorkOrderMap});
 }
+
+class SearchWorkOrderParts extends WorkOrderTabsDetailsEvent {
+  final bool isSearched;
+
+  SearchWorkOrderParts({required this.isSearched});
+}
+
+class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
+  FetchWorkOrderDocuments();
+}
+
+class SelectWorkOrderDocument extends WorkOrderTabsDetailsEvent {
+  final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
+  final List documentList;
+  final String docId;
+
+  SelectWorkOrderDocument(
+      {required this.fetchWorkOrderDocumentsModel,
+      required this.docId,
+      required this.documentList});
+}
+
+class SelectWorkOrderDocumentType extends WorkOrderTabsDetailsEvent {
+  final String docTypeId;
+  final String docTypeName;
+
+  SelectWorkOrderDocumentType(
+      {required this.docTypeId, required this.docTypeName});
+}
+
+class SelectWorkOrderDocumentStatusOption extends WorkOrderTabsDetailsEvent {
+  final String statusId;
+  final String statusOption;
+
+  SelectWorkOrderDocumentStatusOption(
+      {required this.statusId, required this.statusOption});
+}
+
+class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ApplyWorkOrderDocumentFilter();
+}
+
+class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ClearWorkOrderDocumentFilter();
+}
+
+class FetchWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
