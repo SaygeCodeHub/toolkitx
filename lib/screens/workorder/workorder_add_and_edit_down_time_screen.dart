@@ -19,32 +19,39 @@ class WorkOrderAddAndEditDownTimeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderTabDetailsBloc>().add(FetchWorkOrderSingleDownTime(
-        downTimeId: addAndEditDownTimeMap['downTimeId']));
+    addAndEditDownTimeMap['downTimeId'] != null
+        ? context.read<WorkOrderTabDetailsBloc>().add(
+            FetchWorkOrderSingleDownTime(
+                downTimeId: addAndEditDownTimeMap['downTimeId'] ?? ''))
+        : null;
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ScheduleDowntime')),
         bottomNavigationBar: const WorkOrderDownTimeSaveButton(),
-        body: BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
-            buildWhen: (previousState, currentState) =>
-                currentState is FetchingWorkOrderSingleDownTime ||
-                currentState is WorkOrderSingleDownTimeFetched ||
-                currentState is WorkOrderSingleDownTimeNotFetched,
-            builder: (context, state) {
-              if (state is FetchingWorkOrderSingleDownTime) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is WorkOrderSingleDownTimeFetched) {
-                return const WorkOrderAddAndEditDownTimeBody();
-              } else if (state is WorkOrderSingleDownTimeNotFetched) {
-                return GenericReloadButton(
-                    onPressed: () {
-                      context
-                          .read<WorkOrderTabDetailsBloc>()
-                          .add(FetchWorkOrderSingleDownTime(downTimeId: ''));
-                    },
-                    textValue: StringConstants.kReload);
-              } else {
-                return const SizedBox.shrink();
-              }
-            }));
+        body: Visibility(
+          visible: addAndEditDownTimeMap['downTimeId'] != null,
+          replacement: const WorkOrderAddAndEditDownTimeBody(),
+          child:
+              BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+                  buildWhen: (previousState, currentState) =>
+                      currentState is FetchingWorkOrderSingleDownTime ||
+                      currentState is WorkOrderSingleDownTimeFetched ||
+                      currentState is WorkOrderSingleDownTimeNotFetched,
+                  builder: (context, state) {
+                    if (state is FetchingWorkOrderSingleDownTime) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is WorkOrderSingleDownTimeFetched) {
+                      return const WorkOrderAddAndEditDownTimeBody();
+                    } else if (state is WorkOrderSingleDownTimeNotFetched) {
+                      return GenericReloadButton(
+                          onPressed: () {
+                            context.read<WorkOrderTabDetailsBloc>().add(
+                                FetchWorkOrderSingleDownTime(downTimeId: ''));
+                          },
+                          textValue: StringConstants.kReload);
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),
+        ));
   }
 }
