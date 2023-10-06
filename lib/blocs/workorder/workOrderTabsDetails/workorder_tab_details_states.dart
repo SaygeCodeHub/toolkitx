@@ -6,6 +6,7 @@ import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
+import '../../../data/models/workorder/fetch_workorder_misc_cost_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
@@ -350,3 +351,18 @@ class WorkOrderDocumentApplyingFilter extends WorkOrderTabDetailsStates {}
 class WorkOrderDocumentFilterApplied extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentDidNotFilter extends WorkOrderTabDetailsStates {}
+
+class FetchingWorkOrderSingleMiscCost extends WorkOrderTabDetailsStates {}
+
+class SingleWorkOrderMiscCostFetched extends WorkOrderTabDetailsStates {
+  final FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel;
+
+  SingleWorkOrderMiscCostFetched(
+      {required this.fetchWorkOrderSingleMiscCostModel});
+}
+
+class SingleWorkOrderMiscCostNotFetched extends WorkOrderTabDetailsStates {
+  final String miscCostNotFetched;
+
+  SingleWorkOrderMiscCostNotFetched({required this.miscCostNotFetched});
+}
