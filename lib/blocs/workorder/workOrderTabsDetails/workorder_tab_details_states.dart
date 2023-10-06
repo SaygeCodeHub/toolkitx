@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -365,4 +366,19 @@ class SingleWorkOrderMiscCostNotFetched extends WorkOrderTabDetailsStates {
   final String miscCostNotFetched;
 
   SingleWorkOrderMiscCostNotFetched({required this.miscCostNotFetched});
+}
+
+class DeletingWorkOrderSingleMiscCost extends WorkOrderTabDetailsStates {}
+
+class WorkOrderSingleMiscCostDeleted extends WorkOrderTabDetailsStates {
+  final DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel;
+
+  WorkOrderSingleMiscCostDeleted(
+      {required this.deleteWorkOrderSingleMiscCostModel});
+}
+
+class WorkOrderSingleMiscCostNotDeleted extends WorkOrderTabDetailsStates {
+  final String miscCostNotDeleted;
+
+  WorkOrderSingleMiscCostNotDeleted({required this.miscCostNotDeleted});
 }

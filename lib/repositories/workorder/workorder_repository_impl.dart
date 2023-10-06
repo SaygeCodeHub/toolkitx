@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/delete_document_model.dart';
 import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
+import 'package:toolkit/data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
@@ -159,5 +160,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getsinglemisccost?hashcode=$hashCode&misccostid=$misCostId");
     return FetchWorkOrderSingleMiscCostModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteWorkOrderSingleMiscCostModel> deleteWorkOrderSingleMiscCost(
+      Map deleteMiscCostMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/deletemisccost", deleteMiscCostMap);
+    return DeleteWorkOrderSingleMiscCostModel.fromJson(response);
   }
 }
