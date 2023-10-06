@@ -27,7 +27,6 @@ import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../screens/workorder/assign_workforce_screen.dart';
 import '../../../screens/workorder/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
-import '../../../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
