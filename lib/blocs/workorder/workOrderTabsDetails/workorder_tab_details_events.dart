@@ -251,3 +251,5 @@ class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
 class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
   ClearWorkOrderDocumentFilter();
 }
+
+class FetchWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}

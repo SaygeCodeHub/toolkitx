@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart'
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_workorder_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
@@ -150,5 +151,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getdocumentsforworkorder?pageno=$pageNo&hashcode=$hashCode&workorderid=$workOrderId&name=$name&filter=$filter");
     return FetchWorkOrderDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderSingleMiscCostModel> fetchWorkOrderSingleMiscCost(
+      String hashCode, String misCostId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/getsinglemisccost?hashcode=$hashCode&misccostid=$misCostId");
+    return FetchWorkOrderSingleMiscCostModel.fromJson(response);
   }
 }
