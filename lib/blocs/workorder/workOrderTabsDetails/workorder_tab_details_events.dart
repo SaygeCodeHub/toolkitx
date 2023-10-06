@@ -197,10 +197,10 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
   StartWorkOrder({required this.startWorkOrderMap});
 }
 
-class SearchParts extends WorkOrderTabsDetailsEvent {
+class SearchWorkOrderParts extends WorkOrderTabsDetailsEvent {
   final bool isSearched;
 
-  SearchParts({required this.isSearched});
+  SearchWorkOrderParts({required this.isSearched});
 }
 
 class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {

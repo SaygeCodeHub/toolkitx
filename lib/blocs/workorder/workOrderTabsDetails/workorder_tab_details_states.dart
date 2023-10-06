@@ -304,8 +304,6 @@ class WorkOderNotStarted extends WorkOrderTabDetailsStates {
   WorkOderNotStarted({required this.workOrderNotStarted});
 }
 
-class WorkOrderAddPartsListSearching extends WorkOrderTabDetailsStates {}
-
 class WorkOrderAddPartsListSearched extends WorkOrderTabDetailsStates {
   final bool isSearched;
 

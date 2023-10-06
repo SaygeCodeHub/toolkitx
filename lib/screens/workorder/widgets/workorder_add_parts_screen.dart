@@ -35,7 +35,7 @@ class WorkOrderAddPartsScreen extends StatelessWidget {
     context.read<WorkOrderTabDetailsBloc>().docListReachedMax = false;
     context
         .read<WorkOrderTabDetailsBloc>()
-        .add(SearchParts(isSearched: isSearched));
+        .add(SearchWorkOrderParts(isSearched: isSearched));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('AddParts')),
       body: Padding(
@@ -83,7 +83,8 @@ class WorkOrderAddPartsScreen extends StatelessWidget {
                                         .read<WorkOrderTabDetailsBloc>()
                                         .docListReachedMax = false;
                                     context.read<WorkOrderTabDetailsBloc>().add(
-                                        SearchParts(isSearched: isSearched));
+                                        SearchWorkOrderParts(
+                                            isSearched: isSearched));
                                   }
                                 },
                                 icon: (state.isSearched == false)

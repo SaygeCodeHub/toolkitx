@@ -70,7 +70,7 @@ class WorkOrderTabDetailsBloc
     on<FetchAssignPartsList>(_fetchAssignPartsList);
     on<RejectWorkOrder>(_rejectWorkOrder);
     on<StartWorkOrder>(_startWorkOrder);
-    on<SearchParts>(_searchParts);
+    on<SearchWorkOrderParts>(_searchWorkOrderParts);
     on<FetchWorkOrderDocuments>(_fetchWorkOrderDocuments);
     on<SelectWorkOrderDocument>(_selectWorkOrderDocuments);
     on<SelectWorkOrderDocumentType>(_selectWorkOrderDocumentType);
@@ -687,8 +687,8 @@ class WorkOrderTabDetailsBloc
     }
   }
 
-  FutureOr<void> _searchParts(
-      SearchParts event, Emitter<WorkOrderTabDetailsStates> emit) {
+  FutureOr<void> _searchWorkOrderParts(
+      SearchWorkOrderParts event, Emitter<WorkOrderTabDetailsStates> emit) {
     if (event.isSearched == true) {
       emit(WorkOrderAddPartsListSearched(isSearched: event.isSearched));
       add(FetchAssignPartsList(
