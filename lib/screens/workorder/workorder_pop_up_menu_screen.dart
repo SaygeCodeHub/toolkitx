@@ -120,6 +120,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddParts')) {
+          context.read<WorkOrderTabDetailsBloc>().addPartsDatum = [];
           Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Start')) {

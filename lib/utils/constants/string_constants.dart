@@ -15,6 +15,7 @@ abstract class StringConstants {
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kParts = 'Parts'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -214,6 +215,7 @@ abstract class StringConstants {
   static const String kNoRecordsFound = 'No records found';
   static const String kSearchLanguage = 'Search language';
   static const String kSearchTimezone = 'Search timezone';
+  static const String kSearchPartName = 'Search Part Name...';
   static const String kPermitType = 'Permit Type';
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';
