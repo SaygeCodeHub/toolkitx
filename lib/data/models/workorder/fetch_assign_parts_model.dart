@@ -21,7 +21,8 @@ class FetchAssignPartsModel {
       FetchAssignPartsModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<AddPartsDatum>.from(json["Data"].map((x) => AddPartsDatum.fromJson(x))),
+        data: List<AddPartsDatum>.from(
+            json["Data"].map((x) => AddPartsDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

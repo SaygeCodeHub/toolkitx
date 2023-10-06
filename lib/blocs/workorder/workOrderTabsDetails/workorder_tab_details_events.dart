@@ -176,8 +176,13 @@ class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
 
 class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
+  final String workOrderId;
+  final String partName;
 
-  FetchAssignPartsList({required this.pageNo});
+  FetchAssignPartsList(
+      {required this.pageNo,
+      required this.partName,
+      required this.workOrderId});
 }
 
 class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
@@ -190,6 +195,12 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
   final Map startWorkOrderMap;
 
   StartWorkOrder({required this.startWorkOrderMap});
+}
+
+class SearchParts extends WorkOrderTabsDetailsEvent {
+  final bool isSearched;
+
+  SearchParts({required this.isSearched});
 }
 
 class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
