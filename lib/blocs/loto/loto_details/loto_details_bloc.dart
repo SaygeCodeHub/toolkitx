@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
 
 import '../../../data/cache/cache_keys.dart';
@@ -21,6 +22,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
   String lotoId = '';
+  String isRemove = '';
+  String isStartRemove = '';
   int lotoTabIndex = 0;
   bool lotoListReachedMax = false;
 
@@ -29,6 +32,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
+    on<StartLotoEvent>(_startLotoEvent);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -47,6 +51,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      isRemove = fetchLotoDetailsModel.data.isremove;
+      isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {
         emit(LotoDetailsFetched(
             fetchLotoDetailsModel: fetchLotoDetailsModel,
@@ -115,6 +121,30 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoAssignTeamError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _startLotoEvent(
+      StartLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoStarting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map startLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "isRemove": isStartRemove,
+        "questions": []
+      };
+      StartLotoModel startLotoModel =
+          await _lotoRepository.startLotoRepo(startLotoMap);
+      if (startLotoModel.status == 200) {
+        emit(LotoStarted(startLotoModel: startLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotStarted(getError: e.toString()));
     }
   }
 }

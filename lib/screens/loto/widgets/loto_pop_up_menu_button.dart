@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/screens/loto/widgets/loto_assign_workforce_body.dart';
+import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
 import '../../../utils/database_utils.dart';
 import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
@@ -37,6 +38,9 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('assign_team')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName);
+          }
+          if (value == DatabaseUtil.getText('Start')) {
+            Navigator.pushNamed(context, StartLotoScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

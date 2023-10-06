@@ -64,3 +64,17 @@ class LotoAssignTeamError extends LotoDetailsState {
 
   LotoAssignTeamError({required this.getError});
 }
+
+class LotoStarting extends LotoDetailsState {}
+
+class LotoStarted extends LotoDetailsState {
+  final StartLotoModel startLotoModel;
+
+  LotoStarted({required this.startLotoModel});
+}
+
+class LotoNotStarted extends LotoDetailsState {
+  final String getError;
+
+  LotoNotStarted({required this.getError});
+}
