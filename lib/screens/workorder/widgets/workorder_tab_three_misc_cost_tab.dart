@@ -64,6 +64,8 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                               WorkOrderAddMisCostScreen
                                       .workOrderDetailsMap['vendorName'] =
                                   data.misccost[index].vendorname;
+                              WorkOrderAddMisCostScreen
+                                  .workOrderDetailsMap['workorderId'] = data.id;
                               Navigator.pushNamed(
                                   context, WorkOrderAddMisCostScreen.routeName);
                             },
