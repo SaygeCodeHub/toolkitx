@@ -482,7 +482,8 @@ class WorkOrderTabDetailsBloc
 
   _selectVendorOptions(WorkOrderSelectVendorOption event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] == null) {
+    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] == null &&
+        WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
           i < WorkOrderAddMisCostScreen.workOrderMasterDatum[8].length;
           i++) {
@@ -502,7 +503,8 @@ class WorkOrderTabDetailsBloc
 
   _selectCurrencyOptions(WorkOrderSelectCurrencyOption event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['currency'] == null) {
+    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['currency'] == null &&
+        WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
           i < WorkOrderAddMisCostScreen.workOrderMasterDatum[7].length;
           i++) {

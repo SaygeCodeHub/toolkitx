@@ -61,6 +61,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
           WorkOrderAddMisCostScreen.workOrderMasterDatum =
               context.read<WorkOrderBloc>().workOrderMasterDatum;
+          WorkOrderAddMisCostScreen.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
