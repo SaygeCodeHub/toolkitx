@@ -86,6 +86,7 @@ import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_workorder_screen.dart';
+import '../screens/workorder/workorder_add_comments_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
@@ -340,6 +341,8 @@ class AppRoutes {
         return _createRoute(const DocumentFilterScreen());
       case LotoAssignTeamScreen.routeName:
         return _createRoute(const LotoAssignTeamScreen());
+      case WorkOrderAddCommentsScreen.routeName:
+        return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
         return _createRoute(DocumentLocationFilterList(
           selectLocation: settings.arguments.toString(),

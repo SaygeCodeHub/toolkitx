@@ -29,6 +29,8 @@ import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
+import '../../../data/models/workorder/workorder_save_comments_model.dart';
+import '../../../screens/workorder/workorder_add_comments_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
@@ -88,6 +90,7 @@ class WorkOrderTabDetailsBloc
     on<DeleteWorkOrderSingleMiscCost>(_deleteSingleMiscCost);
     on<AssignWorkForce>(_assignWorkForce);
     on<EditWorkOrderWorkForce>(_editWorkForce);
+    on<SaveWorkOrderComments>(_saveDocuments);
   }
 
   int tabIndex = 0;
@@ -118,8 +121,7 @@ class WorkOrderTabDetailsBloc
         DatabaseUtil.getText('AddDocuments'),
         DatabaseUtil.getText('AddMiscCost'),
         DatabaseUtil.getText('AddDowntime'),
-        DatabaseUtil.getText('AddComment'),
-        DatabaseUtil.getText('ShowRouts')
+        DatabaseUtil.getText('AddComment')
       ];
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
@@ -864,6 +866,41 @@ class WorkOrderTabDetailsBloc
               fetchWorkOrderSingleMiscCostModel));
     } catch (e) {
       emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _saveDocuments(SaveWorkOrderComments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingWorkOrderComments());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (WorkOrderAddCommentsScreen.addCommentsMap['comments'] == null) {
+        emit(WorkOrderCommentsNotSaved(
+            commentsNotSaved: DatabaseUtil.getText('ValidComments')));
+      } else {
+        Map saveWorkOrderCommentsMap = {
+          "userid": userId,
+          "workorderid":
+              WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] ?? '',
+          "hashcode": hashCode,
+          "comments":
+              WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? ''
+        };
+        SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
+            await _workOrderRepository
+                .saveWorkOrderComments(saveWorkOrderCommentsMap);
+        if (saveWorkOrderCommentsModel.status == 200) {
+          emit(WorkOrderCommentsSaved(
+              saveWorkOrderCommentsModel: saveWorkOrderCommentsModel));
+        } else {
+          emit(WorkOrderCommentsNotSaved(
+              commentsNotSaved:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderCommentsNotSaved(commentsNotSaved: e.toString()));
     }
   }
 

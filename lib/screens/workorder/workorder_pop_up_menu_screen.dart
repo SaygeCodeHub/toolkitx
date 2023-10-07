@@ -14,6 +14,7 @@ import 'widgets/assign_workforce_body.dart';
 import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
 import 'start_workorder_screen.dart';
+import 'workorder_add_comments_screen.dart';
 import 'workorder_assign_document_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
 import '../../widgets/android_pop_up.dart';
@@ -133,6 +134,11 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
           Navigator.pushNamed(context, WorkOrderAddDocumentScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('AddComment')) {
+          WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,

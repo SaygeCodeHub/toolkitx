@@ -20,6 +20,7 @@ import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../data/models/workorder/start_workorder_model.dart';
 import '../../data/models/workorder/update_workorder_details_model.dart';
 import '../../data/models/workorder/workorder_edit_workforce_model.dart';
+import '../../data/models/workorder/workorder_save_comments_model.dart';
 
 abstract class WorkOrderRepository {
   Future<FetchWorkOrdersModel> fetchWorkOrders(
@@ -59,6 +60,9 @@ abstract class WorkOrderRepository {
       Map deleteMiscCostMap);
 
   Future<EditWorkOrderWorkForceModel> editWorkForce(Map editWorkForceMap);
+
+  Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
+      Map saveWorkOrderCommentsMap);
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
       Map saveNewAndSimilarWorkOrderMap);
