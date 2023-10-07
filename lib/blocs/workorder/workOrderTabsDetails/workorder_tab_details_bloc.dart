@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
@@ -28,11 +28,13 @@ import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
+import '../../../screens/workorder/workorder_edit_workforce_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -85,6 +87,7 @@ class WorkOrderTabDetailsBloc
     on<FetchWorkOrderSingleMiscCost>(_fetchSingleMiscCost);
     on<DeleteWorkOrderSingleMiscCost>(_deleteSingleMiscCost);
     on<AssignWorkForce>(_assignWorkForce);
+    on<EditWorkOrderWorkForce>(_editWorkForce);
   }
 
   int tabIndex = 0;
@@ -875,7 +878,6 @@ class WorkOrderTabDetailsBloc
         "userid": userId,
         "hashcode": hashCode
       };
-      log("map=======>$deleteSingleMiscCostMap");
       DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel =
           await _workOrderRepository
               .deleteWorkOrderSingleMiscCost(deleteSingleMiscCostMap);
@@ -889,6 +891,59 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(ItemTabItemNotDeleted(cannotDeleteItem: e.toString()));
+    }
+  }
+
+  FutureOr _editWorkForce(EditWorkOrderWorkForce event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(EditingWorkOrderWorkForce());
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
+    try {
+      if (WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'] ==
+              null ||
+          WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
+              WorkOrderEditWorkForceScreen
+                      .editWorkOrderWorkForceMap['actualhrs'] ==
+                  null) {
+        emit(WorkOrderWorkForceNotEdited(
+            workForceNotEdited:
+                DatabaseUtil.getText('ValidPlannedActualHours')));
+      } else {
+        String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
+            WorkOrderEditWorkForceScreen
+                .editWorkOrderWorkForceMap['workForceId'],
+            apiKey);
+        Map editWorkForceMap = {
+          "workorderid": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['workorderId'] ??
+              '',
+          "workforceid": decryptedWorkForceId,
+          "plannedhrs": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'] ??
+              '',
+          "actualhrs": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['actualhrs'] ??
+              '',
+          "userid": userId,
+          "hashcode": hashCode
+        };
+        EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
+            await _workOrderRepository.editWorkForce(editWorkForceMap);
+        if (editWorkOrderWorkForceModel.status == 200) {
+          emit(WorkOrderWorkForceEdited(
+              editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
+        } else {
+          emit(WorkOrderWorkForceNotEdited(
+              workForceNotEdited:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
     }
   }
 }
