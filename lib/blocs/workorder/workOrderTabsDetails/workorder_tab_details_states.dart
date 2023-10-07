@@ -315,6 +315,12 @@ class WorkOrderAddPartsListSearched extends WorkOrderTabDetailsStates {
   WorkOrderAddPartsListSearched({required this.isSearched});
 }
 
+class WorkOrderAssignWorkforceSearched extends WorkOrderTabDetailsStates {
+  final bool isWorkforceSearched;
+
+  WorkOrderAssignWorkforceSearched({required this.isWorkforceSearched});
+}
+
 class FetchingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentsFetched extends WorkOrderTabDetailsStates {

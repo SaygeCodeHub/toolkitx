@@ -84,7 +84,7 @@ import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
-import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
+import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_workorder_screen.dart';
 import '../screens/workorder/workorder_add_comments_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
