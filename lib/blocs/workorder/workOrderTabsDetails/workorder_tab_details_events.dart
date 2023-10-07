@@ -253,3 +253,17 @@ class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
 }
 
 class FetchWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class AssignWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map assignWorkOrderMap;
+  final String showWarningCount;
+
+  AssignWorkForce(
+      {required this.showWarningCount, required this.assignWorkOrderMap});
+}
+
+class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
+
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}

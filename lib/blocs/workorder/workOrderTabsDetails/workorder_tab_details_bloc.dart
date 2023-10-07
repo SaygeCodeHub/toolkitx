@@ -9,9 +9,12 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
+import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -24,12 +27,16 @@ import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
+import '../../../data/models/workorder/workorder_save_comments_model.dart';
+import '../../../screens/workorder/workorder_add_comments_screen.dart';
 import '../../../screens/workorder/assign_workforce_screen.dart';
 import '../../../screens/workorder/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
+import '../../../screens/workorder/workorder_edit_workforce_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -82,6 +89,10 @@ class WorkOrderTabDetailsBloc
     on<ApplyWorkOrderDocumentFilter>(_applyWorkOrderDocumentFilter);
     on<ClearWorkOrderDocumentFilter>(_clearWorkOrderDocumentFilter);
     on<FetchWorkOrderSingleMiscCost>(_fetchSingleMiscCost);
+    on<DeleteWorkOrderSingleMiscCost>(_deleteSingleMiscCost);
+    on<AssignWorkForce>(_assignWorkForce);
+    on<EditWorkOrderWorkForce>(_editWorkForce);
+    on<SaveWorkOrderComments>(_saveDocuments);
   }
 
   int tabIndex = 0;
@@ -95,6 +106,7 @@ class WorkOrderTabDetailsBloc
   List documentList = [];
   String currencyName = '';
   String vendorName = '';
+  String misCostId = '';
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -111,8 +123,7 @@ class WorkOrderTabDetailsBloc
         DatabaseUtil.getText('AddDocuments'),
         DatabaseUtil.getText('AddMiscCost'),
         DatabaseUtil.getText('AddDowntime'),
-        DatabaseUtil.getText('AddComment'),
-        DatabaseUtil.getText('ShowRouts')
+        DatabaseUtil.getText('AddComment')
       ];
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
@@ -513,22 +524,24 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (event.manageMisCostMap['service'] == null ||
-          event.manageMisCostMap['vendor'] == null ||
+          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor == '' ||
           event.manageMisCostMap['quan'] == null ||
-          event.manageMisCostMap['currency'] == null ||
+          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency == '' ||
           event.manageMisCostMap['amount'] == null) {
         emit(WorkOrderMisCostCannotManage(
             cannotManageMiscCost: StringConstants.kMiscCostValidation));
       } else {
         Map manageMiscCostMap = {
           "service": event.manageMisCostMap['service'] ?? '',
-          "vendor": event.manageMisCostMap['vendor'] ?? '',
+          "vendor": event.manageMisCostMap['vendor'] ??
+              WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor,
           "quan": event.manageMisCostMap['quan'] ?? '',
-          "currency": event.manageMisCostMap['currency'] ?? '',
+          "currency": event.manageMisCostMap['currency'] ??
+              WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency,
           "amount": event.manageMisCostMap['amount'] ?? '',
           "hashcode": hashCode,
           "woid": event.manageMisCostMap['workorderId'] ?? '',
-          "id": ""
+          "id": WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] ?? ''
         };
         ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
             await _workOrderRepository.manageMiscCost(manageMiscCostMap);
@@ -692,6 +705,58 @@ class WorkOrderTabDetailsBloc
     }
   }
 
+  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingAssignParts());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (!docListReachedMax) {
+        FetchAssignPartsModel fetchAssignPartsModel =
+            await _workOrderRepository.fetchAssignPartsModel(
+                event.pageNo, hashCode!, event.workOrderId, event.partName);
+        pageNo = event.pageNo;
+        workOrderId = event.workOrderId;
+        partName = event.partName;
+        addPartsDatum.addAll(fetchAssignPartsModel.data);
+        docListReachedMax = fetchAssignPartsModel.data.isEmpty;
+        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
+      }
+    } catch (e) {
+      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _assignWorkForce(
+      AssignWorkForce event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(AssigningWorkForce());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map assignWorkForceMap = {
+        "hashcode": hashCode,
+        "woid": event.assignWorkOrderMap['workorderId'] ?? '',
+        "peopleid": event.assignWorkOrderMap['peopleid'] ?? '',
+        "userid": userId,
+        "hrs": event.assignWorkOrderMap['hrs'] ?? '',
+        "showswwarning": event.showWarningCount
+      };
+      AssignWorkOrderModel assignWorkOrderModel =
+          await _workOrderRepository.assignWorkForce(assignWorkForceMap);
+      if (assignWorkOrderModel.status == 200) {
+        emit(WorkForceAssigned(assignWorkOrderModel: assignWorkOrderModel));
+      } else if (assignWorkOrderModel.status == 300) {
+        emit(WorkForceNotAssigned(
+            workForceNotFetched: assignWorkOrderModel.message));
+      } else {
+        emit(WorkForceNotAssigned(
+            workForceNotFetched:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WorkForceNotAssigned(workForceNotFetched: e.toString()));
+    }
+  }
+
   FutureOr _startWorkOrder(
       StartWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(StartingWorkOder());
@@ -825,7 +890,7 @@ class WorkOrderTabDetailsBloc
     WorkOrderAddDocumentScreen.documentFilterMap.clear();
   }
 
-  _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,
+  FutureOr _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderSingleMiscCost());
     try {
@@ -833,11 +898,134 @@ class WorkOrderTabDetailsBloc
       FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
           await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
               WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
+          fetchWorkOrderSingleMiscCostModel.data.id;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
+          fetchWorkOrderSingleMiscCostModel.data.service;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['amount'] =
+          fetchWorkOrderSingleMiscCostModel.data.amount;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['quan'] =
+          fetchWorkOrderSingleMiscCostModel.data.quan;
       emit(SingleWorkOrderMiscCostFetched(
           fetchWorkOrderSingleMiscCostModel:
               fetchWorkOrderSingleMiscCostModel));
     } catch (e) {
       emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _saveDocuments(SaveWorkOrderComments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingWorkOrderComments());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (WorkOrderAddCommentsScreen.addCommentsMap['comments'] == null) {
+        emit(WorkOrderCommentsNotSaved(
+            commentsNotSaved: DatabaseUtil.getText('ValidComments')));
+      } else {
+        Map saveWorkOrderCommentsMap = {
+          "userid": userId,
+          "workorderid":
+              WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] ?? '',
+          "hashcode": hashCode,
+          "comments":
+              WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? ''
+        };
+        SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
+            await _workOrderRepository
+                .saveWorkOrderComments(saveWorkOrderCommentsMap);
+        if (saveWorkOrderCommentsModel.status == 200) {
+          emit(WorkOrderCommentsSaved(
+              saveWorkOrderCommentsModel: saveWorkOrderCommentsModel));
+        } else {
+          emit(WorkOrderCommentsNotSaved(
+              commentsNotSaved:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderCommentsNotSaved(commentsNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr _deleteSingleMiscCost(DeleteWorkOrderSingleMiscCost event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(DeletingWorkOrderSingleMiscCost());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map deleteSingleMiscCostMap = {
+        "misccostid": misCostId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel =
+          await _workOrderRepository
+              .deleteWorkOrderSingleMiscCost(deleteSingleMiscCostMap);
+      if (deleteWorkOrderSingleMiscCostModel.status == 200) {
+        emit(WorkOrderSingleMiscCostDeleted(
+            deleteWorkOrderSingleMiscCostModel:
+                deleteWorkOrderSingleMiscCostModel));
+      } else {
+        emit(WorkOrderSingleMiscCostNotDeleted(
+            miscCostNotDeleted: deleteWorkOrderSingleMiscCostModel.message));
+      }
+    } catch (e) {
+      emit(ItemTabItemNotDeleted(cannotDeleteItem: e.toString()));
+    }
+  }
+
+  FutureOr _editWorkForce(EditWorkOrderWorkForce event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(EditingWorkOrderWorkForce());
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
+    try {
+      if (WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'] ==
+              null ||
+          WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
+              WorkOrderEditWorkForceScreen
+                      .editWorkOrderWorkForceMap['actualhrs'] ==
+                  null) {
+        emit(WorkOrderWorkForceNotEdited(
+            workForceNotEdited:
+                DatabaseUtil.getText('ValidPlannedActualHours')));
+      } else {
+        String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
+            WorkOrderEditWorkForceScreen
+                .editWorkOrderWorkForceMap['workForceId'],
+            apiKey);
+        Map editWorkForceMap = {
+          "workorderid": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['workorderId'] ??
+              '',
+          "workforceid": decryptedWorkForceId,
+          "plannedhrs": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['plannedhrs'] ??
+              '',
+          "actualhrs": WorkOrderEditWorkForceScreen
+                  .editWorkOrderWorkForceMap['actualhrs'] ??
+              '',
+          "userid": userId,
+          "hashcode": hashCode
+        };
+        EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
+            await _workOrderRepository.editWorkForce(editWorkForceMap);
+        if (editWorkOrderWorkForceModel.status == 200) {
+          emit(WorkOrderWorkForceEdited(
+              editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
+        } else {
+          emit(WorkOrderWorkForceNotEdited(
+              workForceNotEdited:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
     }
   }
 }
