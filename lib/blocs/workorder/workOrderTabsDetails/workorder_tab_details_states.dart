@@ -1,11 +1,14 @@
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
+import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
+import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
+import '../../../data/models/workorder/fetch_workorder_misc_cost_model.dart';
 import '../../../data/models/workorder/hold_workorder_model.dart';
 import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
@@ -14,6 +17,8 @@ import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart
 import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
+import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
+import '../../../data/models/workorder/workorder_save_comments_model.dart';
 
 abstract class WorkOrderTabDetailsStates {}
 
@@ -305,6 +310,18 @@ class WorkOderNotStarted extends WorkOrderTabDetailsStates {
   WorkOderNotStarted({required this.workOrderNotStarted});
 }
 
+class WorkOrderAddPartsListSearched extends WorkOrderTabDetailsStates {
+  final bool isSearched;
+
+  WorkOrderAddPartsListSearched({required this.isSearched});
+}
+
+class WorkOrderAssignWorkforceSearched extends WorkOrderTabDetailsStates {
+  final bool isWorkforceSearched;
+
+  WorkOrderAssignWorkforceSearched({required this.isWorkforceSearched});
+}
+
 class FetchingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentsFetched extends WorkOrderTabDetailsStates {
@@ -345,6 +362,78 @@ class WorkOrderDocumentApplyingFilter extends WorkOrderTabDetailsStates {}
 class WorkOrderDocumentFilterApplied extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentDidNotFilter extends WorkOrderTabDetailsStates {}
+
+class FetchingWorkOrderSingleMiscCost extends WorkOrderTabDetailsStates {}
+
+class SingleWorkOrderMiscCostFetched extends WorkOrderTabDetailsStates {
+  final FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel;
+
+  SingleWorkOrderMiscCostFetched(
+      {required this.fetchWorkOrderSingleMiscCostModel});
+}
+
+class SingleWorkOrderMiscCostNotFetched extends WorkOrderTabDetailsStates {
+  final String miscCostNotFetched;
+
+  SingleWorkOrderMiscCostNotFetched({required this.miscCostNotFetched});
+}
+
+class AssigningWorkForce extends WorkOrderTabDetailsStates {}
+
+class WorkForceAssigned extends WorkOrderTabDetailsStates {
+  final AssignWorkOrderModel assignWorkOrderModel;
+
+  WorkForceAssigned({required this.assignWorkOrderModel});
+}
+
+class WorkForceNotAssigned extends WorkOrderTabDetailsStates {
+  final String workForceNotFetched;
+
+  WorkForceNotAssigned({required this.workForceNotFetched});
+}
+
+class DeletingWorkOrderSingleMiscCost extends WorkOrderTabDetailsStates {}
+
+class WorkOrderSingleMiscCostDeleted extends WorkOrderTabDetailsStates {
+  final DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel;
+
+  WorkOrderSingleMiscCostDeleted(
+      {required this.deleteWorkOrderSingleMiscCostModel});
+}
+
+class WorkOrderSingleMiscCostNotDeleted extends WorkOrderTabDetailsStates {
+  final String miscCostNotDeleted;
+
+  WorkOrderSingleMiscCostNotDeleted({required this.miscCostNotDeleted});
+}
+
+class EditingWorkOrderWorkForce extends WorkOrderTabDetailsStates {}
+
+class WorkOrderWorkForceEdited extends WorkOrderTabDetailsStates {
+  final EditWorkOrderWorkForceModel editWorkOrderWorkForceModel;
+
+  WorkOrderWorkForceEdited({required this.editWorkOrderWorkForceModel});
+}
+
+class WorkOrderWorkForceNotEdited extends WorkOrderTabDetailsStates {
+  final String workForceNotEdited;
+
+  WorkOrderWorkForceNotEdited({required this.workForceNotEdited});
+}
+
+class SavingWorkOrderComments extends WorkOrderTabDetailsStates {}
+
+class WorkOrderCommentsSaved extends WorkOrderTabDetailsStates {
+  final SaveWorkOrderCommentsModel saveWorkOrderCommentsModel;
+
+  WorkOrderCommentsSaved({required this.saveWorkOrderCommentsModel});
+}
+
+class WorkOrderCommentsNotSaved extends WorkOrderTabDetailsStates {
+  final String commentsNotSaved;
+
+  WorkOrderCommentsNotSaved({required this.commentsNotSaved});
+}
 
 class SavingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
 

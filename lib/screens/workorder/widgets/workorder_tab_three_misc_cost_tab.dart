@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
+import '../../../blocs/workorder/workorder_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -9,6 +14,7 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
+import '../workorder_add_mis_cost_screen.dart';
 
 class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -34,24 +40,53 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
               return CustomCard(
                   child: ListTile(
                       contentPadding: const EdgeInsets.all(tinierSpacing),
-                      onTap: () {},
                       title: Text(data.misccost[index].service,
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppColor.black)),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         CustomIconButton(
-                            dx: 1,
-                            dy: -28,
                             icon: Icons.delete,
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AndroidPopUp(
+                                        titleValue: DatabaseUtil.getText(
+                                            'DeleteRecord'),
+                                        contentValue: '',
+                                        onPrimaryButton: () {
+                                          context
+                                              .read<WorkOrderTabDetailsBloc>()
+                                              .misCostId = data.id;
+                                          context
+                                              .read<WorkOrderTabDetailsBloc>()
+                                              .add(
+                                                  DeleteWorkOrderSingleMiscCost());
+                                        });
+                                  });
+                              Navigator.pop(context);
+                            },
                             size: kEditAndDeleteIconTogether),
                         const SizedBox(width: xxxTinierSpacing),
                         CustomIconButton(
-                            dx: 1,
-                            dy: -28,
                             icon: Icons.edit,
-                            onPressed: () {},
+                            onPressed: () {
+                              WorkOrderAddMisCostScreen.workOrderMasterDatum =
+                                  context
+                                      .read<WorkOrderBloc>()
+                                      .workOrderMasterDatum;
+                              WorkOrderAddMisCostScreen
+                                      .workOrderDetailsMap['misCostId'] =
+                                  data.misccost[index].id;
+                              WorkOrderAddMisCostScreen
+                                      .workOrderDetailsMap['vendorName'] =
+                                  data.misccost[index].vendorname;
+                              WorkOrderAddMisCostScreen
+                                  .workOrderDetailsMap['workorderId'] = data.id;
+                              Navigator.pushNamed(
+                                  context, WorkOrderAddMisCostScreen.routeName);
+                            },
                             size: kEditAndDeleteIconTogether)
                       ]),
                       subtitle: Padding(

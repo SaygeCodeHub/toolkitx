@@ -15,6 +15,7 @@ abstract class StringConstants {
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kParts = 'Parts'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -214,6 +215,7 @@ abstract class StringConstants {
   static const String kNoRecordsFound = 'No records found';
   static const String kSearchLanguage = 'Search language';
   static const String kSearchTimezone = 'Search timezone';
+  static const String kSearchPartName = 'Search Part Name...';
   static const String kPermitType = 'Permit Type';
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';
@@ -296,6 +298,8 @@ abstract class StringConstants {
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
+  static const String kLotoStart = 'LOTO Start';
+  static const String kLotoStarted = "Loto Started";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
@@ -304,4 +308,6 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kCarefulAndOrganized =
+      '"A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy."';
 }

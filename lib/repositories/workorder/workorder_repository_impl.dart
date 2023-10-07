@@ -1,11 +1,14 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/delete_document_model.dart';
 import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
+import 'package:toolkit/data/models/workorder/delete_workorder_single_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_workorder_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
@@ -15,6 +18,8 @@ import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_mod
 import 'package:toolkit/data/models/workorder/save_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/start_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_save_comments_model.dart';
 
 import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -132,6 +137,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
+  Future<AssignWorkOrderModel> assignWorkForce(Map assignWorkForceMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/assignworkforce", assignWorkForceMap);
+    return AssignWorkOrderModel.fromJson(response);
+  }
+
+  @override
   Future<RejectWorkOrderModel> rejectWorkOrder(Map rejectWorkOrderMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}workorder/rejectworkorder", rejectWorkOrderMap);
@@ -151,6 +163,40 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getdocumentsforworkorder?pageno=$pageNo&hashcode=$hashCode&workorderid=$workOrderId&name=$name&filter=$filter");
     return FetchWorkOrderDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderSingleMiscCostModel> fetchWorkOrderSingleMiscCost(
+      String hashCode, String misCostId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/getsinglemisccost?hashcode=$hashCode&misccostid=$misCostId");
+    return FetchWorkOrderSingleMiscCostModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteWorkOrderSingleMiscCostModel> deleteWorkOrderSingleMiscCost(
+      Map deleteMiscCostMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/deletemisccost", deleteMiscCostMap);
+    return DeleteWorkOrderSingleMiscCostModel.fromJson(response);
+  }
+
+  @override
+  Future<EditWorkOrderWorkForceModel> editWorkForce(
+      Map editWorkForceMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/updateworkforcehours",
+        editWorkForceMap);
+    return EditWorkOrderWorkForceModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
+      Map saveWorkOrderCommentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/savecomments",
+        saveWorkOrderCommentsMap);
+    return SaveWorkOrderCommentsModel.fromJson(response);
   }
 
   @override

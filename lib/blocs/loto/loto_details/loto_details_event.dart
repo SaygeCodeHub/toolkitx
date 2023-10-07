@@ -31,3 +31,7 @@ class FetchLotoAssignTeam extends LotoDetailsEvent {
   FetchLotoAssignTeam(
       {required this.pageNo, required this.isRemove, required this.name});
 }
+
+class StartLotoEvent extends LotoDetailsEvent {
+  StartLotoEvent();
+}

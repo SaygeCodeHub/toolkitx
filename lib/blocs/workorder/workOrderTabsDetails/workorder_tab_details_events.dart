@@ -170,14 +170,23 @@ class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
 
 class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
-
-  FetchAssignWorkForceList({required this.pageNo});
+  final String workOrderWorkforceName;
+  final String workOrderId;
+  FetchAssignWorkForceList(
+      {required this.pageNo,
+      required this.workOrderWorkforceName,
+      required this.workOrderId});
 }
 
 class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
+  final String workOrderId;
+  final String partName;
 
-  FetchAssignPartsList({required this.pageNo});
+  FetchAssignPartsList(
+      {required this.pageNo,
+      required this.partName,
+      required this.workOrderId});
 }
 
 class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
@@ -190,6 +199,18 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
   final Map startWorkOrderMap;
 
   StartWorkOrder({required this.startWorkOrderMap});
+}
+
+class SearchWorkOrderParts extends WorkOrderTabsDetailsEvent {
+  final bool isSearched;
+
+  SearchWorkOrderParts({required this.isSearched});
+}
+
+class SearchWorkOrderWorkforce extends WorkOrderTabsDetailsEvent {
+  final bool isWorkforceSearched;
+
+  SearchWorkOrderWorkforce({required this.isWorkforceSearched});
 }
 
 class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
@@ -230,5 +251,21 @@ class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
 class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
   ClearWorkOrderDocumentFilter();
 }
+
+class FetchWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class AssignWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map assignWorkOrderMap;
+  final String showWarningCount;
+
+  AssignWorkForce(
+      {required this.showWarningCount, required this.assignWorkOrderMap});
+}
+
+class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
+
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
 
 class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
