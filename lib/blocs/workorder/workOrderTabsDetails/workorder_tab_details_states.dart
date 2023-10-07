@@ -5,6 +5,7 @@ import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
+import '../../../data/models/workorder/delete_workorder_workforce_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -426,4 +427,18 @@ class WorkOrderCommentsNotSaved extends WorkOrderTabDetailsStates {
   final String commentsNotSaved;
 
   WorkOrderCommentsNotSaved({required this.commentsNotSaved});
+}
+
+class DeletingWorkOrderWorkForce extends WorkOrderTabDetailsStates {}
+
+class WorkOrderWorkForceDeleted extends WorkOrderTabDetailsStates {
+  final DeleteWorkOrderWorkForceModel deleteWorkOrderWorkForceModel;
+
+  WorkOrderWorkForceDeleted({required this.deleteWorkOrderWorkForceModel});
+}
+
+class WorkOrderWorkForceNotDeleted extends WorkOrderTabDetailsStates {
+  final String workForceNotDeleted;
+
+  WorkOrderWorkForceNotDeleted({required this.workForceNotDeleted});
 }

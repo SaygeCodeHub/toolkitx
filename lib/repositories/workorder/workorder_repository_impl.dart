@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/workorder/assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/delete_document_model.dart';
 import 'package:toolkit/data/models/workorder/delete_item_tab_item_model.dart';
 import 'package:toolkit/data/models/workorder/delete_workorder_single_misc_cost_model.dart';
+import 'package:toolkit/data/models/workorder/delete_workorder_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart';
@@ -196,5 +197,13 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
         "${ApiConstants.baseUrl}workorder/savecomments",
         saveWorkOrderCommentsMap);
     return SaveWorkOrderCommentsModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteWorkOrderWorkForceModel> deleteWorkForce(
+      Map deleteWorkForceMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/savecomments", deleteWorkForceMap);
+    return DeleteWorkOrderWorkForceModel.fromJson(response);
   }
 }

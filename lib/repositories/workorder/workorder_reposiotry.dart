@@ -5,6 +5,7 @@ import '../../data/models/workorder/assign_workforce_model.dart';
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
+import '../../data/models/workorder/delete_workorder_workforce_model.dart';
 import '../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -60,6 +61,8 @@ abstract class WorkOrderRepository {
       Map deleteMiscCostMap);
 
   Future<EditWorkOrderWorkForceModel> editWorkForce(Map editWorkForceMap);
+
+  Future<DeleteWorkOrderWorkForceModel> deleteWorkForce(Map deleteWorkForceMap);
 
   Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
       Map saveWorkOrderCommentsMap);

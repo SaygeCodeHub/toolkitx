@@ -91,6 +91,7 @@ class WorkOrderTabDetailsBloc
     on<AssignWorkForce>(_assignWorkForce);
     on<EditWorkOrderWorkForce>(_editWorkForce);
     on<SaveWorkOrderComments>(_saveDocuments);
+    on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
   }
 
   int tabIndex = 0;
@@ -981,6 +982,17 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
+    }
+  }
+
+  FutureOr _deleteWorkForce(DeleteWorkOrderWorkForce event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(DeletingWorkOrderWorkForce());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    } catch (e) {
+      emit(WorkOrderWorkForceNotDeleted(workForceNotDeleted: e.toString()));
     }
   }
 }
