@@ -40,55 +40,60 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
               return CustomCard(
                   child: ListTile(
                       contentPadding: const EdgeInsets.all(tinierSpacing),
-                      title: Text(data.misccost[index].service,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.black)),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        CustomIconButton(
-                            icon: Icons.delete,
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AndroidPopUp(
-                                        titleValue: DatabaseUtil.getText(
-                                            'DeleteRecord'),
-                                        contentValue: '',
-                                        onPrimaryButton: () {
-                                          context
-                                              .read<WorkOrderTabDetailsBloc>()
-                                              .misCostId = data.id;
-                                          context
-                                              .read<WorkOrderTabDetailsBloc>()
-                                              .add(
-                                                  DeleteWorkOrderSingleMiscCost());
-                                        });
-                                  });
-                              Navigator.pop(context);
-                            },
-                            size: kEditAndDeleteIconTogether),
-                        const SizedBox(width: xxxTinierSpacing),
-                        CustomIconButton(
-                            icon: Icons.edit,
-                            onPressed: () {
-                              WorkOrderAddMisCostScreen.workOrderMasterDatum =
-                                  context
-                                      .read<WorkOrderBloc>()
-                                      .workOrderMasterDatum;
-                              WorkOrderAddMisCostScreen
-                                      .workOrderDetailsMap['misCostId'] =
-                                  data.misccost[index].id;
-                              WorkOrderAddMisCostScreen
-                                      .workOrderDetailsMap['vendorName'] =
-                                  data.misccost[index].vendorname;
-                              WorkOrderAddMisCostScreen
-                                  .workOrderDetailsMap['workorderId'] = data.id;
-                              Navigator.pushNamed(
-                                  context, WorkOrderAddMisCostScreen.routeName);
-                            },
-                            size: kEditAndDeleteIconTogether)
-                      ]),
+                      title: Row(
+                        children: [
+                          Text(data.misccost[index].service,
+                              style: Theme.of(context).textTheme.small.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.black)),
+                          const Spacer(),
+                          CustomIconButton(
+                              icon: Icons.delete,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AndroidPopUp(
+                                          titleValue: DatabaseUtil.getText(
+                                              'DeleteRecord'),
+                                          contentValue: '',
+                                          onPrimaryButton: () {
+                                            context
+                                                .read<WorkOrderTabDetailsBloc>()
+                                                .misCostId = data.id;
+                                            context
+                                                .read<WorkOrderTabDetailsBloc>()
+                                                .add(
+                                                    DeleteWorkOrderSingleMiscCost());
+                                            Navigator.pop(context);
+                                          });
+                                    });
+                              },
+                              size: kEditAndDeleteIconTogether),
+                          const SizedBox(width: xxxTinierSpacing),
+                          CustomIconButton(
+                              icon: Icons.edit,
+                              onPressed: () {
+                                WorkOrderAddMisCostScreen.workOrderMasterDatum =
+                                    context
+                                        .read<WorkOrderBloc>()
+                                        .workOrderMasterDatum;
+                                WorkOrderAddMisCostScreen
+                                        .workOrderDetailsMap['misCostId'] =
+                                    data.misccost[index].id;
+                                WorkOrderAddMisCostScreen
+                                        .workOrderDetailsMap['vendorName'] =
+                                    data.misccost[index].vendorname;
+                                WorkOrderAddMisCostScreen
+                                        .workOrderDetailsMap['workorderId'] =
+                                    data.id;
+                                WorkOrderAddMisCostScreen.isFromEdit = true;
+                                Navigator.pushNamed(context,
+                                    WorkOrderAddMisCostScreen.routeName);
+                              },
+                              size: kEditAndDeleteIconTogether)
+                        ],
+                      ),
                       subtitle: Padding(
                           padding: const EdgeInsets.only(top: xxxTinierSpacing),
                           child: Column(
