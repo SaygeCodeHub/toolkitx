@@ -133,7 +133,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
-          Navigator.pushNamed(context, WorkOrderAddDocumentScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddComment')) {
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =

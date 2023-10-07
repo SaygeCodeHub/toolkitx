@@ -267,3 +267,5 @@ class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
 class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
 
 class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}

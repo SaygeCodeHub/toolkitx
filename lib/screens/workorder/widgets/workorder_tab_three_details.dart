@@ -31,59 +31,62 @@ class WorkOrderTabThreeDetails extends StatelessWidget {
             currentState is WorkOrderTabDetailsFetched,
         builder: (context, state) {
           if (state is WorkOrderTabDetailsFetched) {
-            return Column(children: [
-              const SizedBox(height: tinierSpacing),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ToggleSwitch(
-                      animate: true,
-                      minHeight: MediaQuery.of(context).size.width * 0.093,
-                      minWidth: MediaQuery.of(context).size.width * 0.215,
-                      initialLabelIndex: toggleIndex,
-                      cornerRadius: kSignInToggleCornerRadius,
-                      activeFgColor: AppColor.black,
-                      inactiveBgColor: AppColor.blueGrey,
-                      inactiveFgColor: AppColor.black,
-                      totalSwitches: 4,
-                      labels: [
-                        DatabaseUtil.getText('Documents'),
-                        DatabaseUtil.getText('ItemsParts'),
-                        DatabaseUtil.getText('MiscCost'),
-                        DatabaseUtil.getText('ScheduleDowntime')
-                      ],
-                      activeBgColors: const [
-                        [AppColor.lightBlue],
-                        [AppColor.lightBlue],
-                        [AppColor.lightBlue],
-                        [AppColor.lightBlue]
-                      ],
-                      onToggle: (index) {
-                        toggleIndex = index!;
-                        context.read<WorkOrderTabDetailsBloc>().add(
-                            WorkOrderToggleSwitchIndex(
-                                fetchWorkOrderDetailsModel:
-                                    state.fetchWorkOrderDetailsModel,
-                                tabInitialIndex: tabIndex,
-                                toggleIndex: index));
-                      }),
-                ],
-              ),
-              const SizedBox(height: xxSmallestSpacing),
-              (toggleIndex == 0)
-                  ? WorkOrderTabThreeDocumentTab(
-                      data: data, clientId: state.clientId!)
-                  : const SizedBox.shrink(),
-              (toggleIndex == 1)
-                  ? WorkOrderTabThreeItemsTab(data: data)
-                  : const SizedBox.shrink(),
-              (toggleIndex == 2)
-                  ? WorkOrderTabThreeMiscCostTab(data: data)
-                  : const SizedBox.shrink(),
-              (toggleIndex == 3)
-                  ? WorkOrderTabThreeShowDowntimeTab(data: data)
-                  : const SizedBox.shrink()
-            ]);
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(children: [
+                const SizedBox(height: tinierSpacing),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ToggleSwitch(
+                        animate: true,
+                        minHeight: MediaQuery.of(context).size.width * 0.093,
+                        minWidth: MediaQuery.of(context).size.width * 0.215,
+                        initialLabelIndex: toggleIndex,
+                        cornerRadius: kSignInToggleCornerRadius,
+                        activeFgColor: AppColor.black,
+                        inactiveBgColor: AppColor.blueGrey,
+                        inactiveFgColor: AppColor.black,
+                        totalSwitches: 4,
+                        labels: [
+                          DatabaseUtil.getText('Documents'),
+                          DatabaseUtil.getText('ItemsParts'),
+                          DatabaseUtil.getText('MiscCost'),
+                          DatabaseUtil.getText('ScheduleDowntime')
+                        ],
+                        activeBgColors: const [
+                          [AppColor.lightBlue],
+                          [AppColor.lightBlue],
+                          [AppColor.lightBlue],
+                          [AppColor.lightBlue]
+                        ],
+                        onToggle: (index) {
+                          toggleIndex = index!;
+                          context.read<WorkOrderTabDetailsBloc>().add(
+                              WorkOrderToggleSwitchIndex(
+                                  fetchWorkOrderDetailsModel:
+                                      state.fetchWorkOrderDetailsModel,
+                                  tabInitialIndex: tabIndex,
+                                  toggleIndex: index));
+                        }),
+                  ],
+                ),
+                const SizedBox(height: xxSmallestSpacing),
+                (toggleIndex == 0)
+                    ? WorkOrderTabThreeDocumentTab(
+                        data: data, clientId: state.clientId!)
+                    : const SizedBox.shrink(),
+                (toggleIndex == 1)
+                    ? WorkOrderTabThreeItemsTab(data: data)
+                    : const SizedBox.shrink(),
+                (toggleIndex == 2)
+                    ? WorkOrderTabThreeMiscCostTab(data: data)
+                    : const SizedBox.shrink(),
+                (toggleIndex == 3)
+                    ? WorkOrderTabThreeShowDowntimeTab(data: data)
+                    : const SizedBox.shrink()
+              ]),
+            );
           } else {
             return const SizedBox.shrink();
           }

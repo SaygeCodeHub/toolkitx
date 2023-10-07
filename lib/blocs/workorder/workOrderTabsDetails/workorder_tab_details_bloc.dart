@@ -25,6 +25,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
@@ -93,6 +94,7 @@ class WorkOrderTabDetailsBloc
     on<AssignWorkForce>(_assignWorkForce);
     on<EditWorkOrderWorkForce>(_editWorkForce);
     on<SaveWorkOrderComments>(_saveDocuments);
+    on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
   }
 
   int tabIndex = 0;
@@ -815,11 +817,11 @@ class WorkOrderTabDetailsBloc
               hashCode!,
               WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
               '',
-              jsonEncode(WorkOrderAddDocumentScreen.documentFilterMap));
+              jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       emit(WorkOrderDocumentsFetched(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           documentList: [],
-          filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+          filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
       add(SelectWorkOrderDocument(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           docId: '',
@@ -843,7 +845,7 @@ class WorkOrderTabDetailsBloc
     emit(WorkOrderDocumentsFetched(
         documentList: documentList,
         fetchWorkOrderDocumentsModel: event.fetchWorkOrderDocumentsModel,
-        filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+        filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
   }
 
   _selectWorkOrderDocumentType(SelectWorkOrderDocumentType event,
@@ -866,7 +868,31 @@ class WorkOrderTabDetailsBloc
 
   _clearWorkOrderDocumentFilter(ClearWorkOrderDocumentFilter event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    WorkOrderAddDocumentScreen.documentFilterMap.clear();
+    WorkOrderAssignDocumentScreen.documentFilterMap.clear();
+  }
+
+  FutureOr _saveWorkOrderDocuments(SaveWorkOrderDocuments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingWorkOrderDocuments());
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    Map saveDocumentsMap = {
+      "hashcode": hashCode,
+      "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+      "documents":
+          WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
+      "userid": userId
+    };
+    SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
+        await _workOrderRepository.saveDocuments(saveDocumentsMap);
+    if (saveWorkOrderDocumentsModel.status == 200) {
+      emit(WorkOrderDocumentsSaved(
+          saveWorkOrderDocuments: saveWorkOrderDocumentsModel));
+    } else {
+      emit(WorkOrderDocumentsNotSaved(
+          documentsNotSaved:
+              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+    }
   }
 
   FutureOr _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,

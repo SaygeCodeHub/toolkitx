@@ -319,8 +319,8 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
       case AssignWorkForceScreen.routeName:
         return _createRoute(const AssignWorkForceScreen());
-      case WorkOrderAddDocumentScreen.routeName:
-        return _createRoute(const WorkOrderAddDocumentScreen());
+      case WorkOrderAssignDocumentScreen.routeName:
+        return _createRoute(const WorkOrderAssignDocumentScreen());
       case WorkOrderDocumentFilterScreen.routeName:
         return _createRoute(const WorkOrderDocumentFilterScreen());
       case QuizQuestionsScreen.routeName:
