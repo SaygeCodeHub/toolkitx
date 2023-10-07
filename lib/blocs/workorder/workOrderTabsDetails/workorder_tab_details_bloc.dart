@@ -705,27 +705,6 @@ class WorkOrderTabDetailsBloc
     }
   }
 
-  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
-      Emitter<WorkOrderTabDetailsStates> emit) async {
-    emit(FetchingAssignParts());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (!docListReachedMax) {
-        FetchAssignPartsModel fetchAssignPartsModel =
-            await _workOrderRepository.fetchAssignPartsModel(
-                event.pageNo, hashCode!, event.workOrderId, event.partName);
-        pageNo = event.pageNo;
-        workOrderId = event.workOrderId;
-        partName = event.partName;
-        addPartsDatum.addAll(fetchAssignPartsModel.data);
-        docListReachedMax = fetchAssignPartsModel.data.isEmpty;
-        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
-      }
-    } catch (e) {
-      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
-    }
-  }
-
   Future<FutureOr<void>> _assignWorkForce(
       AssignWorkForce event, Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(AssigningWorkForce());
