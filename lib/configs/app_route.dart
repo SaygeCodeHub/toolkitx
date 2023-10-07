@@ -84,12 +84,14 @@ import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
-import '../screens/workorder/widgets/workorder_add_parts_screen.dart';
+import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_workorder_screen.dart';
+import '../screens/workorder/workorder_add_comments_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_document_filter_screen.dart';
+import '../screens/workorder/workorder_edit_workforce_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
 import '../screens/workorder/workorder_form_screen_three.dart';
@@ -317,8 +319,8 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddAndEditDownTimeScreen());
       case AssignWorkForceScreen.routeName:
         return _createRoute(const AssignWorkForceScreen());
-      case WorkOrderAddDocumentScreen.routeName:
-        return _createRoute(const WorkOrderAddDocumentScreen());
+      case WorkOrderAssignDocumentScreen.routeName:
+        return _createRoute(const WorkOrderAssignDocumentScreen());
       case WorkOrderDocumentFilterScreen.routeName:
         return _createRoute(const WorkOrderDocumentFilterScreen());
       case QuizQuestionsScreen.routeName:
@@ -339,10 +341,14 @@ class AppRoutes {
         return _createRoute(const DocumentFilterScreen());
       case LotoAssignTeamScreen.routeName:
         return _createRoute(const LotoAssignTeamScreen());
+      case WorkOrderAddCommentsScreen.routeName:
+        return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
         return _createRoute(DocumentLocationFilterList(
           selectLocation: settings.arguments.toString(),
         ));
+      case WorkOrderEditWorkForceScreen.routeName:
+        return _createRoute(const WorkOrderEditWorkForceScreen());
       case LotoAssignWorkforceScreen.routeName:
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
