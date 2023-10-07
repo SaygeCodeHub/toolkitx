@@ -21,7 +21,7 @@ class WorkOrderAssignDocumentBody extends StatelessWidget {
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           shrinkWrap: true,
-          itemCount: WorkOrderAddDocumentScreen.documentDataList.length,
+          itemCount: WorkOrderAssignDocumentScreen.documentDataList.length,
           itemBuilder: (BuildContext context, int index) {
             return CheckboxListTile(
                 checkColor: AppColor.white,
@@ -30,15 +30,16 @@ class WorkOrderAssignDocumentBody extends StatelessWidget {
                 value: context
                     .read<WorkOrderTabDetailsBloc>()
                     .documentList
-                    .contains(WorkOrderAddDocumentScreen
+                    .contains(WorkOrderAssignDocumentScreen
                         .documentDataList[index].docid),
                 title: Text(
-                    WorkOrderAddDocumentScreen.documentDataList[index].docname,
+                    WorkOrderAssignDocumentScreen
+                        .documentDataList[index].docname,
                     style: Theme.of(context)
                         .textTheme
                         .xSmall
                         .copyWith(fontWeight: FontWeight.w600)),
-                subtitle: Text(WorkOrderAddDocumentScreen
+                subtitle: Text(WorkOrderAssignDocumentScreen
                     .documentDataList[index].doctypename),
                 controlAffinity: ListTileControlAffinity.trailing,
                 onChanged: (isChecked) {
@@ -46,7 +47,7 @@ class WorkOrderAssignDocumentBody extends StatelessWidget {
                       SelectWorkOrderDocument(
                           fetchWorkOrderDocumentsModel:
                               fetchWorkOrderDocumentsModel,
-                          docId: WorkOrderAddDocumentScreen
+                          docId: WorkOrderAssignDocumentScreen
                               .documentDataList[index].docid,
                           documentList: context
                               .read<WorkOrderTabDetailsBloc>()

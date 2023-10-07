@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../blocs/workorder/workorder_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -43,15 +46,30 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                               color: AppColor.black)),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         CustomIconButton(
-                            dy: -20,
-                            dx: 0,
                             icon: Icons.delete,
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AndroidPopUp(
+                                        titleValue: DatabaseUtil.getText(
+                                            'DeleteRecord'),
+                                        contentValue: '',
+                                        onPrimaryButton: () {
+                                          context
+                                              .read<WorkOrderTabDetailsBloc>()
+                                              .misCostId = data.id;
+                                          context
+                                              .read<WorkOrderTabDetailsBloc>()
+                                              .add(
+                                                  DeleteWorkOrderSingleMiscCost());
+                                        });
+                                  });
+                              Navigator.pop(context);
+                            },
                             size: kEditAndDeleteIconTogether),
                         const SizedBox(width: xxxTinierSpacing),
                         CustomIconButton(
-                            dy: -21,
-                            dx: 0,
                             icon: Icons.edit,
                             onPressed: () {
                               WorkOrderAddMisCostScreen.workOrderMasterDatum =
@@ -64,6 +82,8 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                               WorkOrderAddMisCostScreen
                                       .workOrderDetailsMap['vendorName'] =
                                   data.misccost[index].vendorname;
+                              WorkOrderAddMisCostScreen
+                                  .workOrderDetailsMap['workorderId'] = data.id;
                               Navigator.pushNamed(
                                   context, WorkOrderAddMisCostScreen.routeName);
                             },

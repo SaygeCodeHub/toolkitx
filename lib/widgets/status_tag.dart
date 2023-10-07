@@ -34,13 +34,10 @@ class StatusTag extends StatelessWidget {
                               bottom: xxTiniestSpacing,
                               right: tiniestSpacing,
                               left: tiniestSpacing),
-                          child: SizedBox(
-                              height: MediaQuery.of(context).size.width * 0.040,
-                              child: Center(
-                                  child: Text(tags![index].title!,
-                                      style: const TextStyle(
-                                          color: AppColor.white),
-                                      textAlign: TextAlign.center)))))
+                          child: Center(
+                              child: Text(tags![index].title!,
+                                  style: const TextStyle(color: AppColor.white),
+                                  textAlign: TextAlign.center))))
                   : const SizedBox.shrink();
             }));
   }

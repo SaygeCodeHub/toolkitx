@@ -59,8 +59,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                             const SizedBox(height: xxxTinierSpacing),
                             TextFieldWidget(
                                 maxLength: 70,
-                                value: state.fetchWorkOrderSingleMiscCostModel
-                                    .data.service,
+                                value: workOrderDetailsMap['service'] ?? '',
                                 textInputAction: TextInputAction.done,
                                 textInputType: TextInputType.text,
                                 onTextFieldChanged: (String textField) {
@@ -83,8 +82,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                             const SizedBox(height: xxxTinierSpacing),
                             TextFieldWidget(
                                 maxLength: 30,
-                                value: state.fetchWorkOrderSingleMiscCostModel
-                                    .data.quan,
+                                value: workOrderDetailsMap['quan'] ?? '',
                                 textInputAction: TextInputAction.done,
                                 textInputType: TextInputType.number,
                                 onTextFieldChanged: (String textField) {
@@ -107,8 +105,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                             const SizedBox(height: xxxTinierSpacing),
                             TextFieldWidget(
                                 maxLength: 30,
-                                value: state.fetchWorkOrderSingleMiscCostModel
-                                    .data.amount,
+                                value: workOrderDetailsMap['amount'] ?? '',
                                 textInputAction: TextInputAction.done,
                                 textInputType: TextInputType.number,
                                 onTextFieldChanged: (String textField) {

@@ -7,7 +7,9 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/workorder_tab_two_status_tag_util.dart';
 import '../../../widgets/custom_card.dart';
+import '../../../widgets/custom_edit_delete_pop_up_menu_options.dart';
 import '../../../widgets/status_tag.dart';
+import '../workorder_edit_workforce_screen.dart';
 
 class WorkOrderTabTwoDetails extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -27,11 +29,41 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
           return CustomCard(
             child: ListTile(
               contentPadding: const EdgeInsets.all(xxTinierSpacing),
-              title: Padding(
-                  padding: const EdgeInsets.only(bottom: xxTinierSpacing),
-                  child: Text(data.workforce[index].name,
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          color: AppColor.black, fontWeight: FontWeight.w600))),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: xxTinierSpacing),
+                      child: Text(data.workforce[index].name,
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600))),
+                  Visibility(
+                    visible: data.workforce[index].certificatecode != '0',
+                    child: CustomEditDeletePopUpMenuOption(
+                      onSelected: (value) {
+                        if (value == DatabaseUtil.getText('Edit')) {
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['plannedhrs'] =
+                              data.workforce[index].plannedhrs.toString();
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['workForceName'] =
+                              data.workforce[index].name;
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['workorderId'] =
+                              data.id;
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['workForceId'] =
+                              data.workforce[index].workforceid;
+                          Navigator.pushNamed(
+                              context, WorkOrderEditWorkForceScreen.routeName);
+                        }
+                        if (value == DatabaseUtil.getText('Delete')) {}
+                      },
+                    ),
+                  )
+                ],
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
