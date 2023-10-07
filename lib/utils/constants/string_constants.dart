@@ -129,6 +129,12 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kApprovalPending = 'Approval Pending';
+  static const String kLastUploaded = 'Last Uploaded : ';
+  static const String kViewCertificate = 'View Certificate : ';
+  static const String kUploadNewCertificate = 'Upload new Certificate : ';
+  static const String kPendingSelectedCertificate =
+      "You can't upload new certificate as approval is pending for selected certificate";
   static const String kDateFormatValidate = 'Please select a Date Format!'; //
   static const String kChangePassword = 'Change Password'; //
   static const String kChangeLanguage = 'Change Language';
