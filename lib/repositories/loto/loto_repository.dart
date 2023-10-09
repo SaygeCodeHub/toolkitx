@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
@@ -28,6 +29,8 @@ abstract class LotoRepository {
 
   Future<SaveLotoAssignWorkforceModel> saveLotoAssignWorkforceModel(
       Map lotoAssignWorkforceMap);
+
+  Future<ApplyLotoModel> applyLotoModel(Map applyLotoMap);
 
   Future<StartLotoModel> startLotoRepo(Map startLotoMap);
 }
