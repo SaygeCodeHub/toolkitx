@@ -48,32 +48,66 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('Apply')) {
             showDialog(
-              context: context,
-              builder: (context) =>
-                  BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                listener: (context, state) {
-                  if (state is LotoApplying) {
-                    ProgressBar.show(context);
-                  } else if (state is LotoApplied) {
-                    ProgressBar.dismiss(context);
-                    showCustomSnackBar(
-                        context, StringConstants.kLotoApplied, '');
-                    Navigator.pop(context);
-                  } else if (state is LotoNotApplied) {
-                    ProgressBar.dismiss(context);
-                    showCustomSnackBar(
-                        context, StringConstants.kSomethingWentWrong, '');
-                  }
-                },
-                child: AndroidPopUp(
-                  titleValue: StringConstants.kPleaseConfirm,
-                  contentValue: StringConstants.kPleaseVerifyEverything,
-                  onPrimaryButton: () {
-                    context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
-                  },
-                ),
-              ),
-            );
+                context: context,
+                builder: (context) => BlocListener<LotoDetailsBloc,
+                        LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoApplying) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoApplied) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoApplied, '');
+                        Navigator.pop(context);
+                      } else if (state is LotoNotApplied) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: AndroidPopUp(
+                        titleValue: StringConstants.kPleaseConfirm,
+                        contentValue: StringConstants.kPleaseVerifyEverything,
+                        onPrimaryButton: () {
+                          context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
+                          context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                              lotTabIndex: context
+                                  .read<LotoDetailsBloc>()
+                                  .lotoTabIndex));
+                        })));
+          }
+          if (value == DatabaseUtil.getText('ApproveButton')) {
+            showDialog(
+                context: context,
+                builder: (context) =>
+                    BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                        listener: (context, state) {
+                          if (state is LotoAccepting) {
+                            ProgressBar.show(context);
+                          } else if (state is LotoAccepted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(
+                                context, StringConstants.kLotoAccepted, '');
+                            Navigator.pop(context);
+                          } else if (state is LotoNotAccepted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context,
+                                StringConstants.kSomethingWentWrong, '');
+                          }
+                        },
+                        child: AndroidPopUp(
+                            titleValue: StringConstants.kPleaseConfirm,
+                            contentValue: StringConstants.kWantToApproveLoto,
+                            onPrimaryButton: () {
+                              context
+                                  .read<LotoDetailsBloc>()
+                                  .add(AcceptLotoEvent());
+                              context.read<LotoDetailsBloc>().add(
+                                  FetchLotoDetails(
+                                      lotTabIndex: context
+                                          .read<LotoDetailsBloc>()
+                                          .lotoTabIndex));
+                            })));
           }
         },
         position: PopupMenuPosition.under,

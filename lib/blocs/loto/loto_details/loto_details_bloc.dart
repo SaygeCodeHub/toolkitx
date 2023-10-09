@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
@@ -35,6 +36,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
+    on<AcceptLotoEvent>(_acceptLotoEvent);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -45,6 +47,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('Apply'),
+        DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
         DatabaseUtil.getText('assign_team'),
         DatabaseUtil.getText('AddComment'),
@@ -164,12 +167,34 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "hashcode": hashCode,
       };
       ApplyLotoModel applyLotoModel =
-          await _lotoRepository.applyLotoModel(applyLotoMap);
+          await _lotoRepository.applyLotoRepo(applyLotoMap);
       if (applyLotoModel.status == 200) {
         emit(LotoApplied(applyLotoModel: applyLotoModel));
       }
     } catch (e) {
       emit(LotoNotApplied(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _acceptLotoEvent(
+      AcceptLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoAccepting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map acceptLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      AcceptLotoModel acceptLotoModel =
+          await _lotoRepository.acceptLotoRepo(acceptLotoMap);
+      if (acceptLotoModel.status == 200) {
+        emit(LotoAccepted(acceptLotoModel: acceptLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotAccepted(getError: e.toString()));
     }
   }
 }

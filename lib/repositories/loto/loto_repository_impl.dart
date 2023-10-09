@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
@@ -71,9 +72,16 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
-  Future<ApplyLotoModel> applyLotoModel(Map applyLotoMap) async {
+  Future<ApplyLotoModel> applyLotoRepo(Map applyLotoMap) async {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/applyloto", applyLotoMap);
     return ApplyLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<AcceptLotoModel> acceptLotoRepo(Map acceptLotoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/acceptloto", acceptLotoMap);
+    return AcceptLotoModel.fromJson(response);
   }
 }
