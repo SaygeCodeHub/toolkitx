@@ -306,6 +306,9 @@ abstract class StringConstants {
   static const String kQRError = 'Invalid Location';
   static const String kLotoStart = 'LOTO Start';
   static const String kLotoStarted = "Loto Started";
+  static const String kLotoApplied = "Loto Applied";
+  static const String kPleaseVerifyEverything =
+      "Please verify everything before performing this action";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";

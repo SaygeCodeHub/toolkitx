@@ -78,3 +78,17 @@ class LotoNotStarted extends LotoDetailsState {
 
   LotoNotStarted({required this.getError});
 }
+
+class LotoApplying extends LotoDetailsState {}
+
+class LotoApplied extends LotoDetailsState {
+  final ApplyLotoModel applyLotoModel;
+
+  LotoApplied({required this.applyLotoModel});
+}
+
+class LotoNotApplied extends LotoDetailsState {
+  final String getError;
+
+  LotoNotApplied({required this.getError});
+}

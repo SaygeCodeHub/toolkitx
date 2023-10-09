@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
@@ -33,6 +34,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
+    on<ApplyLotoEvent>(_applyLotoEvent);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -42,6 +44,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       lotoTabIndex = event.lotTabIndex;
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
+        DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('assign_workforce'),
         DatabaseUtil.getText('assign_team'),
         DatabaseUtil.getText('AddComment'),
@@ -145,6 +148,28 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotStarted(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _applyLotoEvent(
+      ApplyLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoApplying());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map applyLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      ApplyLotoModel applyLotoModel =
+          await _lotoRepository.applyLotoModel(applyLotoMap);
+      if (applyLotoModel.status == 200) {
+        emit(LotoApplied(applyLotoModel: applyLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotApplied(getError: e.toString()));
     }
   }
 }
