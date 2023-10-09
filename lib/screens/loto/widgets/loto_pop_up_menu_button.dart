@@ -5,7 +5,11 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/screens/loto/widgets/loto_assign_workforce_body.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/android_pop_up.dart';
 import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
 
@@ -41,6 +45,35 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('Start')) {
             Navigator.pushNamed(context, StartLotoScreen.routeName);
+          }
+          if (value == DatabaseUtil.getText('Apply')) {
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                listener: (context, state) {
+                  if (state is LotoApplying) {
+                    ProgressBar.show(context);
+                  } else if (state is LotoApplied) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(
+                        context, StringConstants.kLotoApplied, '');
+                    Navigator.pop(context);
+                  } else if (state is LotoNotApplied) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(
+                        context, StringConstants.kSomethingWentWrong, '');
+                  }
+                },
+                child: AndroidPopUp(
+                  titleValue: StringConstants.kPleaseConfirm,
+                  contentValue: StringConstants.kPleaseVerifyEverything,
+                  onPrimaryButton: () {
+                    context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
+                  },
+                ),
+              ),
+            );
           }
         },
         position: PopupMenuPosition.under,
