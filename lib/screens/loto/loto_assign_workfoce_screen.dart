@@ -97,6 +97,7 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                       filled: true,
                       fillColor: AppColor.white)),
             ),
+            const SizedBox(height: tinySpacing),
             const LotoAssignWorkforceBody(),
           ],
         ),

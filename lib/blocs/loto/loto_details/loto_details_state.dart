@@ -8,13 +8,13 @@ class LotoDetailsFetching extends LotoDetailsState {}
 
 class LotoDetailsFetched extends LotoDetailsState {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
-  final List lotoPopUpMenu;
   final bool showPopUpMenu;
+  final List lotoPopUpMenuList;
+
 
   LotoDetailsFetched(
       {required this.fetchLotoDetailsModel,
-      required this.lotoPopUpMenu,
-      required this.showPopUpMenu});
+      required this.showPopUpMenu , required this.lotoPopUpMenuList,});
 }
 
 class LotoDetailsNotFetched extends LotoDetailsState {

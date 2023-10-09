@@ -14,13 +14,11 @@ import '../../../screens/loto/loto_assign_workfoce_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
-
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
@@ -47,15 +45,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     emit(LotoDetailsFetching());
     try {
       lotoTabIndex = event.lotTabIndex;
-      List popUpMenuItems = [
-        DatabaseUtil.getText('Start'),
-        DatabaseUtil.getText('assign_workforce'),
-        DatabaseUtil.getText('Apply'),
-        DatabaseUtil.getText('ApproveButton'),
-        DatabaseUtil.getText('RejectButton'),
-        DatabaseUtil.getText('assign _workforce_for_remove_loto'),
-        DatabaseUtil.getText('assign_team_for_remove_loto'),
-        DatabaseUtil.getText('assign_team'),
+      List popUpMenuItemsList = [
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
         DatabaseUtil.getText('Cancel'),
@@ -63,40 +53,41 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
-      // if (fetchLotoDetailsModel.data.assignwf == '1') {
-      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign_workforce'));
-      // }
-      // if (fetchLotoDetailsModel.data.assignwf == '1') {
-      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('assign_team'));
-      // }
-      // if (fetchLotoDetailsModel.data.assignwf == '0') {
-      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('Apply'));
-      // }
-      // if (fetchLotoDetailsModel.data.isapprove == '1') {
-      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('ApproveButton'));
-      // }
-      // if (fetchLotoDetailsModel.data.isreject == '1') {
-      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('RejectButton'));
-      // }
-      // if (fetchLotoDetailsModel.data.assignwfremove == '1') {
-      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign _workforce_for_remove_loto'));
-      // }
-      // if (fetchLotoDetailsModel.data.isremove == '1') {
-      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('assign_team_for_remove_loto'));
-      // }
-      // if (fetchLotoDetailsModel.data.isstart == '1') {
-      //   popUpMenuItemsList.insert(2, DatabaseUtil.getText('Start'));
-      // }
-      // if (fetchLotoDetailsModel.data.assignwf == '1') {
-      //   popUpMenuItemsList.insert(7, DatabaseUtil.getText('AddComment'));
-      // }
+      if (fetchLotoDetailsModel.data.isstart == '1') {
+        popUpMenuItemsList.insert(0, DatabaseUtil.getText('Start'));
+      }
+      if (fetchLotoDetailsModel.data.isapply == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('Apply'));
+      }
+      if (fetchLotoDetailsModel.data.assignwf == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign_workforce'));
+      }
+      if (fetchLotoDetailsModel.data.assignwf == '1') {
+        popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_team'));
+      }
+      if (fetchLotoDetailsModel.data.isapprove == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('ApproveButton'));
+      }
+      if (fetchLotoDetailsModel.data.isreject == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('RejectButton'));
+      }
+      if (fetchLotoDetailsModel.data.assignwfremove == '1') {
+        popUpMenuItemsList.insert(
+            1, DatabaseUtil.getText('assign _workforce_for_remove_loto'));
+      }
+      if (fetchLotoDetailsModel.data.assignwfremove == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('assign_team_for_remove_loto'));
+      }
+
       isRemove = fetchLotoDetailsModel.data.isremove;
       isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {
         emit(LotoDetailsFetched(
-            fetchLotoDetailsModel: fetchLotoDetailsModel,
-            lotoPopUpMenu: popUpMenuItems,
-            showPopUpMenu: true));
+          fetchLotoDetailsModel: fetchLotoDetailsModel,
+          showPopUpMenu: true,
+          lotoPopUpMenuList: popUpMenuItemsList,
+        ));
       }
     } catch (e) {
       emit(LotoDetailsNotFetched(getError: e.toString()));
