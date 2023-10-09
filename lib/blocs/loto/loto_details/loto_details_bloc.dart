@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
@@ -10,6 +11,7 @@ import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
+import '../../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database_utils.dart';
 
@@ -33,6 +35,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
+    on<SaveLotoAssignTeam>(_saveLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
   }
@@ -107,6 +110,31 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoAssignWorkforceNotSaved(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveLotoAssignTeam(
+      SaveLotoAssignTeam event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoAssignTeamSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map lotoAssignTeamMap = {
+        "hashcode": hashCode,
+        "lotoid": lotoId,
+        "teamid": event.teamId,
+        "userid": userId
+      };
+
+      SaveLotoAssignTeamModel saveLotoAssignTeamModel =
+          await _lotoRepository.saveLotoAssignTeam(lotoAssignTeamMap);
+      if (saveLotoAssignTeamModel.status == 200) {
+        log('hello?');
+        emit(LotoAssignTeamSaved(
+            saveLotoAssignTeamModel: saveLotoAssignTeamModel));
+      }
+    } catch (e) {
+      emit(LotoAssignTeamNotSaved(getError: e.toString()));
     }
   }
 

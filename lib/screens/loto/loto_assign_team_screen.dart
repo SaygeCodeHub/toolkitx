@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
@@ -7,11 +9,13 @@ import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_card.dart';
+import '../../widgets/custom_snackbar.dart';
 
 class LotoAssignTeamScreen extends StatelessWidget {
   static const routeName = 'LotoAssignTeamScreen';
@@ -59,7 +63,23 @@ class LotoAssignTeamScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: tinySpacing),
-            BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
+            BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
+              listener: (context, state) {
+                if (state is LotoAssignTeamSaving) {
+                  ProgressBar.show(context);
+                } else if (state is LotoAssignTeamSaved) {
+                  ProgressBar.dismiss(context);
+                  log('?');
+                  context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                      lotTabIndex:
+                          context.read<LotoDetailsBloc>().lotoTabIndex));
+                  Navigator.pop(context);
+                } else if (state is LotoAssignTeamNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(
+                      context, StringConstants.kSomethingWentWrong, '');
+                }
+              },
               buildWhen: (previousState, currentState) =>
                   currentState is LotoAssignTeamFetching ||
                   currentState is LotoAssignTeamFetched ||
@@ -82,8 +102,8 @@ class LotoAssignTeamScreen extends StatelessWidget {
                                         .textTheme
                                         .small
                                         .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.black)),
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.black)),
                                 subtitle: Text(
                                     state.fetchLotoAssignTeamModel.data[index]
                                         .membersCount,
@@ -91,10 +111,17 @@ class LotoAssignTeamScreen extends StatelessWidget {
                                         .textTheme
                                         .xSmall
                                         .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.grey)),
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.grey)),
                                 trailing: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      context.read<LotoDetailsBloc>().add(
+                                          SaveLotoAssignTeam(
+                                              teamId: state
+                                                  .fetchLotoAssignTeamModel
+                                                  .data[index]
+                                                  .id));
+                                    },
                                     child: const Card(
                                         shape: CircleBorder(),
                                         elevation: kElevation,
