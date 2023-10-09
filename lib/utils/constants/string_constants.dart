@@ -320,5 +320,5 @@ abstract class StringConstants {
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
   static const String kCarefulAndOrganized =
-      '"A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy."';
+      "A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy.";
 }
