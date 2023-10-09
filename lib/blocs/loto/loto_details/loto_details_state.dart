@@ -37,6 +37,12 @@ class LotoAssignWorkforceError extends LotoDetailsState {
   LotoAssignWorkforceError({required this.getError});
 }
 
+class LotoAssignWorkforceSearched extends LotoDetailsState {
+  final bool isWorkforceSearched;
+
+  LotoAssignWorkforceSearched({required this.isWorkforceSearched});
+}
+
 class LotoAssignWorkforceSaving extends LotoDetailsState {}
 
 class LotoAssignWorkforceSaved extends LotoDetailsState {

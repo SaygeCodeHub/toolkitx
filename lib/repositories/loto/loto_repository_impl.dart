@@ -40,7 +40,7 @@ class LotoRepositoryImpl extends LotoRepository {
       String lotoId,
       int pageNo,
       String name,
-      int isRemove) async {
+      String isRemove) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/getworkforceforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
     return FetchLotoAssignWorkforceModel.fromJson(response);

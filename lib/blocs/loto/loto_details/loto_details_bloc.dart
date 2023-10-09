@@ -10,26 +10,33 @@ import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
 import '../../../di/app_module.dart';
+import '../../../screens/loto/loto_assign_workfoce_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
   String lotoId = '';
+  String lotoWorkforceName = '';
+  int pageNo = 1;
   String isRemove = '';
   String isStartRemove = '';
   int lotoTabIndex = 0;
-  bool lotoListReachedMax = false;
+  bool lotoWorkforceReachedMax = false;
+  static List popUpMenuItemsList = [];
 
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
+    on<SearchLotoAssignWorkForce>(_searchLotoAssignWorkForce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
@@ -43,6 +50,11 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('assign_workforce'),
+        DatabaseUtil.getText('Apply'),
+        DatabaseUtil.getText('ApproveButton'),
+        DatabaseUtil.getText('RejectButton'),
+        DatabaseUtil.getText('assign _workforce_for_remove_loto'),
+        DatabaseUtil.getText('assign_team_for_remove_loto'),
         DatabaseUtil.getText('assign_team'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
@@ -51,6 +63,33 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      // if (fetchLotoDetailsModel.data.assignwf == '1') {
+      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign_workforce'));
+      // }
+      // if (fetchLotoDetailsModel.data.assignwf == '1') {
+      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('assign_team'));
+      // }
+      // if (fetchLotoDetailsModel.data.assignwf == '0') {
+      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('Apply'));
+      // }
+      // if (fetchLotoDetailsModel.data.isapprove == '1') {
+      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('ApproveButton'));
+      // }
+      // if (fetchLotoDetailsModel.data.isreject == '1') {
+      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('RejectButton'));
+      // }
+      // if (fetchLotoDetailsModel.data.assignwfremove == '1') {
+      //   popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign _workforce_for_remove_loto'));
+      // }
+      // if (fetchLotoDetailsModel.data.isremove == '1') {
+      //   popUpMenuItemsList.insert(6, DatabaseUtil.getText('assign_team_for_remove_loto'));
+      // }
+      // if (fetchLotoDetailsModel.data.isstart == '1') {
+      //   popUpMenuItemsList.insert(2, DatabaseUtil.getText('Start'));
+      // }
+      // if (fetchLotoDetailsModel.data.assignwf == '1') {
+      //   popUpMenuItemsList.insert(7, DatabaseUtil.getText('AddComment'));
+      // }
       isRemove = fetchLotoDetailsModel.data.isremove;
       isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {
@@ -69,12 +108,14 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     emit(LotoAssignWorkforceFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (!lotoListReachedMax) {
+      if (!lotoWorkforceReachedMax) {
         FetchLotoAssignWorkforceModel fetchLotoAssignWorkforceModel =
-            await _lotoRepository.fetchLotoAssignWorkforceModel(
-                hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
+            await _lotoRepository.fetchLotoAssignWorkforceModel(hashCode!,
+                lotoId, event.pageNo, event.workforceName, event.isRemove);
+        pageNo = event.pageNo;
+        lotoWorkforceName = event.workforceName;
         assignWorkforceDatum.addAll(fetchLotoAssignWorkforceModel.data);
-        lotoListReachedMax = fetchLotoAssignWorkforceModel.data.isEmpty;
+        lotoWorkforceReachedMax = fetchLotoAssignWorkforceModel.data.isEmpty;
         emit(LotoAssignWorkforceFetched(
             fetchLotoAssignWorkforceModel: fetchLotoAssignWorkforceModel));
       }
@@ -145,6 +186,22 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotStarted(getError: e.toString()));
+    }
+  }
+
+  FutureOr<void> _searchLotoAssignWorkForce(
+      SearchLotoAssignWorkForce event, Emitter<LotoDetailsState> emit) {
+    if (event.isWorkforceSearched == true) {
+      emit(LotoAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      add(FetchLotoAssignWorkforce(
+          pageNo: 1, isRemove: isRemove, workforceName: lotoWorkforceName));
+    } else {
+      emit(LotoAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      LotoAssignWorkforceScreen.workforceNameController.clear();
+      add(FetchLotoAssignWorkforce(
+          pageNo: 1, isRemove: isRemove, workforceName: ''));
     }
   }
 }
