@@ -150,19 +150,19 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
       if (documentDetailsModel.data.canaddmoredocs == '1') {
         documentsPopUpMenu.add('Attach Documents');
-    }
-    if (documentDetailsModel.data.canapprove == '1') {
-      documentsPopUpMenu.add('Approve Documents');
-    }
-    if (documentDetailsModel.data.canclose == '1') {
-      documentsPopUpMenu.add('Close Documents');
-    }
-    if (documentDetailsModel.data.canedit == '1') {
-      documentsPopUpMenu.add('Edit');
-    }
-    if (documentDetailsModel.data.canopen == '1') {
-      documentsPopUpMenu.add('Open Documents');
-    }
+      }
+      if (documentDetailsModel.data.canapprove == '1') {
+        documentsPopUpMenu.add('Approve Documents');
+      }
+      if (documentDetailsModel.data.canclose == '1') {
+        documentsPopUpMenu.add('Close Documents');
+      }
+      if (documentDetailsModel.data.canedit == '1') {
+        documentsPopUpMenu.add('Edit');
+      }
+      if (documentDetailsModel.data.canopen == '1') {
+        documentsPopUpMenu.add('Open Documents');
+      }
       if (documentDetailsModel.data.canreject == '1') {
         documentsPopUpMenu.add('Reject Documents');
       }
