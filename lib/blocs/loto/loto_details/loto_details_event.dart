@@ -36,6 +36,10 @@ class StartLotoEvent extends LotoDetailsEvent {
   StartLotoEvent();
 }
 
+class RejectLotoEvent extends LotoDetailsEvent {
+  RejectLotoEvent();
+}
+
 class ApplyLotoEvent extends LotoDetailsEvent {
   ApplyLotoEvent();
 }

@@ -12,6 +12,7 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/android_pop_up.dart';
 import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
+import '../loto_reject_screen.dart';
 
 class LotoPopupMenuButton extends StatelessWidget {
   const LotoPopupMenuButton(
@@ -67,7 +68,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                     },
                     child: AndroidPopUp(
                         titleValue: StringConstants.kPleaseConfirm,
-                        contentValue: StringConstants.kPleaseVerifyEverything,
+                        contentValue: DatabaseUtil.getText('applylotomessage'),
                         onPrimaryButton: () {
                           context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
                           context.read<LotoDetailsBloc>().add(FetchLotoDetails(
@@ -97,7 +98,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                         },
                         child: AndroidPopUp(
                             titleValue: StringConstants.kPleaseConfirm,
-                            contentValue: StringConstants.kWantToApproveLoto,
+                            contentValue: DatabaseUtil.getText('ApproveLotoMessage'),
                             onPrimaryButton: () {
                               context
                                   .read<LotoDetailsBloc>()
@@ -108,6 +109,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                                           .read<LotoDetailsBloc>()
                                           .lotoTabIndex));
                             })));
+          }
+          if (value == DatabaseUtil.getText('RejectButton')) {
+            Navigator.pushNamed(context, LotoRejectScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

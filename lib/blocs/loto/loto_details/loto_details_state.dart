@@ -93,6 +93,20 @@ class LotoNotApplied extends LotoDetailsState {
   LotoNotApplied({required this.getError});
 }
 
+class LotoRejecting extends LotoDetailsState {}
+
+class LotoRejected extends LotoDetailsState {
+  final RejectLotoModel rejectLotoModel;
+
+  LotoRejected({required this.rejectLotoModel});
+}
+
+class LotoNotRejected extends LotoDetailsState {
+  final String getError;
+
+  LotoNotRejected({required this.getError});
+}
+
 class LotoAccepting extends LotoDetailsState {}
 
 class LotoAccepted extends LotoDetailsState {

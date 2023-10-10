@@ -8,6 +8,7 @@ import '../../data/models/loto/accept_loto_model.dart';
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../data/models/loto/loto_list_model.dart';
 import '../../data/models/loto/loto_master_model.dart';
+import '../../data/models/loto/reject_loto_model.dart';
 
 abstract class LotoRepository {
   Future<FetchLotoListModel> fetchLotoListRepo(
@@ -34,6 +35,8 @@ abstract class LotoRepository {
   Future<ApplyLotoModel> applyLotoRepo(Map applyLotoMap);
 
   Future<AcceptLotoModel> acceptLotoRepo(Map acceptLotoMap);
+
+  Future<RejectLotoModel> rejectLotoRepo(Map rejectLotoMap);
 
   Future<StartLotoModel> startLotoRepo(Map startLotoMap);
 }

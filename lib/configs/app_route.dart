@@ -50,6 +50,7 @@ import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
+import '../screens/loto/loto_reject_screen.dart';
 import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
@@ -361,6 +362,8 @@ class AppRoutes {
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
+      case LotoRejectScreen.routeName:
+        return _createRoute(const LotoRejectScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

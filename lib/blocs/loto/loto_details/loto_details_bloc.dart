@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/reject_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
 
@@ -37,6 +38,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartLotoEvent>(_startLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<RejectLotoEvent>(_rejectLotoEvent);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -47,6 +49,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('Apply'),
+        DatabaseUtil.getText('RejectButton'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
         DatabaseUtil.getText('assign_team'),
@@ -173,6 +176,27 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotApplied(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectLotoEvent(RejectLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoRejecting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map rejectLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      RejectLotoModel rejectLotoModel =
+          await _lotoRepository.rejectLotoRepo(rejectLotoMap);
+      if (rejectLotoModel.status == 200) {
+        emit(LotoRejected(rejectLotoModel: rejectLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotRejected(getError: e.toString()));
     }
   }
 
