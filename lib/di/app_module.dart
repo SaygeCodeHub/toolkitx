@@ -34,6 +34,8 @@ import '../repositories/login/login_repository.dart';
 import '../repositories/profile/profile_repository.dart';
 import '../repositories/qualityManagement/qm_repository.dart';
 import '../repositories/qualityManagement/qm_repository_impl.dart';
+import '../repositories/safetyNotice/safety_notice_repository.dart';
+import '../repositories/safetyNotice/safety_notice_repository_impl.dart';
 import '../repositories/timeZone/time_zone_repository.dart';
 import '../repositories/timeZone/time_zone_repository_impl.dart';
 import '../repositories/todo/todo_repository.dart';
@@ -83,4 +85,6 @@ configurableDependencies() {
       () => CertificateRepositoryImpl());
   getIt.registerLazySingleton<DocumentsRepository>(
       () => DocumentsRepositoryImpl());
+  getIt.registerLazySingleton<SafetyNoticeRepository>(
+      () => SafetyNoticeRepositoryImpl());
 }

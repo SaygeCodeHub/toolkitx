@@ -22,6 +22,7 @@ class DocumentsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     page = 1;
+    context.read<DocumentsBloc>().docListReachedMax = false;
     context
         .read<DocumentsBloc>()
         .add(GetDocumentsList(page: 1, isFromHome: isFromHome));

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_screen.dart';
-
+import 'package:toolkit/screens/workorder/workorder_add_parts_screen.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
@@ -10,9 +9,12 @@ import '../../blocs/workorder/workorder_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'widgets/assign_workforce_body.dart';
 import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
 import 'start_workorder_screen.dart';
+import 'workorder_add_comments_screen.dart';
+import 'workorder_assign_document_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
 import '../../widgets/android_pop_up.dart';
 import 'workorder_form_one_screen.dart';
@@ -59,6 +61,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
           WorkOrderAddMisCostScreen.workOrderMasterDatum =
               context.read<WorkOrderBloc>().workOrderMasterDatum;
+          WorkOrderAddMisCostScreen.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
@@ -116,15 +119,27 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
               });
         }
         if (value == DatabaseUtil.getText('assign_workforce')) {
+          AssignWorkForceBody.assignWorkForceMap['workorderId'] =
+              workOrderDetailsMap['workorderId'] ?? '';
+          context.read<WorkOrderTabDetailsBloc>().assignWorkForceDatum = [];
           Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddParts')) {
+          context.read<WorkOrderTabDetailsBloc>().addPartsDatum = [];
           Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Start')) {
           StartWorkOrderScreen.startWorkOrderMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('AddDocuments')) {
+          Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName);
+        }
+        if (value == DatabaseUtil.getText('AddComment')) {
+          WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,

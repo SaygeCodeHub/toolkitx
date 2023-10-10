@@ -15,6 +15,7 @@ abstract class StringConstants {
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kParts = 'Parts'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -128,6 +129,12 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kApprovalPending = 'Approval Pending';
+  static const String kLastUploaded = 'Last Uploaded : ';
+  static const String kViewCertificate = 'View Certificate : ';
+  static const String kUploadNewCertificate = 'Upload new Certificate : ';
+  static const String kPendingSelectedCertificate =
+      "You can't upload new certificate as approval is pending for selected certificate";
   static const String kDateFormatValidate = 'Please select a Date Format!'; //
   static const String kChangePassword = 'Change Password'; //
   static const String kChangeLanguage = 'Change Language';
@@ -180,6 +187,7 @@ abstract class StringConstants {
   static const String kResponded = 'Responded';
   static const String kLocation = 'Location';
   static const String kWorkforce = 'Workforce';
+  static const String kTeam = 'Teams';
   static const String kSystemUser = 'System User';
   static const String kAssignedFor = 'Assigned for: ';
   static const String kReportToAuthorities = 'Report to authorities';
@@ -210,9 +218,10 @@ abstract class StringConstants {
   static const String kValidateConfirmPassword =
       'Please enter confirm password';
   static const String kValidatePasswordMatch = 'Passwords must match!';
-  static const String kNoRecordsFound = 'No records found';
+  static const String kNoRecordsFound = 'No records found!';
   static const String kSearchLanguage = 'Search language';
   static const String kSearchTimezone = 'Search timezone';
+  static const String kSearchPartName = 'Search Part Name...';
   static const String kPermitType = 'Permit Type';
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';
@@ -239,6 +248,7 @@ abstract class StringConstants {
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
+  static const String kWorkforceAssigned = 'Workforce Assigned';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
@@ -294,6 +304,13 @@ abstract class StringConstants {
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
+  static const String kLotoStart = 'LOTO Start';
+  static const String kLotoStarted = "Loto Started";
+  static const String kLotoApplied = "Loto Applied";
+  static const String kLotoAccepted = "Loto Approved";
+  static const String kPleaseVerifyEverything =
+      "Please verify everything before performing this action";
+  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
@@ -302,4 +319,6 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kCarefulAndOrganized =
+      "A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy.";
 }

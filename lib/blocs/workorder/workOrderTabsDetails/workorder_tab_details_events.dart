@@ -1,4 +1,5 @@
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
+import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
 
 abstract class WorkOrderTabsDetailsEvent {}
 
@@ -169,14 +170,23 @@ class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
 
 class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
-
-  FetchAssignWorkForceList({required this.pageNo});
+  final String workOrderWorkforceName;
+  final String workOrderId;
+  FetchAssignWorkForceList(
+      {required this.pageNo,
+      required this.workOrderWorkforceName,
+      required this.workOrderId});
 }
 
 class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
+  final String workOrderId;
+  final String partName;
 
-  FetchAssignPartsList({required this.pageNo});
+  FetchAssignPartsList(
+      {required this.pageNo,
+      required this.partName,
+      required this.workOrderId});
 }
 
 class RejectWorkOrder extends WorkOrderTabsDetailsEvent {
@@ -190,3 +200,72 @@ class StartWorkOrder extends WorkOrderTabsDetailsEvent {
 
   StartWorkOrder({required this.startWorkOrderMap});
 }
+
+class SearchWorkOrderParts extends WorkOrderTabsDetailsEvent {
+  final bool isSearched;
+
+  SearchWorkOrderParts({required this.isSearched});
+}
+
+class SearchWorkOrderWorkforce extends WorkOrderTabsDetailsEvent {
+  final bool isWorkforceSearched;
+
+  SearchWorkOrderWorkforce({required this.isWorkforceSearched});
+}
+
+class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
+  FetchWorkOrderDocuments();
+}
+
+class SelectWorkOrderDocument extends WorkOrderTabsDetailsEvent {
+  final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
+  final List documentList;
+  final String docId;
+
+  SelectWorkOrderDocument(
+      {required this.fetchWorkOrderDocumentsModel,
+      required this.docId,
+      required this.documentList});
+}
+
+class SelectWorkOrderDocumentType extends WorkOrderTabsDetailsEvent {
+  final String docTypeId;
+  final String docTypeName;
+
+  SelectWorkOrderDocumentType(
+      {required this.docTypeId, required this.docTypeName});
+}
+
+class SelectWorkOrderDocumentStatusOption extends WorkOrderTabsDetailsEvent {
+  final String statusId;
+  final String statusOption;
+
+  SelectWorkOrderDocumentStatusOption(
+      {required this.statusId, required this.statusOption});
+}
+
+class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ApplyWorkOrderDocumentFilter();
+}
+
+class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
+  ClearWorkOrderDocumentFilter();
+}
+
+class FetchWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class AssignWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map assignWorkOrderMap;
+  final String showWarningCount;
+
+  AssignWorkForce(
+      {required this.showWarningCount, required this.assignWorkOrderMap});
+}
+
+class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
+
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
