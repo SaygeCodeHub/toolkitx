@@ -307,8 +307,10 @@ abstract class StringConstants {
   static const String kLotoStart = 'LOTO Start';
   static const String kLotoStarted = "Loto Started";
   static const String kLotoApplied = "Loto Applied";
+  static const String kLotoAccepted = "Loto Approved";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
+  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
@@ -318,5 +320,5 @@ abstract class StringConstants {
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
   static const String kCarefulAndOrganized =
-      '"A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy."';
+      "A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy.";
 }
