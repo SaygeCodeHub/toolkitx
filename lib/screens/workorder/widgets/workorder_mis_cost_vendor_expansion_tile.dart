@@ -16,8 +16,9 @@ class WorkOrderMisCostVendorExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(WorkOrderSelectVendorOption(
-        vendorName:
-            WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] ?? ''));
+          vendorName: '',
+        ));
+
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderVendorOptionSelected,
@@ -30,9 +31,14 @@ class WorkOrderMisCostVendorExpansionTile extends StatelessWidget {
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
-                        (state.vendorName.isEmpty)
+                        (context
+                                .read<WorkOrderTabDetailsBloc>()
+                                .vendorName
+                                .isEmpty)
                             ? StringConstants.kSelectVendor
-                            : state.vendorName,
+                            : context
+                                .read<WorkOrderTabDetailsBloc>()
+                                .vendorName,
                         style: Theme.of(context).textTheme.xSmall),
                     children: [
                       ListView.builder(

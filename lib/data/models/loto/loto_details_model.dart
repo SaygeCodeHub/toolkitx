@@ -379,7 +379,7 @@ class Workforce {
         id: json["id"],
         workforceid: json["workforceid"],
         name: json["name"],
-        jobTitle: json["job_title"],
+        jobTitle: json["job_title"] ?? '',
         type: json["type"],
         applyfor: json["applyfor"],
         candelete: json["candelete"],

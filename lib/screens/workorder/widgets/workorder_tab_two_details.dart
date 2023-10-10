@@ -3,11 +3,14 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/workorder_tab_two_status_tag_util.dart';
 import '../../../widgets/custom_card.dart';
+import '../../../widgets/custom_icon_button.dart';
 import '../../../widgets/status_tag.dart';
+import '../workorder_edit_workforce_screen.dart';
 
 class WorkOrderTabTwoDetails extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -27,11 +30,38 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
           return CustomCard(
             child: ListTile(
               contentPadding: const EdgeInsets.all(xxTinierSpacing),
-              title: Padding(
-                  padding: const EdgeInsets.only(bottom: xxTinierSpacing),
-                  child: Text(data.workforce[index].name,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(data.workforce[index].name,
                       style: Theme.of(context).textTheme.small.copyWith(
-                          color: AppColor.black, fontWeight: FontWeight.w600))),
+                          color: AppColor.black, fontWeight: FontWeight.w600)),
+                  const Spacer(),
+                  CustomIconButton(
+                      icon: Icons.delete,
+                      onPressed: () {},
+                      size: kEditAndDeleteIconTogether),
+                  const SizedBox(width: xxxTinierSpacing),
+                  CustomIconButton(
+                      icon: Icons.edit,
+                      onPressed: () {
+                        WorkOrderEditWorkForceScreen
+                                .editWorkOrderWorkForceMap['plannedhrs'] =
+                            data.workforce[index].plannedhrs.toString();
+                        WorkOrderEditWorkForceScreen
+                                .editWorkOrderWorkForceMap['workForceName'] =
+                            data.workforce[index].name;
+                        WorkOrderEditWorkForceScreen
+                            .editWorkOrderWorkForceMap['workorderId'] = data.id;
+                        WorkOrderEditWorkForceScreen
+                                .editWorkOrderWorkForceMap['workForceId'] =
+                            data.workforce[index].workforceid;
+                        Navigator.pushNamed(
+                            context, WorkOrderEditWorkForceScreen.routeName);
+                      },
+                      size: kEditAndDeleteIconTogether)
+                ],
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

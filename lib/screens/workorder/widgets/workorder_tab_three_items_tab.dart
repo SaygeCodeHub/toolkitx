@@ -35,19 +35,22 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
               return CustomCard(
                   child: ListTile(
                       contentPadding: const EdgeInsets.all(tinierSpacing),
-                      title: Text(data.items[index].item,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.black)),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        WorkOrderItemTabDeleteButton(
-                            itemId: data.items[index].id),
-                        const SizedBox(width: xxxTinierSpacing),
-                        CustomIconButton(
-                            icon: Icons.edit,
-                            onPressed: () {},
-                            size: kEditAndDeleteIconTogether)
-                      ]),
+                      title: Row(
+                        children: [
+                          Text(data.items[index].item,
+                              style: Theme.of(context).textTheme.small.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.black)),
+                          const Spacer(),
+                          WorkOrderItemTabDeleteButton(
+                              itemId: data.items[index].id),
+                          const SizedBox(width: xxxTinierSpacing),
+                          CustomIconButton(
+                              icon: Icons.edit,
+                              onPressed: () {},
+                              size: kEditAndDeleteIconTogether)
+                        ],
+                      ),
                       subtitle: Padding(
                           padding: const EdgeInsets.only(top: xxxTinierSpacing),
                           child: Column(

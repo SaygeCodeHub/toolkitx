@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/certificates/get_course_certificate_screen.dart';
-import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
+import 'package:toolkit/screens/certificates/widgets/certificate_list_card.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import 'package:toolkit/widgets/text_button.dart';
 import '../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
-import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 
 import '../../utils/constants/string_constants.dart';
-import '../../widgets/custom_card.dart';
-import 'feedback_certificate_screen.dart';
 
 class CertificatesListScreen extends StatelessWidget {
   static const routeName = 'CertificatesListScreen';
@@ -30,169 +24,82 @@ class CertificatesListScreen extends StatelessWidget {
         .read<CertificateListBloc>()
         .add(FetchCertificateList(pageNo: pageNo));
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('Certificates')),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: leftRightMargin,
-          right: leftRightMargin,
-          top: xxTinierSpacing,
-        ),
-        child: SafeArea(
-          child: BlocConsumer<CertificateListBloc, CertificateListState>(
-            buildWhen: (previousState, currentState) =>
-                ((currentState is FetchedCertificateList &&
-                        context.read<CertificateListBloc>().hasReachedMax ==
-                            false) ||
-                    (currentState is FetchingCertificateList &&
-                        CertificatesListScreen.pageNo == 1)),
-            listener: (context, state) {
-              if (state is FetchedCertificateList) {
-                if (state.fetchCertificatesModel.status == 204) {
-                  context.read<CertificateListBloc>().hasReachedMax = true;
-                  showCustomSnackBar(
-                      context, StringConstants.kAllDataLoaded, '');
-                }
-              }
-            },
-            builder: (context, state) {
-              if (state is FetchingCertificateList) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is FetchedCertificateList) {
-                if (state.fetchCertificatesModel.data.isNotEmpty) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: state.hasReachedMax
-                                ? state.data.length
-                                : state.data.length + 1,
-                            itemBuilder: (context, index) {
-                              if (index < state.data.length) {
-                                return CustomCard(
-                                  elevation: 2,
-                                  child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: tinierSpacing),
-                                      child: Column(children: [
-                                        ListTile(
-                                          onTap: () {},
-                                          title: Text(state.data[index].name,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .small
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color: AppColor.black)),
-                                          subtitle: const Text(
-                                              StringConstants.kNotAvailable),
-                                          trailing: Image.asset(
-                                              'assets/icons/certificate.png',
-                                              height: kImageHeight,
-                                              width: kImageWidth),
-                                        ),
-                                        const Divider(
-                                          color: AppColor.lightestGrey,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Expanded(
-                                                child: CustomTextButton(
-                                                    onPressed: () {
-                                                      Map certificateMap = {
-                                                        "title": state
-                                                            .data[index].name,
-                                                        "id":
-                                                            state.data[index].id
-                                                      };
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          UploadCertificateScreen
-                                                              .routeName,
-                                                          arguments:
-                                                              certificateMap);
-                                                    },
-                                                    textValue: StringConstants
-                                                        .kUpload)),
-                                            Expanded(
-                                                child: CustomTextButton(
-                                                    onPressed: () {},
-                                                    textValue: StringConstants
-                                                        .kDownload)),
-                                            Expanded(
-                                                child: CustomTextButton(
-                                                    onPressed: () {
-                                                      String certificateId =
-                                                          state.data[index].id;
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          GetCourseCertificateScreen
-                                                              .routeName,
-                                                          arguments:
-                                                              certificateId);
-                                                    },
-                                                    textValue: StringConstants
-                                                        .kStartCourse)),
-                                            Expanded(
-                                                child: CustomTextButton(
-                                                    onPressed: () {
-                                                      Map certificateMap = {
-                                                        "title": state
-                                                            .data[index].name,
-                                                        "id":
-                                                            state.data[index].id
-                                                      };
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          FeedbackCertificateScreen
-                                                              .routeName,
-                                                          arguments:
-                                                              certificateMap);
-                                                    },
-                                                    textValue: StringConstants
-                                                        .kFeedback)),
-                                          ],
-                                        )
-                                      ])),
-                                );
-                              } else if (!state.hasReachedMax) {
-                                CertificatesListScreen.pageNo++;
-                                context.read<CertificateListBloc>().add(
-                                    FetchCertificateList(
-                                        pageNo: CertificatesListScreen.pageNo));
-                                return const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(
-                                        kCircularProgressIndicatorPadding),
-                                    child: SizedBox(
-                                        width: kCircularProgressIndicatorWidth,
-                                        child: CircularProgressIndicator()),
-                                  ),
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: tinierSpacing);
-                            }),
-                      ),
-                      const SizedBox(height: xxxSmallestSpacing),
-                    ],
-                  );
-                }
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
-      ),
-    );
+        appBar: GenericAppBar(title: DatabaseUtil.getText('Certificates')),
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing),
+            child: SafeArea(
+                child: BlocConsumer<CertificateListBloc, CertificateListState>(
+                    buildWhen: (previousState, currentState) => ((currentState
+                                is FetchedCertificateList &&
+                            context.read<CertificateListBloc>().hasReachedMax ==
+                                false) ||
+                        (currentState is FetchingCertificateList &&
+                            CertificatesListScreen.pageNo == 1)),
+                    listener: (context, state) {
+                      if (state is FetchedCertificateList) {
+                        if (state.fetchCertificatesModel.status == 204) {
+                          context.read<CertificateListBloc>().hasReachedMax =
+                              true;
+                          showCustomSnackBar(
+                              context, StringConstants.kAllDataLoaded, '');
+                        }
+                      }
+                      if (state is CertificateDetailsFetched) {
+                        if (state.fetchCertificateDetailsModel.data?.status !=
+                            "1") {
+                          showCustomSnackBar(context, "No Data Available", '');
+                        }
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is FetchingCertificateList) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is FetchedCertificateList) {
+                        if (state.fetchCertificatesModel.data.isNotEmpty) {
+                          return Column(children: [
+                            Expanded(
+                                child: ListView.separated(
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: state.hasReachedMax
+                                        ? state.data.length
+                                        : state.data.length + 1,
+                                    itemBuilder: (context, index) {
+                                      if (index < state.data.length) {
+                                        return CertificateListCard(
+                                          data: state.data[index],
+                                        );
+                                      } else if (!state.hasReachedMax) {
+                                        CertificatesListScreen.pageNo++;
+                                        context.read<CertificateListBloc>().add(
+                                            FetchCertificateList(
+                                                pageNo: CertificatesListScreen
+                                                    .pageNo));
+                                        return const Center(
+                                            child: Padding(
+                                                padding: EdgeInsets.all(
+                                                    kCircularProgressIndicatorPadding),
+                                                child: SizedBox(
+                                                    width:
+                                                        kCircularProgressIndicatorWidth,
+                                                    child:
+                                                        CircularProgressIndicator())));
+                                      } else {
+                                        return const SizedBox.shrink();
+                                      }
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const SizedBox(
+                                          height: tinierSpacing);
+                                    })),
+                            const SizedBox(height: xxxSmallestSpacing),
+                          ]);
+                        }
+                      }
+                      return const SizedBox.shrink();
+                    }))));
   }
 }
