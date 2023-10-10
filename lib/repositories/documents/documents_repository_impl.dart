@@ -19,21 +19,24 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<DocumentRolesModel> getDocumentsRoles(String userId, String hashCode) async {
+  Future<DocumentRolesModel> getDocumentsRoles(
+      String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getroles?hashcode=$hashCode&userid=$userId");
     return DocumentRolesModel.fromJson(response);
   }
 
   @override
-  Future<FetchDocumentMasterModel> fetchDocumentMaster(String userId, String hashCode) async {
+  Future<FetchDocumentMasterModel> fetchDocumentMaster(
+      String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchDocumentMasterModel.fromJson(response);
   }
 
   @override
-  Future<DocumentDetailsModel> getDocumentsDetails(String userId, String hashCode, String roleId, String documentId) async {
+  Future<DocumentDetailsModel> getDocumentsDetails(
+      String userId, String hashCode, String roleId, String documentId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId");
     log('response==================>$response');
