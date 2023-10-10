@@ -13,6 +13,8 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   final SafetyNoticeRepository _safetyNoticeRepository =
       getIt<SafetyNoticeRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  bool safetyNoticeListReachedMax = false;
+  List<Notice> noticesDatum = [];
 
   SafetyNoticeStates get initialState => SafetyNoticeInitialState();
 
@@ -28,9 +30,10 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchSafetyNoticesModel fetchSafetyNoticesModel =
           await _safetyNoticeRepository.fetchSafetyNotices(
-              1, userId!, hashCode!, '{}');
-      emit(SafetyNoticesFetched(
-          fetchSafetyNoticesModel: fetchSafetyNoticesModel));
+              event.pageNo, userId!, hashCode!, '{}');
+      safetyNoticeListReachedMax = fetchSafetyNoticesModel.data.notices.isEmpty;
+      noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
+      emit(SafetyNoticesFetched(noticesDatum: noticesDatum));
     } catch (e) {
       e.toString();
     }

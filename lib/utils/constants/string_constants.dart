@@ -218,7 +218,7 @@ abstract class StringConstants {
   static const String kValidateConfirmPassword =
       'Please enter confirm password';
   static const String kValidatePasswordMatch = 'Passwords must match!';
-  static const String kNoRecordsFound = 'No records found';
+  static const String kNoRecordsFound = 'No records found!';
   static const String kSearchLanguage = 'Search language';
   static const String kSearchTimezone = 'Search timezone';
   static const String kSearchPartName = 'Search Part Name...';

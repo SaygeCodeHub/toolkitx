@@ -356,7 +356,8 @@ class AppRoutes {
       case WorkOrderEditWorkForceScreen.routeName:
         return _createRoute(const WorkOrderEditWorkForceScreen());
       case SafetyNoticeScreen.routeName:
-        return _createRoute(const SafetyNoticeScreen());
+        return _createRoute(
+            SafetyNoticeScreen(isFromHomeScreen: settings.arguments as bool));
       case LotoAssignWorkforceScreen.routeName:
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
