@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
@@ -39,7 +37,6 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
       String userId, String hashCode, String roleId, String documentId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId");
-    log('response==================>$response');
     return DocumentDetailsModel.fromJson(response);
   }
 }
