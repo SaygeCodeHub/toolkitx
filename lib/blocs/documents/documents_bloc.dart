@@ -45,23 +45,22 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       emit(const FetchingDocumentsList());
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      if (!docListReachedMax) {
-        if (event.isFromHome == true) {
-          filters = {};
-          DocumentsListModel documentsListModel =
-              await _documentsRepository.getDocumentsList(userId.toString(),
-                  hashCode.toString(), "", roleId, event.page);
-          documentsListDatum.addAll(documentsListModel.data);
-          docListReachedMax = documentsListModel.data.isEmpty;
-          emit(DocumentsListFetched(documentsListModel: documentsListModel));
-        } else {
-          DocumentsListModel documentsListModel =
-              await _documentsRepository.getDocumentsList(userId.toString(),
-                  hashCode.toString(), jsonEncode(filters), roleId, event.page);
-          documentsListDatum.addAll(documentsListModel.data);
-          docListReachedMax = documentsListModel.data.isEmpty;
-          emit(DocumentsListFetched(documentsListModel: documentsListModel));
-        }
+      if (event.isFromHome == true) {
+        docListReachedMax = false;
+        filters = {};
+        DocumentsListModel documentsListModel =
+            await _documentsRepository.getDocumentsList(
+                userId.toString(), hashCode.toString(), "", roleId, event.page);
+        documentsListDatum.addAll(documentsListModel.data);
+        docListReachedMax = documentsListModel.data.isEmpty;
+        emit(DocumentsListFetched(documentsListModel: documentsListModel));
+      } else if (!docListReachedMax) {
+        DocumentsListModel documentsListModel =
+            await _documentsRepository.getDocumentsList(userId.toString(),
+                hashCode.toString(), jsonEncode(filters), roleId, event.page);
+        documentsListDatum.addAll(documentsListModel.data);
+        docListReachedMax = documentsListModel.data.isEmpty;
+        emit(DocumentsListFetched(documentsListModel: documentsListModel));
       }
     } catch (e) {
       emit(DocumentsListError(message: e.toString()));
@@ -139,42 +138,42 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   Future<FutureOr<void>> _getDocumentsDetails(
       GetDocumentsDetails event, Emitter<DocumentsStates> emit) async {
     emit(const FetchingDocumentsDetails());
-    try {
-      String hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      List documentsPopUpMenu = ['Link Documents'];
-      DocumentDetailsModel documentDetailsModel = await _documentsRepository
-          .getDocumentsDetails(userId, hashCode, roleId, documentId);
-      if (documentDetailsModel.data.canaddcomments == '1') {
-        documentsPopUpMenu.add('Add comments');
-      }
-      if (documentDetailsModel.data.canaddmoredocs == '1') {
-        documentsPopUpMenu.add('Attach Documents');
-      }
-      if (documentDetailsModel.data.canapprove == '1') {
-        documentsPopUpMenu.add('Approve Documents');
-      }
-      if (documentDetailsModel.data.canclose == '1') {
-        documentsPopUpMenu.add('Close Documents');
-      }
-      if (documentDetailsModel.data.canedit == '1') {
-        documentsPopUpMenu.add('Edit');
-      }
-      if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add('Open Documents');
-      }
-      if (documentDetailsModel.data.canreject == '1') {
-        documentsPopUpMenu.add('Reject Documents');
-      }
-      if (documentDetailsModel.data.canwithdraw == '1') {
-        documentsPopUpMenu.add('Withdraw Documents');
-      }
-      emit(DocumentsDetailsFetched(
-          documentDetailsModel: documentDetailsModel,
-          documentsPopUpMenu: documentsPopUpMenu));
-    } catch (e) {
-      emit(DocumentsDetailsError(message: e.toString()));
+    // try {
+    String hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    List documentsPopUpMenu = ['Link Documents'];
+    DocumentDetailsModel documentDetailsModel = await _documentsRepository
+        .getDocumentsDetails(userId, hashCode, roleId, documentId);
+    if (documentDetailsModel.data.canaddcomments == '1') {
+      documentsPopUpMenu.add('Add comments');
     }
+    if (documentDetailsModel.data.canaddmoredocs == '1') {
+      documentsPopUpMenu.add('Attach Documents');
+    }
+    if (documentDetailsModel.data.canapprove == '1') {
+      documentsPopUpMenu.add('Approve Documents');
+    }
+    if (documentDetailsModel.data.canclose == '1') {
+      documentsPopUpMenu.add('Close Documents');
+    }
+    if (documentDetailsModel.data.canedit == '1') {
+      documentsPopUpMenu.add('Edit');
+    }
+    if (documentDetailsModel.data.canopen == '1') {
+      documentsPopUpMenu.add('Open Documents');
+    }
+    if (documentDetailsModel.data.canreject == '1') {
+      documentsPopUpMenu.add('Reject Documents');
+    }
+    if (documentDetailsModel.data.canwithdraw == '1') {
+      documentsPopUpMenu.add('Withdraw Documents');
+    }
+    emit(DocumentsDetailsFetched(
+        documentDetailsModel: documentDetailsModel,
+        documentsPopUpMenu: documentsPopUpMenu));
+    // } catch (e) {
+    //   emit(DocumentsDetailsError(message: e.toString()));
+    // }
   }
 }

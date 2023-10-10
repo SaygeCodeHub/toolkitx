@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/documents/documents_bloc.dart';
-import 'package:toolkit/blocs/documents/documents_events.dart';
-import 'package:toolkit/blocs/documents/documents_states.dart';
-import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/utils/documents_util.dart';
-import 'package:toolkit/widgets/generic_app_bar.dart';
 
+import '../../blocs/documents/documents_bloc.dart';
+import '../../blocs/documents/documents_events.dart';
+import '../../blocs/documents/documents_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
+import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
+import '../../utils/documents_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
+import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'widgets/document_details.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
   static const String routeName = 'DocumentsDetailsScreen';
@@ -53,7 +54,7 @@ class DocumentsDetailsScreen extends StatelessWidget {
                                         StatusTag(tags: [
                                           StatusTagModel(
                                               title: state.documentDetailsModel
-                                                  .data.status,
+                                                  .data.statustext,
                                               bgColor: AppColor.deepBlue)
                                         ])
                                       ])))),
@@ -62,13 +63,17 @@ class DocumentsDetailsScreen extends StatelessWidget {
                           height: kDividerHeight, thickness: kDividerWidth),
                       const SizedBox(height: xxTinierSpacing),
                       CustomTabBarView(
-                          lengthOfTabs: 4,
+                          lengthOfTabs: 6,
                           tabBarViewIcons: DocumentsUtil().tabBarViewIcons,
                           tabBarViewWidgets: [
-                            SizedBox(),
-                            SizedBox(),
-                            SizedBox(),
-                            SizedBox()
+                            DocumentDetails(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
+                            const SizedBox(),
+                            const SizedBox(),
+                            const SizedBox(),
+                            const SizedBox(),
+                            const SizedBox()
                           ])
                     ]));
               } else {

@@ -9,7 +9,7 @@ String documentDetailsModelToJson(DocumentDetailsModel data) =>
 class DocumentDetailsModel {
   final int status;
   final String message;
-  final Data data;
+  final DocumentDetailsData data;
 
   DocumentDetailsModel(
       {required this.status, required this.message, required this.data});
@@ -18,13 +18,13 @@ class DocumentDetailsModel {
       DocumentDetailsModel(
           status: json["Status"],
           message: json["Message"],
-          data: Data.fromJson(json["Data"]));
+          data: DocumentDetailsData.fromJson(json["Data"]));
 
   Map<String, dynamic> toJson() =>
       {"Status": status, "Message": message, "Data": data.toJson()};
 }
 
-class Data {
+class DocumentDetailsData {
   final String name;
   final String docno;
   final String doctypeid;
@@ -64,10 +64,9 @@ class Data {
   final List<ApproveList> approvelist;
   final List<CustomField> customfields;
   final List<Log> logs;
-  final List<Comment> comments;
   final List<LinkedDoc> linkeddocs;
 
-  Data(
+  DocumentDetailsData(
       {required this.name,
       required this.docno,
       required this.doctypeid,
@@ -107,56 +106,54 @@ class Data {
       required this.approvelist,
       required this.customfields,
       required this.logs,
-      required this.comments,
       required this.linkeddocs});
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-      name: json["name"],
-      docno: json["docno"],
-      doctypeid: json["doctypeid"],
-      status: json["status"],
-      docname: json["docname"],
-      notes: json["notes"],
-      revision: json["revision"],
-      userid: json["userid"],
-      visiblecontractor: json["visiblecontractor"],
-      author: json["author"],
-      authorEmail: json["author_email"],
-      grantAccess: json["grant_access"],
-      documentOpenType: json["document_open_type"],
-      distribution: json["distribution"],
-      rejectedcount: json["rejectedcount"],
-      matrix: json["matrix"],
-      matrix2: json["matrix2"],
-      matrix3: json["matrix3"],
-      docsubtypeid: json["docsubtypeid"],
-      subtypename: json["subtypename"],
-      areaid: json["areaid"],
-      areaname: json["areaname"],
-      distributionnames: json["distributionnames"],
-      isauthor: json["isauthor"],
-      canopen: json["canopen"],
-      canedit: json["canedit"],
-      canaddmoredocs: json["canaddmoredocs"],
-      canaddcomments: json["canaddcomments"],
-      canclose: json["canclose"],
-      canapprove: json["canapprove"],
-      canreject: json["canreject"],
-      canwithdraw: json["canwithdraw"],
-      id: json["id"],
-      statustext: json["statustext"],
-      doctypename: json["doctypename"],
-      filelist: List<FileList>.from(
-          json["filelist"].map((x) => FileList.fromJson(x))),
-      approvelist: List<ApproveList>.from(
-          json["approvelist"].map((x) => ApproveList.fromJson(x))),
-      customfields: List<CustomField>.from(
-          json["customfields"].map((x) => CustomField.fromJson(x))),
-      logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
-      comments:
-          List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x))),
-      linkeddocs: List<LinkedDoc>.from(
-          json["linkeddocs"].map((x) => LinkedDoc.fromJson(x))));
+  factory DocumentDetailsData.fromJson(Map<String, dynamic> json) =>
+      DocumentDetailsData(
+          name: json["name"],
+          docno: json["docno"],
+          doctypeid: json["doctypeid"],
+          status: json["status"],
+          docname: json["docname"],
+          notes: json["notes"],
+          revision: json["revision"],
+          userid: json["userid"],
+          visiblecontractor: json["visiblecontractor"],
+          author: json["author"],
+          authorEmail: json["author_email"],
+          grantAccess: json["grant_access"],
+          documentOpenType: json["document_open_type"],
+          distribution: json["distribution"],
+          rejectedcount: json["rejectedcount"],
+          matrix: json["matrix"],
+          matrix2: json["matrix2"],
+          matrix3: json["matrix3"],
+          docsubtypeid: json["docsubtypeid"],
+          subtypename: json["subtypename"],
+          areaid: json["areaid"],
+          areaname: json["areaname"],
+          distributionnames: json["distributionnames"],
+          isauthor: json["isauthor"],
+          canopen: json["canopen"],
+          canedit: json["canedit"],
+          canaddmoredocs: json["canaddmoredocs"],
+          canaddcomments: json["canaddcomments"],
+          canclose: json["canclose"],
+          canapprove: json["canapprove"],
+          canreject: json["canreject"],
+          canwithdraw: json["canwithdraw"],
+          id: json["id"],
+          statustext: json["statustext"],
+          doctypename: json["doctypename"],
+          filelist: List<FileList>.from(
+              json["filelist"].map((x) => FileList.fromJson(x))),
+          approvelist: List<ApproveList>.from(
+              json["approvelist"].map((x) => ApproveList.fromJson(x))),
+          customfields: List<CustomField>.from(
+              json["customfields"].map((x) => CustomField.fromJson(x))),
+          logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+          linkeddocs: List<LinkedDoc>.from(
+              json["linkeddocs"].map((x) => LinkedDoc.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "name": name,
@@ -198,7 +195,6 @@ class Data {
         "approvelist": List<dynamic>.from(approvelist.map((x) => x.toJson())),
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
-        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
         "linkeddocs": List<dynamic>.from(linkeddocs.map((x) => x.toJson()))
       };
 }
@@ -212,36 +208,12 @@ class ApproveList {
       {required this.approve, required this.remark, required this.group});
 
   factory ApproveList.fromJson(Map<String, dynamic> json) => ApproveList(
-      approve: json["approve"], remark: json["remark"], group: json["group"]);
+      approve: json["approve"] ?? '',
+      remark: json["remark"] ?? '',
+      group: json["group"]);
 
   Map<String, dynamic> toJson() =>
       {"approve": approve, "remark": remark, "group": group};
-}
-
-class Comment {
-  final String ownername;
-  final String created;
-  final String files;
-  final String comments;
-
-  Comment(
-      {required this.ownername,
-      required this.created,
-      required this.files,
-      required this.comments});
-
-  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-      ownername: json["ownername"],
-      created: json["created"],
-      files: json["files"],
-      comments: json["comments"]);
-
-  Map<String, dynamic> toJson() => {
-        "ownername": ownername,
-        "created": created,
-        "files": files,
-        "comments": comments
-      };
 }
 
 class CustomField {
@@ -260,7 +232,7 @@ class CustomField {
 
   factory CustomField.fromJson(Map<String, dynamic> json) => CustomField(
       title: json["title"],
-      fieldvalue: json["fieldvalue"],
+      fieldvalue: json["fieldvalue"] ?? '',
       fieldtype: json["fieldtype"],
       fieldid: json["fieldid"],
       optionid: json["optionid"]);
