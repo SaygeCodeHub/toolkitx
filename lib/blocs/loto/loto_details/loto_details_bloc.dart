@@ -26,6 +26,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   List<LotoData> lotoData = [];
   String lotoId = '';
   String isRemove = '';
+  String isWorkforceRemove = '';
   String isStartRemove = '';
   int lotoTabIndex = 0;
   bool lotoListReachedMax = false;
@@ -51,7 +52,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
-        DatabaseUtil.getText('assign_team'),
+        DatabaseUtil.getText('assign _workforce_for_remove_loto'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
         DatabaseUtil.getText('Cancel'),
@@ -59,6 +60,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      isWorkforceRemove = fetchLotoDetailsModel.data.assignwfremove;
       isRemove = fetchLotoDetailsModel.data.isremove;
       isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {

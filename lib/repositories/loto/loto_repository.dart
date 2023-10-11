@@ -27,7 +27,7 @@ abstract class LotoRepository {
       Map workforceRemoveMap);
 
   Future<FetchLotoAssignWorkforceModel> fetchLotoAssignWorkforceModel(
-      String hashCode, String lotoId, int pageNo, String name, int isRemove);
+      String hashCode, String lotoId, int pageNo, String name, String isRemove);
 
   Future<FetchLotoAssignTeamModel> fetchLotoAssignTeam(
       String hashCode, String lotoId, int pageNo, String name, int isRemove);
