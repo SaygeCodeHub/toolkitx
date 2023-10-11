@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
+import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 
 class DocumentsStates extends Equatable {
@@ -84,4 +85,22 @@ class DocumentTypeFilterSelected extends DocumentsStates {
 
   @override
   List<Object?> get props => [selectedType];
+}
+
+class FetchingDocumentsDetails extends DocumentsStates {
+  const FetchingDocumentsDetails();
+}
+
+class DocumentsDetailsFetched extends DocumentsStates {
+  final DocumentDetailsModel documentDetailsModel;
+  final List documentsPopUpMenu;
+
+  const DocumentsDetailsFetched(
+      {required this.documentDetailsModel, required this.documentsPopUpMenu});
+}
+
+class DocumentsDetailsError extends DocumentsStates {
+  final String message;
+
+  const DocumentsDetailsError({required this.message});
 }

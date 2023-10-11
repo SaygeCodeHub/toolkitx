@@ -26,6 +26,7 @@ import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/incident/add_injured_person_screen.dart';
@@ -276,8 +277,7 @@ class AppRoutes {
             workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
-          certificateItemsMap: settings.arguments as Map,
-        ));
+            certificateItemsMap: settings.arguments as Map));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
       case WorkOrderFormScreenTwo.routeName:
@@ -294,8 +294,7 @@ class AppRoutes {
             selectLocationName: settings.arguments as String));
       case GetCourseCertificateScreen.routeName:
         return _createRoute(GetCourseCertificateScreen(
-          certificateId: settings.arguments.toString(),
-        ));
+            certificateId: settings.arguments.toString()));
       case WorkOrderFormScreenThree.routeName:
         return _createRoute(WorkOrderFormScreenThree(
             workOrderDetailsMap: settings.arguments as Map));
@@ -308,8 +307,7 @@ class AppRoutes {
         ));
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(
-          getdetailsMap: settings.arguments as Map,
-        ));
+            getdetailsMap: settings.arguments as Map));
       case WorkOrderAddMisCostScreen.routeName:
         return _createRoute(const WorkOrderAddMisCostScreen());
       case StartWorkOrderScreen.routeName:
@@ -326,17 +324,14 @@ class AppRoutes {
       case WorkOrderDocumentFilterScreen.routeName:
         return _createRoute(const WorkOrderDocumentFilterScreen());
       case QuizQuestionsScreen.routeName:
-        return _createRoute(QuizQuestionsScreen(
-          quizMap: settings.arguments as Map,
-        ));
+        return _createRoute(
+            QuizQuestionsScreen(quizMap: settings.arguments as Map));
       case DocumentsListScreen.routeName:
-        return _createRoute(DocumentsListScreen(
-          isFromHome: settings.arguments as bool,
-        ));
+        return _createRoute(
+            DocumentsListScreen(isFromHome: settings.arguments as bool));
       case GetCertificateDetailsScreen.routeName:
         return _createRoute(GetCertificateDetailsScreen(
-          certificateMap: settings.arguments as Map,
-        ));
+            certificateMap: settings.arguments as Map));
       case LotoDetailsScreen.routeName:
         return _createRoute(const LotoDetailsScreen());
       case ChangeRoleDocumentsScreen.routeName:
@@ -351,8 +346,7 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
         return _createRoute(DocumentLocationFilterList(
-          selectLocation: settings.arguments.toString(),
-        ));
+            selectLocation: settings.arguments.toString()));
       case WorkOrderEditWorkForceScreen.routeName:
         return _createRoute(const WorkOrderEditWorkForceScreen());
       case SafetyNoticeScreen.routeName:
@@ -362,6 +356,8 @@ class AppRoutes {
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
+      case DocumentsDetailsScreen.routeName:
+        return _createRoute(const DocumentsDetailsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
@@ -374,10 +370,8 @@ class AppRoutes {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.ease;
-
           var tween =
               Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
           return SlideTransition(
               position: animation.drive(tween), child: child);
         });
