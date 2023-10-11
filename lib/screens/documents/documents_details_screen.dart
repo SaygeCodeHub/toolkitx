@@ -13,6 +13,7 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
+import 'widgets/documents_details_files.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
   static const String routeName = 'DocumentsDetailsScreen';
@@ -41,16 +42,19 @@ class DocumentsDetailsScreen extends StatelessWidget {
                           elevation: kCardElevation,
                           child: ListTile(
                               title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: xxTinierSpacing),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: xxTinierSpacing),
                                   child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(state
-                                            .documentDetailsModel.data.name),
+                                        Expanded(
+                                            child: Text(state
+                                                .documentDetailsModel
+                                                .data
+                                                .name)),
                                         StatusTag(tags: [
                                           StatusTagModel(
                                               title: state.documentDetailsModel
@@ -69,7 +73,9 @@ class DocumentsDetailsScreen extends StatelessWidget {
                             DocumentDetails(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
-                            const SizedBox(),
+                            DocumentDetailsFiles(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
                             const SizedBox(),
                             const SizedBox(),
                             const SizedBox(),

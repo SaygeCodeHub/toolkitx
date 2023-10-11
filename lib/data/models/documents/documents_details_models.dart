@@ -60,7 +60,7 @@ class DocumentDetailsData {
   final String id;
   final String statustext;
   final String doctypename;
-  final List<FileList> filelist;
+  final List<FileList> fileList;
   final List<ApproveList> approvelist;
   final List<CustomField> customfields;
   final List<Log> logs;
@@ -102,7 +102,7 @@ class DocumentDetailsData {
       required this.id,
       required this.statustext,
       required this.doctypename,
-      required this.filelist,
+      required this.fileList,
       required this.approvelist,
       required this.customfields,
       required this.logs,
@@ -145,7 +145,7 @@ class DocumentDetailsData {
           id: json["id"],
           statustext: json["statustext"],
           doctypename: json["doctypename"],
-          filelist: List<FileList>.from(
+          fileList: List<FileList>.from(
               json["filelist"].map((x) => FileList.fromJson(x))),
           approvelist: List<ApproveList>.from(
               json["approvelist"].map((x) => ApproveList.fromJson(x))),
@@ -191,7 +191,7 @@ class DocumentDetailsData {
         "id": id,
         "statustext": statustext,
         "doctypename": doctypename,
-        "filelist": List<dynamic>.from(filelist.map((x) => x.toJson())),
+        "filelist": List<dynamic>.from(fileList.map((x) => x.toJson())),
         "approvelist": List<dynamic>.from(approvelist.map((x) => x.toJson())),
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
