@@ -94,8 +94,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                       }
                     },
                     child: AndroidPopUp(
-                        titleValue: StringConstants.kPleaseConfirm,
-                        contentValue: StringConstants.kPleaseVerifyEverything,
+                        titleValue: DatabaseUtil.getText('ApproveLotoTitle'),
+                        contentValue:
+                            DatabaseUtil.getText('removelotoremovemessage'),
                         onPrimaryButton: () {
                           context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
                           context.read<LotoDetailsBloc>().add(FetchLotoDetails(
@@ -107,35 +108,68 @@ class LotoPopupMenuButton extends StatelessWidget {
           if (value == DatabaseUtil.getText('ApproveButton')) {
             showDialog(
                 context: context,
-                builder: (context) =>
-                    BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                        listener: (context, state) {
-                          if (state is LotoAccepting) {
-                            ProgressBar.show(context);
-                          } else if (state is LotoAccepted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(
-                                context, StringConstants.kLotoAccepted, '');
-                            Navigator.pop(context);
-                          } else if (state is LotoNotAccepted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
-                          }
-                        },
-                        child: AndroidPopUp(
-                            titleValue: StringConstants.kPleaseConfirm,
-                            contentValue: StringConstants.kWantToApproveLoto,
-                            onPrimaryButton: () {
-                              context
+                builder: (context) => BlocListener<LotoDetailsBloc,
+                        LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoAccepting) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoAccepted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoAccepted, '');
+                        Navigator.pop(context);
+                      } else if (state is LotoNotAccepted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: AndroidPopUp(
+                        titleValue: DatabaseUtil.getText('ApproveLotoTitle'),
+                        contentValue:
+                            DatabaseUtil.getText('ApproveLotoMessage'),
+                        onPrimaryButton: () {
+                          context
+                              .read<LotoDetailsBloc>()
+                              .add(AcceptLotoEvent());
+                          context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                              lotTabIndex: context
                                   .read<LotoDetailsBloc>()
-                                  .add(AcceptLotoEvent());
-                              context.read<LotoDetailsBloc>().add(
-                                  FetchLotoDetails(
-                                      lotTabIndex: context
-                                          .read<LotoDetailsBloc>()
-                                          .lotoTabIndex));
-                            })));
+                                  .lotoTabIndex));
+                        })));
+          }
+          if (value == DatabaseUtil.getText('RemoveLoto')) {
+            showDialog(
+                context: context,
+                builder: (context) => BlocListener<LotoDetailsBloc,
+                        LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoRemoving) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoRemoved) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoRemoved, '');
+                        Navigator.pop(context);
+                      } else if (state is LotoNotRemoved) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: AndroidPopUp(
+                        titleValue: DatabaseUtil.getText('ApproveLotoTitle'),
+                        contentValue:
+                            DatabaseUtil.getText('removelotoremovemessage'),
+                        onPrimaryButton: () {
+                          context
+                              .read<LotoDetailsBloc>()
+                              .add(RemoveLotoEvent());
+                          context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                              lotTabIndex: context
+                                  .read<LotoDetailsBloc>()
+                                  .lotoTabIndex));
+                        })));
           }
         },
         position: PopupMenuPosition.under,

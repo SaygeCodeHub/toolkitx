@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart'
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
@@ -42,6 +43,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<RemoveLotoEvent>(_removeLotoEvent);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -52,6 +54,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('StartRemoveLotoButton'),
+        DatabaseUtil.getText('RemoveLoto'),
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
@@ -249,6 +252,28 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(AssignWorkforceRemoveError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeLotoEvent(
+      RemoveLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoRemoving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map removeLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      RemoveLotoModel removeLotoModel =
+          await _lotoRepository.removeLotoRepo(removeLotoMap);
+      if (removeLotoModel.status == 200) {
+        emit(LotoRemoved(removeLotoModel: removeLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotRemoved(getError: e.toString()));
     }
   }
 }
