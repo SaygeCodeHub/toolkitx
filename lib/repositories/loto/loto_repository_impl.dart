@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
@@ -37,12 +38,21 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
+  Future<AssignWorkForceForRemoveModel> assignWorkforceRemove(
+      Map workforceRemoveMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/assignworkforceforremove",
+        workforceRemoveMap);
+    return AssignWorkForceForRemoveModel.fromJson(response);
+  }
+
+  @override
   Future<FetchLotoAssignWorkforceModel> fetchLotoAssignWorkforceModel(
       String hashCode,
       String lotoId,
       int pageNo,
       String name,
-      int isRemove) async {
+      String isRemove) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/getworkforceforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
     return FetchLotoAssignWorkforceModel.fromJson(response);

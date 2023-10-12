@@ -38,13 +38,32 @@ class LotoPopupMenuButton extends StatelessWidget {
             LotoAssignWorkforceScreen.pageNo = 1;
             LotoAssignWorkforceBody.isFirst = true;
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
-                arguments: fetchLotoDetailsModel.data.id);
+                    arguments: fetchLotoDetailsModel.data.id)
+                .then((_) => {
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
           }
           if (value == DatabaseUtil.getText('assign_team')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName);
           }
           if (value == DatabaseUtil.getText('Start')) {
-            Navigator.pushNamed(context, StartLotoScreen.routeName);
+            Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
+                {
+                  context
+                      .read<LotoDetailsBloc>()
+                      .add(FetchLotoDetails(lotTabIndex: 0))
+                });
+          }
+          if (value ==
+              DatabaseUtil.getText('assign _workforce_for_remove_loto')) {
+            Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName)
+                .then((_) => {
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
           }
           if (value == DatabaseUtil.getText('Apply')) {
             showDialog(

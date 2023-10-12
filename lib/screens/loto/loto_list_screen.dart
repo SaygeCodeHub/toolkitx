@@ -13,8 +13,6 @@ class LotoListScreen extends StatelessWidget {
   static int pageNo = 1;
 
   const LotoListScreen({super.key, this.isFromHome = false});
-
-  static List lotoListData = [];
   final bool isFromHome;
 
   @override

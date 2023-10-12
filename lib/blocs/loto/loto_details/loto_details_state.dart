@@ -23,6 +23,20 @@ class LotoDetailsNotFetched extends LotoDetailsState {
   LotoDetailsNotFetched({required this.getError});
 }
 
+class AssignWorkforceRemoving extends LotoDetailsState {}
+
+class AssignWorkforceRemoved extends LotoDetailsState {
+  final AssignWorkForceForRemoveModel assignWorkForceForRemoveModel;
+
+  AssignWorkforceRemoved({required this.assignWorkForceForRemoveModel});
+}
+
+class AssignWorkforceRemoveError extends LotoDetailsState {
+  final String getError;
+
+  AssignWorkforceRemoveError({required this.getError});
+}
+
 class LotoAssignWorkforceFetching extends LotoDetailsState {}
 
 class LotoAssignWorkforceFetched extends LotoDetailsState {

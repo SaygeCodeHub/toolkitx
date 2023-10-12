@@ -249,6 +249,7 @@ abstract class StringConstants {
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
+  static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';

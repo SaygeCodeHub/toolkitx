@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
@@ -25,12 +26,14 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   List<LotoData> lotoData = [];
   String lotoId = '';
   String isRemove = '';
+  String isWorkforceRemove = '';
   String isStartRemove = '';
   int lotoTabIndex = 0;
   bool lotoListReachedMax = false;
 
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
+    on<RemoveAssignWorkforce>(_removeAssignWorkforce);
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
@@ -49,7 +52,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
-        DatabaseUtil.getText('assign_team'),
+        DatabaseUtil.getText('assign _workforce_for_remove_loto'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
         DatabaseUtil.getText('Cancel'),
@@ -57,6 +60,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      isWorkforceRemove = fetchLotoDetailsModel.data.assignwfremove;
       isRemove = fetchLotoDetailsModel.data.isremove;
       isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {
@@ -195,6 +199,29 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotAccepted(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeAssignWorkforce(
+      RemoveAssignWorkforce event, Emitter<LotoDetailsState> emit) async {
+    emit(AssignWorkforceRemoving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map workforceRemoveMap = {
+        "hashcode": hashCode,
+        "lotoid": lotoId,
+        "peopleid": event.peopleId,
+        "userid": userId
+      };
+      AssignWorkForceForRemoveModel assignWorkForceForRemoveModel =
+          await _lotoRepository.assignWorkforceRemove(workforceRemoveMap);
+      if (assignWorkForceForRemoveModel.status == 200) {
+        emit(AssignWorkforceRemoved(
+            assignWorkForceForRemoveModel: assignWorkForceForRemoveModel));
+      }
+    } catch (e) {
+      emit(AssignWorkforceRemoveError(getError: e.toString()));
     }
   }
 }

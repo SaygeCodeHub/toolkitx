@@ -1,6 +1,10 @@
 part of 'loto_list_bloc.dart';
 
-abstract class LotoListState {}
+abstract class LotoListState extends Equatable {
+  const LotoListState();
+  @override
+  List<Object> get props => [];
+}
 
 class LotoListInitial extends LotoListState {}
 
@@ -12,18 +16,21 @@ class LotoListFetched extends LotoListState {
   final bool hasReachedMax;
   final Map filtersMap;
 
-  LotoListFetched({
+  const LotoListFetched({
     required this.fetchLotoListModel,
     required this.data,
     required this.hasReachedMax,
     required this.filtersMap,
   });
+
+  @override
+  List<Object> get props => [data];
 }
 
 class LotoListError extends LotoListState {
   final String error;
 
-  LotoListError({required this.error});
+  const LotoListError({required this.error});
 }
 
 class FetchingLotoMaster extends LotoListState {}
@@ -31,7 +38,7 @@ class FetchingLotoMaster extends LotoListState {}
 class LotoMasterFetched extends LotoListState {
   final FetchLotoMasterModel fetchLotoMasterModel;
   final Map lotoMasterMap;
-  LotoMasterFetched({
+  const LotoMasterFetched({
     required this.fetchLotoMasterModel,
     required this.lotoMasterMap,
   });
@@ -40,16 +47,16 @@ class LotoMasterFetched extends LotoListState {
 class LotoMasterFetchError extends LotoListState {
   final String lotoMasterError;
 
-  LotoMasterFetchError({required this.lotoMasterError});
+  const LotoMasterFetchError({required this.lotoMasterError});
 }
 
 class LotoStatusFilterSelected extends LotoListState {
   final String selectedIndex;
-  LotoStatusFilterSelected(this.selectedIndex);
+  const LotoStatusFilterSelected(this.selectedIndex);
 }
 
 class LotoLocationFilterSelected extends LotoListState {
   final String selectLocationName;
 
-  LotoLocationFilterSelected(this.selectLocationName);
+  const LotoLocationFilterSelected(this.selectLocationName);
 }
