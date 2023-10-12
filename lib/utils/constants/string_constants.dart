@@ -305,7 +305,6 @@ abstract class StringConstants {
   static const String kWarning = 'Warning';
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
-  static const String kLotoStart = 'LOTO Start';
   static const String kLotoStarted = "Loto Started";
   static const String kLotoRemoveStarted = "Loto Remove Started";
   static const String kLotoApplied = "Loto Applied";

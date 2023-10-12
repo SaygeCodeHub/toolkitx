@@ -18,7 +18,7 @@ class StartLotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const GenericAppBar(title: StringConstants.kLotoStart),
+        appBar: GenericAppBar(title: DatabaseUtil.getText("StartLotoButton")),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
