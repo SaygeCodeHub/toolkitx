@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 
@@ -43,4 +44,6 @@ abstract class LotoRepository {
   Future<StartLotoModel> startLotoRepo(Map startLotoMap);
 
   Future<StartRemoveLotoModel> startRemoveLotoRepo(Map startRemoveLotoMap);
+
+  Future<LotoUploadPhotosModel> lotoUploadPhotosRepo(Map lotoUploadPhotosMap);
 }

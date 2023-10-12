@@ -4,10 +4,10 @@ import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart'
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
-
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
@@ -42,6 +42,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<LotoUploadPhotos>(_lotoUploadPhotos);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -249,6 +250,27 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(AssignWorkforceRemoveError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _lotoUploadPhotos(LotoUploadPhotos event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoPhotosUploading());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map lotoUploadPhotosMap = {
+        "lotoid": lotoId,
+        "filenames": event.filename,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      LotoUploadPhotosModel lotoUploadPhotosModel = await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
+      if (lotoUploadPhotosModel.status == 200) {
+        emit(LotoPhotosUploaded(
+            lotoUploadPhotosModel: lotoUploadPhotosModel));
+      }
+    } catch (e) {
+      emit(LotoPhotosNotUploaded(getError: e.toString()));
     }
   }
 }

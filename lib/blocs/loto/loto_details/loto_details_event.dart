@@ -52,3 +52,8 @@ class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
   RemoveAssignWorkforce({required this.peopleId});
 }
+
+class LotoUploadPhotos extends LotoDetailsEvent {
+  final String filename;
+  LotoUploadPhotos({required this.filename});
+}

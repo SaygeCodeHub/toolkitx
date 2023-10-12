@@ -134,3 +134,17 @@ class LotoNotAccepted extends LotoDetailsState {
 
   LotoNotAccepted({required this.getError});
 }
+
+class LotoPhotosUploading extends LotoDetailsState {}
+
+class LotoPhotosUploaded extends LotoDetailsState {
+  final LotoUploadPhotosModel lotoUploadPhotosModel;
+
+  LotoPhotosUploaded({required this.lotoUploadPhotosModel});
+}
+
+class LotoPhotosNotUploaded extends LotoDetailsState {
+  final String getError;
+
+  LotoPhotosNotUploaded({required this.getError});
+}
