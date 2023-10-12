@@ -253,7 +253,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     }
   }
 
-  Future<FutureOr<void>> _lotoUploadPhotos(LotoUploadPhotos event, Emitter<LotoDetailsState> emit) async {
+  Future<FutureOr<void>> _lotoUploadPhotos(
+      LotoUploadPhotos event, Emitter<LotoDetailsState> emit) async {
     emit(LotoPhotosUploading());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -264,10 +265,10 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode
       };
-      LotoUploadPhotosModel lotoUploadPhotosModel = await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
+      LotoUploadPhotosModel lotoUploadPhotosModel =
+          await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
       if (lotoUploadPhotosModel.status == 200) {
-        emit(LotoPhotosUploaded(
-            lotoUploadPhotosModel: lotoUploadPhotosModel));
+        emit(LotoPhotosUploaded(lotoUploadPhotosModel: lotoUploadPhotosModel));
       }
     } catch (e) {
       emit(LotoPhotosNotUploaded(getError: e.toString()));

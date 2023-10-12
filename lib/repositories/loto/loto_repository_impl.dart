@@ -106,9 +106,10 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
-  Future<LotoUploadPhotosModel> lotoUploadPhotosRepo(Map lotoUploadPhotosMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
+  Future<LotoUploadPhotosModel> lotoUploadPhotosRepo(
+      Map lotoUploadPhotosMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
     return LotoUploadPhotosModel.fromJson(response);
   }
 }
