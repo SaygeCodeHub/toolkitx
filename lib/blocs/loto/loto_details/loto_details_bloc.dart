@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
+import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
 
 import '../../../data/cache/cache_keys.dart';
@@ -27,7 +28,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   String lotoId = '';
   String isRemove = '';
   String isWorkforceRemove = '';
-  String isStartRemove = '';
+  String isStartRemove = '0';
   int lotoTabIndex = 0;
   bool lotoListReachedMax = false;
 
@@ -38,6 +39,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
+    on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
   }
@@ -49,6 +51,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       lotoTabIndex = event.lotTabIndex;
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
+        DatabaseUtil.getText('StartRemoveLotoButton'),
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
@@ -155,6 +158,30 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotStarted(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _startRemoveLotoEvent(
+      StartRemoveLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoRemoveStarting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map startRemoveLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "isRemove": isStartRemove,
+        "questions": []
+      };
+      StartRemoveLotoModel startRemoveLotoModel =
+          await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
+      if (startRemoveLotoModel.status == 200) {
+        emit(LotoRemoveStarted(startRemoveLotoModel: startRemoveLotoModel));
+      }
+    } catch (e) {
+      emit(LotoRemoveNotStarted(getError: e.toString()));
     }
   }
 

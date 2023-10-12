@@ -36,6 +36,10 @@ class StartLotoEvent extends LotoDetailsEvent {
   StartLotoEvent();
 }
 
+class StartRemoveLotoEvent extends LotoDetailsEvent {
+  StartRemoveLotoEvent();
+}
+
 class ApplyLotoEvent extends LotoDetailsEvent {
   ApplyLotoEvent();
 }
