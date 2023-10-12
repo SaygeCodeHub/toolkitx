@@ -134,3 +134,17 @@ class LotoNotAccepted extends LotoDetailsState {
 
   LotoNotAccepted({required this.getError});
 }
+
+class LotoCommentAdding extends LotoDetailsState {}
+
+class LotoCommentAdded extends LotoDetailsState {
+  final AddLotoCommentModel addLotoCommentModel;
+
+  LotoCommentAdded({required this.addLotoCommentModel});
+}
+
+class LotoCommentNotAdded extends LotoDetailsState {
+  final String getError;
+
+  LotoCommentNotAdded({required this.getError});
+}

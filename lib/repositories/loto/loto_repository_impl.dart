@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
@@ -102,5 +103,12 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}loto/startremoveloto", startRemoveLotoMap);
     return StartRemoveLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<AddLotoCommentModel> addLotoCommentRepo(Map addLotoCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savecomments", addLotoCommentMap);
+    return AddLotoCommentModel.fromJson(response);
   }
 }

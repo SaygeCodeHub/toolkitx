@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
@@ -42,6 +43,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<AddLotoComment>(_addLotoComment);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -249,6 +251,28 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(AssignWorkforceRemoveError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addLotoComment(
+      AddLotoComment event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoCommentAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addLotoCommentMap = {
+        "comments": event.comment,
+        "lotoid": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      AddLotoCommentModel addLotoCommentModel =
+          await _lotoRepository.addLotoCommentRepo(addLotoCommentMap);
+      if (addLotoCommentModel.status == 200) {
+        emit(LotoCommentAdded(addLotoCommentModel: addLotoCommentModel));
+      }
+    } catch (e) {
+      emit(LotoCommentNotAdded(getError: e.toString()));
     }
   }
 }
