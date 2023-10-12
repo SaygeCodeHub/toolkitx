@@ -19,6 +19,46 @@ class StartRemoveLotoScreen extends StatelessWidget {
     return Scaffold(
         appBar:
             GenericAppBar(title: DatabaseUtil.getText("StartRemoveLotoButton")),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(leftRightMargin),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            SizedBox(
+              height: kErrorButtonHeight,
+              width: xxxSizedBoxWidth,
+              child: PrimaryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText("buttonBack")),
+            ),
+            SizedBox(
+                height: kErrorButtonHeight,
+                width: xxSizedBoxWidth,
+                child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoRemoveStarting) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoRemoveStarted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoRemoveStarted, '');
+                      } else if (state is LotoRemoveNotStarted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context
+                              .read<LotoDetailsBloc>()
+                              .add(StartRemoveLotoEvent());
+                        },
+                        textValue:
+                            DatabaseUtil.getText("StartRemoveLotoButton"))))
+          ]),
+        ),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -27,43 +67,6 @@ class StartRemoveLotoScreen extends StatelessWidget {
             child: Column(children: [
               Text(DatabaseUtil.getText("LOTOREMOVEMESSAGEFORUSERS"),
                   textAlign: TextAlign.justify),
-              const SizedBox(height: mediumSpacing),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  height: kErrorButtonHeight,
-                  width: xxxSizedBoxWidth,
-                  child: PrimaryButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      textValue: DatabaseUtil.getText("buttonBack")),
-                ),
-                SizedBox(
-                    height: kErrorButtonHeight,
-                    width: xxSizedBoxWidth,
-                    child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                        listener: (context, state) {
-                          if (state is LotoRemoveStarting) {
-                            ProgressBar.show(context);
-                          } else if (state is LotoRemoveStarted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kLotoRemoveStarted, '');
-                          } else if (state is LotoRemoveNotStarted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
-                          }
-                        },
-                        child: PrimaryButton(
-                            onPressed: () {
-                              context
-                                  .read<LotoDetailsBloc>()
-                                  .add(StartRemoveLotoEvent());
-                            },
-                            textValue:
-                                DatabaseUtil.getText("StartRemoveLotoButton"))))
-              ])
             ])));
   }
 }

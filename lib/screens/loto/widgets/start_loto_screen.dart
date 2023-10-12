@@ -12,13 +12,47 @@ import '../../../configs/app_spacing.dart';
 
 class StartLotoScreen extends StatelessWidget {
   static const routeName = "StartLotoScreen";
-  static int isRemove = 0;
   const StartLotoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText("StartLotoButton")),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(leftRightMargin),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            SizedBox(
+              width: xxxSizedBoxWidth,
+              child: PrimaryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText("buttonBack")),
+            ),
+            SizedBox(
+                width: xxSizedBoxWidth,
+                child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoStarting) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoStarted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoStarted, '');
+                      } else if (state is LotoNotStarted) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context.read<LotoDetailsBloc>().add(StartLotoEvent());
+                        },
+                        textValue: DatabaseUtil.getText("StartLotoButton"))))
+          ]),
+        ),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -27,43 +61,6 @@ class StartLotoScreen extends StatelessWidget {
             child: Column(children: [
               Text(DatabaseUtil.getText("LOTOREMOVEMESSAGEFORUSERS"),
                   textAlign: TextAlign.justify),
-              const SizedBox(height: mediumSpacing),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  height: kErrorButtonHeight,
-                  width: xxxSizedBoxWidth,
-                  child: PrimaryButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      textValue: DatabaseUtil.getText("buttonBack")),
-                ),
-                SizedBox(
-                    height: kErrorButtonHeight,
-                    width: xxSizedBoxWidth,
-                    child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                        listener: (context, state) {
-                          if (state is LotoStarting) {
-                            ProgressBar.show(context);
-                          } else if (state is LotoStarted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(
-                                context, StringConstants.kLotoStarted, '');
-                          } else if (state is LotoNotStarted) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
-                          }
-                        },
-                        child: PrimaryButton(
-                            onPressed: () {
-                              context
-                                  .read<LotoDetailsBloc>()
-                                  .add(StartLotoEvent());
-                            },
-                            textValue:
-                                DatabaseUtil.getText("StartLotoButton"))))
-              ])
             ])));
   }
 }

@@ -20,6 +20,43 @@ class LotoAddCommentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText("AddComment")),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(leftRightMargin),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            SizedBox(
+              width: xxxSizedBoxWidth,
+              child: PrimaryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText("buttonBack")),
+            ),
+            SizedBox(
+                width: xxSizedBoxWidth,
+                child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                    listener: (context, state) {
+                      if (state is LotoCommentAdding) {
+                        ProgressBar.show(context);
+                      } else if (state is LotoCommentAdded) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kLotoCommentSaved, '');
+                        Navigator.pop(context);
+                      } else if (state is LotoCommentNotAdded) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(
+                            context, StringConstants.kSomethingWentWrong, '');
+                      }
+                    },
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context.read<LotoDetailsBloc>().add(AddLotoComment(
+                              comment: addLotoCommentMap["comments"]));
+                        },
+                        textValue: DatabaseUtil.getText("buttonSave"))))
+          ]),
+        ),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -32,43 +69,6 @@ class LotoAddCommentScreen extends StatelessWidget {
                   },
                   maxLines: 3,
                   hintText: DatabaseUtil.getText("AddComment")),
-              const SizedBox(height: xxxSmallestSpacing),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                SizedBox(
-                  height: kErrorButtonHeight,
-                  width: xxxSizedBoxWidth,
-                  child: PrimaryButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      textValue: DatabaseUtil.getText("buttonBack")),
-                ),
-                SizedBox(
-                    height: kErrorButtonHeight,
-                    width: xxSizedBoxWidth,
-                    child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                        listener: (context, state) {
-                          if (state is LotoCommentAdding) {
-                            ProgressBar.show(context);
-                          } else if (state is LotoCommentAdded) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(
-                                context, StringConstants.kLotoCommentSaved, '');
-                            Navigator.pop(context);
-                          } else if (state is LotoCommentNotAdded) {
-                            ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
-                          }
-                        },
-                        child: PrimaryButton(
-                            onPressed: () {
-                              context.read<LotoDetailsBloc>().add(
-                                  AddLotoComment(
-                                      comment: addLotoCommentMap["comments"]));
-                            },
-                            textValue: DatabaseUtil.getText("buttonSave"))))
-              ])
             ])));
   }
 }
