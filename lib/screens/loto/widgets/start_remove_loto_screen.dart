@@ -10,10 +10,9 @@ import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../configs/app_spacing.dart';
 
-class StartLotoScreen extends StatelessWidget {
-  static const routeName = "StartLotoScreen";
-  static int isRemove = 0;
-  const StartLotoScreen({super.key});
+class StartRemoveLotoScreen extends StatelessWidget {
+  static const routeName = "StartRemoveLotoScreen";
+  const StartRemoveLotoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +42,13 @@ class StartLotoScreen extends StatelessWidget {
                     width: xxSizedBoxWidth,
                     child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
                         listener: (context, state) {
-                          if (state is LotoStarting) {
+                          if (state is LotoRemoveStarting) {
                             ProgressBar.show(context);
-                          } else if (state is LotoStarted) {
+                          } else if (state is LotoRemoveStarted) {
                             ProgressBar.dismiss(context);
-                            showCustomSnackBar(
-                                context, StringConstants.kLotoStarted, '');
-                          } else if (state is LotoNotStarted) {
+                            showCustomSnackBar(context,
+                                StringConstants.kLotoRemoveStarted, '');
+                          } else if (state is LotoRemoveNotStarted) {
                             ProgressBar.dismiss(context);
                             showCustomSnackBar(context,
                                 StringConstants.kSomethingWentWrong, '');
@@ -59,10 +58,10 @@ class StartLotoScreen extends StatelessWidget {
                             onPressed: () {
                               context
                                   .read<LotoDetailsBloc>()
-                                  .add(StartLotoEvent());
+                                  .add(StartRemoveLotoEvent());
                             },
                             textValue:
-                                DatabaseUtil.getText("StartLotoButton"))))
+                                DatabaseUtil.getText("StartRemoveLotoButton"))))
               ])
             ])));
   }

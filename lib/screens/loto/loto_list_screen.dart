@@ -22,9 +22,7 @@ class LotoListScreen extends StatelessWidget {
         .read<LotoListBloc>()
         .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-        appBar: GenericAppBar(
-          title: DatabaseUtil.getText('LOTO'),
-        ),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

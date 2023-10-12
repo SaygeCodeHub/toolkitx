@@ -307,6 +307,7 @@ abstract class StringConstants {
   static const String kQRError = 'Invalid Location';
   static const String kLotoStart = 'LOTO Start';
   static const String kLotoStarted = "Loto Started";
+  static const String kLotoRemoveStarted = "Loto Remove Started";
   static const String kLotoApplied = "Loto Applied";
   static const String kLotoAccepted = "Loto Approved";
   static const String kPleaseVerifyEverything =
@@ -320,6 +321,4 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
-  static const String kCarefulAndOrganized =
-      "A careful and organized approach to LOTO is very important. Before applying LOTO, please down the machine or equipment and isolate them for any source of energy.";
 }
