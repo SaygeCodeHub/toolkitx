@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
@@ -13,6 +12,7 @@ import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
 import '../../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../../di/app_module.dart';
+import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
@@ -129,7 +129,6 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       SaveLotoAssignTeamModel saveLotoAssignTeamModel =
           await _lotoRepository.saveLotoAssignTeam(lotoAssignTeamMap);
       if (saveLotoAssignTeamModel.status == 200) {
-        log('hello?');
         emit(LotoAssignTeamSaved(
             saveLotoAssignTeamModel: saveLotoAssignTeamModel));
       }
@@ -146,7 +145,11 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       FetchLotoAssignTeamModel fetchLotoAssignTeamModel =
           await _lotoRepository.fetchLotoAssignTeam(
               hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
-      if (fetchLotoAssignTeamModel.status == 200) {
+      if (fetchLotoAssignTeamModel.status == 200 ||
+          fetchLotoAssignTeamModel.status == 204) {
+        LotoAssignTeamScreen.hasReachedMax =
+            fetchLotoAssignTeamModel.data.isEmpty;
+        LotoAssignTeamScreen.data.addAll(fetchLotoAssignTeamModel.data);
         emit(LotoAssignTeamFetched(
             fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
       }

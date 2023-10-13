@@ -41,7 +41,12 @@ class LotoPopupMenuButton extends StatelessWidget {
                 arguments: fetchLotoDetailsModel.data.id);
           }
           if (value == DatabaseUtil.getText('assign_team')) {
-            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName);
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((value) => () {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex));
+                    });
           }
           if (value == DatabaseUtil.getText('Start')) {
             Navigator.pushNamed(context, StartLotoScreen.routeName);

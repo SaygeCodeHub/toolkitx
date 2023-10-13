@@ -1,21 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_dimensions.dart';
+import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
+import 'package:toolkit/blocs/searchTextField/search_text_field_state.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/loto/widgets/assign_team_list.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import 'package:toolkit/widgets/generic_text_field.dart';
-import 'package:toolkit/widgets/primary_button.dart';
-import 'package:toolkit/widgets/progress_bar.dart';
-
 import '../../blocs/loto/loto_details/loto_details_bloc.dart';
+import '../../blocs/searchTextField/search_text_field_event.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
-import '../../widgets/custom_card.dart';
-import '../../widgets/custom_snackbar.dart';
+import '../../widgets/custom_icon_button.dart';
 
 class LotoAssignTeamScreen extends StatelessWidget {
   static const routeName = 'LotoAssignTeamScreen';
@@ -25,9 +21,15 @@ class LotoAssignTeamScreen extends StatelessWidget {
   static String name = '';
   static int isRemove = 0;
   static int pageNo = 1;
+  static bool hasReachedMax = false;
+  static List data = [];
+  static bool isSearched = false;
 
   @override
   Widget build(BuildContext context) {
+    pageNo = 1;
+    data.clear();
+    hasReachedMax = false;
     context
         .read<LotoDetailsBloc>()
         .add(FetchLotoAssignTeam(pageNo: pageNo, isRemove: isRemove, name: ''));
@@ -40,111 +42,94 @@ class LotoAssignTeamScreen extends StatelessWidget {
             top: leftRightMargin),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                    child: TextFieldWidget(
-                        onTextFieldChanged: (textField) {
-                          name = textField;
-                        },
-                        hintText: StringConstants.kTeam)),
-                const SizedBox(width: tinySpacing),
-                SizedBox(
-                    width: kApplyButtonWidth,
-                    child: PrimaryButton(
-                        onPressed: () {
-                          context.read<LotoDetailsBloc>().add(
-                              FetchLotoAssignTeam(
-                                  pageNo: pageNo,
-                                  isRemove: isRemove,
-                                  name: name));
-                        },
-                        textValue: StringConstants.kApply)),
-              ],
-            ),
+            CustomSearchTextField(onChange: (value) {
+              name = value;
+            }, onSearch: () {
+              pageNo = 1;
+              data.clear();
+              hasReachedMax = false;
+              context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
+                  pageNo: pageNo, isRemove: isRemove, name: name));
+            }, onClear: () {
+              pageNo = 1;
+              data.clear();
+              hasReachedMax = false;
+              name = '';
+              context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
+                  pageNo: pageNo, isRemove: isRemove, name: name));
+            }),
             const SizedBox(height: tinySpacing),
-            BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
-              listener: (context, state) {
-                if (state is LotoAssignTeamSaving) {
-                  ProgressBar.show(context);
-                } else if (state is LotoAssignTeamSaved) {
-                  ProgressBar.dismiss(context);
-                  log('?');
-                  context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                      lotTabIndex:
-                          context.read<LotoDetailsBloc>().lotoTabIndex));
-                  Navigator.pop(context);
-                } else if (state is LotoAssignTeamNotSaved) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(
-                      context, StringConstants.kSomethingWentWrong, '');
-                }
-              },
-              buildWhen: (previousState, currentState) =>
-                  currentState is LotoAssignTeamFetching ||
-                  currentState is LotoAssignTeamFetched ||
-                  currentState is LotoAssignTeamError,
-              builder: (context, state) {
-                if (state is LotoAssignTeamFetching) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is LotoAssignTeamFetched) {
-                  return Expanded(
-                    child: ListView.separated(
-                      itemCount: state.fetchLotoAssignTeamModel.data.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return CustomCard(
-                            child: ListTile(
-                                title: Text(
-                                    state.fetchLotoAssignTeamModel.data[index]
-                                        .name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .small
-                                        .copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColor.black)),
-                                subtitle: Text(
-                                    state.fetchLotoAssignTeamModel.data[index]
-                                        .membersCount,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColor.grey)),
-                                trailing: InkWell(
-                                    onTap: () {
-                                      context.read<LotoDetailsBloc>().add(
-                                          SaveLotoAssignTeam(
-                                              teamId: state
-                                                  .fetchLotoAssignTeamModel
-                                                  .data[index]
-                                                  .id));
-                                    },
-                                    child: const Card(
-                                        shape: CircleBorder(),
-                                        elevation: kElevation,
-                                        color: AppColor.paleGrey,
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsets.all(xxTiniestSpacing),
-                                          child: Icon(Icons.add),
-                                        )))));
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: tiniestSpacing);
-                      },
-                    ),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
+            const AssignTeamList(),
           ],
         ),
       ),
     );
+  }
+}
+
+class CustomSearchTextField extends StatelessWidget {
+  final void Function(String)? onChange;
+  final void Function() onSearch;
+  final void Function() onClear;
+
+  CustomSearchTextField(
+      {Key? key,
+      required this.onChange,
+      required this.onSearch,
+      required this.onClear})
+      : super(key: key);
+  final TextEditingController textController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<SearchTextFieldBloc>().add(InitiateSearch());
+    return TextFormField(
+        controller: textController,
+        onChanged: onChange,
+        decoration: InputDecoration(
+            suffixIcon: BlocBuilder<SearchTextFieldBloc, SearchTextFieldStates>(
+                builder: (context, state) {
+              if (state is SearchTextFieldInitial) {
+                return CustomIconButton(
+                    onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                      if (textController.text != '' ||
+                          textController.text.trim() != '') {
+                        onSearch();
+                        context.read<SearchTextFieldBloc>().add(Search());
+                      }
+                    },
+                    icon: Icons.search);
+              } else if (state is Searched) {
+                return CustomIconButton(
+                    onPressed: () {
+                      FocusScopeNode currentFocus = FocusScope.of(context);
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                      onClear();
+                      textController.text = '';
+                      context.read<SearchTextFieldBloc>().add(InitiateSearch());
+                    },
+                    icon: Icons.close);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+            hintStyle: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(color: AppColor.grey),
+            hintText: StringConstants.kSearch,
+            contentPadding: const EdgeInsets.all(xxxTinierSpacing),
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColor.lightGrey)),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppColor.lightGrey)),
+            filled: true,
+            fillColor: AppColor.white));
   }
 }
