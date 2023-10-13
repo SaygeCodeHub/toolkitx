@@ -13,15 +13,15 @@ import '../../configs/app_spacing.dart';
 class LotoAssignWorkforceScreen extends StatelessWidget {
   static const routeName = 'LotoAssignWorkforceScreen';
   static String name = '';
-  static int isRemove = 0;
   static int pageNo = 1;
   const LotoAssignWorkforceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LotoDetailsBloc>()
-        .add(FetchLotoAssignWorkforce(pageNo: 1, isRemove: isRemove, name: ''));
+    context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
+        pageNo: 1,
+        isRemove: context.read<LotoDetailsBloc>().isRemove,
+        name: ''));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText("assign_workforce")),
       body: Padding(
@@ -52,7 +52,10 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                               false;
                           context.read<LotoDetailsBloc>().add(
                               FetchLotoAssignWorkforce(
-                                  pageNo: 1, isRemove: isRemove, name: name));
+                                  pageNo: 1,
+                                  isRemove:
+                                      context.read<LotoDetailsBloc>().isRemove,
+                                  name: name));
                         },
                         textValue: StringConstants.kApply)),
               ],

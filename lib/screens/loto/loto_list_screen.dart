@@ -13,8 +13,6 @@ class LotoListScreen extends StatelessWidget {
   static int pageNo = 1;
 
   const LotoListScreen({super.key, this.isFromHome = false});
-
-  static List lotoListData = [];
   final bool isFromHome;
 
   @override
@@ -24,9 +22,7 @@ class LotoListScreen extends StatelessWidget {
         .read<LotoListBloc>()
         .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-        appBar: GenericAppBar(
-          title: DatabaseUtil.getText('LOTO'),
-        ),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
