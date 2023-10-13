@@ -48,6 +48,10 @@ class AcceptLotoEvent extends LotoDetailsEvent {
   AcceptLotoEvent();
 }
 
+class RemoveLotoEvent extends LotoDetailsEvent {
+  RemoveLotoEvent();
+}
+
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
   RemoveAssignWorkforce({required this.peopleId});
