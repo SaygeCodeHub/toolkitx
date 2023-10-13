@@ -310,9 +310,9 @@ abstract class StringConstants {
   static const String kLotoRemoveStarted = "Loto Remove Started";
   static const String kLotoApplied = "Loto Applied";
   static const String kLotoAccepted = "Loto Approved";
+  static const String kLotoRemoved = "Loto Removed";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
-  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";

@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart'
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
@@ -44,6 +45,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<RemoveLotoEvent>(_removeLotoEvent);
     on<AddLotoComment>(_addLotoComment);
   }
 
@@ -55,6 +57,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       List popUpMenuItems = [
         DatabaseUtil.getText('Start'),
         DatabaseUtil.getText('StartRemoveLotoButton'),
+        DatabaseUtil.getText('RemoveLoto'),
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
@@ -118,6 +121,10 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
       }
+      {
+        emit(LotoAssignWorkforceNotSaved(
+            getError: saveLotoAssignWorkforceModel.message));
+      }
     } catch (e) {
       emit(LotoAssignWorkforceNotSaved(getError: e.toString()));
     }
@@ -158,6 +165,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.startLotoRepo(startLotoMap);
       if (startLotoModel.status == 200) {
         emit(LotoStarted(startLotoModel: startLotoModel));
+      } else {
+        emit(LotoNotStarted(getError: startLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotStarted(getError: e.toString()));
@@ -182,6 +191,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
       if (startRemoveLotoModel.status == 200) {
         emit(LotoRemoveStarted(startRemoveLotoModel: startRemoveLotoModel));
+      } else {
+        emit(LotoRemoveNotStarted(getError: startRemoveLotoModel.message));
       }
     } catch (e) {
       emit(LotoRemoveNotStarted(getError: e.toString()));
@@ -204,6 +215,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.applyLotoRepo(applyLotoMap);
       if (applyLotoModel.status == 200) {
         emit(LotoApplied(applyLotoModel: applyLotoModel));
+      } else {
+        emit(LotoNotApplied(getError: applyLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotApplied(getError: e.toString()));
@@ -226,6 +239,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.acceptLotoRepo(acceptLotoMap);
       if (acceptLotoModel.status == 200) {
         emit(LotoAccepted(acceptLotoModel: acceptLotoModel));
+      } else {
+        emit(LotoNotAccepted(getError: acceptLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotAccepted(getError: e.toString()));
@@ -249,9 +264,36 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (assignWorkForceForRemoveModel.status == 200) {
         emit(AssignWorkforceRemoved(
             assignWorkForceForRemoveModel: assignWorkForceForRemoveModel));
+      } else {
+        emit(AssignWorkforceRemoveError(
+            getError: assignWorkForceForRemoveModel.message));
       }
     } catch (e) {
       emit(AssignWorkforceRemoveError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeLotoEvent(
+      RemoveLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoRemoving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map removeLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      RemoveLotoModel removeLotoModel =
+          await _lotoRepository.removeLotoRepo(removeLotoMap);
+      if (removeLotoModel.status == 200) {
+        emit(LotoRemoved(removeLotoModel: removeLotoModel));
+      } else {
+        emit(LotoNotRemoved(getError: removeLotoModel.message));
+      }
+    } catch (e) {
+      emit(LotoNotRemoved(getError: e.toString()));
     }
   }
 

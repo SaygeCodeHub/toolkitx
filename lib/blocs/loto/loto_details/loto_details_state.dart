@@ -148,3 +148,17 @@ class LotoCommentNotAdded extends LotoDetailsState {
 
   LotoCommentNotAdded({required this.getError});
 }
+
+class LotoRemoving extends LotoDetailsState {}
+
+class LotoRemoved extends LotoDetailsState {
+  final RemoveLotoModel removeLotoModel;
+
+  LotoRemoved({required this.removeLotoModel});
+}
+
+class LotoNotRemoved extends LotoDetailsState {
+  final String getError;
+
+  LotoNotRemoved({required this.getError});
+}
