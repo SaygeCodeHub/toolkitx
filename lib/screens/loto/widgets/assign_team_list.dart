@@ -49,14 +49,14 @@ class AssignTeamList extends StatelessWidget {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         } else if (state is LotoAssignTeamFetched) {
-          return Expanded(
-            child: ListView.separated(
-              itemCount: (LotoAssignTeamScreen.hasReachedMax)
-                  ? LotoAssignTeamScreen.data.length
-                  : LotoAssignTeamScreen.data.length + 1,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                if (LotoAssignTeamScreen.data.isNotEmpty) {
+          if (LotoAssignTeamScreen.data.isNotEmpty) {
+            return Expanded(
+              child: ListView.separated(
+                itemCount: (LotoAssignTeamScreen.hasReachedMax)
+                    ? LotoAssignTeamScreen.data.length
+                    : LotoAssignTeamScreen.data.length + 1,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
                   if (index < LotoAssignTeamScreen.data.length) {
                     return CustomCard(
                         child: ListTile(
@@ -101,15 +101,15 @@ class AssignTeamList extends StatelessWidget {
                       child: Center(child: CircularProgressIndicator()),
                     );
                   }
-                } else {
-                  return const NoRecordsText(text: 'No Records Found');
-                }
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: tiniestSpacing);
-              },
-            ),
-          );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: tiniestSpacing);
+                },
+              ),
+            );
+          } else {
+            return const NoRecordsText(text: 'No Records Found');
+          }
         } else {
           return const SizedBox.shrink();
         }

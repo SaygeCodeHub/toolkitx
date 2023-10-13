@@ -61,6 +61,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
+        DatabaseUtil.getText('assign_team'),
         DatabaseUtil.getText('assign _workforce_for_remove_loto'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
