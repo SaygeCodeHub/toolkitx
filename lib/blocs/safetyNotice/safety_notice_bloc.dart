@@ -9,6 +9,7 @@ import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/safetyNotice/add_safety_notice_model.dart';
+import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../repositories/safetyNotice/safety_notice_repository.dart';
@@ -19,6 +20,8 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   bool safetyNoticeListReachedMax = false;
   List<Notice> noticesDatum = [];
+  String safetyNoticeId = '';
+  int safetyNoticeTabIndex = 0;
 
   SafetyNoticeStates get initialState => SafetyNoticeInitialState();
 
@@ -26,6 +29,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<FetchSafetyNotices>(_fetchSafetyNotices);
     on<AddSafetyNotice>(_addSafetyNotice);
     on<SafetyNoticeSaveFiles>(_saveSafetyNoticeFiles);
+    on<FetchSafetyNoticeDetails>(_fetchSafetyNoticeDetails);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -105,6 +109,26 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeFilesNotSaved(filesNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchSafetyNoticeDetails(
+      FetchSafetyNoticeDetails event, Emitter<SafetyNoticeStates> emit) async {
+    emit(FetchingSafetyNoticeDetails());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      FetchSafetyNoticeDetailsModel fetchSafetyNoticeDetailsModel =
+          await _safetyNoticeRepository.fetchSafetyNoticeDetails(
+              event.safetyNoticeId, userId!, hashCode!);
+      safetyNoticeId = event.safetyNoticeId;
+      safetyNoticeTabIndex = event.tabIndex;
+      emit(SafetyNoticeDetailsFetched(
+          fetchSafetyNoticeDetailsModel: fetchSafetyNoticeDetailsModel,
+          clientId: clientId!));
+    } catch (e) {
+      emit(SafetyNoticeDetailsNotFetched(detailsNotFetched: e.toString()));
     }
   }
 }

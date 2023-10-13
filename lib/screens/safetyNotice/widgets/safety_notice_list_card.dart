@@ -8,9 +8,11 @@ import '../../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/status_tag.dart';
+import '../safety_notice_details_screen.dart';
 
 class SafetyNoticeListCard extends StatelessWidget {
   final Notice noticesDatum;
+  static String safetyNoticeId = '';
 
   const SafetyNoticeListCard({Key? key, required this.noticesDatum})
       : super(key: key);
@@ -19,7 +21,10 @@ class SafetyNoticeListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          safetyNoticeId = noticesDatum.id;
+          Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName);
+        },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
             padding: const EdgeInsets.only(bottom: xxTinierSpacing),

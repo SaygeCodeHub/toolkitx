@@ -1,4 +1,5 @@
 import '../../data/safetyNotice/add_safety_notice_model.dart';
+import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 
@@ -40,4 +41,20 @@ class SafetyNoticeFilesNotSaved extends SafetyNoticeStates {
   final String filesNotSaved;
 
   SafetyNoticeFilesNotSaved({required this.filesNotSaved});
+}
+
+class FetchingSafetyNoticeDetails extends SafetyNoticeStates {}
+
+class SafetyNoticeDetailsFetched extends SafetyNoticeStates {
+  final FetchSafetyNoticeDetailsModel fetchSafetyNoticeDetailsModel;
+  final String clientId;
+
+  SafetyNoticeDetailsFetched(
+      {required this.clientId, required this.fetchSafetyNoticeDetailsModel});
+}
+
+class SafetyNoticeDetailsNotFetched extends SafetyNoticeStates {
+  final String detailsNotFetched;
+
+  SafetyNoticeDetailsNotFetched({required this.detailsNotFetched});
 }

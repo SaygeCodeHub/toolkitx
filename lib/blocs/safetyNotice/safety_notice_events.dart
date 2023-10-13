@@ -20,3 +20,11 @@ class SafetyNoticeSaveFiles extends SafetyNoticeEvent {
   SafetyNoticeSaveFiles(
       {required this.safetyNoticeId, required this.addSafetyNoticeMap});
 }
+
+class FetchSafetyNoticeDetails extends SafetyNoticeEvent {
+  final String safetyNoticeId;
+  final int tabIndex;
+
+  FetchSafetyNoticeDetails(
+      {required this.tabIndex, required this.safetyNoticeId});
+}
