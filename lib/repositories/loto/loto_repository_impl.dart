@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
@@ -127,5 +128,13 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/savecomments", addLotoCommentMap);
     return AddLotoCommentModel.fromJson(response);
+  }
+
+  @override
+  Future<LotoUploadPhotosModel> lotoUploadPhotosRepo(
+      Map lotoUploadPhotosMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
+    return LotoUploadPhotosModel.fromJson(response);
   }
 }

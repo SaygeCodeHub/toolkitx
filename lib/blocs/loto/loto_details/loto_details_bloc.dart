@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart'
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
@@ -20,13 +21,11 @@ import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
-
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
@@ -50,6 +49,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<AcceptLotoEvent>(_acceptLotoEvent);
     on<RemoveLotoEvent>(_removeLotoEvent);
     on<AddLotoComment>(_addLotoComment);
+    on<LotoUploadPhotos>(_lotoUploadPhotos);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -349,6 +349,30 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoCommentNotAdded(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _lotoUploadPhotos(
+      LotoUploadPhotos event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoPhotosUploading());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map lotoUploadPhotosMap = {
+        "lotoid": lotoId,
+        "filenames": event.filename,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      LotoUploadPhotosModel lotoUploadPhotosModel =
+          await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
+      if (lotoUploadPhotosModel.status == 200) {
+        emit(LotoPhotosUploaded(lotoUploadPhotosModel: lotoUploadPhotosModel));
+      } else {
+        emit(LotoPhotosNotUploaded(getError: lotoUploadPhotosModel.message));
+      }
+    } catch (e) {
+      emit(LotoPhotosNotUploaded(getError: e.toString()));
     }
   }
 }

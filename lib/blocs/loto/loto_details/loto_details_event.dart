@@ -63,6 +63,11 @@ class RemoveAssignWorkforce extends LotoDetailsEvent {
   RemoveAssignWorkforce({required this.peopleId});
 }
 
+class LotoUploadPhotos extends LotoDetailsEvent {
+  final String filename;
+  LotoUploadPhotos({required this.filename});
+}
+
 class AddLotoComment extends LotoDetailsEvent {
   final String comment;
   AddLotoComment({required this.comment});
