@@ -21,8 +21,7 @@ class AddSafetyNoticeModel {
         data: Data.fromJson(json["Data"]),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
         "Data": data.toJson(),
