@@ -13,6 +13,7 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
+import 'widgets/document_details_custom_fields.dart';
 import 'widgets/document_details_popup_menu.dart';
 import 'widgets/documents_details_files.dart';
 
@@ -92,7 +93,9 @@ class DocumentsDetailsScreen extends StatelessWidget {
                             DocumentDetailsFiles(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
-                            const SizedBox(),
+                            DocumentDetailsCustomFields(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
                             const SizedBox(),
                             const SizedBox(),
                             const SizedBox()
