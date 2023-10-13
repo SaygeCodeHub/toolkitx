@@ -41,17 +41,17 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                     arguments: fetchLotoDetailsModel.data.id)
                 .then((_) => {
-                      context
-                          .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
           if (value == DatabaseUtil.getText('assign_team')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
-                .then((value) => () {
+                .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
                           lotTabIndex:
-                              context.read<LotoDetailsBloc>().lotoTabIndex));
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
           if (value == DatabaseUtil.getText('Start')) {

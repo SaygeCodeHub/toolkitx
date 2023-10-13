@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/generic_no_records_text.dart';
 
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../configs/app_color.dart';
@@ -55,46 +56,53 @@ class AssignTeamList extends StatelessWidget {
                   : LotoAssignTeamScreen.data.length + 1,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                if (index < LotoAssignTeamScreen.data.length) {
-                  return CustomCard(
-                      child: ListTile(
-                          title: Text(LotoAssignTeamScreen.data[index].name,
-                              style: Theme.of(context).textTheme.small.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColor.black)),
-                          subtitle: Text(
-                              LotoAssignTeamScreen.data[index].membersCount,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColor.grey)),
-                          trailing: InkWell(
-                              onTap: () {
-                                context.read<LotoDetailsBloc>().add(
-                                    SaveLotoAssignTeam(
-                                        teamId: LotoAssignTeamScreen
-                                            .data[index].id));
-                              },
-                              child: const Card(
-                                  shape: CircleBorder(),
-                                  elevation: kElevation,
-                                  color: AppColor.paleGrey,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(xxTiniestSpacing),
-                                    child: Icon(Icons.add),
-                                  )))));
+                if (LotoAssignTeamScreen.data.isNotEmpty) {
+                  if (index < LotoAssignTeamScreen.data.length) {
+                    return CustomCard(
+                        child: ListTile(
+                            title: Text(LotoAssignTeamScreen.data[index].name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .small
+                                    .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.black)),
+                            subtitle: Text(
+                                LotoAssignTeamScreen.data[index].membersCount,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xSmall
+                                    .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.grey)),
+                            trailing: InkWell(
+                                onTap: () {
+                                  context.read<LotoDetailsBloc>().add(
+                                      SaveLotoAssignTeam(
+                                          teamId: LotoAssignTeamScreen
+                                              .data[index].id));
+                                },
+                                child: const Card(
+                                    shape: CircleBorder(),
+                                    elevation: kElevation,
+                                    color: AppColor.paleGrey,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(xxTiniestSpacing),
+                                      child: Icon(Icons.add),
+                                    )))));
+                  } else {
+                    LotoAssignTeamScreen.pageNo++;
+                    context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
+                        pageNo: LotoAssignTeamScreen.pageNo,
+                        isRemove: LotoAssignTeamScreen.isRemove,
+                        name: LotoAssignTeamScreen.name));
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: tinierSpacing),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
                 } else {
-                  LotoAssignTeamScreen.pageNo++;
-                  context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
-                      pageNo: LotoAssignTeamScreen.pageNo,
-                      isRemove: LotoAssignTeamScreen.isRemove,
-                      name: LotoAssignTeamScreen.name));
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: tinierSpacing),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
+                  return const NoRecordsText(text: 'No Records Found');
                 }
               },
               separatorBuilder: (context, index) {
