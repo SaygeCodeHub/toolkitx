@@ -120,8 +120,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (saveLotoAssignWorkforceModel.status == 200) {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
-      }
-      else {
+      } else {
         emit(LotoAssignWorkforceNotSaved(
             getError: saveLotoAssignWorkforceModel.message));
       }

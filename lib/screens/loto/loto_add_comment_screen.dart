@@ -45,8 +45,7 @@ class LotoAddCommentScreen extends StatelessWidget {
                         Navigator.pop(context);
                       } else if (state is LotoCommentNotAdded) {
                         ProgressBar.dismiss(context);
-                        showCustomSnackBar(
-                            context, state.getError, '');
+                        showCustomSnackBar(context, state.getError, '');
                       }
                     },
                     child: PrimaryButton(
