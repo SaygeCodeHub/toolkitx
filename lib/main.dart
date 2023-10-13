@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/assets/assets_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
@@ -198,6 +199,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => DocumentsBloc()),
           BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
           BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
+          BlocProvider(lazy: true, create: (context) => AssetsBloc()),
         ],
         child: GestureDetector(
             onTap: () {

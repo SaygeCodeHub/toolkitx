@@ -15,6 +15,7 @@ import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
 import 'widgets/document_details_custom_fields.dart';
 import 'widgets/document_details_popup_menu.dart';
+import 'widgets/document_details_timeline.dart';
 import 'widgets/documents_details_files.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
@@ -96,7 +97,9 @@ class DocumentsDetailsScreen extends StatelessWidget {
                             DocumentDetailsCustomFields(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
-                            const SizedBox(),
+                            DocumentCustomTimeline(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
                             const SizedBox(),
                             const SizedBox()
                           ])
