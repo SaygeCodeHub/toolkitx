@@ -8,7 +8,6 @@ import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
-
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
@@ -18,11 +17,13 @@ import '../../../di/app_module.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
