@@ -108,7 +108,7 @@ class AssignTeamList extends StatelessWidget {
               ),
             );
           } else {
-            return const NoRecordsText(text: 'No Records Found');
+            return const NoRecordsText(text: StringConstants.kNoRecordsFound);
           }
         } else {
           return const SizedBox.shrink();
