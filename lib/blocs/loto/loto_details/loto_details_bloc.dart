@@ -162,8 +162,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.startLotoRepo(startLotoMap);
       if (startLotoModel.status == 200) {
         emit(LotoStarted(startLotoModel: startLotoModel));
-      }
-      else {
+      } else {
         emit(LotoNotStarted(getError: startLotoModel.message));
       }
     } catch (e) {
@@ -189,8 +188,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
       if (startRemoveLotoModel.status == 200) {
         emit(LotoRemoveStarted(startRemoveLotoModel: startRemoveLotoModel));
-      }
-      else {
+      } else {
         emit(LotoRemoveNotStarted(getError: startRemoveLotoModel.message));
       }
     } catch (e) {
