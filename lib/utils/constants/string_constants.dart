@@ -321,4 +321,5 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kNoFiles = 'No Files found!';
 }
