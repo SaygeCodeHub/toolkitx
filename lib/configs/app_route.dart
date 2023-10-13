@@ -6,6 +6,7 @@ import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/assets/assets_list_dart.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -83,6 +84,7 @@ import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
 import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
+import '../screens/safetyNotice/safety_notice_details_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -368,8 +370,12 @@ class AppRoutes {
         return _createRoute(const LotoAddCommentScreen());
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
+      case AssetsListScreen.routeName:
+        return _createRoute(const AssetsListScreen());
       case AddAndEditSafetyNoticeScreen.routeName:
         return _createRoute(AddAndEditSafetyNoticeScreen());
+      case SafetyNoticeDetailsScreen.routeName:
+        return _createRoute(const SafetyNoticeDetailsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

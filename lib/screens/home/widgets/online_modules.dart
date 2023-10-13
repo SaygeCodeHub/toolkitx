@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/assets_list_dart.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
@@ -205,6 +206,9 @@ class OnLineModules extends StatelessWidget {
       case 'safetyNotice':
         Navigator.pushNamed(context, SafetyNoticeScreen.routeName,
             arguments: true);
+        break;
+      case 'eam':
+        Navigator.pushNamed(context, AssetsListScreen.routeName);
         break;
     }
   }
