@@ -16,6 +16,7 @@ import '../../utils/safety_notice_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'widgets/safety_notice_details_tab_two.dart';
 import 'widgets/safety_notice_list_card.dart';
 import 'widgets/safety_notice_tab_one.dart';
 
@@ -87,7 +88,11 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
                               tabIndex: 0,
                               safetyNoticeData:
                                   state.fetchSafetyNoticeDetailsModel.data,
-                              clientId: state.clientId)
+                              clientId: state.clientId),
+                          SafetyNoticeDetailsTabTwo(
+                              tabIndex: 1,
+                              safetyNoticeData:
+                                  state.fetchSafetyNoticeDetailsModel.data)
                         ])
                   ]));
             } else if (state is SafetyNoticeDetailsNotFetched) {
