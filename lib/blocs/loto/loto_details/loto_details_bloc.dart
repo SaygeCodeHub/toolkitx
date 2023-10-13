@@ -163,7 +163,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (startLotoModel.status == 200) {
         emit(LotoStarted(startLotoModel: startLotoModel));
       }
-      {
+      else {
         emit(LotoNotStarted(getError: startLotoModel.message));
       }
     } catch (e) {
@@ -190,7 +190,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (startRemoveLotoModel.status == 200) {
         emit(LotoRemoveStarted(startRemoveLotoModel: startRemoveLotoModel));
       }
-      {
+      else {
         emit(LotoRemoveNotStarted(getError: startRemoveLotoModel.message));
       }
     } catch (e) {
