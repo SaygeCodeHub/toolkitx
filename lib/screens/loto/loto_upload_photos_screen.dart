@@ -55,8 +55,7 @@ class LotoUploadPhotosScreen extends StatelessWidget {
                         Navigator.pop(context);
                       } else if (state is LotoPhotosNotUploaded) {
                         ProgressBar.dismiss(context);
-                        showCustomSnackBar(
-                            context, StringConstants.kSomethingWentWrong, '');
+                        showCustomSnackBar(context, state.getError, '');
                       }
                     },
                     child: PrimaryButton(

@@ -336,6 +336,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
       if (lotoUploadPhotosModel.status == 200) {
         emit(LotoPhotosUploaded(lotoUploadPhotosModel: lotoUploadPhotosModel));
+      } else {
+        emit(LotoPhotosNotUploaded(getError: lotoUploadPhotosModel.message));
       }
     } catch (e) {
       emit(LotoPhotosNotUploaded(getError: e.toString()));
