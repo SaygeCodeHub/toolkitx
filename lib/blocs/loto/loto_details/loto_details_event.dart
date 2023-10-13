@@ -23,6 +23,12 @@ class SaveLotoAssignWorkForce extends LotoDetailsEvent {
   SaveLotoAssignWorkForce({required this.peopleId});
 }
 
+class SaveLotoAssignTeam extends LotoDetailsEvent {
+  final String teamId;
+
+  SaveLotoAssignTeam({required this.teamId});
+}
+
 class FetchLotoAssignTeam extends LotoDetailsEvent {
   final int pageNo;
   final int isRemove;
@@ -48,7 +54,16 @@ class AcceptLotoEvent extends LotoDetailsEvent {
   AcceptLotoEvent();
 }
 
+class RemoveLotoEvent extends LotoDetailsEvent {
+  RemoveLotoEvent();
+}
+
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
   RemoveAssignWorkforce({required this.peopleId});
+}
+
+class AddLotoComment extends LotoDetailsEvent {
+  final String comment;
+  AddLotoComment({required this.comment});
 }

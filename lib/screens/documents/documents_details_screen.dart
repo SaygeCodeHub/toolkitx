@@ -13,6 +13,9 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
+import 'widgets/document_details_custom_fields.dart';
+import 'widgets/document_details_popup_menu.dart';
+import 'widgets/documents_details_files.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
   static const String routeName = 'DocumentsDetailsScreen';
@@ -23,9 +26,24 @@ class DocumentsDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<DocumentsBloc>().add(const GetDocumentsDetails());
     return Scaffold(
-        appBar: const GenericAppBar(),
+        appBar: GenericAppBar(actions: [
+          BlocBuilder<DocumentsBloc, DocumentsStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is DocumentsDetailsFetched,
+              builder: (context, state) {
+                if (state is DocumentsDetailsFetched) {
+                  return DocumentsDetailsPopUpMenu(
+                      popUpMenuItems: state.documentsPopUpMenu);
+                } else {
+                  return const SizedBox();
+                }
+              })
+        ]),
         body: BlocConsumer<DocumentsBloc, DocumentsStates>(
             listener: (context, state) {},
+            buildWhen: (previousState, currentState) =>
+                currentState is FetchingDocumentsDetails ||
+                currentState is DocumentsDetailsFetched,
             builder: (context, state) {
               if (state is FetchingDocumentsDetails) {
                 return const Center(child: CircularProgressIndicator());
@@ -41,16 +59,19 @@ class DocumentsDetailsScreen extends StatelessWidget {
                           elevation: kCardElevation,
                           child: ListTile(
                               title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: xxTinierSpacing),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: xxTinierSpacing),
                                   child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(state
-                                            .documentDetailsModel.data.name),
+                                        Expanded(
+                                            child: Text(state
+                                                .documentDetailsModel
+                                                .data
+                                                .name)),
                                         StatusTag(tags: [
                                           StatusTagModel(
                                               title: state.documentDetailsModel
@@ -69,8 +90,12 @@ class DocumentsDetailsScreen extends StatelessWidget {
                             DocumentDetails(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
-                            const SizedBox(),
-                            const SizedBox(),
+                            DocumentDetailsFiles(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
+                            DocumentDetailsCustomFields(
+                                documentDetailsModel:
+                                    state.documentDetailsModel),
                             const SizedBox(),
                             const SizedBox(),
                             const SizedBox()

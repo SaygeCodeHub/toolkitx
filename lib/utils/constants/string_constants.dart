@@ -310,12 +310,13 @@ abstract class StringConstants {
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
   static const String kLotoStarted = "Loto Started";
+  static const String kLotoCommentSaved = "Loto Comment saved";
   static const String kLotoRemoveStarted = "Loto Remove Started";
   static const String kLotoApplied = "Loto Applied";
   static const String kLotoAccepted = "Loto Approved";
+  static const String kLotoRemoved = "Loto Removed";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
-  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
@@ -324,4 +325,5 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kNoFiles = 'No Files found!';
 }
