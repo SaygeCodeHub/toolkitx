@@ -14,7 +14,9 @@ import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
+import '../../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../../di/app_module.dart';
+import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
@@ -41,6 +43,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
+    on<SaveLotoAssignTeam>(_saveLotoAssignTeam);
     on<StartLotoEvent>(_startLotoEvent);
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
@@ -61,6 +64,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         DatabaseUtil.getText('Apply'),
         DatabaseUtil.getText('ApproveButton'),
         DatabaseUtil.getText('assign_workforce'),
+        DatabaseUtil.getText('assign_team'),
         DatabaseUtil.getText('assign _workforce_for_remove_loto'),
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
@@ -129,6 +133,30 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     }
   }
 
+  Future<FutureOr<void>> _saveLotoAssignTeam(
+      SaveLotoAssignTeam event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoAssignTeamSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map lotoAssignTeamMap = {
+        "hashcode": hashCode,
+        "lotoid": lotoId,
+        "teamid": event.teamId,
+        "userid": userId
+      };
+
+      SaveLotoAssignTeamModel saveLotoAssignTeamModel =
+          await _lotoRepository.saveLotoAssignTeam(lotoAssignTeamMap);
+      if (saveLotoAssignTeamModel.status == 200) {
+        emit(LotoAssignTeamSaved(
+            saveLotoAssignTeamModel: saveLotoAssignTeamModel));
+      }
+    } catch (e) {
+      emit(LotoAssignTeamNotSaved(getError: e.toString()));
+    }
+  }
+
   Future<FutureOr<void>> _fetchLotoAssignTeam(
       FetchLotoAssignTeam event, Emitter<LotoDetailsState> emit) async {
     emit(LotoAssignTeamFetching());
@@ -137,7 +165,11 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       FetchLotoAssignTeamModel fetchLotoAssignTeamModel =
           await _lotoRepository.fetchLotoAssignTeam(
               hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
-      if (fetchLotoAssignTeamModel.status == 200) {
+      if (fetchLotoAssignTeamModel.status == 200 ||
+          fetchLotoAssignTeamModel.status == 204) {
+        LotoAssignTeamScreen.hasReachedMax =
+            fetchLotoAssignTeamModel.data.isEmpty;
+        LotoAssignTeamScreen.data.addAll(fetchLotoAssignTeamModel.data);
         emit(LotoAssignTeamFetched(
             fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
       }

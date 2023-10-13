@@ -65,6 +65,20 @@ class LotoAssignWorkforceNotSaved extends LotoDetailsState {
   LotoAssignWorkforceNotSaved({required this.getError});
 }
 
+class LotoAssignTeamSaving extends LotoDetailsState {}
+
+class LotoAssignTeamSaved extends LotoDetailsState {
+  final SaveLotoAssignTeamModel saveLotoAssignTeamModel;
+
+  LotoAssignTeamSaved({required this.saveLotoAssignTeamModel});
+}
+
+class LotoAssignTeamNotSaved extends LotoDetailsState {
+  final String getError;
+
+  LotoAssignTeamNotSaved({required this.getError});
+}
+
 class LotoAssignTeamFetching extends LotoDetailsState {}
 
 class LotoAssignTeamFetched extends LotoDetailsState {
