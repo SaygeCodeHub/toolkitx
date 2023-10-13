@@ -40,7 +40,6 @@ abstract class LotoRepository {
 
   Future<SaveLotoAssignTeamModel> saveLotoAssignTeam(Map lotoAssignTeamMap);
 
-  Future<ApplyLotoModel> applyLotoModel(Map applyLotoMap);
   Future<ApplyLotoModel> applyLotoRepo(Map applyLotoMap);
 
   Future<AcceptLotoModel> acceptLotoRepo(Map acceptLotoMap);
