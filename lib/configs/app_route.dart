@@ -80,6 +80,7 @@ import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -361,6 +362,8 @@ class AppRoutes {
         return _createRoute(const StartRemoveLotoScreen());
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
+      case AddAndEditSafetyNoticeScreen.routeName:
+        return _createRoute(AddAndEditSafetyNoticeScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
