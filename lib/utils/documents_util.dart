@@ -12,11 +12,11 @@ class DocumentsUtil {
   ];
   final List<Tab> tabBarViewIcons = [
     const Tab(icon: Icon(Icons.shelves, color: AppColor.grey)),
+    const Tab(icon: Icon(Icons.file_copy_outlined, color: AppColor.grey)),
     const Tab(icon: Icon(Icons.info, color: AppColor.grey)),
-    const Tab(icon: Icon(Icons.group, color: AppColor.grey)),
-    const Tab(icon: Icon(Icons.group, color: AppColor.grey)),
-    const Tab(icon: Icon(Icons.group, color: AppColor.grey)),
-    const Tab(icon: Icon(Icons.timeline, color: AppColor.grey))
+    const Tab(icon: Icon(Icons.timeline, color: AppColor.grey)),
+    const Tab(icon: Icon(Icons.comment, color: AppColor.grey)),
+    const Tab(icon: Icon(Icons.link, color: AppColor.grey))
   ];
 
   static List<String> fileMenuOptions(FileList fileListData) {
@@ -32,9 +32,4 @@ class DocumentsUtil {
     }
     return fileMenuOptionsList;
   }
-
-// static String fileNameDecrypt(String fileName,String apiKey )  {
-//   return EncryptData.decryptAESPrivateKey(
-//       fileName,apiKey);
-// }
 }

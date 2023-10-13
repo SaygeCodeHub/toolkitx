@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/documents/documents_details_models.dart';
@@ -149,28 +150,28 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       DocumentDetailsModel documentDetailsModel = await _documentsRepository
           .getDocumentsDetails(userId, hashCode, roleId, documentId);
       if (documentDetailsModel.data.canaddcomments == '1') {
-        documentsPopUpMenu.add('Add comments');
+        documentsPopUpMenu.add(DatabaseUtil.getText('AddComments'));
       }
       if (documentDetailsModel.data.canaddmoredocs == '1') {
-        documentsPopUpMenu.add('Attach Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_attachdocument'));
       }
       if (documentDetailsModel.data.canapprove == '1') {
-        documentsPopUpMenu.add('Approve Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_approvedocument'));
       }
       if (documentDetailsModel.data.canclose == '1') {
-        documentsPopUpMenu.add('Close Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_closedocument'));
       }
       if (documentDetailsModel.data.canedit == '1') {
-        documentsPopUpMenu.add('Edit');
+        documentsPopUpMenu.add(DatabaseUtil.getText('Edit'));
       }
       if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add('Open Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('Open'));
       }
       if (documentDetailsModel.data.canreject == '1') {
-        documentsPopUpMenu.add('Reject Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
       }
       if (documentDetailsModel.data.canwithdraw == '1') {
-        documentsPopUpMenu.add('Withdraw Documents');
+        documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
       }
       emit(DocumentsDetailsFetched(
           documentDetailsModel: documentDetailsModel,

@@ -13,6 +13,7 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
+import 'widgets/document_details_popup_menu.dart';
 import 'widgets/documents_details_files.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
@@ -24,9 +25,24 @@ class DocumentsDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<DocumentsBloc>().add(const GetDocumentsDetails());
     return Scaffold(
-        appBar: const GenericAppBar(),
+        appBar: GenericAppBar(actions: [
+          BlocBuilder<DocumentsBloc, DocumentsStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is DocumentsDetailsFetched,
+              builder: (context, state) {
+                if (state is DocumentsDetailsFetched) {
+                  return DocumentsDetailsPopUpMenu(
+                      popUpMenuItems: state.documentsPopUpMenu);
+                } else {
+                  return const SizedBox();
+                }
+              })
+        ]),
         body: BlocConsumer<DocumentsBloc, DocumentsStates>(
             listener: (context, state) {},
+            buildWhen: (previousState, currentState) =>
+                currentState is FetchingDocumentsDetails ||
+                currentState is DocumentsDetailsFetched,
             builder: (context, state) {
               if (state is FetchingDocumentsDetails) {
                 return const Center(child: CircularProgressIndicator());
