@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
@@ -8,7 +9,6 @@ import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
-
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
@@ -18,11 +18,13 @@ import '../../../di/app_module.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
@@ -44,6 +46,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
     on<RemoveLotoEvent>(_removeLotoEvent);
+    on<AddLotoComment>(_addLotoComment);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -117,8 +120,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (saveLotoAssignWorkforceModel.status == 200) {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
-      }
-      {
+      } else {
         emit(LotoAssignWorkforceNotSaved(
             getError: saveLotoAssignWorkforceModel.message));
       }
@@ -291,6 +293,30 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotRemoved(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addLotoComment(
+      AddLotoComment event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoCommentAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addLotoCommentMap = {
+        "comments": event.comment,
+        "lotoid": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      AddLotoCommentModel addLotoCommentModel =
+          await _lotoRepository.addLotoCommentRepo(addLotoCommentMap);
+      if (addLotoCommentModel.status == 200) {
+        emit(LotoCommentAdded(addLotoCommentModel: addLotoCommentModel));
+      } else {
+        emit(LotoCommentNotAdded(getError: addLotoCommentModel.message));
+      }
+    } catch (e) {
+      emit(LotoCommentNotAdded(getError: e.toString()));
     }
   }
 }

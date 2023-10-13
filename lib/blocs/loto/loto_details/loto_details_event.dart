@@ -56,3 +56,8 @@ class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
   RemoveAssignWorkforce({required this.peopleId});
 }
+
+class AddLotoComment extends LotoDetailsEvent {
+  final String comment;
+  AddLotoComment({required this.comment});
+}
