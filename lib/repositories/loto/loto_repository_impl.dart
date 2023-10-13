@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
@@ -6,6 +7,7 @@ import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
+import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -37,12 +39,21 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
+  Future<AssignWorkForceForRemoveModel> assignWorkforceRemove(
+      Map workforceRemoveMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/assignworkforceforremove",
+        workforceRemoveMap);
+    return AssignWorkForceForRemoveModel.fromJson(response);
+  }
+
+  @override
   Future<FetchLotoAssignWorkforceModel> fetchLotoAssignWorkforceModel(
       String hashCode,
       String lotoId,
       int pageNo,
       String name,
-      int isRemove) async {
+      String isRemove) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/getworkforceforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
     return FetchLotoAssignWorkforceModel.fromJson(response);
@@ -83,5 +94,13 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/acceptloto", acceptLotoMap);
     return AcceptLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<StartRemoveLotoModel> startRemoveLotoRepo(
+      Map startRemoveLotoMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/startremoveloto", startRemoveLotoMap);
+    return StartRemoveLotoModel.fromJson(response);
   }
 }

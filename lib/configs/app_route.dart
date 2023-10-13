@@ -53,6 +53,7 @@ import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
+import '../screens/loto/widgets/start_remove_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -357,6 +358,8 @@ class AppRoutes {
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
+      case StartRemoveLotoScreen.routeName:
+        return _createRoute(const StartRemoveLotoScreen());
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
       case SafetyNoticeFilterScreen.routeName:
