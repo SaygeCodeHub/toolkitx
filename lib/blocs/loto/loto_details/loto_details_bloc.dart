@@ -118,6 +118,10 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
       }
+      {
+        emit(LotoAssignWorkforceNotSaved(
+            getError: saveLotoAssignWorkforceModel.message));
+      }
     } catch (e) {
       emit(LotoAssignWorkforceNotSaved(getError: e.toString()));
     }
@@ -159,6 +163,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (startLotoModel.status == 200) {
         emit(LotoStarted(startLotoModel: startLotoModel));
       }
+      {
+        emit(LotoNotStarted(getError: startLotoModel.message));
+      }
     } catch (e) {
       emit(LotoNotStarted(getError: e.toString()));
     }
@@ -183,6 +190,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (startRemoveLotoModel.status == 200) {
         emit(LotoRemoveStarted(startRemoveLotoModel: startRemoveLotoModel));
       }
+      {
+        emit(LotoRemoveNotStarted(getError: startRemoveLotoModel.message));
+      }
     } catch (e) {
       emit(LotoRemoveNotStarted(getError: e.toString()));
     }
@@ -204,6 +214,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.applyLotoRepo(applyLotoMap);
       if (applyLotoModel.status == 200) {
         emit(LotoApplied(applyLotoModel: applyLotoModel));
+      } else {
+        emit(LotoNotApplied(getError: applyLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotApplied(getError: e.toString()));
@@ -226,6 +238,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.acceptLotoRepo(acceptLotoMap);
       if (acceptLotoModel.status == 200) {
         emit(LotoAccepted(acceptLotoModel: acceptLotoModel));
+      } else {
+        emit(LotoNotAccepted(getError: acceptLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotAccepted(getError: e.toString()));
@@ -249,6 +263,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (assignWorkForceForRemoveModel.status == 200) {
         emit(AssignWorkforceRemoved(
             assignWorkForceForRemoveModel: assignWorkForceForRemoveModel));
+      } else {
+        emit(AssignWorkforceRemoveError(
+            getError: assignWorkForceForRemoveModel.message));
       }
     } catch (e) {
       emit(AssignWorkforceRemoveError(getError: e.toString()));
@@ -271,6 +288,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.removeLotoRepo(removeLotoMap);
       if (removeLotoModel.status == 200) {
         emit(LotoRemoved(removeLotoModel: removeLotoModel));
+      } else {
+        emit(LotoNotRemoved(getError: removeLotoModel.message));
       }
     } catch (e) {
       emit(LotoNotRemoved(getError: e.toString()));

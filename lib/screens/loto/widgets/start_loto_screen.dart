@@ -51,8 +51,7 @@ class StartLotoScreen extends StatelessWidget {
                                 context, StringConstants.kLotoStarted, '');
                           } else if (state is LotoNotStarted) {
                             ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
+                            showCustomSnackBar(context, state.getError, '');
                           }
                         },
                         child: PrimaryButton(
