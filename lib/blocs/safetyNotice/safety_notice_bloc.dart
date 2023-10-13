@@ -124,9 +124,29 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
               event.safetyNoticeId, userId!, hashCode!);
       safetyNoticeId = event.safetyNoticeId;
       safetyNoticeTabIndex = event.tabIndex;
+      List popUpMenuList = [];
+      if (fetchSafetyNoticeDetailsModel.data.canEdit == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Edit'));
+      }
+      if (fetchSafetyNoticeDetailsModel.data.canIssue == '1') {
+        popUpMenuList.insert(1, DatabaseUtil.getText('Issue'));
+      }
+      if (fetchSafetyNoticeDetailsModel.data.canHold == '1') {
+        popUpMenuList.insert(1, DatabaseUtil.getText('Hold'));
+      }
+      if (fetchSafetyNoticeDetailsModel.data.canCancel == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Cancel'));
+      }
+      if (fetchSafetyNoticeDetailsModel.data.canReissue == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Reissue'));
+      }
+      if (fetchSafetyNoticeDetailsModel.data.canClose == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Close'));
+      }
       emit(SafetyNoticeDetailsFetched(
           fetchSafetyNoticeDetailsModel: fetchSafetyNoticeDetailsModel,
-          clientId: clientId!));
+          clientId: clientId!,
+          popUpMenuOptionsList: popUpMenuList));
     } catch (e) {
       emit(SafetyNoticeDetailsNotFetched(detailsNotFetched: e.toString()));
     }
