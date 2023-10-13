@@ -204,6 +204,10 @@ abstract class StringConstants {
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
+  static const String kSafetyNoticeValidation = 'Please enter notice!'; //
+  static const String kSafetyNoticeValidityValidation =
+      'Please enter validity!'; //
+  static const String kUploadFiles = 'Uploading files...'; //
   static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
   static const String kDescriptionValidation =

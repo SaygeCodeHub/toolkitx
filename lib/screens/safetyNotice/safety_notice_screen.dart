@@ -7,6 +7,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/safetyNotice/safety_notice_bloc.dart';
 import '../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../configs/app_spacing.dart';
+import 'add_and_edit_safety_notice_screen.dart';
 import 'widgets/safety_notice_list_body.dart';
 
 class SafetyNoticeScreen extends StatelessWidget {
@@ -26,6 +27,12 @@ class SafetyNoticeScreen extends StatelessWidget {
         FetchSafetyNotices(pageNo: pageNo, isFromHomeScreen: isFromHomeScreen));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('SafetyNotice')),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(
+                context, AddAndEditSafetyNoticeScreen.routeName);
+          },
+          child: const Icon(Icons.add)),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
