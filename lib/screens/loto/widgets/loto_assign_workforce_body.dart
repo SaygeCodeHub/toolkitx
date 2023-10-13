@@ -26,19 +26,29 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           currentState is LotoAssignWorkforceFetched ||
           currentState is LotoAssignWorkforceError,
       listener: (context, state) {
-        if (state is LotoAssignWorkforceSaving) {
-          ProgressBar.show(context);
-        } else if (state is LotoAssignWorkforceSaved) {
-          ProgressBar.dismiss(context);
+        if (state is LotoAssignWorkforceSaved) {
           LotoAssignWorkforceScreen.pageNo = 1;
           context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
               pageNo: 1,
-              isRemove: LotoAssignWorkforceScreen.isRemove,
+              isRemove: context.read<LotoDetailsBloc>().isRemove,
               name: ''));
           showCustomSnackBar(context, StringConstants.kWorkforceAssigned, '');
         } else if (state is LotoAssignWorkforceNotSaved) {
-          ProgressBar.dismiss(context);
+          ProgressBar.show(context);
+          showCustomSnackBar(context, StringConstants.kSomethingWentWrong, '');
+        }
+
+        if (state is AssignWorkforceRemoved) {
+          LotoAssignWorkforceScreen.pageNo = 1;
+          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
+          context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
+              pageNo: 1,
+              isRemove: context.read<LotoDetailsBloc>().isRemove,
+              name: ''));
+          showCustomSnackBar(context, StringConstants.kWorkforceRemoved, '');
+        } else if (state is LotoAssignWorkforceNotSaved) {
+          ProgressBar.show(context);
           showCustomSnackBar(context, StringConstants.kSomethingWentWrong, '');
         }
         if (state is LotoAssignWorkforceFetched) {
@@ -77,10 +87,9 @@ class LotoAssignWorkforceBody extends StatelessWidget {
                               .assignWorkforceDatum
                               .length) {
                         return LotoAssignWorkforceCard(
-                          workForceDatum: context
-                              .read<LotoDetailsBloc>()
-                              .assignWorkforceDatum[index],
-                        );
+                            workForceDatum: context
+                                .read<LotoDetailsBloc>()
+                                .assignWorkforceDatum[index]);
                       } else if (!context
                           .read<LotoDetailsBloc>()
                           .lotoListReachedMax) {
@@ -88,7 +97,8 @@ class LotoAssignWorkforceBody extends StatelessWidget {
                         context.read<LotoDetailsBloc>().add(
                             FetchLotoAssignWorkforce(
                                 pageNo: LotoAssignWorkforceScreen.pageNo,
-                                isRemove: LotoAssignWorkforceScreen.isRemove,
+                                isRemove:
+                                    context.read<LotoDetailsBloc>().isRemove,
                                 name: ''));
                         return const Center(
                             child: Padding(

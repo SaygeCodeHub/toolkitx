@@ -203,7 +203,8 @@ class OnLineModules extends StatelessWidget {
             arguments: true);
         break;
       case 'safetyNotice':
-        Navigator.pushNamed(context, SafetyNoticeScreen.routeName);
+        Navigator.pushNamed(context, SafetyNoticeScreen.routeName,
+            arguments: true);
         break;
     }
   }

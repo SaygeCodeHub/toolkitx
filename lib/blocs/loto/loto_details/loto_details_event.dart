@@ -10,7 +10,7 @@ class FetchLotoDetails extends LotoDetailsEvent {
 
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
   final int pageNo;
-  final int isRemove;
+  final String isRemove;
   final String name;
 
   FetchLotoAssignWorkforce(
@@ -38,10 +38,27 @@ class FetchLotoAssignTeam extends LotoDetailsEvent {
       {required this.pageNo, required this.isRemove, required this.name});
 }
 
+class StartLotoEvent extends LotoDetailsEvent {
+  StartLotoEvent();
+}
+
+class StartRemoveLotoEvent extends LotoDetailsEvent {
+  StartRemoveLotoEvent();
+}
+
 class ApplyLotoEvent extends LotoDetailsEvent {
   ApplyLotoEvent();
 }
 
-class StartLotoEvent extends LotoDetailsEvent {
-  StartLotoEvent();
+class AcceptLotoEvent extends LotoDetailsEvent {
+  AcceptLotoEvent();
+}
+
+class RemoveLotoEvent extends LotoDetailsEvent {
+  RemoveLotoEvent();
+}
+
+class RemoveAssignWorkforce extends LotoDetailsEvent {
+  final int peopleId;
+  RemoveAssignWorkforce({required this.peopleId});
 }

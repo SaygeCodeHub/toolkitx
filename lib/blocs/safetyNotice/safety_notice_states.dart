@@ -7,7 +7,7 @@ class SafetyNoticeInitialState extends SafetyNoticeStates {}
 class FetchingSafetyNotices extends SafetyNoticeStates {}
 
 class SafetyNoticesFetched extends SafetyNoticeStates {
-  final FetchSafetyNoticesModel fetchSafetyNoticesModel;
+  final List<Notice> noticesDatum;
 
-  SafetyNoticesFetched({required this.fetchSafetyNoticesModel});
+  SafetyNoticesFetched({required this.noticesDatum});
 }
