@@ -6,7 +6,9 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/safetyNotice/safety_notice_bloc.dart';
 import '../../blocs/safetyNotice/safety_notice_events.dart';
+import '../../blocs/safetyNotice/safety_notice_states.dart';
 import '../../configs/app_spacing.dart';
+import 'safety_notice_filter_screen.dart';
 import 'widgets/safety_notice_list_body.dart';
 
 class SafetyNoticeScreen extends StatelessWidget {
@@ -33,11 +35,42 @@ class SafetyNoticeScreen extends StatelessWidget {
             top: xxTinierSpacing),
         child: Column(
           children: [
-            CustomIconButtonRow(
-                primaryOnPress: () {},
-                secondaryOnPress: () {},
-                secondaryIcon: Icons.history,
-                clearOnPress: () {}),
+            BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
+              buildWhen: (previousState, currentState) {
+                if (currentState is FetchingSafetyNotices &&
+                    isFromHomeScreen == true) {
+                  return true;
+                } else if (currentState is SafetyNoticesFetched) {
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is SafetyNoticesFetched) {
+                  return CustomIconButtonRow(
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, SafetyNoticeFilterScreen.routeName);
+                      },
+                      secondaryOnPress: () {},
+                      secondaryIcon: Icons.history,
+                      clearVisible: state.safetyNoticeFilterMap.isNotEmpty,
+                      clearOnPress: () {
+                        state.safetyNoticeFilterMap.clear();
+                        pageNo = 1;
+                        context.read<SafetyNoticeBloc>().noticesDatum.clear();
+                        context
+                            .read<SafetyNoticeBloc>()
+                            .safetyNoticeListReachedMax = false;
+                        context.read<SafetyNoticeBloc>().add(FetchSafetyNotices(
+                            pageNo: pageNo,
+                            isFromHomeScreen: isFromHomeScreen));
+                      });
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
             const SizedBox(height: xxTinierSpacing),
             const SafetyNoticeListBody()
           ],
