@@ -327,4 +327,5 @@ abstract class StringConstants {
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
   static const String kNoFiles = 'No Files found!';
+  static const String kNoLinkedDoc = 'No Linked Documents!';
 }

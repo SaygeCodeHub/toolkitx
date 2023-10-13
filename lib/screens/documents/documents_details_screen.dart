@@ -13,7 +13,9 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/document_details.dart';
+import 'widgets/document_details_comments.dart';
 import 'widgets/document_details_custom_fields.dart';
+import 'widgets/document_details_linked_doc.dart';
 import 'widgets/document_details_popup_menu.dart';
 import 'widgets/document_details_timeline.dart';
 import 'widgets/documents_details_files.dart';
@@ -44,7 +46,8 @@ class DocumentsDetailsScreen extends StatelessWidget {
             listener: (context, state) {},
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentsDetails ||
-                currentState is DocumentsDetailsFetched,
+                currentState is DocumentsDetailsFetched ||
+                currentState is DocumentsDetailsError,
             builder: (context, state) {
               if (state is FetchingDocumentsDetails) {
                 return const Center(child: CircularProgressIndicator());
@@ -93,15 +96,21 @@ class DocumentsDetailsScreen extends StatelessWidget {
                                     state.documentDetailsModel),
                             DocumentDetailsFiles(
                                 documentDetailsModel:
-                                    state.documentDetailsModel),
+                                    state.documentDetailsModel,
+                                clientId: state.clientId),
                             DocumentDetailsCustomFields(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
                             DocumentCustomTimeline(
                                 documentDetailsModel:
                                     state.documentDetailsModel),
-                            const SizedBox(),
-                            const SizedBox()
+                            DocumentDetailsComments(
+                                documentDetailsModel:
+                                    state.documentDetailsModel,
+                                clientId: state.clientId),
+                            DocumentDetailsLinkedDocs(
+                                documentDetailsModel:
+                                    state.documentDetailsModel)
                           ])
                     ]));
               } else {

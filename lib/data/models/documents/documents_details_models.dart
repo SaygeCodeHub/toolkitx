@@ -65,6 +65,7 @@ class DocumentDetailsData {
   final List<CustomField> customfields;
   final List<Log> logs;
   final List<LinkedDoc> linkeddocs;
+  final List<Comment> comments;
 
   DocumentDetailsData(
       {required this.name,
@@ -106,6 +107,7 @@ class DocumentDetailsData {
       required this.approvelist,
       required this.customfields,
       required this.logs,
+      required this.comments,
       required this.linkeddocs});
 
   factory DocumentDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -152,6 +154,10 @@ class DocumentDetailsData {
           customfields: List<CustomField>.from(
               json["customfields"].map((x) => CustomField.fromJson(x))),
           logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+          comments: json["comments"] == null
+              ? json["comments"]
+              : List<Comment>.from(
+                  json["comments"].map((x) => Comment.fromJson(x))),
           linkeddocs: List<LinkedDoc>.from(
               json["linkeddocs"].map((x) => LinkedDoc.fromJson(x))));
 
@@ -195,6 +201,7 @@ class DocumentDetailsData {
         "approvelist": List<dynamic>.from(approvelist.map((x) => x.toJson())),
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
         "linkeddocs": List<dynamic>.from(linkeddocs.map((x) => x.toJson()))
       };
 }
@@ -214,6 +221,34 @@ class ApproveList {
 
   Map<String, dynamic> toJson() =>
       {"approve": approve, "remark": remark, "group": group};
+}
+
+class Comment {
+  final String ownername;
+  final String created;
+  final String files;
+  final String comments;
+
+  Comment({
+    required this.ownername,
+    required this.created,
+    required this.files,
+    required this.comments,
+  });
+
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        ownername: json["ownername"],
+        created: json["created"],
+        files: json["files"],
+        comments: json["comments"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ownername": ownername,
+        "created": created,
+        "files": files,
+        "comments": comments,
+      };
 }
 
 class CustomField {
