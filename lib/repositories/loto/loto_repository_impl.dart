@@ -10,6 +10,7 @@ import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 
+import '../../data/models/loto/add_loto_comment_model.dart';
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';

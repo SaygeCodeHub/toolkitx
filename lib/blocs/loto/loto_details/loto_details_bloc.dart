@@ -121,7 +121,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
       }
-      {
+      else {
         emit(LotoAssignWorkforceNotSaved(
             getError: saveLotoAssignWorkforceModel.message));
       }
@@ -313,6 +313,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
           await _lotoRepository.addLotoCommentRepo(addLotoCommentMap);
       if (addLotoCommentModel.status == 200) {
         emit(LotoCommentAdded(addLotoCommentModel: addLotoCommentModel));
+      } else {
+        emit(LotoCommentNotAdded(getError: addLotoCommentModel.message));
       }
     } catch (e) {
       emit(LotoCommentNotAdded(getError: e.toString()));
