@@ -5,11 +5,13 @@ import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart'
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
+import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 
+import '../../data/models/loto/add_loto_comment_model.dart';
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -103,6 +105,20 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}loto/startremoveloto", startRemoveLotoMap);
     return StartRemoveLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<RemoveLotoModel> removeLotoRepo(Map removeLotoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/removeloto", removeLotoMap);
+    return RemoveLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<AddLotoCommentModel> addLotoCommentRepo(Map addLotoCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savecomments", addLotoCommentMap);
+    return AddLotoCommentModel.fromJson(response);
   }
 
   @override

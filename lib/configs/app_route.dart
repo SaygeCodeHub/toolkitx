@@ -46,6 +46,7 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_add_comment_screen.dart';
 import '../screens/loto/loto_assign_team_screen.dart';
 import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
@@ -362,6 +363,8 @@ class AppRoutes {
         return _createRoute(const StartRemoveLotoScreen());
       case LotoUploadPhotosScreen.routeName:
         return _createRoute(LotoUploadPhotosScreen());
+      case LotoAddCommentScreen.routeName:
+        return _createRoute(const LotoAddCommentScreen());
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
       default:

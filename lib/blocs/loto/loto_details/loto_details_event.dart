@@ -48,6 +48,10 @@ class AcceptLotoEvent extends LotoDetailsEvent {
   AcceptLotoEvent();
 }
 
+class RemoveLotoEvent extends LotoDetailsEvent {
+  RemoveLotoEvent();
+}
+
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
   RemoveAssignWorkforce({required this.peopleId});
@@ -56,4 +60,9 @@ class RemoveAssignWorkforce extends LotoDetailsEvent {
 class LotoUploadPhotos extends LotoDetailsEvent {
   final String filename;
   LotoUploadPhotos({required this.filename});
+}
+
+class AddLotoComment extends LotoDetailsEvent {
+  final String comment;
+  AddLotoComment({required this.comment});
 }
