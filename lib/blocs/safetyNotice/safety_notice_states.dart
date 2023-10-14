@@ -48,9 +48,12 @@ class FetchingSafetyNoticeDetails extends SafetyNoticeStates {}
 class SafetyNoticeDetailsFetched extends SafetyNoticeStates {
   final FetchSafetyNoticeDetailsModel fetchSafetyNoticeDetailsModel;
   final String clientId;
+  final List popUpMenuOptionsList;
 
   SafetyNoticeDetailsFetched(
-      {required this.clientId, required this.fetchSafetyNoticeDetailsModel});
+      {required this.popUpMenuOptionsList,
+      required this.clientId,
+      required this.fetchSafetyNoticeDetailsModel});
 }
 
 class SafetyNoticeDetailsNotFetched extends SafetyNoticeStates {
