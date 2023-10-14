@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/assets_details_screen.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
@@ -26,54 +27,63 @@ class AssetsListScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing,
                 bottom: leftRightMargin),
-            child:
-                BlocBuilder<AssetsBloc, AssetsState>(builder: (context, state) {
-              if (state is AssetsListFetching) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is AssetsListFetched) {
-                return ListView.separated(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 15,
-                    itemBuilder: (context, index) {
-                      return CustomCard(
-                          child: Column(children: [
-                        ListTile(
-                            onTap: () {},
-                            title: Text(
-                                state.fetchAssetsListModel.data[index].name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .small
-                                    .copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: AppColor.black)),
-                            subtitle: Text(
-                              state.fetchAssetsListModel.data[index].tag,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColor.grey),
-                            ),
-                            trailing: Text(
-                              state.fetchAssetsListModel.data[index].status,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColor.deepBlue),
-                            ))
-                      ]));
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: tinierSpacing);
-                    });
-              } else {
-                return const SizedBox.shrink();
-              }
-            })));
+            child: BlocBuilder<AssetsBloc, AssetsState>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is AssetsListFetching ||
+                    currentState is AssetsListFetched ||
+                    currentState is AssetsListError,
+                builder: (context, state) {
+                  if (state is AssetsListFetching) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is AssetsListFetched) {
+                    return ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 15,
+                        itemBuilder: (context, index) {
+                          return CustomCard(
+                              child: Column(children: [
+                            ListTile(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, AssetsDetailsScreen.routeName,
+                                      arguments: state
+                                          .fetchAssetsListModel.data[index].id);
+                                },
+                                title: Text(
+                                    state.fetchAssetsListModel.data[index].name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .small
+                                        .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColor.black)),
+                                subtitle: Text(
+                                  state.fetchAssetsListModel.data[index].tag,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.grey),
+                                ),
+                                trailing: Text(
+                                  state.fetchAssetsListModel.data[index].status,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.deepBlue),
+                                ))
+                          ]));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: tinierSpacing);
+                        });
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                })));
   }
 }

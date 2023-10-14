@@ -6,6 +6,7 @@ import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_list_dart.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
@@ -370,7 +371,13 @@ class AppRoutes {
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
       case AssetsListScreen.routeName:
-        return _createRoute(const AssetsListScreen());
+        return _createRoute(
+          const AssetsListScreen(),
+        );
+      case AssetsDetailsScreen.routeName:
+        return _createRoute(AssetsDetailsScreen(
+          assetId: settings.arguments.toString(),
+        ));
       case AddAndEditSafetyNoticeScreen.routeName:
         return _createRoute(AddAndEditSafetyNoticeScreen());
       default:

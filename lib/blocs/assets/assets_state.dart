@@ -17,3 +17,17 @@ class AssetsListError extends AssetsState {
 
   AssetsListError({required this.errorMessage});
 }
+
+class AssetsDetailsFetching extends AssetsState {}
+
+class AssetsDetailsFetched extends AssetsState {
+  final FetchAssetsDetailsModel fetchAssetsDetailsModel;
+
+  AssetsDetailsFetched({required this.fetchAssetsDetailsModel});
+}
+
+class AssetsDetailsError extends AssetsState {
+  final String errorMessage;
+
+  AssetsDetailsError({required this.errorMessage});
+}
