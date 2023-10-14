@@ -6,6 +6,7 @@ import 'package:toolkit/repositories/assets/assets_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/assets/assets_details_model.dart';
 import '../../di/app_module.dart';
 
 part 'assets_event.dart';
@@ -18,7 +19,9 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   AssetsState get initialState => AssetsInitial();
   AssetsBloc() : super(AssetsInitial()) {
     on<FetchAssetsList>(_fetchAssetsList);
+    on<FetchAssetsDetails>(_fetchAssetsDetails);
   }
+  int assetTabIndex = 0;
 
   Future<FutureOr<void>> _fetchAssetsList(
       FetchAssetsList event, Emitter<AssetsState> emit) async {
@@ -30,6 +33,21 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       emit(AssetsListFetched(fetchAssetsListModel: fetchAssetsListModel));
     } catch (e) {
       emit(AssetsListError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssetsDetails(
+      FetchAssetsDetails event, Emitter<AssetsState> emit) async {
+    assetTabIndex = event.assetTabIndex;
+    emit(AssetsDetailsFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssetsDetailsModel fetchAssetsDetailsModel = await _assetsRepository
+          .fetchAssetsDetailsRepo(hashCode!, event.assetId);
+      emit(AssetsDetailsFetched(
+          fetchAssetsDetailsModel: fetchAssetsDetailsModel));
+    } catch (e) {
+      emit(AssetsDetailsError(errorMessage: e.toString()));
     }
   }
 }

@@ -7,3 +7,9 @@ class FetchAssetsList extends AssetsEvent {
 
   FetchAssetsList({required this.pageNo});
 }
+
+class FetchAssetsDetails extends AssetsEvent {
+  final String assetId;
+  final int assetTabIndex;
+  FetchAssetsDetails({required this.assetId, required this.assetTabIndex});
+}
