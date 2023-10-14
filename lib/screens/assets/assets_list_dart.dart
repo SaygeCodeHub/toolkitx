@@ -39,7 +39,7 @@ class AssetsListScreen extends StatelessWidget {
                     return ListView.separated(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 15,
+                        itemCount: state.fetchAssetsListModel.data.length,
                         itemBuilder: (context, index) {
                           return CustomCard(
                               child: Column(children: [
