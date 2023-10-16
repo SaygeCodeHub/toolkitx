@@ -4,10 +4,12 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'add_and_edit_safety_notice_screen.dart';
 
 class SafetyNoticePopUpMenuScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticePopUpMenuScreen';
   final List popUpMenuOptionsList;
+  static Map safetyNoticeDetailsMap = {};
 
   const SafetyNoticePopUpMenuScreen(
       {Key? key, required this.popUpMenuOptionsList})
@@ -28,7 +30,12 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
       icon: const Icon(Icons.more_vert_outlined),
       offset: const Offset(0, xxTinierSpacing),
       onSelected: (value) {
-        if (value == DatabaseUtil.getText('Edit')) {}
+        if (value == DatabaseUtil.getText('Edit')) {
+          AddAndEditSafetyNoticeScreen.isFromEditOption = true;
+          AddAndEditSafetyNoticeScreen.manageSafetyNoticeMap =
+              safetyNoticeDetailsMap;
+          Navigator.pushNamed(context, AddAndEditSafetyNoticeScreen.routeName);
+        }
         if (value == DatabaseUtil.getText('Issue')) {}
         if (value == DatabaseUtil.getText('Hold')) {}
         if (value == DatabaseUtil.getText('Cancel')) {}

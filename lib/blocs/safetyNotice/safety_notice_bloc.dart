@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/safetyNotice/safety_notice_events.dart';
 import 'package:toolkit/blocs/safetyNotice/safety_notice_states.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../di/app_module.dart';
@@ -12,6 +13,7 @@ import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
+import '../../data/safetyNotice/update_safety_notice_model.dart';
 import '../../repositories/safetyNotice/safety_notice_repository.dart';
 
 class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
@@ -30,6 +32,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<AddSafetyNotice>(_addSafetyNotice);
     on<SafetyNoticeSaveFiles>(_saveSafetyNoticeFiles);
     on<FetchSafetyNoticeDetails>(_fetchSafetyNoticeDetails);
+    on<UpdateSafetyNotice>(_updateSafetyNotice);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -72,9 +75,11 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
             await _safetyNoticeRepository.addSafetyNotices(addSafetyNoticeMap);
         if (addSafetyNoticeModel.status == 200) {
           emit(SafetyNoticeAdded(addSafetyNoticeModel: addSafetyNoticeModel));
-          add(SafetyNoticeSaveFiles(
-              safetyNoticeId: addSafetyNoticeModel.message,
-              addSafetyNoticeMap: event.addSafetyNoticeMap));
+          if (event.addSafetyNoticeMap['file_name'] != null) {
+            add(SafetyNoticeSaveFiles(
+                safetyNoticeId: addSafetyNoticeModel.message,
+                addSafetyNoticeMap: event.addSafetyNoticeMap));
+          }
         } else {
           emit(SafetyNoticeNotAdded(
               errorMessage:
@@ -119,6 +124,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       FetchSafetyNoticeDetailsModel fetchSafetyNoticeDetailsModel =
           await _safetyNoticeRepository.fetchSafetyNoticeDetails(
               event.safetyNoticeId, userId!, hashCode!);
@@ -143,12 +149,56 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       if (fetchSafetyNoticeDetailsModel.data.canClose == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Close'));
       }
+      String encryptedNoticeId = EncryptData.encryptAESPrivateKey(
+          fetchSafetyNoticeDetailsModel.data.noticeid, apiKey);
+      Map safetyNoticeDetailsMap = {
+        "notice": fetchSafetyNoticeDetailsModel.data.notice,
+        "validity": fetchSafetyNoticeDetailsModel.data.validity,
+        "noticeid": encryptedNoticeId,
+        'clientId': clientId,
+        'file_name': fetchSafetyNoticeDetailsModel.data.files
+      };
       emit(SafetyNoticeDetailsFetched(
           fetchSafetyNoticeDetailsModel: fetchSafetyNoticeDetailsModel,
           clientId: clientId!,
-          popUpMenuOptionsList: popUpMenuList));
+          popUpMenuOptionsList: popUpMenuList,
+          safetyNoticeDetailsMap: safetyNoticeDetailsMap));
     } catch (e) {
       emit(SafetyNoticeDetailsNotFetched(detailsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _updateSafetyNotice(
+      UpdateSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(UpdatingSafetyNotice());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map updateSafetyNoticeMap = {
+        "userid": userId,
+        "notice": event.updateSafetyNoticeMap['notice'] ?? '',
+        "validity": event.updateSafetyNoticeMap['validity'] ?? '',
+        "noticeid": event.updateSafetyNoticeMap['noticeid'] ?? '',
+        "hashcode": hashCode
+      };
+      UpdatingSafetyNoticeModel updatingSafetyNoticeModel =
+          await _safetyNoticeRepository
+              .updateSafetyNotices(updateSafetyNoticeMap);
+      if (updatingSafetyNoticeModel.status == 200) {
+        emit(SafetyNoticeUpdated(
+            updatingSafetyNoticeModel: updatingSafetyNoticeModel));
+        if (event.updateSafetyNoticeMap['file_name'] != null) {
+          add(SafetyNoticeSaveFiles(
+              safetyNoticeId: updatingSafetyNoticeModel.message,
+              addSafetyNoticeMap: event.updateSafetyNoticeMap));
+        }
+      } else {
+        emit(SafetyNoticeCouldNotUpdate(
+            noticeNotUpdated:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeCouldNotUpdate(noticeNotUpdated: e.toString()));
     }
   }
 }

@@ -380,7 +380,7 @@ class AppRoutes {
           assetId: settings.arguments.toString(),
         ));
       case AddAndEditSafetyNoticeScreen.routeName:
-        return _createRoute(AddAndEditSafetyNoticeScreen());
+        return _createRoute(const AddAndEditSafetyNoticeScreen());
       case SafetyNoticeDetailsScreen.routeName:
         return _createRoute(const SafetyNoticeDetailsScreen());
       default:
