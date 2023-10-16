@@ -39,6 +39,8 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
                     currentState is SafetyNoticeDetailsFetched,
                 builder: (context, state) {
                   if (state is SafetyNoticeDetailsFetched) {
+                    SafetyNoticePopUpMenuScreen.safetyNoticeDetailsMap =
+                        state.safetyNoticeDetailsMap;
                     return SafetyNoticePopUpMenuScreen(
                         popUpMenuOptionsList: state.popUpMenuOptionsList);
                   } else {

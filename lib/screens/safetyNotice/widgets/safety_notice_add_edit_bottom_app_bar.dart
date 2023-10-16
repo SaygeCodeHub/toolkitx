@@ -11,6 +11,7 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_loading_popup.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
+import '../add_and_edit_safety_notice_screen.dart';
 import '../safety_notice_screen.dart';
 
 class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
@@ -39,6 +40,12 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
                 ProgressBar.show(context);
               } else if (state is SafetyNoticeAdded) {
                 ProgressBar.dismiss(context);
+                if (manageSafetyNoticeMap['file_name'] == null) {
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, SafetyNoticeScreen.routeName,
+                      arguments: false);
+                }
               } else if (state is SafetyNoticeNotAdded) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.errorMessage, '');
@@ -55,12 +62,32 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
                 GenericLoadingPopUp.dismiss(context);
                 showCustomSnackBar(context, state.filesNotSaved, '');
               }
+              if (state is UpdatingSafetyNotice) {
+                ProgressBar.show(context);
+              } else if (state is SafetyNoticeUpdated) {
+                ProgressBar.dismiss(context);
+                if (manageSafetyNoticeMap['file_name'] == null) {
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, SafetyNoticeScreen.routeName,
+                      arguments: false);
+                }
+              } else if (state is SafetyNoticeCouldNotUpdate) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.noticeNotUpdated, '');
+              }
             },
             child: Expanded(
                 child: PrimaryButton(
                     onPressed: () {
-                      context.read<SafetyNoticeBloc>().add(AddSafetyNotice(
-                          addSafetyNoticeMap: manageSafetyNoticeMap));
+                      if (AddAndEditSafetyNoticeScreen.isFromEditOption ==
+                          true) {
+                        context.read<SafetyNoticeBloc>().add(UpdateSafetyNotice(
+                            updateSafetyNoticeMap: manageSafetyNoticeMap));
+                      } else {
+                        context.read<SafetyNoticeBloc>().add(AddSafetyNotice(
+                            addSafetyNoticeMap: manageSafetyNoticeMap));
+                      }
                     },
                     textValue: DatabaseUtil.getText('Save'))),
           )

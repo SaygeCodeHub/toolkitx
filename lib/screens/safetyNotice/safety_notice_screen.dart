@@ -29,6 +29,7 @@ class SafetyNoticeScreen extends StatelessWidget {
       appBar: GenericAppBar(title: DatabaseUtil.getText('SafetyNotice')),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
+            AddAndEditSafetyNoticeScreen.isFromEditOption = false;
             Navigator.pushNamed(
                 context, AddAndEditSafetyNoticeScreen.routeName);
           },

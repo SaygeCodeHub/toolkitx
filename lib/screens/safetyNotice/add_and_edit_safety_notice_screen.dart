@@ -11,15 +11,20 @@ import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'widgets/safety_notice_add_edit_bottom_app_bar.dart';
 import 'widgets/safety_notice_image_count.dart';
+import 'widgets/view_edit_safety_notice_images.dart';
 
 class AddAndEditSafetyNoticeScreen extends StatelessWidget {
   static const routeName = 'AddAndEditSafetyNoticeScreen';
-  final Map manageSafetyNoticeMap = {};
+  static Map manageSafetyNoticeMap = {};
+  static bool isFromEditOption = true;
 
-  AddAndEditSafetyNoticeScreen({Key? key}) : super(key: key);
+  const AddAndEditSafetyNoticeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    (isFromEditOption == false)
+        ? manageSafetyNoticeMap.clear()
+        : manageSafetyNoticeMap;
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
@@ -41,6 +46,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: xxxTinierSpacing),
               TextFieldWidget(
+                  value: manageSafetyNoticeMap['notice'] ?? '',
                   maxLength: 250,
                   maxLines: 3,
                   textInputAction: TextInputAction.next,
@@ -56,6 +62,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.w600)),
               const SizedBox(height: xxxTinierSpacing),
               TextFieldWidget(
+                  value: manageSafetyNoticeMap['validity'] ?? '',
                   maxLength: 10,
                   textInputAction: TextInputAction.done,
                   textInputType: TextInputType.number,
@@ -63,9 +70,13 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                     manageSafetyNoticeMap['validity'] = textField;
                   }),
               const SizedBox(height: xxTinySpacing),
+              const ViewEditSafetyNoticeImages(),
+              const SizedBox(height: xxTinySpacing),
               const SafetyNoticeImageCount(),
               const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
+                editedImageList:
+                    manageSafetyNoticeMap['file_name'].toString().split(','),
                 isUpload: true,
                 onUploadImageResponse: (List uploadImageList) {
                   manageSafetyNoticeMap['file_name'] = uploadImageList
