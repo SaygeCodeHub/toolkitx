@@ -44,3 +44,9 @@ class ClearDocumentFilter extends DocumentsEvents {}
 class GetDocumentsDetails extends DocumentsEvents {
   const GetDocumentsDetails();
 }
+
+class GetDocumentsToLink extends DocumentsEvents {
+  final int page;
+
+  const GetDocumentsToLink({required this.page});
+}

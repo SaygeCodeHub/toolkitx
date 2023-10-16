@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -60,7 +61,8 @@ class DocumentDetailsComments extends StatelessWidget {
                                     CustomGridImages(
                                         files: documentDetailsModel
                                             .data.comments[index].files,
-                                        clientId: clientId)
+                                        clientId: clientId,
+                                        baseUrl: ApiConstants.viewDocBaseUrl)
                                   ])))));
             },
             separatorBuilder: (context, index) {

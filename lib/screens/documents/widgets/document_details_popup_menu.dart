@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
+import '../link_document_screen.dart';
 
 class DocumentsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -26,15 +27,19 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
-          if (popUpMenuItems[value] == DatabaseUtil.getText('AddComments')) {
+          if (popUpMenuItems[value] == DatabaseUtil.getText('Edit')) {
+          } else if (popUpMenuItems[value] == DatabaseUtil.getText('Open')) {
+          } else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('dms_linkotherdocument')) {
+            Navigator.pushNamed(context, LinkDocumentScreen.routeName);
+          } else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('AddComments')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_attachdocument')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
-          } else if (popUpMenuItems[value] == DatabaseUtil.getText('Edit')) {
-          } else if (popUpMenuItems[value] == DatabaseUtil.getText('Open')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
           } else if (popUpMenuItems[value] ==

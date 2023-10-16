@@ -30,6 +30,7 @@ import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
+import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
@@ -372,17 +373,16 @@ class AppRoutes {
       case DocumentsDetailsScreen.routeName:
         return _createRoute(const DocumentsDetailsScreen());
       case AssetsListScreen.routeName:
-        return _createRoute(
-          const AssetsListScreen(),
-        );
+        return _createRoute(const AssetsListScreen());
       case AssetsDetailsScreen.routeName:
-        return _createRoute(AssetsDetailsScreen(
-          assetId: settings.arguments.toString(),
-        ));
+        return _createRoute(
+            AssetsDetailsScreen(assetId: settings.arguments.toString()));
       case AddAndEditSafetyNoticeScreen.routeName:
         return _createRoute(const AddAndEditSafetyNoticeScreen());
       case SafetyNoticeDetailsScreen.routeName:
         return _createRoute(const SafetyNoticeDetailsScreen());
+      case LinkDocumentScreen.routeName:
+        return _createRoute(const LinkDocumentScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

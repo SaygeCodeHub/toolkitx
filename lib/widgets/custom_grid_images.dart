@@ -13,9 +13,12 @@ import '../utils/incident_view_image_util.dart';
 class CustomGridImages extends StatelessWidget {
   final String files;
   final String clientId;
+  final String baseUrl;
 
-  const CustomGridImages(
-      {super.key, required this.files, required this.clientId});
+  const CustomGridImages({super.key,
+    required this.files,
+    required this.clientId,
+    required this.baseUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,7 @@ class CustomGridImages extends StatelessWidget {
               child: CachedNetworkImage(
                   height: kCachedNetworkImageHeight,
                   imageUrl:
-                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(files)[gridIndex]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                      '$baseUrl${ViewImageUtil.viewImageList(files)[gridIndex]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: AppColor.paleGrey,
                       highlightColor: AppColor.white,

@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/documents/document_roles_model.dart';
 
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
+import '../../data/models/documents/documents_to_link_model.dart';
 
 class DocumentsStates extends Equatable {
   const DocumentsStates();
@@ -106,4 +107,25 @@ class DocumentsDetailsError extends DocumentsStates {
   final String message;
 
   const DocumentsDetailsError({required this.message});
+}
+
+class FetchingDocumentsToLink extends DocumentsStates {
+  const FetchingDocumentsToLink();
+}
+
+class DocumentsToLinkFetched extends DocumentsStates {
+  final DocumentsToLinkModel documentsToLinkModel;
+  final List<DocumentsToLinkData> documentsToLinkList;
+
+  const DocumentsToLinkFetched(
+      {required this.documentsToLinkModel, required this.documentsToLinkList});
+
+  @override
+  List<Object?> get props => [documentsToLinkList];
+}
+
+class DocumentsToLinkError extends DocumentsStates {
+  final String message;
+
+  const DocumentsToLinkError({required this.message});
 }
