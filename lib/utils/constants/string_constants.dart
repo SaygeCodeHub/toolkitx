@@ -365,6 +365,10 @@ abstract class StringConstants {
   static const String kSumOfYearsDigits = "Sum of the Year's Digits";
   static const String kWarrantyStart = "WarrantyStart";
   static const String kWarrantyEnd = "Warranty End";
+  static const String kDescription = "Description";
+  static const String kDescriptionTitle = "Description:";
+  static const String kScAsset = "SCAsset";
+  static const String kChildPattern = "Child pattern";
   static const String kCostAndDepreciation = "Cost And Depreciation:";
   static const String kDepreciationMethod = "Depreciation Method";
   static const String kPurchaseDate = "Purchase Date";

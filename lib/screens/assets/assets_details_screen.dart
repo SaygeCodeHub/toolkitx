@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/assets/widgets/assets_codes_tab.dart';
 import 'package:toolkit/screens/assets/widgets/assets_cost_and_depreciation_tab.dart';
+import 'package:toolkit/screens/assets/widgets/assets_description_tab.dart';
 import 'package:toolkit/screens/assets/widgets/assets_details_tab.dart';
 import 'package:toolkit/utils/asset_util.dart';
 
@@ -92,7 +93,8 @@ class AssetsDetailsScreen extends StatelessWidget {
                                   data: state.fetchAssetsDetailsModel.data,
                                   fetchAssetsDetailsModel:
                                       state.fetchAssetsDetailsModel),
-                              const Text("Tab 6"),
+                              AssetsDescriptionTab(
+                                  data: state.fetchAssetsDetailsModel.data),
                             ])
                       ]));
                 } else {
