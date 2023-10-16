@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/assets/assets_details_tab.dart';
 import 'package:toolkit/utils/asset_util.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
@@ -13,9 +14,7 @@ import '../../widgets/status_tag.dart';
 
 class AssetsDetailsScreen extends StatelessWidget {
   static const routeName = 'AssetsDetailsScreen';
-
   const AssetsDetailsScreen({super.key, required this.assetId});
-
   final String assetId;
 
   @override
@@ -76,13 +75,14 @@ class AssetsDetailsScreen extends StatelessWidget {
                             tabBarViewIcons: AssetUtil().tabBarViewIcons,
                             initialIndex:
                                 context.read<AssetsBloc>().assetTabIndex,
-                            tabBarViewWidgets: const [
-                              Text("Tab 1"),
-                              Text("Tab 2"),
-                              Text("Tab 3"),
-                              Text("Tab 4"),
-                              Text("Tab 5"),
-                              Text("Tab 6"),
+                            tabBarViewWidgets: [
+                              AssetsDetailsTab(
+                                  data: state.fetchAssetsDetailsModel.data),
+                              const Text("Tab 2"),
+                              const Text("Tab 3"),
+                              const Text("Tab 4"),
+                              const Text("Tab 5"),
+                              const Text("Tab 6"),
                             ])
                       ]));
                 } else {
