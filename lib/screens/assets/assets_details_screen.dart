@@ -78,11 +78,11 @@ class AssetsDetailsScreen extends StatelessWidget {
                             tabBarViewWidgets: [
                               AssetsDetailsTab(
                                   data: state.fetchAssetsDetailsModel.data),
-                              Text("Tab 2"),
-                              Text("Tab 3"),
-                              Text("Tab 4"),
-                              Text("Tab 5"),
-                              Text("Tab 6"),
+                              const Text("Tab 2"),
+                              const Text("Tab 3"),
+                              const Text("Tab 4"),
+                              const Text("Tab 5"),
+                              const Text("Tab 6"),
                             ])
                       ]));
                 } else {
