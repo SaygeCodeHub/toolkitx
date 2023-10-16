@@ -3,48 +3,57 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../configs/app_color.dart';
+import '../../../utils/asset_depreciation_util.dart';
 
-class AssetsCodesTab extends StatelessWidget {
-  const AssetsCodesTab({super.key, required this.data});
-
+class AssetsCostAndDepreciationTab extends StatelessWidget {
+  const AssetsCostAndDepreciationTab(
+      {super.key, required this.data, required this.fetchAssetsDetailsModel});
   final Data data;
+  final FetchAssetsDetailsModel fetchAssetsDetailsModel;
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(StringConstants.kCodes,
+      Text(StringConstants.kCostAndDepreciation,
           style: Theme.of(context)
               .textTheme
               .medium
               .copyWith(fontWeight: FontWeight.bold, color: AppColor.grey)),
       const SizedBox(height: xxxSmallestSpacing),
-      Text(DatabaseUtil.getText("CostCente"),
+      Text(StringConstants.kDepreciationMethod,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.costcenter, style: Theme.of(context).textTheme.smallTextGrey),
+      Text(
+          AssetsDepreciationUtil()
+              .assetsDepreciationWidget(fetchAssetsDetailsModel),
+          style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
-      Text(StringConstants.kLatitude,
+      Text(StringConstants.kPurchaseDate,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.latitude, style: Theme.of(context).textTheme.smallTextGrey),
+      Text(data.purchasedate, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
-      Text(StringConstants.kAccount,
+      Text(StringConstants.kSalvageValue,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.account, style: Theme.of(context).textTheme.smallTextGrey),
+      Text(data.salvagevalue, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
-      Text(StringConstants.kDepartment,
+      Text(StringConstants.kAssetCost,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.department, style: Theme.of(context).textTheme.smallTextGrey),
+      Text(data.assetcost, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
-      Text(StringConstants.kLongitude,
+      Text(StringConstants.kLifespanYears,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.longitude, style: Theme.of(context).textTheme.smallTextGrey),
+      Text(data.depyears, style: Theme.of(context).textTheme.smallTextGrey),
+      const SizedBox(height: xxxSmallestSpacing),
+      Text(StringConstants.kDepreciationFactor,
+          style: Theme.of(context).textTheme.smallTextBlack),
+      const SizedBox(height: tiniestSpacing),
+      Text(data.depfactor, style: Theme.of(context).textTheme.smallTextGrey),
     ]);
   }
 }

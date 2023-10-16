@@ -360,7 +360,17 @@ abstract class StringConstants {
   static const String kAccount = "Account";
   static const String kDepartment = "Department";
   static const String kLongitude = "Longitude";
+  static const String kStraightLine = "Straight-Line";
+  static const String kDecliningBalance = "Declining Balance";
+  static const String kSumOfYearsDigits = "Sum of the Year's Digits";
   static const String kWarrantyStart = "WarrantyStart";
   static const String kWarrantyEnd = "Warranty End";
+  static const String kCostAndDepreciation = "Cost And Depreciation:";
+  static const String kDepreciationMethod = "Depreciation Method";
+  static const String kPurchaseDate = "Purchase Date";
+  static const String kSalvageValue = "Salvage Value";
+  static const String kAssetCost = "Asset Cost";
+  static const String kLifespanYears = "Lifespan (Years)";
+  static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
 }
