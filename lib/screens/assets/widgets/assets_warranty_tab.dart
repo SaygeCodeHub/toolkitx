@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../configs/app_color.dart';
+import '../../../configs/app_color.dart';
 
 class AssetsWarrantyTab extends StatelessWidget {
   const AssetsWarrantyTab({super.key, required this.data});

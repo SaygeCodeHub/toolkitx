@@ -353,6 +353,11 @@ abstract class StringConstants {
   static const String kLinkedTo = "Linked To";
   static const String kExtId = "Ext.Id";
   static const String kWarranty = "Warranty:";
+  static const String kCodes = "Codes:";
+  static const String kLatitude = "Latitude";
+  static const String kAccount = "Account";
+  static const String kDepartment = "Department";
+  static const String kLongitude = "Longitude";
   static const String kWarrantyStart = "WarrantyStart";
   static const String kWarrantyEnd = "Warranty End";
   static const String kNoLinkedDoc = 'No Linked Documents!';
