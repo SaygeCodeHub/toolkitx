@@ -189,21 +189,21 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   Future<FutureOr<void>> _fetchDocumentsToLink(
       GetDocumentsToLink event, Emitter<DocumentsStates> emit) async {
     emit(const FetchingDocumentsToLink());
-    // try {
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    if (!linkDocumentsReachedMax) {
-      DocumentsToLinkModel documentsToLinkModel =
-          await _documentsRepository.getDocumentsToLink(
-              jsonEncode(linkDocFilters), hashCode, documentId, event.page);
-      documentsToLinkList.addAll(documentsToLinkModel.data);
-      linkDocumentsReachedMax = documentsToLinkModel.data.isEmpty;
-      emit(DocumentsToLinkFetched(
-          documentsToLinkModel: documentsToLinkModel,
-          documentsToLinkList: documentsToLinkList));
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (!linkDocumentsReachedMax) {
+        DocumentsToLinkModel documentsToLinkModel =
+            await _documentsRepository.getDocumentsToLink(
+                jsonEncode(linkDocFilters), hashCode, documentId, event.page);
+        documentsToLinkList.addAll(documentsToLinkModel.data);
+        linkDocumentsReachedMax = documentsToLinkModel.data.isEmpty;
+        emit(DocumentsToLinkFetched(
+            documentsToLinkModel: documentsToLinkModel,
+            documentsToLinkList: documentsToLinkList));
+      }
+    } catch (e) {
+      emit(DocumentMasterError(fetchError: e.toString()));
     }
-    // } catch (e) {
-    //   emit(DocumentMasterError(fetchError: e.toString()));
-    // }
   }
 }

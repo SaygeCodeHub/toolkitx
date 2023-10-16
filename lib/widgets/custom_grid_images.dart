@@ -15,10 +15,11 @@ class CustomGridImages extends StatelessWidget {
   final String clientId;
   final String baseUrl;
 
-  const CustomGridImages({super.key,
-    required this.files,
-    required this.clientId,
-    required this.baseUrl});
+  const CustomGridImages(
+      {super.key,
+      required this.files,
+      required this.clientId,
+      required this.baseUrl});
 
   @override
   Widget build(BuildContext context) {

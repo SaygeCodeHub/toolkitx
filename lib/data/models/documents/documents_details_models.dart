@@ -214,11 +214,10 @@ class ApproveList {
   ApproveList(
       {required this.approve, required this.remark, required this.group});
 
-  factory ApproveList.fromJson(Map<String, dynamic> json) =>
-      ApproveList(
-          approve: json["approve"] ?? '',
-          remark: json["remark"] ?? '',
-          group: json["group"]);
+  factory ApproveList.fromJson(Map<String, dynamic> json) => ApproveList(
+      approve: json["approve"] ?? '',
+      remark: json["remark"] ?? '',
+      group: json["group"]);
 
   Map<String, dynamic> toJson() =>
       {"approve": approve, "remark": remark, "group": group};
@@ -237,8 +236,7 @@ class Comment {
     required this.comments,
   });
 
-  factory Comment.fromJson(Map<String, dynamic> json) =>
-      Comment(
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         ownername: json["ownername"],
         created: json["created"],
         files: json["files"] ?? '',
