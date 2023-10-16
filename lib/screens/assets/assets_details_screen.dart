@@ -11,6 +11,7 @@ import '../../data/models/status_tag_model.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'assets_it_info_tab.dart';
 import 'assets_warranty_tab.dart';
 
 class AssetsDetailsScreen extends StatelessWidget {
@@ -81,7 +82,9 @@ class AssetsDetailsScreen extends StatelessWidget {
                                   data: state.fetchAssetsDetailsModel.data),
                               AssetsWarrantyTab(
                                   data: state.fetchAssetsDetailsModel.data),
-                              const Text("Tab 3"),
+                              AssetsITInfoTab(
+                                data: state.fetchAssetsDetailsModel.data,
+                              ),
                               const Text("Tab 4"),
                               const Text("Tab 5"),
                               const Text("Tab 6"),

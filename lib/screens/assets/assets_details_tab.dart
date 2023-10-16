@@ -3,8 +3,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-
-import '../../configs/app_color.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 class AssetsDetailsTab extends StatelessWidget {
   const AssetsDetailsTab({super.key, required this.data});
@@ -37,7 +36,7 @@ class AssetsDetailsTab extends StatelessWidget {
           Text(data.assetgroupname,
               style: Theme.of(context).textTheme.smallTextGrey),
           const SizedBox(height: xxxSmallestSpacing),
-          Text(StringConstants.kCategory,
+          Text(DatabaseUtil.getText("Category"),
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),
           Text(data.subcategory,
@@ -60,12 +59,12 @@ class AssetsDetailsTab extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(data.position, style: Theme.of(context).textTheme.smallTextGrey),
           const SizedBox(height: xxxSmallestSpacing),
-          Text(StringConstants.kLocation,
+          Text(DatabaseUtil.getText("Location"),
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),
           Text(data.location, style: Theme.of(context).textTheme.smallTextGrey),
           const SizedBox(height: xxxSmallestSpacing),
-          Text(StringConstants.kPriority,
+          Text(DatabaseUtil.getText("Priority"),
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),
           Text(data.priority, style: Theme.of(context).textTheme.smallTextGrey),
@@ -73,11 +72,7 @@ class AssetsDetailsTab extends StatelessWidget {
           Text(StringConstants.kState,
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),
-          Text(data.status,
-              style: Theme.of(context)
-                  .textTheme
-                  .xSmall
-                  .copyWith(fontWeight: FontWeight.w400, color: AppColor.grey)),
+          Text(data.status, style: Theme.of(context).textTheme.smallTextGrey),
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kAssetSpecialist,
               style: Theme.of(context).textTheme.smallTextBlack),

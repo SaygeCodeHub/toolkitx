@@ -13,26 +13,23 @@ class AssetsWarrantyTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(StringConstants.kWarranty,
-              style: Theme.of(context)
-                  .textTheme
-                  .medium
-                  .copyWith(fontWeight: FontWeight.w500, color: AppColor.grey)),
-          const SizedBox(height: smallestSpacing),
-          Text(StringConstants.kWarrantyStart,
-              style: Theme.of(context).textTheme.smallTextBlack),
-          const SizedBox(height: tiniestSpacing),
-          Text(data.warrantystart,
-              style: Theme.of(context).textTheme.smallTextGrey),
-          const SizedBox(height: xxxSmallestSpacing),
-          Text(StringConstants.kWarrantyEnd,
-              style: Theme.of(context).textTheme.smallTextBlack),
-          const SizedBox(height: tiniestSpacing),
-          Text(data.warrantyend,
-              style: Theme.of(context).textTheme.smallTextGrey),
-        ]));
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(StringConstants.kWarranty,
+          style: Theme.of(context)
+              .textTheme
+              .medium
+              .copyWith(fontWeight: FontWeight.w500, color: AppColor.grey)),
+      const SizedBox(height: xxxSmallestSpacing),
+      Text(StringConstants.kWarrantyStart,
+          style: Theme.of(context).textTheme.smallTextBlack),
+      const SizedBox(height: tiniestSpacing),
+      Text(data.warrantystart,
+          style: Theme.of(context).textTheme.smallTextGrey),
+      const SizedBox(height: xxxSmallestSpacing),
+      Text(StringConstants.kWarrantyEnd,
+          style: Theme.of(context).textTheme.smallTextBlack),
+      const SizedBox(height: tiniestSpacing),
+      Text(data.warrantyend, style: Theme.of(context).textTheme.smallTextGrey),
+    ]);
   }
 }
