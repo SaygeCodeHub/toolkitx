@@ -1,4 +1,5 @@
 import '../../data/safetyNotice/add_safety_notice_model.dart';
+import '../../data/safetyNotice/close_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/hold_safety_notice_model.dart';
@@ -107,4 +108,18 @@ class SafetyNoticeNotOnHold extends SafetyNoticeStates {
   final String noticeNotOnHold;
 
   SafetyNoticeNotOnHold({required this.noticeNotOnHold});
+}
+
+class ClosingSafetyNotice extends SafetyNoticeStates {}
+
+class SafetyNoticeClosed extends SafetyNoticeStates {
+  final CloseSafetyNoticeModel closeSafetyNoticeModel;
+
+  SafetyNoticeClosed({required this.closeSafetyNoticeModel});
+}
+
+class SafetyNoticeNotClosed extends SafetyNoticeStates {
+  final String noticeNotClosed;
+
+  SafetyNoticeNotClosed({required this.noticeNotClosed});
 }

@@ -38,3 +38,5 @@ class UpdateSafetyNotice extends SafetyNoticeEvent {
 }
 
 class HoldSafetyNotice extends SafetyNoticeEvent {}
+
+class CloseSafetyNotice extends SafetyNoticeEvent {}
