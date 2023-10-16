@@ -336,7 +336,7 @@ abstract class StringConstants {
   static const String kParentAsset = "Parent Asset";
   static const String kPosition = "Position";
   static const String kPriority = "Priority";
-  static const String kState = "AState";
+  static const String kState = "State";
   static const String kAssetSpecialist = "Asset Specialist";
   static const String kBarcode = "Barcode";
   static const String kSerial = "Serial#";
