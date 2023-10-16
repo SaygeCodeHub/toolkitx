@@ -207,7 +207,7 @@ class DocumentDetailsData {
 }
 
 class ApproveList {
-  final int approve;
+  final dynamic approve;
   final String remark;
   final String group;
 
@@ -226,7 +226,7 @@ class ApproveList {
 class Comment {
   final String ownername;
   final String created;
-  final String files;
+  final dynamic files;
   final String comments;
 
   Comment({
@@ -239,7 +239,7 @@ class Comment {
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         ownername: json["ownername"],
         created: json["created"],
-        files: json["files"],
+        files: json["files"] ?? '',
         comments: json["comments"],
       );
 

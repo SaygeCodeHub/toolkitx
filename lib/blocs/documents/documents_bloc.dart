@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -25,6 +26,9 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   String selectedType = '';
   List<DocumentsListDatum> documentsListDatum = [];
   String documentId = '';
+  Map linkDocFilters = {};
+  List<DocumentsToLinkData> documentsToLinkList = [];
+  bool linkDocumentsReachedMax = false;
 
   DocumentsStates get initialState => const DocumentsInitial();
 
@@ -38,6 +42,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<ApplyDocumentFilter>(_applyDocumentFilter);
     on<ClearDocumentFilter>(_clearDocumentFilter);
     on<GetDocumentsDetails>(_getDocumentsDetails);
+    on<GetDocumentsToLink>(_fetchDocumentsToLink);
   }
 
   Future<void> _getDocumentsList(
@@ -145,7 +150,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       String clientId =
           await _customerCache.getClientId(CacheKeys.clientId) ?? '';
-      List documentsPopUpMenu = ['Link Documents'];
+      List documentsPopUpMenu = [DatabaseUtil.getText('dms_linkotherdocument')];
       DocumentDetailsModel documentDetailsModel = await _documentsRepository
           .getDocumentsDetails(userId, hashCode, roleId, documentId);
       if (documentDetailsModel.data.canaddcomments == '1') {
@@ -178,6 +183,27 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
           clientId: clientId));
     } catch (e) {
       emit(DocumentsDetailsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchDocumentsToLink(
+      GetDocumentsToLink event, Emitter<DocumentsStates> emit) async {
+    emit(const FetchingDocumentsToLink());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (!linkDocumentsReachedMax) {
+        DocumentsToLinkModel documentsToLinkModel =
+            await _documentsRepository.getDocumentsToLink(
+                jsonEncode(linkDocFilters), hashCode, documentId, event.page);
+        documentsToLinkList.addAll(documentsToLinkModel.data);
+        linkDocumentsReachedMax = documentsToLinkModel.data.isEmpty;
+        emit(DocumentsToLinkFetched(
+            documentsToLinkModel: documentsToLinkModel,
+            documentsToLinkList: documentsToLinkList));
+      }
+    } catch (e) {
+      emit(DocumentMasterError(fetchError: e.toString()));
     }
   }
 }
