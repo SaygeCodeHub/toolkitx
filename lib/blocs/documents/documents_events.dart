@@ -50,3 +50,9 @@ class GetDocumentsToLink extends DocumentsEvents {
 
   const GetDocumentsToLink({required this.page});
 }
+
+class SaveLinkedDocuments extends DocumentsEvents {
+  final String linkedDocuments;
+
+  SaveLinkedDocuments({required this.linkedDocuments});
+}
