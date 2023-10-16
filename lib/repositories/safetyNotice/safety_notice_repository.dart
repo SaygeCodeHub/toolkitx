@@ -6,8 +6,8 @@ import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
 
 abstract class SafetyNoticeRepository {
-  Future<FetchSafetyNoticesModel> fetchSafetyNotices(int pageNo, String userId,
-      String hashCode, String filter);
+  Future<FetchSafetyNoticesModel> fetchSafetyNotices(
+      int pageNo, String userId, String hashCode, String filter);
 
   Future<AddSafetyNoticeModel> addSafetyNotices(Map addSafetyNoticeMap);
 
