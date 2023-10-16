@@ -67,7 +67,21 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Cancel')) {}
+        if (value == DatabaseUtil.getText('Cancel')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: StringConstants.kSafetyNoticeCancel,
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context
+                          .read<SafetyNoticeBloc>()
+                          .add(CancelSafetyNotice());
+                      Navigator.pop(context);
+                    });
+              });
+        }
         if (value == DatabaseUtil.getText('Close')) {}
         if (value == DatabaseUtil.getText('Reissue')) {}
       },
