@@ -11,7 +11,6 @@ import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/documents/documents_repository.dart';
-import '../../screens/documents/widgets/documents_details_files.dart';
 import 'documents_events.dart';
 import 'documents_states.dart';
 
@@ -144,7 +143,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      DocumentDetailsFiles.clientId =
+      String clientId =
           await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       List documentsPopUpMenu = ['Link Documents'];
       DocumentDetailsModel documentDetailsModel = await _documentsRepository
@@ -175,7 +174,8 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
       emit(DocumentsDetailsFetched(
           documentDetailsModel: documentDetailsModel,
-          documentsPopUpMenu: documentsPopUpMenu));
+          documentsPopUpMenu: documentsPopUpMenu,
+          clientId: clientId));
     } catch (e) {
       emit(DocumentsDetailsError(message: e.toString()));
     }

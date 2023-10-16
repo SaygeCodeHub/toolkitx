@@ -341,4 +341,5 @@ abstract class StringConstants {
   static const String kBarcode = "Barcode";
   static const String kSerial = "Serial#";
   static const String kModel = "Model";
+  static const String kNoLinkedDoc = 'No Linked Documents!';
 }

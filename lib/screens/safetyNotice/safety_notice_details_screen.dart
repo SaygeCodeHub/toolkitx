@@ -16,6 +16,7 @@ import '../../utils/safety_notice_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'safety_notice_pop_up_menu_screen.dart';
 import 'widgets/safety_notice_details_tab_two.dart';
 import 'widgets/safety_notice_list_card.dart';
 import 'widgets/safety_notice_tab_one.dart';
@@ -30,7 +31,22 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
     context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
         safetyNoticeId: SafetyNoticeListCard.safetyNoticeId, tabIndex: 0));
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('SafetyNotice')),
+        appBar: GenericAppBar(
+          title: DatabaseUtil.getText('SafetyNotice'),
+          actions: [
+            BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is SafetyNoticeDetailsFetched,
+                builder: (context, state) {
+                  if (state is SafetyNoticeDetailsFetched) {
+                    return SafetyNoticePopUpMenuScreen(
+                        popUpMenuOptionsList: state.popUpMenuOptionsList);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                })
+          ],
+        ),
         body: BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
           buildWhen: (previousState, currentState) =>
               currentState is FetchingSafetyNoticeDetails ||

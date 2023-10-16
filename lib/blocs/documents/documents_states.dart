@@ -94,9 +94,12 @@ class FetchingDocumentsDetails extends DocumentsStates {
 class DocumentsDetailsFetched extends DocumentsStates {
   final DocumentDetailsModel documentDetailsModel;
   final List documentsPopUpMenu;
+  final String clientId;
 
   const DocumentsDetailsFetched(
-      {required this.documentDetailsModel, required this.documentsPopUpMenu});
+      {required this.documentDetailsModel,
+      required this.documentsPopUpMenu,
+      required this.clientId});
 }
 
 class DocumentsDetailsError extends DocumentsStates {
