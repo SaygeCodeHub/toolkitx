@@ -328,4 +328,17 @@ abstract class StringConstants {
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
   static const String kNoFiles = 'No Files found!';
+  static const String kAssetName = "Asset Name";
+  static const String kAssetTag = "Asset Tag";
+  static const String kServiceSite = "Service Site";
+  static const String kAssetGroup = "Asset Group";
+  static const String kCritically = "Critically";
+  static const String kParentAsset = "Parent Asset";
+  static const String kPosition = "Position";
+  static const String kPriority = "Priority";
+  static const String kState = "AState";
+  static const String kAssetSpecialist = "Asset Specialist";
+  static const String kBarcode = "Barcode";
+  static const String kSerial = "Serial#";
+  static const String kModel = "Model";
 }

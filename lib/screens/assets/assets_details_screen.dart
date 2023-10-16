@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/assets/assets_details_tab.dart';
 import 'package:toolkit/utils/asset_util.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
@@ -76,8 +77,9 @@ class AssetsDetailsScreen extends StatelessWidget {
                             tabBarViewIcons: AssetUtil().tabBarViewIcons,
                             initialIndex:
                                 context.read<AssetsBloc>().assetTabIndex,
-                            tabBarViewWidgets: const [
-                              Text("Tab 1"),
+                            tabBarViewWidgets: [
+                              AssetsDetailsTab(
+                                  data: state.fetchAssetsDetailsModel.data),
                               Text("Tab 2"),
                               Text("Tab 3"),
                               Text("Tab 4"),
