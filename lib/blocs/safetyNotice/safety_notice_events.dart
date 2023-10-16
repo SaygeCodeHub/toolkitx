@@ -36,3 +36,5 @@ class UpdateSafetyNotice extends SafetyNoticeEvent {
 
   UpdateSafetyNotice({required this.updateSafetyNoticeMap});
 }
+
+class HoldSafetyNotice extends SafetyNoticeEvent {}

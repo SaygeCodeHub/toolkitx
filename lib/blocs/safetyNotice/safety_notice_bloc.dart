@@ -12,6 +12,7 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
+import '../../data/safetyNotice/hold_safety_notice_model.dart';
 import '../../data/safetyNotice/issue_safety_notice_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
@@ -36,6 +37,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<FetchSafetyNoticeDetails>(_fetchSafetyNoticeDetails);
     on<UpdateSafetyNotice>(_updateSafetyNotice);
     on<IssueSafetyNotice>(_issueSafetyNotice);
+    on<HoldSafetyNotice>(_holdSafetyNotice);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -229,6 +231,31 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeFailedToIssue(noticeNotIssued: e.toString()));
+    }
+  }
+
+  FutureOr<void> _holdSafetyNotice(
+      HoldSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(PuttingSafetyNoticeOnHold());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map holdSafetyNoticeMap = {
+        "userid": userId,
+        "noticeid": safetyNoticeDetailsMap['noticeid'],
+        "hashcode": hashCode
+      };
+      HoldSafetyNoticeModel holdSafetyNoticeModel =
+          await _safetyNoticeRepository.holdSafetyNotices(holdSafetyNoticeMap);
+      if (holdSafetyNoticeModel.status == 200) {
+        emit(SafetyNoticeOnHold(holdSafetyNoticeModel: holdSafetyNoticeModel));
+      } else {
+        emit(SafetyNoticeNotOnHold(
+            noticeNotOnHold:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeNotOnHold(noticeNotOnHold: e.toString()));
     }
   }
 }
