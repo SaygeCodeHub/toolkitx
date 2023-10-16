@@ -11,6 +11,7 @@ import '../../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/cancel_safety_notice_model.dart';
+import '../../data/safetyNotice/close_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/hold_safety_notice_model.dart';
@@ -40,6 +41,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<IssueSafetyNotice>(_issueSafetyNotice);
     on<HoldSafetyNotice>(_holdSafetyNotice);
     on<CancelSafetyNotice>(_cancelSafetyNotice);
+    on<CloseSafetyNotice>(_closeSafetyNotice);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -285,6 +287,32 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeNotCancelled(noticeNotCancelled: e.toString()));
+    }
+  }
+
+  FutureOr<void> _closeSafetyNotice(
+      CloseSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(ClosingSafetyNotice());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map closeSafetyNoticeMap = {
+        "userid": userId,
+        "noticeid": safetyNoticeDetailsMap['noticeid'],
+        "hashcode": hashCode
+      };
+      CloseSafetyNoticeModel closeSafetyNoticeModel =
+          await _safetyNoticeRepository.closeSafetyNotice(closeSafetyNoticeMap);
+      if (closeSafetyNoticeModel.status == 200) {
+        emit(
+            SafetyNoticeClosed(closeSafetyNoticeModel: closeSafetyNoticeModel));
+      } else {
+        emit(SafetyNoticeNotClosed(
+            noticeNotClosed:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeNotClosed(noticeNotClosed: e.toString()));
     }
   }
 }
