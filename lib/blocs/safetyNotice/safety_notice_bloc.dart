@@ -12,6 +12,7 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
+import '../../data/safetyNotice/issue_safety_notice_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
 import '../../repositories/safetyNotice/safety_notice_repository.dart';
@@ -24,6 +25,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   List<Notice> noticesDatum = [];
   String safetyNoticeId = '';
   int safetyNoticeTabIndex = 0;
+  Map safetyNoticeDetailsMap = {};
 
   SafetyNoticeStates get initialState => SafetyNoticeInitialState();
 
@@ -33,6 +35,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<SafetyNoticeSaveFiles>(_saveSafetyNoticeFiles);
     on<FetchSafetyNoticeDetails>(_fetchSafetyNoticeDetails);
     on<UpdateSafetyNotice>(_updateSafetyNotice);
+    on<IssueSafetyNotice>(_issueSafetyNotice);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -151,7 +154,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
       String encryptedNoticeId = EncryptData.encryptAESPrivateKey(
           fetchSafetyNoticeDetailsModel.data.noticeid, apiKey);
-      Map safetyNoticeDetailsMap = {
+      safetyNoticeDetailsMap = {
         "notice": fetchSafetyNoticeDetailsModel.data.notice,
         "validity": fetchSafetyNoticeDetailsModel.data.validity,
         "noticeid": encryptedNoticeId,
@@ -199,6 +202,33 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeCouldNotUpdate(noticeNotUpdated: e.toString()));
+    }
+  }
+
+  FutureOr<void> _issueSafetyNotice(
+      IssueSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(IssuingSafetyNotice());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map issueSafetyNoticeMap = {
+        "userid": userId,
+        "noticeid": safetyNoticeDetailsMap['noticeid'],
+        "hashcode": hashCode
+      };
+      IssueSafetyNoticeModel issueSafetyNoticeModel =
+          await _safetyNoticeRepository
+              .issueSafetyNotices(issueSafetyNoticeMap);
+      if (issueSafetyNoticeModel.status == 200) {
+        emit(
+            SafetyNoticeIssued(issueSafetyNoticeModel: issueSafetyNoticeModel));
+      } else {
+        emit(SafetyNoticeFailedToIssue(
+            noticeNotIssued:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeFailedToIssue(noticeNotIssued: e.toString()));
     }
   }
 }

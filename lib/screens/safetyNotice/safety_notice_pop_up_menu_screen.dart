@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
+import '../../blocs/safetyNotice/safety_notice_bloc.dart';
+import '../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
@@ -36,7 +41,19 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
               safetyNoticeDetailsMap;
           Navigator.pushNamed(context, AddAndEditSafetyNoticeScreen.routeName);
         }
-        if (value == DatabaseUtil.getText('Issue')) {}
+        if (value == DatabaseUtil.getText('Issue')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: StringConstants.kSafetyNoticeIssue,
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<SafetyNoticeBloc>().add(IssueSafetyNotice());
+                      Navigator.pop(context);
+                    });
+              });
+        }
         if (value == DatabaseUtil.getText('Hold')) {}
         if (value == DatabaseUtil.getText('Cancel')) {}
         if (value == DatabaseUtil.getText('Close')) {}
