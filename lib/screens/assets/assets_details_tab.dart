@@ -4,8 +4,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../configs/app_color.dart';
-
 class AssetsDetailsTab extends StatelessWidget {
   const AssetsDetailsTab({super.key, required this.data});
   final Data data;
@@ -73,11 +71,7 @@ class AssetsDetailsTab extends StatelessWidget {
           Text(StringConstants.kState,
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),
-          Text(data.status,
-              style: Theme.of(context)
-                  .textTheme
-                  .xSmall
-                  .copyWith(fontWeight: FontWeight.w400, color: AppColor.grey)),
+          Text(data.status, style: Theme.of(context).textTheme.smallTextGrey),
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kAssetSpecialist,
               style: Theme.of(context).textTheme.smallTextBlack),

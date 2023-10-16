@@ -21,7 +21,7 @@ class AssetsWarrantyTab extends StatelessWidget {
                   .textTheme
                   .medium
                   .copyWith(fontWeight: FontWeight.w500, color: AppColor.grey)),
-          const SizedBox(height: smallestSpacing),
+          const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kWarrantyStart,
               style: Theme.of(context).textTheme.smallTextBlack),
           const SizedBox(height: tiniestSpacing),

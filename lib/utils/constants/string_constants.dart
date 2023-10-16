@@ -341,6 +341,17 @@ abstract class StringConstants {
   static const String kBarcode = "Barcode";
   static const String kSerial = "Serial#";
   static const String kModel = "Model";
+  static const String kITInfo = "IT Info:";
+  static const String kITType = "IT Type";
+  static const String kITFlag = "IT Flag";
+  static const String kIP = "IP";
+  static const String kOtherIp = "Other IP";
+  static const String kMACAddress = "MAC Address";
+  static const String kSubType = "Sub Type";
+  static const String kOSName = "OS Name";
+  static const String kSystemID = "System ID";
+  static const String kLinkedTo = "Linked To";
+  static const String kExtId = "Ext.Id";
   static const String kWarranty = "Warranty:";
   static const String kWarrantyStart = "WarrantyStart";
   static const String kWarrantyEnd = "Warranty End";
