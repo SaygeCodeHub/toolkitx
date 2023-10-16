@@ -1,5 +1,6 @@
 import 'package:toolkit/data/safetyNotice/add_safety_notice_model.dart';
 import 'package:toolkit/data/safetyNotice/fetch_safety_notice_details_model.dart';
+import 'package:toolkit/data/safetyNotice/hold_safety_notice_model.dart';
 import 'package:toolkit/data/safetyNotice/issue_safety_notice_model.dart';
 import 'package:toolkit/data/safetyNotice/save_safety_notice_files_model.dart';
 import 'package:toolkit/data/safetyNotice/update_safety_notice_model.dart';
@@ -55,5 +56,13 @@ class SafetyNoticeRepositoryImpl extends SafetyNoticeRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}notice/IssueNotice", issueSafetyNoticeMap);
     return IssueSafetyNoticeModel.fromJson(response);
+  }
+
+  @override
+  Future<HoldSafetyNoticeModel> holdSafetyNotices(
+      Map holdSafetyNoticeMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}notice/HoldNotice", holdSafetyNoticeMap);
+    return HoldSafetyNoticeModel.fromJson(response);
   }
 }

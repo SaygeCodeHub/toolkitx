@@ -23,6 +23,7 @@ abstract class StringConstants {
   static const String kSelectTypeValidation = 'Please Select type'; //
   static const String kSafetyNoticeIssue =
       'Do you want to issue this notice?'; //
+  static const String kSafetyNoticeHold = 'Do you want to hold this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
