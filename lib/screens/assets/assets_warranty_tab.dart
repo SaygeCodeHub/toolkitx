@@ -29,8 +29,7 @@ class AssetsWarrantyTab extends StatelessWidget {
       Text(StringConstants.kWarrantyEnd,
           style: Theme.of(context).textTheme.smallTextBlack),
       const SizedBox(height: tiniestSpacing),
-      Text(data.warrantyend,
-          style: Theme.of(context).textTheme.smallTextGrey),
+      Text(data.warrantyend, style: Theme.of(context).textTheme.smallTextGrey),
     ]);
   }
 }
