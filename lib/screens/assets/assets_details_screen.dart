@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/assets/assets_details_tab.dart';
+import 'package:toolkit/screens/assets/widgets/assets_codes_tab.dart';
+import 'package:toolkit/screens/assets/widgets/assets_details_tab.dart';
 import 'package:toolkit/utils/asset_util.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
@@ -11,6 +12,8 @@ import '../../data/models/status_tag_model.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'widgets/assets_it_info_tab.dart';
+import 'widgets/assets_warranty_tab.dart';
 
 class AssetsDetailsScreen extends StatelessWidget {
   static const routeName = 'AssetsDetailsScreen';
@@ -78,9 +81,12 @@ class AssetsDetailsScreen extends StatelessWidget {
                             tabBarViewWidgets: [
                               AssetsDetailsTab(
                                   data: state.fetchAssetsDetailsModel.data),
-                              const Text("Tab 2"),
-                              const Text("Tab 3"),
-                              const Text("Tab 4"),
+                              AssetsWarrantyTab(
+                                  data: state.fetchAssetsDetailsModel.data),
+                              AssetsITInfoTab(
+                                  data: state.fetchAssetsDetailsModel.data),
+                              AssetsCodesTab(
+                                  data: state.fetchAssetsDetailsModel.data),
                               const Text("Tab 5"),
                               const Text("Tab 6"),
                             ])
