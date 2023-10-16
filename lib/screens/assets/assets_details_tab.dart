@@ -7,7 +7,6 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../configs/app_color.dart';
 
 class AssetsDetailsTab extends StatelessWidget {
-  static const routeName = "AssetsDetailsTab";
   const AssetsDetailsTab({super.key, required this.data});
   final Data data;
 
