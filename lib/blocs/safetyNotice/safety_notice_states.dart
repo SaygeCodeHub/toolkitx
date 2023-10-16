@@ -1,6 +1,7 @@
 import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
+import '../../data/safetyNotice/issue_safety_notice_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
 
@@ -63,6 +64,20 @@ class SafetyNoticeDetailsNotFetched extends SafetyNoticeStates {
   final String detailsNotFetched;
 
   SafetyNoticeDetailsNotFetched({required this.detailsNotFetched});
+}
+
+class IssuingSafetyNotice extends SafetyNoticeStates {}
+
+class SafetyNoticeIssued extends SafetyNoticeStates {
+  final IssueSafetyNoticeModel issueSafetyNoticeModel;
+
+  SafetyNoticeIssued({required this.issueSafetyNoticeModel});
+}
+
+class SafetyNoticeFailedToIssue extends SafetyNoticeStates {
+  final String noticeNotIssued;
+
+  SafetyNoticeFailedToIssue({required this.noticeNotIssued});
 }
 
 class UpdatingSafetyNotice extends SafetyNoticeStates {}

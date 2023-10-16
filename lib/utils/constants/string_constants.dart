@@ -21,6 +21,8 @@ abstract class StringConstants {
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
   static const String kSelectTypeValidation = 'Please Select type'; //
+  static const String kSafetyNoticeIssue =
+      'Do you want to issue this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';

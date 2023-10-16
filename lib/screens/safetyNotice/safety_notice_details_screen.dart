@@ -5,7 +5,9 @@ import 'package:toolkit/blocs/safetyNotice/safety_notice_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/error_section.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../configs/app_color.dart';
@@ -49,11 +51,24 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
                 })
           ],
         ),
-        body: BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
+        body: BlocConsumer<SafetyNoticeBloc, SafetyNoticeStates>(
           buildWhen: (previousState, currentState) =>
               currentState is FetchingSafetyNoticeDetails ||
               currentState is SafetyNoticeDetailsFetched ||
               currentState is SafetyNoticeDetailsNotFetched,
+          listener: (context, state) {
+            if (state is IssuingSafetyNotice) {
+              ProgressBar.show(context);
+            } else if (state is SafetyNoticeIssued) {
+              ProgressBar.dismiss(context);
+              context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
+                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
+                  tabIndex: 0));
+            } else if (state is SafetyNoticeFailedToIssue) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.noticeNotIssued, '');
+            }
+          },
           builder: (context, state) {
             if (state is FetchingSafetyNoticeDetails) {
               return const Center(child: CircularProgressIndicator());

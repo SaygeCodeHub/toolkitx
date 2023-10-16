@@ -29,6 +29,8 @@ class FetchSafetyNoticeDetails extends SafetyNoticeEvent {
       {required this.tabIndex, required this.safetyNoticeId});
 }
 
+class IssueSafetyNotice extends SafetyNoticeEvent {}
+
 class UpdateSafetyNotice extends SafetyNoticeEvent {
   final Map updateSafetyNoticeMap;
 
