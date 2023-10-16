@@ -14,9 +14,7 @@ import '../../widgets/status_tag.dart';
 
 class AssetsDetailsScreen extends StatelessWidget {
   static const routeName = 'AssetsDetailsScreen';
-
   const AssetsDetailsScreen({super.key, required this.assetId});
-
   final String assetId;
 
   @override
