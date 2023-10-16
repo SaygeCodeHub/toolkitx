@@ -10,6 +10,7 @@ import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/safetyNotice/add_safety_notice_model.dart';
+import '../../data/safetyNotice/cancel_safety_notice_model.dart';
 import '../../data/safetyNotice/close_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
@@ -39,6 +40,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<UpdateSafetyNotice>(_updateSafetyNotice);
     on<IssueSafetyNotice>(_issueSafetyNotice);
     on<HoldSafetyNotice>(_holdSafetyNotice);
+    on<CancelSafetyNotice>(_cancelSafetyNotice);
     on<CloseSafetyNotice>(_closeSafetyNotice);
   }
 
@@ -258,6 +260,33 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeNotOnHold(noticeNotOnHold: e.toString()));
+    }
+  }
+
+  FutureOr<void> _cancelSafetyNotice(
+      CancelSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(CancellingSafetyNotice());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map cancelSafetyNoticeMap = {
+        "userid": userId,
+        "noticeid": safetyNoticeDetailsMap['noticeid'],
+        "hashcode": hashCode
+      };
+      CancelSafetyNoticeModel cancelSafetyNoticeModel =
+          await _safetyNoticeRepository
+              .cancelSafetyNotices(cancelSafetyNoticeMap);
+      if (cancelSafetyNoticeModel.status == 200) {
+        emit(SafetyNoticeCancelled(
+            cancelSafetyNoticeModel: cancelSafetyNoticeModel));
+      } else {
+        emit(SafetyNoticeNotCancelled(
+            noticeNotCancelled:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeNotCancelled(noticeNotCancelled: e.toString()));
     }
   }
 

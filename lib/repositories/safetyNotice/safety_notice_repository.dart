@@ -1,4 +1,5 @@
 import '../../data/safetyNotice/add_safety_notice_model.dart';
+import '../../data/safetyNotice/cancel_safety_notice_model.dart';
 import '../../data/safetyNotice/close_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
@@ -22,6 +23,9 @@ abstract class SafetyNoticeRepository {
   Future<IssueSafetyNoticeModel> issueSafetyNotices(Map issueSafetyNoticeMap);
 
   Future<HoldSafetyNoticeModel> holdSafetyNotices(Map holdSafetyNoticeMap);
+
+  Future<CancelSafetyNoticeModel> cancelSafetyNotices(
+      Map cancelSafetyNoticeMap);
 
   Future<CloseSafetyNoticeModel> closeSafetyNotice(Map closeSafetyNoticeMap);
 

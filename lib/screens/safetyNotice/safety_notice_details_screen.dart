@@ -79,6 +79,17 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotOnHold, '');
             }
+            if (state is CancellingSafetyNotice) {
+              ProgressBar.show(context);
+            } else if (state is SafetyNoticeCancelled) {
+              ProgressBar.dismiss(context);
+              context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
+                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
+                  tabIndex: 0));
+            } else if (state is SafetyNoticeNotCancelled) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.noticeNotCancelled, '');
+            }
             if (state is ClosingSafetyNotice) {
               ProgressBar.show(context);
             } else if (state is SafetyNoticeClosed) {
