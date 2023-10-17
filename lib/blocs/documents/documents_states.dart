@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/documents/document_roles_model.dart';
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
+import '../../data/models/documents/save_linked_document_model.dart';
 
 class DocumentsStates extends Equatable {
   const DocumentsStates();
@@ -128,4 +129,20 @@ class DocumentsToLinkError extends DocumentsStates {
   final String message;
 
   const DocumentsToLinkError({required this.message});
+}
+
+class SavingLikedDocuments extends DocumentsStates {
+  const SavingLikedDocuments();
+}
+
+class LikedDocumentsSaved extends DocumentsStates {
+  final SaveLinkedDocumentsModel saveLinkedDocumentsModel;
+
+  const LikedDocumentsSaved({required this.saveLinkedDocumentsModel});
+}
+
+class SaveLikedDocumentsError extends DocumentsStates {
+  final String message;
+
+  const SaveLikedDocumentsError({required this.message});
 }

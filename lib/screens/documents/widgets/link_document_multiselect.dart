@@ -59,6 +59,10 @@ class _LinkDocumentMultiSelectState extends State<LinkDocumentMultiSelect> {
                     controlAffinity: ListTileControlAffinity.trailing,
                     onChanged: (isChecked) {
                       multiSelect(widget.linkDocumentsList[index].id);
+                      LinkDocumentScreen.linkedDocuments = selectedDocuments
+                          .toString()
+                          .replaceAll('[', '')
+                          .replaceAll(']', '');
                     });
               } else if (!context.read<DocumentsBloc>().docListReachedMax) {
                 LinkDocumentScreen.page++;
