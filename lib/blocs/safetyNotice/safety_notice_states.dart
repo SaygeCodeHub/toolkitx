@@ -138,3 +138,17 @@ class SafetyNoticeNotClosed extends SafetyNoticeStates {
 
   SafetyNoticeNotClosed({required this.noticeNotClosed});
 }
+
+class FetchingSafetyNoticeHistoryList extends SafetyNoticeStates {}
+
+class SafetyNoticeHistoryListFetched extends SafetyNoticeStates {
+  final List historyDatum;
+
+  SafetyNoticeHistoryListFetched({required this.historyDatum});
+}
+
+class SafetyNoticeHistoryListNotFetched extends SafetyNoticeStates {
+  final String historyNotFetched;
+
+  SafetyNoticeHistoryListNotFetched({required this.historyNotFetched});
+}
