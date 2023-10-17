@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
+import 'package:toolkit/data/models/documents/save_linked_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -43,6 +44,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<ClearDocumentFilter>(_clearDocumentFilter);
     on<GetDocumentsDetails>(_getDocumentsDetails);
     on<GetDocumentsToLink>(_fetchDocumentsToLink);
+    on<SaveLinkedDocuments>(_saveLinkedDocuments);
   }
 
   Future<void> _getDocumentsList(
@@ -204,6 +206,35 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
     } catch (e) {
       emit(DocumentMasterError(fetchError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveLinkedDocuments(
+      SaveLinkedDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const SavingLikedDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveLinkedDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "documents": event.linkedDocuments,
+        "userid": userId
+      };
+      SaveLinkedDocumentsModel saveLinkedDocumentsModel =
+          await _documentsRepository
+              .saveLinkedDocuments(saveLinkedDocumentsMap);
+      if (saveLinkedDocumentsModel.message == '1') {
+        emit(LikedDocumentsSaved(
+            saveLinkedDocumentsModel: saveLinkedDocumentsModel));
+      } else {
+        emit(SaveLikedDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SaveLikedDocumentsError(message: e.toString()));
     }
   }
 }
