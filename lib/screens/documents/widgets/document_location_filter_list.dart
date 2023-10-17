@@ -55,6 +55,14 @@ class DocumentLocationFilterList extends StatelessWidget {
                                         .masterData[0][index]
                                         .id
                                         .toString();
+                                context
+                                        .read<DocumentsBloc>()
+                                        .linkDocFilters["type"] =
+                                    context
+                                        .read<DocumentsBloc>()
+                                        .masterData[0][index]
+                                        .id
+                                        .toString();
                                 context.read<DocumentsBloc>().add(
                                     SelectDocumentLocationFilter(
                                         selectedType: context
@@ -63,6 +71,13 @@ class DocumentLocationFilterList extends StatelessWidget {
                                             .id
                                             .toString()));
                                 context.read<DocumentsBloc>().selectedType =
+                                    context
+                                        .read<DocumentsBloc>()
+                                        .masterData[0][index]
+                                        .name;
+                                context
+                                        .read<DocumentsBloc>()
+                                        .linkDocSelectedType =
                                     context
                                         .read<DocumentsBloc>()
                                         .masterData[0][index]

@@ -12,24 +12,27 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_text_field.dart';
 
-class DocumentLocationScreen extends StatelessWidget {
+class DocumentTypeScreen extends StatelessWidget {
   final Map documentFilterMap;
   final List locationList;
+  final bool isFromLikeDoc;
 
-  const DocumentLocationScreen(
-      {super.key, required this.documentFilterMap, required this.locationList});
+  const DocumentTypeScreen(
+      {super.key,
+      required this.documentFilterMap,
+      required this.locationList,
+      required this.isFromLikeDoc});
 
   @override
   Widget build(BuildContext context) {
     context.read<DocumentsBloc>().add(SelectDocumentLocationFilter(
         selectedType: documentFilterMap['type'] ?? ''));
     return BlocBuilder<DocumentsBloc, DocumentsStates>(
-      buildWhen: (previousState, currentState) =>
-          currentState is DocumentTypeFilterSelected,
-      builder: (context, state) {
-        if (state is DocumentTypeFilterSelected) {
-          return Column(
-            children: [
+        buildWhen: (previousState, currentState) =>
+            currentState is DocumentTypeFilterSelected,
+        builder: (context, state) {
+          if (state is DocumentTypeFilterSelected) {
+            return Column(children: [
               ListTile(
                   contentPadding: EdgeInsets.zero,
                   onTap: () async {
@@ -44,7 +47,23 @@ class DocumentLocationScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   subtitle: (context.read<DocumentsBloc>().selectedType == '')
                       ? null
-                      : Text(context.read<DocumentsBloc>().selectedType),
+                      : (context.read<DocumentsBloc>().linkDocSelectedType ==
+                              '')
+                          ? null
+                          : (isFromLikeDoc)
+                              ? Text(context
+                                  .read<DocumentsBloc>()
+                                  .linkDocSelectedType)
+                              : Text(
+                                  context.read<DocumentsBloc>().selectedType),
+
+                  // Visibility(
+                  //             visible: isFromLikeDoc,
+                  //             replacement: Text(
+                  //                 context.read<DocumentsBloc>().selectedType),
+                  //             child: Text(context
+                  //                 .read<DocumentsBloc>()
+                  //                 .linkDocSelectedType)),
                   trailing:
                       const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
@@ -66,13 +85,11 @@ class DocumentLocationScreen extends StatelessWidget {
                                       ? textField
                                       : '');
                             })
-                      ])),
-            ],
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-    );
+                      ]))
+            ]);
+          } else {
+            return const SizedBox.shrink();
+          }
+        });
   }
 }
