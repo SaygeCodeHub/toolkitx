@@ -15,13 +15,13 @@ import '../../../widgets/generic_text_field.dart';
 class DocumentTypeScreen extends StatelessWidget {
   final Map documentFilterMap;
   final List locationList;
-  final bool isFromLikeDoc;
+  final bool isFromLinkDoc;
 
   const DocumentTypeScreen(
       {super.key,
       required this.documentFilterMap,
       required this.locationList,
-      required this.isFromLikeDoc});
+      required this.isFromLinkDoc});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,7 @@ class DocumentTypeScreen extends StatelessWidget {
               ListTile(
                   contentPadding: EdgeInsets.zero,
                   onTap: () async {
+                    DocumentLocationFilterList.isFromLinkDoc = isFromLinkDoc;
                     await Navigator.pushNamed(
                         context, DocumentLocationFilterList.routeName,
                         arguments: state.selectedType);
@@ -50,7 +51,7 @@ class DocumentTypeScreen extends StatelessWidget {
                       : (context.read<DocumentsBloc>().linkDocSelectedType ==
                               '')
                           ? null
-                          : (isFromLikeDoc)
+                          : (isFromLinkDoc)
                               ? Text(context
                                   .read<DocumentsBloc>()
                                   .linkDocSelectedType)

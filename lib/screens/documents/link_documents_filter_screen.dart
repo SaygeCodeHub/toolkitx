@@ -90,7 +90,7 @@ class LinkDocumentsFilterScreen extends StatelessWidget {
                                       .linkDocFilters,
                                   locationList:
                                       state.fetchDocumentMasterModel.data,
-                                  isFromLikeDoc: true),
+                                  isFromLinkDoc: true),
                               const SizedBox(height: xxTinySpacing),
                               PrimaryButton(
                                   onPressed: () {

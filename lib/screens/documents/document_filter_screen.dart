@@ -106,7 +106,7 @@ class DocumentFilterScreen extends StatelessWidget {
                     DocumentTypeScreen(
                         documentFilterMap: documentFilterMap,
                         locationList: state.fetchDocumentMasterModel.data,
-                        isFromLikeDoc: false),
+                        isFromLinkDoc: false),
                     const SizedBox(height: xxTinySpacing),
                     PrimaryButton(
                         onPressed: () {
