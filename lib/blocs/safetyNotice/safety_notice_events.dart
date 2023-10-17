@@ -42,3 +42,9 @@ class HoldSafetyNotice extends SafetyNoticeEvent {}
 class CancelSafetyNotice extends SafetyNoticeEvent {}
 
 class CloseSafetyNotice extends SafetyNoticeEvent {}
+
+class FetchSafetyNoticeHistoryList extends SafetyNoticeEvent {
+  final int pageNo;
+
+  FetchSafetyNoticeHistoryList({required this.pageNo});
+}

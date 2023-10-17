@@ -13,6 +13,7 @@ import '../../data/safetyNotice/add_safety_notice_model.dart';
 import '../../data/safetyNotice/cancel_safety_notice_model.dart';
 import '../../data/safetyNotice/close_safety_notice_model.dart';
 import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
+import '../../data/safetyNotice/fetch_safety_notice_history_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/hold_safety_notice_model.dart';
 import '../../data/safetyNotice/issue_safety_notice_model.dart';
@@ -25,7 +26,9 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       getIt<SafetyNoticeRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   bool safetyNoticeListReachedMax = false;
+  bool safetyNoticeHistoryListReachedMax = false;
   List<Notice> noticesDatum = [];
+  List<HistoryNotice> noticesHistoryDatum = [];
   String safetyNoticeId = '';
   int safetyNoticeTabIndex = 0;
   Map safetyNoticeDetailsMap = {};
@@ -42,6 +45,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<HoldSafetyNotice>(_holdSafetyNotice);
     on<CancelSafetyNotice>(_cancelSafetyNotice);
     on<CloseSafetyNotice>(_closeSafetyNotice);
+    on<FetchSafetyNoticeHistoryList>(_fetchSafetyNoticeHistory);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -313,6 +317,27 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeNotClosed(noticeNotClosed: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchSafetyNoticeHistory(FetchSafetyNoticeHistoryList event,
+      Emitter<SafetyNoticeStates> emit) async {
+    emit(FetchingSafetyNoticeHistoryList());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (!safetyNoticeHistoryListReachedMax) {
+        FetchHistorySafetyNoticeModel fetchHistorySafetyNoticeModel =
+            await _safetyNoticeRepository.fetchSafetyNoticeHistoryList(
+                event.pageNo, userId!, hashCode!, '{}');
+        noticesHistoryDatum
+            .addAll(fetchHistorySafetyNoticeModel.data.noticesHistoryDatum);
+        safetyNoticeHistoryListReachedMax =
+            fetchHistorySafetyNoticeModel.data.noticesHistoryDatum.isEmpty;
+        emit(SafetyNoticeHistoryListFetched(historyDatum: noticesHistoryDatum));
+      }
+    } catch (e) {
+      e.toString();
     }
   }
 }
