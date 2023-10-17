@@ -5,6 +5,7 @@ import '../../data/safetyNotice/fetch_safety_notice_details_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/hold_safety_notice_model.dart';
 import '../../data/safetyNotice/issue_safety_notice_model.dart';
+import '../../data/safetyNotice/reissue_safety_notice_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
 
@@ -151,4 +152,18 @@ class SafetyNoticeHistoryListNotFetched extends SafetyNoticeStates {
   final String historyNotFetched;
 
   SafetyNoticeHistoryListNotFetched({required this.historyNotFetched});
+}
+
+class ReIssuingSafetyNotice extends SafetyNoticeStates {}
+
+class SafetyNoticeReIssued extends SafetyNoticeStates {
+  final ReIssueSafetyNoticeModel reIssueSafetyNoticeModel;
+
+  SafetyNoticeReIssued({required this.reIssueSafetyNoticeModel});
+}
+
+class SafetyNoticeFailedToReIssue extends SafetyNoticeStates {
+  final String noticeNotReIssued;
+
+  SafetyNoticeFailedToReIssue({required this.noticeNotReIssued});
 }

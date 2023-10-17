@@ -20,18 +20,18 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'safety_notice_pop_up_menu_screen.dart';
 import 'widgets/safety_notice_details_tab_two.dart';
-import 'widgets/safety_notice_list_card.dart';
 import 'widgets/safety_notice_tab_one.dart';
 
 class SafetyNoticeDetailsScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeDetailsScreen';
+  static String safetyNoticeId = '';
 
   const SafetyNoticeDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-        safetyNoticeId: SafetyNoticeListCard.safetyNoticeId, tabIndex: 0));
+    context.read<SafetyNoticeBloc>().add(
+        FetchSafetyNoticeDetails(safetyNoticeId: safetyNoticeId, tabIndex: 0));
     return Scaffold(
         appBar: GenericAppBar(
           title: DatabaseUtil.getText('SafetyNotice'),
@@ -62,8 +62,7 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeIssued) {
               ProgressBar.dismiss(context);
               context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
-                  tabIndex: 0));
+                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
             } else if (state is SafetyNoticeFailedToIssue) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotIssued, '');
@@ -73,8 +72,7 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeOnHold) {
               ProgressBar.dismiss(context);
               context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
-                  tabIndex: 0));
+                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
             } else if (state is SafetyNoticeNotOnHold) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotOnHold, '');
@@ -84,8 +82,7 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeCancelled) {
               ProgressBar.dismiss(context);
               context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
-                  tabIndex: 0));
+                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
             } else if (state is SafetyNoticeNotCancelled) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotCancelled, '');
@@ -95,11 +92,21 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeClosed) {
               ProgressBar.dismiss(context);
               context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
-                  tabIndex: 0));
+                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
             } else if (state is SafetyNoticeNotClosed) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotClosed, '');
+            }
+
+            if (state is ReIssuingSafetyNotice) {
+              ProgressBar.show(context);
+            } else if (state is SafetyNoticeReIssued) {
+              ProgressBar.dismiss(context);
+              context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
+                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
+            } else if (state is SafetyNoticeFailedToReIssue) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.noticeNotReIssued, '');
             }
           },
           builder: (context, state) {
@@ -166,8 +173,7 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
                   onPressed: () {
                     context.read<SafetyNoticeBloc>().add(
                         FetchSafetyNoticeDetails(
-                            safetyNoticeId: SafetyNoticeListCard.safetyNoticeId,
-                            tabIndex: 0));
+                            safetyNoticeId: safetyNoticeId, tabIndex: 0));
                   },
                   textValue: StringConstants.kReload);
             } else {

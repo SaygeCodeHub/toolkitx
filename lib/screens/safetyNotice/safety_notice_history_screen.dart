@@ -13,6 +13,7 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'safety_notice_details_screen.dart';
 
 class SafetyNoticeHistoryScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeHistoryScreen';
@@ -64,7 +65,15 @@ class SafetyNoticeHistoryScreen extends StatelessWidget {
                       if (index < state.historyDatum.length) {
                         return CustomCard(
                           child: ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              SafetyNoticeDetailsScreen.safetyNoticeId =
+                                  state.historyDatum[index].id;
+                              Navigator.pushNamed(context,
+                                      SafetyNoticeDetailsScreen.routeName)
+                                  .then((value) =>
+                                      Navigator.pushReplacementNamed(context,
+                                          SafetyNoticeHistoryScreen.routeName));
+                            },
                             contentPadding:
                                 const EdgeInsets.all(xxTinierSpacing),
                             title: Padding(

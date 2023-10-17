@@ -17,6 +17,7 @@ import '../../data/safetyNotice/fetch_safety_notice_history_model.dart';
 import '../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../data/safetyNotice/hold_safety_notice_model.dart';
 import '../../data/safetyNotice/issue_safety_notice_model.dart';
+import '../../data/safetyNotice/reissue_safety_notice_model.dart';
 import '../../data/safetyNotice/save_safety_notice_files_model.dart';
 import '../../data/safetyNotice/update_safety_notice_model.dart';
 import '../../repositories/safetyNotice/safety_notice_repository.dart';
@@ -46,6 +47,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<CancelSafetyNotice>(_cancelSafetyNotice);
     on<CloseSafetyNotice>(_closeSafetyNotice);
     on<FetchSafetyNoticeHistoryList>(_fetchSafetyNoticeHistory);
+    on<ReIssueSafetyNotice>(_reIssueSafetyNotice);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -157,7 +159,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         popUpMenuList.add(DatabaseUtil.getText('Cancel'));
       }
       if (fetchSafetyNoticeDetailsModel.data.canReissue == '1') {
-        popUpMenuList.add(DatabaseUtil.getText('Reissue'));
+        popUpMenuList.add(DatabaseUtil.getText('ReIssue'));
       }
       if (fetchSafetyNoticeDetailsModel.data.canClose == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Close'));
@@ -338,6 +340,33 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       }
     } catch (e) {
       emit(SafetyNoticeHistoryListNotFetched(historyNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _reIssueSafetyNotice(
+      ReIssueSafetyNotice event, Emitter<SafetyNoticeStates> emit) async {
+    emit(ReIssuingSafetyNotice());
+    try {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map reIssueSafetyNoticeMap = {
+        "userid": userId,
+        "noticeid": safetyNoticeDetailsMap['noticeid'],
+        "hashcode": hashCode
+      };
+      ReIssueSafetyNoticeModel reIssueSafetyNoticeModel =
+          await _safetyNoticeRepository
+              .reIssueSafetyNotice(reIssueSafetyNoticeMap);
+      if (reIssueSafetyNoticeModel.status == 200) {
+        emit(SafetyNoticeReIssued(
+            reIssueSafetyNoticeModel: reIssueSafetyNoticeModel));
+      } else {
+        emit(SafetyNoticeFailedToReIssue(
+            noticeNotReIssued:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SafetyNoticeFailedToReIssue(noticeNotReIssued: e.toString()));
     }
   }
 }
