@@ -56,14 +56,6 @@ class DocumentTypeScreen extends StatelessWidget {
                                   .linkDocSelectedType)
                               : Text(
                                   context.read<DocumentsBloc>().selectedType),
-
-                  // Visibility(
-                  //             visible: isFromLikeDoc,
-                  //             replacement: Text(
-                  //                 context.read<DocumentsBloc>().selectedType),
-                  //             child: Text(context
-                  //                 .read<DocumentsBloc>()
-                  //                 .linkDocSelectedType)),
                   trailing:
                       const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
