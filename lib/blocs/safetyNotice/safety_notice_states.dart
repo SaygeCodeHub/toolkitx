@@ -146,3 +146,9 @@ class SafetyNoticeHistoryListFetched extends SafetyNoticeStates {
 
   SafetyNoticeHistoryListFetched({required this.historyDatum});
 }
+
+class SafetyNoticeHistoryListNotFetched extends SafetyNoticeStates {
+  final String historyNotFetched;
+
+  SafetyNoticeHistoryListNotFetched({required this.historyNotFetched});
+}

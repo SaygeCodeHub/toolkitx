@@ -337,7 +337,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         emit(SafetyNoticeHistoryListFetched(historyDatum: noticesHistoryDatum));
       }
     } catch (e) {
-      e.toString();
+      emit(SafetyNoticeHistoryListNotFetched(historyNotFetched: e.toString()));
     }
   }
 }
