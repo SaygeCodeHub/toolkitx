@@ -12,7 +12,6 @@ import '../safety_notice_screen.dart';
 
 class SafetyNoticeListCard extends StatelessWidget {
   final Notice noticesDatum;
-  static String safetyNoticeId = '';
 
   const SafetyNoticeListCard({Key? key, required this.noticesDatum})
       : super(key: key);
@@ -22,7 +21,7 @@ class SafetyNoticeListCard extends StatelessWidget {
     return CustomCard(
       child: ListTile(
         onTap: () {
-          safetyNoticeId = noticesDatum.id;
+          SafetyNoticeDetailsScreen.safetyNoticeId = noticesDatum.id;
           Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName)
               .then((value) => Navigator.pushReplacementNamed(
                   context, SafetyNoticeScreen.routeName,

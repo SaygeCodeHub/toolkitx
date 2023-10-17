@@ -48,3 +48,5 @@ class FetchSafetyNoticeHistoryList extends SafetyNoticeEvent {
 
   FetchSafetyNoticeHistoryList({required this.pageNo});
 }
+
+class ReIssueSafetyNotice extends SafetyNoticeEvent {}

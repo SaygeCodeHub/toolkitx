@@ -97,7 +97,21 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Reissue')) {}
+        if (value == DatabaseUtil.getText('ReIssue')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: StringConstants.kSafetyNoticeReissue,
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context
+                          .read<SafetyNoticeBloc>()
+                          .add(ReIssueSafetyNotice());
+                      Navigator.pop(context);
+                    });
+              });
+        }
       },
       position: PopupMenuPosition.under,
       itemBuilder: (BuildContext context) => [
