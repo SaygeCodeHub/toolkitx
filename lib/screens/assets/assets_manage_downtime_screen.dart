@@ -77,7 +77,6 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        const SizedBox(height: tinierSpacing),
                                         Text("${hours}hr : ${remainingMin}m",
                                             style: Theme.of(context)
                                                 .textTheme

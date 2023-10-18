@@ -22,12 +22,8 @@ class AssetsDowntimePopUpMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: (value) {
-          if (value == DatabaseUtil.getText("Edit")) {
-            // Navigator.pushNamed(context, AssetsManageDownTimeScreen.routeName);
-          }
-          if (value == DatabaseUtil.getText("Delete")) {
-            // Navigator.pushNamed(context, AssetsManageDownTimeScreen.routeName);
-          }
+          if (value == DatabaseUtil.getText("Edit")) {}
+          if (value == DatabaseUtil.getText("Delete")) {}
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
