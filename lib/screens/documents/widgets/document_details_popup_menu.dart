@@ -3,13 +3,19 @@ import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
+import '../attach_document_screen.dart';
 import '../link_document_screen.dart';
 
 class DocumentsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
+  final DocumentDetailsModel documentDetailsModel;
 
-  const DocumentsDetailsPopUpMenu({Key? key, required this.popUpMenuItems})
+  const DocumentsDetailsPopUpMenu(
+      {Key? key,
+      required this.popUpMenuItems,
+      required this.documentDetailsModel})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
@@ -36,6 +42,8 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
               DatabaseUtil.getText('AddComments')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_attachdocument')) {
+            Navigator.pushNamed(context, AttachDocumentScreen.routeName,
+                arguments: documentDetailsModel);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
           } else if (popUpMenuItems[value] ==
