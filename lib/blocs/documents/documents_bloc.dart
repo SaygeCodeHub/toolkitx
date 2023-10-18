@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
 import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
-import 'package:toolkit/data/models/documents/save_linked_document_model.dart';
+import 'package:toolkit/data/models/documents/post_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -45,6 +45,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<GetDocumentsDetails>(_getDocumentsDetails);
     on<GetDocumentsToLink>(_fetchDocumentsToLink);
     on<SaveLinkedDocuments>(_saveLinkedDocuments);
+    on<AttachDocuments>(_attachDocuments);
   }
 
   Future<void> _getDocumentsList(
@@ -222,9 +223,8 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         "documents": event.linkedDocuments,
         "userid": userId
       };
-      SaveLinkedDocumentsModel saveLinkedDocumentsModel =
-          await _documentsRepository
-              .saveLinkedDocuments(saveLinkedDocumentsMap);
+      PostDocumentsModel saveLinkedDocumentsModel = await _documentsRepository
+          .saveLinkedDocuments(saveLinkedDocumentsMap);
       if (saveLinkedDocumentsModel.message == '1') {
         emit(LikedDocumentsSaved(
             saveLinkedDocumentsModel: saveLinkedDocumentsModel));
@@ -235,6 +235,34 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
     } catch (e) {
       emit(SaveLikedDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _attachDocuments(
+      AttachDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const AttachingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map attachDocumentsMap = {
+        "documentid": documentId,
+        "files": event.attachDocumentsMap['files'],
+        "userid": userId,
+        "notes": event.attachDocumentsMap['notes'],
+        "hashcode": hashCode
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.attachDocuments(attachDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(AttachDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(AttachDocumentsError(message: e.toString()));
     }
   }
 }

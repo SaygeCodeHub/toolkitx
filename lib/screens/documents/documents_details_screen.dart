@@ -36,7 +36,8 @@ class DocumentsDetailsScreen extends StatelessWidget {
               builder: (context, state) {
                 if (state is DocumentsDetailsFetched) {
                   return DocumentsDetailsPopUpMenu(
-                      popUpMenuItems: state.documentsPopUpMenu);
+                      popUpMenuItems: state.documentsPopUpMenu,
+                      documentDetailsModel: state.documentDetailsModel);
                 } else {
                   return const SizedBox();
                 }
