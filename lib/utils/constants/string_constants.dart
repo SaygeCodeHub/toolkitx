@@ -338,6 +338,7 @@ abstract class StringConstants {
       'You have 1 courses to complete this certificate, keep it up!';
   static const String kNoFiles = 'No Files found!';
   static const String kAssetName = "Asset Name";
+  static const String kIsDraft = "[Draft]";
   static const String kAssetTag = "Asset Tag";
   static const String kServiceSite = "Service Site";
   static const String kAssetGroup = "Asset Group";
