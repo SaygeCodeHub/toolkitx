@@ -3,6 +3,7 @@ import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -29,11 +30,13 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
+import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
@@ -395,6 +398,11 @@ class AppRoutes {
         return _createRoute(const LinkDocumentScreen());
       case AssetsManageDownTimeScreen.routeName:
         return _createRoute(const AssetsManageDownTimeScreen());
+      case LinkDocumentsFilterScreen.routeName:
+        return _createRoute(const LinkDocumentsFilterScreen());
+      case AttachDocumentScreen.routeName:
+        return _createRoute(AttachDocumentScreen(
+            documentDetailsModel: settings.arguments as DocumentDetailsModel));
       default:
         return _createRoute(const WelcomeScreen());
     }

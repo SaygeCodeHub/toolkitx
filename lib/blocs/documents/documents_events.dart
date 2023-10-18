@@ -56,3 +56,9 @@ class SaveLinkedDocuments extends DocumentsEvents {
 
   SaveLinkedDocuments({required this.linkedDocuments});
 }
+
+class AttachDocuments extends DocumentsEvents {
+  final Map attachDocumentsMap;
+
+  AttachDocuments({required this.attachDocumentsMap});
+}
