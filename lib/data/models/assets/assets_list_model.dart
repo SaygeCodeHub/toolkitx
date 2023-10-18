@@ -9,7 +9,7 @@ String fetchAssetsListModelToJson(FetchAssetsListModel data) =>
 class FetchAssetsListModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<AssetsListDatum> data;
 
   FetchAssetsListModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchAssetsListModel {
       FetchAssetsListModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<AssetsListDatum>.from(
+            json["Data"].map((x) => AssetsListDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,14 +32,14 @@ class FetchAssetsListModel {
       };
 }
 
-class Datum {
+class AssetsListDatum {
   final String id;
   final String name;
   final String locationname;
   final String tag;
   final String status;
 
-  Datum({
+  AssetsListDatum({
     required this.id,
     required this.name,
     required this.locationname,
@@ -46,7 +47,8 @@ class Datum {
     required this.status,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory AssetsListDatum.fromJson(Map<String, dynamic> json) =>
+      AssetsListDatum(
         id: json["id"],
         name: json["name"],
         locationname: json["locationname"],

@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets/assets_master_model.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -20,5 +21,12 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/getasset?hashcode=$hashCode&assetid=$assetId");
     return FetchAssetsDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchAssetsMasterModel> fetchAssetsMasterRepo(String hashCode) async {
+    final response = await DioClient()
+        .get("${ApiConstants.baseUrl}asset/getmaster?hashcode=$hashCode");
+    return FetchAssetsMasterModel.fromJson(response);
   }
 }
