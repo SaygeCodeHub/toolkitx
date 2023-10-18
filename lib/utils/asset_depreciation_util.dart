@@ -2,7 +2,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 class AssetsDepreciationUtil {
   assetsDepreciationWidget(fetchAssetsDetailsModel) {
-    switch (fetchAssetsDetailsModel.data.deptype) {
+    switch (fetchAssetsDetailsModel.assetsDatum.deptype) {
       case '1':
         return StringConstants.kStraightLine;
       case '2':
