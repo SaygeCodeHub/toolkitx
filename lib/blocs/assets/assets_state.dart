@@ -50,6 +50,7 @@ class AssetsMasterFetching extends AssetsState {}
 class AssetsMasterFetched extends AssetsState {
   final FetchAssetsMasterModel fetchAssetsMasterModel;
   final Map assetsMasterMap;
+
   AssetsMasterFetched(
       {required this.fetchAssetsMasterModel, required this.assetsMasterMap});
 }
@@ -76,4 +77,24 @@ class AssetsSiteSelected extends AssetsState {
   final String id;
 
   AssetsSiteSelected({required this.id});
+}
+
+class AssetsGetDownTimeFetching extends AssetsState {}
+
+class AssetsGetDownTimeFetched extends AssetsState {
+  final FetchAssetsDowntimeModel fetchAssetsDowntimeModel;
+  final List assetsPopUpMenu;
+  final bool showPopUpMenu;
+
+  AssetsGetDownTimeFetched({
+    required this.fetchAssetsDowntimeModel,
+    required this.assetsPopUpMenu,
+    required this.showPopUpMenu,
+  });
+}
+
+class AssetsGetDownTimeError extends AssetsState {
+  final String errorMessage;
+
+  AssetsGetDownTimeError({required this.errorMessage});
 }

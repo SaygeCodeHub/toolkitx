@@ -21,15 +21,12 @@ import 'widgets/assets_warranty_tab.dart';
 class AssetsDetailsScreen extends StatelessWidget {
   static const routeName = 'AssetsDetailsScreen';
 
-  const AssetsDetailsScreen({super.key, required this.assetId});
-
-  final String assetId;
+  const AssetsDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<AssetsBloc>()
-        .add(FetchAssetsDetails(assetId: assetId, assetTabIndex: 0));
+    context.read<AssetsBloc>().add(FetchAssetsDetails(
+        assetId: context.read<AssetsBloc>().assetId, assetTabIndex: 0));
     return Scaffold(
         appBar: GenericAppBar(actions: [
           BlocBuilder<AssetsBloc, AssetsState>(

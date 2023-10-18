@@ -43,3 +43,9 @@ class ApplyAssetsFilter extends AssetsEvent {
 }
 
 class ClearAssetsFilter extends AssetsEvent {}
+
+class FetchAssetsGetDownTime extends AssetsEvent {
+  final String assetId;
+  final int pageNo;
+  FetchAssetsGetDownTime({required this.assetId, required this.pageNo});
+}

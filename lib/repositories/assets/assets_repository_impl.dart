@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/assets_master_model.dart';
+import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -28,5 +29,13 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient()
         .get("${ApiConstants.baseUrl}asset/getmaster?hashcode=$hashCode");
     return FetchAssetsMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchAssetsDowntimeModel> fetchAssetsDowntimeRepo(
+      int pageNo, String hashCode, String assetId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}asset/getdowntime?pageno=$pageNo&hashcode=$hashCode&filter=$assetId");
+    return FetchAssetsDowntimeModel.fromJson(response);
   }
 }

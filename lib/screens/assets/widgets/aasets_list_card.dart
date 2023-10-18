@@ -18,8 +18,8 @@ class AssetsListCard extends StatelessWidget {
         child: Column(children: [
       ListTile(
           onTap: () {
-            Navigator.pushNamed(context, AssetsDetailsScreen.routeName,
-                    arguments: data.id)
+            context.read<AssetsBloc>().assetId = data.id;
+            Navigator.pushNamed(context, AssetsDetailsScreen.routeName)
                 .then((_) => {
                       AssetsListScreen.pageNo = 1,
                       context.read<AssetsBloc>().assetsDatum.clear(),
