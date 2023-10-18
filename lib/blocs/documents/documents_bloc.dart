@@ -25,6 +25,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   List masterData = [];
   bool docListReachedMax = false;
   String selectedType = '';
+  String linkDocSelectedType = '';
   List<DocumentsListDatum> documentsListDatum = [];
   String documentId = '';
   Map linkDocFilters = {};
@@ -55,6 +56,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       if (event.isFromHome == true) {
         docListReachedMax = false;
+        selectedType = '';
         filters = {};
         DocumentsListModel documentsListModel =
             await _documentsRepository.getDocumentsList(
