@@ -8,7 +8,9 @@ import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
-import '../screens/assets/assets_list.dart';
+import '../screens/assets/assets_filter_screen.dart';
+import '../screens/assets/assets_list_screen.dart';
+import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -33,6 +35,7 @@ import '../screens/documents/document_filter_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
+import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
@@ -377,6 +380,11 @@ class AppRoutes {
         return _createRoute(const DocumentsDetailsScreen());
       case AssetsListScreen.routeName:
         return _createRoute(const AssetsListScreen());
+      case AssetsFilterScreen.routeName:
+        return _createRoute(AssetsFilterScreen());
+      case AssetsLocationFilterList.routeName:
+        return _createRoute(AssetsLocationFilterList(
+            selectLocationName: settings.arguments.toString()));
       case AssetsDetailsScreen.routeName:
         return _createRoute(
             AssetsDetailsScreen(assetId: settings.arguments.toString()));
@@ -388,6 +396,8 @@ class AppRoutes {
         return _createRoute(const SafetyNoticeHistoryScreen());
       case LinkDocumentScreen.routeName:
         return _createRoute(const LinkDocumentScreen());
+      case LinkDocumentsFilterScreen.routeName:
+        return _createRoute(const LinkDocumentsFilterScreen());
       case AttachDocumentScreen.routeName:
         return _createRoute(AttachDocumentScreen(
             documentDetailsModel: settings.arguments as DocumentDetailsModel));
