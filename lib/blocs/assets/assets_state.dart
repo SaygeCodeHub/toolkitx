@@ -29,8 +29,14 @@ class AssetsDetailsFetching extends AssetsState {}
 
 class AssetsDetailsFetched extends AssetsState {
   final FetchAssetsDetailsModel fetchAssetsDetailsModel;
+  final List assetsPopUpMenu;
+  final bool showPopUpMenu;
 
-  AssetsDetailsFetched({required this.fetchAssetsDetailsModel});
+  AssetsDetailsFetched({
+    required this.fetchAssetsDetailsModel,
+    required this.assetsPopUpMenu,
+    required this.showPopUpMenu,
+  });
 }
 
 class AssetsDetailsError extends AssetsState {

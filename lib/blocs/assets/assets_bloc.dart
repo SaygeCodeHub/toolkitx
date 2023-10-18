@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/assets/assets_details_model.dart';
 import '../../data/models/assets/assets_master_model.dart';
 import '../../di/app_module.dart';
+import '../../utils/database_utils.dart';
+
 part 'assets_event.dart';
 part 'assets_state.dart';
 
@@ -27,7 +31,6 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<ApplyAssetsFilter>(_applyAssetsFilter);
     on<ClearAssetsFilter>(_clearAssetsFilter);
   }
-
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
   bool hasReachedMax = false;
@@ -69,13 +72,23 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   Future<FutureOr<void>> _fetchAssetsDetails(
       FetchAssetsDetails event, Emitter<AssetsState> emit) async {
     assetTabIndex = event.assetTabIndex;
+    List popUpMenuItems = [
+      StringConstants.kManageDocuments,
+      StringConstants.kManageDownTime,
+      StringConstants.kManageComment,
+      StringConstants.kReportFailure,
+      StringConstants.kManageMeterReading,
+      DatabaseUtil.getText("Cancel"),
+    ];
     emit(AssetsDetailsFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchAssetsDetailsModel fetchAssetsDetailsModel = await _assetsRepository
           .fetchAssetsDetailsRepo(hashCode!, event.assetId);
       emit(AssetsDetailsFetched(
-          fetchAssetsDetailsModel: fetchAssetsDetailsModel));
+          fetchAssetsDetailsModel: fetchAssetsDetailsModel,
+          assetsPopUpMenu: popUpMenuItems,
+          showPopUpMenu: true));
     } catch (e) {
       emit(AssetsDetailsError(errorMessage: e.toString()));
     }
