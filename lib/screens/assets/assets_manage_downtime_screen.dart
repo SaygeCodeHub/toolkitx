@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/widgets/assets_add_downtime_screen.dart';
 import 'package:toolkit/screens/assets/widgets/assets_downtime_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -21,6 +22,19 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
     context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
         assetId: context.read<AssetsBloc>().assetId, pageNo: pageNo));
     return Scaffold(
+        floatingActionButton: Padding(
+            padding: const EdgeInsets.all(tinierSpacing),
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AssetsAddDowntimeScreen.routeName)
+                    .then((_) => {
+                          context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
+                              assetId: context.read<AssetsBloc>().assetId,
+                              pageNo: pageNo))
+                        });
+              },
+              child: const Icon(Icons.add),
+            )),
         appBar: const GenericAppBar(title: StringConstants.kManageDownTime),
         body: Padding(
             padding: const EdgeInsets.only(

@@ -98,3 +98,17 @@ class AssetsGetDownTimeError extends AssetsState {
 
   AssetsGetDownTimeError({required this.errorMessage});
 }
+
+class AssetsDownTimeSaving extends AssetsState {}
+
+class AssetsDownTimeSaved extends AssetsState {
+  final SaveAssetsDowntimeModel saveAssetsDowntimeModel;
+
+  AssetsDownTimeSaved({required this.saveAssetsDowntimeModel});
+}
+
+class AssetsDownTimeNotSaved extends AssetsState {
+  final String errorMessage;
+
+  AssetsDownTimeNotSaved({required this.errorMessage});
+}

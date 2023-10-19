@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -33,6 +34,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<ApplyAssetsFilter>(_applyAssetsFilter);
     on<ClearAssetsFilter>(_clearAssetsFilter);
     on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
+    on<SaveAssetsDownTime>(_saveAssetsDownTime);
   }
 
   int assetTabIndex = 0;
@@ -165,6 +167,32 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           showPopUpMenu: true));
     } catch (e) {
       emit(AssetsGetDownTimeError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveAssetsDownTime(
+      SaveAssetsDownTime event, Emitter<AssetsState> emit) async {
+    emit(AssetsDownTimeSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveDowntimeMap = {
+        "hashcode": hashCode,
+        "startdate": event.saveDowntimeMap["startdate"],
+        "enddate": event.saveDowntimeMap["enddate"],
+        "starttime": event.saveDowntimeMap["starttime"],
+        "endtime": event.saveDowntimeMap["endtime"],
+        "userid": userId,
+        "assetid": assetId,
+        "id": " ",
+        "note": event.saveDowntimeMap["note"],
+      };
+      SaveAssetsDowntimeModel saveAssetsDowntimeModel =
+          await _assetsRepository.saveAssetsDowntimeRepo(saveDowntimeMap);
+      emit(AssetsDownTimeSaved(
+          saveAssetsDowntimeModel: saveAssetsDowntimeModel));
+    } catch (e) {
+      emit(AssetsDownTimeNotSaved(errorMessage: e.toString()));
     }
   }
 }
