@@ -49,3 +49,9 @@ class FetchAssetsGetDownTime extends AssetsEvent {
   final int pageNo;
   FetchAssetsGetDownTime({required this.assetId, required this.pageNo});
 }
+
+class SaveAssetsDownTime extends AssetsEvent {
+  final Map saveDowntimeMap;
+
+  SaveAssetsDownTime({required this.saveDowntimeMap});
+}
