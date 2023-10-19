@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/data/models/assets/assets_details_model.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/data/models/assets_get_downtime_model.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
-import '../assets_manage_downtime_screen.dart';
-
-class AssetsPopUpMenuButton extends StatelessWidget {
-  const AssetsPopUpMenuButton(
+class AssetsDowntimePopUpMenu extends StatelessWidget {
+  const AssetsDowntimePopUpMenu(
       {super.key,
       required this.popUpMenuItems,
-      required this.assetsDetailsModel});
+      required this.fetchAssetsDowntimeModel});
 
   final List popUpMenuItems;
-  final FetchAssetsDetailsModel assetsDetailsModel;
+  final FetchAssetsDowntimeModel fetchAssetsDowntimeModel;
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
@@ -24,9 +22,8 @@ class AssetsPopUpMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: (value) {
-          if (value == StringConstants.kManageDownTime) {
-            Navigator.pushNamed(context, AssetsManageDownTimeScreen.routeName);
-          }
+          if (value == DatabaseUtil.getText("Edit")) {}
+          if (value == DatabaseUtil.getText("Delete")) {}
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [

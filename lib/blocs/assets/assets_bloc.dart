@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -13,6 +14,7 @@ import '../../di/app_module.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
+
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -30,13 +32,16 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SelectAssetsSite>(_selectAssetsSite);
     on<ApplyAssetsFilter>(_applyAssetsFilter);
     on<ClearAssetsFilter>(_clearAssetsFilter);
+    on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
   }
+
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
   bool hasReachedMax = false;
   Map filters = {};
   List assetMasterData = [];
   String selectLocationName = '';
+  String assetId = "";
 
   Future<FutureOr<void>> _fetchAssetsList(
       FetchAssetsList event, Emitter<AssetsState> emit) async {
@@ -139,5 +144,27 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       ClearAssetsFilter event, Emitter<AssetsState> emit) {
     filters = {};
     add(FetchAssetsList(pageNo: 1, isFromHome: false));
+  }
+
+  Future<FutureOr<void>> _fetchAssetsGetDownTime(
+      FetchAssetsGetDownTime event, Emitter<AssetsState> emit) async {
+    emit(AssetsGetDownTimeFetching());
+    try {
+      List popUpMenuItems = [
+        DatabaseUtil.getText("Edit"),
+        DatabaseUtil.getText("Delete"),
+        DatabaseUtil.getText("Cancel"),
+      ];
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
+          await _assetsRepository.fetchAssetsDowntimeRepo(
+              event.pageNo, hashCode!, event.assetId);
+      emit(AssetsGetDownTimeFetched(
+          fetchAssetsDowntimeModel: fetchAssetsDowntimeModel,
+          assetsPopUpMenu: popUpMenuItems,
+          showPopUpMenu: true));
+    } catch (e) {
+      emit(AssetsGetDownTimeError(errorMessage: e.toString()));
+    }
   }
 }
