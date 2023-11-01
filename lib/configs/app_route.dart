@@ -95,6 +95,7 @@ import '../screens/root/root_screen.dart';
 import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
 import '../screens/safetyNotice/safety_notice_details_screen.dart';
 import '../screens/safetyNotice/safety_notice_history_screen.dart';
+import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -406,6 +407,8 @@ class AppRoutes {
       case AttachDocumentScreen.routeName:
         return _createRoute(AttachDocumentScreen(
             documentDetailsModel: settings.arguments as DocumentDetailsModel));
+      case SafetyNoticeFilterScreen.routeName:
+        return _createRoute(const SafetyNoticeFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

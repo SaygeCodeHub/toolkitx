@@ -50,3 +50,16 @@ class FetchSafetyNoticeHistoryList extends SafetyNoticeEvent {
 }
 
 class ReIssueSafetyNotice extends SafetyNoticeEvent {}
+
+class SelectSafetyNoticeStatus extends SafetyNoticeEvent {
+  final String statusId;
+  final String status;
+
+  SelectSafetyNoticeStatus({required this.status, required this.statusId});
+}
+
+class SafetyNoticeApplyFilter extends SafetyNoticeEvent {
+  final Map safetyNoticeFilterMap;
+
+  SafetyNoticeApplyFilter({required this.safetyNoticeFilterMap});
+}
