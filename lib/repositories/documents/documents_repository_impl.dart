@@ -64,4 +64,12 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
         "${ApiConstants.baseUrl}document/attachfiles", attachDocumentsMap);
     return PostDocumentsModel.fromJson(response);
   }
+
+  @override
+  Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/deletedocumentfile",
+        deleteDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
 }

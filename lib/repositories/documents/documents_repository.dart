@@ -24,4 +24,6 @@ abstract class DocumentsRepository {
   Future<PostDocumentsModel> saveLinkedDocuments(Map saveLinkedDocumentsMap);
 
   Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap);
+
+  Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap);
 }

@@ -7,6 +7,7 @@ import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_grid_images.dart';
+import '../documents_details_screen.dart';
 
 class DocumentDetailsComments extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
@@ -18,6 +19,7 @@ class DocumentDetailsComments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DocumentsDetailsScreen.defaultIndex = 4;
     return (documentDetailsModel.data.comments.isEmpty)
         ? Center(
             child: Text(StringConstants.kNoComment,
