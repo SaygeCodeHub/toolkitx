@@ -47,6 +47,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<GetDocumentsToLink>(_fetchDocumentsToLink);
     on<SaveLinkedDocuments>(_saveLinkedDocuments);
     on<AttachDocuments>(_attachDocuments);
+    on<DeleteDocuments>(_deleteDocuments);
   }
 
   Future<void> _getDocumentsList(
@@ -265,6 +266,27 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
     } catch (e) {
       emit(AttachDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteDocuments(
+      DeleteDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const DeletingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {"fileid": event.fileId, "hashcode": hashCode};
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.deleteDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsDeleted(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(DeleteDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(DeleteDocumentsError(message: e.toString()));
     }
   }
 }

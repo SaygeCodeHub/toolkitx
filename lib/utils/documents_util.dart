@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 import '../configs/app_color.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -22,13 +23,13 @@ class DocumentsUtil {
   static List<String> fileMenuOptions(FileList fileListData) {
     List<String> fileMenuOptionsList = ['View'];
     if (fileListData.canuploadnewversion == '1') {
-      fileMenuOptionsList.add('Upload New Version');
+      fileMenuOptionsList.add(DatabaseUtil.getText('dms_uploadnewversion'));
     }
     if (fileListData.candelete == '1') {
-      fileMenuOptionsList.add('Delete');
+      fileMenuOptionsList.add(DatabaseUtil.getText('Delete'));
     }
     if (fileListData.canaddcomments == '1') {
-      fileMenuOptionsList.add('Add Comment');
+      fileMenuOptionsList.add(DatabaseUtil.getText('AddComments'));
     }
     return fileMenuOptionsList;
   }
