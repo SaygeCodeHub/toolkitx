@@ -162,3 +162,19 @@ class AttachDocumentsError extends DocumentsStates {
 
   const AttachDocumentsError({required this.message});
 }
+
+class DeletingDocuments extends DocumentsStates {
+  const DeletingDocuments();
+}
+
+class DocumentsDeleted extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsDeleted({required this.postDocumentsModel});
+}
+
+class DeleteDocumentsError extends DocumentsStates {
+  final String message;
+
+  const DeleteDocumentsError({required this.message});
+}

@@ -41,14 +41,13 @@ class AndroidPopUp extends StatelessWidget {
             .copyWith(fontWeight: FontWeight.w500),
         actions: [
           Visibility(
-            visible: isNoVisible,
-            child: TextButton(
-                onPressed: onSecondaryButton ??
-                    () {
-                      Navigator.pop(context);
-                    },
-                child: Text(DatabaseUtil.getText('No'))),
-          ),
+              visible: isNoVisible,
+              child: TextButton(
+                  onPressed: onSecondaryButton ??
+                      () {
+                        Navigator.pop(context);
+                      },
+                  child: Text(DatabaseUtil.getText('No')))),
           TextButton(onPressed: onPrimaryButton, child: Text(textValue))
         ]);
   }

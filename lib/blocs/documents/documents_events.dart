@@ -62,3 +62,9 @@ class AttachDocuments extends DocumentsEvents {
 
   AttachDocuments({required this.attachDocumentsMap});
 }
+
+class DeleteDocuments extends DocumentsEvents {
+  final String fileId;
+
+  DeleteDocuments({required this.fileId});
+}

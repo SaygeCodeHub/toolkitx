@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/documents/documents_bloc.dart';
 import '../../blocs/documents/documents_events.dart';
@@ -22,11 +24,13 @@ import 'widgets/documents_details_files.dart';
 
 class DocumentsDetailsScreen extends StatelessWidget {
   static const String routeName = 'DocumentsDetailsScreen';
+  static int defaultIndex = 0;
 
   const DocumentsDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    defaultIndex = 0;
     context.read<DocumentsBloc>().add(const GetDocumentsDetails());
     return Scaffold(
         appBar: GenericAppBar(actions: [
@@ -44,7 +48,19 @@ class DocumentsDetailsScreen extends StatelessWidget {
               })
         ]),
         body: BlocConsumer<DocumentsBloc, DocumentsStates>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              if (state is DeletingDocuments) {
+                ProgressBar.show(context);
+              }
+              if (state is DocumentsDeleted) {
+                ProgressBar.dismiss(context);
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+              if (state is DeleteDocumentsError) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.message, '');
+              }
+            },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentsDetails ||
                 currentState is DocumentsDetailsFetched ||
@@ -91,6 +107,7 @@ class DocumentsDetailsScreen extends StatelessWidget {
                       CustomTabBarView(
                           lengthOfTabs: 6,
                           tabBarViewIcons: DocumentsUtil().tabBarViewIcons,
+                          initialIndex: defaultIndex,
                           tabBarViewWidgets: [
                             DocumentDetails(
                                 documentDetailsModel:

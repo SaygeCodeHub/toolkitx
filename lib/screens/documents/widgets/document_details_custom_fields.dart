@@ -6,6 +6,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
+import '../documents_details_screen.dart';
 
 class DocumentDetailsCustomFields extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
@@ -15,6 +16,7 @@ class DocumentDetailsCustomFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DocumentsDetailsScreen.defaultIndex = 2;
     return (documentDetailsModel.data.customfields.isEmpty)
         ? Center(
             child: Text(StringConstants.kNoCustomFields,
