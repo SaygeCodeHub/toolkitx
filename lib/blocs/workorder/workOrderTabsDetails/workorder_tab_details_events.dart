@@ -170,8 +170,12 @@ class FetchWorkOrderSingleDownTime extends WorkOrderTabsDetailsEvent {
 
 class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
-
-  FetchAssignWorkForceList({required this.pageNo});
+  final String workOrderWorkforceName;
+  final String workOrderId;
+  FetchAssignWorkForceList(
+      {required this.pageNo,
+      required this.workOrderWorkforceName,
+      required this.workOrderId});
 }
 
 class FetchAssignPartsList extends WorkOrderTabsDetailsEvent {
@@ -201,6 +205,12 @@ class SearchWorkOrderParts extends WorkOrderTabsDetailsEvent {
   final bool isSearched;
 
   SearchWorkOrderParts({required this.isSearched});
+}
+
+class SearchWorkOrderWorkforce extends WorkOrderTabsDetailsEvent {
+  final bool isWorkforceSearched;
+
+  SearchWorkOrderWorkforce({required this.isWorkforceSearched});
 }
 
 class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
@@ -257,5 +267,7 @@ class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
 class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
 
 class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+
+class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 
 class DeleteWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}

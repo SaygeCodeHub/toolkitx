@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_card.dart';
-import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_screen.dart';
+import 'package:toolkit/screens/workorder/workorder_add_parts_screen.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../../blocs/workorder/workorder_bloc.dart';

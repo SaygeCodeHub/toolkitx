@@ -15,7 +15,6 @@ import 'documents_list_card.dart';
 
 class DocumentListTile extends StatelessWidget {
   const DocumentListTile({super.key});
-  static bool noMoreData = false;
 
   @override
   Widget build(BuildContext context) {

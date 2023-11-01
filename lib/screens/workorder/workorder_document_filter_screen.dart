@@ -78,13 +78,13 @@ class WorkOrderDocumentFilterScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
                   TextFieldWidget(
-                      value: WorkOrderAddDocumentScreen
+                      value: WorkOrderAssignDocumentScreen
                               .documentFilterMap['name'] ??
                           '',
                       maxLength: 70,
                       onTextFieldChanged: (String textValue) {
-                        WorkOrderAddDocumentScreen.documentFilterMap['name'] =
-                            textValue;
+                        WorkOrderAssignDocumentScreen
+                            .documentFilterMap['name'] = textValue;
                       }),
                   const WorkOrderDocumentTypeListTile(),
                   Text(DatabaseUtil.getText('Status'),
@@ -102,13 +102,13 @@ class WorkOrderDocumentFilterScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
                   TextFieldWidget(
-                      value: WorkOrderAddDocumentScreen
+                      value: WorkOrderAssignDocumentScreen
                               .documentFilterMap['author'] ??
                           '',
                       maxLength: 70,
                       onTextFieldChanged: (String textValue) {
-                        WorkOrderAddDocumentScreen.documentFilterMap['author'] =
-                            textValue;
+                        WorkOrderAssignDocumentScreen
+                            .documentFilterMap['author'] = textValue;
                       })
                 ],
               )),

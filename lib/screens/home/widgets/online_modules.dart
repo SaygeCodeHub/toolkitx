@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
@@ -24,6 +25,7 @@ import '../../logBook/logbook_list_screen.dart';
 import '../../loto/loto_list_screen.dart';
 import '../../permit/permit_list_screen.dart';
 import '../../qualityManagement/qm_list_screen.dart';
+import '../../safetyNotice/safety_notice_screen.dart';
 import '../../signInQRCode/signin_list_screen.dart';
 import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 
@@ -200,6 +202,13 @@ class OnLineModules extends StatelessWidget {
       case 'dms':
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
             arguments: true);
+        break;
+      case 'safetyNotice':
+        Navigator.pushNamed(context, SafetyNoticeScreen.routeName,
+            arguments: true);
+        break;
+      case 'eam':
+        Navigator.pushNamed(context, AssetsListScreen.routeName);
         break;
     }
   }

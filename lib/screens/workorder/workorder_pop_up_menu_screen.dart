@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/workorder/widgets/workorder_add_parts_screen.dart';
-
+import 'package:toolkit/screens/workorder/workorder_add_parts_screen.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
@@ -62,6 +61,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
           WorkOrderAddMisCostScreen.workOrderMasterDatum =
               context.read<WorkOrderBloc>().workOrderMasterDatum;
+          WorkOrderAddMisCostScreen.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDowntime')) {
@@ -121,6 +121,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
         if (value == DatabaseUtil.getText('assign_workforce')) {
           AssignWorkForceBody.assignWorkForceMap['workorderId'] =
               workOrderDetailsMap['workorderId'] ?? '';
+          context.read<WorkOrderTabDetailsBloc>().assignWorkForceDatum = [];
           Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddParts')) {
@@ -133,7 +134,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
-          Navigator.pushNamed(context, WorkOrderAddDocumentScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName);
         }
         if (value == DatabaseUtil.getText('AddComment')) {
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =

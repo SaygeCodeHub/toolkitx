@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/assets/assets_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
+import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
@@ -51,6 +53,7 @@ import 'blocs/permit/permit_bloc.dart';
 import 'blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/qualityManagement/qm_bloc.dart';
+import 'blocs/safetyNotice/safety_notice_bloc.dart';
 import 'blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
 import 'blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
 import 'blocs/timeZone/time_zone_bloc.dart';
@@ -171,6 +174,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
           BlocProvider(lazy: true, create: (context) => SignInProcessBloc()),
+          BlocProvider(lazy: true, create: (context) => SafetyNoticeBloc()),
           BlocProvider(
               lazy: true, create: (context) => SignInLocationDetailsBloc()),
           BlocProvider(
@@ -194,6 +198,8 @@ class MyApp extends StatelessWidget {
               lazy: true, create: (context) => FeedbackCertificateBloc()),
           BlocProvider(lazy: true, create: (context) => DocumentsBloc()),
           BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
+          BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
+          BlocProvider(lazy: true, create: (context) => AssetsBloc()),
         ],
         child: GestureDetector(
             onTap: () {

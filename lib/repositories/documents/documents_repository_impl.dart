@@ -1,7 +1,9 @@
-import 'package:toolkit/data/models/documents/document_master_model.dart';
-import 'package:toolkit/data/models/documents/document_roles_model.dart';
-
+import '../../data/models/documents/document_master_model.dart';
+import '../../data/models/documents/document_roles_model.dart';
+import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
+import '../../data/models/documents/documents_to_link_model.dart';
+import '../../data/models/documents/post_document_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'documents_repository.dart';
@@ -29,5 +31,37 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getmaster?hashcode=$hashCode&userid=$userId");
     return FetchDocumentMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<DocumentDetailsModel> getDocumentsDetails(
+      String userId, String hashCode, String roleId, String documentId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId");
+    return DocumentDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<DocumentsToLinkModel> getDocumentsToLink(
+      String filter, String hashCode, String documentId, int pageNo) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}document/getdocumentstolink?pageno=$pageNo&hashcode=$hashCode&documentid=$documentId&filter=$filter");
+    return DocumentsToLinkModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> saveLinkedDocuments(
+      Map saveLinkedDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/savelinkeddocuments",
+        saveLinkedDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/attachfiles", attachDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
   }
 }

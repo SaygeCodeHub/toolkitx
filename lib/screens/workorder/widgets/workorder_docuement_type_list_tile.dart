@@ -18,17 +18,18 @@ class WorkOrderDocumentTypeListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderDocumentType(
-        docTypeId: WorkOrderAddDocumentScreen.documentFilterMap['type'] ?? '',
+        docTypeId:
+            WorkOrderAssignDocumentScreen.documentFilterMap['type'] ?? '',
         docTypeName:
-            WorkOrderAddDocumentScreen.documentFilterMap['type'] != null
-                ? WorkOrderAddDocumentScreen.documentFilterMap['typeName']
+            WorkOrderAssignDocumentScreen.documentFilterMap['type'] != null
+                ? WorkOrderAssignDocumentScreen.documentFilterMap['typeName']
                 : ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderDocumentTypeSelected,
         builder: (context, state) {
           if (state is WorkOrderDocumentTypeSelected) {
-            WorkOrderAddDocumentScreen.documentFilterMap['typeName'] =
+            WorkOrderAssignDocumentScreen.documentFilterMap['typeName'] =
                 state.docTypeName;
             return ListTile(
                 contentPadding: EdgeInsets.zero,

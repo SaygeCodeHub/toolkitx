@@ -18,6 +18,7 @@ import '../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../data/models/workorder/manage_downtime_model.dart';
 import '../../data/models/workorder/reject_workorder_model.dart';
 import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../data/models/workorder/start_workorder_model.dart';
 import '../../data/models/workorder/update_workorder_details_model.dart';
 import '../../data/models/workorder/workorder_edit_workforce_model.dart';
@@ -66,6 +67,8 @@ abstract class WorkOrderRepository {
 
   Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
       Map saveWorkOrderCommentsMap);
+
+  Future<SaveWorkOrderDocumentsModel> saveDocuments(Map saveDocumentsMap);
 
   Future<SaveNewAndSimilarWorkOrderModel> saveNewAndSimilarWorkOrder(
       Map saveNewAndSimilarWorkOrderMap);

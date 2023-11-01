@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -26,13 +25,15 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
 import '../../../data/models/workorder/workorder_save_comments_model.dart';
 import '../../../screens/workorder/workorder_add_comments_screen.dart';
+import '../../../screens/workorder/assign_workforce_screen.dart';
+import '../../../screens/workorder/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
-import '../../../screens/workorder/widgets/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
@@ -47,6 +48,7 @@ class WorkOrderTabDetailsBloc
   bool docListReachedMax = false;
   int pageNo = 1;
   String partName = '';
+  String workOrderWorkforceName = '';
   String workOrderId = '';
   List<AddPartsDatum> addPartsDatum = [];
 
@@ -80,6 +82,7 @@ class WorkOrderTabDetailsBloc
     on<RejectWorkOrder>(_rejectWorkOrder);
     on<StartWorkOrder>(_startWorkOrder);
     on<SearchWorkOrderParts>(_searchWorkOrderParts);
+    on<SearchWorkOrderWorkforce>(_searchWorkOrderWorkforce);
     on<FetchWorkOrderDocuments>(_fetchWorkOrderDocuments);
     on<SelectWorkOrderDocument>(_selectWorkOrderDocuments);
     on<SelectWorkOrderDocumentType>(_selectWorkOrderDocumentType);
@@ -91,6 +94,7 @@ class WorkOrderTabDetailsBloc
     on<AssignWorkForce>(_assignWorkForce);
     on<EditWorkOrderWorkForce>(_editWorkForce);
     on<SaveWorkOrderComments>(_saveDocuments);
+    on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
     on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
   }
 
@@ -479,7 +483,8 @@ class WorkOrderTabDetailsBloc
 
   _selectVendorOptions(WorkOrderSelectVendorOption event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] == null) {
+    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] == null &&
+        WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
           i < WorkOrderAddMisCostScreen.workOrderMasterDatum[8].length;
           i++) {
@@ -499,7 +504,8 @@ class WorkOrderTabDetailsBloc
 
   _selectCurrencyOptions(WorkOrderSelectCurrencyOption event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['currency'] == null) {
+    if (WorkOrderAddMisCostScreen.workOrderDetailsMap['currency'] == null &&
+        WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
           i < WorkOrderAddMisCostScreen.workOrderMasterDatum[7].length;
           i++) {
@@ -645,7 +651,9 @@ class WorkOrderTabDetailsBloc
                 event.pageNo,
                 hashCode!,
                 WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-                '');
+                event.workOrderWorkforceName);
+        pageNo = event.pageNo;
+        workOrderWorkforceName = event.workOrderWorkforceName;
         assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
         assignWorkForceListReachedMax = fetchAssignWorkForceModel.data.isEmpty;
         emit(AssignWorkOrderFetched(
@@ -653,6 +661,27 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(FetchingAssignParts());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      if (!docListReachedMax) {
+        FetchAssignPartsModel fetchAssignPartsModel =
+            await _workOrderRepository.fetchAssignPartsModel(
+                event.pageNo, hashCode!, event.workOrderId, event.partName);
+        pageNo = event.pageNo;
+        workOrderId = event.workOrderId;
+        partName = event.partName;
+        addPartsDatum.addAll(fetchAssignPartsModel.data);
+        docListReachedMax = fetchAssignPartsModel.data.isEmpty;
+        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
+      }
+    } catch (e) {
+      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
     }
   }
 
@@ -678,27 +707,6 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderNotRejected(workOrderNotRejected: e.toString()));
-    }
-  }
-
-  Future<FutureOr<void>> _fetchAssignPartsList(FetchAssignPartsList event,
-      Emitter<WorkOrderTabDetailsStates> emit) async {
-    emit(FetchingAssignParts());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (!docListReachedMax) {
-        FetchAssignPartsModel fetchAssignPartsModel =
-            await _workOrderRepository.fetchAssignPartsModel(
-                event.pageNo, hashCode!, event.workOrderId, event.partName);
-        pageNo = event.pageNo;
-        workOrderId = event.workOrderId;
-        partName = event.partName;
-        addPartsDatum.addAll(fetchAssignPartsModel.data);
-        docListReachedMax = fetchAssignPartsModel.data.isEmpty;
-        emit(AssignPartsFetched(fetchAssignPartsModel: fetchAssignPartsModel));
-      }
-    } catch (e) {
-      emit(AssignPartsNotFetched(partsNotAssigned: e.toString()));
     }
   }
 
@@ -781,6 +789,26 @@ class WorkOrderTabDetailsBloc
     }
   }
 
+  FutureOr<void> _searchWorkOrderWorkforce(
+      SearchWorkOrderWorkforce event, Emitter<WorkOrderTabDetailsStates> emit) {
+    if (event.isWorkforceSearched == true) {
+      emit(WorkOrderAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      add(FetchAssignWorkForceList(
+        pageNo: 1,
+        workOrderWorkforceName: workOrderWorkforceName,
+        workOrderId: workOrderId,
+      ));
+    } else {
+      emit(WorkOrderAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      AssignWorkForceScreen.workforceNameController.clear();
+      assignWorkForceListReachedMax = false;
+      add(FetchAssignWorkForceList(
+          pageNo: 1, workOrderWorkforceName: '', workOrderId: workOrderId));
+    }
+  }
+
   FutureOr _fetchWorkOrderDocuments(FetchWorkOrderDocuments event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderDocuments());
@@ -792,11 +820,11 @@ class WorkOrderTabDetailsBloc
               hashCode!,
               WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
               '',
-              jsonEncode(WorkOrderAddDocumentScreen.documentFilterMap));
+              jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       emit(WorkOrderDocumentsFetched(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           documentList: [],
-          filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+          filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
       add(SelectWorkOrderDocument(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           docId: '',
@@ -820,7 +848,7 @@ class WorkOrderTabDetailsBloc
     emit(WorkOrderDocumentsFetched(
         documentList: documentList,
         fetchWorkOrderDocumentsModel: event.fetchWorkOrderDocumentsModel,
-        filterMap: WorkOrderAddDocumentScreen.documentFilterMap));
+        filterMap: WorkOrderAssignDocumentScreen.documentFilterMap));
   }
 
   _selectWorkOrderDocumentType(SelectWorkOrderDocumentType event,
@@ -843,7 +871,31 @@ class WorkOrderTabDetailsBloc
 
   _clearWorkOrderDocumentFilter(ClearWorkOrderDocumentFilter event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    WorkOrderAddDocumentScreen.documentFilterMap.clear();
+    WorkOrderAssignDocumentScreen.documentFilterMap.clear();
+  }
+
+  FutureOr _saveWorkOrderDocuments(SaveWorkOrderDocuments event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(SavingWorkOrderDocuments());
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    Map saveDocumentsMap = {
+      "hashcode": hashCode,
+      "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+      "documents":
+          WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
+      "userid": userId
+    };
+    SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
+        await _workOrderRepository.saveDocuments(saveDocumentsMap);
+    if (saveWorkOrderDocumentsModel.status == 200) {
+      emit(WorkOrderDocumentsSaved(
+          saveWorkOrderDocuments: saveWorkOrderDocumentsModel));
+    } else {
+      emit(WorkOrderDocumentsNotSaved(
+          documentsNotSaved:
+              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+    }
   }
 
   FutureOr _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
 import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
@@ -96,7 +97,9 @@ class LotoDetailsScreen extends StatelessWidget {
                             const Text("Tab 2"),
                             const Text("Tab 3"),
                             const Text("Tab 4"),
-                            const Text("Tab 5"),
+                            LotoCustomTimeLine(
+                                fetchLotoDetailsModel:
+                                    state.fetchLotoDetailsModel),
                             LotoTabSixScreen(
                                 fetchLotoDetailsModel:
                                     state.fetchLotoDetailsModel,

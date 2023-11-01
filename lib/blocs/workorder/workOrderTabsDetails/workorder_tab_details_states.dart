@@ -15,6 +15,7 @@ import '../../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../../data/models/workorder/manage_downtime_model.dart';
 import '../../../data/models/workorder/reject_workorder_model.dart';
 import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart';
+import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
 import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
@@ -316,6 +317,12 @@ class WorkOrderAddPartsListSearched extends WorkOrderTabDetailsStates {
   WorkOrderAddPartsListSearched({required this.isSearched});
 }
 
+class WorkOrderAssignWorkforceSearched extends WorkOrderTabDetailsStates {
+  final bool isWorkforceSearched;
+
+  WorkOrderAssignWorkforceSearched({required this.isWorkforceSearched});
+}
+
 class FetchingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
 
 class WorkOrderDocumentsFetched extends WorkOrderTabDetailsStates {
@@ -427,6 +434,20 @@ class WorkOrderCommentsNotSaved extends WorkOrderTabDetailsStates {
   final String commentsNotSaved;
 
   WorkOrderCommentsNotSaved({required this.commentsNotSaved});
+}
+
+class SavingWorkOrderDocuments extends WorkOrderTabDetailsStates {}
+
+class WorkOrderDocumentsSaved extends WorkOrderTabDetailsStates {
+  final SaveWorkOrderDocumentsModel saveWorkOrderDocuments;
+
+  WorkOrderDocumentsSaved({required this.saveWorkOrderDocuments});
+}
+
+class WorkOrderDocumentsNotSaved extends WorkOrderTabDetailsStates {
+  final String documentsNotSaved;
+
+  WorkOrderDocumentsNotSaved({required this.documentsNotSaved});
 }
 
 class DeletingWorkOrderWorkForce extends WorkOrderTabDetailsStates {}
