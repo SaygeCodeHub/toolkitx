@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
+import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
 import 'package:toolkit/repositories/documents/documents_repository.dart';
@@ -13,6 +14,7 @@ import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
+import '../repositories/assets/assets_repository_impl.dart';
 import '../repositories/calendar/calendar_repository.dart';
 import '../repositories/calendar/calendar_repository_impl.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart';
@@ -87,4 +89,5 @@ configurableDependencies() {
       () => DocumentsRepositoryImpl());
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
+  getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
 }

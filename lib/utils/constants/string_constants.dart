@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kNoLogs = 'No logs!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
@@ -20,6 +21,15 @@ abstract class StringConstants {
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
   static const String kSelectTypeValidation = 'Please Select type'; //
+  static const String kSafetyNoticeIssue =
+      'Do you want to issue this notice?'; //
+  static const String kSafetyNoticeHold = 'Do you want to hold this notice?'; //
+  static const String kSafetyNoticeCancel =
+      'Do you want to cancel this notice?'; //
+  static const String kSafetyNoticeClose =
+      'Do you want to close this notice?'; //
+  static const String kSafetyNoticeReissue =
+      'Do you want to reissue this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
   static const String kLogin = 'LOGIN';
@@ -204,6 +214,10 @@ abstract class StringConstants {
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
+  static const String kSafetyNoticeValidation = 'Please enter notice!'; //
+  static const String kSafetyNoticeValidityValidation =
+      'Please enter validity!'; //
+  static const String kUploadFiles = 'Uploading files...'; //
   static const String kDate = 'Date'; //
   static const String kSubmitTodoPopUp = 'Do you want to submit todo?'; //
   static const String kDescriptionValidation =
@@ -306,12 +320,14 @@ abstract class StringConstants {
   static const String kCapture = 'Capture';
   static const String kQRError = 'Invalid Location';
   static const String kLotoStarted = "Loto Started";
+  static const String kPhotosUploaded = "Photos Uploaded";
+  static const String kLotoCommentSaved = "Loto Comment saved";
   static const String kLotoRemoveStarted = "Loto Remove Started";
   static const String kLotoApplied = "Loto Applied";
   static const String kLotoAccepted = "Loto Approved";
+  static const String kLotoRemoved = "Loto Removed";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
-  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
@@ -320,4 +336,57 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kNoFiles = 'No Files found!';
+  static const String kAssetName = "Asset Name";
+  static const String kAssetTag = "Asset Tag";
+  static const String kServiceSite = "Service Site";
+  static const String kAssetGroup = "Asset Group";
+  static const String kCritically = "Critically";
+  static const String kParentAsset = "Parent Asset";
+  static const String kPosition = "Position";
+  static const String kPriority = "Priority";
+  static const String kState = "State";
+  static const String kAssetSpecialist = "Asset Specialist";
+  static const String kBarcode = "Barcode";
+  static const String kSerial = "Serial#";
+  static const String kModel = "Model";
+  static const String kITInfo = "IT Info:";
+  static const String kITType = "IT Type";
+  static const String kITFlag = "IT Flag";
+  static const String kIP = "IP";
+  static const String kOtherIp = "Other IP";
+  static const String kMACAddress = "MAC Address";
+  static const String kSubType = "Sub Type";
+  static const String kOSName = "OS Name";
+  static const String kSystemID = "System ID";
+  static const String kLinkedTo = "Linked To";
+  static const String kExtId = "Ext.Id";
+  static const String kWarranty = "Warranty:";
+  static const String kCodes = "Codes:";
+  static const String kLatitude = "Latitude";
+  static const String kAccount = "Account";
+  static const String kDepartment = "Department";
+  static const String kLongitude = "Longitude";
+  static const String kStraightLine = "Straight-Line";
+  static const String kDecliningBalance = "Declining Balance";
+  static const String kSumOfYearsDigits = "Sum of the Year's Digits";
+  static const String kWarrantyStart = "WarrantyStart";
+  static const String kWarrantyEnd = "Warranty End";
+  static const String kDescription = "Description";
+  static const String kDescriptionTitle = "Description:";
+  static const String kScAsset = "SCAsset";
+  static const String kManageDocuments = "Manage Documents";
+  static const String kManageDownTime = "Manage DownTime";
+  static const String kManageComment = "Manage Comment";
+  static const String kReportFailure = "Report Failure";
+  static const String kManageMeterReading = "ManageMeterReading";
+  static const String kChildPattern = "Child pattern";
+  static const String kCostAndDepreciation = "Cost And Depreciation:";
+  static const String kDepreciationMethod = "Depreciation Method";
+  static const String kPurchaseDate = "Purchase Date";
+  static const String kSalvageValue = "Salvage Value";
+  static const String kAssetCost = "Asset Cost";
+  static const String kLifespanYears = "Lifespan (Years)";
+  static const String kDepreciationFactor = "Depreciation Factor";
+  static const String kNoLinkedDoc = 'No Linked Documents!';
 }

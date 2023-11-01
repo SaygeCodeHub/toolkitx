@@ -60,11 +60,12 @@ class DocumentDetailsData {
   final String id;
   final String statustext;
   final String doctypename;
-  final List<FileList> filelist;
+  final List<FileList> fileList;
   final List<ApproveList> approvelist;
   final List<CustomField> customfields;
   final List<Log> logs;
   final List<LinkedDoc> linkeddocs;
+  final List<Comment> comments;
 
   DocumentDetailsData(
       {required this.name,
@@ -102,10 +103,11 @@ class DocumentDetailsData {
       required this.id,
       required this.statustext,
       required this.doctypename,
-      required this.filelist,
+      required this.fileList,
       required this.approvelist,
       required this.customfields,
       required this.logs,
+      required this.comments,
       required this.linkeddocs});
 
   factory DocumentDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -145,13 +147,17 @@ class DocumentDetailsData {
           id: json["id"],
           statustext: json["statustext"],
           doctypename: json["doctypename"],
-          filelist: List<FileList>.from(
+          fileList: List<FileList>.from(
               json["filelist"].map((x) => FileList.fromJson(x))),
           approvelist: List<ApproveList>.from(
               json["approvelist"].map((x) => ApproveList.fromJson(x))),
           customfields: List<CustomField>.from(
               json["customfields"].map((x) => CustomField.fromJson(x))),
           logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+          comments: json["comments"] == null
+              ? json["comments"]
+              : List<Comment>.from(
+                  json["comments"].map((x) => Comment.fromJson(x))),
           linkeddocs: List<LinkedDoc>.from(
               json["linkeddocs"].map((x) => LinkedDoc.fromJson(x))));
 
@@ -191,16 +197,17 @@ class DocumentDetailsData {
         "id": id,
         "statustext": statustext,
         "doctypename": doctypename,
-        "filelist": List<dynamic>.from(filelist.map((x) => x.toJson())),
+        "filelist": List<dynamic>.from(fileList.map((x) => x.toJson())),
         "approvelist": List<dynamic>.from(approvelist.map((x) => x.toJson())),
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
         "linkeddocs": List<dynamic>.from(linkeddocs.map((x) => x.toJson()))
       };
 }
 
 class ApproveList {
-  final int approve;
+  final dynamic approve;
   final String remark;
   final String group;
 
@@ -214,6 +221,34 @@ class ApproveList {
 
   Map<String, dynamic> toJson() =>
       {"approve": approve, "remark": remark, "group": group};
+}
+
+class Comment {
+  final String ownername;
+  final String created;
+  final dynamic files;
+  final String comments;
+
+  Comment({
+    required this.ownername,
+    required this.created,
+    required this.files,
+    required this.comments,
+  });
+
+  factory Comment.fromJson(Map<String, dynamic> json) => Comment(
+        ownername: json["ownername"],
+        created: json["created"],
+        files: json["files"] ?? '',
+        comments: json["comments"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ownername": ownername,
+        "created": created,
+        "files": files,
+        "comments": comments,
+      };
 }
 
 class CustomField {

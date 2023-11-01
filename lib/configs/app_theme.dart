@@ -109,4 +109,12 @@ extension AppTextTheme on TextTheme {
   TextStyle get xxxSmall {
     return const TextStyle(fontSize: 7, color: AppColor.white);
   }
+
+  TextStyle get smallTextBlack {
+    return const TextStyle(fontWeight: FontWeight.bold, color: AppColor.black);
+  }
+
+  TextStyle get smallTextGrey {
+    return const TextStyle(fontWeight: FontWeight.w400, color: AppColor.grey);
+  }
 }

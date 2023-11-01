@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/screens/loto/loto_add_comment_screen.dart';
+import 'package:toolkit/screens/loto/loto_upload_photos_screen.dart';
 import 'package:toolkit/screens/loto/widgets/loto_assign_workforce_body.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
 import 'package:toolkit/screens/loto/widgets/start_remove_loto_screen.dart';
@@ -41,13 +43,29 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                     arguments: fetchLotoDetailsModel.data.id)
                 .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
+                    });
+          }
+          if (value == DatabaseUtil.getText('assign_team')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
+                    });
+          }
+          if (value == DatabaseUtil.getText('AddComment')) {
+            Navigator.pushNamed(context, LotoAddCommentScreen.routeName);
+          }
+          if (value == DatabaseUtil.getText('UploadPhotos')) {
+            Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName).then(
+                (_) => {
                       context
                           .read<LotoDetailsBloc>()
                           .add(FetchLotoDetails(lotTabIndex: 0))
                     });
-          }
-          if (value == DatabaseUtil.getText('assign_team')) {
-            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName);
           }
           if (value == DatabaseUtil.getText('Start')) {
             Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
@@ -89,13 +107,13 @@ class LotoPopupMenuButton extends StatelessWidget {
                         Navigator.pop(context);
                       } else if (state is LotoNotApplied) {
                         ProgressBar.dismiss(context);
-                        showCustomSnackBar(
-                            context, StringConstants.kSomethingWentWrong, '');
+                        showCustomSnackBar(context, state.getError, '');
                       }
                     },
                     child: AndroidPopUp(
-                        titleValue: StringConstants.kPleaseConfirm,
-                        contentValue: StringConstants.kPleaseVerifyEverything,
+                        titleValue: DatabaseUtil.getText('ApproveLotoTitle'),
+                        contentValue:
+                            DatabaseUtil.getText('removelotoremovemessage'),
                         onPrimaryButton: () {
                           context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
                           context.read<LotoDetailsBloc>().add(FetchLotoDetails(
@@ -119,17 +137,52 @@ class LotoPopupMenuButton extends StatelessWidget {
                             Navigator.pop(context);
                           } else if (state is LotoNotAccepted) {
                             ProgressBar.dismiss(context);
-                            showCustomSnackBar(context,
-                                StringConstants.kSomethingWentWrong, '');
+                            showCustomSnackBar(context, state.getError, '');
                           }
                         },
                         child: AndroidPopUp(
-                            titleValue: StringConstants.kPleaseConfirm,
-                            contentValue: StringConstants.kWantToApproveLoto,
+                            titleValue:
+                                DatabaseUtil.getText('ApproveLotoTitle'),
+                            contentValue:
+                                DatabaseUtil.getText('ApproveLotoMessage'),
                             onPrimaryButton: () {
                               context
                                   .read<LotoDetailsBloc>()
                                   .add(AcceptLotoEvent());
+                              context.read<LotoDetailsBloc>().add(
+                                  FetchLotoDetails(
+                                      lotTabIndex: context
+                                          .read<LotoDetailsBloc>()
+                                          .lotoTabIndex));
+                            })));
+          }
+          if (value == DatabaseUtil.getText('RemoveLoto')) {
+            showDialog(
+                context: context,
+                builder: (context) =>
+                    BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                        listener: (context, state) {
+                          if (state is LotoRemoving) {
+                            ProgressBar.show(context);
+                          } else if (state is LotoRemoved) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(
+                                context, StringConstants.kLotoRemoved, '');
+                            Navigator.pop(context);
+                          } else if (state is LotoNotRemoved) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context, state.getError, '');
+                          }
+                        },
+                        child: AndroidPopUp(
+                            titleValue:
+                                DatabaseUtil.getText('ApproveLotoTitle'),
+                            contentValue:
+                                DatabaseUtil.getText('removelotoremovemessage'),
+                            onPrimaryButton: () {
+                              context
+                                  .read<LotoDetailsBloc>()
+                                  .add(RemoveLotoEvent());
                               context.read<LotoDetailsBloc>().add(
                                   FetchLotoDetails(
                                       lotTabIndex: context
