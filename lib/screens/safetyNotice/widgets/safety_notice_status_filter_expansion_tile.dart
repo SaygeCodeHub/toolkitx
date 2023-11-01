@@ -16,9 +16,10 @@ class SafetyNoticeStatusFilterExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<SafetyNoticeBloc>()
-        .add(SelectSafetyNoticeStatus(statusId: '', status: ''));
+    context.read<SafetyNoticeBloc>().add(SelectSafetyNoticeStatus(
+        statusId:
+            SafetyNoticeFilterScreen.safetyNoticeFilterMap['status'] ?? '',
+        status: ''));
     return BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
         buildWhen: (previousState, currentState) =>
             currentState is SafetyNoticeStatusSelected,

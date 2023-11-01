@@ -9,7 +9,6 @@ import '../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../blocs/safetyNotice/safety_notice_states.dart';
 import '../../configs/app_spacing.dart';
 import 'add_and_edit_safety_notice_screen.dart';
-import 'safety_notice_history_screen.dart';
 import 'safety_notice_filter_screen.dart';
 import 'widgets/safety_notice_list_body.dart';
 
@@ -63,7 +62,8 @@ class SafetyNoticeScreen extends StatelessWidget {
                       },
                       secondaryOnPress: () {},
                       secondaryIcon: Icons.history,
-                      clearVisible: state.safetyNoticeFilterMap.isNotEmpty,
+                      clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&
+                          isFromHomeScreen != true,
                       clearOnPress: () {
                         state.safetyNoticeFilterMap.clear();
                         pageNo = 1;
@@ -80,14 +80,6 @@ class SafetyNoticeScreen extends StatelessWidget {
                 }
               },
             ),
-            CustomIconButtonRow(
-                primaryOnPress: () {},
-                secondaryOnPress: () {
-                  Navigator.pushNamed(
-                      context, SafetyNoticeHistoryScreen.routeName);
-                },
-                secondaryIcon: Icons.history,
-                clearOnPress: () {}),
             const SizedBox(height: xxTinierSpacing),
             const SafetyNoticeListBody()
           ],
