@@ -63,7 +63,8 @@ abstract class WorkOrderRepository {
 
   Future<EditWorkOrderWorkForceModel> editWorkForce(Map editWorkForceMap);
 
-  Future<DeleteWorkOrderWorkForceModel> deleteWorkForce(Map deleteWorkForceMap);
+  Future<DeleteWorkOrderWorkForceModel> deleteWorkOrderWorkForce(
+      Map deleteWorkForceMap);
 
   Future<SaveWorkOrderCommentsModel> saveWorkOrderComments(
       Map saveWorkOrderCommentsMap);

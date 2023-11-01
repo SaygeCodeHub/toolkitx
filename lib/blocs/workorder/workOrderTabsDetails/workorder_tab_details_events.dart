@@ -172,6 +172,7 @@ class FetchAssignWorkForceList extends WorkOrderTabsDetailsEvent {
   final int pageNo;
   final String workOrderWorkforceName;
   final String workOrderId;
+
   FetchAssignWorkForceList(
       {required this.pageNo,
       required this.workOrderWorkforceName,
@@ -270,4 +271,8 @@ class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
 
 class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 
-class DeleteWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+class DeleteWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {
+  final String workForceId;
+
+  DeleteWorkOrderWorkForce({required this.workForceId});
+}

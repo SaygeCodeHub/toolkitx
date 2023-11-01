@@ -209,10 +209,10 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
-  Future<DeleteWorkOrderWorkForceModel> deleteWorkForce(
+  Future<DeleteWorkOrderWorkForceModel> deleteWorkOrderWorkForce(
       Map deleteWorkForceMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}workorder/savecomments", deleteWorkForceMap);
+        "${ApiConstants.baseUrl}workorder/deleteworkforce", deleteWorkForceMap);
     return DeleteWorkOrderWorkForceModel.fromJson(response);
   }
 }

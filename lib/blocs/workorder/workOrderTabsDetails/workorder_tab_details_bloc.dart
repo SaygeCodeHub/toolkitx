@@ -15,6 +15,7 @@ import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
+import '../../../data/models/workorder/delete_workorder_workforce_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../data/models/workorder/fetch_workorder_documents_model.dart';
@@ -1043,6 +1044,21 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map deleteWorkForce = {
+        "woworkforceid": event.workForceId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      DeleteWorkOrderWorkForceModel deleteWorkOrderWorkForceModel =
+          await _workOrderRepository.deleteWorkOrderWorkForce(deleteWorkForce);
+      if (deleteWorkOrderWorkForceModel.message == '1') {
+        emit(WorkOrderWorkForceDeleted(
+            deleteWorkOrderWorkForceModel: deleteWorkOrderWorkForceModel));
+      } else {
+        emit(WorkOrderWorkForceNotDeleted(
+            workForceNotDeleted:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
     } catch (e) {
       emit(WorkOrderWorkForceNotDeleted(workForceNotDeleted: e.toString()));
     }
