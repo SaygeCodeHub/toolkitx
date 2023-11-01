@@ -55,8 +55,8 @@ class DocumentsFilesMenu extends StatelessWidget {
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
-          for (int i = 0; i < popUpMenuItems.length; i++)
-            _buildPopupMenuItem(context, popUpMenuItems[i], i)
-        ]);
+              for (int i = 0; i < popUpMenuItems.length; i++)
+                _buildPopupMenuItem(context, popUpMenuItems[i], i)
+            ]);
   }
 }

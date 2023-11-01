@@ -31,42 +31,42 @@ class DocumentDetailsComments extends StatelessWidget {
             itemCount: documentDetailsModel.data.comments.length,
             itemBuilder: (context, index) {
               return CustomCard(
-              child: Padding(
-                  padding: const EdgeInsets.only(top: xxTinierSpacing),
-                  child: ListTile(
-                      title: Text(
-                          documentDetailsModel
-                              .data.comments[index].ownername,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: AppColor.mediumBlack)),
-                      subtitle: Padding(
-                          padding:
-                          const EdgeInsets.only(top: xxTinierSpacing),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(documentDetailsModel
-                                    .data.comments[index].comments),
-                                const SizedBox(height: xxTinierSpacing),
-                                Text(
-                                    documentDetailsModel
-                                        .data.comments[index].created,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xxSmall
-                                        .copyWith(
-                                        color: AppColor.deepBlue)),
-                                const SizedBox(height: xxTiniestSpacing),
-                                CustomGridImages(
-                                    files: documentDetailsModel
-                                        .data.comments[index].files,
-                                    clientId: clientId)
-                              ])))));
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: xxTinierSpacing);
-        });
+                  child: Padding(
+                      padding: const EdgeInsets.only(top: xxTinierSpacing),
+                      child: ListTile(
+                          title: Text(
+                              documentDetailsModel
+                                  .data.comments[index].ownername,
+                              style: Theme.of(context).textTheme.small.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColor.mediumBlack)),
+                          subtitle: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: xxTinierSpacing),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(documentDetailsModel
+                                        .data.comments[index].comments),
+                                    const SizedBox(height: xxTinierSpacing),
+                                    Text(
+                                        documentDetailsModel
+                                            .data.comments[index].created,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xxSmall
+                                            .copyWith(
+                                                color: AppColor.deepBlue)),
+                                    const SizedBox(height: xxTiniestSpacing),
+                                    CustomGridImages(
+                                        files: documentDetailsModel
+                                            .data.comments[index].files,
+                                        clientId: clientId)
+                                  ])))));
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: xxTinierSpacing);
+            });
   }
 }

@@ -28,27 +28,27 @@ class DocumentDetailsLinkedDocs extends StatelessWidget {
             shrinkWrap: true,
             itemCount: documentDetailsModel.data.linkeddocs.length,
             itemBuilder: (context, index) {
-          return CustomCard(
-              child: ListTile(
-                  contentPadding: const EdgeInsets.only(
-                      left: tinierSpacing,
-                      right: tinierSpacing,
-                      top: tiniestSpacing,
-                      bottom: tiniestSpacing),
-                  title: Text(
-                      documentDetailsModel.data.linkeddocs[index].name,
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppColor.mediumBlack)),
-                  subtitle: Padding(
-                      padding: const EdgeInsets.only(top: xxTinierSpacing),
-                      child: Text(
-                          documentDetailsModel
-                              .data.linkeddocs[index].doctype,
-                          style: Theme.of(context).textTheme.xSmall))));
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: xxTinierSpacing);
-        });
+              return CustomCard(
+                  child: ListTile(
+                      contentPadding: const EdgeInsets.only(
+                          left: tinierSpacing,
+                          right: tinierSpacing,
+                          top: tiniestSpacing,
+                          bottom: tiniestSpacing),
+                      title: Text(
+                          documentDetailsModel.data.linkeddocs[index].name,
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColor.mediumBlack)),
+                      subtitle: Padding(
+                          padding: const EdgeInsets.only(top: xxTinierSpacing),
+                          child: Text(
+                              documentDetailsModel
+                                  .data.linkeddocs[index].doctype,
+                              style: Theme.of(context).textTheme.xSmall))));
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: xxTinierSpacing);
+            });
   }
 }

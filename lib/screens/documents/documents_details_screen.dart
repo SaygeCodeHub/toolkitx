@@ -84,9 +84,9 @@ class DocumentsDetailsScreen extends StatelessWidget {
                                       vertical: xxTinierSpacing),
                                   child: Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                             child: Text(state
@@ -121,14 +121,14 @@ class DocumentsDetailsScreen extends StatelessWidget {
                                     state.documentDetailsModel),
                             DocumentCustomTimeline(
                                 documentDetailsModel:
-                                state.documentDetailsModel),
+                                    state.documentDetailsModel),
                             DocumentDetailsComments(
                                 documentDetailsModel:
-                                state.documentDetailsModel,
+                                    state.documentDetailsModel,
                                 clientId: state.clientId),
                             DocumentDetailsLinkedDocs(
                                 documentDetailsModel:
-                                state.documentDetailsModel)
+                                    state.documentDetailsModel)
                           ])
                     ]));
               } else {
