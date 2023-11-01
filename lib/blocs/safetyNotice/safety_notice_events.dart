@@ -63,3 +63,9 @@ class SafetyNoticeApplyFilter extends SafetyNoticeEvent {
 
   SafetyNoticeApplyFilter({required this.safetyNoticeFilterMap});
 }
+
+class SafetyNoticeReadReceipt extends SafetyNoticeEvent {
+  final String safetyNoticeId;
+
+  SafetyNoticeReadReceipt({required this.safetyNoticeId});
+}

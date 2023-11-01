@@ -39,4 +39,6 @@ abstract class SafetyNoticeRepository {
 
   Future<FetchSafetyNoticeDetailsModel> fetchSafetyNoticeDetails(
       String safetyNoticeId, String userId, String hashCode);
+
+  Future<void> saveReadReceipt(Map saveReadReceiptMap);
 }
