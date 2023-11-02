@@ -11,6 +11,7 @@ import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/assets/assets_details_model.dart';
 import '../../data/models/assets/assets_master_model.dart';
+import '../../data/models/assets/fetch_assets_document_model.dart';
 import '../../di/app_module.dart';
 import '../../utils/database_utils.dart';
 
@@ -35,6 +36,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<ClearAssetsFilter>(_clearAssetsFilter);
     on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
     on<SaveAssetsDownTime>(_saveAssetsDownTime);
+    on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
   }
 
   int assetTabIndex = 0;
@@ -193,6 +195,27 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           saveAssetsDowntimeModel: saveAssetsDowntimeModel));
     } catch (e) {
       emit(AssetsDownTimeNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssetsManageDocument(
+      FetchAssetsManageDocument event, Emitter<AssetsState> emit) async {
+    emit(AssetsGetDocumentFetching());
+    try {
+      List popUpMenuItems = [
+        DatabaseUtil.getText("Delete"),
+        DatabaseUtil.getText("Cancel"),
+      ];
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel =
+          await _assetsRepository.fetchAssetsDocument(
+              event.pageNo, hashCode!, event.assetsId);
+      emit(AssetsGetDocumentFetched(
+          fetchAssetsManageDocumentModel: fetchAssetsManageDocumentModel,
+          assetsPopUpMenu: popUpMenuItems,
+          showPopUpMenu: true));
+    } catch (e) {
+      emit(AssetsGetDocumentError(errorMessage: e.toString()));
     }
   }
 }

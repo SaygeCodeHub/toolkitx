@@ -112,3 +112,23 @@ class AssetsDownTimeNotSaved extends AssetsState {
 
   AssetsDownTimeNotSaved({required this.errorMessage});
 }
+
+class AssetsGetDocumentFetching extends AssetsState {}
+
+class AssetsGetDocumentFetched extends AssetsState {
+  final FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel;
+  final List assetsPopUpMenu;
+  final bool showPopUpMenu;
+
+  AssetsGetDocumentFetched({
+    required this.fetchAssetsManageDocumentModel,
+    required this.assetsPopUpMenu,
+    required this.showPopUpMenu,
+  });
+}
+
+class AssetsGetDocumentError extends AssetsState {
+  final String errorMessage;
+
+  AssetsGetDocumentError({required this.errorMessage});
+}
