@@ -39,6 +39,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/expense/expense_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -409,6 +410,9 @@ class AppRoutes {
             documentDetailsModel: settings.arguments as DocumentDetailsModel));
       case SafetyNoticeFilterScreen.routeName:
         return _createRoute(const SafetyNoticeFilterScreen());
+      case ExpenseListScreen.routeName:
+        return _createRoute(const ExpenseListScreen());
+
       default:
         return _createRoute(const WelcomeScreen());
     }
