@@ -14,7 +14,6 @@ import '../../data/models/loto/loto_list_model.dart';
 import '../../data/models/loto/loto_master_model.dart';
 import '../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../data/models/loto/start_remove_loto_model.dart';
-import '../../data/models/loto/start_remove_loto_model.dart';
 
 abstract class LotoRepository {
   Future<FetchLotoListModel> fetchLotoListRepo(
@@ -50,8 +49,6 @@ abstract class LotoRepository {
   Future<RemoveLotoModel> removeLotoRepo(Map removeLotoMap);
 
   Future<StartLotoModel> startLotoRepo(Map startLotoMap);
-
-  Future<StartRemoveLotoModel> startRemoveLotoRepo(Map startRemoveLotoMap);
 
   Future<StartRemoveLotoModel> startRemoveLotoRepo(Map startRemoveLotoMap);
 
