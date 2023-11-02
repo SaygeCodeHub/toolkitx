@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
-
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
@@ -61,6 +60,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
       if (fetchLotoDetailsModel.data.assignwf == '1') {
         popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign_workforce'));
+      }
+      if (fetchLotoDetailsModel.data.isstartremove == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('RemoveButton'));
       }
       if (fetchLotoDetailsModel.data.assignwf == '1') {
         popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_team'));
