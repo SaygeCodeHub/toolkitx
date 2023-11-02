@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/status_tag_model.dart';
@@ -8,6 +7,8 @@ import '../../../data/safetyNotice/fetch_safety_notices_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/status_tag.dart';
+import '../safety_notice_details_screen.dart';
+import '../safety_notice_screen.dart';
 
 class SafetyNoticeListCard extends StatelessWidget {
   final Notice noticesDatum;
@@ -19,7 +20,13 @@ class SafetyNoticeListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomCard(
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          SafetyNoticeDetailsScreen.safetyNoticeId = noticesDatum.id;
+          Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName)
+              .then((value) => Navigator.pushReplacementNamed(
+                  context, SafetyNoticeScreen.routeName,
+                  arguments: false));
+        },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
             padding: const EdgeInsets.only(bottom: xxTinierSpacing),

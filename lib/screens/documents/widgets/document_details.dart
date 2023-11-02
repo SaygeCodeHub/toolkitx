@@ -5,6 +5,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
+import '../documents_details_screen.dart';
 
 class DocumentDetails extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
@@ -13,6 +14,7 @@ class DocumentDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DocumentsDetailsScreen.defaultIndex = 0;
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

@@ -6,9 +6,7 @@ import 'package:toolkit/screens/documents/widgets/document_list_tile.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/documents/documents_states.dart';
 import '../../configs/app_spacing.dart';
-import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
-import '../../widgets/text_button.dart';
 import 'change_role_documents.dart';
 import 'document_filter_screen.dart';
 
@@ -29,59 +27,30 @@ class DocumentsListScreen extends StatelessWidget {
     return Scaffold(
         appBar: const GenericAppBar(title: 'Documents'),
         body: Padding(
-          padding: const EdgeInsets.only(
-              left: leftRightMargin,
-              right: leftRightMargin,
-              top: xxTinierSpacing),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               BlocBuilder<DocumentsBloc, DocumentsStates>(
-                  buildWhen: (previousState, currentState) =>
-                      (currentState is FetchingDocumentsList && page == 1) ||
-                      (currentState is DocumentsListFetched),
                   builder: (context, state) {
-                    if (state is DocumentsListFetched) {
-                      return Visibility(
-                          visible:
-                              context.read<DocumentsBloc>().filters.isNotEmpty,
-                          child: CustomTextButton(
-                              onPressed: () {
-                                context
-                                    .read<DocumentsBloc>()
-                                    .documentsListDatum
-                                    .clear();
-                                context.read<DocumentsBloc>().selectedType = '';
-                                context.read<DocumentsBloc>().filters = {};
-                                context
-                                    .read<DocumentsBloc>()
-                                    .docListReachedMax = false;
-                                page = 1;
-                                context
-                                    .read<DocumentsBloc>()
-                                    .add(ClearDocumentFilter());
-                                DocumentFilterScreen.documentFilterMap = {};
-                              },
-                              textValue: DatabaseUtil.getText('Clear')));
-                    } else {
-                      return const SizedBox();
-                    }
-                  }),
-              CustomIconButtonRow(
-                  isEnabled: true,
-                  primaryOnPress: () {
-                    Navigator.pushNamed(
-                        context, DocumentFilterScreen.routeName);
-                  },
-                  secondaryOnPress: () {
-                    Navigator.pushNamed(
-                        context, ChangeRoleDocumentsScreen.routeName);
-                  },
-                  clearOnPress: () {})
-            ]),
-            const SizedBox(height: xxTinierSpacing),
-            const DocumentListTile()
-          ]),
-        ));
+                return CustomIconButtonRow(
+                    clearVisible:
+                        context.read<DocumentsBloc>().filters.isNotEmpty,
+                    isEnabled: true,
+                    primaryOnPress: () {
+                      Navigator.pushNamed(
+                          context, DocumentFilterScreen.routeName);
+                    },
+                    secondaryOnPress: () {
+                      Navigator.pushNamed(
+                          context, ChangeRoleDocumentsScreen.routeName);
+                    },
+                    clearOnPress: () {});
+              }),
+              const SizedBox(height: xxTinierSpacing),
+              const DocumentListTile()
+            ])));
   }
 }

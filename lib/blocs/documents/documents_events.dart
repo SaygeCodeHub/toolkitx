@@ -44,3 +44,27 @@ class ClearDocumentFilter extends DocumentsEvents {}
 class GetDocumentsDetails extends DocumentsEvents {
   const GetDocumentsDetails();
 }
+
+class GetDocumentsToLink extends DocumentsEvents {
+  final int page;
+
+  const GetDocumentsToLink({required this.page});
+}
+
+class SaveLinkedDocuments extends DocumentsEvents {
+  final String linkedDocuments;
+
+  SaveLinkedDocuments({required this.linkedDocuments});
+}
+
+class AttachDocuments extends DocumentsEvents {
+  final Map attachDocumentsMap;
+
+  AttachDocuments({required this.attachDocumentsMap});
+}
+
+class DeleteDocuments extends DocumentsEvents {
+  final String fileId;
+
+  DeleteDocuments({required this.fileId});
+}

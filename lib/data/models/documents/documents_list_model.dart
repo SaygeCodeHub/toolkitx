@@ -33,8 +33,8 @@ class DocumentsListDatum {
   final String name;
   final String docno;
   final String isdue;
-  final int opencommentscount;
-  final int closecommentscount;
+  final dynamic opencommentscount;
+  final dynamic closecommentscount;
   final dynamic doctype;
   final String owner;
   final String status;

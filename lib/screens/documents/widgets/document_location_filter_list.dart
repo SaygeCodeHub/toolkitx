@@ -12,6 +12,7 @@ import '../document_filter_screen.dart';
 class DocumentLocationFilterList extends StatelessWidget {
   static const routeName = 'DocumentLocationFilterList';
   final String selectLocation;
+  static bool isFromLinkDoc = true;
 
   const DocumentLocationFilterList({super.key, required this.selectLocation});
 
@@ -20,58 +21,79 @@ class DocumentLocationFilterList extends StatelessWidget {
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectType),
         body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-              padding: const EdgeInsets.only(
-                  left: leftRightMargin, right: leftRightMargin),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        itemCount:
-                            context.read<DocumentsBloc>().masterData[0].length,
-                        itemBuilder: (context, index) {
-                          return RadioListTile(
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: AppColor.deepBlue,
-                              controlAffinity: ListTileControlAffinity.trailing,
-                              title: Text(context
-                                  .read<DocumentsBloc>()
-                                  .masterData[0][index]
-                                  .name),
-                              value: context
-                                  .read<DocumentsBloc>()
-                                  .masterData[0][index]
-                                  .id
-                                  .toString(),
-                              groupValue: selectLocation,
-                              onChanged: (value) {
-                                DocumentFilterScreen.documentFilterMap["type"] =
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+                padding: const EdgeInsets.only(
+                    left: leftRightMargin, right: leftRightMargin),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: context
+                              .read<DocumentsBloc>()
+                              .masterData[0]
+                              .length,
+                          itemBuilder: (context, index) {
+                            return RadioListTile(
+                                contentPadding: EdgeInsets.zero,
+                                activeColor: AppColor.deepBlue,
+                                controlAffinity:
+                                    ListTileControlAffinity.trailing,
+                                title: Text(context
+                                    .read<DocumentsBloc>()
+                                    .masterData[0][index]
+                                    .name),
+                                value: context
+                                    .read<DocumentsBloc>()
+                                    .masterData[0][index]
+                                    .id
+                                    .toString(),
+                                groupValue: selectLocation,
+                                onChanged: (value) {
+                                  if (isFromLinkDoc) {
                                     context
-                                        .read<DocumentsBloc>()
-                                        .masterData[0][index]
-                                        .id
-                                        .toString();
-                                context.read<DocumentsBloc>().add(
-                                    SelectDocumentLocationFilter(
-                                        selectedType: context
+                                            .read<DocumentsBloc>()
+                                            .linkDocFilters["type"] =
+                                        context
                                             .read<DocumentsBloc>()
                                             .masterData[0][index]
                                             .id
-                                            .toString()));
-                                context.read<DocumentsBloc>().selectedType =
+                                            .toString();
                                     context
-                                        .read<DocumentsBloc>()
-                                        .masterData[0][index]
-                                        .name;
-                                Navigator.pop(context);
-                              });
-                        }),
-                    const SizedBox(height: xxxSmallerSpacing)
-                  ])),
-        ));
+                                            .read<DocumentsBloc>()
+                                            .linkDocSelectedType =
+                                        context
+                                            .read<DocumentsBloc>()
+                                            .masterData[0][index]
+                                            .name;
+                                  } else {
+                                    context.read<DocumentsBloc>().selectedType =
+                                        context
+                                            .read<DocumentsBloc>()
+                                            .masterData[0][index]
+                                            .name;
+                                    DocumentFilterScreen
+                                            .documentFilterMap["type"] =
+                                        context
+                                            .read<DocumentsBloc>()
+                                            .masterData[0][index]
+                                            .id
+                                            .toString();
+                                  }
+                                  context.read<DocumentsBloc>().add(
+                                      SelectDocumentLocationFilter(
+                                          selectedType: context
+                                              .read<DocumentsBloc>()
+                                              .masterData[0][index]
+                                              .id
+                                              .toString()));
+                                  Navigator.pop(context);
+                                });
+                          }),
+                      const SizedBox(height: xxxSmallerSpacing)
+                    ]))));
   }
 }
