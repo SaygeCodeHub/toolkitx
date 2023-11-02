@@ -5,7 +5,7 @@ import 'package:toolkit/data/models/documents/document_roles_model.dart';
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
-import '../../data/models/documents/save_linked_document_model.dart';
+import '../../data/models/documents/post_document_model.dart';
 
 class DocumentsStates extends Equatable {
   const DocumentsStates();
@@ -136,7 +136,7 @@ class SavingLikedDocuments extends DocumentsStates {
 }
 
 class LikedDocumentsSaved extends DocumentsStates {
-  final SaveLinkedDocumentsModel saveLinkedDocumentsModel;
+  final PostDocumentsModel saveLinkedDocumentsModel;
 
   const LikedDocumentsSaved({required this.saveLinkedDocumentsModel});
 }
@@ -145,4 +145,36 @@ class SaveLikedDocumentsError extends DocumentsStates {
   final String message;
 
   const SaveLikedDocumentsError({required this.message});
+}
+
+class AttachingDocuments extends DocumentsStates {
+  const AttachingDocuments();
+}
+
+class DocumentsAttached extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsAttached({required this.postDocumentsModel});
+}
+
+class AttachDocumentsError extends DocumentsStates {
+  final String message;
+
+  const AttachDocumentsError({required this.message});
+}
+
+class DeletingDocuments extends DocumentsStates {
+  const DeletingDocuments();
+}
+
+class DocumentsDeleted extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsDeleted({required this.postDocumentsModel});
+}
+
+class DeleteDocumentsError extends DocumentsStates {
+  final String message;
+
+  const DeleteDocumentsError({required this.message});
 }

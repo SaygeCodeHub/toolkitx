@@ -3,11 +3,16 @@ import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
-import '../screens/assets/assets_list.dart';
+import '../screens/assets/assets_filter_screen.dart';
+import '../screens/assets/assets_list_screen.dart';
+import '../screens/assets/widgets/assets_add_downtime_screen.dart';
+import '../screens/assets/widgets/assets_location_filter_list.dart';
+import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -26,11 +31,13 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
+import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/expense/expense_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
@@ -89,6 +96,7 @@ import '../screens/root/root_screen.dart';
 import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
 import '../screens/safetyNotice/safety_notice_details_screen.dart';
 import '../screens/safetyNotice/safety_notice_history_screen.dart';
+import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -376,9 +384,13 @@ class AppRoutes {
         return _createRoute(const DocumentsDetailsScreen());
       case AssetsListScreen.routeName:
         return _createRoute(const AssetsListScreen());
+      case AssetsFilterScreen.routeName:
+        return _createRoute(AssetsFilterScreen());
+      case AssetsLocationFilterList.routeName:
+        return _createRoute(AssetsLocationFilterList(
+            selectLocationName: settings.arguments.toString()));
       case AssetsDetailsScreen.routeName:
-        return _createRoute(
-            AssetsDetailsScreen(assetId: settings.arguments.toString()));
+        return _createRoute(const AssetsDetailsScreen());
       case AddAndEditSafetyNoticeScreen.routeName:
         return _createRoute(const AddAndEditSafetyNoticeScreen());
       case SafetyNoticeDetailsScreen.routeName:
@@ -387,6 +399,17 @@ class AppRoutes {
         return _createRoute(const SafetyNoticeHistoryScreen());
       case LinkDocumentScreen.routeName:
         return _createRoute(const LinkDocumentScreen());
+      case AssetsManageDownTimeScreen.routeName:
+        return _createRoute(const AssetsManageDownTimeScreen());
+      case AssetsAddDowntimeScreen.routeName:
+        return _createRoute(AssetsAddDowntimeScreen());
+      case LinkDocumentsFilterScreen.routeName:
+        return _createRoute(const LinkDocumentsFilterScreen());
+      case AttachDocumentScreen.routeName:
+        return _createRoute(AttachDocumentScreen(
+            documentDetailsModel: settings.arguments as DocumentDetailsModel));
+      case SafetyNoticeFilterScreen.routeName:
+        return _createRoute(const SafetyNoticeFilterScreen());
       case ExpenseListScreen.routeName:
         return _createRoute(const ExpenseListScreen());
 

@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-SaveLinkedDocumentsModel saveLinkedDocumentsModelFromJson(String str) =>
-    SaveLinkedDocumentsModel.fromJson(json.decode(str));
+PostDocumentsModel saveLinkedDocumentsModelFromJson(String str) =>
+    PostDocumentsModel.fromJson(json.decode(str));
 
-String saveLinkedDocumentsModelToJson(SaveLinkedDocumentsModel data) =>
+String saveLinkedDocumentsModelToJson(PostDocumentsModel data) =>
     json.encode(data.toJson());
 
-class SaveLinkedDocumentsModel {
+class PostDocumentsModel {
   final int status;
   final String message;
   final Data data;
 
-  SaveLinkedDocumentsModel(
+  PostDocumentsModel(
       {required this.status, required this.message, required this.data});
 
-  factory SaveLinkedDocumentsModel.fromJson(Map<String, dynamic> json) =>
-      SaveLinkedDocumentsModel(
+  factory PostDocumentsModel.fromJson(Map<String, dynamic> json) =>
+      PostDocumentsModel(
           status: json["Status"],
           message: json["Message"],
           data: Data.fromJson(json["Data"]));

@@ -3,7 +3,7 @@ import '../../data/models/documents/document_roles_model.dart';
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
-import '../../data/models/documents/save_linked_document_model.dart';
+import '../../data/models/documents/post_document_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'documents_repository.dart';
@@ -50,11 +50,26 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<SaveLinkedDocumentsModel> saveLinkedDocuments(
+  Future<PostDocumentsModel> saveLinkedDocuments(
       Map saveLinkedDocumentsMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}document/savelinkeddocuments",
         saveLinkedDocumentsMap);
-    return SaveLinkedDocumentsModel.fromJson(response);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/attachfiles", attachDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/deletedocumentfile",
+        deleteDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
   }
 }

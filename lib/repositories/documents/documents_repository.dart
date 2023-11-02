@@ -4,7 +4,7 @@ import 'package:toolkit/data/models/documents/documents_list_model.dart';
 
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
-import '../../data/models/documents/save_linked_document_model.dart';
+import '../../data/models/documents/post_document_model.dart';
 
 abstract class DocumentsRepository {
   Future<DocumentsListModel> getDocumentsList(
@@ -21,6 +21,9 @@ abstract class DocumentsRepository {
   Future<DocumentsToLinkModel> getDocumentsToLink(
       String filter, String hashCode, String documentId, int pageNo);
 
-  Future<SaveLinkedDocumentsModel> saveLinkedDocuments(
-      Map saveLinkedDocumentsMap);
+  Future<PostDocumentsModel> saveLinkedDocuments(Map saveLinkedDocumentsMap);
+
+  Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap);
+
+  Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap);
 }

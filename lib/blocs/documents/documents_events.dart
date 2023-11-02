@@ -56,3 +56,15 @@ class SaveLinkedDocuments extends DocumentsEvents {
 
   SaveLinkedDocuments({required this.linkedDocuments});
 }
+
+class AttachDocuments extends DocumentsEvents {
+  final Map attachDocumentsMap;
+
+  AttachDocuments({required this.attachDocumentsMap});
+}
+
+class DeleteDocuments extends DocumentsEvents {
+  final String fileId;
+
+  DeleteDocuments({required this.fileId});
+}

@@ -101,4 +101,11 @@ class SafetyNoticeRepositoryImpl extends SafetyNoticeRepository {
         "${ApiConstants.baseUrl}notice/ReIssueNotice", reIssueSafetyNoticeMap);
     return ReIssueSafetyNoticeModel.fromJson(response);
   }
+
+  @override
+  Future<void> saveReadReceipt(Map saveReadReceiptMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}notice/ReadReceipt", saveReadReceiptMap);
+    return response;
+  }
 }
