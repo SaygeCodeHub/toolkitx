@@ -3,9 +3,16 @@ import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/assets/assets_details_screen.dart';
+import '../screens/assets/assets_filter_screen.dart';
+import '../screens/assets/assets_list_screen.dart';
+import '../screens/assets/widgets/assets_add_downtime_screen.dart';
+import '../screens/assets/widgets/assets_location_filter_list.dart';
+import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -24,10 +31,15 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
+import '../screens/documents/link_document_screen.dart';
+import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/expense/expense_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -45,13 +57,16 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_add_comment_screen.dart';
 import '../screens/loto/loto_assign_team_screen.dart';
 import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_filter_screen.dart';
 import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
+import '../screens/loto/loto_upload_photos_screen.dart';
 import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
+import '../screens/loto/widgets/start_remove_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -78,6 +93,11 @@ import '../screens/qualityManagement/report_new_qm.dart';
 import '../screens/qualityManagement/qm_roles_screen.dart';
 import '../screens/qualityManagement/qm_filters_screen.dart';
 import '../screens/root/root_screen.dart';
+import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
+import '../screens/safetyNotice/safety_notice_details_screen.dart';
+import '../screens/safetyNotice/safety_notice_history_screen.dart';
+import '../screens/safetyNotice/safety_notice_filter_screen.dart';
+import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -275,8 +295,7 @@ class AppRoutes {
             workOrderDetailsMap: settings.arguments as Map));
       case UploadCertificateScreen.routeName:
         return _createRoute(UploadCertificateScreen(
-          certificateItemsMap: settings.arguments as Map,
-        ));
+            certificateItemsMap: settings.arguments as Map));
       case ProcessSignInScreen.routeName:
         return _createRoute(const ProcessSignInScreen());
       case WorkOrderFormScreenTwo.routeName:
@@ -293,8 +312,7 @@ class AppRoutes {
             selectLocationName: settings.arguments as String));
       case GetCourseCertificateScreen.routeName:
         return _createRoute(GetCourseCertificateScreen(
-          certificateId: settings.arguments.toString(),
-        ));
+            certificateId: settings.arguments.toString()));
       case WorkOrderFormScreenThree.routeName:
         return _createRoute(WorkOrderFormScreenThree(
             workOrderDetailsMap: settings.arguments as Map));
@@ -307,8 +325,7 @@ class AppRoutes {
         ));
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(
-          getdetailsMap: settings.arguments as Map,
-        ));
+            getdetailsMap: settings.arguments as Map));
       case WorkOrderAddMisCostScreen.routeName:
         return _createRoute(const WorkOrderAddMisCostScreen());
       case StartWorkOrderScreen.routeName:
@@ -325,17 +342,14 @@ class AppRoutes {
       case WorkOrderDocumentFilterScreen.routeName:
         return _createRoute(const WorkOrderDocumentFilterScreen());
       case QuizQuestionsScreen.routeName:
-        return _createRoute(QuizQuestionsScreen(
-          quizMap: settings.arguments as Map,
-        ));
+        return _createRoute(
+            QuizQuestionsScreen(quizMap: settings.arguments as Map));
       case DocumentsListScreen.routeName:
-        return _createRoute(DocumentsListScreen(
-          isFromHome: settings.arguments as bool,
-        ));
+        return _createRoute(
+            DocumentsListScreen(isFromHome: settings.arguments as bool));
       case GetCertificateDetailsScreen.routeName:
         return _createRoute(GetCertificateDetailsScreen(
-          certificateMap: settings.arguments as Map,
-        ));
+            certificateMap: settings.arguments as Map));
       case LotoDetailsScreen.routeName:
         return _createRoute(const LotoDetailsScreen());
       case ChangeRoleDocumentsScreen.routeName:
@@ -350,14 +364,55 @@ class AppRoutes {
         return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
         return _createRoute(DocumentLocationFilterList(
-          selectLocation: settings.arguments.toString(),
-        ));
+            selectLocation: settings.arguments.toString()));
       case WorkOrderEditWorkForceScreen.routeName:
         return _createRoute(const WorkOrderEditWorkForceScreen());
+      case SafetyNoticeScreen.routeName:
+        return _createRoute(
+            SafetyNoticeScreen(isFromHomeScreen: settings.arguments as bool));
       case LotoAssignWorkforceScreen.routeName:
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
+      case StartRemoveLotoScreen.routeName:
+        return _createRoute(const StartRemoveLotoScreen());
+      case LotoUploadPhotosScreen.routeName:
+        return _createRoute(LotoUploadPhotosScreen());
+      case LotoAddCommentScreen.routeName:
+        return _createRoute(const LotoAddCommentScreen());
+      case DocumentsDetailsScreen.routeName:
+        return _createRoute(const DocumentsDetailsScreen());
+      case AssetsListScreen.routeName:
+        return _createRoute(const AssetsListScreen());
+      case AssetsFilterScreen.routeName:
+        return _createRoute(AssetsFilterScreen());
+      case AssetsLocationFilterList.routeName:
+        return _createRoute(AssetsLocationFilterList(
+            selectLocationName: settings.arguments.toString()));
+      case AssetsDetailsScreen.routeName:
+        return _createRoute(const AssetsDetailsScreen());
+      case AddAndEditSafetyNoticeScreen.routeName:
+        return _createRoute(const AddAndEditSafetyNoticeScreen());
+      case SafetyNoticeDetailsScreen.routeName:
+        return _createRoute(const SafetyNoticeDetailsScreen());
+      case SafetyNoticeHistoryScreen.routeName:
+        return _createRoute(const SafetyNoticeHistoryScreen());
+      case LinkDocumentScreen.routeName:
+        return _createRoute(const LinkDocumentScreen());
+      case AssetsManageDownTimeScreen.routeName:
+        return _createRoute(const AssetsManageDownTimeScreen());
+      case AssetsAddDowntimeScreen.routeName:
+        return _createRoute(AssetsAddDowntimeScreen());
+      case LinkDocumentsFilterScreen.routeName:
+        return _createRoute(const LinkDocumentsFilterScreen());
+      case AttachDocumentScreen.routeName:
+        return _createRoute(AttachDocumentScreen(
+            documentDetailsModel: settings.arguments as DocumentDetailsModel));
+      case SafetyNoticeFilterScreen.routeName:
+        return _createRoute(const SafetyNoticeFilterScreen());
+      case ExpenseListScreen.routeName:
+        return _createRoute(const ExpenseListScreen());
+
       default:
         return _createRoute(const WelcomeScreen());
     }
@@ -370,10 +425,8 @@ class AppRoutes {
           const begin = Offset(1.0, 0.0);
           const end = Offset.zero;
           const curve = Curves.ease;
-
           var tween =
               Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
           return SlideTransition(
               position: animation.drive(tween), child: child);
         });

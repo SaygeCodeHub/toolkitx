@@ -23,6 +23,20 @@ class LotoDetailsNotFetched extends LotoDetailsState {
   LotoDetailsNotFetched({required this.getError});
 }
 
+class AssignWorkforceRemoving extends LotoDetailsState {}
+
+class AssignWorkforceRemoved extends LotoDetailsState {
+  final AssignWorkForceForRemoveModel assignWorkForceForRemoveModel;
+
+  AssignWorkforceRemoved({required this.assignWorkForceForRemoveModel});
+}
+
+class AssignWorkforceRemoveError extends LotoDetailsState {
+  final String getError;
+
+  AssignWorkforceRemoveError({required this.getError});
+}
+
 class LotoAssignWorkforceFetching extends LotoDetailsState {}
 
 class LotoAssignWorkforceFetched extends LotoDetailsState {
@@ -57,6 +71,20 @@ class LotoAssignWorkforceNotSaved extends LotoDetailsState {
   LotoAssignWorkforceNotSaved({required this.getError});
 }
 
+class LotoAssignTeamSaving extends LotoDetailsState {}
+
+class LotoAssignTeamSaved extends LotoDetailsState {
+  final SaveLotoAssignTeamModel saveLotoAssignTeamModel;
+
+  LotoAssignTeamSaved({required this.saveLotoAssignTeamModel});
+}
+
+class LotoAssignTeamNotSaved extends LotoDetailsState {
+  final String getError;
+
+  LotoAssignTeamNotSaved({required this.getError});
+}
+
 class LotoAssignTeamFetching extends LotoDetailsState {}
 
 class LotoAssignTeamFetched extends LotoDetailsState {
@@ -83,4 +111,88 @@ class LotoNotStarted extends LotoDetailsState {
   final String getError;
 
   LotoNotStarted({required this.getError});
+}
+
+class LotoRemoveStarting extends LotoDetailsState {}
+
+class LotoRemoveStarted extends LotoDetailsState {
+  final StartRemoveLotoModel startRemoveLotoModel;
+
+  LotoRemoveStarted({required this.startRemoveLotoModel});
+}
+
+class LotoRemoveNotStarted extends LotoDetailsState {
+  final String getError;
+
+  LotoRemoveNotStarted({required this.getError});
+}
+
+class LotoApplying extends LotoDetailsState {}
+
+class LotoApplied extends LotoDetailsState {
+  final ApplyLotoModel applyLotoModel;
+
+  LotoApplied({required this.applyLotoModel});
+}
+
+class LotoNotApplied extends LotoDetailsState {
+  final String getError;
+
+  LotoNotApplied({required this.getError});
+}
+
+class LotoAccepting extends LotoDetailsState {}
+
+class LotoAccepted extends LotoDetailsState {
+  final AcceptLotoModel acceptLotoModel;
+
+  LotoAccepted({required this.acceptLotoModel});
+}
+
+class LotoNotAccepted extends LotoDetailsState {
+  final String getError;
+
+  LotoNotAccepted({required this.getError});
+}
+
+class LotoCommentAdding extends LotoDetailsState {}
+
+class LotoCommentAdded extends LotoDetailsState {
+  final AddLotoCommentModel addLotoCommentModel;
+
+  LotoCommentAdded({required this.addLotoCommentModel});
+}
+
+class LotoCommentNotAdded extends LotoDetailsState {
+  final String getError;
+
+  LotoCommentNotAdded({required this.getError});
+}
+
+class LotoRemoving extends LotoDetailsState {}
+
+class LotoRemoved extends LotoDetailsState {
+  final RemoveLotoModel removeLotoModel;
+
+  LotoRemoved({required this.removeLotoModel});
+}
+
+class LotoNotRemoved extends LotoDetailsState {
+  final String getError;
+
+  LotoNotRemoved({required this.getError});
+}
+
+class LotoPhotosUploading extends LotoDetailsState {}
+
+class LotoPhotosUploaded extends LotoDetailsState {
+  final LotoUploadPhotosModel lotoUploadPhotosModel;
+
+  LotoPhotosUploaded({required this.lotoUploadPhotosModel});
+}
+
+class LotoPhotosNotUploaded extends LotoDetailsState {
+  final String getError;
+
+  LotoPhotosNotUploaded({required this.getError});
 }

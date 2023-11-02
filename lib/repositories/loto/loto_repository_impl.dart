@@ -1,11 +1,19 @@
+import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
+import 'package:toolkit/data/models/loto/accept_loto_model.dart';
+import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
+import 'package:toolkit/data/models/loto/remove_loto_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
+import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 
+import '../../data/models/loto/add_loto_comment_model.dart';
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
+import '../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'loto_repository.dart';
@@ -32,6 +40,15 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/getloto?lotoid=$lotoId&hashcode=$hashCode");
     return FetchLotoDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<AssignWorkForceForRemoveModel> assignWorkforceRemove(
+      Map workforceRemoveMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/assignworkforceforremove",
+        workforceRemoveMap);
+    return AssignWorkForceForRemoveModel.fromJson(response);
   }
 
   @override
@@ -63,9 +80,61 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
+  Future<SaveLotoAssignTeamModel> saveLotoAssignTeam(
+      Map lotoAssignTeamMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/assignteam", lotoAssignTeamMap);
+    return SaveLotoAssignTeamModel.fromJson(response);
+  }
+
+  @override
   Future<StartLotoModel> startLotoRepo(Map startLotoMap) async {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/startloto", startLotoMap);
     return StartLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<ApplyLotoModel> applyLotoRepo(Map applyLotoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/applyloto", applyLotoMap);
+    return ApplyLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<AcceptLotoModel> acceptLotoRepo(Map acceptLotoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/acceptloto", acceptLotoMap);
+    return AcceptLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<StartRemoveLotoModel> startRemoveLotoRepo(
+      Map startRemoveLotoMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/startremoveloto", startRemoveLotoMap);
+    return StartRemoveLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<RemoveLotoModel> removeLotoRepo(Map removeLotoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/removeloto", removeLotoMap);
+    return RemoveLotoModel.fromJson(response);
+  }
+
+  @override
+  Future<AddLotoCommentModel> addLotoCommentRepo(Map addLotoCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savecomments", addLotoCommentMap);
+    return AddLotoCommentModel.fromJson(response);
+  }
+
+  @override
+  Future<LotoUploadPhotosModel> lotoUploadPhotosRepo(
+      Map lotoUploadPhotosMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
+    return LotoUploadPhotosModel.fromJson(response);
   }
 }
