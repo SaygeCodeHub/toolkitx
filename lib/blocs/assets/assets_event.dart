@@ -47,6 +47,7 @@ class ClearAssetsFilter extends AssetsEvent {}
 class FetchAssetsGetDownTime extends AssetsEvent {
   final String assetId;
   final int pageNo;
+
   FetchAssetsGetDownTime({required this.assetId, required this.pageNo});
 }
 
@@ -54,4 +55,11 @@ class SaveAssetsDownTime extends AssetsEvent {
   final Map saveDowntimeMap;
 
   SaveAssetsDownTime({required this.saveDowntimeMap});
+}
+
+class FetchAssetsManageDocument extends AssetsEvent {
+  final int pageNo;
+  final String assetsId;
+
+  FetchAssetsManageDocument({required this.assetsId, required this.pageNo});
 }
