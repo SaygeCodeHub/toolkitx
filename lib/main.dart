@@ -12,6 +12,7 @@ import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certifi
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
+import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
@@ -175,6 +176,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => WorkOrderBloc()),
           BlocProvider(lazy: true, create: (context) => SignInProcessBloc()),
           BlocProvider(lazy: true, create: (context) => SafetyNoticeBloc()),
+          BlocProvider(lazy: true, create: (context) => ExpenseBloc()),
           BlocProvider(
               lazy: true, create: (context) => SignInLocationDetailsBloc()),
           BlocProvider(

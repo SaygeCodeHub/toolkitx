@@ -64,7 +64,9 @@ class OnLineModules extends StatelessWidget {
                   return InkWell(
                       borderRadius: BorderRadius.circular(kCardRadius),
                       onTap: () => navigateToModule(
-                          state.availableModules[index].key, context),
+                          state.availableModules[index].key,
+                          state.availableModules[index].moduleName,
+                          context),
                       child: CustomCard(
                           color: AppColor.transparent,
                           elevation: kZeroElevation,
@@ -148,7 +150,7 @@ class OnLineModules extends StatelessWidget {
         });
   }
 
-  navigateToModule(moduleKey, context) {
+  navigateToModule(moduleKey, moduleName, context) {
     switch (moduleKey) {
       case 'ptw':
         Navigator.pushNamed(context, PermitListScreen.routeName,
@@ -174,10 +176,18 @@ class OnLineModules extends StatelessWidget {
             context, TodoAssignedByMeAndToMeListScreen.routeName);
         break;
       case 'timesheet':
-        Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+        if (moduleName == 'Expense') {
+          Navigator.pushNamed(context, ExpenseListScreen.routeName);
+        } else {
+          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+        }
         break;
       case 'wf_timesheet':
-        Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+        if (moduleName == 'Expense') {
+          Navigator.pushNamed(context, ExpenseListScreen.routeName);
+        } else {
+          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+        }
         break;
       case 'qareport':
         Navigator.pushNamed(context, QualityManagementListScreen.routeName,

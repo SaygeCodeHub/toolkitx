@@ -36,7 +36,6 @@ class ExpenseListBody extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: xxTinierSpacing),
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(expenseListDatum[index].refno,
                                   style: Theme.of(context)
@@ -45,7 +44,7 @@ class ExpenseListBody extends StatelessWidget {
                                       .copyWith(
                                           color: AppColor.black,
                                           fontWeight: FontWeight.w600)),
-                              const SizedBox(width: tinierSpacing),
+                              const SizedBox(width: tiniestSpacing),
                               Visibility(
                                   visible: expenseListDatum[index].isdraft == 1,
                                   child: Text(StringConstants.kIsDraft,

@@ -25,7 +25,7 @@ class ExpenseListScreen extends StatelessWidget {
     context.read<ExpenseBloc>().expenseListReachedMax = false;
     context.read<ExpenseBloc>().add(FetchExpenseList(pageNo: pageNo));
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('SafetyNotice')),
+      appBar: GenericAppBar(title: DatabaseUtil.getText('ExpenseReport')),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -52,14 +52,17 @@ class ExpenseListScreen extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is FetchingExpenses) {
-                  return const CircularProgressIndicator();
+                  return const Expanded(
+                      child: Center(child: CircularProgressIndicator()));
                 } else if (state is ExpensesFetched) {
                   if (state.expenseListDatum.isNotEmpty) {
                     return ExpenseListBody(
                         expenseListDatum: state.expenseListDatum);
                   } else {
-                    return NoRecordsText(
-                        text: DatabaseUtil.getText('no_records_found'));
+                    return Center(
+                      child: NoRecordsText(
+                          text: DatabaseUtil.getText('no_records_found')),
+                    );
                   }
                 } else {
                   return const SizedBox.shrink();
