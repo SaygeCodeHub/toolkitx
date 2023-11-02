@@ -11,10 +11,11 @@ class LotoDetailsFetched extends LotoDetailsState {
   final bool showPopUpMenu;
   final List lotoPopUpMenuList;
 
-
-  LotoDetailsFetched(
-      {required this.fetchLotoDetailsModel,
-      required this.showPopUpMenu , required this.lotoPopUpMenuList,});
+  LotoDetailsFetched({
+    required this.fetchLotoDetailsModel,
+    required this.showPopUpMenu,
+    required this.lotoPopUpMenuList,
+  });
 }
 
 class LotoDetailsNotFetched extends LotoDetailsState {

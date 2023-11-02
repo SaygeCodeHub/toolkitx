@@ -46,7 +46,7 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
               pageNo: 1,
               isRemove: context.read<LotoDetailsBloc>().isRemove,
-              name: ''));
+              workforceName: ''));
           showCustomSnackBar(context, StringConstants.kWorkforceRemoved, '');
         } else if (state is LotoAssignWorkforceNotSaved) {
           ProgressBar.show(context);
@@ -100,9 +100,6 @@ class LotoAssignWorkforceBody extends StatelessWidget {
                                 pageNo: LotoAssignWorkforceScreen.pageNo,
                                 isRemove: LotoAssignWorkforceScreen.isRemove,
                                 workforceName: ''));
-                                isRemove:
-                                    context.read<LotoDetailsBloc>().isRemove,
-                                name: ''));
                         return const Center(
                             child: Padding(
                                 padding: EdgeInsets.all(
