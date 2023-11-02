@@ -8,13 +8,14 @@ class LotoDetailsFetching extends LotoDetailsState {}
 
 class LotoDetailsFetched extends LotoDetailsState {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
-  final List lotoPopUpMenu;
   final bool showPopUpMenu;
+  final List lotoPopUpMenuList;
 
-  LotoDetailsFetched(
-      {required this.fetchLotoDetailsModel,
-      required this.lotoPopUpMenu,
-      required this.showPopUpMenu});
+  LotoDetailsFetched({
+    required this.fetchLotoDetailsModel,
+    required this.showPopUpMenu,
+    required this.lotoPopUpMenuList,
+  });
 }
 
 class LotoDetailsNotFetched extends LotoDetailsState {
@@ -49,6 +50,12 @@ class LotoAssignWorkforceError extends LotoDetailsState {
   final String getError;
 
   LotoAssignWorkforceError({required this.getError});
+}
+
+class LotoAssignWorkforceSearched extends LotoDetailsState {
+  final bool isWorkforceSearched;
+
+  LotoAssignWorkforceSearched({required this.isWorkforceSearched});
 }
 
 class LotoAssignWorkforceSaving extends LotoDetailsState {}

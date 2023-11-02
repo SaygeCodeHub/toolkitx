@@ -34,7 +34,7 @@ class LotoDetailsScreen extends StatelessWidget {
                 if (state is LotoDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return LotoPopupMenuButton(
-                      popUpMenuItems: state.lotoPopUpMenu,
+                      popUpMenuItems: state.lotoPopUpMenuList,
                       fetchLotoDetailsModel: state.fetchLotoDetailsModel,
                     );
                   } else {
