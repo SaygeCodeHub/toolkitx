@@ -52,6 +52,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<CloseSafetyNotice>(_closeSafetyNotice);
     on<FetchSafetyNoticeHistoryList>(_fetchSafetyNoticeHistory);
     on<ReIssueSafetyNotice>(_reIssueSafetyNotice);
+    on<SafetyNoticeReadReceipt>(_safetyNoticeReadReceipt);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -197,6 +198,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
           clientId: clientId!,
           popUpMenuOptionsList: popUpMenuList,
           safetyNoticeDetailsMap: safetyNoticeDetailsMap));
+      add(SafetyNoticeReadReceipt(safetyNoticeId: event.safetyNoticeId));
     } catch (e) {
       emit(SafetyNoticeDetailsNotFetched(detailsNotFetched: e.toString()));
     }
@@ -398,5 +400,17 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   _safetyNoticeApplyFilter(
       SafetyNoticeApplyFilter event, Emitter<SafetyNoticeStates> emit) {
     safetNoticeFilterMap = event.safetyNoticeFilterMap;
+  }
+
+  FutureOr<void> _safetyNoticeReadReceipt(
+      SafetyNoticeReadReceipt event, Emitter<SafetyNoticeStates> emit) async {
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    Map saveReadReceiptMap = {
+      "hashcode": hashCode,
+      "userid": userId,
+      "noticeid": event.safetyNoticeId
+    };
+    await _safetyNoticeRepository.saveReadReceipt(saveReadReceiptMap);
   }
 }
