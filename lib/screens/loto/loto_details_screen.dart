@@ -97,7 +97,8 @@ class LotoDetailsScreen extends StatelessWidget {
                                     .lotoTabIndex),
                             const Text("Tab 2"),
                             const Text("Tab 3"),
-                           LotoRemoveChecklistTab(data: state.fetchLotoDetailsModel.data),
+                            LotoRemoveChecklistTab(
+                                data: state.fetchLotoDetailsModel.data),
                             LotoCustomTimeLine(
                                 fetchLotoDetailsModel:
                                     state.fetchLotoDetailsModel),
@@ -113,5 +114,3 @@ class LotoDetailsScreen extends StatelessWidget {
             }));
   }
 }
-
-

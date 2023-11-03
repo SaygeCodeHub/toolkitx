@@ -7,7 +7,8 @@ import '../../../widgets/custom_card.dart';
 
 class LotoRemoveChecklistTab extends StatelessWidget {
   const LotoRemoveChecklistTab({
-    super.key, required this.data,
+    super.key,
+    required this.data,
   });
   final LotoData data;
 
@@ -19,18 +20,15 @@ class LotoRemoveChecklistTab extends StatelessWidget {
           visible: data.removechecklistname.isEmpty ? false : true,
           child: CustomCard(
               child: ListTile(
-                  title: Text(
-                      data.removechecklistname,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xSmall
-                          .copyWith(fontWeight: FontWeight.w400,color: AppColor.black)),
+                  title: Text(data.removechecklistname,
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                          fontWeight: FontWeight.w400, color: AppColor.black)),
                   subtitle: InkWell(
                     onTap: () {},
-                    child: Text(
-                        StringConstants.kViewResponse,
+                    child: Text(StringConstants.kViewResponse,
                         style: Theme.of(context).textTheme.xSmall.copyWith(
-                            fontWeight: FontWeight.w400, color: AppColor.deepBlue)),
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.deepBlue)),
                   ))),
         ),
       ],
