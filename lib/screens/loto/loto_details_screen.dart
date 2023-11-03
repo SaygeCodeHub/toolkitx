@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
+import 'package:toolkit/screens/loto/widgets/loto_remove_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
 import 'package:toolkit/utils/loto_util.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
@@ -96,7 +97,7 @@ class LotoDetailsScreen extends StatelessWidget {
                                     .lotoTabIndex),
                             const Text("Tab 2"),
                             const Text("Tab 3"),
-                            const Text("Tab 4"),
+                           LotoRemoveChecklistTab(data: state.fetchLotoDetailsModel.data),
                             LotoCustomTimeLine(
                                 fetchLotoDetailsModel:
                                     state.fetchLotoDetailsModel),
@@ -112,3 +113,5 @@ class LotoDetailsScreen extends StatelessWidget {
             }));
   }
 }
+
+
