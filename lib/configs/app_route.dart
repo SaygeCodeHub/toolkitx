@@ -10,6 +10,7 @@ import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
+import '../screens/assets/assets_manage_document_screeen.dart';
 import '../screens/assets/widgets/assets_add_downtime_screen.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
@@ -412,6 +413,10 @@ class AppRoutes {
       case SafetyNoticeFilterScreen.routeName:
         return _createRoute(const SafetyNoticeFilterScreen());
       case ExpenseListScreen.routeName:
+        return _createRoute(const ExpenseListScreen());
+
+      case AssetsManageDocumentScreen.routeName:
+        return _createRoute(const AssetsManageDocumentScreen());
         return _createRoute(
             ExpenseListScreen(isFromHome: settings.arguments as bool));
       case ExpenseFilterScreen.routeName:

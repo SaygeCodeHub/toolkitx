@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
+import 'package:toolkit/screens/loto/widgets/loto_image_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
+import 'package:toolkit/screens/loto/widgets/loto_remove_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
 import 'package:toolkit/utils/loto_util.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
@@ -34,7 +36,7 @@ class LotoDetailsScreen extends StatelessWidget {
                 if (state is LotoDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return LotoPopupMenuButton(
-                      popUpMenuItems: state.lotoPopUpMenu,
+                      popUpMenuItems: state.lotoPopUpMenuList,
                       fetchLotoDetailsModel: state.fetchLotoDetailsModel,
                     );
                   } else {
@@ -53,6 +55,7 @@ class LotoDetailsScreen extends StatelessWidget {
               if (state is LotoDetailsFetching) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is LotoDetailsFetched) {
+                var data = state.fetchLotoDetailsModel.data;
                 return Padding(
                     padding: const EdgeInsets.only(top: xxTinierSpacing),
                     child: Column(children: [
@@ -69,12 +72,10 @@ class LotoDetailsScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(state
-                                            .fetchLotoDetailsModel.data.loto),
+                                        Text(data.loto),
                                         StatusTag(tags: [
                                           StatusTagModel(
-                                              title: state.fetchLotoDetailsModel
-                                                  .data.statustext,
+                                              title: data.statustext,
                                               bgColor: AppColor.deepBlue)
                                         ])
                                       ])))),
@@ -94,9 +95,10 @@ class LotoDetailsScreen extends StatelessWidget {
                                 lotoTabIndex: context
                                     .read<LotoDetailsBloc>()
                                     .lotoTabIndex),
-                            const Text("Tab 2"),
+                            LotoImageTab(data: data, clientId: state.clientId),
                             const Text("Tab 3"),
-                            const Text("Tab 4"),
+                            LotoRemoveChecklistTab(
+                                data: state.fetchLotoDetailsModel.data),
                             LotoCustomTimeLine(
                                 fetchLotoDetailsModel:
                                     state.fetchLotoDetailsModel),

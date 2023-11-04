@@ -10,6 +10,7 @@ import '../../../widgets/custom_card.dart';
 
 class LotoAssignWorkforceCard extends StatelessWidget {
   const LotoAssignWorkforceCard({super.key, required this.workForceDatum});
+
   final LotoWorkforceDatum workForceDatum;
 
   @override

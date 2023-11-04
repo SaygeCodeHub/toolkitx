@@ -390,4 +390,5 @@ abstract class StringConstants {
   static const String kLifespanYears = "Lifespan (Years)";
   static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
+  static const String kViewResponse = "View Response";
 }
