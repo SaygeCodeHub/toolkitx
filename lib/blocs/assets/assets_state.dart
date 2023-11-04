@@ -132,3 +132,17 @@ class AssetsGetDocumentError extends AssetsState {
 
   AssetsGetDocumentError({required this.errorMessage});
 }
+
+class AssetsSingleDownTimeFetching extends AssetsState {}
+
+class AssetsSingleDownTimeFetched extends AssetsState {
+  final FetchAssetSingleDowntimeModel fetchAssetSingleDowntimeModel;
+
+  AssetsSingleDownTimeFetched({required this.fetchAssetSingleDowntimeModel});
+}
+
+class AssetsSingleDownTimeError extends AssetsState {
+  final String errorMessage;
+
+  AssetsSingleDownTimeError({required this.errorMessage});
+}

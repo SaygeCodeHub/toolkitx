@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
@@ -13,6 +14,7 @@ import '../../data/models/assets/assets_details_model.dart';
 import '../../data/models/assets/assets_master_model.dart';
 import '../../data/models/assets/fetch_assets_document_model.dart';
 import '../../di/app_module.dart';
+import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
@@ -37,11 +39,13 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
     on<SaveAssetsDownTime>(_saveAssetsDownTime);
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
+    on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
   }
 
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
   bool hasReachedMax = false;
+  bool isFromAdd = true;
   Map filters = {};
   List assetMasterData = [];
   String selectLocationName = '';
@@ -163,6 +167,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
           await _assetsRepository.fetchAssetsDowntimeRepo(
               event.pageNo, hashCode!, event.assetId);
+
       emit(AssetsGetDownTimeFetched(
           fetchAssetsDowntimeModel: fetchAssetsDowntimeModel,
           assetsPopUpMenu: popUpMenuItems,
@@ -186,7 +191,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "endtime": event.saveDowntimeMap["endtime"],
         "userid": userId,
         "assetid": assetId,
-        "id": " ",
+        "id": event.saveDowntimeMap["id"] ?? '',
         "note": event.saveDowntimeMap["note"],
       };
       SaveAssetsDowntimeModel saveAssetsDowntimeModel =
@@ -216,6 +221,34 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           showPopUpMenu: true));
     } catch (e) {
       emit(AssetsGetDocumentError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAssetsSingleDowntime(
+      FetchAssetsSingleDowntime event, Emitter<AssetsState> emit) async {
+    emit(AssetsSingleDownTimeFetching());
+    try {
+      isFromAdd = true;
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssetSingleDowntimeModel fetchAssetSingleDowntimeModel =
+          await _assetsRepository.fetchAssetsSingleDowntimeRepo(
+              hashCode!, event.downtimeId);
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["startdate"] =
+          fetchAssetSingleDowntimeModel.data.startdate;
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["enddate"] =
+          fetchAssetSingleDowntimeModel.data.enddate;
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["starttime"] =
+          fetchAssetSingleDowntimeModel.data.starttime;
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["endtime"] =
+          fetchAssetSingleDowntimeModel.data.endtime;
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["id"] =
+          fetchAssetSingleDowntimeModel.data.id;
+      AssetsAddAndEditDowntimeScreen.saveDowntimeMap["note"] =
+          fetchAssetSingleDowntimeModel.data.note;
+      emit(AssetsSingleDownTimeFetched(
+          fetchAssetSingleDowntimeModel: fetchAssetSingleDowntimeModel));
+    } catch (e) {
+      emit(AssetsSingleDownTimeError(errorMessage: e.toString()));
     }
   }
 }
