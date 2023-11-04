@@ -417,8 +417,6 @@ class AppRoutes {
 
       case AssetsManageDocumentScreen.routeName:
         return _createRoute(const AssetsManageDocumentScreen());
-        return _createRoute(
-            ExpenseListScreen(isFromHome: settings.arguments as bool));
       case ExpenseFilterScreen.routeName:
         return _createRoute(const ExpenseFilterScreen());
       default:
