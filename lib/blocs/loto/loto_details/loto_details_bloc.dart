@@ -68,6 +68,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         DatabaseUtil.getText('Cancel'),
       ];
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
       if (fetchLotoDetailsModel.data.isstart == '1') {
@@ -107,7 +108,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoDetailsFetched(
           fetchLotoDetailsModel: fetchLotoDetailsModel,
           showPopUpMenu: true,
-          lotoPopUpMenuList: popUpMenuItemsList,
+          lotoPopUpMenuList: popUpMenuItemsList, clientId: clientId ?? '',
         ));
       }
     } catch (e) {
