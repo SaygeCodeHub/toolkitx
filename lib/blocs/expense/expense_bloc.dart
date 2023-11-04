@@ -32,11 +32,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenses());
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.isFromHome) {
         FetchExpenseListModel fetchExpenseListModel = await _expenseRepository
-            .fetchExpenseList(event.pageNo, userId!, hashCode!, '{}');
+            .fetchExpenseList(event.pageNo, userId, hashCode, '{}');
         expenseListReachedMax = fetchExpenseListModel.expenseListData.isEmpty;
         expenseListData.addAll(fetchExpenseListModel.expenseListData);
         emit(
@@ -44,7 +45,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       } else {
         FetchExpenseListModel fetchExpenseListModel =
             await _expenseRepository.fetchExpenseList(
-                event.pageNo, userId!, hashCode!, jsonEncode(filters));
+                event.pageNo, userId, hashCode, jsonEncode(filters));
         expenseListReachedMax = fetchExpenseListModel.expenseListData.isEmpty;
         expenseListData.addAll(fetchExpenseListModel.expenseListData);
         emit(ExpensesFetched(
@@ -59,12 +60,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       FetchExpenseDetails event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseDetails());
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       tabIndex = event.tabIndex;
       FetchExpenseDetailsModel fetchExpenseDetailsModel =
           await _expenseRepository.fetchExpenseDetails(
-              event.expenseId, userId!, hashCode!);
+              event.expenseId, userId, hashCode);
       emit(ExpenseDetailsFetched(
           fetchExpenseDetailsModel: fetchExpenseDetailsModel));
     } catch (e) {
