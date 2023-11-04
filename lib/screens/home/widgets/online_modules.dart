@@ -177,7 +177,8 @@ class OnLineModules extends StatelessWidget {
         break;
       case 'timesheet':
         if (moduleName == 'Expense') {
-          Navigator.pushNamed(context, ExpenseListScreen.routeName);
+          Navigator.pushNamed(context, ExpenseListScreen.routeName,
+              arguments: true);
         } else {
           Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
         }
