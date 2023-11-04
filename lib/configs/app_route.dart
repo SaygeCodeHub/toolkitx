@@ -40,6 +40,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
@@ -416,6 +417,8 @@ class AppRoutes {
 
       case AssetsManageDocumentScreen.routeName:
         return _createRoute(const AssetsManageDocumentScreen());
+      case ExpenseFilterScreen.routeName:
+        return _createRoute(const ExpenseFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
