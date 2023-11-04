@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
@@ -14,10 +15,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   ExpenseBloc() : super(ExpenseInitial()) {
     on<FetchExpenseList>(_fetchExpenseList);
+    on<FetchExpenseDetails>(_fetchExpenseDetails);
   }
 
   List<ExpenseListDatum> expenseListData = [];
   bool expenseListReachedMax = false;
+  int tabIndex = 0;
 
   Future<void> _fetchExpenseList(
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
@@ -32,6 +35,23 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       emit(ExpensesFetched(expenseListDatum: expenseListData));
     } catch (e) {
       emit(ExpensesNotFetched(expensesNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchExpenseDetails(
+      FetchExpenseDetails event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseDetails());
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      tabIndex = event.tabIndex;
+      FetchExpenseDetailsModel fetchExpenseDetailsModel =
+          await _expenseRepository.fetchExpenseDetails(
+              event.expenseId, userId!, hashCode!);
+      emit(ExpenseDetailsFetched(
+          fetchExpenseDetailsModel: fetchExpenseDetailsModel));
+    } catch (e) {
+      emit(ExpenseDetailsFailedToFetch(expenseDetailsNotFetched: e.toString()));
     }
   }
 }
