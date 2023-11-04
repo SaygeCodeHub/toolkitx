@@ -1,10 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
+import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/save_expense_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
 import 'expense_event.dart';
@@ -19,6 +24,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseStatus>(_selectExpenseStatus);
     on<ExpenseApplyFilter>(_expenseApplyFilter);
     on<ExpenseClearFilter>(_expenseClearFilter);
+    on<FetchExpenseMaster>(_fetchExpenseMaster);
+    on<ExpenseSelectCurrency>(_selectCurrency);
+    on<AddExpense>(_saveExpense);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -73,5 +81,75 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   _expenseClearFilter(ExpenseClearFilter event, Emitter<ExpenseStates> emit) {
     filters = {};
+  }
+
+  Future<void> _fetchExpenseMaster(
+      FetchExpenseMaster event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseMaster());
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchExpenseMasterModel fetchExpenseMasterModel =
+          await _expenseRepository.fetchExpenseMaster(hashCode);
+      if (fetchExpenseMasterModel.data.isNotEmpty) {
+        emit(ExpenseMasterFetched(
+            fetchExpenseMasterModel: fetchExpenseMasterModel));
+      } else {
+        emit(ExpenseMasterNotFetched(
+            masterNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(ExpenseMasterNotFetched(masterNotFetched: e.toString()));
+    }
+  }
+
+  _selectCurrency(ExpenseSelectCurrency event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseCurrencySelected(currencyDetailsMap: event.currencyDetailsMap));
+  }
+
+  Future<void> _saveExpense(
+      AddExpense event, Emitter<ExpenseStates> emit) async {
+    emit(SavingAddExpense());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.saveExpenseMap['startdate'] == null &&
+              event.saveExpenseMap['enddate'] == null &&
+              event.saveExpenseMap['currency'] == null ||
+          event.saveExpenseMap['currency'].isEmpty) {
+        emit(AddExpenseNotSaved(
+            expenseNotSaved:
+                DatabaseUtil.getText('DateAndCurrencyCompulsary')));
+      } else if (DateFormat("dd.MM.yyy")
+              .parse(event.saveExpenseMap['startdate'])
+              .compareTo(DateFormat("dd.MM.yyy")
+                  .parse(event.saveExpenseMap['enddate'])) >
+          0) {
+        emit(AddExpenseNotSaved(
+            expenseNotSaved: DatabaseUtil.getText(
+                'Enddateshouldbegreaterthanstartdatetime')));
+      } else {
+        Map saveExpenseMap = {
+          "startdate": event.saveExpenseMap['startdate'],
+          "enddate": event.saveExpenseMap['enddate'],
+          "location": event.saveExpenseMap['location'] ?? '',
+          "purpose": event.saveExpenseMap['purpose'] ?? '',
+          "currency": event.saveExpenseMap['currency'],
+          "userid": userId,
+          "hashcode": hashCode
+        };
+        SaveExpenseModel saveExpenseModel =
+            await _expenseRepository.addExpense(saveExpenseMap);
+        if (saveExpenseModel.status == 200) {
+          emit(AddExpenseSaved(saveExpenseModel: saveExpenseModel));
+        } else {
+          emit(AddExpenseNotSaved(
+              expenseNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
+        }
+      }
+    } catch (e) {
+      emit(AddExpenseNotSaved(expenseNotSaved: e.toString()));
+    }
   }
 }

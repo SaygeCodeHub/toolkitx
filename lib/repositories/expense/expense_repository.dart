@@ -1,6 +1,12 @@
 import '../../data/models/expense/fetch_expense_list_model.dart';
+import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/save_expense_model.dart';
 
 abstract class ExpenseRepository {
   Future<FetchExpenseListModel> fetchExpenseList(
       int pageNo, String userId, String hashCode, String filter);
+
+  Future<FetchExpenseMasterModel> fetchExpenseMaster(String hashCode);
+
+  Future<SaveExpenseModel> addExpense(Map saveExpenseMap);
 }
