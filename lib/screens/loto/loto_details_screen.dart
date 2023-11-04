@@ -114,5 +114,3 @@ class LotoDetailsScreen extends StatelessWidget {
             }));
   }
 }
-
-

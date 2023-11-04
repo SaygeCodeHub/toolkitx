@@ -12,7 +12,8 @@ import '../../../utils/generic_alphanumeric_generator_util.dart';
 class LotoImageTab extends StatelessWidget {
   const LotoImageTab({
     super.key,
-    required this.data, required this.clientId,
+    required this.data,
+    required this.clientId,
   });
 
   final LotoData data;
@@ -21,10 +22,8 @@ class LotoImageTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: data
-            .attachments.length,
-        gridDelegate:
-        const SliverGridDelegateWithFixedCrossAxisCount(
+        itemCount: data.attachments.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 200 / 350,
             crossAxisCount: 4,
             crossAxisSpacing: tinierSpacing,
@@ -42,24 +41,18 @@ class LotoImageTab extends StatelessWidget {
                   child: CachedNetworkImage(
                       height: kCachedNetworkImageHeight,
                       imageUrl:
-                      '${ApiConstants.viewDocBaseUrl}${data.attachments[index].attachmentUrl}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                          '${ApiConstants.viewDocBaseUrl}${data.attachments[index].attachmentUrl}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                       placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: AppColor.paleGrey,
-                          highlightColor:
-                          AppColor.white,
+                          highlightColor: AppColor.white,
                           child: Container(
-                              height:
-                              kNetworkImageContainerTogether,
-                              width:
-                              kNetworkImageContainerTogether,
+                              height: kNetworkImageContainerTogether,
+                              width: kNetworkImageContainerTogether,
                               decoration: BoxDecoration(
                                   color: AppColor.white,
                                   borderRadius:
-                                  BorderRadius.circular(
-                                      kCardRadius)))),
-                      errorWidget: (context, url,
-                          error) =>
-                      const Icon(
+                                      BorderRadius.circular(kCardRadius)))),
+                      errorWidget: (context, url, error) => const Icon(
                           Icons.error_outline_sharp,
                           size: kIconSize))));
         });

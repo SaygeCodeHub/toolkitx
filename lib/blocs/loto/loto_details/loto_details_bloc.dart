@@ -108,7 +108,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoDetailsFetched(
           fetchLotoDetailsModel: fetchLotoDetailsModel,
           showPopUpMenu: true,
-          lotoPopUpMenuList: popUpMenuItemsList, clientId: clientId ?? '',
+          lotoPopUpMenuList: popUpMenuItemsList,
+          clientId: clientId ?? '',
         ));
       }
     } catch (e) {
