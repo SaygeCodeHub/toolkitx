@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/safetyNotice/safety_notice_events.dart';
@@ -33,11 +34,14 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   String safetyNoticeId = '';
   int safetyNoticeTabIndex = 0;
   Map safetyNoticeDetailsMap = {};
+  Map safetNoticeFilterMap = {};
 
   SafetyNoticeStates get initialState => SafetyNoticeInitialState();
 
   SafetyNoticeBloc() : super(SafetyNoticeInitialState()) {
     on<FetchSafetyNotices>(_fetchSafetyNotices);
+    on<SelectSafetyNoticeStatus>(_selectSafetyNoticeStatus);
+    on<SafetyNoticeApplyFilter>(_safetyNoticeApplyFilter);
     on<AddSafetyNotice>(_addSafetyNotice);
     on<SafetyNoticeSaveFiles>(_saveSafetyNoticeFiles);
     on<FetchSafetyNoticeDetails>(_fetchSafetyNoticeDetails);
@@ -48,6 +52,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     on<CloseSafetyNotice>(_closeSafetyNotice);
     on<FetchSafetyNoticeHistoryList>(_fetchSafetyNoticeHistory);
     on<ReIssueSafetyNotice>(_reIssueSafetyNotice);
+    on<SafetyNoticeReadReceipt>(_safetyNoticeReadReceipt);
   }
 
   FutureOr<void> _fetchSafetyNotices(
@@ -56,12 +61,27 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     try {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchSafetyNoticesModel fetchSafetyNoticesModel =
-          await _safetyNoticeRepository.fetchSafetyNotices(
-              event.pageNo, userId!, hashCode!, '{}');
-      safetyNoticeListReachedMax = fetchSafetyNoticesModel.data.notices.isEmpty;
-      noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
-      emit(SafetyNoticesFetched(noticesDatum: noticesDatum));
+      if (event.isFromHomeScreen == true) {
+        FetchSafetyNoticesModel fetchSafetyNoticesModel =
+            await _safetyNoticeRepository.fetchSafetyNotices(
+                event.pageNo, userId!, hashCode!, '{}');
+        safetyNoticeListReachedMax =
+            fetchSafetyNoticesModel.data.notices.isEmpty;
+        noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
+        emit(SafetyNoticesFetched(
+            noticesDatum: noticesDatum,
+            safetyNoticeFilterMap: safetNoticeFilterMap));
+      } else {
+        FetchSafetyNoticesModel fetchSafetyNoticesModel =
+            await _safetyNoticeRepository.fetchSafetyNotices(event.pageNo,
+                userId!, hashCode!, jsonEncode(safetNoticeFilterMap));
+        safetyNoticeListReachedMax =
+            fetchSafetyNoticesModel.data.notices.isEmpty;
+        noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
+        emit(SafetyNoticesFetched(
+            noticesDatum: noticesDatum,
+            safetyNoticeFilterMap: safetNoticeFilterMap));
+      }
     } catch (e) {
       e.toString();
     }
@@ -178,6 +198,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
           clientId: clientId!,
           popUpMenuOptionsList: popUpMenuList,
           safetyNoticeDetailsMap: safetyNoticeDetailsMap));
+      add(SafetyNoticeReadReceipt(safetyNoticeId: event.safetyNoticeId));
     } catch (e) {
       emit(SafetyNoticeDetailsNotFetched(detailsNotFetched: e.toString()));
     }
@@ -368,5 +389,28 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
     } catch (e) {
       emit(SafetyNoticeFailedToReIssue(noticeNotReIssued: e.toString()));
     }
+  }
+
+  _selectSafetyNoticeStatus(
+      SelectSafetyNoticeStatus event, Emitter<SafetyNoticeStates> emit) {
+    emit(SafetyNoticeStatusSelected(
+        statusId: event.statusId, status: event.status));
+  }
+
+  _safetyNoticeApplyFilter(
+      SafetyNoticeApplyFilter event, Emitter<SafetyNoticeStates> emit) {
+    safetNoticeFilterMap = event.safetyNoticeFilterMap;
+  }
+
+  FutureOr<void> _safetyNoticeReadReceipt(
+      SafetyNoticeReadReceipt event, Emitter<SafetyNoticeStates> emit) async {
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    Map saveReadReceiptMap = {
+      "hashcode": hashCode,
+      "userid": userId,
+      "noticeid": event.safetyNoticeId
+    };
+    await _safetyNoticeRepository.saveReadReceipt(saveReadReceiptMap);
   }
 }

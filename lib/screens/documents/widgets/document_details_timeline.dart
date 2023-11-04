@@ -4,6 +4,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
+import '../documents_details_screen.dart';
 
 class DocumentCustomTimeline extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
@@ -13,6 +14,7 @@ class DocumentCustomTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DocumentsDetailsScreen.defaultIndex = 3;
     return Padding(
         padding: const EdgeInsets.only(
             top: xxxSmallerSpacing, bottom: xxxSmallerSpacing),

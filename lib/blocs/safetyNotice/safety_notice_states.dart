@@ -17,8 +17,17 @@ class FetchingSafetyNotices extends SafetyNoticeStates {}
 
 class SafetyNoticesFetched extends SafetyNoticeStates {
   final List<Notice> noticesDatum;
+  final Map safetyNoticeFilterMap;
 
-  SafetyNoticesFetched({required this.noticesDatum});
+  SafetyNoticesFetched(
+      {required this.safetyNoticeFilterMap, required this.noticesDatum});
+}
+
+class SafetyNoticeStatusSelected extends SafetyNoticeStates {
+  final String statusId;
+  final String status;
+
+  SafetyNoticeStatusSelected({required this.status, required this.statusId});
 }
 
 class AddingSafetyNotice extends SafetyNoticeStates {}

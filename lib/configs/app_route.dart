@@ -10,6 +10,7 @@ import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
+import '../screens/assets/assets_manage_document_screeen.dart';
 import '../screens/assets/widgets/assets_add_downtime_screen.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
@@ -39,6 +40,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/expense/expense_list_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -95,6 +97,7 @@ import '../screens/root/root_screen.dart';
 import '../screens/safetyNotice/add_and_edit_safety_notice_screen.dart';
 import '../screens/safetyNotice/safety_notice_details_screen.dart';
 import '../screens/safetyNotice/safety_notice_history_screen.dart';
+import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -406,6 +409,13 @@ class AppRoutes {
       case AttachDocumentScreen.routeName:
         return _createRoute(AttachDocumentScreen(
             documentDetailsModel: settings.arguments as DocumentDetailsModel));
+      case SafetyNoticeFilterScreen.routeName:
+        return _createRoute(const SafetyNoticeFilterScreen());
+      case ExpenseListScreen.routeName:
+        return _createRoute(const ExpenseListScreen());
+
+      case AssetsManageDocumentScreen.routeName:
+        return _createRoute(const AssetsManageDocumentScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

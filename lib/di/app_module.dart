@@ -21,6 +21,8 @@ import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart'
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
+import '../repositories/expense/expense_repository.dart';
+import '../repositories/expense/expense_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/loto/loto_repository.dart';
@@ -90,4 +92,5 @@ configurableDependencies() {
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
+  getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
 }

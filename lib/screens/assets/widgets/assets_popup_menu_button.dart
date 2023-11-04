@@ -3,6 +3,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../assets_manage_document_screeen.dart';
 import '../assets_manage_downtime_screen.dart';
 
 class AssetsPopUpMenuButton extends StatelessWidget {
@@ -26,6 +27,9 @@ class AssetsPopUpMenuButton extends StatelessWidget {
         onSelected: (value) {
           if (value == StringConstants.kManageDownTime) {
             Navigator.pushNamed(context, AssetsManageDownTimeScreen.routeName);
+          }
+          if (value == StringConstants.kManageDocuments) {
+            Navigator.pushNamed(context, AssetsManageDocumentScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,
