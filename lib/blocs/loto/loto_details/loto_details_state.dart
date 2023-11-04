@@ -8,6 +8,7 @@ class LotoDetailsFetching extends LotoDetailsState {}
 
 class LotoDetailsFetched extends LotoDetailsState {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
+  final String clientId;
   final bool showPopUpMenu;
   final List lotoPopUpMenuList;
 
@@ -15,6 +16,7 @@ class LotoDetailsFetched extends LotoDetailsState {
     required this.fetchLotoDetailsModel,
     required this.showPopUpMenu,
     required this.lotoPopUpMenuList,
+    required this.clientId,
   });
 }
 
