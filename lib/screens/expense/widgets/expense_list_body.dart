@@ -79,9 +79,8 @@ class ExpenseListBody extends StatelessWidget {
                 );
               } else {
                 ExpenseListScreen.pageNo++;
-                context
-                    .read<ExpenseBloc>()
-                    .add(FetchExpenseList(pageNo: ExpenseListScreen.pageNo));
+                context.read<ExpenseBloc>().add(FetchExpenseList(
+                    pageNo: ExpenseListScreen.pageNo, isFromHome: false));
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

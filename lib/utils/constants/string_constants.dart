@@ -314,6 +314,7 @@ abstract class StringConstants {
   static const String kSelectOrigination = 'Select origination'; //
   static const String kSelectCostCenter = 'Select Cost Center'; //
   static const String kMiscCostValidation = 'Please enter all data'; //
+  static const String kNoWorkForce = 'No workforce!'; //
   static const String kPlannedDateValidation =
       "Planned finished date can't be greater than planned start date!"; //
   static const String kChecklistError = 'Checklist assigning error';

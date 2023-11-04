@@ -11,19 +11,25 @@ import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'expense_filter_screen.dart';
 import 'widgets/expense_list_body.dart';
 
 class ExpenseListScreen extends StatelessWidget {
   static const routeName = 'ExpenseListScreen';
+  final bool isFromHome;
 
-  const ExpenseListScreen({Key? key}) : super(key: key);
+  const ExpenseListScreen({Key? key, this.isFromHome = false})
+      : super(key: key);
   static int pageNo = 1;
 
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
     context.read<ExpenseBloc>().expenseListReachedMax = false;
-    context.read<ExpenseBloc>().add(FetchExpenseList(pageNo: pageNo));
+    context.read<ExpenseBloc>().expenseListData.clear();
+    context
+        .read<ExpenseBloc>()
+        .add(FetchExpenseList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('ExpenseReport')),
       body: Padding(
@@ -33,11 +39,40 @@ class ExpenseListScreen extends StatelessWidget {
             top: xxTinierSpacing),
         child: Column(
           children: [
-            CustomIconButtonRow(
-                primaryOnPress: () {},
-                secondaryOnPress: () {},
-                secondaryVisible: false,
-                clearOnPress: () {}),
+            BlocBuilder<ExpenseBloc, ExpenseStates>(
+              buildWhen: (previousState, currentState) {
+                if (currentState is FetchingExpenses && isFromHome == true) {
+                  return true;
+                } else if (currentState is ExpensesFetched) {
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is ExpensesFetched) {
+                  return CustomIconButtonRow(
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, ExpenseFilterScreen.routeName);
+                      },
+                      secondaryOnPress: () {},
+                      secondaryVisible: false,
+                      clearVisible:
+                          state.filtersMap.isNotEmpty && isFromHome != true,
+                      clearOnPress: () {
+                        pageNo = 1;
+                        context.read<ExpenseBloc>().expenseListReachedMax =
+                            false;
+                        context.read<ExpenseBloc>().expenseListData.clear();
+                        context.read<ExpenseBloc>().add(ExpenseClearFilter());
+                        context.read<ExpenseBloc>().add(FetchExpenseList(
+                            pageNo: 1, isFromHome: isFromHome));
+                      });
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
             const SizedBox(height: xxTinierSpacing),
             BlocConsumer<ExpenseBloc, ExpenseStates>(
               buildWhen: (previousState, currentState) =>
@@ -59,10 +94,8 @@ class ExpenseListScreen extends StatelessWidget {
                     return ExpenseListBody(
                         expenseListDatum: state.expenseListDatum);
                   } else {
-                    return Center(
-                      child: NoRecordsText(
-                          text: DatabaseUtil.getText('no_records_found')),
-                    );
+                    return NoRecordsText(
+                        text: DatabaseUtil.getText('no_records_found'));
                   }
                 } else {
                   return const SizedBox.shrink();
