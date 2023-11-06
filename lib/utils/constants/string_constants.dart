@@ -24,6 +24,8 @@ abstract class StringConstants {
   static const String kSafetyNoticeIssue =
       'Do you want to issue this notice?'; //
   static const String kSafetyNoticeHold = 'Do you want to hold this notice?'; //
+  static const String kExpenseDraftText =
+      'The expense report is now in Draft Mode. When you will finish marking changes, click the "Submit for Approval" button so that your expense report may be approved.'; //
   static const String kSafetyNoticeCancel =
       'Do you want to cancel this notice?'; //
   static const String kSafetyNoticeClose =
@@ -312,6 +314,7 @@ abstract class StringConstants {
   static const String kSelectOrigination = 'Select origination'; //
   static const String kSelectCostCenter = 'Select Cost Center'; //
   static const String kMiscCostValidation = 'Please enter all data'; //
+  static const String kNoWorkForce = 'No workforce!'; //
   static const String kPlannedDateValidation =
       "Planned finished date can't be greater than planned start date!"; //
   static const String kChecklistError = 'Checklist assigning error';
