@@ -191,7 +191,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "endtime": event.saveDowntimeMap["endtime"],
         "userid": userId,
         "assetid": assetId,
-        "id": event.saveDowntimeMap["id"] ?? '',
+        "id": event.saveDowntimeMap["downtimeId"] ?? '' ,
         "note": event.saveDowntimeMap["note"],
       };
       SaveAssetsDowntimeModel saveAssetsDowntimeModel =
@@ -228,7 +228,6 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsSingleDowntime event, Emitter<AssetsState> emit) async {
     emit(AssetsSingleDownTimeFetching());
     try {
-      isFromAdd = true;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchAssetSingleDowntimeModel fetchAssetSingleDowntimeModel =
           await _assetsRepository.fetchAssetsSingleDowntimeRepo(

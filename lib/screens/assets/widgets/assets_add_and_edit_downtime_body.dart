@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/generic_text_field.dart';
@@ -17,7 +18,7 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("Start date",
+          Text(StringConstants.kStartDate,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           Padding(
@@ -31,7 +32,7 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
                         .saveDowntimeMap["startdate"] = date;
                   })),
           const SizedBox(height: tinierSpacing),
-          Text("End date",
+          Text(StringConstants.kEndDate,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           Padding(
@@ -45,7 +46,7 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
                         date;
                   })),
           const SizedBox(height: tinierSpacing),
-          Text("Start Time",
+          Text(StringConstants.kStartTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           Padding(
@@ -59,7 +60,7 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
                         .saveDowntimeMap["starttime"] = time;
                   })),
           const SizedBox(height: tinierSpacing),
-          Text("End Time",
+          Text(StringConstants.kEndTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           Padding(
@@ -73,7 +74,7 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
                         time;
                   })),
           const SizedBox(height: tinierSpacing),
-          Text("Note",
+          Text(StringConstants.kNote,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -24,7 +25,10 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
         .add(FetchAssetsSingleDowntime(downtimeId: downtimeId));
 
     return Scaffold(
-        appBar: GenericAppBar(title: (context.read<AssetsBloc>().isFromAdd = false) ? DatabaseUtil.getText("AddDowntime") : "Edit DownTime"),
+        appBar: GenericAppBar(
+            title:
+            ((downtimeId == "") ?
+            DatabaseUtil.getText("AddDowntime") : StringConstants.kEditDownTime)),
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(tinierSpacing),
             child: BlocListener<AssetsBloc, AssetsState>(
@@ -33,7 +37,7 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
                   ProgressBar.show(context);
                 } else if (state is AssetsDownTimeSaved) {
                   ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, "DownTime Saved", "");
+                  showCustomSnackBar(context, StringConstants.kDowntimeSaved, "");
                   Navigator.pop(context);
                 } else if (state is AssetsDownTimeNotSaved) {
                   ProgressBar.dismiss(context);
@@ -42,10 +46,11 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
               },
               child: PrimaryButton(
                   onPressed: () {
-                    context.read<AssetsBloc>().add(
-                        SaveAssetsDownTime(saveDowntimeMap: saveDowntimeMap));
+                    saveDowntimeMap["downtimeId"] = downtimeId;
+                    context.read<AssetsBloc>().add(SaveAssetsDownTime(
+                        saveDowntimeMap: saveDowntimeMap));
                   },
-                  textValue: "Save"),
+                  textValue: StringConstants.kSave),
             )),
         body: BlocBuilder<AssetsBloc, AssetsState>(builder: (context, state) {
           if (state is AssetsSingleDownTimeFetching) {
@@ -56,8 +61,6 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
             saveDowntimeMap = {};
             return const AssetsAddAndEditDowntimeBody();
           }
-        })
-        // )
-        );
+        }));
   }
 }
