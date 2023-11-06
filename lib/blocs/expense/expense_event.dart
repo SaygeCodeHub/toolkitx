@@ -34,3 +34,17 @@ class ExpenseApplyFilter extends ExpenseEvent {
 }
 
 class ExpenseClearFilter extends ExpenseEvent {}
+
+class FetchExpenseMaster extends ExpenseEvent {}
+
+class ExpenseSelectCurrency extends ExpenseEvent {
+  final Map currencyDetailsMap;
+
+  ExpenseSelectCurrency({required this.currencyDetailsMap});
+}
+
+class AddExpense extends ExpenseEvent {
+  final Map saveExpenseMap;
+
+  AddExpense({required this.saveExpenseMap});
+}

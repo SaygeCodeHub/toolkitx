@@ -43,6 +43,7 @@ import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
+import '../screens/expense/manage_expense_form_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -422,6 +423,8 @@ class AppRoutes {
       case ExpenseDetailsScreen.routeName:
         return _createRoute(
             ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
+      case ManageExpenseFormScreen.routeName:
+        return _createRoute(const ManageExpenseFormScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
