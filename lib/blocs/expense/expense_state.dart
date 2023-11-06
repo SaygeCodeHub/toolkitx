@@ -1,3 +1,5 @@
+import '../../data/models/expense/fetch_expense_details_model.dart';
+
 abstract class ExpenseStates {}
 
 class ExpenseInitial extends ExpenseStates {}
@@ -23,4 +25,18 @@ class ExpenseStatusSelected extends ExpenseStates {
 
   ExpenseStatusSelected(
       {required this.statusIdList, required this.statusValueList});
+}
+
+class FetchingExpenseDetails extends ExpenseStates {}
+
+class ExpenseDetailsFetched extends ExpenseStates {
+  final FetchExpenseDetailsModel fetchExpenseDetailsModel;
+
+  ExpenseDetailsFetched({required this.fetchExpenseDetailsModel});
+}
+
+class ExpenseDetailsFailedToFetch extends ExpenseStates {
+  final String expenseDetailsNotFetched;
+
+  ExpenseDetailsFailedToFetch({required this.expenseDetailsNotFetched});
 }

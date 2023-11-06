@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
+import '../expense_details_screen.dart';
 import '../expense_list_screen.dart';
 
 class ExpenseListBody extends StatelessWidget {
@@ -30,7 +31,11 @@ class ExpenseListBody extends StatelessWidget {
               if (index < expenseListDatum.length) {
                 return CustomCard(
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, ExpenseDetailsScreen.routeName,
+                          arguments: expenseListDatum[index].id);
+                    },
                     contentPadding: const EdgeInsets.all(xxTinierSpacing),
                     title: Padding(
                         padding: const EdgeInsets.only(bottom: xxTinierSpacing),
