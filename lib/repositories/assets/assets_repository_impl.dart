@@ -59,7 +59,8 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<FetchAssetSingleDowntimeModel> fetchAssetsSingleDowntimeRepo(String hashCode, String downtimeId) async {
+  Future<FetchAssetSingleDowntimeModel> fetchAssetsSingleDowntimeRepo(
+      String hashCode, String downtimeId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/getsingledowntime?hashcode=$hashCode&downtimeid=$downtimeId");
     return FetchAssetSingleDowntimeModel.fromJson(response);

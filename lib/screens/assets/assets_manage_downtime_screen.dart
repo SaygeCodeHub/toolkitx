@@ -25,7 +25,9 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(tinierSpacing),
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, AssetsAddAndEditDowntimeScreen.routeName,arguments: "")
+                Navigator.pushNamed(
+                        context, AssetsAddAndEditDowntimeScreen.routeName,
+                        arguments: "")
                     .then((_) => {
                           context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
                               assetId: context.read<AssetsBloc>().assetId,

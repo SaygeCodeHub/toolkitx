@@ -191,7 +191,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "endtime": event.saveDowntimeMap["endtime"],
         "userid": userId,
         "assetid": assetId,
-        "id": event.saveDowntimeMap["downtimeId"] ?? '' ,
+        "id": event.saveDowntimeMap["downtimeId"] ?? '',
         "note": event.saveDowntimeMap["note"],
       };
       SaveAssetsDowntimeModel saveAssetsDowntimeModel =

@@ -26,9 +26,9 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: GenericAppBar(
-            title:
-            ((downtimeId == "") ?
-            DatabaseUtil.getText("AddDowntime") : StringConstants.kEditDownTime)),
+            title: ((downtimeId == "")
+                ? DatabaseUtil.getText("AddDowntime")
+                : StringConstants.kEditDownTime)),
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(tinierSpacing),
             child: BlocListener<AssetsBloc, AssetsState>(
@@ -37,7 +37,8 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
                   ProgressBar.show(context);
                 } else if (state is AssetsDownTimeSaved) {
                   ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, StringConstants.kDowntimeSaved, "");
+                  showCustomSnackBar(
+                      context, StringConstants.kDowntimeSaved, "");
                   Navigator.pop(context);
                 } else if (state is AssetsDownTimeNotSaved) {
                   ProgressBar.dismiss(context);
@@ -47,8 +48,8 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
               child: PrimaryButton(
                   onPressed: () {
                     saveDowntimeMap["downtimeId"] = downtimeId;
-                    context.read<AssetsBloc>().add(SaveAssetsDownTime(
-                        saveDowntimeMap: saveDowntimeMap));
+                    context.read<AssetsBloc>().add(
+                        SaveAssetsDownTime(saveDowntimeMap: saveDowntimeMap));
                   },
                   textValue: StringConstants.kSave),
             )),

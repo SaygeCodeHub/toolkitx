@@ -1,8 +1,12 @@
 import 'dart:convert';
 
-FetchAssetSingleDowntimeModel fetchAssetSingleDowntimeModelFromJson(String str) => FetchAssetSingleDowntimeModel.fromJson(json.decode(str));
+FetchAssetSingleDowntimeModel fetchAssetSingleDowntimeModelFromJson(
+        String str) =>
+    FetchAssetSingleDowntimeModel.fromJson(json.decode(str));
 
-String fetchAssetSingleDowntimeModelToJson(FetchAssetSingleDowntimeModel data) => json.encode(data.toJson());
+String fetchAssetSingleDowntimeModelToJson(
+        FetchAssetSingleDowntimeModel data) =>
+    json.encode(data.toJson());
 
 class FetchAssetSingleDowntimeModel {
   final int status;
@@ -15,17 +19,18 @@ class FetchAssetSingleDowntimeModel {
     required this.data,
   });
 
-  factory FetchAssetSingleDowntimeModel.fromJson(Map<String, dynamic> json) => FetchAssetSingleDowntimeModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory FetchAssetSingleDowntimeModel.fromJson(Map<String, dynamic> json) =>
+      FetchAssetSingleDowntimeModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
@@ -66,40 +71,40 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    assetid: json["assetid"],
-    startdatetime: json["startdatetime"],
-    enddatetime: json["enddatetime"],
-    totalmin: json["totalmin"],
-    woid: json["woid"],
-    repby: json["repby"],
-    note: json["note"],
-    created: json["created"],
-    createdby: json["createdby"],
-    updated: json["updated"],
-    updateby: json["updateby"],
-    startdate: json["startdate"],
-    starttime: json["starttime"],
-    enddate: json["enddate"],
-    endtime: json["endtime"],
-  );
+        id: json["id"],
+        assetid: json["assetid"],
+        startdatetime: json["startdatetime"],
+        enddatetime: json["enddatetime"],
+        totalmin: json["totalmin"],
+        woid: json["woid"],
+        repby: json["repby"],
+        note: json["note"],
+        created: json["created"],
+        createdby: json["createdby"],
+        updated: json["updated"],
+        updateby: json["updateby"],
+        startdate: json["startdate"],
+        starttime: json["starttime"],
+        enddate: json["enddate"],
+        endtime: json["endtime"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "assetid": assetid,
-    "startdatetime": startdatetime,
-    "enddatetime": enddatetime,
-    "totalmin": totalmin,
-    "woid": woid,
-    "repby": repby,
-    "note": note,
-    "created": created,
-    "createdby": createdby,
-    "updated": updated,
-    "updateby": updateby,
-    "startdate": startdate,
-    "starttime": starttime,
-    "enddate": enddate,
-    "endtime": endtime,
-  };
+        "id": id,
+        "assetid": assetid,
+        "startdatetime": startdatetime,
+        "enddatetime": enddatetime,
+        "totalmin": totalmin,
+        "woid": woid,
+        "repby": repby,
+        "note": note,
+        "created": created,
+        "createdby": createdby,
+        "updated": updated,
+        "updateby": updateby,
+        "startdate": startdate,
+        "starttime": starttime,
+        "enddate": enddate,
+        "endtime": endtime,
+      };
 }

@@ -406,7 +406,9 @@ class AppRoutes {
       case AssetsManageDownTimeScreen.routeName:
         return _createRoute(const AssetsManageDownTimeScreen());
       case AssetsAddAndEditDowntimeScreen.routeName:
-        return _createRoute(AssetsAddAndEditDowntimeScreen(downtimeId: settings.arguments.toString(),));
+        return _createRoute(AssetsAddAndEditDowntimeScreen(
+          downtimeId: settings.arguments.toString(),
+        ));
       case LinkDocumentsFilterScreen.routeName:
         return _createRoute(const LinkDocumentsFilterScreen());
       case AttachDocumentScreen.routeName:

@@ -10,7 +10,8 @@ class AssetsDowntimePopUpMenu extends StatelessWidget {
   const AssetsDowntimePopUpMenu(
       {super.key,
       required this.popUpMenuItems,
-      required this.fetchAssetsDowntimeModel, required this.downtimeId});
+      required this.fetchAssetsDowntimeModel,
+      required this.downtimeId});
 
   final List popUpMenuItems;
   final FetchAssetsDowntimeModel fetchAssetsDowntimeModel;
@@ -27,11 +28,14 @@ class AssetsDowntimePopUpMenu extends StatelessWidget {
     return PopupMenuButton(
         onSelected: (value) {
           if (value == DatabaseUtil.getText("Edit")) {
-            Navigator.pushNamed(context, AssetsAddAndEditDowntimeScreen.routeName,arguments: downtimeId,)
-                .then((_) => {
-            context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
-            assetId: context.read<AssetsBloc>().assetId, pageNo: 1))
-            });
+            Navigator.pushNamed(
+              context,
+              AssetsAddAndEditDowntimeScreen.routeName,
+              arguments: downtimeId,
+            ).then((_) => {
+                  context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
+                      assetId: context.read<AssetsBloc>().assetId, pageNo: 1))
+                });
           }
           if (value == DatabaseUtil.getText("Delete")) {}
         },

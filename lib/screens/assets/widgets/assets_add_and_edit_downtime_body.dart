@@ -12,7 +12,8 @@ class AssetsAddAndEditDowntimeBody extends StatelessWidget {
   const AssetsAddAndEditDowntimeBody({super.key});
 
   @override
-  Widget build(BuildContext context) {    return Padding(
+  Widget build(BuildContext context) {
+    return Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
             right: leftRightMargin,
