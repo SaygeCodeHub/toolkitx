@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
