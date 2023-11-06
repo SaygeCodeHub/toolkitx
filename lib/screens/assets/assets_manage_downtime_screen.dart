@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/assets/widgets/assets_add_downtime_screen.dart';
+import 'package:toolkit/screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import 'package:toolkit/screens/assets/widgets/assets_downtime_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -14,7 +14,6 @@ import '../../configs/app_color.dart';
 class AssetsManageDownTimeScreen extends StatelessWidget {
   static const routeName = 'AssetsManageDownTimeScreen';
   static int pageNo = 1;
-
   const AssetsManageDownTimeScreen({super.key});
 
   @override
@@ -26,7 +25,9 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(tinierSpacing),
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, AssetsAddDowntimeScreen.routeName)
+                Navigator.pushNamed(
+                        context, AssetsAddAndEditDowntimeScreen.routeName,
+                        arguments: "")
                     .then((_) => {
                           context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
                               assetId: context.read<AssetsBloc>().assetId,
@@ -66,27 +67,29 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                                     top: xxxTinierSpacing,
                                     bottom: xxxTinierSpacing),
                                 child: ListTile(
-                                  title: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                            "${state.fetchAssetsDowntimeModel.data[index].startdatetime} - ${state.fetchAssetsDowntimeModel.data[index].enddatetime}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .xSmall
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: AppColor.black)),
-                                      ),
-                                      SizedBox(
-                                          width: smallerSpacing,
-                                          child: AssetsDowntimePopUpMenu(
-                                              popUpMenuItems:
-                                                  state.assetsPopUpMenu,
-                                              fetchAssetsDowntimeModel: state
-                                                  .fetchAssetsDowntimeModel)),
-                                    ],
-                                  ),
+                                  title: Row(children: [
+                                    Expanded(
+                                      child: Text(
+                                          "${state.fetchAssetsDowntimeModel.data[index].startdatetime} - ${state.fetchAssetsDowntimeModel.data[index].enddatetime}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.black)),
+                                    ),
+                                    SizedBox(
+                                        width: smallerSpacing,
+                                        child: AssetsDowntimePopUpMenu(
+                                            popUpMenuItems:
+                                                state.assetsPopUpMenu,
+                                            fetchAssetsDowntimeModel:
+                                                state.fetchAssetsDowntimeModel,
+                                            downtimeId: state
+                                                .fetchAssetsDowntimeModel
+                                                .data[index]
+                                                .id))
+                                  ]),
                                   subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
