@@ -14,6 +14,7 @@ import '../../utils/expense_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'expense_pop_up_menu_screen.dart';
 import 'widgets/expense_details_tab_one.dart';
 
 class ExpenseDetailsScreen extends StatelessWidget {
@@ -29,7 +30,21 @@ class ExpenseDetailsScreen extends StatelessWidget {
         .read<ExpenseBloc>()
         .add(FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
     return Scaffold(
-        appBar: const GenericAppBar(),
+        appBar: GenericAppBar(
+          actions: [
+            BlocBuilder<ExpenseBloc, ExpenseStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is ExpenseDetailsFetched,
+                builder: (context, state) {
+                  if (state is ExpenseDetailsFetched) {
+                    return ExpensePopUpMenuScreen(
+                        popUpMenuOptions: state.popUpMenuList);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                })
+          ],
+        ),
         body: BlocBuilder<ExpenseBloc, ExpenseStates>(
           buildWhen: (previousState, currentState) =>
               currentState is FetchingExpenseDetails ||
