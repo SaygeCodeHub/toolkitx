@@ -48,7 +48,7 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
             child: BlocConsumer<AssetsBloc, AssetsState>(
                 listener: (context, state) {
                   if (state is AssetsDownTimeDeleting) {
-                    ProgressBar().toString();
+                    ProgressBar.show(context);
                   } else if (state is AssetsDownTimeDeleted) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(
