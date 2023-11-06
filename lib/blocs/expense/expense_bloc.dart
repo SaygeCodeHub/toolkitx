@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -67,8 +68,22 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       FetchExpenseDetailsModel fetchExpenseDetailsModel =
           await _expenseRepository.fetchExpenseDetails(
               event.expenseId, userId, hashCode);
+      List popUpMenuList = [];
+      if (fetchExpenseDetailsModel.data.canEdit == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Edit'));
+      }
+      if (fetchExpenseDetailsModel.data.canSubmitforapproval == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('SubmitForApproval'));
+      }
+      if (fetchExpenseDetailsModel.data.canApprove == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('approve'));
+      }
+      if (fetchExpenseDetailsModel.data.canClose == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('Close'));
+      }
       emit(ExpenseDetailsFetched(
-          fetchExpenseDetailsModel: fetchExpenseDetailsModel));
+          fetchExpenseDetailsModel: fetchExpenseDetailsModel,
+          popUpMenuList: popUpMenuList));
     } catch (e) {
       emit(ExpenseDetailsFailedToFetch(expenseDetailsNotFetched: e.toString()));
     }
