@@ -6,7 +6,9 @@ import 'package:toolkit/screens/assets/widgets/assets_add_and_edit_downtime_scre
 import 'package:toolkit/screens/assets/widgets/assets_downtime_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
 import '../../configs/app_color.dart';
@@ -43,7 +45,22 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing,
                 bottom: leftRightMargin),
-            child: BlocBuilder<AssetsBloc, AssetsState>(
+            child: BlocConsumer<AssetsBloc, AssetsState>(
+                listener: (context, state) {
+                  if (state is AssetsDownTimeDeleting) {
+                    ProgressBar().toString();
+                  } else if (state is AssetsDownTimeDeleted) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(
+                        context, StringConstants.kDowntimeDeleted, "");
+                    context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
+                        assetId: context.read<AssetsBloc>().assetId,
+                        pageNo: pageNo));
+                  } else if (state is AssetsDownTimeNotDeleted) {
+                    showCustomSnackBar(context, state.errorMessage, "");
+                    ProgressBar.dismiss(context);
+                  }
+                },
                 buildWhen: (previousState, currentState) =>
                     currentState is AssetsGetDownTimeFetching ||
                     currentState is AssetsGetDownTimeFetched ||

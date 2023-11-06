@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 import '../../../blocs/assets/assets_bloc.dart';
 
 class AssetsDowntimePopUpMenu extends StatelessWidget {
@@ -37,7 +39,20 @@ class AssetsDowntimePopUpMenu extends StatelessWidget {
                       assetId: context.read<AssetsBloc>().assetId, pageNo: 1))
                 });
           }
-          if (value == DatabaseUtil.getText("Delete")) {}
+          if (value == DatabaseUtil.getText("Delete")) {
+            showDialog(
+                context: context,
+                builder: (context) => AndroidPopUp(
+                      titleValue: StringConstants.kDeleteDowntime,
+                      contentValue:
+                          DatabaseUtil.getText("DeleteConfirmationImage"),
+                      onPrimaryButton: () {
+                        context
+                            .read<AssetsBloc>()
+                            .add(DeleteAssetsDownTime(downtimeId: downtimeId));
+                      },
+                    ));
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
