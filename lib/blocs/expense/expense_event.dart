@@ -20,6 +20,13 @@ class SelectExpenseStatus extends ExpenseEvent {
       required this.statusName});
 }
 
+class FetchExpenseDetails extends ExpenseEvent {
+  final String expenseId;
+  final int tabIndex;
+
+  FetchExpenseDetails({required this.tabIndex, required this.expenseId});
+}
+
 class ExpenseApplyFilter extends ExpenseEvent {
   final Map expenseFilterMap;
 

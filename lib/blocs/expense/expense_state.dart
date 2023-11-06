@@ -1,3 +1,5 @@
+import '../../data/models/expense/fetch_expense_details_model.dart';
+
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 
@@ -26,6 +28,20 @@ class ExpenseStatusSelected extends ExpenseStates {
 
   ExpenseStatusSelected(
       {required this.statusIdList, required this.statusValueList});
+}
+
+class FetchingExpenseDetails extends ExpenseStates {}
+
+class ExpenseDetailsFetched extends ExpenseStates {
+  final FetchExpenseDetailsModel fetchExpenseDetailsModel;
+
+  ExpenseDetailsFetched({required this.fetchExpenseDetailsModel});
+}
+
+class ExpenseDetailsFailedToFetch extends ExpenseStates {
+  final String expenseDetailsNotFetched;
+
+  ExpenseDetailsFailedToFetch({required this.expenseDetailsNotFetched});
 }
 
 class FetchingExpenseMaster extends ExpenseStates {}
