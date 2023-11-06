@@ -1,3 +1,4 @@
+import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -13,4 +14,7 @@ abstract class ExpenseRepository {
   Future<FetchExpenseMasterModel> fetchExpenseMaster(String hashCode);
 
   Future<SaveExpenseModel> addExpense(Map saveExpenseMap);
+
+  Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
+      Map submitForApprovalMap);
 }

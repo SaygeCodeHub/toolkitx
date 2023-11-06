@@ -48,3 +48,5 @@ class AddExpense extends ExpenseEvent {
 
   AddExpense({required this.saveExpenseMap});
 }
+
+class SubmitExpenseForApproval extends ExpenseEvent {}

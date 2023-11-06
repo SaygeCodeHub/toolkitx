@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_state.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../blocs/expense/expense_bloc.dart';
 import '../../blocs/expense/expense_event.dart';
@@ -13,7 +14,9 @@ import '../../data/models/status_tag_model.dart';
 import '../../utils/expense_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'expense_list_screen.dart';
 import 'expense_pop_up_menu_screen.dart';
 import 'widgets/expense_details_tab_one.dart';
 
@@ -45,10 +48,25 @@ class ExpenseDetailsScreen extends StatelessWidget {
                 })
           ],
         ),
-        body: BlocBuilder<ExpenseBloc, ExpenseStates>(
+        body: BlocConsumer<ExpenseBloc, ExpenseStates>(
           buildWhen: (previousState, currentState) =>
               currentState is FetchingExpenseDetails ||
               currentState is ExpenseDetailsFetched,
+          listener: (context, state) {
+            if (state is SubmittingExpenseForApproval) {
+              ProgressBar.show(context);
+            } else if (state is ExpenseForApprovalSubmitted) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ExpenseListScreen.routeName,
+                  arguments: false);
+            } else if (state is ExpenseForApprovalFailedToSubmit) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.approvalFailedToSubmit, '');
+            }
+          },
           builder: (context, state) {
             if (state is FetchingExpenseDetails) {
               return const Center(child: CircularProgressIndicator());
