@@ -1,5 +1,8 @@
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
+import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/save_expense_model.dart';
+
 abstract class ExpenseStates {}
 
 class ExpenseInitial extends ExpenseStates {}
@@ -41,4 +44,38 @@ class ExpenseDetailsFailedToFetch extends ExpenseStates {
   final String expenseDetailsNotFetched;
 
   ExpenseDetailsFailedToFetch({required this.expenseDetailsNotFetched});
+}
+
+class FetchingExpenseMaster extends ExpenseStates {}
+
+class ExpenseMasterFetched extends ExpenseStates {
+  final FetchExpenseMasterModel fetchExpenseMasterModel;
+
+  ExpenseMasterFetched({required this.fetchExpenseMasterModel});
+}
+
+class ExpenseMasterNotFetched extends ExpenseStates {
+  final String masterNotFetched;
+
+  ExpenseMasterNotFetched({required this.masterNotFetched});
+}
+
+class ExpenseCurrencySelected extends ExpenseStates {
+  final Map currencyDetailsMap;
+
+  ExpenseCurrencySelected({required this.currencyDetailsMap});
+}
+
+class SavingAddExpense extends ExpenseStates {}
+
+class AddExpenseSaved extends ExpenseStates {
+  final SaveExpenseModel saveExpenseModel;
+
+  AddExpenseSaved({required this.saveExpenseModel});
+}
+
+class AddExpenseNotSaved extends ExpenseStates {
+  final String expenseNotSaved;
+
+  AddExpenseNotSaved({required this.expenseNotSaved});
 }
