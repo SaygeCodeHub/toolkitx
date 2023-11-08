@@ -43,7 +43,11 @@ class ExpenseCurrencyList extends StatelessWidget {
                               value: data[0][index].id.toString(),
                               groupValue: currencyDetailsMap['currency_id'],
                               onChanged: (value) {
-                                currencyDetailsMap['currency_id'] = value;
+                                currencyDetailsMap['currency_id'] ==
+                                        currencyDetailsMap['currency_id']
+                                    ? currencyDetailsMap['new_currency_id'] =
+                                        value
+                                    : currencyDetailsMap['currency_id'] = '';
                                 currencyDetailsMap['currency_name'] =
                                     data[0][index].currency;
                                 context.read<ExpenseBloc>().add(
