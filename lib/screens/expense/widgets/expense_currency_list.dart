@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
@@ -13,8 +15,7 @@ class ExpenseCurrencyList extends StatelessWidget {
   final List<List<ExpenseMasterDatum>> data;
   final Map currencyDetailsMap;
 
-  const ExpenseCurrencyList(
-      {Key? key, required this.data, required this.currencyDetailsMap})
+  const ExpenseCurrencyList({Key? key, required this.data, required this.currencyDetailsMap})
       : super(key: key);
 
   @override
@@ -43,7 +44,13 @@ class ExpenseCurrencyList extends StatelessWidget {
                               value: data[0][index].id.toString(),
                               groupValue: currencyDetailsMap['currency_id'],
                               onChanged: (value) {
-                                currencyDetailsMap['currency_id'] = value;
+                                currencyDetailsMap['currency_id'] ==
+                                        currencyDetailsMap['currency_id']
+                                    ? currencyDetailsMap['new_currency_id'] =
+                                        value
+                                    : currencyDetailsMap['currency_id'] = '';
+                                log('currency old------>${currencyDetailsMap['currency_id']}');
+                                log('currency new------>${currencyDetailsMap['new_currency_id']}');
                                 currencyDetailsMap['currency_name'] =
                                     data[0][index].currency;
                                 context.read<ExpenseBloc>().add(

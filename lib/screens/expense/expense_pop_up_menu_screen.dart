@@ -4,11 +4,16 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
+import 'manage_expense_form_screen.dart';
 
 class ExpensePopUpMenuScreen extends StatelessWidget {
   final List popUpMenuOptions;
+  final Map manageExpenseMap;
 
-  const ExpensePopUpMenuScreen({Key? key, required this.popUpMenuOptions})
+  const ExpensePopUpMenuScreen(
+      {Key? key,
+      required this.popUpMenuOptions,
+      required this.manageExpenseMap})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -26,7 +31,11 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
       icon: const Icon(Icons.more_vert_outlined),
       offset: const Offset(0, xxTinierSpacing),
       onSelected: (value) {
-        if (value == DatabaseUtil.getText('Edit')) {}
+        if (value == DatabaseUtil.getText('Edit')) {
+          ManageExpenseFormScreen.manageExpenseMap = manageExpenseMap;
+          ManageExpenseFormScreen.isFromEditOption = true;
+          Navigator.pushNamed(context, ManageExpenseFormScreen.routeName);
+        }
         if (value == DatabaseUtil.getText('SubmitForApproval')) {}
         if (value == DatabaseUtil.getText('approve')) {}
         if (value == DatabaseUtil.getText('Close')) {}

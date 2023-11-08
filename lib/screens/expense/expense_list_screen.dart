@@ -35,6 +35,7 @@ class ExpenseListScreen extends StatelessWidget {
         appBar: GenericAppBar(title: DatabaseUtil.getText('ExpenseReport')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              ManageExpenseFormScreen.isFromEditOption = false;
               Navigator.pushNamed(context, ManageExpenseFormScreen.routeName);
             },
             child: const Icon(Icons.add)),
