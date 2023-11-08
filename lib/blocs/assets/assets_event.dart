@@ -75,3 +75,8 @@ class FetchAssetsSingleDowntime extends AssetsEvent {
 
   FetchAssetsSingleDowntime({required this.downtimeId});
 }
+
+class FetchAssetsComments extends AssetsEvent {
+
+  FetchAssetsComments();
+}
