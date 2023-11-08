@@ -38,7 +38,8 @@ class ExpenseDetailsScreen extends StatelessWidget {
                 builder: (context, state) {
                   if (state is ExpenseDetailsFetched) {
                     return ExpensePopUpMenuScreen(
-                        popUpMenuOptions: state.popUpMenuList);
+                        popUpMenuOptions: state.popUpMenuList,
+                        manageExpenseMap: state.manageExpenseMap);
                   } else {
                     return const SizedBox.shrink();
                   }

@@ -19,10 +19,12 @@ class ManageExpenseFormScreen extends StatelessWidget {
 
   const ManageExpenseFormScreen({Key? key}) : super(key: key);
   static Map manageExpenseMap = {};
+  static bool isFromEditOption = false;
 
   @override
   Widget build(BuildContext context) {
     context.read<ExpenseBloc>().add(FetchExpenseMaster());
+    isFromEditOption == true ? manageExpenseMap : manageExpenseMap.clear();
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('NewExpenseReport')),
       bottomNavigationBar: const SaveExpenseBottomAppBar(),
@@ -50,9 +52,11 @@ class ManageExpenseFormScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    DatePickerTextField(onDateChanged: (String date) {
-                      manageExpenseMap['startdate'] = date;
-                    }),
+                    DatePickerTextField(
+                        editDate: manageExpenseMap['startdate'] ?? '',
+                        onDateChanged: (String date) {
+                          manageExpenseMap['startdate'] = date;
+                        }),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('EndDate'),
                         style: Theme.of(context)
@@ -60,9 +64,11 @@ class ManageExpenseFormScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    DatePickerTextField(onDateChanged: (String date) {
-                      manageExpenseMap['enddate'] = date;
-                    }),
+                    DatePickerTextField(
+                        editDate: manageExpenseMap['enddate'] ?? '',
+                        onDateChanged: (String date) {
+                          manageExpenseMap['enddate'] = date;
+                        }),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Location'),
                         style: Theme.of(context)
@@ -71,6 +77,7 @@ class ManageExpenseFormScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TextFieldWidget(
+                        value: manageExpenseMap['location'] ?? '',
                         maxLength: 100,
                         textInputAction: TextInputAction.next,
                         textInputType: TextInputType.text,
@@ -85,6 +92,7 @@ class ManageExpenseFormScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TextFieldWidget(
+                        value: manageExpenseMap['purpose'] ?? '',
                         maxLength: 100,
                         textInputAction: TextInputAction.done,
                         onTextFieldChanged: (String textField) {
