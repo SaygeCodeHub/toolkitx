@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
@@ -44,6 +45,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
     on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
     on<FetchAssetsComments>(_fetchAssetsComments);
+    on<AddAssetsComments>(_addAssetsComments);
   }
 
   int assetTabIndex = 0;
@@ -289,5 +291,28 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     } catch (e) {
       emit(AssetsCommentsError(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _addAssetsComments(
+      AddAssetsComments event, Emitter<AssetsState> emit) async {
+    emit(AssetsCommentsAdding());
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    Map addCommentMap = {
+      "userid": userId,
+      "assetid": assetId,
+      "comments": event.addAssetCommentMap["comments"],
+      "files": event.addAssetCommentMap["files"],
+      "hashcode": hashCode
+    };
+    AssetsAddCommentsModel assetsAddCommentsModel =
+        await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
+    if (assetsAddCommentsModel.status == 200) {
+      emit(AssetsCommentsAdded(assetsAddCommentsModel: assetsAddCommentsModel));
+    }
+    // } catch (e) {
+    //   emit(AssetsCommentsNotAdded(errorMessage: e.toString()));
+    // }
   }
 }

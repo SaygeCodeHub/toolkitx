@@ -79,3 +79,9 @@ class FetchAssetsSingleDowntime extends AssetsEvent {
 class FetchAssetsComments extends AssetsEvent {
   FetchAssetsComments();
 }
+
+class AddAssetsComments extends AssetsEvent {
+  final Map addAssetCommentMap;
+
+  AddAssetsComments({required this.addAssetCommentMap});
+}
