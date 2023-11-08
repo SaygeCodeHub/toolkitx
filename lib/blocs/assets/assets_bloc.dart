@@ -280,8 +280,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchAssetsCommentsModel fetchAssetsCommentsModel =
-          await _assetsRepository.fetchAssetsCommentsRepo(
-              hashCode!, assetId);
+          await _assetsRepository.fetchAssetsCommentsRepo(hashCode!, assetId);
       if (fetchAssetsCommentsModel.status == 200) {
         emit(AssetsCommentsFetched(
             fetchAssetsCommentsModel: fetchAssetsCommentsModel,

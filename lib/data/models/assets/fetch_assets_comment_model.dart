@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchAssetsCommentsModel fetchAssetsCommentsModelFromJson(String str) => FetchAssetsCommentsModel.fromJson(json.decode(str));
+FetchAssetsCommentsModel fetchAssetsCommentsModelFromJson(String str) =>
+    FetchAssetsCommentsModel.fromJson(json.decode(str));
 
-String fetchAssetsCommentsModelToJson(FetchAssetsCommentsModel data) => json.encode(data.toJson());
+String fetchAssetsCommentsModelToJson(FetchAssetsCommentsModel data) =>
+    json.encode(data.toJson());
 
 class FetchAssetsCommentsModel {
   final int status;
@@ -15,17 +17,18 @@ class FetchAssetsCommentsModel {
     required this.data,
   });
 
-  factory FetchAssetsCommentsModel.fromJson(Map<String, dynamic> json) => FetchAssetsCommentsModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-  );
+  factory FetchAssetsCommentsModel.fromJson(Map<String, dynamic> json) =>
+      FetchAssetsCommentsModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -42,16 +45,16 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    ownername: json["ownername"] ?? "",
-    created: json["created"] ?? "",
-    files: json["files"] ?? "",
-    comment: json["comment"] ?? "",
-  );
+        ownername: json["ownername"] ?? "",
+        created: json["created"] ?? "",
+        files: json["files"] ?? "",
+        comment: json["comment"] ?? "",
+      );
 
   Map<String, dynamic> toJson() => {
-    "ownername": ownername,
-    "created": created,
-    "files": files,
-    "comment": comment,
-  };
+        "ownername": ownername,
+        "created": created,
+        "files": files,
+        "comment": comment,
+      };
 }

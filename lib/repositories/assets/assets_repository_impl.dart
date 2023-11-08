@@ -77,7 +77,8 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<FetchAssetsCommentsModel> fetchAssetsCommentsRepo(String hashCode, String assetId) async {
+  Future<FetchAssetsCommentsModel> fetchAssetsCommentsRepo(
+      String hashCode, String assetId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/getcomments?hashcode=$hashCode&filter=$assetId");
     return FetchAssetsCommentsModel.fromJson(response);

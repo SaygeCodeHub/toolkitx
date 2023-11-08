@@ -77,6 +77,5 @@ class FetchAssetsSingleDowntime extends AssetsEvent {
 }
 
 class FetchAssetsComments extends AssetsEvent {
-
   FetchAssetsComments();
 }

@@ -167,7 +167,8 @@ class AssetsCommentsFetched extends AssetsState {
   final FetchAssetsCommentsModel fetchAssetsCommentsModel;
   final String clientId;
 
-  AssetsCommentsFetched({required this.fetchAssetsCommentsModel, required this.clientId});
+  AssetsCommentsFetched(
+      {required this.fetchAssetsCommentsModel, required this.clientId});
 }
 
 class AssetsCommentsError extends AssetsState {
