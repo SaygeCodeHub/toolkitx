@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/assets_master_model.dart';
@@ -64,5 +65,13 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/getsingledowntime?hashcode=$hashCode&downtimeid=$downtimeId");
     return FetchAssetSingleDowntimeModel.fromJson(response);
+  }
+
+  @override
+  Future<AssetsDeleteDowntimeModel> assetsDeleteDowntimeRepo(
+      Map deleteDowntimeMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/deletedowntime", deleteDowntimeMap);
+    return AssetsDeleteDowntimeModel.fromJson(response);
   }
 }

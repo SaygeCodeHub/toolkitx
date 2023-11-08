@@ -133,6 +133,20 @@ class AssetsGetDocumentError extends AssetsState {
   AssetsGetDocumentError({required this.errorMessage});
 }
 
+class AssetsDownTimeDeleting extends AssetsState {}
+
+class AssetsDownTimeDeleted extends AssetsState {
+  final AssetsDeleteDowntimeModel assetsDeleteDowntimeModel;
+
+  AssetsDownTimeDeleted({required this.assetsDeleteDowntimeModel});
+}
+
+class AssetsDownTimeNotDeleted extends AssetsState {
+  final String errorMessage;
+
+  AssetsDownTimeNotDeleted({required this.errorMessage});
+}
+
 class AssetsSingleDownTimeFetching extends AssetsState {}
 
 class AssetsSingleDownTimeFetched extends AssetsState {

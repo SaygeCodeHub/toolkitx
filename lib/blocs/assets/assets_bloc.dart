@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
@@ -38,6 +39,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<ClearAssetsFilter>(_clearAssetsFilter);
     on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
     on<SaveAssetsDownTime>(_saveAssetsDownTime);
+    on<DeleteAssetsDownTime>(_deleteAssetsDownTime);
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
     on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
   }
@@ -248,6 +250,24 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           fetchAssetSingleDowntimeModel: fetchAssetSingleDowntimeModel));
     } catch (e) {
       emit(AssetsSingleDownTimeError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteAssetsDownTime(
+      DeleteAssetsDownTime event, Emitter<AssetsState> emit) async {
+    emit(AssetsDownTimeDeleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map deleteDowntimeMap = {
+        "downtimeid": event.downtimeId,
+        "hashcode": hashCode,
+      };
+      AssetsDeleteDowntimeModel assetsDeleteDowntimeModel =
+          await _assetsRepository.assetsDeleteDowntimeRepo(deleteDowntimeMap);
+      emit(AssetsDownTimeDeleted(
+          assetsDeleteDowntimeModel: assetsDeleteDowntimeModel));
+    } catch (e) {
+      emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
     }
   }
 }

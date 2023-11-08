@@ -64,6 +64,12 @@ class FetchAssetsManageDocument extends AssetsEvent {
   FetchAssetsManageDocument({required this.assetsId, required this.pageNo});
 }
 
+class DeleteAssetsDownTime extends AssetsEvent {
+  final String downtimeId;
+
+  DeleteAssetsDownTime({required this.downtimeId});
+}
+
 class FetchAssetsSingleDowntime extends AssetsEvent {
   final String downtimeId;
 
