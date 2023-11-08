@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
+import 'package:toolkit/data/models/assets/fetch_assets_comment_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
@@ -42,6 +43,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<DeleteAssetsDownTime>(_deleteAssetsDownTime);
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
     on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
+    on<FetchAssetsComments>(_fetchAssetsComments);
   }
 
   int assetTabIndex = 0;
@@ -268,6 +270,24 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           assetsDeleteDowntimeModel: assetsDeleteDowntimeModel));
     } catch (e) {
       emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchAssetsComments(
+      FetchAssetsComments event, Emitter<AssetsState> emit) async {
+    emit(AssetsCommentsFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      FetchAssetsCommentsModel fetchAssetsCommentsModel =
+          await _assetsRepository.fetchAssetsCommentsRepo(hashCode!, assetId);
+      if (fetchAssetsCommentsModel.status == 200) {
+        emit(AssetsCommentsFetched(
+            fetchAssetsCommentsModel: fetchAssetsCommentsModel,
+            clientId: clientId!));
+      }
+    } catch (e) {
+      emit(AssetsCommentsError(errorMessage: e.toString()));
     }
   }
 }

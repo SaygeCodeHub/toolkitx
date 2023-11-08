@@ -3,6 +3,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../assets_manage_comments_screen.dart';
 import '../assets_manage_document_screeen.dart';
 import '../assets_manage_downtime_screen.dart';
 
@@ -30,6 +31,9 @@ class AssetsPopUpMenuButton extends StatelessWidget {
           }
           if (value == StringConstants.kManageDocuments) {
             Navigator.pushNamed(context, AssetsManageDocumentScreen.routeName);
+          }
+          if (value == StringConstants.kManageComment) {
+            Navigator.pushNamed(context, AssetsManageCommentsScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

@@ -160,3 +160,19 @@ class AssetsSingleDownTimeError extends AssetsState {
 
   AssetsSingleDownTimeError({required this.errorMessage});
 }
+
+class AssetsCommentsFetching extends AssetsState {}
+
+class AssetsCommentsFetched extends AssetsState {
+  final FetchAssetsCommentsModel fetchAssetsCommentsModel;
+  final String clientId;
+
+  AssetsCommentsFetched(
+      {required this.fetchAssetsCommentsModel, required this.clientId});
+}
+
+class AssetsCommentsError extends AssetsState {
+  final String errorMessage;
+
+  AssetsCommentsError({required this.errorMessage});
+}
