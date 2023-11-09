@@ -14,6 +14,7 @@ import '../../utils/expense_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
+import 'expense_details_tab_two.dart';
 import 'expense_pop_up_menu_screen.dart';
 import 'widgets/expense_details_tab_one.dart';
 
@@ -107,6 +108,10 @@ class ExpenseDetailsScreen extends StatelessWidget {
                         tabBarViewWidgets: [
                           ExpenseDetailsTabOne(
                               tabIndex: 0,
+                              expenseDetailsData:
+                                  state.fetchExpenseDetailsModel.data),
+                          ExpenseDetailsTabTwo(
+                              tabIndex: 1,
                               expenseDetailsData:
                                   state.fetchExpenseDetailsModel.data)
                         ])
