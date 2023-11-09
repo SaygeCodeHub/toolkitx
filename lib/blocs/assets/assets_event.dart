@@ -79,3 +79,9 @@ class FetchAssetsSingleDowntime extends AssetsEvent {
 class FetchAssetsComments extends AssetsEvent {
   FetchAssetsComments();
 }
+
+class SelectAssetsFailureCode extends AssetsEvent {
+  final String id;
+
+  SelectAssetsFailureCode({required this.id});
+}

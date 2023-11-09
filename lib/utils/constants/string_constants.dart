@@ -391,6 +391,7 @@ abstract class StringConstants {
   static const String kNote = "Note";
   static const String kManageComment = "Manage Comment";
   static const String kReportFailure = "Report Failure";
+  static const String kFailureCode = "Failure Code";
   static const String kManageMeterReading = "ManageMeterReading";
   static const String kChildPattern = "Child pattern";
   static const String kCostAndDepreciation = "Cost And Depreciation:";

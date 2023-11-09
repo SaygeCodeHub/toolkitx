@@ -44,6 +44,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
     on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
     on<FetchAssetsComments>(_fetchAssetsComments);
+    on<SelectAssetsFailureCode>(_selectAssetsFailureCode);
   }
 
   int assetTabIndex = 0;
@@ -289,5 +290,9 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     } catch (e) {
       emit(AssetsCommentsError(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectAssetsFailureCode(SelectAssetsFailureCode event, Emitter<AssetsState> emit) {
+    emit(AssetsFailureCodeSelected(id: event.id));
   }
 }

@@ -176,3 +176,9 @@ class AssetsCommentsError extends AssetsState {
 
   AssetsCommentsError({required this.errorMessage});
 }
+
+class AssetsFailureCodeSelected extends AssetsState {
+  final String id;
+
+  AssetsFailureCodeSelected({required this.id});
+}
