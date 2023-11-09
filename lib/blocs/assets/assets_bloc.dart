@@ -296,23 +296,24 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   Future<FutureOr<void>> _addAssetsComments(
       AddAssetsComments event, Emitter<AssetsState> emit) async {
     emit(AssetsCommentsAdding());
-    // try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    String? userId = await _customerCache.getUserId(CacheKeys.userId);
-    Map addCommentMap = {
-      "userid": userId,
-      "assetid": assetId,
-      "comments": event.addAssetCommentMap["comments"],
-      "files": event.addAssetCommentMap["files"],
-      "hashcode": hashCode
-    };
-    AssetsAddCommentsModel assetsAddCommentsModel =
-        await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
-    if (assetsAddCommentsModel.status == 200) {
-      emit(AssetsCommentsAdded(assetsAddCommentsModel: assetsAddCommentsModel));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addCommentMap = {
+        "userid": userId,
+        "assetid": assetId,
+        "comments": event.addAssetCommentMap["comments"],
+        "files": event.addAssetCommentMap["files"],
+        "hashcode": hashCode
+      };
+      AssetsAddCommentsModel assetsAddCommentsModel =
+          await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
+      if (assetsAddCommentsModel.status == 200) {
+        emit(AssetsCommentsAdded(
+            assetsAddCommentsModel: assetsAddCommentsModel));
+      }
+    } catch (e) {
+      emit(AssetsCommentsNotAdded(errorMessage: e.toString()));
     }
-    // } catch (e) {
-    //   emit(AssetsCommentsNotAdded(errorMessage: e.toString()));
-    // }
   }
 }
