@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../blocs/assets/assets_bloc.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/assets/assets_master_model.dart';
@@ -17,24 +14,23 @@ class AssetsFailureCodeChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    context.read<AssetsBloc>().add(SelectAssetsFailureCode(id: assetsReportFailureMap['failureCode'] ?? ''));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
     for (int i = 0; i < data[4].length; i++) {
-      log("dataIndex=================>${data[4][i].failureSetCode}");
       Widget item = BlocBuilder<AssetsBloc, AssetsState>(
           buildWhen: (previousState, currentState) =>
-              currentState is AssetsSiteSelected,
+              currentState is AssetsFailureCodeSelected,
           builder: (context, state) {
-            if (state is AssetsSiteSelected) {
+            if (state is AssetsFailureCodeSelected) {
               String id = data[4][i].id.toString();
-              assetsReportFailureMap['failureCode'] = state.id.toString();
+              assetsReportFailureMap['failure'] = state.id.toString();
               return CustomChoiceChip(
                 label: data[4][i].failureSetCode,
-                selected: (assetsReportFailureMap['failureCode'] == null)
+                selected: (assetsReportFailureMap['failure'] == null)
                     ? false
                     : state.id == id,
                 onSelected: (bool val) {

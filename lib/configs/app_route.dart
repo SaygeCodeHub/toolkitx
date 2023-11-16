@@ -16,6 +16,7 @@ import '../screens/assets/assets_report_failure_screen.dart';
 import '../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
+import '../screens/assets/widgets/assets_report_failure_location_list.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -407,10 +408,12 @@ class AppRoutes {
         return _createRoute(const LinkDocumentScreen());
       case AssetsManageDownTimeScreen.routeName:
         return _createRoute(const AssetsManageDownTimeScreen());
+      case AssetsReportFailureLocationList.routeName:
+        return _createRoute(AssetsReportFailureLocationList(
+            selectLocationName: settings.arguments.toString()));
       case AssetsAddAndEditDowntimeScreen.routeName:
         return _createRoute(AssetsAddAndEditDowntimeScreen(
-          downtimeId: settings.arguments.toString(),
-        ));
+            downtimeId: settings.arguments.toString()));
       case LinkDocumentsFilterScreen.routeName:
         return _createRoute(const LinkDocumentsFilterScreen());
       case AttachDocumentScreen.routeName:
