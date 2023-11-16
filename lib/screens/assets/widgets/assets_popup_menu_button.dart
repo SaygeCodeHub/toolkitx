@@ -36,7 +36,7 @@ class AssetsPopUpMenuButton extends StatelessWidget {
           if (value == StringConstants.kManageComment) {
             Navigator.pushNamed(context, AssetsManageCommentsScreen.routeName);
           }
-          if(value == StringConstants.kReportFailure){
+          if (value == StringConstants.kReportFailure) {
             Navigator.pushNamed(context, AssetsReportFailureScreen.routeName);
           }
         },

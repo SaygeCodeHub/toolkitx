@@ -34,17 +34,18 @@ class AssetsReportFailureScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: BlocConsumer<AssetsBloc, AssetsState>(
-              listener: (context, state) {
-                if(state is AssetsReportFailureSaving){
-                  ProgressBar.show(context);
-                } else if(state is AssetsReportFailureSaved){
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, state.saveAssetsReportFailureModel.message, "");
-                  Navigator.pop(context);
-                } else if(state is AssetsReportFailureNotSaved){
-                  showCustomSnackBar(context, state.errorMessage, "");
-                }
-              },
+                listener: (context, state) {
+                  if (state is AssetsReportFailureSaving) {
+                    ProgressBar.show(context);
+                  } else if (state is AssetsReportFailureSaved) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(context,
+                        state.saveAssetsReportFailureModel.message, "");
+                    Navigator.pop(context);
+                  } else if (state is AssetsReportFailureNotSaved) {
+                    showCustomSnackBar(context, state.errorMessage, "");
+                  }
+                },
                 buildWhen: (previousState, currentState) =>
                     currentState is AssetsMasterFetching ||
                     currentState is AssetsMasterFetched ||
@@ -60,10 +61,10 @@ class AssetsReportFailureScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               AssetsReportFailureLocation(
-                                assetsReportFailureMap: assetsReportFailureMap,
-                                reportFailureLocationList:
-                                    state.fetchAssetsMasterModel.data
-                              ),
+                                  assetsReportFailureMap:
+                                      assetsReportFailureMap,
+                                  reportFailureLocationList:
+                                      state.fetchAssetsMasterModel.data),
                               const SizedBox(height: tinierSpacing),
                               Text(StringConstants.kFailureCode,
                                   style: Theme.of(context)

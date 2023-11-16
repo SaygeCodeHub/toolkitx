@@ -45,7 +45,7 @@ class SelectLanguageBody extends StatelessWidget {
                       leading: CachedNetworkImage(
                           height: kLanguageFlagHeight,
                           imageUrl:
-                          '${ApiConstants.baseUrlFlag}${getLanguagesData.flagName}',
+                              '${ApiConstants.baseUrlFlag}${getLanguagesData.flagName}',
                           placeholder: (context, url) => Shimmer.fromColors(
                               baseColor: AppColor.paleGrey,
                               highlightColor: AppColor.white,
@@ -55,7 +55,7 @@ class SelectLanguageBody extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       color: AppColor.white,
                                       borderRadius:
-                                      BorderRadius.circular(kCardRadius)))),
+                                          BorderRadius.circular(kCardRadius)))),
                           errorWidget: (context, url, error) => const Icon(
                               Icons.error_outline_sharp,
                               size: kIconSize)),
@@ -64,8 +64,8 @@ class SelectLanguageBody extends StatelessWidget {
         emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
         filter: (value) => getLanguagesData
             .where((element) => element.langName
-            .toLowerCase()
-            .contains(value.toLowerCase().trim()))
+                .toLowerCase()
+                .contains(value.toLowerCase().trim()))
             .toList(),
         inputDecoration: InputDecoration(
             suffix: const SizedBox(),

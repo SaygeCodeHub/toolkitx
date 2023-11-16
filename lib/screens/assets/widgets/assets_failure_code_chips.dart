@@ -14,7 +14,8 @@ class AssetsFailureCodeChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AssetsBloc>().add(SelectAssetsFailureCode(id: assetsReportFailureMap['failureCode'] ?? ''));
+    context.read<AssetsBloc>().add(SelectAssetsFailureCode(
+        id: assetsReportFailureMap['failureCode'] ?? ''));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 

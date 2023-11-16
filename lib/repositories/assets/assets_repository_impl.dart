@@ -85,9 +85,11 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<SaveAssetsReportFailureModel> saveAssetsReportFailureRepo(Map assetsReportFailureMap) async {
-    final response = await DioClient()
-        .post("${ApiConstants.baseUrl}asset/reportequipmentfailure", assetsReportFailureMap);
+  Future<SaveAssetsReportFailureModel> saveAssetsReportFailureRepo(
+      Map assetsReportFailureMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}asset/reportequipmentfailure",
+        assetsReportFailureMap);
     return SaveAssetsReportFailureModel.fromJson(response);
   }
 }

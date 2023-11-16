@@ -293,17 +293,21 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     }
   }
 
-  FutureOr<void> _selectAssetsReportFailureLocation(SelectAssetsReportFailureLocation event, Emitter<AssetsState> emit) {
-    emit(AssetsReportFailureLocationSelected(selectLocationName: selectLocationName));
+  FutureOr<void> _selectAssetsReportFailureLocation(
+      SelectAssetsReportFailureLocation event, Emitter<AssetsState> emit) {
+    emit(AssetsReportFailureLocationSelected(
+        selectLocationName: selectLocationName));
   }
 
-  FutureOr<void> _selectAssetsFailureCode(SelectAssetsFailureCode event, Emitter<AssetsState> emit) {
+  FutureOr<void> _selectAssetsFailureCode(
+      SelectAssetsFailureCode event, Emitter<AssetsState> emit) {
     emit(AssetsFailureCodeSelected(id: event.id));
   }
 
-  Future<FutureOr<void>> _saveAssetsReportFailure(SaveAssetsReportFailure event, Emitter<AssetsState> emit) async {
+  Future<FutureOr<void>> _saveAssetsReportFailure(
+      SaveAssetsReportFailure event, Emitter<AssetsState> emit) async {
     emit(AssetsReportFailureSaving());
-    try{
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       Map assetsReportFailureMap = {
@@ -313,16 +317,18 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "userid": userId,
         "assetid": assetId
       };
-      SaveAssetsReportFailureModel saveAssetsReportFailureModel = await _assetsRepository.saveAssetsReportFailureRepo(assetsReportFailureMap);
-      if(saveAssetsReportFailureModel.status == 200){
-        emit(AssetsReportFailureSaved(saveAssetsReportFailureModel: saveAssetsReportFailureModel));
+      SaveAssetsReportFailureModel saveAssetsReportFailureModel =
+          await _assetsRepository
+              .saveAssetsReportFailureRepo(assetsReportFailureMap);
+      if (saveAssetsReportFailureModel.status == 200) {
+        emit(AssetsReportFailureSaved(
+            saveAssetsReportFailureModel: saveAssetsReportFailureModel));
       } else {
-        emit(AssetsReportFailureNotSaved(errorMessage: saveAssetsReportFailureModel.message));
+        emit(AssetsReportFailureNotSaved(
+            errorMessage: saveAssetsReportFailureModel.message));
       }
-    } catch(e){
+    } catch (e) {
       emit(AssetsReportFailureNotSaved(errorMessage: e.toString()));
     }
   }
-
-
 }

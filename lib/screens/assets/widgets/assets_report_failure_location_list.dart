@@ -11,7 +11,8 @@ import '../assets_report_failure_screen.dart';
 class AssetsReportFailureLocationList extends StatelessWidget {
   static const routeName = "AssetsReportFailureLocationList";
 
-  const AssetsReportFailureLocationList({super.key, required this.selectLocationName});
+  const AssetsReportFailureLocationList(
+      {super.key, required this.selectLocationName});
 
   final String selectLocationName;
 
@@ -51,7 +52,8 @@ class AssetsReportFailureLocationList extends StatelessWidget {
                                   .toString(),
                               groupValue: selectLocationName,
                               onChanged: (value) {
-                                AssetsReportFailureScreen.assetsReportFailureMap["location"] =
+                                AssetsReportFailureScreen
+                                        .assetsReportFailureMap["location"] =
                                     context
                                         .read<AssetsBloc>()
                                         .assetMasterData[0][index]
