@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
@@ -82,5 +83,13 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/getcomments?hashcode=$hashCode&filter=$assetId");
     return FetchAssetsCommentsModel.fromJson(response);
+  }
+
+  @override
+  Future<AssetsAddCommentsModel> assetsAddCommentsRepo(
+      Map addCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/savecomments", addCommentMap);
+    return AssetsAddCommentsModel.fromJson(response);
   }
 }
