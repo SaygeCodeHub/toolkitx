@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/assets/fetch_assets_document_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_report_failure_model.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
+import '../../data/models/assets/assets_add_comments_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'assets_repository.dart';
