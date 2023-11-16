@@ -86,6 +86,12 @@ class FetchAssetsComments extends AssetsEvent {
   FetchAssetsComments();
 }
 
+class AddAssetsComments extends AssetsEvent {
+  final Map addAssetCommentMap;
+
+  AddAssetsComments({required this.addAssetCommentMap});
+}
+
 class SelectAssetsFailureCode extends AssetsEvent {
   final String id;
 

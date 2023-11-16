@@ -183,6 +183,20 @@ class AssetsCommentsError extends AssetsState {
   AssetsCommentsError({required this.errorMessage});
 }
 
+class AssetsCommentsAdding extends AssetsState {}
+
+class AssetsCommentsAdded extends AssetsState {
+  final AssetsAddCommentsModel assetsAddCommentsModel;
+
+  AssetsCommentsAdded({required this.assetsAddCommentsModel});
+}
+
+class AssetsCommentsNotAdded extends AssetsState {
+  final String errorMessage;
+
+  AssetsCommentsNotAdded({required this.errorMessage});
+}
+
 class AssetsFailureCodeSelected extends AssetsState {
   final String id;
 

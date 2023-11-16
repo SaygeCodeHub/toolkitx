@@ -85,6 +85,14 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
+  Future<AssetsAddCommentsModel> assetsAddCommentsRepo(
+      Map addCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/savecomments", addCommentMap);
+    return AssetsAddCommentsModel.fromJson(response);
+  }
+
+  @override
   Future<SaveAssetsReportFailureModel> saveAssetsReportFailureRepo(
       Map assetsReportFailureMap) async {
     final response = await DioClient().post(
