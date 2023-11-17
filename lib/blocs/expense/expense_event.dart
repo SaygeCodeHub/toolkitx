@@ -70,9 +70,9 @@ class SelectExpenseItem extends ExpenseEvent {
 }
 
 class SelectExpenseWorkingAtOption extends ExpenseEvent {
-  final Map workingAtMap;
+  final String workingAt;
 
-  SelectExpenseWorkingAtOption({required this.workingAtMap});
+  SelectExpenseWorkingAtOption({required this.workingAt});
 }
 
 class SelectExpenseWorkingAtNumber extends ExpenseEvent {

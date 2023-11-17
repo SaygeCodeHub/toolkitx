@@ -296,7 +296,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   _selectWorkingAtOption(
       SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
-    emit(ExpenseWorkingAtOptionSelected(workingAtMap: event.workingAtMap));
+    emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
   }
 
   _selectWorkingAtNumber(

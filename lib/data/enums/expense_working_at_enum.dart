@@ -1,11 +1,10 @@
 enum ExpenseWorkingAtEnum {
-  workOrder(status: 'Workorder', value: '0'),
-  wbs(status: 'WBS', value: '1'),
-  project(status: 'Project', value: '2'),
-  generalWbs(status: 'General WBS', value: '3');
+  workOrder(status: 'Workorder'),
+  wbs(status: 'WBS'),
+  project(status: 'Project'),
+  generalWbs(status: 'General WBS');
 
-  const ExpenseWorkingAtEnum({required this.status, required this.value});
+  const ExpenseWorkingAtEnum({required this.status});
 
   final String status;
-  final String value;
 }

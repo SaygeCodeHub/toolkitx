@@ -127,9 +127,9 @@ class ExpenseItemSelected extends ExpenseStates {
 }
 
 class ExpenseWorkingAtOptionSelected extends ExpenseStates {
-  final Map workingAtMap;
+  final String workingAt;
 
-  ExpenseWorkingAtOptionSelected({required this.workingAtMap});
+  ExpenseWorkingAtOptionSelected({required this.workingAt});
 }
 
 class ExpenseWorkingAtNumberSelected extends ExpenseStates {
