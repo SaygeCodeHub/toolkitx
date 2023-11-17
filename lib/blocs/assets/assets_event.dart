@@ -22,6 +22,12 @@ class SelectAssetsLocation extends AssetsEvent {
   SelectAssetsLocation({required this.selectLocationName});
 }
 
+class SelectAssetsReportFailureLocation extends AssetsEvent {
+  final String selectLocationName;
+
+  SelectAssetsReportFailureLocation({required this.selectLocationName});
+}
+
 class FetchAssetsMaster extends AssetsEvent {}
 
 class SelectAssetsStatus extends AssetsEvent {
@@ -78,4 +84,22 @@ class FetchAssetsSingleDowntime extends AssetsEvent {
 
 class FetchAssetsComments extends AssetsEvent {
   FetchAssetsComments();
+}
+
+class AddAssetsComments extends AssetsEvent {
+  final Map addAssetCommentMap;
+
+  AddAssetsComments({required this.addAssetCommentMap});
+}
+
+class SelectAssetsFailureCode extends AssetsEvent {
+  final String id;
+
+  SelectAssetsFailureCode({required this.id});
+}
+
+class SaveAssetsReportFailure extends AssetsEvent {
+  final Map assetsReportFailureMap;
+
+  SaveAssetsReportFailure({required this.assetsReportFailureMap});
 }
