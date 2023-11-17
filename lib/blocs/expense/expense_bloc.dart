@@ -7,6 +7,7 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -32,6 +33,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<ExpenseSelectCurrency>(_selectCurrency);
     on<AddExpense>(_saveExpense);
     on<UpdateExpense>(_updateExpense);
+    on<SubmitExpenseForApproval>(_submitExpenseForApproval);
     on<FetchExpenseItemMaster>(_fetchItemMaster);
     on<SelectExpenseDate>(_selectDate);
     on<SelectExpenseItem>(_selectItem);
@@ -267,6 +269,35 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseCouldNotUpdate(expenseNotUpdated: e.toString()));
+    }
+  }
+
+  Future<void> _submitExpenseForApproval(
+      SubmitExpenseForApproval event, Emitter<ExpenseStates> emit) async {
+    emit(SubmittingExpenseForApproval());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map submitExpenseForApproval = {
+        "reportid": expenseId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      ExpenseSubmitForApprovalModel expenseSubmitForApprovalModel =
+          await _expenseRepository
+              .submitExpenseForApproval(submitExpenseForApproval);
+      if (expenseSubmitForApprovalModel.message == '1') {
+        emit(ExpenseForApprovalSubmitted(
+            expenseSubmitForApprovalModel: expenseSubmitForApprovalModel));
+      } else {
+        emit(ExpenseForApprovalFailedToSubmit(
+            approvalFailedToSubmit:
+                DatabaseUtil.getText('UnknownErrorMessage')));
+      }
+    } catch (e) {
+      emit(ExpenseForApprovalFailedToSubmit(
+          approvalFailedToSubmit: e.toString()));
     }
   }
 

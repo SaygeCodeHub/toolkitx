@@ -55,6 +55,8 @@ class UpdateExpense extends ExpenseEvent {
   UpdateExpense({required this.manageExpenseMap});
 }
 
+class SubmitExpenseForApproval extends ExpenseEvent {}
+
 class FetchExpenseItemMaster extends ExpenseEvent {}
 
 class SelectExpenseDate extends ExpenseEvent {

@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
@@ -46,6 +47,15 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}expense/Update", updateExpenseMap);
     return UpdateExpenseModel.fromJson(response);
+  }
+
+  @override
+  Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
+      Map submitForApprovalMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}expense/SubmitForApproval",
+        submitForApprovalMap);
+    return ExpenseSubmitForApprovalModel.fromJson(response);
   }
 
   @override

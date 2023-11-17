@@ -1,3 +1,4 @@
+import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -98,6 +99,20 @@ class ExpenseCouldNotUpdate extends ExpenseStates {
   final String expenseNotUpdated;
 
   ExpenseCouldNotUpdate({required this.expenseNotUpdated});
+}
+
+class SubmittingExpenseForApproval extends ExpenseStates {}
+
+class ExpenseForApprovalSubmitted extends ExpenseStates {
+  final ExpenseSubmitForApprovalModel expenseSubmitForApprovalModel;
+
+  ExpenseForApprovalSubmitted({required this.expenseSubmitForApprovalModel});
+}
+
+class ExpenseForApprovalFailedToSubmit extends ExpenseStates {
+  final String approvalFailedToSubmit;
+
+  ExpenseForApprovalFailedToSubmit({required this.approvalFailedToSubmit});
 }
 
 class FetchingExpenseItemMaster extends ExpenseStates {}
