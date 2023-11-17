@@ -67,6 +67,12 @@ class AssetsLocationSelected extends AssetsState {
   AssetsLocationSelected({required this.selectLocationName});
 }
 
+class AssetsReportFailureLocationSelected extends AssetsState {
+  final String selectLocationName;
+
+  AssetsReportFailureLocationSelected({required this.selectLocationName});
+}
+
 class AssetsStatusSelected extends AssetsState {
   final String id;
 
@@ -189,4 +195,24 @@ class AssetsCommentsNotAdded extends AssetsState {
   final String errorMessage;
 
   AssetsCommentsNotAdded({required this.errorMessage});
+}
+
+class AssetsFailureCodeSelected extends AssetsState {
+  final String id;
+
+  AssetsFailureCodeSelected({required this.id});
+}
+
+class AssetsReportFailureSaving extends AssetsState {}
+
+class AssetsReportFailureSaved extends AssetsState {
+  final SaveAssetsReportFailureModel saveAssetsReportFailureModel;
+
+  AssetsReportFailureSaved({required this.saveAssetsReportFailureModel});
+}
+
+class AssetsReportFailureNotSaved extends AssetsState {
+  final String errorMessage;
+
+  AssetsReportFailureNotSaved({required this.errorMessage});
 }
