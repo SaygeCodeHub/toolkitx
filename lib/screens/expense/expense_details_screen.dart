@@ -126,7 +126,8 @@ class ExpenseDetailsScreen extends StatelessWidget {
                           ExpenseDetailsTabOne(
                               tabIndex: 0,
                               expenseDetailsData:
-                                  state.fetchExpenseDetailsModel.data)
+                                  state.fetchExpenseDetailsModel.data,
+                              expenseId: expenseId)
                         ])
                   ]));
             } else {

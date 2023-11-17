@@ -39,6 +39,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseItem>(_selectItem);
     on<SelectExpenseWorkingAtOption>(_selectWorkingAtOption);
     on<SelectExpenseWorkingAtNumber>(_selectWorkingAtNumber);
+    on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -309,8 +310,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
           await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
-      emit(
-          ExpenseItemMasterFetched(fetchItemMasterModel: fetchItemMasterModel));
+      emit(ExpenseItemMasterFetched(
+          fetchItemMasterModel: fetchItemMasterModel,
+          isScreenChange: event.isScreenChange));
       add(SelectExpenseDate(date: ''));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
@@ -334,5 +336,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
     emit(ExpenseWorkingAtNumberSelected(
         workingAtNumberMap: event.workingAtNumberMap));
+  }
+
+  _selectAddItemCurrency(
+      SelectExpenseAddItemsCurrency event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseAddItemsCurrencySelected(
+        currencyDetailsMap: event.currencyDetailsMap));
   }
 }

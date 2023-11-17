@@ -119,8 +119,10 @@ class FetchingExpenseItemMaster extends ExpenseStates {}
 
 class ExpenseItemMasterFetched extends ExpenseStates {
   final FetchItemMasterModel fetchItemMasterModel;
+  final bool isScreenChange;
 
-  ExpenseItemMasterFetched({required this.fetchItemMasterModel});
+  ExpenseItemMasterFetched(
+      {required this.isScreenChange, required this.fetchItemMasterModel});
 }
 
 class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
@@ -151,4 +153,10 @@ class ExpenseWorkingAtNumberSelected extends ExpenseStates {
   final Map workingAtNumberMap;
 
   ExpenseWorkingAtNumberSelected({required this.workingAtNumberMap});
+}
+
+class ExpenseAddItemsCurrencySelected extends ExpenseStates {
+  final Map currencyDetailsMap;
+
+  ExpenseAddItemsCurrencySelected({required this.currencyDetailsMap});
 }
