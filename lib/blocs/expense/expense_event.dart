@@ -54,3 +54,29 @@ class UpdateExpense extends ExpenseEvent {
 
   UpdateExpense({required this.manageExpenseMap});
 }
+
+class FetchExpenseItemMaster extends ExpenseEvent {}
+
+class SelectExpenseDate extends ExpenseEvent {
+  final String date;
+
+  SelectExpenseDate({required this.date});
+}
+
+class SelectExpenseItem extends ExpenseEvent {
+  final Map itemsMap;
+
+  SelectExpenseItem({required this.itemsMap});
+}
+
+class SelectExpenseWorkingAtOption extends ExpenseEvent {
+  final Map workingAtMap;
+
+  SelectExpenseWorkingAtOption({required this.workingAtMap});
+}
+
+class SelectExpenseWorkingAtNumber extends ExpenseEvent {
+  final Map workingAtNumberMap;
+
+  SelectExpenseWorkingAtNumber({required this.workingAtNumberMap});
+}

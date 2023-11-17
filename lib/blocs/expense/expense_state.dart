@@ -1,6 +1,7 @@
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/fetch_item_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -97,4 +98,42 @@ class ExpenseCouldNotUpdate extends ExpenseStates {
   final String expenseNotUpdated;
 
   ExpenseCouldNotUpdate({required this.expenseNotUpdated});
+}
+
+class FetchingExpenseItemMaster extends ExpenseStates {}
+
+class ExpenseItemMasterFetched extends ExpenseStates {
+  final FetchItemMasterModel fetchItemMasterModel;
+
+  ExpenseItemMasterFetched({required this.fetchItemMasterModel});
+}
+
+class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
+  final String itemsNotFound;
+
+  ExpenseItemMasterCouldNotFetch({required this.itemsNotFound});
+}
+
+class ExpenseDateSelected extends ExpenseStates {
+  final String date;
+
+  ExpenseDateSelected({required this.date});
+}
+
+class ExpenseItemSelected extends ExpenseStates {
+  final Map itemsMap;
+
+  ExpenseItemSelected({required this.itemsMap});
+}
+
+class ExpenseWorkingAtOptionSelected extends ExpenseStates {
+  final Map workingAtMap;
+
+  ExpenseWorkingAtOptionSelected({required this.workingAtMap});
+}
+
+class ExpenseWorkingAtNumberSelected extends ExpenseStates {
+  final Map workingAtNumberMap;
+
+  ExpenseWorkingAtNumberSelected({required this.workingAtNumberMap});
 }
