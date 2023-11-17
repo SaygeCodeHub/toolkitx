@@ -21,16 +21,15 @@ class ExpenseCurrencyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ExpenseBloc>()
-        .add(ExpenseSelectCurrency(currencyDetailsMap: {}));
+    context.read<ExpenseBloc>().add(ExpenseSelectCurrency(
+        currencyDetailsMap: ManageExpenseFormScreen.manageExpenseMap));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is ExpenseCurrencySelected,
       builder: (context, state) {
         if (state is ExpenseCurrencySelected) {
           ManageExpenseFormScreen.manageExpenseMap['currency'] =
-              state.currencyDetailsMap['currency_id'] ?? '';
+              state.currencyDetailsMap['new_currency_id'] ?? '';
           return ListTile(
               contentPadding: EdgeInsets.zero,
               onTap: () async {

@@ -12,6 +12,7 @@ import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
+import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
 import 'expense_event.dart';
@@ -30,6 +31,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<FetchExpenseMaster>(_fetchExpenseMaster);
     on<ExpenseSelectCurrency>(_selectCurrency);
     on<AddExpense>(_saveExpense);
+    on<UpdateExpense>(_updateExpense);
     on<SubmitExpenseForApproval>(_submitExpenseForApproval);
   }
 
@@ -92,9 +94,18 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       if (fetchExpenseDetailsModel.data.canClose == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Close'));
       }
+      Map manageExpensesMap = {
+        'startdate': fetchExpenseDetailsModel.data.startdate,
+        'enddate': fetchExpenseDetailsModel.data.enddate,
+        'location': fetchExpenseDetailsModel.data.location,
+        'purpose': fetchExpenseDetailsModel.data.purpose,
+        'currency_id': fetchExpenseDetailsModel.data.currency,
+        'currency_name': fetchExpenseDetailsModel.data.currencyname
+      };
       emit(ExpenseDetailsFetched(
           fetchExpenseDetailsModel: fetchExpenseDetailsModel,
-          popUpMenuList: popUpMenuList));
+          popUpMenuList: popUpMenuList,
+          manageExpenseMap: manageExpensesMap));
     } catch (e) {
       emit(ExpenseDetailsFailedToFetch(expenseDetailsNotFetched: e.toString()));
     }
@@ -190,6 +201,68 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(AddExpenseNotSaved(expenseNotSaved: e.toString()));
+    }
+  }
+
+  Future<void> _updateExpense(
+      UpdateExpense event, Emitter<ExpenseStates> emit) async {
+    emit(UpdatingExpense());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.manageExpenseMap['startdate'] == null &&
+              event.manageExpenseMap['enddate'] == null &&
+              event.manageExpenseMap['currency'] == null ||
+          event.manageExpenseMap['currency'].isEmpty) {
+        emit(AddExpenseNotSaved(
+            expenseNotSaved:
+                DatabaseUtil.getText('DateAndCurrencyCompulsary')));
+      } else if (DateFormat("dd.MM.yyy")
+              .parse(event.manageExpenseMap['startdate'])
+              .compareTo(DateFormat("dd.MM.yyy")
+                  .parse(event.manageExpenseMap['enddate'])) >
+          0) {
+        emit(AddExpenseNotSaved(
+            expenseNotSaved: DatabaseUtil.getText(
+                'Enddateshouldbegreaterthanstartdatetime')));
+      } else {
+        Map updateExpenseMap = {
+          "reportid": expenseId,
+          "startdate": event.manageExpenseMap['startdate'] ?? '',
+          "enddate": event.manageExpenseMap['enddate'] ?? '',
+          "location": event.manageExpenseMap['location'] ?? '',
+          "purpose": event.manageExpenseMap['purpose'] ?? '',
+          "currency1": event.manageExpenseMap['currency_id'] ?? '',
+          "currency2": event.manageExpenseMap['new_currency_id'] ??
+              event.manageExpenseMap['currency_id'],
+          "showcurrencychangewarning":
+              (event.manageExpenseMap['new_currency_id'] !=
+                      event.manageExpenseMap['currency_id'])
+                  ? '1'
+                  : '0',
+          "userid": userId,
+          "hashcode": hashCode
+        };
+
+        UpdateExpenseModel updateExpenseModel =
+            await _expenseRepository.updateExpense(updateExpenseMap);
+        if (updateExpenseModel.message == 'Modifyingexpensereport') {
+          emit(ExpenseCouldNotUpdate(
+              expenseNotUpdated:
+                  DatabaseUtil.getText('Modifyingexpensereport')));
+          event.manageExpenseMap['currency_id'] =
+              event.manageExpenseMap['new_currency_id'];
+        } else if (updateExpenseModel.message == '1') {
+          emit(ExpenseUpdated(
+              updateExpenseModel: updateExpenseModel, expenseId: expenseId));
+        } else {
+          emit(ExpenseCouldNotUpdate(
+              expenseNotUpdated: DatabaseUtil.getText('UnknownErrorMessage')));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseCouldNotUpdate(expenseNotUpdated: e.toString()));
     }
   }
 

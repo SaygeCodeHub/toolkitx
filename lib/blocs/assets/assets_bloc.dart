@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
+import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
+import 'package:toolkit/data/models/assets/fetch_assets_comment_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
+import 'package:toolkit/data/models/assets/save_assets_report_failure_model.dart';
 import 'package:toolkit/data/models/assets_get_downtime_model.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/assets/assets_details_model.dart';
@@ -18,7 +21,6 @@ import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
-
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -38,8 +40,14 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<ClearAssetsFilter>(_clearAssetsFilter);
     on<FetchAssetsGetDownTime>(_fetchAssetsGetDownTime);
     on<SaveAssetsDownTime>(_saveAssetsDownTime);
+    on<DeleteAssetsDownTime>(_deleteAssetsDownTime);
     on<FetchAssetsManageDocument>(_fetchAssetsManageDocument);
     on<FetchAssetsSingleDowntime>(_fetchAssetsSingleDowntime);
+    on<FetchAssetsComments>(_fetchAssetsComments);
+    on<AddAssetsComments>(_addAssetsComments);
+    on<SelectAssetsReportFailureLocation>(_selectAssetsReportFailureLocation);
+    on<SelectAssetsFailureCode>(_selectAssetsFailureCode);
+    on<SaveAssetsReportFailure>(_saveAssetsReportFailure);
   }
 
   int assetTabIndex = 0;
@@ -248,6 +256,105 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           fetchAssetSingleDowntimeModel: fetchAssetSingleDowntimeModel));
     } catch (e) {
       emit(AssetsSingleDownTimeError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteAssetsDownTime(
+      DeleteAssetsDownTime event, Emitter<AssetsState> emit) async {
+    emit(AssetsDownTimeDeleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map deleteDowntimeMap = {
+        "downtimeid": event.downtimeId,
+        "hashcode": hashCode,
+      };
+      AssetsDeleteDowntimeModel assetsDeleteDowntimeModel =
+          await _assetsRepository.assetsDeleteDowntimeRepo(deleteDowntimeMap);
+      emit(AssetsDownTimeDeleted(
+          assetsDeleteDowntimeModel: assetsDeleteDowntimeModel));
+    } catch (e) {
+      emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchAssetsComments(
+      FetchAssetsComments event, Emitter<AssetsState> emit) async {
+    emit(AssetsCommentsFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      FetchAssetsCommentsModel fetchAssetsCommentsModel =
+          await _assetsRepository.fetchAssetsCommentsRepo(hashCode!, assetId);
+      if (fetchAssetsCommentsModel.status == 200) {
+        emit(AssetsCommentsFetched(
+            fetchAssetsCommentsModel: fetchAssetsCommentsModel,
+            clientId: clientId!));
+      }
+    } catch (e) {
+      emit(AssetsCommentsError(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addAssetsComments(
+      AddAssetsComments event, Emitter<AssetsState> emit) async {
+    emit(AssetsCommentsAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addCommentMap = {
+        "userid": userId,
+        "assetid": assetId,
+        "comments": event.addAssetCommentMap["comments"],
+        "files": event.addAssetCommentMap["files"],
+        "hashcode": hashCode
+      };
+      AssetsAddCommentsModel assetsAddCommentsModel =
+          await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
+      if (assetsAddCommentsModel.status == 200) {
+        emit(AssetsCommentsAdded(
+            assetsAddCommentsModel: assetsAddCommentsModel));
+      }
+    } catch (e) {
+      emit(AssetsCommentsNotAdded(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAssetsReportFailureLocation(
+      SelectAssetsReportFailureLocation event, Emitter<AssetsState> emit) {
+    emit(AssetsReportFailureLocationSelected(
+        selectLocationName: selectLocationName));
+  }
+
+  FutureOr<void> _selectAssetsFailureCode(
+      SelectAssetsFailureCode event, Emitter<AssetsState> emit) {
+    emit(AssetsFailureCodeSelected(id: event.id));
+  }
+
+  Future<FutureOr<void>> _saveAssetsReportFailure(
+      SaveAssetsReportFailure event, Emitter<AssetsState> emit) async {
+    emit(AssetsReportFailureSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map assetsReportFailureMap = {
+        "hashcode": hashCode,
+        "failure": event.assetsReportFailureMap['failure'],
+        "location": event.assetsReportFailureMap['location'],
+        "userid": userId,
+        "assetid": assetId
+      };
+      SaveAssetsReportFailureModel saveAssetsReportFailureModel =
+          await _assetsRepository
+              .saveAssetsReportFailureRepo(assetsReportFailureMap);
+      if (saveAssetsReportFailureModel.status == 200) {
+        emit(AssetsReportFailureSaved(
+            saveAssetsReportFailureModel: saveAssetsReportFailureModel));
+      } else {
+        emit(AssetsReportFailureNotSaved(
+            errorMessage: saveAssetsReportFailureModel.message));
+      }
+    } catch (e) {
+      emit(AssetsReportFailureNotSaved(errorMessage: e.toString()));
     }
   }
 }

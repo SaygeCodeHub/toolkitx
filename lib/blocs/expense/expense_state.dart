@@ -3,6 +3,7 @@ import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
+import '../../data/models/expense/update_expense_model.dart';
 
 abstract class ExpenseStates {}
 
@@ -36,9 +37,12 @@ class FetchingExpenseDetails extends ExpenseStates {}
 class ExpenseDetailsFetched extends ExpenseStates {
   final FetchExpenseDetailsModel fetchExpenseDetailsModel;
   final List popUpMenuList;
+  final Map manageExpenseMap;
 
   ExpenseDetailsFetched(
-      {required this.popUpMenuList, required this.fetchExpenseDetailsModel});
+      {required this.manageExpenseMap,
+      required this.popUpMenuList,
+      required this.fetchExpenseDetailsModel});
 }
 
 class ExpenseDetailsFailedToFetch extends ExpenseStates {
@@ -79,6 +83,21 @@ class AddExpenseNotSaved extends ExpenseStates {
   final String expenseNotSaved;
 
   AddExpenseNotSaved({required this.expenseNotSaved});
+}
+
+class UpdatingExpense extends ExpenseStates {}
+
+class ExpenseUpdated extends ExpenseStates {
+  final UpdateExpenseModel updateExpenseModel;
+  final String expenseId;
+
+  ExpenseUpdated({required this.expenseId, required this.updateExpenseModel});
+}
+
+class ExpenseCouldNotUpdate extends ExpenseStates {
+  final String expenseNotUpdated;
+
+  ExpenseCouldNotUpdate({required this.expenseNotUpdated});
 }
 
 class SubmittingExpenseForApproval extends ExpenseStates {}

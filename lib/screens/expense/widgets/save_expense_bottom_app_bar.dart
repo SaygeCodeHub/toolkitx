@@ -42,13 +42,31 @@ class SaveExpenseBottomAppBar extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.expenseNotSaved, '');
               }
+
+              if (state is UpdatingExpense) {
+                ProgressBar.show(context);
+              } else if (state is ExpenseUpdated) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                context.read<ExpenseBloc>().add(FetchExpenseDetails(
+                    tabIndex: 0, expenseId: state.expenseId));
+              } else if (state is ExpenseCouldNotUpdate) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.expenseNotUpdated, '');
+              }
             },
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    context.read<ExpenseBloc>().add(AddExpense(
-                        saveExpenseMap:
-                            ManageExpenseFormScreen.manageExpenseMap));
+                    if (ManageExpenseFormScreen.isFromEditOption == true) {
+                      context.read<ExpenseBloc>().add(UpdateExpense(
+                          manageExpenseMap:
+                              ManageExpenseFormScreen.manageExpenseMap));
+                    } else {
+                      context.read<ExpenseBloc>().add(AddExpense(
+                          saveExpenseMap:
+                              ManageExpenseFormScreen.manageExpenseMap));
+                    }
                   },
                   textValue: DatabaseUtil.getText('buttonSave')),
             ),

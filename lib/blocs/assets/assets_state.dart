@@ -67,6 +67,12 @@ class AssetsLocationSelected extends AssetsState {
   AssetsLocationSelected({required this.selectLocationName});
 }
 
+class AssetsReportFailureLocationSelected extends AssetsState {
+  final String selectLocationName;
+
+  AssetsReportFailureLocationSelected({required this.selectLocationName});
+}
+
 class AssetsStatusSelected extends AssetsState {
   final String id;
 
@@ -133,6 +139,20 @@ class AssetsGetDocumentError extends AssetsState {
   AssetsGetDocumentError({required this.errorMessage});
 }
 
+class AssetsDownTimeDeleting extends AssetsState {}
+
+class AssetsDownTimeDeleted extends AssetsState {
+  final AssetsDeleteDowntimeModel assetsDeleteDowntimeModel;
+
+  AssetsDownTimeDeleted({required this.assetsDeleteDowntimeModel});
+}
+
+class AssetsDownTimeNotDeleted extends AssetsState {
+  final String errorMessage;
+
+  AssetsDownTimeNotDeleted({required this.errorMessage});
+}
+
 class AssetsSingleDownTimeFetching extends AssetsState {}
 
 class AssetsSingleDownTimeFetched extends AssetsState {
@@ -145,4 +165,54 @@ class AssetsSingleDownTimeError extends AssetsState {
   final String errorMessage;
 
   AssetsSingleDownTimeError({required this.errorMessage});
+}
+
+class AssetsCommentsFetching extends AssetsState {}
+
+class AssetsCommentsFetched extends AssetsState {
+  final FetchAssetsCommentsModel fetchAssetsCommentsModel;
+  final String clientId;
+
+  AssetsCommentsFetched(
+      {required this.fetchAssetsCommentsModel, required this.clientId});
+}
+
+class AssetsCommentsError extends AssetsState {
+  final String errorMessage;
+
+  AssetsCommentsError({required this.errorMessage});
+}
+
+class AssetsCommentsAdding extends AssetsState {}
+
+class AssetsCommentsAdded extends AssetsState {
+  final AssetsAddCommentsModel assetsAddCommentsModel;
+
+  AssetsCommentsAdded({required this.assetsAddCommentsModel});
+}
+
+class AssetsCommentsNotAdded extends AssetsState {
+  final String errorMessage;
+
+  AssetsCommentsNotAdded({required this.errorMessage});
+}
+
+class AssetsFailureCodeSelected extends AssetsState {
+  final String id;
+
+  AssetsFailureCodeSelected({required this.id});
+}
+
+class AssetsReportFailureSaving extends AssetsState {}
+
+class AssetsReportFailureSaved extends AssetsState {
+  final SaveAssetsReportFailureModel saveAssetsReportFailureModel;
+
+  AssetsReportFailureSaved({required this.saveAssetsReportFailureModel});
+}
+
+class AssetsReportFailureNotSaved extends AssetsState {
+  final String errorMessage;
+
+  AssetsReportFailureNotSaved({required this.errorMessage});
 }

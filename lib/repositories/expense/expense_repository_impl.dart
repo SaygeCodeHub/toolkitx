@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_model.dart';
+import 'package:toolkit/data/models/expense/update_expense_model.dart';
 
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -38,6 +39,13 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}expense/save", saveExpenseMap);
     return SaveExpenseModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateExpenseModel> updateExpense(Map updateExpenseMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}expense/Update", updateExpenseMap);
+    return UpdateExpenseModel.fromJson(response);
   }
 
   @override

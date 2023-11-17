@@ -383,12 +383,15 @@ abstract class StringConstants {
   static const String kManageDownTime = "Manage Downtime";
   static const String kEditDownTime = "Edit Downtime";
   static const String kDowntimeSaved = "Downtime Saved";
+  static const String kDowntimeDeleted = "Downtime Deleted";
+  static const String kDeleteDowntime = "Delete Downtime";
   static const String kEndDate = "End Date";
   static const String kStartTime = "Start Time";
   static const String kEndTime = "End Time";
   static const String kNote = "Note";
   static const String kManageComment = "Manage Comment";
   static const String kReportFailure = "Report Failure";
+  static const String kFailureCode = "Failure Code";
   static const String kManageMeterReading = "ManageMeterReading";
   static const String kChildPattern = "Child pattern";
   static const String kCostAndDepreciation = "Cost And Depreciation:";
@@ -400,4 +403,5 @@ abstract class StringConstants {
   static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
   static const String kViewResponse = "View Response";
+  static const String kCommentAdded = "Comment Added";
 }
