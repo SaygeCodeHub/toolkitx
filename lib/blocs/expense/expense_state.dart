@@ -2,6 +2,7 @@ import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/fetch_item_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -112,4 +113,42 @@ class ExpenseForApprovalFailedToSubmit extends ExpenseStates {
   final String approvalFailedToSubmit;
 
   ExpenseForApprovalFailedToSubmit({required this.approvalFailedToSubmit});
+}
+
+class FetchingExpenseItemMaster extends ExpenseStates {}
+
+class ExpenseItemMasterFetched extends ExpenseStates {
+  final FetchItemMasterModel fetchItemMasterModel;
+
+  ExpenseItemMasterFetched({required this.fetchItemMasterModel});
+}
+
+class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
+  final String itemsNotFound;
+
+  ExpenseItemMasterCouldNotFetch({required this.itemsNotFound});
+}
+
+class ExpenseDateSelected extends ExpenseStates {
+  final String date;
+
+  ExpenseDateSelected({required this.date});
+}
+
+class ExpenseItemSelected extends ExpenseStates {
+  final Map itemsMap;
+
+  ExpenseItemSelected({required this.itemsMap});
+}
+
+class ExpenseWorkingAtOptionSelected extends ExpenseStates {
+  final String workingAt;
+
+  ExpenseWorkingAtOptionSelected({required this.workingAt});
+}
+
+class ExpenseWorkingAtNumberSelected extends ExpenseStates {
+  final Map workingAtNumberMap;
+
+  ExpenseWorkingAtNumberSelected({required this.workingAtNumberMap});
 }

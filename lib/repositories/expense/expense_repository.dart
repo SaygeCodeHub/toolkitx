@@ -2,6 +2,7 @@ import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/fetch_item_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -20,4 +21,7 @@ abstract class ExpenseRepository {
 
   Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
       Map submitForApprovalMap);
+
+  Future<FetchItemMasterModel> fetchExpenseItemMaster(
+      String hashCode, String expenseId);
 }
