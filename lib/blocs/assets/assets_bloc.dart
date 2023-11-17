@@ -16,6 +16,7 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/models/assets/assets_details_model.dart';
 import '../../data/models/assets/assets_master_model.dart';
 import '../../data/models/assets/fetch_assets_document_model.dart';
+import '../../data/models/assets/save_assets_meter_reading_model.dart';
 import '../../di/app_module.dart';
 import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
@@ -48,6 +49,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SelectAssetsReportFailureLocation>(_selectAssetsReportFailureLocation);
     on<SelectAssetsFailureCode>(_selectAssetsFailureCode);
     on<SaveAssetsReportFailure>(_saveAssetsReportFailure);
+    on<SaveAssetsMeterReading>(_saveAssetsMeterReading);
   }
 
   int assetTabIndex = 0;
@@ -356,5 +358,33 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     } catch (e) {
       emit(AssetsReportFailureNotSaved(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _saveAssetsMeterReading(SaveAssetsMeterReading event, Emitter<AssetsState> emit) async {
+    emit(AssetsMeterReadingSaving());
+    // try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map assetsMeterReadingMap = {
+        "hashcode": hashCode,
+        "date": event.assetsMeterReadingMap["date"],
+        "time": event.assetsMeterReadingMap["time"],
+        "note": event.assetsMeterReadingMap["note"],
+        "reading": event.assetsMeterReadingMap["reading"],
+        "meterid": event.assetsMeterReadingMap["meterid"],
+        "userid": userId,
+        "isrollover": event.assetsMeterReadingMap["isrollover"],
+        "assetid": assetId
+      };
+      SaveAssetsMeterReadingModel saveAssetsMeterReadingModel = await _assetsRepository.saveAssetsMeterReadingRepo(assetsMeterReadingMap);
+      if (saveAssetsMeterReadingModel.status == 200) {
+        emit(AssetsMeterReadingSaved(saveAssetsMeterReadingModel: saveAssetsMeterReadingModel));
+      } else {
+        emit(AssetsMeterReadingNotSaved(
+            errorMessage: saveAssetsMeterReadingModel.message));
+      }
+    // } catch (e) {
+    //   emit(AssetsMeterReadingNotSaved(errorMessage: e.toString()));
+    // }
   }
 }

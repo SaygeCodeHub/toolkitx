@@ -6,6 +6,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../assets_manage_comments_screen.dart';
 import '../assets_manage_document_screeen.dart';
 import '../assets_manage_downtime_screen.dart';
+import '../assets_manage_meter_reading_screen.dart';
 import '../assets_report_failure_screen.dart';
 
 class AssetsPopUpMenuButton extends StatelessWidget {
@@ -38,6 +39,9 @@ class AssetsPopUpMenuButton extends StatelessWidget {
           }
           if (value == StringConstants.kReportFailure) {
             Navigator.pushNamed(context, AssetsReportFailureScreen.routeName);
+          }
+          if (value == StringConstants.kManageMeterReading) {
+            Navigator.pushNamed(context, AssetsManageMeterReadingScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

@@ -216,3 +216,17 @@ class AssetsReportFailureNotSaved extends AssetsState {
 
   AssetsReportFailureNotSaved({required this.errorMessage});
 }
+
+class AssetsMeterReadingSaving extends AssetsState {}
+
+class AssetsMeterReadingSaved extends AssetsState {
+  final SaveAssetsMeterReadingModel saveAssetsMeterReadingModel;
+
+  AssetsMeterReadingSaved({required this.saveAssetsMeterReadingModel});
+}
+
+class AssetsMeterReadingNotSaved extends AssetsState {
+  final String errorMessage;
+
+  AssetsMeterReadingNotSaved({required this.errorMessage});
+}

@@ -103,3 +103,9 @@ class SaveAssetsReportFailure extends AssetsEvent {
 
   SaveAssetsReportFailure({required this.assetsReportFailureMap});
 }
+
+class SaveAssetsMeterReading extends AssetsEvent {
+  final Map assetsMeterReadingMap;
+
+  SaveAssetsMeterReading({required this.assetsMeterReadingMap});
+}
