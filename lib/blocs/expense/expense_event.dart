@@ -54,3 +54,41 @@ class UpdateExpense extends ExpenseEvent {
 
   UpdateExpense({required this.manageExpenseMap});
 }
+
+class SubmitExpenseForApproval extends ExpenseEvent {}
+
+class FetchExpenseItemMaster extends ExpenseEvent {
+  final bool isScreenChange;
+
+  FetchExpenseItemMaster({required this.isScreenChange});
+}
+
+class SelectExpenseDate extends ExpenseEvent {
+  final String date;
+
+  SelectExpenseDate({required this.date});
+}
+
+class SelectExpenseItem extends ExpenseEvent {
+  final Map itemsMap;
+
+  SelectExpenseItem({required this.itemsMap});
+}
+
+class SelectExpenseWorkingAtOption extends ExpenseEvent {
+  final String workingAt;
+
+  SelectExpenseWorkingAtOption({required this.workingAt});
+}
+
+class SelectExpenseWorkingAtNumber extends ExpenseEvent {
+  final Map workingAtNumberMap;
+
+  SelectExpenseWorkingAtNumber({required this.workingAtNumberMap});
+}
+
+class SelectExpenseAddItemsCurrency extends ExpenseEvent {
+  final Map currencyDetailsMap;
+
+  SelectExpenseAddItemsCurrency({required this.currencyDetailsMap});
+}

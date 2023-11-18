@@ -55,9 +55,11 @@ class ExpenseDetailsData {
   final String schedule;
   final List<dynamic> itemlist;
   final String total;
+  final List<Log> logs;
 
   ExpenseDetailsData(
-      {required this.id,
+      {required this.logs,
+      required this.id,
       required this.startdate,
       required this.enddate,
       required this.status,
@@ -86,33 +88,33 @@ class ExpenseDetailsData {
 
   factory ExpenseDetailsData.fromJson(Map<String, dynamic> json) =>
       ExpenseDetailsData(
-        id: json["id"] ?? '',
-        startdate: json["startdate"] ?? '',
-        enddate: json["enddate"] ?? '',
-        status: json["status"] ?? '',
-        purpose: json["purpose"] ?? '',
-        location: json["location"] ?? '',
-        createdworkforceby: json["createdworkforceby"] ?? '',
-        createduserby: json["createduserby"] ?? '',
-        reportdate: json["reportdate"] ?? '',
-        createdbyname: json["createdbyname"] ?? '',
-        itemscount: json["itemscount"] ?? '',
-        currency: json["currency"] ?? '',
-        currencyname: json["currencyname"] ?? '',
-        isdraft: json["isdraft"] ?? '',
-        rejectedcount: json["rejectedcount"] ?? '',
-        employeeid: json["employeeid"] ?? '',
-        statustext: json["statustext"] ?? '',
-        canEdit: json["can_edit"] ?? '',
-        canSubmitforapproval: json["can_submitforapproval"] ?? '',
-        canAdditems: json["can_additems"] ?? '',
-        canApprove: json["can_approve"] ?? '',
-        canClose: json["can_close"] ?? '',
-        ref: json["ref"] ?? '',
-        schedule: json["schedule"] ?? '',
-        itemlist: List<dynamic>.from(json["itemlist"].map((x) => x)),
-        total: json["total"] ?? '',
-      );
+          id: json["id"] ?? '',
+          startdate: json["startdate"] ?? '',
+          enddate: json["enddate"] ?? '',
+          status: json["status"] ?? '',
+          purpose: json["purpose"] ?? '',
+          location: json["location"] ?? '',
+          createdworkforceby: json["createdworkforceby"] ?? '',
+          createduserby: json["createduserby"] ?? '',
+          reportdate: json["reportdate"] ?? '',
+          createdbyname: json["createdbyname"] ?? '',
+          itemscount: json["itemscount"] ?? '',
+          currency: json["currency"] ?? '',
+          currencyname: json["currencyname"] ?? '',
+          isdraft: json["isdraft"] ?? '',
+          rejectedcount: json["rejectedcount"] ?? '',
+          employeeid: json["employeeid"] ?? '',
+          statustext: json["statustext"] ?? '',
+          canEdit: json["can_edit"] ?? '',
+          canSubmitforapproval: json["can_submitforapproval"] ?? '',
+          canAdditems: json["can_additems"] ?? '',
+          canApprove: json["can_approve"] ?? '',
+          canClose: json["can_close"] ?? '',
+          ref: json["ref"] ?? '',
+          schedule: json["schedule"] ?? '',
+          itemlist: List<dynamic>.from(json["itemlist"].map((x) => x)),
+          total: json["total"] ?? '',
+          logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -141,5 +143,25 @@ class ExpenseDetailsData {
         "schedule": schedule,
         "itemlist": List<dynamic>.from(itemlist.map((x) => x)),
         "total": total,
+        "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+      };
+}
+
+class Log {
+  final String createdAt;
+  final String action;
+  final String createdBy;
+
+  Log({required this.createdAt, required this.action, required this.createdBy});
+
+  factory Log.fromJson(Map<String, dynamic> json) => Log(
+      createdAt: json["created_at"] ?? '',
+      action: json["action"] ?? '',
+      createdBy: json["created_by"] ?? '');
+
+  Map<String, dynamic> toJson() => {
+        "created_at": createdAt,
+        "action": action,
+        "created_by": createdBy,
       };
 }

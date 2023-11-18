@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
+import '../../blocs/expense/expense_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
@@ -37,6 +41,22 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, ManageExpenseFormScreen.routeName);
         }
         if (value == DatabaseUtil.getText('SubmitForApproval')) {}
+        if (value == DatabaseUtil.getText('Edit')) {}
+        if (value == DatabaseUtil.getText('SubmitForApproval')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('SubmitExpenseReport'),
+                    contentValue:
+                        DatabaseUtil.getText('SubmitExpenseReportMessage'),
+                    onPrimaryButton: () {
+                      context
+                          .read<ExpenseBloc>()
+                          .add(SubmitExpenseForApproval());
+                    });
+              });
+        }
         if (value == DatabaseUtil.getText('approve')) {}
         if (value == DatabaseUtil.getText('Close')) {}
       },

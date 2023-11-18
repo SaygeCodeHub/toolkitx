@@ -1,6 +1,8 @@
+import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
+import 'package:toolkit/data/models/expense/fetch_item_master_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_model.dart';
 import 'package:toolkit/data/models/expense/update_expense_model.dart';
 
@@ -45,5 +47,22 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}expense/Update", updateExpenseMap);
     return UpdateExpenseModel.fromJson(response);
+  }
+
+  @override
+  Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
+      Map submitForApprovalMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}expense/SubmitForApproval",
+        submitForApprovalMap);
+    return ExpenseSubmitForApprovalModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchItemMasterModel> fetchExpenseItemMaster(
+      String hashCode, String expenseId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}expense/getitemmaster1?hashcode=$hashCode&reportid=$expenseId");
+    return FetchItemMasterModel.fromJson(response);
   }
 }
