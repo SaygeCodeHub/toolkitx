@@ -46,7 +46,6 @@ class MeterExpansionTile extends StatelessWidget {
                                     onTap: () {
                                       meterReadingMap["meterid"] =
                                           data[3][listIndex].id;
-                                      // state.yearList.clear();
                                       context.read<AssetsBloc>().add(
                                           SelectAssetsMeter(
                                               id: meterReadingMap["meterid"],
