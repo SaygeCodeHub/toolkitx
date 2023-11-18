@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../blocs/expense/expense_state.dart';
-import '../../../configs/app_spacing.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_floating_action_button.dart';
-import 'addItemsWidgets/expense_date_list_tile.dart';
-import 'addItemsWidgets/expense_item_list_tile.dart';
-import 'addItemsWidgets/expense_working_at_expansion_tile.dart';
-import 'addItemsWidgets/expense_working_at_number_list_tile.dart';
+import 'addItemsWidgets/expense_add_item_form_one.dart';
+import 'addItemsWidgets/expense_add_item_form_two.dart';
+import 'expense_add_item_bottom_bar.dart';
 import 'expense_details_tab_one_body.dart';
 
 class ExpenseDetailsTabOne extends StatelessWidget {
   final int tabIndex;
   final ExpenseDetailsData expenseDetailsData;
+  final String expenseId;
   static List itemMasterList = [];
 
   const ExpenseDetailsTabOne(
-      {Key? key, required this.tabIndex, required this.expenseDetailsData})
+      {Key? key,
+      required this.tabIndex,
+      required this.expenseDetailsData,
+      required this.expenseId})
       : super(key: key);
+  static Map addItemMap = {};
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      bottomNavigationBar: ExpenseAddItemBottomBar(expenseId: expenseId),
       floatingActionButton: BlocBuilder<ExpenseBloc, ExpenseStates>(
         buildWhen: (previousState, currentState) =>
             currentState is FetchingExpenseItemMaster ||
@@ -41,7 +48,9 @@ class ExpenseDetailsTabOne extends StatelessWidget {
           } else {
             return CustomFloatingActionButton(
                 onPressed: () {
-                  context.read<ExpenseBloc>().add(FetchExpenseItemMaster());
+                  context
+                      .read<ExpenseBloc>()
+                      .add(FetchExpenseItemMaster(isScreenChange: false));
                 },
                 textValue: DatabaseUtil.getText('AddItems'));
           }
@@ -56,27 +65,11 @@ class ExpenseDetailsTabOne extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ExpenseItemMasterFetched) {
             itemMasterList.addAll(state.fetchItemMasterModel.data);
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ExpenseDateExpansionTile(),
-                  const ExpenseItemListTile(),
-                  const SizedBox(height: xxxTinierSpacing),
-                  Text(StringConstants.kWorkingAt,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xSmall
-                          .copyWith(fontWeight: FontWeight.w600)),
-                  const SizedBox(height: xxxTinierSpacing),
-                  const ExpenseWorkingAtExpansionTile(),
-                  const SizedBox(height: xxTinySpacing),
-                  const ExpenseWorkingAtNumberListTile(),
-                  const SizedBox(height: xxxTinierSpacing),
-                ],
-              ),
-            );
+            if (state.isScreenChange == false) {
+              return const ExpenseAddItemFormOne();
+            } else {
+              return const ExpenseAddItemFormTwo();
+            }
           } else if (state is ExpenseItemMasterCouldNotFetch) {
             return const Center(child: Text(StringConstants.kNoRecordsFound));
           } else {

@@ -57,7 +57,11 @@ class UpdateExpense extends ExpenseEvent {
 
 class SubmitExpenseForApproval extends ExpenseEvent {}
 
-class FetchExpenseItemMaster extends ExpenseEvent {}
+class FetchExpenseItemMaster extends ExpenseEvent {
+  final bool isScreenChange;
+
+  FetchExpenseItemMaster({required this.isScreenChange});
+}
 
 class SelectExpenseDate extends ExpenseEvent {
   final String date;
@@ -81,4 +85,10 @@ class SelectExpenseWorkingAtNumber extends ExpenseEvent {
   final Map workingAtNumberMap;
 
   SelectExpenseWorkingAtNumber({required this.workingAtNumberMap});
+}
+
+class SelectExpenseAddItemsCurrency extends ExpenseEvent {
+  final Map currencyDetailsMap;
+
+  SelectExpenseAddItemsCurrency({required this.currencyDetailsMap});
 }
