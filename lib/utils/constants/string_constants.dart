@@ -396,7 +396,7 @@ abstract class StringConstants {
   static const String kManageComment = "Manage Comment";
   static const String kReportFailure = "Report Failure";
   static const String kFailureCode = "Failure Code";
-  static const String kManageMeterReading = "ManageMeterReading";
+  static const String kManageMeterReading = "Manage Meter Reading";
   static const String kChildPattern = "Child pattern";
   static const String kCostAndDepreciation = "Cost And Depreciation:";
   static const String kDepreciationMethod = "Depreciation Method";
@@ -408,4 +408,9 @@ abstract class StringConstants {
   static const String kNoLinkedDoc = 'No Linked Documents!';
   static const String kViewResponse = "View Response";
   static const String kCommentAdded = "Comment Added";
+  static const String kMeter = "Meter";
+  static const String kDateTaken = "Date Taken";
+  static const String kTimeTaken = "Time Taken";
+  static const String kReading = "Reading";
+  static const String kIsRollover = "Is rollover";
 }

@@ -12,6 +12,7 @@ import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
 import '../screens/assets/assets_manage_comments_screen.dart';
 import '../screens/assets/assets_manage_document_screeen.dart';
+import '../screens/assets/assets_manage_meter_reading_screen.dart';
 import '../screens/assets/assets_report_failure_screen.dart';
 import '../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../screens/assets/widgets/assets_add_comment_screen.dart';
@@ -430,6 +431,8 @@ class AppRoutes {
         return _createRoute(const AssetsManageCommentsScreen());
       case AssetsReportFailureScreen.routeName:
         return _createRoute(AssetsReportFailureScreen());
+      case AssetsManageMeterReadingScreen.routeName:
+        return _createRoute(const AssetsManageMeterReadingScreen());
       case AssetsAddCommentScreen.routeName:
         return _createRoute(const AssetsAddCommentScreen());
       case ExpenseFilterScreen.routeName:
