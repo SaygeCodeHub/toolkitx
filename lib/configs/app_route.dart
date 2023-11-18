@@ -61,6 +61,7 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/location/location_list_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
@@ -434,6 +435,8 @@ class AppRoutes {
         return _createRoute(const AssetsAddCommentScreen());
       case ExpenseFilterScreen.routeName:
         return _createRoute(const ExpenseFilterScreen());
+      case LocationListScreen.routeName:
+        return _createRoute(const LocationListScreen());
       case ExpenseDetailsScreen.routeName:
         return _createRoute(
             ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
