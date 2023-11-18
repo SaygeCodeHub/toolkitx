@@ -19,46 +19,45 @@ class MeterExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AssetsBloc, AssetsState>(
-      buildWhen: (previousState, currentState) =>
-          currentState is AssetsMeterSelected,
-      builder: (context, state) {
-        if (state is AssetsMeterSelected) {
-          return Theme(
-              data: Theme.of(context)
-                  .copyWith(dividerColor: AppColor.transparent),
-              child: ExpansionTile(
-                  key: GlobalKey(),
-                  collapsedBackgroundColor: AppColor.white,
-                  backgroundColor: AppColor.white,
-                  title: Text(state.meterName),
-                  children: [
-                    MediaQuery(
-                        data: MediaQuery.of(context)
-                            .removePadding(removeTop: true),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: data[3].length,
-                            itemBuilder: (context, listIndex) {
-                              return ListTile(
-                                  contentPadding: const EdgeInsets.only(
-                                      left: xxTinierSpacing),
-                                  title: Text(data[3][listIndex].meter),
-                                  onTap: () {
-                                    meterReadingMap["meterid"] =
-                                        data[3][listIndex].id;
-                                    // state.yearList.clear();
-                                    context.read<AssetsBloc>().add(
-                                        SelectAssetsMeter(
-                                            id: meterReadingMap["meterid"],
-                                            meterName:
-                                                data[3][listIndex].meter));
-                                  });
-                            }))
-                  ]));
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-    );
+        buildWhen: (previousState, currentState) =>
+            currentState is AssetsMeterSelected,
+        builder: (context, state) {
+          if (state is AssetsMeterSelected) {
+            return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: AppColor.transparent),
+                child: ExpansionTile(
+                    key: GlobalKey(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    title: Text(state.meterName),
+                    children: [
+                      MediaQuery(
+                          data: MediaQuery.of(context)
+                              .removePadding(removeTop: true),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: data[3].length,
+                              itemBuilder: (context, listIndex) {
+                                return ListTile(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: xxTinierSpacing),
+                                    title: Text(data[3][listIndex].meter),
+                                    onTap: () {
+                                      meterReadingMap["meterid"] =
+                                          data[3][listIndex].id;
+                                      // state.yearList.clear();
+                                      context.read<AssetsBloc>().add(
+                                          SelectAssetsMeter(
+                                              id: meterReadingMap["meterid"],
+                                              meterName:
+                                                  data[3][listIndex].meter));
+                                    });
+                              }))
+                    ]));
+          } else {
+            return const SizedBox.shrink();
+          }
+        });
   }
 }
