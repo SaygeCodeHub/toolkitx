@@ -50,6 +50,8 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SelectAssetsFailureCode>(_selectAssetsFailureCode);
     on<SaveAssetsReportFailure>(_saveAssetsReportFailure);
     on<SaveAssetsMeterReading>(_saveAssetsMeterReading);
+    on<SelectAssetsMeter>(_selectAssetsMeter);
+    on<SelectAssetsRollOver>(_selectAssetsRollOver);
   }
 
   int assetTabIndex = 0;
@@ -360,9 +362,10 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     }
   }
 
-  Future<FutureOr<void>> _saveAssetsMeterReading(SaveAssetsMeterReading event, Emitter<AssetsState> emit) async {
+  Future<FutureOr<void>> _saveAssetsMeterReading(
+      SaveAssetsMeterReading event, Emitter<AssetsState> emit) async {
     emit(AssetsMeterReadingSaving());
-    // try {
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       Map assetsMeterReadingMap = {
@@ -376,15 +379,28 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "isrollover": event.assetsMeterReadingMap["isrollover"],
         "assetid": assetId
       };
-      SaveAssetsMeterReadingModel saveAssetsMeterReadingModel = await _assetsRepository.saveAssetsMeterReadingRepo(assetsMeterReadingMap);
+      SaveAssetsMeterReadingModel saveAssetsMeterReadingModel =
+          await _assetsRepository
+              .saveAssetsMeterReadingRepo(assetsMeterReadingMap);
       if (saveAssetsMeterReadingModel.status == 200) {
-        emit(AssetsMeterReadingSaved(saveAssetsMeterReadingModel: saveAssetsMeterReadingModel));
+        emit(AssetsMeterReadingSaved(
+            saveAssetsMeterReadingModel: saveAssetsMeterReadingModel));
       } else {
         emit(AssetsMeterReadingNotSaved(
             errorMessage: saveAssetsMeterReadingModel.message));
       }
-    // } catch (e) {
-    //   emit(AssetsMeterReadingNotSaved(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(AssetsMeterReadingNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAssetsMeter(
+      SelectAssetsMeter event, Emitter<AssetsState> emit) {
+    emit(AssetsMeterSelected(id: event.id, meterName: event.meterName));
+  }
+
+  FutureOr<void> _selectAssetsRollOver(
+      SelectAssetsRollOver event, Emitter<AssetsState> emit) {
+    emit(AssetsRollOverSelected(id: event.id, isRollover: event.isRollover));
   }
 }

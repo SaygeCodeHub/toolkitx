@@ -41,7 +41,8 @@ class AssetsPopUpMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, AssetsReportFailureScreen.routeName);
           }
           if (value == StringConstants.kManageMeterReading) {
-            Navigator.pushNamed(context, AssetsManageMeterReadingScreen.routeName);
+            Navigator.pushNamed(
+                context, AssetsManageMeterReadingScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

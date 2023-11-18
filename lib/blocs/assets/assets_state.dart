@@ -230,3 +230,15 @@ class AssetsMeterReadingNotSaved extends AssetsState {
 
   AssetsMeterReadingNotSaved({required this.errorMessage});
 }
+
+class AssetsMeterSelected extends AssetsState {
+  final int id;
+  final String meterName;
+  AssetsMeterSelected({required this.id, required this.meterName});
+}
+
+class AssetsRollOverSelected extends AssetsState {
+  final String id;
+  final String isRollover;
+  AssetsRollOverSelected({required this.id, required this.isRollover});
+}
