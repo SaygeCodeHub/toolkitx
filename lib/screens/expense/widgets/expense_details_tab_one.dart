@@ -68,7 +68,8 @@ class ExpenseDetailsTabOne extends StatelessWidget {
             if (state.isScreenChange == false) {
               return const ExpenseAddItemFormOne();
             } else {
-              return const ExpenseAddItemFormTwo();
+              return ExpenseAddItemFormTwo(
+                  expenseDetailsData: expenseDetailsData);
             }
           } else if (state is ExpenseItemMasterCouldNotFetch) {
             return const Center(child: Text(StringConstants.kNoRecordsFound));

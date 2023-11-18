@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
@@ -7,6 +9,8 @@ import '../../../blocs/expense/expense_state.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
+import '../../../widgets/progress_bar.dart';
+import 'expense_details_tab_one.dart';
 
 class ExpenseAddItemBottomBar extends StatelessWidget {
   final String expenseId;
@@ -16,7 +20,17 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExpenseBloc, ExpenseStates>(
+    return BlocConsumer<ExpenseBloc, ExpenseStates>(
+      listener: (context, state) {
+        if (state is SavingExpenseItem) {
+          ProgressBar.show(context);
+        } else if (state is ExpenseItemSaved) {
+          ProgressBar.dismiss(context);
+        } else if (state is ExpenseItemCouldNotSave) {
+          ProgressBar.dismiss(context);
+          showCustomSnackBar(context, state.itemNotSaved, '');
+        }
+      },
       buildWhen: (previousState, currentState) =>
           currentState is FetchingExpenseItemMaster ||
           currentState is ExpenseItemMasterFetched,
@@ -37,7 +51,10 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 const SizedBox(width: xxTinierSpacing),
                 Expanded(
                     child: PrimaryButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<ExpenseBloc>().add(SaveExpenseItem(
+                              expenseItemMap: ExpenseDetailsTabOne.addItemMap));
+                        },
                         textValue: DatabaseUtil.getText('buttonSave')))
               ]),
             );
@@ -56,8 +73,18 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          context.read<ExpenseBloc>().add(
-                              FetchExpenseItemMaster(isScreenChange: true));
+                          if (ExpenseDetailsTabOne.addItemMap['date'] == null &&
+                              ExpenseDetailsTabOne.addItemMap['itemid'] ==
+                                  null) {
+                            showCustomSnackBar(
+                                context,
+                                StringConstants
+                                    .kExpenseAddItemDateAndItemValidation,
+                                '');
+                          } else {
+                            context.read<ExpenseBloc>().add(
+                                FetchExpenseItemMaster(isScreenChange: true));
+                          }
                         },
                         textValue: DatabaseUtil.getText('nextButtonText')))
               ]),

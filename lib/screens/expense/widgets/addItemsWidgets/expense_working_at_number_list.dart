@@ -67,6 +67,15 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                       ExpenseDetailsTabOne
                                           .itemMasterList[3][index]
                                           .workingatnumber;
+                                  ExpenseDetailsTabOne
+                                          .addItemMap['workingatid'] =
+                                      ExpenseDetailsTabOne
+                                          .itemMasterList[3][index].workingat;
+                                  ExpenseDetailsTabOne
+                                          .addItemMap['workingatnumber'] =
+                                      ExpenseDetailsTabOne
+                                          .itemMasterList[3][index]
+                                          .workingatnumber;
                                   context.read<ExpenseBloc>().add(
                                       SelectExpenseWorkingAtNumber(
                                           workingAtNumberMap:

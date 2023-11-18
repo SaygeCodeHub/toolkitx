@@ -3,6 +3,7 @@ import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -24,4 +25,6 @@ abstract class ExpenseRepository {
 
   Future<FetchItemMasterModel> fetchExpenseItemMaster(
       String hashCode, String expenseId);
+
+  Future<SaveExpenseItemModel> saveExpenseItem(Map saveItemMap);
 }

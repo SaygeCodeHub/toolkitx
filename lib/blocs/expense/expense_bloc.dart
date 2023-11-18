@@ -12,6 +12,7 @@ import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
@@ -40,6 +41,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseWorkingAtOption>(_selectWorkingAtOption);
     on<SelectExpenseWorkingAtNumber>(_selectWorkingAtNumber);
     on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
+    on<SaveExpenseItem>(_saveItem);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -332,15 +334,60 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
   }
 
-  _selectWorkingAtNumber(
-      SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
+  _selectWorkingAtNumber(SelectExpenseWorkingAtNumber event,
+      Emitter<ExpenseStates> emit) {
     emit(ExpenseWorkingAtNumberSelected(
         workingAtNumberMap: event.workingAtNumberMap));
   }
 
-  _selectAddItemCurrency(
-      SelectExpenseAddItemsCurrency event, Emitter<ExpenseStates> emit) {
+  _selectAddItemCurrency(SelectExpenseAddItemsCurrency event,
+      Emitter<ExpenseStates> emit) {
     emit(ExpenseAddItemsCurrencySelected(
         currencyDetailsMap: event.currencyDetailsMap));
+  }
+
+  Future<void> _saveItem(SaveExpenseItem event,
+      Emitter<ExpenseStates> emit) async {
+    emit(SavingExpenseItem());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.expenseItemMap['amount'] == null &&
+          event.expenseItemMap['reportcurrency'] == null) {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved:
+            StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
+      } else {
+        Map saveItemMap = {
+          "id": "",
+          "expenseid": expenseId,
+          "date": event.expenseItemMap['date'] ?? '',
+          "itemid": event.expenseItemMap['itemid'] ?? '',
+          "amount": event.expenseItemMap['amount'] ?? '',
+          "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
+          "description": event.expenseItemMap['description'] ?? '',
+          "currency": event.expenseItemMap['currency'] ?? '',
+          "filenames": event.expenseItemMap['filenames'] ?? '',
+          "reportcurrency": event.expenseItemMap['reportcurrency'] ??
+              event.expenseItemMap['currency'],
+          "workingatid": event.expenseItemMap['workingatid'] ?? '',
+          "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
+          "userid": userId,
+          "hashcode": hashCode,
+          "questions": []
+        };
+        SaveExpenseItemModel saveExpenseItemModel =
+        await _expenseRepository.saveExpenseItem(saveItemMap);
+        if (saveExpenseItemModel.message == '1') {
+          emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
+        } else {
+          emit(ExpenseItemCouldNotSave(
+              itemNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseItemCouldNotSave(itemNotSaved: e.toString()));
+    }
   }
 }
