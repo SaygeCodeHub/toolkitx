@@ -5,3 +5,11 @@ class FetchLocations extends LocationEvent {
 
   FetchLocations({required this.pageNo});
 }
+
+class FetchLocationDetails extends LocationEvent {
+  final String locationId;
+  final int selectedTabIndex;
+
+  FetchLocationDetails(
+      {required this.selectedTabIndex, required this.locationId});
+}
