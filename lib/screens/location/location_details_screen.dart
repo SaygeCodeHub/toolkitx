@@ -34,7 +34,7 @@ class LocationDetailsScreen extends StatelessWidget {
         appBar: const GenericAppBar(title: StringConstants.kLocationDetails),
         body: BlocBuilder<LocationBloc, LocationState>(
           buildWhen: (previousState, currentState) =>
-          currentState is FetchingLocationDetails ||
+              currentState is FetchingLocationDetails ||
               currentState is LocationDetailsFetched ||
               currentState is LocationDetailsNotFetched,
           builder: (context, state) {
@@ -54,11 +54,11 @@ class LocationDetailsScreen extends StatelessWidget {
                         child: ListTile(
                             title: Padding(
                                 padding:
-                                const EdgeInsets.only(top: xxTinierSpacing),
+                                    const EdgeInsets.only(top: xxTinierSpacing),
                                 child: Text(
                                     state.fetchLocationDetailsModel.data.name,
                                     style:
-                                    Theme.of(context).textTheme.medium)))),
+                                        Theme.of(context).textTheme.medium)))),
                     const SizedBox(height: xxTinierSpacing),
                     const Divider(
                         height: kDividerHeight, thickness: kDividerWidth),
