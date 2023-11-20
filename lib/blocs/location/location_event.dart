@@ -13,3 +13,9 @@ class FetchLocationDetails extends LocationEvent {
   FetchLocationDetails(
       {required this.selectedTabIndex, required this.locationId});
 }
+
+class FetchLocationPermits extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationPermits({required this.pageNo});
+}

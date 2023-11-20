@@ -15,6 +15,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/location_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
 import 'widgets/location_documents_tab.dart';
 
@@ -73,7 +74,8 @@ class LocationDetailsScreen extends StatelessWidget {
                           LocationDocumentsTab(
                               data: state.fetchLocationDetailsModel.data,
                               selectedTabIndex: 2,
-                              clientId: state.clientId)
+                              clientId: state.clientId),
+                          const LocationDetailsPermitsTab(selectedTabIndex: 3)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {
