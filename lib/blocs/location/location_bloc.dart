@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../di/app_module.dart';
 import 'location_event.dart';
@@ -14,11 +16,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   List<LocationDatum> locationDatum = [];
   bool locationListReachedMax = false;
+  List<LocationPermitsDatum> locationPermits = [];
+  bool locationPermitListReachedMax = false;
   String locationId = '';
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
     on<FetchLocationDetails>(_fetchLocationDetails);
+    on<FetchLocationPermits>(_fetchLocationPermits);
   }
 
   Future<void> _fetchLocations(
@@ -61,6 +66,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationDetailsNotFetched(detailsNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationPermits(
+      FetchLocationPermits event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationPermits());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationPermitsModel fetchLocationPermitsModel =
+          await _locationRepository.fetchLocationPermits(
+              event.pageNo, hashCode, '{}', locationId);
+      locationPermitListReachedMax = fetchLocationPermitsModel.data.isEmpty;
+      locationPermits.addAll(fetchLocationPermitsModel.data);
+      if (locationPermits.isNotEmpty) {
+        emit(LocationPermitsFetched(
+            locationPermits: locationPermits,
+            locationPermitListReachedMax: locationPermitListReachedMax));
+      } else {
+        emit(LocationPermitsNotFetched(
+            permitsNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationPermitsNotFetched(permitsNotFetched: e.toString()));
     }
   }
 }

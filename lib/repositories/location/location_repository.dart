@@ -1,4 +1,5 @@
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 
 abstract class LocationRepository {
@@ -7,4 +8,7 @@ abstract class LocationRepository {
 
   Future<FetchLocationDetailsModel> fetchLocationDetails(
       String locationId, String hashCode);
+
+  Future<FetchLocationPermitsModel> fetchLocationPermits(
+      int pageNo, String hashCode, String filter, String locationId);
 }

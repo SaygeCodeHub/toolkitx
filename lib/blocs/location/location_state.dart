@@ -1,4 +1,5 @@
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 
 abstract class LocationState {}
@@ -38,4 +39,21 @@ class LocationDetailsNotFetched extends LocationState {
   final String detailsNotFetched;
 
   LocationDetailsNotFetched({required this.detailsNotFetched});
+}
+
+class FetchingLocationPermits extends LocationState {}
+
+class LocationPermitsFetched extends LocationState {
+  final List<LocationPermitsDatum> locationPermits;
+  final bool locationPermitListReachedMax;
+
+  LocationPermitsFetched(
+      {required this.locationPermitListReachedMax,
+      required this.locationPermits});
+}
+
+class LocationPermitsNotFetched extends LocationState {
+  final String permitsNotFetched;
+
+  LocationPermitsNotFetched({required this.permitsNotFetched});
 }
