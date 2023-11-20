@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
@@ -90,7 +91,6 @@ abstract class StringConstants {
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
   static const String kAssignedToMe = 'assignedtome'; //
-  static const String kSelect = 'Select'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
   static const String kDocumentNameValidation =
@@ -120,11 +120,21 @@ abstract class StringConstants {
       'No header data available for this checklist!';
   static const String kOldPassword = 'Old Password'; //
   static const String kToDoHistory = 'ToDo History'; //
+  static const String kWorkingAtNumber = 'Working at number'; //
+  static const String kWorkingAt = 'Working at'; //
+  static const String kSelectItem = 'Select Item'; //
+  static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
   static const String kSelectVendor = 'Select vendor'; //
   static const String kSelectCurrency = 'Select currency'; //
+  static const String kLocationDetails = 'Location Details'; //
+  static const String kParentLocation = 'Parent Location'; //
+  static const String kPowerStatus = 'Power Status'; //
+  static const String kOperationalStatus = 'Operational Status'; //
+  static const String kRestrictionStatus = 'Restriction Status'; //
+  static const String kRDSPPCode = 'RDS-PP code'; //
   static const String kResolve = 'Resolve'; //
   static const String kSelectYourLanguage = 'Select Your Language';
   static const String kClearFilter = 'Clear';
@@ -391,7 +401,8 @@ abstract class StringConstants {
   static const String kNote = "Note";
   static const String kManageComment = "Manage Comment";
   static const String kReportFailure = "Report Failure";
-  static const String kManageMeterReading = "ManageMeterReading";
+  static const String kFailureCode = "Failure Code";
+  static const String kManageMeterReading = "Manage Meter Reading";
   static const String kChildPattern = "Child pattern";
   static const String kCostAndDepreciation = "Cost And Depreciation:";
   static const String kDepreciationMethod = "Depreciation Method";
@@ -402,4 +413,10 @@ abstract class StringConstants {
   static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
   static const String kViewResponse = "View Response";
+  static const String kCommentAdded = "Comment Added";
+  static const String kMeter = "Meter";
+  static const String kDateTaken = "Date Taken";
+  static const String kTimeTaken = "Time Taken";
+  static const String kReading = "Reading";
+  static const String kIsRollover = "Is rollover";
 }

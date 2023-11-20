@@ -9,6 +9,8 @@ import 'package:toolkit/repositories/documents/documents_repository.dart';
 import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
+import 'package:toolkit/repositories/location/location_repository.dart';
+import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import '../repositories/LogBook/logbook_repository.dart';
@@ -82,6 +84,8 @@ configurableDependencies() {
   getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
   getIt.registerLazySingleton<CalendarRepository>(
       () => CalendarRepositoryImpl());
+  getIt.registerLazySingleton<LocationRepository>(
+      () => LocationRepositoryImpl());
   getIt.registerLazySingleton<WorkOrderRepository>(
       () => WorkOrderRepositoryImpl());
   getIt.registerLazySingleton<LotoRepository>(() => LotoRepositoryImpl());

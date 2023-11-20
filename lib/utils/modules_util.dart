@@ -85,6 +85,11 @@ abstract class ModulesUtil {
         key: 'wf_timesheet',
         notificationKey: 'expensereport'),
     ModulesModel(
+        moduleName: 'Location',
+        moduleImage: '${kBaseImagePath}location.png',
+        key: 'eam',
+        notificationKey: 'eam'),
+    ModulesModel(
         moduleName: 'Certificates',
         moduleImage: '${kBaseImagePath}certificate.png',
         key: 'certificates',

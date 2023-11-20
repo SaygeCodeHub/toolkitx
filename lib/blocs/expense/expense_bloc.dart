@@ -7,9 +7,11 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
+import '../../data/models/expense/fetch_item_master_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
@@ -31,6 +33,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<ExpenseSelectCurrency>(_selectCurrency);
     on<AddExpense>(_saveExpense);
     on<UpdateExpense>(_updateExpense);
+    on<SubmitExpenseForApproval>(_submitExpenseForApproval);
+    on<FetchExpenseItemMaster>(_fetchItemMaster);
+    on<SelectExpenseDate>(_selectDate);
+    on<SelectExpenseItem>(_selectItem);
+    on<SelectExpenseWorkingAtOption>(_selectWorkingAtOption);
+    on<SelectExpenseWorkingAtNumber>(_selectWorkingAtNumber);
+    on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -262,5 +271,76 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     } catch (e) {
       emit(ExpenseCouldNotUpdate(expenseNotUpdated: e.toString()));
     }
+  }
+
+  Future<void> _submitExpenseForApproval(
+      SubmitExpenseForApproval event, Emitter<ExpenseStates> emit) async {
+    emit(SubmittingExpenseForApproval());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map submitExpenseForApproval = {
+        "reportid": expenseId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      ExpenseSubmitForApprovalModel expenseSubmitForApprovalModel =
+          await _expenseRepository
+              .submitExpenseForApproval(submitExpenseForApproval);
+      if (expenseSubmitForApprovalModel.message == '1') {
+        emit(ExpenseForApprovalSubmitted(
+            expenseSubmitForApprovalModel: expenseSubmitForApprovalModel));
+      } else {
+        emit(ExpenseForApprovalFailedToSubmit(
+            approvalFailedToSubmit:
+                DatabaseUtil.getText('UnknownErrorMessage')));
+      }
+    } catch (e) {
+      emit(ExpenseForApprovalFailedToSubmit(
+          approvalFailedToSubmit: e.toString()));
+    }
+  }
+
+  Future<void> _fetchItemMaster(
+      FetchExpenseItemMaster event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseItemMaster());
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchItemMasterModel fetchItemMasterModel =
+          await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
+      emit(ExpenseItemMasterFetched(
+          fetchItemMasterModel: fetchItemMasterModel,
+          isScreenChange: event.isScreenChange));
+      add(SelectExpenseDate(date: ''));
+    } catch (e) {
+      emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
+    }
+  }
+
+  _selectDate(SelectExpenseDate event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseDateSelected(date: event.date));
+  }
+
+  _selectItem(SelectExpenseItem event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseItemSelected(itemsMap: event.itemsMap));
+  }
+
+  _selectWorkingAtOption(
+      SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
+  }
+
+  _selectWorkingAtNumber(
+      SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseWorkingAtNumberSelected(
+        workingAtNumberMap: event.workingAtNumberMap));
+  }
+
+  _selectAddItemCurrency(
+      SelectExpenseAddItemsCurrency event, Emitter<ExpenseStates> emit) {
+    emit(ExpenseAddItemsCurrencySelected(
+        currencyDetailsMap: event.currencyDetailsMap));
   }
 }
