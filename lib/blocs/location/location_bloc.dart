@@ -45,13 +45,16 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       locationId = event.locationId;
       FetchLocationDetailsModel fetchLocationDetailsModel =
           await _locationRepository.fetchLocationDetails(locationId, hashCode);
       if (fetchLocationDetailsModel.status == 200) {
         emit(LocationDetailsFetched(
             fetchLocationDetailsModel: fetchLocationDetailsModel,
-            selectedTabIndex: event.selectedTabIndex));
+            selectedTabIndex: event.selectedTabIndex,
+            clientId: clientId));
       } else {
         emit(LocationDetailsNotFetched(
             detailsNotFetched: fetchLocationDetailsModel.message));

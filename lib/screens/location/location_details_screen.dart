@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -14,6 +16,7 @@ import '../../utils/location_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'widgets/location_details_tab_one.dart';
+import 'widgets/location_documents_tab.dart';
 
 class LocationDetailsScreen extends StatelessWidget {
   final String expenseId;
@@ -31,13 +34,14 @@ class LocationDetailsScreen extends StatelessWidget {
         appBar: const GenericAppBar(title: StringConstants.kLocationDetails),
         body: BlocBuilder<LocationBloc, LocationState>(
           buildWhen: (previousState, currentState) =>
-              currentState is FetchingLocationDetails ||
+          currentState is FetchingLocationDetails ||
               currentState is LocationDetailsFetched ||
               currentState is LocationDetailsNotFetched,
           builder: (context, state) {
             if (state is FetchingLocationDetails) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is LocationDetailsFetched) {
+              log('tab index----->${state.selectedTabIndex}');
               return Padding(
                   padding: const EdgeInsets.only(
                       left: leftRightMargin,
@@ -50,22 +54,26 @@ class LocationDetailsScreen extends StatelessWidget {
                         child: ListTile(
                             title: Padding(
                                 padding:
-                                    const EdgeInsets.only(top: xxTinierSpacing),
+                                const EdgeInsets.only(top: xxTinierSpacing),
                                 child: Text(
                                     state.fetchLocationDetailsModel.data.name,
                                     style:
-                                        Theme.of(context).textTheme.medium)))),
+                                    Theme.of(context).textTheme.medium)))),
                     const SizedBox(height: xxTinierSpacing),
                     const Divider(
                         height: kDividerHeight, thickness: kDividerWidth),
                     CustomTabBarView(
-                        lengthOfTabs: state.selectedTabIndex,
+                        lengthOfTabs: 8,
                         tabBarViewIcons: LocationTabsUtil().tabBarViewIcons,
-                        initialIndex: 1,
+                        initialIndex: state.selectedTabIndex,
                         tabBarViewWidgets: [
                           LocationDetailsTabOne(
                               data: state.fetchLocationDetailsModel.data,
-                              selectedTabIndex: 1)
+                              selectedTabIndex: 1),
+                          LocationDocumentsTab(
+                              data: state.fetchLocationDetailsModel.data,
+                              selectedTabIndex: 2,
+                              clientId: state.clientId)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {
