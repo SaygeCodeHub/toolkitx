@@ -19,6 +19,7 @@ const double kProfileImageHeight = 22.0;
 const double kProfileImageWidth = 22.0;
 const double kIconSize = 22.0;
 const double kPdfIconSize = 30.0;
+const double kXlsIconSize = 30.0;
 const double kLargeIconSize = 100.0;
 const double kCircleAvatarImgHeight = 50.0;
 const double kCircleAvatarImgWidth = 50.0;

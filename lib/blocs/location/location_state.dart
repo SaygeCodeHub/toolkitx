@@ -26,9 +26,11 @@ class FetchingLocationDetails extends LocationState {}
 class LocationDetailsFetched extends LocationState {
   final FetchLocationDetailsModel fetchLocationDetailsModel;
   final int selectedTabIndex;
+  final String clientId;
 
   LocationDetailsFetched(
-      {required this.selectedTabIndex,
+      {required this.clientId,
+      required this.selectedTabIndex,
       required this.fetchLocationDetailsModel});
 }
 
