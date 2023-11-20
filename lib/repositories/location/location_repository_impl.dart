@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/location/fetch_location_details_model.dart';
+import 'package:toolkit/data/models/location/fetch_location_loto_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_permits_model.dart';
 
 import '../../data/models/location/fetch_locations_model.dart';
@@ -29,5 +30,13 @@ class LocationRepositoryImpl extends LocationRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getlocationpermits?pageno=$pageNo&hashcode=$hashCode&filter=$filter&locationid=$locationId");
     return FetchLocationPermitsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLocationLoToModel> fetchLocationLoTo(int pageNo, String hashCode,
+      String userId, String filter, String locationId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}common/getlocationloto?pageno=$pageNo&hashcode=$hashCode&filter=$filter&userid=$userId&locationid=$locationId");
+    return FetchLocationLoToModel.fromJson(response);
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -15,6 +13,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/location_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'widgets/location_details_loto_tab.dart';
 import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
 import 'widgets/location_documents_tab.dart';
@@ -42,7 +41,6 @@ class LocationDetailsScreen extends StatelessWidget {
             if (state is FetchingLocationDetails) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is LocationDetailsFetched) {
-              log('tab index----->${state.selectedTabIndex}');
               return Padding(
                   padding: const EdgeInsets.only(
                       left: leftRightMargin,
@@ -75,7 +73,8 @@ class LocationDetailsScreen extends StatelessWidget {
                               data: state.fetchLocationDetailsModel.data,
                               selectedTabIndex: 2,
                               clientId: state.clientId),
-                          const LocationDetailsPermitsTab(selectedTabIndex: 3)
+                          const LocationDetailsPermitsTab(selectedTabIndex: 4),
+                          const LocationDetailsLoToTab(selectedTabIndex: 5)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {
