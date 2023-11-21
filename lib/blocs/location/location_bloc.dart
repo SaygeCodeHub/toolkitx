@@ -4,6 +4,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/location/fetch_location_assets_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
@@ -21,6 +22,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationPermitListReachedMax = false;
   List<LocationLotoDatum> locationLoTos = [];
   bool locationLoToListReachedMax = false;
+  List<LocationAssetsDatum> locationAssets = [];
+  bool locationAssetsListReachedMax = false;
   String locationId = '';
 
   LocationBloc() : super(LocationInitial()) {
@@ -28,6 +31,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
     on<FetchLocationLoTo>(_fetchLocationLoTo);
+    on<FetchLocationAssets>(_fetchLocationAssets);
   }
 
   Future<void> _fetchLocations(
@@ -118,6 +122,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationAssets(
+      FetchLocationAssets event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationAssets());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationAssetsModel fetchLocationAssetsModel =
+          await _locationRepository.fetchLocationAssets(
+              event.pageNo, hashCode, '{}');
+      locationAssetsListReachedMax = fetchLocationAssetsModel.data.isEmpty;
+      locationAssets.addAll(fetchLocationAssetsModel.data);
+      if (locationAssets.isNotEmpty) {
+        emit(LocationAssetsFetched(
+            locationAssetsListReachedMax: locationAssetsListReachedMax,
+            locationAssets: locationAssets));
+      } else {
+        emit(LocationAssetsNotFetched(
+            assetsNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationAssetsNotFetched(assetsNotFetched: e.toString()));
     }
   }
 }
