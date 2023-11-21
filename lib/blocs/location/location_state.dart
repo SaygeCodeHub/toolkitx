@@ -48,8 +48,9 @@ class LocationPermitsFetched extends LocationState {
   final List<LocationPermitsDatum> locationPermits;
   final bool locationPermitListReachedMax;
 
-  LocationPermitsFetched({required this.locationPermitListReachedMax,
-    required this.locationPermits});
+  LocationPermitsFetched(
+      {required this.locationPermitListReachedMax,
+      required this.locationPermits});
 }
 
 class LocationPermitsNotFetched extends LocationState {
