@@ -5,6 +5,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_logbooks_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
@@ -21,6 +22,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationPermitListReachedMax = false;
   List<LocationLotoDatum> locationLoTos = [];
   bool locationLoToListReachedMax = false;
+  List<LocationLogBooksDatum> locationLogBooks = [];
+  bool locationLogBooksListReachedMax = false;
   String locationId = '';
 
   LocationBloc() : super(LocationInitial()) {
@@ -28,6 +31,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
     on<FetchLocationLoTo>(_fetchLocationLoTo);
+    on<FetchLocationLogBooks>(_fetchLocationLogBooks);
   }
 
   Future<void> _fetchLocations(
@@ -118,6 +122,31 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationLogBooks(
+      FetchLocationLogBooks event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationLogBooks());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchLocationLogBookModel fetchLocationLogBookModel =
+          await _locationRepository.fetchLocationLogBooks(
+              event.pageNo, hashCode, userId, '{}', locationId);
+      locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
+      locationLogBooks.addAll(fetchLocationLogBookModel.data);
+      if (locationLogBooks.isNotEmpty) {
+        emit(LocationLogBooksFetched(
+            locationLogBooksListReachedMax: locationLogBooksListReachedMax,
+            locationLogBooks: locationLogBooks));
+      } else {
+        emit(LocationLogBooksNotFetched(
+            logBooksNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationLogBooksNotFetched(logBooksNotFetched: e.toString()));
     }
   }
 }

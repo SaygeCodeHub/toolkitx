@@ -25,3 +25,9 @@ class FetchLocationLoTo extends LocationEvent {
 
   FetchLocationLoTo({required this.pageNo});
 }
+
+class FetchLocationLogBooks extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationLogBooks({required this.pageNo});
+}
