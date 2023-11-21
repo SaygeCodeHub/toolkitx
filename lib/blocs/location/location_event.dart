@@ -19,3 +19,9 @@ class FetchLocationPermits extends LocationEvent {
 
   FetchLocationPermits({required this.pageNo});
 }
+
+class FetchLocationLoTo extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationLoTo({required this.pageNo});
+}

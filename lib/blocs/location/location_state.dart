@@ -1,4 +1,5 @@
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 
@@ -56,4 +57,20 @@ class LocationPermitsNotFetched extends LocationState {
   final String permitsNotFetched;
 
   LocationPermitsNotFetched({required this.permitsNotFetched});
+}
+
+class FetchingLocationLoTo extends LocationState {}
+
+class LocationLoToFetched extends LocationState {
+  final List<LocationLotoDatum> locationLoTos;
+  final bool locationLoToListReachedMax;
+
+  LocationLoToFetched(
+      {required this.locationLoToListReachedMax, required this.locationLoTos});
+}
+
+class LocationLoToNotFetched extends LocationState {
+  final String loToNotFetched;
+
+  LocationLoToNotFetched({required this.loToNotFetched});
 }

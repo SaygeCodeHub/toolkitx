@@ -5,6 +5,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../di/app_module.dart';
@@ -18,12 +19,15 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationListReachedMax = false;
   List<LocationPermitsDatum> locationPermits = [];
   bool locationPermitListReachedMax = false;
+  List<LocationLotoDatum> locationLoTos = [];
+  bool locationLoToListReachedMax = false;
   String locationId = '';
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
+    on<FetchLocationLoTo>(_fetchLocationLoTo);
   }
 
   Future<void> _fetchLocations(
@@ -90,6 +94,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationPermitsNotFetched(permitsNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationLoTo(
+      FetchLocationLoTo event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationLoTo());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchLocationLoToModel fetchLocationLoToModel = await _locationRepository
+          .fetchLocationLoTo(event.pageNo, hashCode, userId, '{}', locationId);
+      locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
+      locationLoTos.addAll(fetchLocationLoToModel.data);
+      if (locationPermits.isNotEmpty) {
+        emit(LocationLoToFetched(
+            locationLoTos: locationLoTos,
+            locationLoToListReachedMax: locationPermitListReachedMax));
+      } else {
+        emit(LocationLoToNotFetched(
+            loToNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
     }
   }
 }
