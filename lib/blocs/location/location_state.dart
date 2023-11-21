@@ -1,3 +1,4 @@
+import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
@@ -13,8 +14,7 @@ class LocationsFetched extends LocationState {
   final List<LocationDatum> locationDatum;
   final bool locationListReachedMax;
 
-  LocationsFetched(
-      {required this.locationListReachedMax, required this.locationDatum});
+  LocationsFetched({required this.locationListReachedMax, required this.locationDatum});
 }
 
 class LocationsCouldNotFetch extends LocationState {
@@ -30,10 +30,9 @@ class LocationDetailsFetched extends LocationState {
   final int selectedTabIndex;
   final String clientId;
 
-  LocationDetailsFetched(
-      {required this.clientId,
-      required this.selectedTabIndex,
-      required this.fetchLocationDetailsModel});
+  LocationDetailsFetched({required this.clientId,
+    required this.selectedTabIndex,
+    required this.fetchLocationDetailsModel});
 }
 
 class LocationDetailsNotFetched extends LocationState {
@@ -48,9 +47,8 @@ class LocationPermitsFetched extends LocationState {
   final List<LocationPermitsDatum> locationPermits;
   final bool locationPermitListReachedMax;
 
-  LocationPermitsFetched(
-      {required this.locationPermitListReachedMax,
-      required this.locationPermits});
+  LocationPermitsFetched({required this.locationPermitListReachedMax,
+    required this.locationPermits});
 }
 
 class LocationPermitsNotFetched extends LocationState {
@@ -73,4 +71,18 @@ class LocationLoToNotFetched extends LocationState {
   final String loToNotFetched;
 
   LocationLoToNotFetched({required this.loToNotFetched});
+}
+
+class FetchingLocationCheckLists extends LocationState {}
+
+class LocationCheckListsFetched extends LocationState {
+  final FetchLocationCheckListsModel fetchLocationCheckListsModel;
+
+  LocationCheckListsFetched({required this.fetchLocationCheckListsModel});
+}
+
+class LocationCheckListsNotFetched extends LocationState {
+  final String checkListsNotFetched;
+
+  LocationCheckListsNotFetched({required this.checkListsNotFetched});
 }

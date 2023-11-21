@@ -4,6 +4,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
@@ -28,6 +29,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
     on<FetchLocationLoTo>(_fetchLocationLoTo);
+    on<FetchCheckListsLocation>(_fetchLocationCheckLists);
   }
 
   Future<void> _fetchLocations(
@@ -118,6 +120,27 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationCheckLists(
+      FetchCheckListsLocation event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationCheckLists());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationCheckListsModel fetchLocationCheckListsModel =
+          await _locationRepository.fetchLocationCheckLists(
+              hashCode, '{}', locationId);
+      if (fetchLocationCheckListsModel.data.isNotEmpty) {
+        emit(LocationCheckListsFetched(
+            fetchLocationCheckListsModel: fetchLocationCheckListsModel));
+      } else {
+        emit(LocationCheckListsNotFetched(
+            checkListsNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationCheckListsNotFetched(checkListsNotFetched: e.toString()));
     }
   }
 }

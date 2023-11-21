@@ -25,3 +25,7 @@ class FetchLocationLoTo extends LocationEvent {
 
   FetchLocationLoTo({required this.pageNo});
 }
+
+class FetchCheckListsLocation extends LocationEvent {
+  FetchCheckListsLocation();
+}
