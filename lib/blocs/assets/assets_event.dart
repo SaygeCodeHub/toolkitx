@@ -103,3 +103,22 @@ class SaveAssetsReportFailure extends AssetsEvent {
 
   SaveAssetsReportFailure({required this.assetsReportFailureMap});
 }
+
+class SaveAssetsMeterReading extends AssetsEvent {
+  final Map assetsMeterReadingMap;
+
+  SaveAssetsMeterReading({required this.assetsMeterReadingMap});
+}
+
+class SelectAssetsMeter extends AssetsEvent {
+  final int id;
+  final String meterName;
+
+  SelectAssetsMeter({required this.id, required this.meterName});
+}
+
+class SelectAssetsRollOver extends AssetsEvent {
+  final String id;
+  final String isRollover;
+  SelectAssetsRollOver({required this.id, required this.isRollover});
+}

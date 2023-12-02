@@ -22,6 +22,7 @@ import '../../checklist/workforce/workforce_list_screen.dart';
 import '../../expense/expense_list_screen.dart';
 import '../../incident/incident_list_screen.dart';
 import '../../leavesAndHolidays/leaves_and_holidays_screen.dart';
+import '../../location/location_list_screen.dart';
 import '../../logBook/logbook_list_screen.dart';
 import '../../loto/loto_list_screen.dart';
 import '../../permit/permit_list_screen.dart';
@@ -220,7 +221,11 @@ class OnLineModules extends StatelessWidget {
             arguments: true);
         break;
       case 'eam':
-        Navigator.pushNamed(context, AssetsListScreen.routeName);
+        if (moduleName == 'Location') {
+          Navigator.pushNamed(context, LocationListScreen.routeName);
+        } else {
+          Navigator.pushNamed(context, AssetsListScreen.routeName);
+        }
         break;
       case 'expensereport':
         Navigator.pushNamed(context, ExpenseListScreen.routeName);

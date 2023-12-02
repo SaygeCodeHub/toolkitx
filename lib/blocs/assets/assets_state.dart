@@ -216,3 +216,29 @@ class AssetsReportFailureNotSaved extends AssetsState {
 
   AssetsReportFailureNotSaved({required this.errorMessage});
 }
+
+class AssetsMeterReadingSaving extends AssetsState {}
+
+class AssetsMeterReadingSaved extends AssetsState {
+  final SaveAssetsMeterReadingModel saveAssetsMeterReadingModel;
+
+  AssetsMeterReadingSaved({required this.saveAssetsMeterReadingModel});
+}
+
+class AssetsMeterReadingNotSaved extends AssetsState {
+  final String errorMessage;
+
+  AssetsMeterReadingNotSaved({required this.errorMessage});
+}
+
+class AssetsMeterSelected extends AssetsState {
+  final int id;
+  final String meterName;
+  AssetsMeterSelected({required this.id, required this.meterName});
+}
+
+class AssetsRollOverSelected extends AssetsState {
+  final String id;
+  final String isRollover;
+  AssetsRollOverSelected({required this.id, required this.isRollover});
+}

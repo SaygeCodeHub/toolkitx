@@ -56,7 +56,13 @@ class ExpenseListBody extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .xxSmall
-                                          .copyWith(color: AppColor.errorRed)))
+                                          .copyWith(color: AppColor.errorRed))),
+                              const Spacer(),
+                              Text(expenseListDatum[index].statustext,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xxSmall
+                                      .copyWith(color: AppColor.deepBlue))
                             ])),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +78,7 @@ class ExpenseListBody extends StatelessWidget {
                         ),
                         const SizedBox(height: tinierSpacing),
                         Text(expenseListDatum[index].location,
-                            style: Theme.of(context).textTheme.xSmall)
+                            style: Theme.of(context).textTheme.xSmall),
                       ],
                     ),
                   ),
