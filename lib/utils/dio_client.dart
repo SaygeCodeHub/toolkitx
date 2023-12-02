@@ -12,12 +12,7 @@ class DioClient {
       final response = await dio.get(requestUrl, options: Options());
       jsonResponse = (response.data);
     } on DioException catch (e) {
-      if (e.response != null) {
-        e.response!.statusCode;
-        e.response!.data;
-      } else {
-        e.message.toString();
-      }
+      throw Exception(e.toString());
     }
     return jsonResponse;
   }
@@ -59,4 +54,20 @@ class DioClient {
     }
     return jsonResponse;
   }
+}
+
+class CustomException implements Exception {
+  final message;
+  final prefix;
+
+  CustomException([this.message, this.prefix]);
+
+  @override
+  String toString() {
+    return "$prefix$message";
+  }
+}
+
+class FetchDataException extends CustomException {
+  FetchDataException([String? message]) : super(message, "");
 }

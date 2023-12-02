@@ -57,7 +57,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           permitRolesModel: permitRolesModel, roleId: roleId));
     } catch (e) {
       emit(const CouldNotFetchPermitRoles());
-      rethrow;
     }
   }
 
@@ -89,7 +88,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitMasterFetched(permitGetMasterModel, filters, location));
     } catch (e) {
       emit(const CouldNotFetchPermitMaster());
-      rethrow;
     }
   }
 
@@ -117,7 +115,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
     } catch (e) {
       emit(const OpenPermitDetailsError());
-      rethrow;
     }
   }
 
@@ -131,7 +128,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(ClosePermitDetailsFetched(closePermitDetailsModel));
     } catch (e) {
       emit(const ClosePermitDetailsError());
-      rethrow;
     }
   }
 
@@ -159,7 +155,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(const CouldNotFetchPermits());
-      rethrow;
     }
   }
 
@@ -186,7 +181,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           permitPopUpMenu: permitPopUpMenu));
     } catch (e) {
       emit(const CouldNotFetchPermitDetails());
-      rethrow;
     }
   }
 
@@ -204,7 +198,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           pdfGenerationModel: pdfGenerationModel, pdfLink: pdfLink));
     } catch (e) {
       emit(const PDFGenerationFailed());
-      rethrow;
     }
   }
 
@@ -230,7 +223,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitOpened(openClosePermitModel));
     } catch (e) {
       emit(OpenPermitError(e.toString()));
-      rethrow;
     }
   }
 
@@ -250,7 +242,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitRequested(openClosePermitModel));
     } catch (e) {
       emit(RequestPermitError(e.toString()));
-      rethrow;
     }
   }
 
@@ -287,7 +278,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(ClosePermitError(e.toString()));
-      rethrow;
     }
   }
 }

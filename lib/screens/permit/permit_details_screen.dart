@@ -82,6 +82,11 @@ class PermitDetailsScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.errorMessage, '');
               }
+              if (state is CouldNotFetchPermitDetails) {
+                Navigator.pop(context);
+                showCustomSnackBar(
+                    context, DatabaseUtil.getText('something_went_wrong'), '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingPermitDetails ||
