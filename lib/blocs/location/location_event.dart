@@ -25,3 +25,25 @@ class FetchLocationLoTo extends LocationEvent {
 
   FetchLocationLoTo({required this.pageNo});
 }
+
+class FetchLocationWorkOrders extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationWorkOrders({required this.pageNo});
+}
+
+class FetchCheckListsLocation extends LocationEvent {
+  FetchCheckListsLocation();
+}
+
+class FetchLocationAssets extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationAssets({required this.pageNo});
+}
+
+class FetchLocationLogBooks extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationLogBooks({required this.pageNo});
+}
