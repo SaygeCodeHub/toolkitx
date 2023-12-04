@@ -1,7 +1,9 @@
+import 'package:toolkit/data/models/location/fetch_location_checklists_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_assets_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_details_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_loto_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_permits_model.dart';
+import 'package:toolkit/data/models/location/fetch_location_workorders_model.dart';
 
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -36,6 +38,22 @@ class LocationRepositoryImpl extends LocationRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getlocationloto?pageno=$pageNo&hashcode=$hashCode&filter=$filter&userid=$userId&locationid=$locationId");
     return FetchLocationLoToModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLocationWorkOrdersModel> fetchLocationWorkOrders(
+      int pageNo, String hashCode, String filter, String locationId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}common/getlocationworkorders?pageno=$pageNo&hashcode=$hashCode&filter=$filter&locationid=$locationId");
+    return FetchLocationWorkOrdersModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLocationCheckListsModel> fetchLocationCheckLists(
+      String hashCode, String filter, String locationId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}common/getlocationschecklists?locationid=$locationId&hashcode=$hashCode&filter=$filter");
+    return FetchLocationCheckListsModel.fromJson(response);
   }
 
   @override

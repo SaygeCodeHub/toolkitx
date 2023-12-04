@@ -4,10 +4,12 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_assets_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
+import '../../data/models/location/fetch_location_workorders_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../di/app_module.dart';
 import 'location_event.dart';
@@ -22,6 +24,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationPermitListReachedMax = false;
   List<LocationLotoDatum> locationLoTos = [];
   bool locationLoToListReachedMax = false;
+  List<LocationWorkOrdersDatum> workOrderLocations = [];
+  bool workOrderLoToListReachedMax = false;
   List<LocationAssetsDatum> locationAssets = [];
   bool locationAssetsListReachedMax = false;
   String locationId = '';
@@ -31,6 +35,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
     on<FetchLocationLoTo>(_fetchLocationLoTo);
+    on<FetchLocationWorkOrders>(_fetchLocationWorkOrders);
+    on<FetchCheckListsLocation>(_fetchLocationCheckLists);
     on<FetchLocationAssets>(_fetchLocationAssets);
   }
 
@@ -122,6 +128,51 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationWorkOrders(
+      FetchLocationWorkOrders event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationWorkOrders());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationWorkOrdersModel fetchLocationWorkOrdersModel =
+          await _locationRepository.fetchLocationWorkOrders(
+              event.pageNo, hashCode, '{}', locationId);
+      workOrderLoToListReachedMax = fetchLocationWorkOrdersModel.data.isEmpty;
+      workOrderLocations.addAll(fetchLocationWorkOrdersModel.data);
+      if (locationPermits.isNotEmpty) {
+        emit(LocationWorkOrdersFetched(
+            workOrderLocations: workOrderLocations,
+            workOrderLoToListReachedMax: workOrderLoToListReachedMax));
+      } else {
+        emit(LocationWorkOrdersNotFetched(
+            workOrderNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationWorkOrdersNotFetched(workOrderNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationCheckLists(
+      FetchCheckListsLocation event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationCheckLists());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationCheckListsModel fetchLocationCheckListsModel =
+          await _locationRepository.fetchLocationCheckLists(
+              hashCode, '{}', locationId);
+      if (fetchLocationCheckListsModel.data.isNotEmpty) {
+        emit(LocationCheckListsFetched(
+            fetchLocationCheckListsModel: fetchLocationCheckListsModel));
+      } else {
+        emit(LocationCheckListsNotFetched(
+            checkListsNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationCheckListsNotFetched(checkListsNotFetched: e.toString()));
     }
   }
 
