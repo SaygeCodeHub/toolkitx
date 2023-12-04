@@ -13,6 +13,7 @@ import '../../configs/app_spacing.dart';
 import '../../utils/location_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'widgets/location_details_checklists_tab.dart';
 import 'widgets/location_details_loto_tab.dart';
 import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
@@ -77,7 +78,11 @@ class LocationDetailsScreen extends StatelessWidget {
                           const LocationDetailsPermitsTab(selectedTabIndex: 3),
                           const LocationDetailsLoToTab(selectedTabIndex: 4),
                           const LocationDetailsWorkOrdersTab(
-                              selectedTabIndex: 5)
+                              selectedTabIndex: 5),
+                          const LocationDetailsPermitsTab(selectedTabIndex: 4),
+                          const LocationDetailsLoToTab(selectedTabIndex: 5),
+                          const LocationDetailsCheckListsTab(
+                              selectedTabIndex: 7)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {

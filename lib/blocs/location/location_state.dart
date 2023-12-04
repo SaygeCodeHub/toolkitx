@@ -1,3 +1,4 @@
+import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
@@ -91,4 +92,18 @@ class LocationWorkOrdersNotFetched extends LocationState {
   final String workOrderNotFetched;
 
   LocationWorkOrdersNotFetched({required this.workOrderNotFetched});
+}
+
+class FetchingLocationCheckLists extends LocationState {}
+
+class LocationCheckListsFetched extends LocationState {
+  final FetchLocationCheckListsModel fetchLocationCheckListsModel;
+
+  LocationCheckListsFetched({required this.fetchLocationCheckListsModel});
+}
+
+class LocationCheckListsNotFetched extends LocationState {
+  final String checkListsNotFetched;
+
+  LocationCheckListsNotFetched({required this.checkListsNotFetched});
 }
