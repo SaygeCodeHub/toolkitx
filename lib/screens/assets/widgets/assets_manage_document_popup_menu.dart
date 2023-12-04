@@ -15,6 +15,7 @@ class AssetsManageDocumentPopUp extends StatelessWidget {
     required this.fetchAssetsManageDocumentModel,
     required this.documentId,
   });
+
   final List popUpMenuItems;
   final FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel;
   final String documentId;
@@ -31,17 +32,16 @@ class AssetsManageDocumentPopUp extends StatelessWidget {
         onSelected: (value) {
           if (value == DatabaseUtil.getText("Delete")) {
             showDialog(
-              context: context,
-              builder: (context) => AndroidPopUp(
-                titleValue: StringConstants.kDeleteDocument,
-                contentValue: DatabaseUtil.getText("DeleteConfirmationImage"),
-                onPrimaryButton: () {
-                  context
-                      .read<AssetsBloc>()
-                      .add(DeleteAssetsDocument(documentId: documentId));
-                },
-              ),
-            );
+                context: context,
+                builder: (context) => AndroidPopUp(
+                    titleValue: StringConstants.kDeleteDocument,
+                    contentValue:
+                        DatabaseUtil.getText("DeleteConfirmationImage"),
+                    onPrimaryButton: () {
+                      context
+                          .read<AssetsBloc>()
+                          .add(DeleteAssetsDocument(documentId: documentId));
+                    }));
           }
           if (value == DatabaseUtil.getText("Cancel")) {}
         },
