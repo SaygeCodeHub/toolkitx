@@ -5,7 +5,9 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
 import 'widgets/assets_manage_document_popup_menu.dart';
@@ -28,7 +30,20 @@ class AssetsManageDocumentScreen extends StatelessWidget {
               child: const Icon(Icons.add),
             )),
         appBar: const GenericAppBar(title: StringConstants.kManageDocuments),
-        body: BlocBuilder<AssetsBloc, AssetsState>(
+        body: BlocConsumer<AssetsBloc, AssetsState>(
+            listener: (context, state) {
+              if (state is AssetsDocumentDeleting) {
+                ProgressBar.show(context);
+              } else if (state is AssetsDocumentDeleted) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(
+                    context, AssetsManageDocumentScreen.routeName);
+              } else if (state is AssetsDocumentNotDeleted) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
+            },
             buildWhen: (previousState, currentState) =>
                 currentState is AssetsGetDocumentFetching ||
                 currentState is AssetsGetDocumentFetched ||
@@ -70,11 +85,15 @@ class AssetsManageDocumentScreen extends StatelessWidget {
                                         SizedBox(
                                             width: smallerSpacing,
                                             child: AssetsManageDocumentPopUp(
-                                                popUpMenuItems:
-                                                    state.assetsPopUpMenu,
-                                                fetchAssetsManageDocumentModel:
-                                                    state
-                                                        .fetchAssetsManageDocumentModel))
+                                              popUpMenuItems:
+                                                  state.assetsPopUpMenu,
+                                              fetchAssetsManageDocumentModel: state
+                                                  .fetchAssetsManageDocumentModel,
+                                              documentId: state
+                                                  .fetchAssetsManageDocumentModel
+                                                  .data[index]
+                                                  .docid,
+                                            ))
                                       ]),
                                       subtitle: Text(
                                           state.fetchAssetsManageDocumentModel
