@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/location/fetch_location_checklists_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_assets_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_details_model.dart';
+import 'package:toolkit/data/models/location/fetch_location_logbooks_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_loto_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_permits_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_workorders_model.dart';
@@ -65,5 +66,13 @@ class LocationRepositoryImpl extends LocationRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}asset/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
     return FetchLocationAssetsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLocationLogBookModel> fetchLocationLogBooks(int pageNo,
+      String hashCode, String userId, String filter, String locationId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}common/getlocationlogbooks?pageno=$pageNo&hashcode=$hashCode&filter=$filter&locationid=$locationId&userid=$userId");
+    return FetchLocationLogBookModel.fromJson(response);
   }
 }

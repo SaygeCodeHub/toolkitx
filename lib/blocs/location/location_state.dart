@@ -1,6 +1,7 @@
 import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_assets_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
+import '../../data/models/location/fetch_location_logbooks_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_location_workorders_model.dart';
@@ -124,4 +125,21 @@ class LocationAssetsNotFetched extends LocationState {
   final String assetsNotFetched;
 
   LocationAssetsNotFetched({required this.assetsNotFetched});
+}
+
+class FetchingLocationLogBooks extends LocationState {}
+
+class LocationLogBooksFetched extends LocationState {
+  final List<LocationLogBooksDatum> locationLogBooks;
+  final bool locationLogBooksListReachedMax;
+
+  LocationLogBooksFetched(
+      {required this.locationLogBooksListReachedMax,
+      required this.locationLogBooks});
+}
+
+class LocationLogBooksNotFetched extends LocationState {
+  final String logBooksNotFetched;
+
+  LocationLogBooksNotFetched({required this.logBooksNotFetched});
 }

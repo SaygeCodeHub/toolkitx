@@ -15,6 +15,7 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'widgets/location_details_checklists_tab.dart';
 import 'widgets/location_details_assets_tab.dart';
+import 'widgets/location_details_logbooks_tab.dart';
 import 'widgets/location_details_loto_tab.dart';
 import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
@@ -76,8 +77,9 @@ class LocationDetailsScreen extends StatelessWidget {
                               data: state.fetchLocationDetailsModel.data,
                               selectedTabIndex: 1,
                               clientId: state.clientId),
-                          const LocationDetailsPermitsTab(selectedTabIndex: 3),
-                          const LocationDetailsLoToTab(selectedTabIndex: 4),
+                          const LocationDetailsPermitsTab(selectedTabIndex: 4),
+                          const LocationDetailsLoToTab(selectedTabIndex: 5),
+                          const LocationDetailsLogBooksTab(selectedTabIndex: 6),
                           const LocationDetailsWorkOrdersTab(
                               selectedTabIndex: 5),
                           const LocationDetailsCheckListsTab(
