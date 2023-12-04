@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/location/fetch_location_checklists_model.dart';
+import 'package:toolkit/data/models/location/fetch_location_assets_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_details_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_loto_model.dart';
 import 'package:toolkit/data/models/location/fetch_location_permits_model.dart';
@@ -56,5 +57,13 @@ class LocationRepositoryImpl extends LocationRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getlocationschecklists?locationid=$locationId&hashcode=$hashCode&filter=$filter");
     return FetchLocationCheckListsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLocationAssetsModel> fetchLocationAssets(
+      int pageNo, String hashCode, String filter) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}asset/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
+    return FetchLocationAssetsModel.fromJson(response);
   }
 }

@@ -35,3 +35,9 @@ class FetchLocationWorkOrders extends LocationEvent {
 class FetchCheckListsLocation extends LocationEvent {
   FetchCheckListsLocation();
 }
+
+class FetchLocationAssets extends LocationEvent {
+  final int pageNo;
+
+  FetchLocationAssets({required this.pageNo});
+}
