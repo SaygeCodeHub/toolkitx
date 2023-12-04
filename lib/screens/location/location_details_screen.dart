@@ -17,6 +17,7 @@ import 'widgets/location_details_checklists_tab.dart';
 import 'widgets/location_details_loto_tab.dart';
 import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
+import 'widgets/location_details_workorders_tab.dart';
 import 'widgets/location_documents_tab.dart';
 
 class LocationDetailsScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class LocationDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context
         .read<LocationBloc>()
-        .add(FetchLocationDetails(locationId: expenseId, selectedTabIndex: 1));
+        .add(FetchLocationDetails(locationId: expenseId, selectedTabIndex: 0));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kLocationDetails),
         body: BlocBuilder<LocationBloc, LocationState>(
@@ -69,11 +70,15 @@ class LocationDetailsScreen extends StatelessWidget {
                         tabBarViewWidgets: [
                           LocationDetailsTabOne(
                               data: state.fetchLocationDetailsModel.data,
-                              selectedTabIndex: 1),
+                              selectedTabIndex: 0),
                           LocationDocumentsTab(
                               data: state.fetchLocationDetailsModel.data,
-                              selectedTabIndex: 2,
+                              selectedTabIndex: 1,
                               clientId: state.clientId),
+                          const LocationDetailsPermitsTab(selectedTabIndex: 3),
+                          const LocationDetailsLoToTab(selectedTabIndex: 4),
+                          const LocationDetailsWorkOrdersTab(
+                              selectedTabIndex: 5)
                           const LocationDetailsPermitsTab(selectedTabIndex: 4),
                           const LocationDetailsLoToTab(selectedTabIndex: 5),
                           const LocationDetailsCheckListsTab(

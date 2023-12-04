@@ -2,6 +2,7 @@ import '../../data/models/location/fetch_location_checklists_model.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
+import '../../data/models/location/fetch_location_workorders_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 
 abstract class LocationState {}
@@ -74,6 +75,23 @@ class LocationLoToNotFetched extends LocationState {
   final String loToNotFetched;
 
   LocationLoToNotFetched({required this.loToNotFetched});
+}
+
+class FetchingLocationWorkOrders extends LocationState {}
+
+class LocationWorkOrdersFetched extends LocationState {
+  final List<LocationWorkOrdersDatum> workOrderLocations;
+  final bool workOrderLoToListReachedMax;
+
+  LocationWorkOrdersFetched(
+      {required this.workOrderLoToListReachedMax,
+      required this.workOrderLocations});
+}
+
+class LocationWorkOrdersNotFetched extends LocationState {
+  final String workOrderNotFetched;
+
+  LocationWorkOrdersNotFetched({required this.workOrderNotFetched});
 }
 
 class FetchingLocationCheckLists extends LocationState {}
