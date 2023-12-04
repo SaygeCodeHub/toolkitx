@@ -420,8 +420,9 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
           await _assetsRepository.assetsDeleteDocumentRepo(deleteDocumentMap);
       if (assetsDeleteDocumentModel.status == 200) {
         emit(AssetsDocumentDeleted());
-      } else{
-        emit(AssetsDownTimeNotDeleted(errorMessage: assetsDeleteDocumentModel.message));
+      } else {
+        emit(AssetsDownTimeNotDeleted(
+            errorMessage: assetsDeleteDocumentModel.message));
       }
     } catch (e) {
       emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
