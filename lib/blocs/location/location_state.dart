@@ -16,7 +16,8 @@ class LocationsFetched extends LocationState {
   final List<LocationDatum> locationDatum;
   final bool locationListReachedMax;
 
-  LocationsFetched({required this.locationListReachedMax, required this.locationDatum});
+  LocationsFetched(
+      {required this.locationListReachedMax, required this.locationDatum});
 }
 
 class LocationsCouldNotFetch extends LocationState {
@@ -32,9 +33,10 @@ class LocationDetailsFetched extends LocationState {
   final int selectedTabIndex;
   final String clientId;
 
-  LocationDetailsFetched({required this.clientId,
-    required this.selectedTabIndex,
-    required this.fetchLocationDetailsModel});
+  LocationDetailsFetched(
+      {required this.clientId,
+      required this.selectedTabIndex,
+      required this.fetchLocationDetailsModel});
 }
 
 class LocationDetailsNotFetched extends LocationState {
@@ -49,8 +51,9 @@ class LocationPermitsFetched extends LocationState {
   final List<LocationPermitsDatum> locationPermits;
   final bool locationPermitListReachedMax;
 
-  LocationPermitsFetched({required this.locationPermitListReachedMax,
-    required this.locationPermits});
+  LocationPermitsFetched(
+      {required this.locationPermitListReachedMax,
+      required this.locationPermits});
 }
 
 class LocationPermitsNotFetched extends LocationState {

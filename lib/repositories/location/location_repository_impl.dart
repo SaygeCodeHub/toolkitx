@@ -12,21 +12,24 @@ import 'location_repository.dart';
 
 class LocationRepositoryImpl extends LocationRepository {
   @override
-  Future<FetchLocationsModel> fetchLocations(int pageNo, String hashCode, String filter) async {
+  Future<FetchLocationsModel> fetchLocations(
+      int pageNo, String hashCode, String filter) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getalllocations?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
     return FetchLocationsModel.fromJson(response);
   }
 
   @override
-  Future<FetchLocationDetailsModel> fetchLocationDetails(String locationId, String hashCode) async {
+  Future<FetchLocationDetailsModel> fetchLocationDetails(
+      String locationId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getlocation?hashcode=$hashCode&locationid=$locationId");
     return FetchLocationDetailsModel.fromJson(response);
   }
 
   @override
-  Future<FetchLocationPermitsModel> fetchLocationPermits(int pageNo, String hashCode, String filter, String locationId) async {
+  Future<FetchLocationPermitsModel> fetchLocationPermits(
+      int pageNo, String hashCode, String filter, String locationId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getlocationpermits?pageno=$pageNo&hashcode=$hashCode&filter=$filter&locationid=$locationId");
     return FetchLocationPermitsModel.fromJson(response);
