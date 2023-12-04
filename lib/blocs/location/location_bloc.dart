@@ -7,6 +7,7 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/models/location/fetch_location_details_model.dart';
 import '../../data/models/location/fetch_location_loto_model.dart';
 import '../../data/models/location/fetch_location_permits_model.dart';
+import '../../data/models/location/fetch_location_workorders_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../di/app_module.dart';
 import 'location_event.dart';
@@ -21,6 +22,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationPermitListReachedMax = false;
   List<LocationLotoDatum> locationLoTos = [];
   bool locationLoToListReachedMax = false;
+  List<LocationWorkOrdersDatum> workOrderLocations = [];
+  bool workOrderLoToListReachedMax = false;
   String locationId = '';
 
   LocationBloc() : super(LocationInitial()) {
@@ -28,6 +31,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationDetails>(_fetchLocationDetails);
     on<FetchLocationPermits>(_fetchLocationPermits);
     on<FetchLocationLoTo>(_fetchLocationLoTo);
+    on<FetchLocationWorkOrders>(_fetchLocationWorkOrders);
   }
 
   Future<void> _fetchLocations(
@@ -118,6 +122,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       }
     } catch (e) {
       emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+    }
+  }
+
+  Future<void> _fetchLocationWorkOrders(
+      FetchLocationWorkOrders event, Emitter<LocationState> emit) async {
+    emit(FetchingLocationWorkOrders());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLocationWorkOrdersModel fetchLocationWorkOrdersModel =
+          await _locationRepository.fetchLocationWorkOrders(
+              event.pageNo, hashCode, '{}', locationId);
+      workOrderLoToListReachedMax = fetchLocationWorkOrdersModel.data.isEmpty;
+      workOrderLocations.addAll(fetchLocationWorkOrdersModel.data);
+      if (locationPermits.isNotEmpty) {
+        emit(LocationWorkOrdersFetched(
+            workOrderLocations: workOrderLocations,
+            workOrderLoToListReachedMax: workOrderLoToListReachedMax));
+      } else {
+        emit(LocationWorkOrdersNotFetched(
+            workOrderNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(LocationWorkOrdersNotFetched(workOrderNotFetched: e.toString()));
     }
   }
 }
