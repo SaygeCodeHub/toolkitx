@@ -122,3 +122,9 @@ class SelectAssetsRollOver extends AssetsEvent {
   final String isRollover;
   SelectAssetsRollOver({required this.id, required this.isRollover});
 }
+
+class DeleteAssetsDocument extends AssetsEvent {
+  final String documentId;
+
+  DeleteAssetsDocument({required this.documentId});
+}

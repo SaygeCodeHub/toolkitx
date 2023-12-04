@@ -242,3 +242,13 @@ class AssetsRollOverSelected extends AssetsState {
   final String isRollover;
   AssetsRollOverSelected({required this.id, required this.isRollover});
 }
+
+class AssetsDocumentDeleting extends AssetsState {}
+
+class AssetsDocumentDeleted extends AssetsState {}
+
+class AssetsDocumentNotDeleted extends AssetsState {
+  final String errorMessage;
+
+  AssetsDocumentNotDeleted({required this.errorMessage});
+}

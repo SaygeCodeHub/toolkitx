@@ -53,12 +53,12 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(
                         context, StringConstants.kDowntimeDeleted, "");
-                    context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
-                        assetId: context.read<AssetsBloc>().assetId,
-                        pageNo: pageNo));
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(
+                        context, AssetsManageDownTimeScreen.routeName);
                   } else if (state is AssetsDownTimeNotDeleted) {
-                    showCustomSnackBar(context, state.errorMessage, "");
                     ProgressBar.dismiss(context);
+                    showCustomSnackBar(context, state.errorMessage, "");
                   }
                 },
                 buildWhen: (previousState, currentState) =>

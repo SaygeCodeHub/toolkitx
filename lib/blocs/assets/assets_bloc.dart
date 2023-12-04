@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
+import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
@@ -52,6 +53,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SaveAssetsMeterReading>(_saveAssetsMeterReading);
     on<SelectAssetsMeter>(_selectAssetsMeter);
     on<SelectAssetsRollOver>(_selectAssetsRollOver);
+    on<DeleteAssetsDocument>(_deleteAssetsDocument);
   }
 
   int assetTabIndex = 0;
@@ -402,5 +404,25 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   FutureOr<void> _selectAssetsRollOver(
       SelectAssetsRollOver event, Emitter<AssetsState> emit) {
     emit(AssetsRollOverSelected(id: event.id, isRollover: event.isRollover));
+  }
+
+  Future<FutureOr<void>> _deleteAssetsDocument(
+      DeleteAssetsDocument event, Emitter<AssetsState> emit) async {
+    emit(AssetsDocumentDeleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map deleteDocumentMap = {
+        "docid": event.documentId,
+        "assetid": assetId,
+        "hashcode": hashCode
+      };
+      AssetsDeleteDocumentModel assetsDeleteDocumentModel =
+          await _assetsRepository.assetsDeleteDocumentRepo(deleteDocumentMap);
+      if (assetsDeleteDocumentModel.status == 200) {
+        emit(AssetsDocumentDeleted());
+      }
+    } catch (e) {
+      emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
+    }
   }
 }
