@@ -78,7 +78,7 @@ class LocationDetailsScreen extends StatelessWidget {
                           const LocationDetailsPermitsTab(selectedTabIndex: 3),
                           const LocationDetailsLoToTab(selectedTabIndex: 4),
                           const LocationDetailsWorkOrdersTab(
-                              selectedTabIndex: 5)
+                              selectedTabIndex: 5),
                           const LocationDetailsPermitsTab(selectedTabIndex: 4),
                           const LocationDetailsLoToTab(selectedTabIndex: 5),
                           const LocationDetailsCheckListsTab(
