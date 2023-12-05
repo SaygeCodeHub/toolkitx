@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/signInQRCode/signInList/sign_in_list_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/signInQRCode/process_signin.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -24,7 +25,11 @@ class SignInListScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         child: PrimaryButton(
-            textValue: DatabaseUtil.getText('ticket_signin'), onPressed: () {}),
+            textValue: DatabaseUtil.getText('ticket_signin'),
+            onPressed: () {
+              ProcessSignInScreen.isSignOut = false;
+              Navigator.pushNamed(context, ProcessSignInScreen.routeName);
+            }),
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -32,7 +37,8 @@ class SignInListScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child: SafeArea(
-          child: BlocBuilder<SignInListBloc, SignInListState>(
+          child: BlocConsumer<SignInListBloc, SignInListState>(
+            listener: (context, state) {},
             builder: (context, state) {
               if (state is FetchingSignInList) {
                 return const Center(child: CircularProgressIndicator());
@@ -63,7 +69,9 @@ class SignInListScreen extends StatelessWidget {
                           ),
                           trailing: IconButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                ProcessSignInScreen.isSignOut = true;
+                                Navigator.pushNamed(
+                                    context, ProcessSignInScreen.routeName);
                               },
                               icon: const Icon(
                                 Icons.logout,

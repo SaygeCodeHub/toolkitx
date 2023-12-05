@@ -13,3 +13,9 @@ class UnauthorizedSignIn extends SignInProcessEvent {
 
   UnauthorizedSignIn({required this.qRCode});
 }
+
+class ProcessSignOut extends SignInProcessEvent {
+  final String qRCode;
+
+  ProcessSignOut({required this.qRCode});
+}
