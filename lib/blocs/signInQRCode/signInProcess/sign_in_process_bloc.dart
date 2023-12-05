@@ -89,6 +89,8 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
           await _signInRepository.processSignOut(processSignOutMap);
       if (processSignOutModel.status == 200) {
         emit(SignOutProcessed());
+      } else {
+        emit(SignOutNotProcessed(errorMsg: processSignOutModel.message));
       }
     } catch (e) {
       emit(SignOutNotProcessed(errorMsg: e.toString()));

@@ -37,8 +37,7 @@ class SignInListScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child: SafeArea(
-          child: BlocConsumer<SignInListBloc, SignInListState>(
-            listener: (context, state) {},
+          child: BlocBuilder<SignInListBloc, SignInListState>(
             builder: (context, state) {
               if (state is FetchingSignInList) {
                 return const Center(child: CircularProgressIndicator());
