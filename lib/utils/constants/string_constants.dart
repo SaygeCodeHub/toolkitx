@@ -420,4 +420,5 @@ abstract class StringConstants {
   static const String kTimeTaken = "Time Taken";
   static const String kReading = "Reading";
   static const String kIsRollover = "Is rollover";
+  static const String kSignOutSuccessfully = 'Sign Out successfully';
 }
