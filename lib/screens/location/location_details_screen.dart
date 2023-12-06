@@ -78,7 +78,8 @@ class LocationDetailsScreen extends StatelessWidget {
                               selectedTabIndex: 1,
                               clientId: state.clientId),
                           const LocationDetailsPermitsTab(selectedTabIndex: 4),
-                          const LocationDetailsLoToTab(selectedTabIndex: 5),
+                          LocationDetailsLoToTab(
+                              selectedTabIndex: 3, expenseId: expenseId),
                           const LocationDetailsLogBooksTab(selectedTabIndex: 6),
                           const LocationDetailsWorkOrdersTab(
                               selectedTabIndex: 5),

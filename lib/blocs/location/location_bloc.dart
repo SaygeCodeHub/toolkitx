@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -32,6 +34,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   List<LocationLogBooksDatum> locationLogBooks = [];
   bool locationLogBooksListReachedMax = false;
   String locationId = '';
+  Map loToFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -42,10 +45,22 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchCheckListsLocation>(_fetchLocationCheckLists);
     on<FetchLocationAssets>(_fetchLocationAssets);
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
+    // on<ClearLotoListFilter>(_clearLotoListFilter);
+    on<ApplyLoToListFilter>(_applyLoToListFilter);
   }
 
-  Future<void> _fetchLocations(
-      FetchLocations event, Emitter<LocationState> emit) async {
+  FutureOr<void> _applyLoToListFilter(ApplyLoToListFilter event,
+      Emitter<LocationState> emit) {
+    loToFilterMap = {
+      "st": event.filterMap["st"] ?? '',
+      "et": event.filterMap["et"] ?? '',
+      "loc": event.filterMap["loc"] ?? '',
+      "status": event.filterMap["status"] ?? '',
+    };
+  }
+
+  Future<void> _fetchLocations(FetchLocations event,
+      Emitter<LocationState> emit) async {
     emit(FetchingLocations());
     try {
       String hashCode =
@@ -62,8 +77,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationDetails(
-      FetchLocationDetails event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationDetails(FetchLocationDetails event, Emitter<LocationState> emit) async {
     emit(FetchingLocationDetails());
     try {
       String hashCode =
@@ -72,7 +86,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       locationId = event.locationId;
       FetchLocationDetailsModel fetchLocationDetailsModel =
-          await _locationRepository.fetchLocationDetails(locationId, hashCode);
+      await _locationRepository.fetchLocationDetails(locationId, hashCode);
       if (fetchLocationDetailsModel.status == 200) {
         emit(LocationDetailsFetched(
             fetchLocationDetailsModel: fetchLocationDetailsModel,
@@ -87,15 +101,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationPermits(
-      FetchLocationPermits event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationPermits(FetchLocationPermits event, Emitter<LocationState> emit) async {
     emit(FetchingLocationPermits());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationPermitsModel fetchLocationPermitsModel =
-          await _locationRepository.fetchLocationPermits(
-              event.pageNo, hashCode, '{}', locationId);
+      await _locationRepository.fetchLocationPermits(
+          event.pageNo, hashCode, '{}', locationId);
       locationPermitListReachedMax = fetchLocationPermitsModel.data.isEmpty;
       locationPermits.addAll(fetchLocationPermitsModel.data);
       if (locationPermits.isNotEmpty) {
@@ -111,8 +124,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationLoTo(
-      FetchLocationLoTo event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationLoTo(FetchLocationLoTo event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLoTo());
     try {
       String hashCode =
@@ -135,15 +147,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationWorkOrders(
-      FetchLocationWorkOrders event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationWorkOrders(FetchLocationWorkOrders event, Emitter<LocationState> emit) async {
     emit(FetchingLocationWorkOrders());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationWorkOrdersModel fetchLocationWorkOrdersModel =
-          await _locationRepository.fetchLocationWorkOrders(
-              event.pageNo, hashCode, '{}', locationId);
+      await _locationRepository.fetchLocationWorkOrders(
+          event.pageNo, hashCode, '{}', locationId);
       workOrderLoToListReachedMax = fetchLocationWorkOrdersModel.data.isEmpty;
       workOrderLocations.addAll(fetchLocationWorkOrdersModel.data);
       if (locationPermits.isNotEmpty) {
@@ -159,15 +170,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationCheckLists(
-      FetchCheckListsLocation event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationCheckLists(FetchCheckListsLocation event, Emitter<LocationState> emit) async {
     emit(FetchingLocationCheckLists());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationCheckListsModel fetchLocationCheckListsModel =
-          await _locationRepository.fetchLocationCheckLists(
-              hashCode, '{}', locationId);
+      await _locationRepository.fetchLocationCheckLists(
+          hashCode, '{}', locationId);
       if (fetchLocationCheckListsModel.data.isNotEmpty) {
         emit(LocationCheckListsFetched(
             fetchLocationCheckListsModel: fetchLocationCheckListsModel));
@@ -180,15 +190,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationAssets(
-      FetchLocationAssets event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationAssets(FetchLocationAssets event, Emitter<LocationState> emit) async {
     emit(FetchingLocationAssets());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationAssetsModel fetchLocationAssetsModel =
-          await _locationRepository.fetchLocationAssets(
-              event.pageNo, hashCode, '{}');
+      await _locationRepository.fetchLocationAssets(
+          event.pageNo, hashCode, '{}');
       locationAssetsListReachedMax = fetchLocationAssetsModel.data.isEmpty;
       locationAssets.addAll(fetchLocationAssetsModel.data);
       if (locationAssets.isNotEmpty) {
@@ -204,16 +213,15 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationLogBooks(
-      FetchLocationLogBooks event, Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationLogBooks(FetchLocationLogBooks event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLogBooks());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchLocationLogBookModel fetchLocationLogBookModel =
-          await _locationRepository.fetchLocationLogBooks(
-              event.pageNo, hashCode, userId, '{}', locationId);
+      await _locationRepository.fetchLocationLogBooks(
+          event.pageNo, hashCode, userId, '{}', locationId);
       locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
       locationLogBooks.addAll(fetchLocationLogBookModel.data);
       if (locationLogBooks.isNotEmpty) {

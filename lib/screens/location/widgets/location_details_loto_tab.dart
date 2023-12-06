@@ -10,13 +10,16 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_icon_button_row.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_no_records_text.dart';
+import '../../loto/loto_filter_screen.dart';
 import 'location_details_loto_body.dart';
 
 class LocationDetailsLoToTab extends StatelessWidget {
   final int selectedTabIndex;
   static int pageNo = 1;
+  final String expenseId;
 
-  const LocationDetailsLoToTab({Key? key, required this.selectedTabIndex})
+  const LocationDetailsLoToTab(
+      {Key? key, required this.selectedTabIndex, required this.expenseId})
       : super(key: key);
 
   @override
@@ -27,11 +30,38 @@ class LocationDetailsLoToTab extends StatelessWidget {
     context.read<LocationBloc>().locationLoToListReachedMax = false;
     return Column(
       children: [
-        CustomIconButtonRow(
-          primaryOnPress: () {},
-          secondaryOnPress: () {},
-          secondaryVisible: false,
-          clearOnPress: () {},
+        BlocBuilder<LocationBloc, LocationState>(
+          buildWhen: (previous, current) {
+            return current is LocationLoToFetched ||
+                current is FetchingLocationLoTo;
+          },
+          builder: (context, state) {
+            if (state is LocationLoToFetched || state is FetchingLocationLoTo) {
+              return CustomIconButtonRow(
+                isEnabled: true,
+                clearVisible:
+                    context.read<LocationBloc>().loToFilterMap.isNotEmpty,
+                primaryOnPress: () {
+                  LotoFilterScreen.isFromLocation = true;
+                  LotoFilterScreen.expenseId = expenseId;
+                  Navigator.pushNamed(context, LotoFilterScreen.routeName);
+                },
+                secondaryOnPress: () {},
+                secondaryVisible: false,
+                clearOnPress: () {
+                  pageNo = 1;
+                  context.read<LocationBloc>().locationLoTos.clear();
+                  context.read<LocationBloc>().locationLoToListReachedMax =
+                      false;
+                  context
+                      .read<LocationBloc>()
+                      .add(FetchLocationLoTo(pageNo: pageNo));
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
         const SizedBox(height: xxTinierSpacing),
         BlocConsumer<LocationBloc, LocationState>(
