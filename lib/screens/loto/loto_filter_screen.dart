@@ -41,7 +41,7 @@ class LotoFilterScreen extends StatelessWidget {
           }
         },
         buildWhen: (previousState, currentState) =>
-        currentState is FetchingLotoMaster ||
+            currentState is FetchingLotoMaster ||
             currentState is LotoMasterFetched ||
             currentState is LotoMasterFetchError,
         builder: (context, state) {

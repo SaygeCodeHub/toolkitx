@@ -45,7 +45,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchCheckListsLocation>(_fetchLocationCheckLists);
     on<FetchLocationAssets>(_fetchLocationAssets);
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
-    // on<ClearLotoListFilter>(_clearLotoListFilter);
     on<ApplyLoToListFilter>(_applyLoToListFilter);
   }
 
