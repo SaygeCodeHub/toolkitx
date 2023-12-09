@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -32,6 +34,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   List<LocationLogBooksDatum> locationLogBooks = [];
   bool locationLogBooksListReachedMax = false;
   String locationId = '';
+  Map loToFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -42,6 +45,17 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchCheckListsLocation>(_fetchLocationCheckLists);
     on<FetchLocationAssets>(_fetchLocationAssets);
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
+    on<ApplyLoToListFilter>(_applyLoToListFilter);
+  }
+
+  FutureOr<void> _applyLoToListFilter(
+      ApplyLoToListFilter event, Emitter<LocationState> emit) {
+    loToFilterMap = {
+      "st": event.filterMap["st"] ?? '',
+      "et": event.filterMap["et"] ?? '',
+      "loc": event.filterMap["loc"] ?? '',
+      "status": event.filterMap["status"] ?? '',
+    };
   }
 
   Future<void> _fetchLocations(
@@ -125,7 +139,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       if (locationPermits.isNotEmpty) {
         emit(LocationLoToFetched(
             locationLoTos: locationLoTos,
-            locationLoToListReachedMax: locationPermitListReachedMax));
+            locationLoToListReachedMax: locationPermitListReachedMax,
+            loToFilterMap: loToFilterMap));
       } else {
         emit(LocationLoToNotFetched(
             loToNotFetched: StringConstants.kNoRecordsFound));

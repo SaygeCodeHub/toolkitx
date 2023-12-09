@@ -317,7 +317,7 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
-        return _createRoute(LotoFilterScreen());
+        return _createRoute(const LotoFilterScreen());
       case LotoLocationFilterList.routeName:
         return _createRoute(LotoLocationFilterList(
             selectLocationName: settings.arguments as String));

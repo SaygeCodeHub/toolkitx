@@ -68,9 +68,12 @@ class FetchingLocationLoTo extends LocationState {}
 class LocationLoToFetched extends LocationState {
   final List<LocationLotoDatum> locationLoTos;
   final bool locationLoToListReachedMax;
+  final Map loToFilterMap;
 
   LocationLoToFetched(
-      {required this.locationLoToListReachedMax, required this.locationLoTos});
+      {required this.loToFilterMap,
+      required this.locationLoToListReachedMax,
+      required this.locationLoTos});
 }
 
 class LocationLoToNotFetched extends LocationState {
