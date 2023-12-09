@@ -395,6 +395,7 @@ abstract class StringConstants {
   static const String kDowntimeSaved = "Downtime Saved";
   static const String kDowntimeDeleted = "Downtime Deleted";
   static const String kDeleteDowntime = "Delete Downtime";
+  static const String kDeleteDocument = "Delete Document";
   static const String kEndDate = "End Date";
   static const String kStartTime = "Start Time";
   static const String kEndTime = "End Time";
@@ -419,4 +420,5 @@ abstract class StringConstants {
   static const String kTimeTaken = "Time Taken";
   static const String kReading = "Reading";
   static const String kIsRollover = "Is rollover";
+  static const String kSignOutSuccessfully = 'Sign Out successfully';
 }

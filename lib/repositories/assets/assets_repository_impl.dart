@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
@@ -109,5 +110,13 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}asset/savemeterreading", assetsMeterReadingMap);
     return SaveAssetsMeterReadingModel.fromJson(response);
+  }
+
+  @override
+  Future<AssetsDeleteDocumentModel> assetsDeleteDocumentRepo(
+      Map deleteDocumentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/deletedocument", deleteDocumentMap);
+    return AssetsDeleteDocumentModel.fromJson(response);
   }
 }
