@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
@@ -21,15 +19,14 @@ import '../incident/widgets/date_picker.dart';
 class LotoFilterScreen extends StatelessWidget {
   static const routeName = 'LotoFilterScreen';
 
-  LotoFilterScreen({super.key});
+  const LotoFilterScreen({super.key});
 
-  final Map lotoFilterMap = {};
+  static Map lotoFilterMap = {};
   static bool isFromLocation = false;
   static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {
-    log('build------->');
     context.read<LotoListBloc>().add(FetchLotoMaster());
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kFilter),

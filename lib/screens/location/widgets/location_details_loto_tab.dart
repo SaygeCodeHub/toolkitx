@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../blocs/location/location_bloc.dart';
 import '../../../blocs/location/location_event.dart';
 import '../../../blocs/location/location_state.dart';
+import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_icon_button_row.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_no_records_text.dart';
@@ -36,11 +37,10 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 current is FetchingLocationLoTo;
           },
           builder: (context, state) {
-            if (state is LocationLoToFetched || state is FetchingLocationLoTo) {
+            if (state is LocationLoToFetched) {
               return CustomIconButtonRow(
                 isEnabled: true,
-                clearVisible:
-                    context.read<LocationBloc>().loToFilterMap.isNotEmpty,
+                clearVisible: state.loToFilterMap.isNotEmpty,
                 primaryOnPress: () {
                   LotoFilterScreen.isFromLocation = true;
                   LotoFilterScreen.expenseId = expenseId;
@@ -50,6 +50,8 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 secondaryVisible: false,
                 clearOnPress: () {
                   pageNo = 1;
+                  state.loToFilterMap.clear();
+                  LotoFilterScreen.lotoFilterMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
                       false;
@@ -84,9 +86,13 @@ class LocationDetailsLoToTab extends StatelessWidget {
                   locationLoTos: state.locationLoTos,
                   locationLoToListReachedMax: state.locationLoToListReachedMax);
             } else if (state is LocationLoToNotFetched) {
-              return NoRecordsText(
-                  text: state.loToNotFetched,
-                  style: Theme.of(context).textTheme.medium);
+              if (context.read<LotoListBloc>().filters.isNotEmpty) {
+                return const NoRecordsText(
+                    text: StringConstants.kNoRecordsFilter);
+              } else {
+                return NoRecordsText(
+                    text: DatabaseUtil.getText('no_records_found'));
+              }
             } else {
               return const SizedBox.shrink();
             }
