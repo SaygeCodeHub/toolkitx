@@ -34,13 +34,13 @@ class WorkOrderTypeFilter extends StatelessWidget {
               currentState is WorkOrderTypeSelected,
           builder: (context, state) {
             if (state is WorkOrderTypeSelected) {
+              workOrderFilterMap['type'] = state.id.toString();
               return CustomChoiceChip(
                 label: workOderDatum[6][i].workordertype,
                 selected: (workOrderFilterMap['type'] == null)
                     ? false
-                    : state.id == id,
+                    : workOrderFilterMap['type'] == id,
                 onSelected: (bool val) {
-                  workOrderFilterMap['type'] = state.id.toString();
                   context
                       .read<WorkOrderBloc>()
                       .add(SelectWorkOrderTypeFilter(value: id));
