@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
@@ -132,21 +133,24 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      FetchLocationLoToModel fetchLocationLoToModel = await _locationRepository
-          .fetchLocationLoTo(event.pageNo, hashCode, userId, '{}', locationId);
+      FetchLocationLoToModel fetchLocationLoToModel =
+          await _locationRepository.fetchLocationLoTo(event.pageNo, hashCode,
+              userId, jsonEncode(loToFilterMap), locationId);
       locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
       locationLoTos.addAll(fetchLocationLoToModel.data);
-      if (locationPermits.isNotEmpty) {
+      if (locationLoTos.isNotEmpty) {
         emit(LocationLoToFetched(
             locationLoTos: locationLoTos,
             locationLoToListReachedMax: locationPermitListReachedMax,
             loToFilterMap: loToFilterMap));
       } else {
         emit(LocationLoToNotFetched(
-            loToNotFetched: StringConstants.kNoRecordsFound));
+            loToNotFetched: StringConstants.kNoRecordsFound,
+            filtersMap: loToFilterMap));
       }
     } catch (e) {
-      emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+      emit(
+          LocationLoToNotFetched(loToNotFetched: e.toString(), filtersMap: {}));
     }
   }
 

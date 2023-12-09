@@ -34,7 +34,8 @@ class LocationDetailsLoToTab extends StatelessWidget {
         BlocBuilder<LocationBloc, LocationState>(
           buildWhen: (previous, current) {
             return current is LocationLoToFetched ||
-                current is FetchingLocationLoTo;
+                current is FetchingLocationLoTo ||
+                current is LocationLoToNotFetched;
           },
           builder: (context, state) {
             if (state is LocationLoToFetched) {
@@ -51,6 +52,29 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 clearOnPress: () {
                   pageNo = 1;
                   state.loToFilterMap.clear();
+                  LotoFilterScreen.lotoFilterMap.clear();
+                  context.read<LocationBloc>().locationLoTos.clear();
+                  context.read<LocationBloc>().locationLoToListReachedMax =
+                      false;
+                  context
+                      .read<LocationBloc>()
+                      .add(FetchLocationLoTo(pageNo: pageNo));
+                },
+              );
+            } else if (state is LocationLoToNotFetched) {
+              return CustomIconButtonRow(
+                isEnabled: true,
+                clearVisible: state.filtersMap.isNotEmpty,
+                primaryOnPress: () {
+                  LotoFilterScreen.isFromLocation = true;
+                  LotoFilterScreen.expenseId = expenseId;
+                  Navigator.pushNamed(context, LotoFilterScreen.routeName);
+                },
+                secondaryOnPress: () {},
+                secondaryVisible: false,
+                clearOnPress: () {
+                  pageNo = 1;
+                  state.filtersMap.clear();
                   LotoFilterScreen.lotoFilterMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
