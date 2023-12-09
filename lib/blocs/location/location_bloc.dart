@@ -135,8 +135,9 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      FetchLocationLoToModel fetchLocationLoToModel = await _locationRepository
-          .fetchLocationLoTo(event.pageNo, hashCode, userId, '{}', locationId);
+      FetchLocationLoToModel fetchLocationLoToModel =
+          await _locationRepository.fetchLocationLoTo(event.pageNo, hashCode,
+              userId, jsonEncode(loToFilterMap), locationId);
       locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
       locationLoTos.addAll(fetchLocationLoToModel.data);
       if (locationPermits.isNotEmpty) {
