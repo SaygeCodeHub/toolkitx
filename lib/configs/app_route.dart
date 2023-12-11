@@ -285,7 +285,7 @@ class AppRoutes {
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
       case LogBookFilterScreen.routeName:
-        return _createRoute(LogBookFilterScreen());
+        return _createRoute(const LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
@@ -297,7 +297,7 @@ class AppRoutes {
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
+        return _createRoute(const WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
@@ -318,7 +318,7 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
-        return _createRoute(LotoFilterScreen());
+        return _createRoute(const LotoFilterScreen());
       case LotoLocationFilterList.routeName:
         return _createRoute(LotoLocationFilterList(
             selectLocationName: settings.arguments as String));

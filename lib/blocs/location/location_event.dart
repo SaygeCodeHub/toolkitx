@@ -47,3 +47,23 @@ class FetchLocationLogBooks extends LocationEvent {
 
   FetchLocationLogBooks({required this.pageNo});
 }
+
+class ClearLoToListFilter extends LocationEvent {}
+
+class ApplyLoToListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyLoToListFilter({required this.filterMap});
+}
+
+class ApplyWorkOrderListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyWorkOrderListFilter({required this.filterMap});
+}
+
+class ApplyLogBookListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyLogBookListFilter({required this.filterMap});
+}

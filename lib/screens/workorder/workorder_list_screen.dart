@@ -64,6 +64,7 @@ class WorkOrderListScreen extends StatelessWidget {
                         WorkOrderListScreen.pageNo = 1;
                         context.read<WorkOrderBloc>().data.clear();
                         context.read<WorkOrderBloc>().hasReachedMax = false;
+                        WorkOrderFilterScreen.workOrderFilterMap.clear();
                         context
                             .read<WorkOrderBloc>()
                             .add(WorkOrderClearFilter());

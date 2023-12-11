@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -32,6 +35,9 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   List<LocationLogBooksDatum> locationLogBooks = [];
   bool locationLogBooksListReachedMax = false;
   String locationId = '';
+  Map loToFilterMap = {};
+  Map workOrderFilterMap = {};
+  Map logBookFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -42,6 +48,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchCheckListsLocation>(_fetchLocationCheckLists);
     on<FetchLocationAssets>(_fetchLocationAssets);
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
+    on<ApplyLoToListFilter>(_applyLoToListFilter);
+    on<ApplyWorkOrderListFilter>(_applyWorkOrderListFilter);
+    on<ApplyLogBookListFilter>(_applyLogBookListFilter);
+  }
+
+  FutureOr<void> _applyLoToListFilter(
+      ApplyLoToListFilter event, Emitter<LocationState> emit) {
+    loToFilterMap = {
+      "st": event.filterMap["st"] ?? '',
+      "et": event.filterMap["et"] ?? '',
+      "loc": event.filterMap["loc"] ?? '',
+      "status": event.filterMap["status"] ?? '',
+    };
   }
 
   Future<void> _fetchLocations(
@@ -118,20 +137,24 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      FetchLocationLoToModel fetchLocationLoToModel = await _locationRepository
-          .fetchLocationLoTo(event.pageNo, hashCode, userId, '{}', locationId);
+      FetchLocationLoToModel fetchLocationLoToModel =
+          await _locationRepository.fetchLocationLoTo(event.pageNo, hashCode,
+              userId, jsonEncode(loToFilterMap), locationId);
       locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
       locationLoTos.addAll(fetchLocationLoToModel.data);
-      if (locationPermits.isNotEmpty) {
+      if (locationLoTos.isNotEmpty) {
         emit(LocationLoToFetched(
             locationLoTos: locationLoTos,
-            locationLoToListReachedMax: locationPermitListReachedMax));
+            locationLoToListReachedMax: locationPermitListReachedMax,
+            loToFilterMap: loToFilterMap));
       } else {
         emit(LocationLoToNotFetched(
-            loToNotFetched: StringConstants.kNoRecordsFound));
+            loToNotFetched: StringConstants.kNoRecordsFound,
+            filtersMap: loToFilterMap));
       }
     } catch (e) {
-      emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+      emit(
+          LocationLoToNotFetched(loToNotFetched: e.toString(), filtersMap: {}));
     }
   }
 
@@ -142,20 +165,23 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationWorkOrdersModel fetchLocationWorkOrdersModel =
-          await _locationRepository.fetchLocationWorkOrders(
-              event.pageNo, hashCode, '{}', locationId);
+          await _locationRepository.fetchLocationWorkOrders(event.pageNo,
+              hashCode, jsonEncode(workOrderFilterMap), locationId);
       workOrderLoToListReachedMax = fetchLocationWorkOrdersModel.data.isEmpty;
       workOrderLocations.addAll(fetchLocationWorkOrdersModel.data);
-      if (locationPermits.isNotEmpty) {
+      if (workOrderLocations.isNotEmpty) {
         emit(LocationWorkOrdersFetched(
             workOrderLocations: workOrderLocations,
-            workOrderLoToListReachedMax: workOrderLoToListReachedMax));
+            workOrderLoToListReachedMax: workOrderLoToListReachedMax,
+            filterMap: workOrderFilterMap));
       } else {
         emit(LocationWorkOrdersNotFetched(
-            workOrderNotFetched: StringConstants.kNoRecordsFound));
+            workOrderNotFetched: StringConstants.kNoRecordsFound,
+            filtersMap: workOrderFilterMap));
       }
     } catch (e) {
-      emit(LocationWorkOrdersNotFetched(workOrderNotFetched: e.toString()));
+      emit(LocationWorkOrdersNotFetched(
+          workOrderNotFetched: e.toString(), filtersMap: {}));
     }
   }
 
@@ -204,6 +230,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
+  FutureOr<void> _applyLogBookListFilter(
+      ApplyLogBookListFilter event, Emitter<LocationState> emit) {
+    logBookFilterMap = {
+      "kword": event.filterMap['kword'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "types": event.filterMap['types'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "act": event.filterMap['act'] ?? '',
+      "status": event.filterMap['status'] ?? ''
+    };
+  }
+
   Future<void> _fetchLocationLogBooks(
       FetchLocationLogBooks event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLogBooks());
@@ -212,20 +252,34 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchLocationLogBookModel fetchLocationLogBookModel =
-          await _locationRepository.fetchLocationLogBooks(
-              event.pageNo, hashCode, userId, '{}', locationId);
+          await _locationRepository.fetchLocationLogBooks(event.pageNo,
+              hashCode, userId, jsonEncode(logBookFilterMap), locationId);
       locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
       locationLogBooks.addAll(fetchLocationLogBookModel.data);
       if (locationLogBooks.isNotEmpty) {
         emit(LocationLogBooksFetched(
             locationLogBooksListReachedMax: locationLogBooksListReachedMax,
-            locationLogBooks: locationLogBooks));
+            locationLogBooks: locationLogBooks,
+            filterMap: logBookFilterMap));
       } else {
         emit(LocationLogBooksNotFetched(
-            logBooksNotFetched: StringConstants.kNoRecordsFound));
+            logBooksNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: logBookFilterMap));
       }
     } catch (e) {
-      emit(LocationLogBooksNotFetched(logBooksNotFetched: e.toString()));
+      emit(LocationLogBooksNotFetched(
+          logBooksNotFetched: e.toString(), filterMap: {}));
     }
+  }
+
+  FutureOr<void> _applyWorkOrderListFilter(
+      ApplyWorkOrderListFilter event, Emitter<LocationState> emit) {
+    workOrderFilterMap = {
+      "status": event.filterMap['status'] ?? '',
+      "type": event.filterMap['type'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "kword": event.filterMap['kword'] ?? ''
+    };
   }
 }

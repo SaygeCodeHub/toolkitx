@@ -68,15 +68,20 @@ class FetchingLocationLoTo extends LocationState {}
 class LocationLoToFetched extends LocationState {
   final List<LocationLotoDatum> locationLoTos;
   final bool locationLoToListReachedMax;
+  final Map loToFilterMap;
 
   LocationLoToFetched(
-      {required this.locationLoToListReachedMax, required this.locationLoTos});
+      {required this.loToFilterMap,
+      required this.locationLoToListReachedMax,
+      required this.locationLoTos});
 }
 
 class LocationLoToNotFetched extends LocationState {
   final String loToNotFetched;
+  final Map filtersMap;
 
-  LocationLoToNotFetched({required this.loToNotFetched});
+  LocationLoToNotFetched(
+      {required this.filtersMap, required this.loToNotFetched});
 }
 
 class FetchingLocationWorkOrders extends LocationState {}
@@ -84,16 +89,20 @@ class FetchingLocationWorkOrders extends LocationState {}
 class LocationWorkOrdersFetched extends LocationState {
   final List<LocationWorkOrdersDatum> workOrderLocations;
   final bool workOrderLoToListReachedMax;
+  final Map filterMap;
 
   LocationWorkOrdersFetched(
-      {required this.workOrderLoToListReachedMax,
+      {required this.filterMap,
+      required this.workOrderLoToListReachedMax,
       required this.workOrderLocations});
 }
 
 class LocationWorkOrdersNotFetched extends LocationState {
   final String workOrderNotFetched;
+  final Map filtersMap;
 
-  LocationWorkOrdersNotFetched({required this.workOrderNotFetched});
+  LocationWorkOrdersNotFetched(
+      {required this.filtersMap, required this.workOrderNotFetched});
 }
 
 class FetchingLocationCheckLists extends LocationState {}
@@ -132,14 +141,18 @@ class FetchingLocationLogBooks extends LocationState {}
 class LocationLogBooksFetched extends LocationState {
   final List<LocationLogBooksDatum> locationLogBooks;
   final bool locationLogBooksListReachedMax;
+  final Map filterMap;
 
   LocationLogBooksFetched(
-      {required this.locationLogBooksListReachedMax,
+      {required this.filterMap,
+      required this.locationLogBooksListReachedMax,
       required this.locationLogBooks});
 }
 
 class LocationLogBooksNotFetched extends LocationState {
   final String logBooksNotFetched;
+  final Map filterMap;
 
-  LocationLogBooksNotFetched({required this.logBooksNotFetched});
+  LocationLogBooksNotFetched(
+      {required this.filterMap, required this.logBooksNotFetched});
 }
