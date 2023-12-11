@@ -87,16 +87,20 @@ class FetchingLocationWorkOrders extends LocationState {}
 class LocationWorkOrdersFetched extends LocationState {
   final List<LocationWorkOrdersDatum> workOrderLocations;
   final bool workOrderLoToListReachedMax;
+  final Map filterMap;
 
   LocationWorkOrdersFetched(
-      {required this.workOrderLoToListReachedMax,
+      {required this.filterMap,
+      required this.workOrderLoToListReachedMax,
       required this.workOrderLocations});
 }
 
 class LocationWorkOrdersNotFetched extends LocationState {
   final String workOrderNotFetched;
+  final Map filtersMap;
 
-  LocationWorkOrdersNotFetched({required this.workOrderNotFetched});
+  LocationWorkOrdersNotFetched(
+      {required this.filtersMap, required this.workOrderNotFetched});
 }
 
 class FetchingLocationCheckLists extends LocationState {}

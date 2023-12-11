@@ -21,6 +21,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   String workOrderId = '';
   Map filtersMap = {};
   List<List<WorkOrderMasterDatum>> workOrderMasterDatum = [];
+
   WorkOrderBloc() : super(WorkOrderInitial()) {
     on<FetchWorkOrders>(_fetchWorkOrders);
     on<FetchWorkOrderMaster>(_fetchMaster);
@@ -31,7 +32,13 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   }
 
   _applyFilter(WorkOrderApplyFilter event, Emitter<WorkOrderStates> emit) {
-    filtersMap = event.workOrderFilterMap;
+    filtersMap = {
+      "status": event.workOrderFilterMap['status'] ?? '',
+      "type": event.workOrderFilterMap['type'] ?? '',
+      "st": event.workOrderFilterMap['st'] ?? '',
+      "et": event.workOrderFilterMap['et'] ?? '',
+      "kword": event.workOrderFilterMap['kword'] ?? ''
+    };
   }
 
   _clearFilter(WorkOrderClearFilter event, Emitter<WorkOrderStates> emit) {
@@ -80,7 +87,8 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
           await _workOrderRepository.fetchWorkOrderMaster(hashCode!, userId!);
       workOrderMasterDatum = fetchWorkOrdersMasterModel.data;
       emit(WorkOrderMasterFetched(
-          fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel));
+          fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel,
+          filtersMap: filtersMap));
     } catch (e) {
       emit(WorkOrderMasterNotFetched(masterNotFetched: e.toString()));
     }

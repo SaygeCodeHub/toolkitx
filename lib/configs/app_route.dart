@@ -296,7 +296,7 @@ class AppRoutes {
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
+        return _createRoute(const WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
