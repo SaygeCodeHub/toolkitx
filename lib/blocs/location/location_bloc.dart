@@ -38,6 +38,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   Map loToFilterMap = {};
   Map workOrderFilterMap = {};
   Map logBookFilterMap = {};
+  Map assetsFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -51,6 +52,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<ApplyLoToListFilter>(_applyLoToListFilter);
     on<ApplyWorkOrderListFilter>(_applyWorkOrderListFilter);
     on<ApplyLogBookListFilter>(_applyLogBookListFilter);
+    on<ApplyAssetsListFilter>(_applyAssetsListFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -206,6 +208,16 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
+  FutureOr<void> _applyAssetsListFilter(
+      ApplyAssetsListFilter event, Emitter<LocationState> emit) async {
+    assetsFilterMap = {
+      "name": event.filterMap['name'] ?? '',
+      "loc": event.filterMap['loc'] ?? '',
+      "status": event.filterMap['status'] ?? '',
+      "site": event.filterMap['site'] ?? ''
+    };
+  }
+
   Future<void> _fetchLocationAssets(
       FetchLocationAssets event, Emitter<LocationState> emit) async {
     emit(FetchingLocationAssets());
@@ -214,19 +226,22 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationAssetsModel fetchLocationAssetsModel =
           await _locationRepository.fetchLocationAssets(
-              event.pageNo, hashCode, '{}');
+              event.pageNo, hashCode, jsonEncode(assetsFilterMap));
       locationAssetsListReachedMax = fetchLocationAssetsModel.data.isEmpty;
       locationAssets.addAll(fetchLocationAssetsModel.data);
       if (locationAssets.isNotEmpty) {
         emit(LocationAssetsFetched(
             locationAssetsListReachedMax: locationAssetsListReachedMax,
-            locationAssets: locationAssets));
+            locationAssets: locationAssets,
+            filterMap: assetsFilterMap));
       } else {
         emit(LocationAssetsNotFetched(
-            assetsNotFetched: StringConstants.kNoRecordsFound));
+            assetsNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: assetsFilterMap));
       }
     } catch (e) {
-      emit(LocationAssetsNotFetched(assetsNotFetched: e.toString()));
+      emit(LocationAssetsNotFetched(
+          assetsNotFetched: e.toString(), filterMap: {}));
     }
   }
 

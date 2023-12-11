@@ -86,7 +86,8 @@ class LocationDetailsScreen extends StatelessWidget {
                               selectedTabIndex: 5, expenseId: expenseId),
                           const LocationDetailsCheckListsTab(
                               selectedTabIndex: 6),
-                          const LocationDetailsAssetsTab(selectedTabIndex: 7)
+                          LocationDetailsAssetsTab(
+                              selectedTabIndex: 7, expenseId: expenseId)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {
