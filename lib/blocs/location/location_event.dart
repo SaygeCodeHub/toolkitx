@@ -73,3 +73,9 @@ class ApplyAssetsListFilter extends LocationEvent {
 
   ApplyAssetsListFilter({required this.filterMap});
 }
+
+class ApplyPermitListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyPermitListFilter({required this.filterMap});
+}
