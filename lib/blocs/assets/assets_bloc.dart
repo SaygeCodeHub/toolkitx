@@ -432,21 +432,26 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     }
   }
 
-  Future<FutureOr<void>> _fetchAddAssetsDocument(FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
+  Future<FutureOr<void>> _fetchAddAssetsDocument(
+      FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
     emit(AddAssetsDocumentFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
-          await _assetsRepository.fetchAddAssetsDocument(event.pageNo, hashCode!, assetId, '');
+          await _assetsRepository.fetchAddAssetsDocument(
+              event.pageNo, hashCode!, assetId, '');
       if (fetchAddAssetsDocumentModel.status == 200) {
-        emit(AddAssetsDocumentFetched(fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel));
+        emit(AddAssetsDocumentFetched(
+            fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel));
       }
     } catch (e) {
       emit(AddAssetsDocumentNotFetched(errorMessage: e.toString()));
     }
   }
 
-  FutureOr<void> _selectAssetsDocument(SelectAssetsDocument event, Emitter<AssetsState> emit) {
-    emit(AssetsDocumentSelected(documentId: event.documentId, isChecked: event.isChecked));
+  FutureOr<void> _selectAssetsDocument(
+      SelectAssetsDocument event, Emitter<AssetsState> emit) {
+    emit(AssetsDocumentSelected(
+        documentId: event.documentId, isChecked: event.isChecked));
   }
 }

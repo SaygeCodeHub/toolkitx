@@ -7,19 +7,23 @@ import '../../../blocs/assets/assets_bloc.dart';
 import '../../../configs/app_color.dart';
 
 typedef CreatedForListCallBack = Function(List id);
+
 class AddAssetsDocumentCheckbox extends StatelessWidget {
   const AddAssetsDocumentCheckbox(
-      {super.key, required this.data, required this.selectedCreatedForIdList, required this.onCreatedForChanged});
+      {super.key,
+      required this.data,
+      required this.selectedCreatedForIdList,
+      required this.onCreatedForChanged});
 
   final List selectedCreatedForIdList;
   final AddDocumentDatum data;
   final CreatedForListCallBack onCreatedForChanged;
 
-  void _checkboxChange(isSelected, documentId){
-    if(isSelected){
+  void _checkboxChange(isSelected, documentId) {
+    if (isSelected) {
       selectedCreatedForIdList.add(documentId);
       onCreatedForChanged(selectedCreatedForIdList);
-    }else{
+    } else {
       onCreatedForChanged(selectedCreatedForIdList);
       selectedCreatedForIdList.remove(documentId);
     }
@@ -33,7 +37,7 @@ class AddAssetsDocumentCheckbox extends StatelessWidget {
         .add(SelectAssetsDocument(documentId: '', isChecked: isChecked));
     return BlocBuilder<AssetsBloc, AssetsState>(
       buildWhen: (previousState, currentState) =>
-      currentState is AssetsDocumentSelected,
+          currentState is AssetsDocumentSelected,
       builder: (context, state) {
         if (state is AssetsDocumentSelected) {
           return CheckboxListTile(
@@ -45,8 +49,8 @@ class AddAssetsDocumentCheckbox extends StatelessWidget {
                       fontWeight: FontWeight.w400, color: AppColor.black)),
               subtitle: Text(data.doctypename,
                   style: Theme.of(context).textTheme.xxSmall.copyWith(
-                    fontWeight: FontWeight.w400,
-                  )),
+                        fontWeight: FontWeight.w400,
+                      )),
               value: selectedCreatedForIdList.contains(data.docid),
               onChanged: (isChecked) {
                 _checkboxChange(isChecked, data.docid);
@@ -59,5 +63,4 @@ class AddAssetsDocumentCheckbox extends StatelessWidget {
       },
     );
   }
-
 }

@@ -32,10 +32,7 @@ class AddAssetsDocumentScreen extends StatelessWidget {
         child: Column(
           children: [
             CustomIconButtonRow(
-                primaryOnPress: () {
-                  // Navigator.pushNamed(
-                  //     context, AssetsFilterScreen.routeName);
-                },
+                primaryOnPress: () {},
                 secondaryVisible: false,
                 isEnabled: true,
                 secondaryOnPress: () {},
@@ -61,10 +58,11 @@ class AddAssetsDocumentScreen extends StatelessWidget {
                             selectedCreatedForIdList: selectedCreatedForIdList,
                             onCreatedForChanged: (List<dynamic> id) {
                               selectedCreatedForIdList = id;
-                              addDocumentApp['documents'] = selectedCreatedForIdList
-                                  .toString()
-                                  .replaceAll("[", "")
-                                  .replaceAll("]", "");
+                              addDocumentApp['documents'] =
+                                  selectedCreatedForIdList
+                                      .toString()
+                                      .replaceAll("[", "")
+                                      .replaceAll("]", "");
                             },
                           );
                         },

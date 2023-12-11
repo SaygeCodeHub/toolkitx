@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchAddAssetsDocumentModel fetchAddAssetsDocumentModelFromJson(String str) => FetchAddAssetsDocumentModel.fromJson(json.decode(str));
+FetchAddAssetsDocumentModel fetchAddAssetsDocumentModelFromJson(String str) =>
+    FetchAddAssetsDocumentModel.fromJson(json.decode(str));
 
-String fetchAddAssetsDocumentModelToJson(FetchAddAssetsDocumentModel data) => json.encode(data.toJson());
+String fetchAddAssetsDocumentModelToJson(FetchAddAssetsDocumentModel data) =>
+    json.encode(data.toJson());
 
 class FetchAddAssetsDocumentModel {
   final int status;
@@ -16,17 +17,19 @@ class FetchAddAssetsDocumentModel {
     required this.data,
   });
 
-  factory FetchAddAssetsDocumentModel.fromJson(Map<String, dynamic> json) => FetchAddAssetsDocumentModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<AddDocumentDatum>.from(json["Data"].map((x) => AddDocumentDatum.fromJson(x))),
-  );
+  factory FetchAddAssetsDocumentModel.fromJson(Map<String, dynamic> json) =>
+      FetchAddAssetsDocumentModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<AddDocumentDatum>.from(
+            json["Data"].map((x) => AddDocumentDatum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class AddDocumentDatum {
@@ -40,15 +43,16 @@ class AddDocumentDatum {
     required this.doctypename,
   });
 
-  factory AddDocumentDatum.fromJson(Map<String, dynamic> json) => AddDocumentDatum(
-    docid: json["docid"],
-    docname: json["docname"],
-    doctypename: json["doctypename"] ?? '',
-  );
+  factory AddDocumentDatum.fromJson(Map<String, dynamic> json) =>
+      AddDocumentDatum(
+        docid: json["docid"],
+        docname: json["docname"],
+        doctypename: json["doctypename"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "docid": docid,
-    "docname": docname,
-    "doctypename": doctypename,
-  };
+        "docid": docid,
+        "docname": docname,
+        "doctypename": doctypename,
+      };
 }
