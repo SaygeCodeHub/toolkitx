@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -26,7 +27,9 @@ class AssetsManageDocumentScreen extends StatelessWidget {
         floatingActionButton: Padding(
             padding: const EdgeInsets.all(tinierSpacing),
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AddAssetsDocumentScreen.routeName);
+              },
               child: const Icon(Icons.add),
             )),
         appBar: const GenericAppBar(title: StringConstants.kManageDocuments),
