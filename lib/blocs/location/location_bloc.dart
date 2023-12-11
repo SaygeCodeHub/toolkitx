@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
@@ -35,6 +37,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   bool locationLogBooksListReachedMax = false;
   String locationId = '';
   Map loToFilterMap = {};
+  Map logBookFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -46,6 +49,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationAssets>(_fetchLocationAssets);
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
     on<ApplyLoToListFilter>(_applyLoToListFilter);
+    on<ApplyLogBookListFilter>(_applyLogBookListFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -219,28 +223,47 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
+  FutureOr<void> _applyLogBookListFilter(
+      ApplyLogBookListFilter event, Emitter<LocationState> emit) {
+    logBookFilterMap = {
+      "types": event.filterMap['types'] ?? '',
+      "activity": event.filterMap['activity'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "status": event.filterMap['status'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "kword": event.filterMap['kword'] ?? ''
+    };
+  }
+
   Future<void> _fetchLocationLogBooks(
       FetchLocationLogBooks event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLogBooks());
     try {
+      log('inside bloc------>');
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchLocationLogBookModel fetchLocationLogBookModel =
-          await _locationRepository.fetchLocationLogBooks(
-              event.pageNo, hashCode, userId, '{}', locationId);
+          await _locationRepository.fetchLocationLogBooks(event.pageNo,
+              hashCode, userId, jsonEncode(logBookFilterMap), locationId);
       locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
       locationLogBooks.addAll(fetchLocationLogBookModel.data);
+      log('logbook data=======>$locationLogBooks');
       if (locationLogBooks.isNotEmpty) {
         emit(LocationLogBooksFetched(
             locationLogBooksListReachedMax: locationLogBooksListReachedMax,
-            locationLogBooks: locationLogBooks));
+            locationLogBooks: locationLogBooks,
+            filterMap: logBookFilterMap));
       } else {
         emit(LocationLogBooksNotFetched(
-            logBooksNotFetched: StringConstants.kNoRecordsFound));
+            logBooksNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: logBookFilterMap));
       }
     } catch (e) {
-      emit(LocationLogBooksNotFetched(logBooksNotFetched: e.toString()));
+      emit(LocationLogBooksNotFetched(
+          logBooksNotFetched: e.toString(), filterMap: {}));
     }
   }
 }

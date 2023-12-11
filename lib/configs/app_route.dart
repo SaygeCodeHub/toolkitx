@@ -284,7 +284,7 @@ class AppRoutes {
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
       case LogBookFilterScreen.routeName:
-        return _createRoute(LogBookFilterScreen());
+        return _createRoute(const LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:

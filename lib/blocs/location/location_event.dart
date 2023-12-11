@@ -55,3 +55,9 @@ class ApplyLoToListFilter extends LocationEvent {
 
   ApplyLoToListFilter({required this.filterMap});
 }
+
+class ApplyLogBookListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyLogBookListFilter({required this.filterMap});
+}

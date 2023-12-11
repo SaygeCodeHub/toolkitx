@@ -1,37 +1,97 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../blocs/location/location_bloc.dart';
 import '../../../blocs/location/location_event.dart';
 import '../../../blocs/location/location_state.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_icon_button_row.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_no_records_text.dart';
+import '../../logBook/logbook_filter_screen.dart';
 import 'location_details_logbooks_body.dart';
 
 class LocationDetailsLogBooksTab extends StatelessWidget {
   final int selectedTabIndex;
+  final String expenseId;
   static int pageNo = 1;
 
-  const LocationDetailsLogBooksTab({Key? key, required this.selectedTabIndex})
+  const LocationDetailsLogBooksTab(
+      {Key? key, required this.selectedTabIndex, required this.expenseId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    log('build------->');
     pageNo = 1;
     context.read<LocationBloc>().add(FetchLocationLogBooks(pageNo: 1));
     context.read<LocationBloc>().locationLogBooks.clear();
     context.read<LocationBloc>().locationLogBooksListReachedMax = false;
     return Column(
       children: [
-        CustomIconButtonRow(
-            primaryOnPress: () {},
-            secondaryOnPress: () {},
-            secondaryVisible: false,
-            clearOnPress: () {}),
+        BlocBuilder<LocationBloc, LocationState>(
+          buildWhen: (previousState, current) {
+            return current is LocationLogBooksFetched ||
+                current is LocationLogBooksNotFetched;
+          },
+          builder: (context, state) {
+            log('filter map-------->$state');
+            if (state is LocationLogBooksFetched) {
+              return CustomIconButtonRow(
+                  isEnabled: true,
+                  primaryOnPress: () {
+                    LogBookFilterScreen.isFromLocation = true;
+                    LogBookFilterScreen.expenseId = expenseId;
+                    Navigator.pushNamed(context, LogBookFilterScreen.routeName);
+                  },
+                  secondaryOnPress: () {},
+                  clearVisible: state.filterMap.isNotEmpty,
+                  secondaryVisible: false,
+                  clearOnPress: () {
+                    pageNo = 1;
+                    context.read<LocationBloc>().locationLogBooks.clear();
+                    context
+                        .read<LocationBloc>()
+                        .locationLogBooksListReachedMax = false;
+                    state.filterMap.clear();
+                    LogBookFilterScreen.logbookFilterMap.clear();
+                    context
+                        .read<LocationBloc>()
+                        .add(FetchLocationLogBooks(pageNo: pageNo));
+                  });
+            } else if (state is LocationLogBooksNotFetched) {
+              return CustomIconButtonRow(
+                  isEnabled: true,
+                  primaryOnPress: () {
+                    LogBookFilterScreen.isFromLocation = true;
+                    LogBookFilterScreen.expenseId = expenseId;
+                    Navigator.pushNamed(context, LogBookFilterScreen.routeName);
+                  },
+                  secondaryOnPress: () {},
+                  clearVisible: state.filterMap.isNotEmpty,
+                  secondaryVisible: false,
+                  clearOnPress: () {
+                    pageNo = 1;
+                    context.read<LocationBloc>().locationLogBooks.clear();
+                    context
+                        .read<LocationBloc>()
+                        .locationLogBooksListReachedMax = false;
+                    state.filterMap.clear();
+                    LogBookFilterScreen.logbookFilterMap.clear();
+                    context
+                        .read<LocationBloc>()
+                        .add(FetchLocationLogBooks(pageNo: pageNo));
+                  });
+            } else {
+              log('else---->');
+              return const SizedBox.shrink();
+            }
+          },
+        ),
         const SizedBox(height: xxTinierSpacing),
         BlocConsumer<LocationBloc, LocationState>(
           buildWhen: (previousState, currentState) =>
@@ -52,11 +112,15 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
               return LocationDetailsLogBooksBody(
                   locationLogBooks: state.locationLogBooks,
                   locationLogBooksListReachedMax:
-                      state.locationLogBooksListReachedMax);
+                  state.locationLogBooksListReachedMax);
             } else if (state is LocationLogBooksNotFetched) {
-              return NoRecordsText(
-                  text: state.logBooksNotFetched,
-                  style: Theme.of(context).textTheme.medium);
+              if (context.read<LocationBloc>().logBookFilterMap.isNotEmpty) {
+                return const NoRecordsText(
+                    text: StringConstants.kNoRecordsFilter);
+              } else {
+                return NoRecordsText(
+                    text: DatabaseUtil.getText('no_records_found'));
+              }
             } else {
               return const SizedBox.shrink();
             }
