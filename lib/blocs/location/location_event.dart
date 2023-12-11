@@ -61,3 +61,9 @@ class ApplyWorkOrderListFilter extends LocationEvent {
 
   ApplyWorkOrderListFilter({required this.filterMap});
 }
+
+class ApplyLogBookListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyLogBookListFilter({required this.filterMap});
+}

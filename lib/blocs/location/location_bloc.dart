@@ -37,6 +37,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   String locationId = '';
   Map loToFilterMap = {};
   Map workOrderFilterMap = {};
+  Map logBookFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -49,6 +50,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<FetchLocationLogBooks>(_fetchLocationLogBooks);
     on<ApplyLoToListFilter>(_applyLoToListFilter);
     on<ApplyWorkOrderListFilter>(_applyWorkOrderListFilter);
+    on<ApplyLogBookListFilter>(_applyLogBookListFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -228,6 +230,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
+  FutureOr<void> _applyLogBookListFilter(
+      ApplyLogBookListFilter event, Emitter<LocationState> emit) {
+    logBookFilterMap = {
+      "kword": event.filterMap['kword'] ?? '',
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "types": event.filterMap['types'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "act": event.filterMap['act'] ?? '',
+      "status": event.filterMap['status'] ?? ''
+    };
+  }
+
   Future<void> _fetchLocationLogBooks(
       FetchLocationLogBooks event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLogBooks());
@@ -236,20 +252,23 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchLocationLogBookModel fetchLocationLogBookModel =
-          await _locationRepository.fetchLocationLogBooks(
-              event.pageNo, hashCode, userId, '{}', locationId);
+          await _locationRepository.fetchLocationLogBooks(event.pageNo,
+              hashCode, userId, jsonEncode(logBookFilterMap), locationId);
       locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
       locationLogBooks.addAll(fetchLocationLogBookModel.data);
       if (locationLogBooks.isNotEmpty) {
         emit(LocationLogBooksFetched(
             locationLogBooksListReachedMax: locationLogBooksListReachedMax,
-            locationLogBooks: locationLogBooks));
+            locationLogBooks: locationLogBooks,
+            filterMap: logBookFilterMap));
       } else {
         emit(LocationLogBooksNotFetched(
-            logBooksNotFetched: StringConstants.kNoRecordsFound));
+            logBooksNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: logBookFilterMap));
       }
     } catch (e) {
-      emit(LocationLogBooksNotFetched(logBooksNotFetched: e.toString()));
+      emit(LocationLogBooksNotFetched(
+          logBooksNotFetched: e.toString(), filterMap: {}));
     }
   }
 

@@ -141,14 +141,18 @@ class FetchingLocationLogBooks extends LocationState {}
 class LocationLogBooksFetched extends LocationState {
   final List<LocationLogBooksDatum> locationLogBooks;
   final bool locationLogBooksListReachedMax;
+  final Map filterMap;
 
   LocationLogBooksFetched(
-      {required this.locationLogBooksListReachedMax,
+      {required this.filterMap,
+      required this.locationLogBooksListReachedMax,
       required this.locationLogBooks});
 }
 
 class LocationLogBooksNotFetched extends LocationState {
   final String logBooksNotFetched;
+  final Map filterMap;
 
-  LocationLogBooksNotFetched({required this.logBooksNotFetched});
+  LocationLogBooksNotFetched(
+      {required this.filterMap, required this.logBooksNotFetched});
 }
