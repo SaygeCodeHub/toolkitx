@@ -124,16 +124,20 @@ class FetchingLocationAssets extends LocationState {}
 class LocationAssetsFetched extends LocationState {
   final List<LocationAssetsDatum> locationAssets;
   final bool locationAssetsListReachedMax;
+  final Map filterMap;
 
   LocationAssetsFetched(
-      {required this.locationAssetsListReachedMax,
+      {required this.filterMap,
+      required this.locationAssetsListReachedMax,
       required this.locationAssets});
 }
 
 class LocationAssetsNotFetched extends LocationState {
   final String assetsNotFetched;
+  final Map filterMap;
 
-  LocationAssetsNotFetched({required this.assetsNotFetched});
+  LocationAssetsNotFetched(
+      {required this.filterMap, required this.assetsNotFetched});
 }
 
 class FetchingLocationLogBooks extends LocationState {}
