@@ -51,16 +51,20 @@ class FetchingLocationPermits extends LocationState {}
 class LocationPermitsFetched extends LocationState {
   final List<LocationPermitsDatum> locationPermits;
   final bool locationPermitListReachedMax;
+  final Map filterMap;
 
   LocationPermitsFetched(
-      {required this.locationPermitListReachedMax,
+      {required this.filterMap,
+      required this.locationPermitListReachedMax,
       required this.locationPermits});
 }
 
 class LocationPermitsNotFetched extends LocationState {
   final String permitsNotFetched;
+  final Map filterMap;
 
-  LocationPermitsNotFetched({required this.permitsNotFetched});
+  LocationPermitsNotFetched(
+      {required this.filterMap, required this.permitsNotFetched});
 }
 
 class FetchingLocationLoTo extends LocationState {}

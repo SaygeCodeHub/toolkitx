@@ -39,6 +39,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   Map workOrderFilterMap = {};
   Map logBookFilterMap = {};
   Map assetsFilterMap = {};
+  Map permitsFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -53,6 +54,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<ApplyWorkOrderListFilter>(_applyWorkOrderListFilter);
     on<ApplyLogBookListFilter>(_applyLogBookListFilter);
     on<ApplyAssetsListFilter>(_applyAssetsListFilter);
+    on<ApplyPermitListFilter>(_applyPermitListFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -108,6 +110,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
+  FutureOr<void> _applyPermitListFilter(
+      ApplyPermitListFilter event, Emitter<LocationState> emit) {
+    permitsFilterMap = {
+      "st": event.filterMap['st'] ?? '',
+      "et": event.filterMap['et'] ?? '',
+      "kword": event.filterMap['kword'] ?? '',
+      "type": event.filterMap['type'] ?? '',
+      "status": event.filterMap['status'] ?? '',
+      "eme": event.filterMap['eme'] ?? '',
+      "locs": event.filterMap['locs'] ?? ''
+    };
+  }
+
   Future<void> _fetchLocationPermits(
       FetchLocationPermits event, Emitter<LocationState> emit) async {
     emit(FetchingLocationPermits());
@@ -116,19 +131,22 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLocationPermitsModel fetchLocationPermitsModel =
           await _locationRepository.fetchLocationPermits(
-              event.pageNo, hashCode, '{}', locationId);
+              event.pageNo, hashCode, jsonEncode(permitsFilterMap), locationId);
       locationPermitListReachedMax = fetchLocationPermitsModel.data.isEmpty;
       locationPermits.addAll(fetchLocationPermitsModel.data);
       if (locationPermits.isNotEmpty) {
         emit(LocationPermitsFetched(
             locationPermits: locationPermits,
-            locationPermitListReachedMax: locationPermitListReachedMax));
+            locationPermitListReachedMax: locationPermitListReachedMax,
+            filterMap: permitsFilterMap));
       } else {
         emit(LocationPermitsNotFetched(
-            permitsNotFetched: StringConstants.kNoRecordsFound));
+            permitsNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: permitsFilterMap));
       }
     } catch (e) {
-      emit(LocationPermitsNotFetched(permitsNotFetched: e.toString()));
+      emit(LocationPermitsNotFetched(
+          permitsNotFetched: e.toString(), filterMap: {}));
     }
   }
 
