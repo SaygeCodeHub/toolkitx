@@ -78,8 +78,10 @@ class LocationLoToFetched extends LocationState {
 
 class LocationLoToNotFetched extends LocationState {
   final String loToNotFetched;
+  final Map filtersMap;
 
-  LocationLoToNotFetched({required this.loToNotFetched});
+  LocationLoToNotFetched(
+      {required this.filtersMap, required this.loToNotFetched});
 }
 
 class FetchingLocationWorkOrders extends LocationState {}

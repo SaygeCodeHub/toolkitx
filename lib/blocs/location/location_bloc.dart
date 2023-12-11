@@ -140,17 +140,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
               userId, jsonEncode(loToFilterMap), locationId);
       locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
       locationLoTos.addAll(fetchLocationLoToModel.data);
-      if (locationPermits.isNotEmpty) {
+      if (locationLoTos.isNotEmpty) {
         emit(LocationLoToFetched(
             locationLoTos: locationLoTos,
             locationLoToListReachedMax: locationPermitListReachedMax,
             loToFilterMap: loToFilterMap));
       } else {
         emit(LocationLoToNotFetched(
-            loToNotFetched: StringConstants.kNoRecordsFound));
+            loToNotFetched: StringConstants.kNoRecordsFound,
+            filtersMap: loToFilterMap));
       }
     } catch (e) {
-      emit(LocationLoToNotFetched(loToNotFetched: e.toString()));
+      emit(
+          LocationLoToNotFetched(loToNotFetched: e.toString(), filtersMap: {}));
     }
   }
 
