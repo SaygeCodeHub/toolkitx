@@ -128,3 +128,16 @@ class DeleteAssetsDocument extends AssetsEvent {
 
   DeleteAssetsDocument({required this.documentId});
 }
+
+class FetchAddAssetsDocument extends AssetsEvent {
+  final int pageNo;
+
+  FetchAddAssetsDocument({required this.pageNo});
+}
+
+class SelectAssetsDocument extends AssetsEvent {
+  final String documentId;
+  final bool isChecked;
+
+  SelectAssetsDocument({required this.documentId, required this.isChecked});
+}

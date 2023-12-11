@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets/fetch_add_assets_document_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
 import 'package:toolkit/data/models/assets/fetch_assets_comment_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
@@ -54,6 +55,8 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SelectAssetsMeter>(_selectAssetsMeter);
     on<SelectAssetsRollOver>(_selectAssetsRollOver);
     on<DeleteAssetsDocument>(_deleteAssetsDocument);
+    on<FetchAddAssetsDocument>(_fetchAddAssetsDocument);
+    on<SelectAssetsDocument>(_selectAssetsDocument);
   }
 
   int assetTabIndex = 0;
@@ -427,5 +430,23 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     } catch (e) {
       emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _fetchAddAssetsDocument(FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
+    emit(AddAssetsDocumentFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+          await _assetsRepository.fetchAddAssetsDocument(event.pageNo, hashCode!, assetId, '');
+      if (fetchAddAssetsDocumentModel.status == 200) {
+        emit(AddAssetsDocumentFetched(fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel));
+      }
+    } catch (e) {
+      emit(AddAssetsDocumentNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAssetsDocument(SelectAssetsDocument event, Emitter<AssetsState> emit) {
+    emit(AssetsDocumentSelected(documentId: event.documentId, isChecked: event.isChecked));
   }
 }
