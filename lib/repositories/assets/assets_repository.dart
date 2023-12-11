@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
@@ -52,4 +53,7 @@ abstract class AssetsRepository {
 
   Future<FetchAddAssetsDocumentModel> fetchAddAssetsDocument(
       int pageNo, String hashCode, String assetId, String filter);
+
+  Future<AddManageDocumentModel> addManageDocumentRepo(
+      Map addDocumentMap);
 }

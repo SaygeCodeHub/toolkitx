@@ -273,3 +273,13 @@ class AssetsDocumentSelected extends AssetsState {
 
   AssetsDocumentSelected({required this.documentId, required this.isChecked});
 }
+
+class ManageDocumentAdding extends AssetsState {}
+
+class ManageDocumentAdded extends AssetsState {}
+
+class ManageDocumentNotAdded extends AssetsState {
+  final String errorMessage;
+
+  ManageDocumentNotAdded({required this.errorMessage});
+}

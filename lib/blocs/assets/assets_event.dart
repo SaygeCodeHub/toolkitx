@@ -141,3 +141,8 @@ class SelectAssetsDocument extends AssetsEvent {
 
   SelectAssetsDocument({required this.documentId, required this.isChecked});
 }
+
+class AddManageDocument extends AssetsEvent {
+  final Map addDocumentMap;
+  AddManageDocument({required this.addDocumentMap});
+}
