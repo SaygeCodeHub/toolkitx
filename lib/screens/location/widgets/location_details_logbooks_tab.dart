@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +24,6 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('build------->');
     pageNo = 1;
     context.read<LocationBloc>().add(FetchLocationLogBooks(pageNo: 1));
     context.read<LocationBloc>().locationLogBooks.clear();
@@ -39,7 +36,6 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
                 current is LocationLogBooksNotFetched;
           },
           builder: (context, state) {
-            log('filter map-------->$state');
             if (state is LocationLogBooksFetched) {
               return CustomIconButtonRow(
                   isEnabled: true,
@@ -87,7 +83,6 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
                         .add(FetchLocationLogBooks(pageNo: pageNo));
                   });
             } else {
-              log('else---->');
               return const SizedBox.shrink();
             }
           },
@@ -112,7 +107,7 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
               return LocationDetailsLogBooksBody(
                   locationLogBooks: state.locationLogBooks,
                   locationLogBooksListReachedMax:
-                  state.locationLogBooksListReachedMax);
+                      state.locationLogBooksListReachedMax);
             } else if (state is LocationLogBooksNotFetched) {
               if (context.read<LocationBloc>().logBookFilterMap.isNotEmpty) {
                 return const NoRecordsText(

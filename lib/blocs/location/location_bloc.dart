@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
@@ -233,14 +231,14 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   FutureOr<void> _applyLogBookListFilter(
       ApplyLogBookListFilter event, Emitter<LocationState> emit) {
     logBookFilterMap = {
-      "types": event.filterMap['types'] ?? '',
-      "activity": event.filterMap['activity'] ?? '',
-      "lgbooks": event.filterMap['lgbooks'] ?? '',
-      "pri": event.filterMap['pri'] ?? '',
-      "status": event.filterMap['status'] ?? '',
+      "kword": event.filterMap['kword'] ?? '',
       "st": event.filterMap['st'] ?? '',
       "et": event.filterMap['et'] ?? '',
-      "kword": event.filterMap['kword'] ?? ''
+      "types": event.filterMap['types'] ?? '',
+      "pri": event.filterMap['pri'] ?? '',
+      "lgbooks": event.filterMap['lgbooks'] ?? '',
+      "act": event.filterMap['act'] ?? '',
+      "status": event.filterMap['status'] ?? ''
     };
   }
 
@@ -248,7 +246,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       FetchLocationLogBooks event, Emitter<LocationState> emit) async {
     emit(FetchingLocationLogBooks());
     try {
-      log('inside bloc------>');
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
@@ -257,7 +254,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
               hashCode, userId, jsonEncode(logBookFilterMap), locationId);
       locationLogBooksListReachedMax = fetchLocationLogBookModel.data.isEmpty;
       locationLogBooks.addAll(fetchLocationLogBookModel.data);
-      log('logbook data=======>$locationLogBooks');
       if (locationLogBooks.isNotEmpty) {
         emit(LocationLogBooksFetched(
             locationLogBooksListReachedMax: locationLogBooksListReachedMax,

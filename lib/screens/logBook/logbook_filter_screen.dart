@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
@@ -47,7 +45,7 @@ class LogBookFilterScreen extends StatelessWidget {
               }
             },
             buildWhen: (previousState, currentState) =>
-            currentState is LogBookFetchingMaster ||
+                currentState is LogBookFetchingMaster ||
                 currentState is LogBookMasterFetched ||
                 currentState is LogBookMasterNotFetched,
             builder: (context, state) {
@@ -75,17 +73,17 @@ class LogBookFilterScreen extends StatelessWidget {
                                 const SizedBox(height: xxTinySpacing),
                                 Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                           child: DatePickerTextField(
                                               editDate:
-                                              (logbookFilterMap['st'] ==
-                                                  null)
-                                                  ? ''
-                                                  : logbookFilterMap['st'],
+                                                  (logbookFilterMap['st'] ==
+                                                          null)
+                                                      ? ''
+                                                      : logbookFilterMap['st'],
                                               hintText:
-                                              StringConstants.kSelectDate,
+                                                  StringConstants.kSelectDate,
                                               onDateChanged: (String date) {
                                                 logbookFilterMap['st'] = date;
                                               })),
@@ -95,12 +93,12 @@ class LogBookFilterScreen extends StatelessWidget {
                                       Expanded(
                                           child: DatePickerTextField(
                                               editDate:
-                                              (logbookFilterMap['et'] ==
-                                                  null)
-                                                  ? ''
-                                                  : logbookFilterMap['et'],
+                                                  (logbookFilterMap['et'] ==
+                                                          null)
+                                                      ? ''
+                                                      : logbookFilterMap['et'],
                                               hintText:
-                                              StringConstants.kSelectDate,
+                                                  StringConstants.kSelectDate,
                                               onDateChanged: (String date) {
                                                 logbookFilterMap['et'] = date;
                                               }))
@@ -172,7 +170,7 @@ class LogBookFilterScreen extends StatelessWidget {
                                 PrimaryButton(
                                     onPressed: () {
                                       if (logbookFilterMap['st'] != null &&
-                                          logbookFilterMap['et'] == null ||
+                                              logbookFilterMap['et'] == null ||
                                           logbookFilterMap['st'] == null &&
                                               logbookFilterMap['et'] != null) {
                                         showCustomSnackBar(
