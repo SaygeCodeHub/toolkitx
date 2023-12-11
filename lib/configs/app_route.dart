@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
@@ -449,6 +450,8 @@ class AppRoutes {
             ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
       case ManageExpenseFormScreen.routeName:
         return _createRoute(const ManageExpenseFormScreen());
+      case AddAssetsDocumentScreen.routeName:
+        return _createRoute(const AddAssetsDocumentScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

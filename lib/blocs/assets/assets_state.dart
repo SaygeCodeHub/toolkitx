@@ -252,3 +252,24 @@ class AssetsDocumentNotDeleted extends AssetsState {
 
   AssetsDocumentNotDeleted({required this.errorMessage});
 }
+
+class AddAssetsDocumentFetching extends AssetsState {}
+
+class AddAssetsDocumentFetched extends AssetsState {
+  final FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel;
+
+  AddAssetsDocumentFetched({required this.fetchAddAssetsDocumentModel});
+}
+
+class AddAssetsDocumentNotFetched extends AssetsState {
+  final String errorMessage;
+
+  AddAssetsDocumentNotFetched({required this.errorMessage});
+}
+
+class AssetsDocumentSelected extends AssetsState {
+  final String documentId;
+  final bool isChecked;
+
+  AssetsDocumentSelected({required this.documentId, required this.isChecked});
+}
