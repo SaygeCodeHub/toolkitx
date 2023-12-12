@@ -79,3 +79,9 @@ class ApplyPermitListFilter extends LocationEvent {
 
   ApplyPermitListFilter({required this.filterMap});
 }
+
+class ApplyCheckListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyCheckListFilter({required this.filterMap});
+}

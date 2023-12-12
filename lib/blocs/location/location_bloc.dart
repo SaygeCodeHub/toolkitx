@@ -40,6 +40,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   Map logBookFilterMap = {};
   Map assetsFilterMap = {};
   Map permitsFilterMap = {};
+  Map checkListFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -55,6 +56,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<ApplyLogBookListFilter>(_applyLogBookListFilter);
     on<ApplyAssetsListFilter>(_applyAssetsListFilter);
     on<ApplyPermitListFilter>(_applyPermitListFilter);
+    on<ApplyCheckListFilter>(_applyCheckListFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -205,24 +207,39 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  Future<void> _fetchLocationCheckLists(
-      FetchCheckListsLocation event, Emitter<LocationState> emit) async {
+  FutureOr<void> _applyCheckListFilter(ApplyCheckListFilter event,
+      Emitter<LocationState> emit) {
+    checkListFilterMap = {
+      "checklistname": event.filterMap['checklistname'] ?? '',
+      "category": event.filterMap['category'] ?? ''
+    };
+  }
+
+  Future<void> _fetchLocationCheckLists(FetchCheckListsLocation event,
+      Emitter<LocationState> emit) async {
     emit(FetchingLocationCheckLists());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       FetchLocationCheckListsModel fetchLocationCheckListsModel =
-          await _locationRepository.fetchLocationCheckLists(
-              hashCode, '{}', locationId);
+      await _locationRepository.fetchLocationCheckLists(
+          hashCode, jsonEncode(checkListFilterMap), locationId);
       if (fetchLocationCheckListsModel.data.isNotEmpty) {
         emit(LocationCheckListsFetched(
-            fetchLocationCheckListsModel: fetchLocationCheckListsModel));
+            fetchLocationCheckListsModel: fetchLocationCheckListsModel,
+            filterMap: checkListFilterMap,
+            userType: userType));
       } else {
         emit(LocationCheckListsNotFetched(
-            checkListsNotFetched: StringConstants.kNoRecordsFound));
+            checkListsNotFetched: StringConstants.kNoRecordsFound,
+            filterMap: checkListFilterMap,
+            userType: userType));
       }
     } catch (e) {
-      emit(LocationCheckListsNotFetched(checkListsNotFetched: e.toString()));
+      emit(LocationCheckListsNotFetched(
+          checkListsNotFetched: e.toString(), filterMap: {}, userType: ''));
     }
   }
 

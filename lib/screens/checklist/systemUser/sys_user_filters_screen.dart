@@ -16,12 +16,12 @@ class FiltersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<SysUserCheckListBloc>().add(FetchCheckListMaster());
-    return Scaffold(
-        appBar: const GenericAppBar(
+    return const Scaffold(
+        appBar: GenericAppBar(
           title: StringConstants.kFilters,
         ),
         body: Padding(
-            padding: const EdgeInsets.only(
+            padding: EdgeInsets.only(
                 left: leftRightMargin,
                 right: leftRightMargin,
                 top: topBottomPadding),

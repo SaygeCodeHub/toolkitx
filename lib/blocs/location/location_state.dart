@@ -113,14 +113,24 @@ class FetchingLocationCheckLists extends LocationState {}
 
 class LocationCheckListsFetched extends LocationState {
   final FetchLocationCheckListsModel fetchLocationCheckListsModel;
+  final Map filterMap;
+  final String userType;
 
-  LocationCheckListsFetched({required this.fetchLocationCheckListsModel});
+  LocationCheckListsFetched(
+      {required this.userType,
+      required this.filterMap,
+      required this.fetchLocationCheckListsModel});
 }
 
 class LocationCheckListsNotFetched extends LocationState {
   final String checkListsNotFetched;
+  final Map filterMap;
+  final String userType;
 
-  LocationCheckListsNotFetched({required this.checkListsNotFetched});
+  LocationCheckListsNotFetched(
+      {required this.userType,
+      required this.filterMap,
+      required this.checkListsNotFetched});
 }
 
 class FetchingLocationAssets extends LocationState {}
