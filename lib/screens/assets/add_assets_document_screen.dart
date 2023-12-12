@@ -92,32 +92,28 @@ class AddAssetsDocumentScreen extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     textValue: DatabaseUtil.getText('buttonBack'))),
-            const SizedBox(
-              width: xxTinierSpacing,
-            ),
+            const SizedBox(width: xxTinierSpacing),
             Expanded(
-              child: BlocListener<AssetsBloc, AssetsState>(
-                listener: (context, state) {
-                  if (state is ManageDocumentAdding) {
-                    ProgressBar.show(context);
-                  } else if (state is ManageDocumentAdded) {
-                    ProgressBar.dismiss(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, AssetsManageDocumentScreen.routeName);
-                  } else if (state is ManageDocumentNotAdded) {
-                    ProgressBar.dismiss(context);
-                    showCustomSnackBar(context, state.errorMessage, '');
-                  }
-                },
-                child: PrimaryButton(
-                    onPressed: () {
-                      context.read<AssetsBloc>().add(
-                          AddManageDocument(addDocumentMap: addDocumentApp));
+                child: BlocListener<AssetsBloc, AssetsState>(
+                    listener: (context, state) {
+                      if (state is ManageDocumentAdding) {
+                        ProgressBar.show(context);
+                      } else if (state is ManageDocumentAdded) {
+                        ProgressBar.dismiss(context);
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, AssetsManageDocumentScreen.routeName);
+                      } else if (state is ManageDocumentNotAdded) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context, state.errorMessage, '');
+                      }
                     },
-                    textValue: StringConstants.kDone),
-              ),
-            )
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context.read<AssetsBloc>().add(AddManageDocument(
+                              addDocumentMap: addDocumentApp));
+                        },
+                        textValue: StringConstants.kDone)))
           ],
         ),
       ),
