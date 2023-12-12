@@ -77,16 +77,18 @@ class LocationDetailsScreen extends StatelessWidget {
                               data: state.fetchLocationDetailsModel.data,
                               selectedTabIndex: 1,
                               clientId: state.clientId),
-                          const LocationDetailsPermitsTab(selectedTabIndex: 2),
+                          LocationDetailsPermitsTab(
+                              selectedTabIndex: 2, expenseId: expenseId),
                           LocationDetailsLoToTab(
                               selectedTabIndex: 3, expenseId: expenseId),
                           LocationDetailsWorkOrdersTab(
                               selectedTabIndex: 4, expenseId: expenseId),
                           LocationDetailsLogBooksTab(
                               selectedTabIndex: 5, expenseId: expenseId),
-                          const LocationDetailsCheckListsTab(
-                              selectedTabIndex: 6),
-                          const LocationDetailsAssetsTab(selectedTabIndex: 7)
+                          LocationDetailsCheckListsTab(
+                              selectedTabIndex: 6, expenseId: expenseId),
+                          LocationDetailsAssetsTab(
+                              selectedTabIndex: 7, expenseId: expenseId)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {

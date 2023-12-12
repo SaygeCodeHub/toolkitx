@@ -23,63 +23,68 @@ class LocationDetailsLogBooksBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: locationLogBooksListReachedMax
-            ? locationLogBooks.length
-            : locationLogBooks.length + 1,
-        itemBuilder: (context, index) {
-          if (index < locationLogBooks.length) {
-            return CustomCard(
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(xxTinierSpacing),
-                title: Padding(
-                    padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Expanded(
+      child: ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: locationLogBooksListReachedMax
+              ? locationLogBooks.length
+              : locationLogBooks.length + 1,
+          itemBuilder: (context, index) {
+            if (index < locationLogBooks.length) {
+              return CustomCard(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(xxTinierSpacing),
+                  title: Padding(
+                      padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(locationLogBooks[index].logbookname,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .small
+                                    .copyWith(
+                                        color: AppColor.black,
+                                        fontWeight: FontWeight.w600)),
+                            const SizedBox(width: tiniestSpacing),
+                            Text(locationLogBooks[index].status,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xxSmall
+                                    .copyWith(color: AppColor.deepBlue))
+                          ])),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(locationLogBooks[index].description,
+                          style: Theme.of(context).textTheme.xSmall.copyWith(
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: tinierSpacing),
+                      Row(
                         children: [
-                          Text(locationLogBooks[index].logbookname,
-                              style: Theme.of(context).textTheme.small.copyWith(
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w600)),
+                          Image.asset("assets/icons/calendar.png",
+                              height: kIconSize, width: kIconSize),
                           const SizedBox(width: tiniestSpacing),
-                          Text(locationLogBooks[index].status,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xxSmall
-                                  .copyWith(color: AppColor.deepBlue))
-                        ])),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(locationLogBooks[index].description,
-                        style: Theme.of(context).textTheme.xSmall.copyWith(
-                            color: AppColor.black,
-                            fontWeight: FontWeight.w600)),
-                    const SizedBox(height: tinierSpacing),
-                    Row(
-                      children: [
-                        Image.asset("assets/icons/calendar.png",
-                            height: kIconSize, width: kIconSize),
-                        const SizedBox(width: tiniestSpacing),
-                        Text(locationLogBooks[index].eventdatetime,
-                            style: Theme.of(context).textTheme.xSmall)
-                      ],
-                    ),
-                  ],
+                          Text(locationLogBooks[index].eventdatetime,
+                              style: Theme.of(context).textTheme.xSmall)
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            LocationDetailsLogBooksTab.pageNo++;
-            context.read<LocationBloc>().add(FetchLocationLogBooks(
-                pageNo: LocationDetailsLogBooksTab.pageNo));
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: xxTinySpacing);
-        });
+              );
+            } else {
+              LocationDetailsLogBooksTab.pageNo++;
+              context.read<LocationBloc>().add(FetchLocationLogBooks(
+                  pageNo: LocationDetailsLogBooksTab.pageNo));
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: xxTinySpacing);
+          }),
+    );
   }
 }

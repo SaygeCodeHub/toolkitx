@@ -80,8 +80,7 @@ class LocationDetailsPermitsBody extends StatelessWidget {
               LocationDetailsPermitsTab.pageNo++;
               context.read<LocationBloc>().add(FetchLocationPermits(
                   pageNo: LocationDetailsPermitsTab.pageNo));
-              return const Expanded(
-                  child: Center(child: CircularProgressIndicator()));
+              return const Center(child: CircularProgressIndicator());
             }
           },
           separatorBuilder: (context, index) {

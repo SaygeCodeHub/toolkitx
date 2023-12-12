@@ -5,6 +5,8 @@ import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 
+import '../../blocs/location/location_bloc.dart';
+import '../../blocs/location/location_event.dart';
 import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_events.dart';
 import '../../blocs/permit/permit_states.dart';
@@ -21,8 +23,10 @@ import 'widgets/permit_type_filter.dart';
 
 class PermitFilterScreen extends StatelessWidget {
   static const routeName = 'PermitFilterScreen';
-  final Map permitFilterMap = {};
+  static Map permitFilterMap = {};
   final List location = [];
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   PermitFilterScreen({Key? key}) : super(key: key);
 
@@ -152,13 +156,24 @@ class PermitFilterScreen extends StatelessWidget {
                                               'TimeDateValidate'),
                                           '');
                                     } else {
-                                      context.read<PermitBloc>().add(
-                                          ApplyPermitFilters(
-                                              permitFilterMap, location));
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacementNamed(
-                                          context, PermitListScreen.routeName,
-                                          arguments: false);
+                                      if (isFromLocation == true) {
+                                        context.read<LocationBloc>().add(
+                                            ApplyPermitListFilter(
+                                                filterMap: permitFilterMap));
+                                        Navigator.pop(context);
+                                        context.read<LocationBloc>().add(
+                                            FetchLocationDetails(
+                                                locationId: expenseId,
+                                                selectedTabIndex: 2));
+                                      } else {
+                                        context.read<PermitBloc>().add(
+                                            ApplyPermitFilters(
+                                                permitFilterMap, location));
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacementNamed(
+                                            context, PermitListScreen.routeName,
+                                            arguments: false);
+                                      }
                                     }
                                   },
                                   textValue: StringConstants.kApply)

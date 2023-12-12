@@ -51,16 +51,20 @@ class FetchingLocationPermits extends LocationState {}
 class LocationPermitsFetched extends LocationState {
   final List<LocationPermitsDatum> locationPermits;
   final bool locationPermitListReachedMax;
+  final Map filterMap;
 
   LocationPermitsFetched(
-      {required this.locationPermitListReachedMax,
+      {required this.filterMap,
+      required this.locationPermitListReachedMax,
       required this.locationPermits});
 }
 
 class LocationPermitsNotFetched extends LocationState {
   final String permitsNotFetched;
+  final Map filterMap;
 
-  LocationPermitsNotFetched({required this.permitsNotFetched});
+  LocationPermitsNotFetched(
+      {required this.filterMap, required this.permitsNotFetched});
 }
 
 class FetchingLocationLoTo extends LocationState {}
@@ -109,14 +113,24 @@ class FetchingLocationCheckLists extends LocationState {}
 
 class LocationCheckListsFetched extends LocationState {
   final FetchLocationCheckListsModel fetchLocationCheckListsModel;
+  final Map filterMap;
+  final String userType;
 
-  LocationCheckListsFetched({required this.fetchLocationCheckListsModel});
+  LocationCheckListsFetched(
+      {required this.userType,
+      required this.filterMap,
+      required this.fetchLocationCheckListsModel});
 }
 
 class LocationCheckListsNotFetched extends LocationState {
   final String checkListsNotFetched;
+  final Map filterMap;
+  final String userType;
 
-  LocationCheckListsNotFetched({required this.checkListsNotFetched});
+  LocationCheckListsNotFetched(
+      {required this.userType,
+      required this.filterMap,
+      required this.checkListsNotFetched});
 }
 
 class FetchingLocationAssets extends LocationState {}
@@ -124,16 +138,20 @@ class FetchingLocationAssets extends LocationState {}
 class LocationAssetsFetched extends LocationState {
   final List<LocationAssetsDatum> locationAssets;
   final bool locationAssetsListReachedMax;
+  final Map filterMap;
 
   LocationAssetsFetched(
-      {required this.locationAssetsListReachedMax,
+      {required this.filterMap,
+      required this.locationAssetsListReachedMax,
       required this.locationAssets});
 }
 
 class LocationAssetsNotFetched extends LocationState {
   final String assetsNotFetched;
+  final Map filterMap;
 
-  LocationAssetsNotFetched({required this.assetsNotFetched});
+  LocationAssetsNotFetched(
+      {required this.filterMap, required this.assetsNotFetched});
 }
 
 class FetchingLocationLogBooks extends LocationState {}

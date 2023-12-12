@@ -67,3 +67,21 @@ class ApplyLogBookListFilter extends LocationEvent {
 
   ApplyLogBookListFilter({required this.filterMap});
 }
+
+class ApplyAssetsListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyAssetsListFilter({required this.filterMap});
+}
+
+class ApplyPermitListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyPermitListFilter({required this.filterMap});
+}
+
+class ApplyCheckListFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyCheckListFilter({required this.filterMap});
+}
