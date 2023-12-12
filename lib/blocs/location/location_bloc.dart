@@ -207,16 +207,16 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     }
   }
 
-  FutureOr<void> _applyCheckListFilter(ApplyCheckListFilter event,
-      Emitter<LocationState> emit) {
+  FutureOr<void> _applyCheckListFilter(
+      ApplyCheckListFilter event, Emitter<LocationState> emit) {
     checkListFilterMap = {
       "checklistname": event.filterMap['checklistname'] ?? '',
       "category": event.filterMap['category'] ?? ''
     };
   }
 
-  Future<void> _fetchLocationCheckLists(FetchCheckListsLocation event,
-      Emitter<LocationState> emit) async {
+  Future<void> _fetchLocationCheckLists(
+      FetchCheckListsLocation event, Emitter<LocationState> emit) async {
     emit(FetchingLocationCheckLists());
     try {
       String hashCode =
@@ -224,8 +224,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String userType =
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
       FetchLocationCheckListsModel fetchLocationCheckListsModel =
-      await _locationRepository.fetchLocationCheckLists(
-          hashCode, jsonEncode(checkListFilterMap), locationId);
+          await _locationRepository.fetchLocationCheckLists(
+              hashCode, jsonEncode(checkListFilterMap), locationId);
       if (fetchLocationCheckListsModel.data.isNotEmpty) {
         emit(LocationCheckListsFetched(
             fetchLocationCheckListsModel: fetchLocationCheckListsModel,
