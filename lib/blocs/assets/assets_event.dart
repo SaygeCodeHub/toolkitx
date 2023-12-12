@@ -136,10 +136,9 @@ class FetchAddAssetsDocument extends AssetsEvent {
 }
 
 class SelectAssetsDocument extends AssetsEvent {
-  final String documentId;
   final bool isChecked;
 
-  SelectAssetsDocument({required this.documentId, required this.isChecked});
+  SelectAssetsDocument({required this.isChecked});
 }
 
 class AddManageDocument extends AssetsEvent {

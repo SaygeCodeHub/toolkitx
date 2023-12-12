@@ -54,6 +54,5 @@ abstract class AssetsRepository {
   Future<FetchAddAssetsDocumentModel> fetchAddAssetsDocument(
       int pageNo, String hashCode, String assetId, String filter);
 
-  Future<AddManageDocumentModel> addManageDocumentRepo(
-      Map addDocumentMap);
+  Future<AddManageDocumentModel> addManageDocumentRepo(Map addDocumentMap);
 }

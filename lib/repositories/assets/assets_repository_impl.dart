@@ -131,7 +131,8 @@ class AssetsRepositoryImpl extends AssetsRepository {
   }
 
   @override
-  Future<AddManageDocumentModel> addManageDocumentRepo(Map addDocumentMap) async {
+  Future<AddManageDocumentModel> addManageDocumentRepo(
+      Map addDocumentMap) async {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}asset/managedocuments", addDocumentMap);
     return AddManageDocumentModel.fromJson(response);

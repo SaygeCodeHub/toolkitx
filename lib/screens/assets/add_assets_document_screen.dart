@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
@@ -27,7 +25,7 @@ class AddAssetsDocumentScreen extends StatelessWidget {
     selectedCreatedForIdList.clear();
     context.read<AssetsBloc>().add(FetchAddAssetsDocument(pageNo: 1));
     return Scaffold(
-      appBar: const GenericAppBar(title: 'kAddDocument'),
+      appBar: const GenericAppBar(title: StringConstants.kAddDocument),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -45,7 +43,7 @@ class AddAssetsDocumentScreen extends StatelessWidget {
             Expanded(
               child: BlocBuilder<AssetsBloc, AssetsState>(
                 buildWhen: (previousState, currentState) =>
-                currentState is AddAssetsDocumentFetching ||
+                    currentState is AddAssetsDocumentFetching ||
                     currentState is AddAssetsDocumentFetched ||
                     currentState is AddAssetsDocumentNotFetched,
                 builder: (context, state) {
@@ -67,7 +65,8 @@ class AddAssetsDocumentScreen extends StatelessWidget {
                                   selectedCreatedForIdList
                                       .toString()
                                       .replaceAll("[", "")
-                                      .replaceAll("]", "");
+                                      .replaceAll("]", "")
+                                      .replaceAll(", ", ",");
                             },
                           );
                         },
@@ -99,24 +98,24 @@ class AddAssetsDocumentScreen extends StatelessWidget {
             Expanded(
               child: BlocListener<AssetsBloc, AssetsState>(
                 listener: (context, state) {
-                  if(state is ManageDocumentAdding){
+                  if (state is ManageDocumentAdding) {
                     ProgressBar.show(context);
-                  }else if(state is ManageDocumentAdded){
+                  } else if (state is ManageDocumentAdded) {
                     ProgressBar.dismiss(context);
                     Navigator.pop(context);
-                    Navigator.pushReplacementNamed(context, AssetsManageDocumentScreen.routeName);
-                  }else if(state is ManageDocumentNotAdded){
+                    Navigator.pushReplacementNamed(
+                        context, AssetsManageDocumentScreen.routeName);
+                  } else if (state is ManageDocumentNotAdded) {
                     ProgressBar.dismiss(context);
-                    showCustomSnackBar(context, 'Document Added', '');
+                    showCustomSnackBar(context, state.errorMessage, '');
                   }
                 },
                 child: PrimaryButton(
                     onPressed: () {
-                      log(
-                          'id=======================>$addDocumentApp');
-                      context.read<AssetsBloc>().add(AddManageDocument(
-                          addDocumentMap: addDocumentApp));
-                    }, textValue: StringConstants.kDone),
+                      context.read<AssetsBloc>().add(
+                          AddManageDocument(addDocumentMap: addDocumentApp));
+                    },
+                    textValue: StringConstants.kDone),
               ),
             )
           ],

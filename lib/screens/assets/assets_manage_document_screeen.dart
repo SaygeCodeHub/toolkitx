@@ -11,6 +11,8 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
+import '../../utils/database_utils.dart';
+import '../../widgets/generic_no_records_text.dart';
 import 'widgets/assets_manage_document_popup_menu.dart';
 
 class AssetsManageDocumentScreen extends StatelessWidget {
@@ -111,6 +113,11 @@ class AssetsManageDocumentScreen extends StatelessWidget {
                         separatorBuilder: (context, index) {
                           return const SizedBox(height: tinierSpacing);
                         }));
+              } else if (state is AssetsGetDocumentError) {
+                return Center(
+                  child: NoRecordsText(
+                      text: DatabaseUtil.getText('no_records_found')),
+                );
               } else {
                 return const SizedBox.shrink();
               }

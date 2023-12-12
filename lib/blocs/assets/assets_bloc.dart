@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
@@ -454,11 +453,11 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
 
   FutureOr<void> _selectAssetsDocument(
       SelectAssetsDocument event, Emitter<AssetsState> emit) {
-    emit(AssetsDocumentSelected(
-        documentId: event.documentId, isChecked: event.isChecked));
+    emit(AssetsDocumentSelected(isChecked: event.isChecked));
   }
 
-  Future<FutureOr<void>> _addManageDocument(AddManageDocument event, Emitter<AssetsState> emit) async {
+  Future<FutureOr<void>> _addManageDocument(
+      AddManageDocument event, Emitter<AssetsState> emit) async {
     emit(ManageDocumentAdding());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -469,14 +468,18 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "documents": event.addDocumentMap['documents'],
         "userid": userId
       };
-      debugPrint("map====================>$addDocumentMap");
-      AddManageDocumentModel addManageDocumentModel =
-          await _assetsRepository.addManageDocumentRepo(addDocumentMap);
-      if (addManageDocumentModel.status == 200) {
-        emit(ManageDocumentAdded());
+      if (event.addDocumentMap['documents'] == null ||
+          event.addDocumentMap['documents'].toString().isEmpty) {
+        emit(ManageDocumentNotAdded(errorMessage: 'Please Select Document'));
       } else {
-        emit(ManageDocumentNotAdded(
-            errorMessage: addManageDocumentModel.message));
+        AddManageDocumentModel addManageDocumentModel =
+            await _assetsRepository.addManageDocumentRepo(addDocumentMap);
+        if (addManageDocumentModel.status == 200) {
+          emit(ManageDocumentAdded());
+        } else {
+          emit(ManageDocumentNotAdded(
+              errorMessage: addManageDocumentModel.message));
+        }
       }
     } catch (e) {
       emit(ManageDocumentNotAdded(errorMessage: e.toString()));

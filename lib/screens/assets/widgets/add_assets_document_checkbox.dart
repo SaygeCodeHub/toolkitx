@@ -24,17 +24,15 @@ class AddAssetsDocumentCheckbox extends StatelessWidget {
       selectedCreatedForIdList.add(documentId);
       onCreatedForChanged(selectedCreatedForIdList);
     } else {
-      onCreatedForChanged(selectedCreatedForIdList);
       selectedCreatedForIdList.remove(documentId);
+      onCreatedForChanged(selectedCreatedForIdList);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     bool isChecked = false;
-    context
-        .read<AssetsBloc>()
-        .add(SelectAssetsDocument(documentId: '', isChecked: isChecked));
+    context.read<AssetsBloc>().add(SelectAssetsDocument(isChecked: isChecked));
     return BlocBuilder<AssetsBloc, AssetsState>(
       buildWhen: (previousState, currentState) =>
           currentState is AssetsDocumentSelected,
@@ -54,8 +52,9 @@ class AddAssetsDocumentCheckbox extends StatelessWidget {
               value: selectedCreatedForIdList.contains(data.docid),
               onChanged: (isChecked) {
                 _checkboxChange(isChecked, data.docid);
-                context.read<AssetsBloc>().add(SelectAssetsDocument(
-                    documentId: data.docid, isChecked: isChecked!));
+                context
+                    .read<AssetsBloc>()
+                    .add(SelectAssetsDocument(isChecked: isChecked!));
               });
         } else {
           return const SizedBox.shrink();

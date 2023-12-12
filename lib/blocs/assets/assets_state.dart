@@ -268,10 +268,9 @@ class AddAssetsDocumentNotFetched extends AssetsState {
 }
 
 class AssetsDocumentSelected extends AssetsState {
-  final String documentId;
   final bool isChecked;
 
-  AssetsDocumentSelected({required this.documentId, required this.isChecked});
+  AssetsDocumentSelected({required this.isChecked});
 }
 
 class ManageDocumentAdding extends AssetsState {}
