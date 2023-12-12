@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/assets/assets_manage_document_filter_screen.dart';
 import 'package:toolkit/screens/assets/widgets/add_assets_document_checkbox.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -22,7 +23,7 @@ class AddAssetsDocumentScreen extends StatelessWidget {
     selectedCreatedForIdList.clear();
     context.read<AssetsBloc>().add(FetchAddAssetsDocument(pageNo: 1));
     return Scaffold(
-      appBar: const GenericAppBar(title: 'kAddDocument'),
+      appBar: GenericAppBar(title: DatabaseUtil.getText('AddDocuments')),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -32,7 +33,9 @@ class AddAssetsDocumentScreen extends StatelessWidget {
         child: Column(
           children: [
             CustomIconButtonRow(
-                primaryOnPress: () {},
+                primaryOnPress: () {
+                  Navigator.pushNamed(context, AssetsManageDocumentFilterScreen.routeName);
+                },
                 secondaryVisible: false,
                 isEnabled: true,
                 secondaryOnPress: () {},

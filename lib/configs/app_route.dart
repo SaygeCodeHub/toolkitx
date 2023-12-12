@@ -12,6 +12,7 @@ import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
 import '../screens/assets/assets_manage_comments_screen.dart';
+import '../screens/assets/assets_manage_document_filter_screen.dart';
 import '../screens/assets/assets_manage_document_screeen.dart';
 import '../screens/assets/assets_manage_meter_reading_screen.dart';
 import '../screens/assets/assets_report_failure_screen.dart';
@@ -452,6 +453,8 @@ class AppRoutes {
         return _createRoute(const ManageExpenseFormScreen());
       case AddAssetsDocumentScreen.routeName:
         return _createRoute(const AddAssetsDocumentScreen());
+      case AssetsManageDocumentFilterScreen.routeName:
+        return _createRoute(const AssetsManageDocumentFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
