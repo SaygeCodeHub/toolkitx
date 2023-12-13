@@ -18,6 +18,7 @@ import '../screens/assets/assets_manage_meter_reading_screen.dart';
 import '../screens/assets/assets_report_failure_screen.dart';
 import '../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../screens/assets/widgets/assets_add_comment_screen.dart';
+import '../screens/assets/widgets/assets_document_filter_type_list.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/assets/widgets/assets_report_failure_location_list.dart';
@@ -455,6 +456,10 @@ class AppRoutes {
         return _createRoute(const AddAssetsDocumentScreen());
       case AssetsManageDocumentFilterScreen.routeName:
         return _createRoute(const AssetsManageDocumentFilterScreen());
+      case AssetsDocumentFilterTypeList.routeName:
+        return _createRoute(AssetsDocumentFilterTypeList(
+          selectedTypeName: settings.arguments.toString(),
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

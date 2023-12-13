@@ -1,8 +1,10 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
+import 'package:toolkit/screens/assets/widgets/assets_document_type_screen.dart';
+import '../../blocs/assets/assets_bloc.dart';
 import '../../blocs/documents/documents_bloc.dart';
 import '../../blocs/documents/documents_events.dart';
 import '../../blocs/documents/documents_states.dart';
@@ -13,7 +15,6 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 import '../../widgets/primary_button.dart';
-import '../documents/widgets/document_location_screen.dart';
 import '../documents/widgets/document_status_filter.dart';
 
 class AssetsManageDocumentFilterScreen extends StatelessWidget {
@@ -61,6 +62,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
+                      value: documentFilterMap["documentName"] ?? '',
                         onTextFieldChanged: (textField) {
                           documentFilterMap["documentName"] = textField;
                         },
@@ -75,10 +77,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                     const SizedBox(height: tiniestSpacing),
                     DocumentStatusFilter(documentFilterMap: documentFilterMap),
                     const SizedBox(height: xxTinySpacing),
-                    DocumentTypeScreen(
-                        documentFilterMap: documentFilterMap,
-                        locationList: state.fetchDocumentMasterModel.data,
-                        isFromLinkDoc: false),
+                    const AssetsDocumentTypeScreen(),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('owner'),
                         style: Theme.of(context)
@@ -87,6 +86,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
+                      value: documentFilterMap["owner"] ?? '',
                       onTextFieldChanged: (textField) {
                         documentFilterMap["owner"] = textField;
                       },
@@ -105,12 +105,11 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              log('map===============>$documentFilterMap');
-              context.read<DocumentsBloc>().add(ApplyDocumentFilter(
-                  filterMap: documentFilterMap));
-              // Navigator.pop(context);
-              // Navigator.pushReplacementNamed(
-              //     context, AddAssetsDocumentScreen.routeName);
+              context.read<AssetsBloc>().add(ApplyAssetsDocumentFilter(
+                  assetsDocumentFilterMap: documentFilterMap));
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, AddAssetsDocumentScreen.routeName);
             },
             textValue: StringConstants.kApply),
       ),

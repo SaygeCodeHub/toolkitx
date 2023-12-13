@@ -24,6 +24,7 @@ import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
+
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -57,15 +58,22 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<DeleteAssetsDocument>(_deleteAssetsDocument);
     on<FetchAddAssetsDocument>(_fetchAddAssetsDocument);
     on<SelectAssetsDocument>(_selectAssetsDocument);
+    on<SelectAssetsDocumentTypeFilter>(_selectAssetsDocumentTypeFilter);
+    on<ApplyAssetsDocumentFilter>(_applyAssetsDocumentFilter);
+    on<ClearAssetsDocumentFilter>(_clearAssetsDocumentFilter);
   }
 
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
+  List<AddDocumentDatum> addDocumentDatum = [];
   bool hasReachedMax = false;
+  bool hasDocumentReachedMax = false;
   bool isFromAdd = true;
   Map filters = {};
+  Map documentFilters = {};
   List assetMasterData = [];
   String selectLocationName = '';
+  String selectTypeName = '';
   String assetId = "";
 
   Future<FutureOr<void>> _fetchAssetsList(
@@ -73,7 +81,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     emit(AssetsListFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.isFromHome == true) {
+      if (event.isFromHome == false) {
         FetchAssetsListModel fetchAssetsListModel = await _assetsRepository
             .fetchAssetsListRepo(event.pageNo, hashCode!, "");
         assetsDatum.addAll(fetchAssetsListModel.data);
@@ -436,13 +444,29 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
     emit(AddAssetsDocumentFetching());
     try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
-          await _assetsRepository.fetchAddAssetsDocument(
-              event.pageNo, hashCode!, assetId, '');
-      if (fetchAddAssetsDocumentModel.status == 200) {
-        emit(AddAssetsDocumentFetched(
-            fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel));
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (event.isFromHome) {
+        FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+            await _assetsRepository.fetchAddAssetsDocument(
+                event.pageNo, hashCode, assetId, '{}');
+        hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
+        addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+          emit(AddAssetsDocumentFetched(
+              fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
+              documentFilterMap: {},
+              data: fetchAddAssetsDocumentModel.data));
+        } else {
+          FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+              await _assetsRepository.fetchAddAssetsDocument(
+                  event.pageNo, hashCode, assetId, jsonEncode(documentFilters));
+          hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
+          addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+          if (fetchAddAssetsDocumentModel.status == 200) {
+            emit(AddAssetsDocumentFetched(
+                fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
+                documentFilterMap: documentFilters,
+                data: fetchAddAssetsDocumentModel.data));
+          }
       }
     } catch (e) {
       emit(AddAssetsDocumentNotFetched(errorMessage: e.toString()));
@@ -454,4 +478,20 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     emit(AssetsDocumentSelected(
         documentId: event.documentId, isChecked: event.isChecked));
   }
+
+  FutureOr<void> _selectAssetsDocumentTypeFilter(
+      SelectAssetsDocumentTypeFilter event, Emitter<AssetsState> emit) {
+    emit(AssetsDocumentTypeFilterSelected(
+        selectedTypeId: event.selectedTypeId,
+        selectedTypeName: event.selectedTypeName));
+  }
+
+  FutureOr<void> _applyAssetsDocumentFilter(
+      ApplyAssetsDocumentFilter event, Emitter<AssetsState> emit) {
+    documentFilters = event.assetsDocumentFilterMap;
+  }
+
+  FutureOr<void> _clearAssetsDocumentFilter(ClearAssetsDocumentFilter event, Emitter<AssetsState> emit) {
+    documentFilters = {};
+    }
 }

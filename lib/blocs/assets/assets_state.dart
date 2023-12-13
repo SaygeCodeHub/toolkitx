@@ -234,12 +234,14 @@ class AssetsMeterReadingNotSaved extends AssetsState {
 class AssetsMeterSelected extends AssetsState {
   final int id;
   final String meterName;
+
   AssetsMeterSelected({required this.id, required this.meterName});
 }
 
 class AssetsRollOverSelected extends AssetsState {
   final String id;
   final String isRollover;
+
   AssetsRollOverSelected({required this.id, required this.isRollover});
 }
 
@@ -257,8 +259,13 @@ class AddAssetsDocumentFetching extends AssetsState {}
 
 class AddAssetsDocumentFetched extends AssetsState {
   final FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel;
+  final Map documentFilterMap;
+  final List<AddDocumentDatum> data;
 
-  AddAssetsDocumentFetched({required this.fetchAddAssetsDocumentModel});
+  AddAssetsDocumentFetched(
+      {required this.fetchAddAssetsDocumentModel,
+      required this.documentFilterMap,
+      required this.data});
 }
 
 class AddAssetsDocumentNotFetched extends AssetsState {
@@ -272,4 +279,12 @@ class AssetsDocumentSelected extends AssetsState {
   final bool isChecked;
 
   AssetsDocumentSelected({required this.documentId, required this.isChecked});
+}
+
+class AssetsDocumentTypeFilterSelected extends AssetsState {
+  final String selectedTypeId;
+  final String selectedTypeName;
+
+  AssetsDocumentTypeFilterSelected(
+      {required this.selectedTypeId, required this.selectedTypeName});
 }
