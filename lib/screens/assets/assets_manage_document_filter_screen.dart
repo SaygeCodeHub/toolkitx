@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -42,7 +41,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
             }
           },
           buildWhen: (previousState, currentState) =>
-          currentState is FetchingDocumentMaster ||
+              currentState is FetchingDocumentMaster ||
               currentState is DocumentMasterFetched ||
               currentState is DocumentMasterError,
           builder: (context, state) {
@@ -62,7 +61,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
-                      value: documentFilterMap["documentName"] ?? '',
+                        value: documentFilterMap["documentName"] ?? '',
                         onTextFieldChanged: (textField) {
                           documentFilterMap["documentName"] = textField;
                         },
@@ -86,12 +85,11 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
-                      value: documentFilterMap["owner"] ?? '',
-                      onTextFieldChanged: (textField) {
-                        documentFilterMap["owner"] = textField;
-                      },
-                        hintText: "Search by Owner name"
-                    ),
+                        value: documentFilterMap["owner"] ?? '',
+                        onTextFieldChanged: (textField) {
+                          documentFilterMap["owner"] = textField;
+                        },
+                        hintText: "Search by Owner name"),
                   ],
                 ),
               );

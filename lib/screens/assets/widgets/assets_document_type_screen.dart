@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -18,11 +17,14 @@ class AssetsDocumentTypeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AssetsBloc>().add(SelectAssetsDocumentTypeFilter(
-        selectedTypeId: AssetsManageDocumentFilterScreen.documentFilterMap['type'] ?? '',
-        selectedTypeName: AssetsManageDocumentFilterScreen.documentFilterMap['typeName'] ?? ''));
+        selectedTypeId:
+            AssetsManageDocumentFilterScreen.documentFilterMap['type'] ?? '',
+        selectedTypeName:
+            AssetsManageDocumentFilterScreen.documentFilterMap['typeName'] ??
+                ''));
     return BlocBuilder<AssetsBloc, AssetsState>(
         buildWhen: (previousState, currentState) =>
-        currentState is AssetsDocumentTypeFilterSelected,
+            currentState is AssetsDocumentTypeFilterSelected,
         builder: (context, state) {
           if (state is AssetsDocumentTypeFilterSelected) {
             return Column(children: [
@@ -40,12 +42,12 @@ class AssetsDocumentTypeScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   subtitle: state.selectedTypeName == ''
                       ? null
-                      : Text(
-                      state.selectedTypeName),
+                      : Text(state.selectedTypeName),
                   trailing:
-                  const Icon(Icons.navigate_next_rounded, size: kIconSize)),
+                      const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
-                  visible: state.selectedTypeId == DatabaseUtil.getText('Other'),
+                  visible:
+                      state.selectedTypeId == DatabaseUtil.getText('Other'),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -58,10 +60,11 @@ class AssetsDocumentTypeScreen extends StatelessWidget {
                         TextFieldWidget(
                             hintText: DatabaseUtil.getText('Other'),
                             onTextFieldChanged: (String textField) {
-                              AssetsManageDocumentFilterScreen.documentFilterMap['type'] =
-                              (state.selectedTypeId == 'Other'
-                                  ? textField
-                                  : '');
+                              AssetsManageDocumentFilterScreen
+                                      .documentFilterMap['type'] =
+                                  (state.selectedTypeId == 'Other'
+                                      ? textField
+                                      : '');
                             })
                       ]))
             ]);

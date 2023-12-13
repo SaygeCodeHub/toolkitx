@@ -8,7 +8,8 @@ import '../../../data/enums/document_status_enum.dart';
 import '../../../widgets/custom_choice_chip.dart';
 
 class AssetsDocumentStatusFilter extends StatelessWidget {
-  const AssetsDocumentStatusFilter({super.key, required this.documentFilterMap});
+  const AssetsDocumentStatusFilter(
+      {super.key, required this.documentFilterMap});
   final Map documentFilterMap;
 
   @override
@@ -19,7 +20,7 @@ class AssetsDocumentStatusFilter extends StatelessWidget {
       for (int i = 0; i < DocumentStatusEnum.values.length; i++)
         BlocBuilder<DocumentsBloc, DocumentsStates>(
           buildWhen: (previousState, currentState) =>
-          currentState is DocumentStatusFilterSelected,
+              currentState is DocumentStatusFilterSelected,
           builder: (context, state) {
             if (state is DocumentStatusFilterSelected) {
               String id = DocumentStatusEnum.values[i].value.toString();

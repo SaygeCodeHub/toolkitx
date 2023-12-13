@@ -445,29 +445,30 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
     emit(AddAssetsDocumentFetching());
     try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       if (event.isFromHome) {
         FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
             await _assetsRepository.fetchAddAssetsDocument(
                 event.pageNo, hashCode, assetId, '{}');
         hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
         addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+        emit(AddAssetsDocumentFetched(
+            fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
+            documentFilterMap: {},
+            data: fetchAddAssetsDocumentModel.data));
+      } else {
+        FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+            await _assetsRepository.fetchAddAssetsDocument(
+                event.pageNo, hashCode, assetId, jsonEncode(documentFilters));
+        hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
+        addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+        if (fetchAddAssetsDocumentModel.status == 200) {
           emit(AddAssetsDocumentFetched(
               fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
-              documentFilterMap: {},
+              documentFilterMap: documentFilters,
               data: fetchAddAssetsDocumentModel.data));
-        } else {
-          FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
-              await _assetsRepository.fetchAddAssetsDocument(
-                  event.pageNo, hashCode, assetId, jsonEncode(documentFilters));
-          hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
-          addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
-          if (fetchAddAssetsDocumentModel.status == 200) {
-            emit(AddAssetsDocumentFetched(
-                fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
-                documentFilterMap: documentFilters,
-                data: fetchAddAssetsDocumentModel.data));
-          }
+        }
       }
     } catch (e) {
       emit(AddAssetsDocumentNotFetched(errorMessage: e.toString()));
@@ -521,7 +522,8 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     documentFilters = event.assetsDocumentFilterMap;
   }
 
-  FutureOr<void> _clearAssetsDocumentFilter(ClearAssetsDocumentFilter event, Emitter<AssetsState> emit) {
+  FutureOr<void> _clearAssetsDocumentFilter(
+      ClearAssetsDocumentFilter event, Emitter<AssetsState> emit) {
     documentFilters = {};
-    }
+  }
 }

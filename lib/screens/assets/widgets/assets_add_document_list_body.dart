@@ -34,7 +34,9 @@ class AssetsAddDocumentListBody extends StatelessWidget {
                     AddAssetsDocumentScreen.selectedCreatedForIdList
                         .toString()
                         .replaceAll("[", "")
-                        .replaceAll("]", "");
+                        .replaceAll("]", "")
+                        .replaceAll(", ", ",");
+                ;
               },
             );
           } else {
@@ -43,8 +45,7 @@ class AssetsAddDocumentListBody extends StatelessWidget {
                 pageNo: AddAssetsDocumentScreen.pageNo, isFromHome: false));
             return const Center(
                 child: Padding(
-                    padding:
-                        EdgeInsets.all(kCircularProgressIndicatorPadding),
+                    padding: EdgeInsets.all(kCircularProgressIndicatorPadding),
                     child: SizedBox(
                         width: kCircularProgressIndicatorWidth,
                         child: CircularProgressIndicator())));

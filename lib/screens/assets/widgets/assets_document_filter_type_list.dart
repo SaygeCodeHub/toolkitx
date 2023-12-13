@@ -12,10 +12,11 @@ import '../../../widgets/generic_app_bar.dart';
 class AssetsDocumentFilterTypeList extends StatelessWidget {
   static const routeName = 'AssetsDocumentFilterTypeList';
   final String selectedTypeName;
-  const AssetsDocumentFilterTypeList({super.key, required this.selectedTypeName});
+  const AssetsDocumentFilterTypeList(
+      {super.key, required this.selectedTypeName});
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectType),
         body: SingleChildScrollView(
@@ -39,7 +40,7 @@ class AssetsDocumentFilterTypeList extends StatelessWidget {
                                 contentPadding: EdgeInsets.zero,
                                 activeColor: AppColor.deepBlue,
                                 controlAffinity:
-                                ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                                 title: Text(context
                                     .read<DocumentsBloc>()
                                     .masterData[0][index]
@@ -51,18 +52,18 @@ class AssetsDocumentFilterTypeList extends StatelessWidget {
                                     .toString(),
                                 groupValue: selectedTypeName,
                                 onChanged: (value) {
-                                    context.read<DocumentsBloc>().selectedType =
-                                        context
-                                            .read<DocumentsBloc>()
-                                            .masterData[0][index]
-                                            .name;
-                                    AssetsManageDocumentFilterScreen
-                                        .documentFilterMap["type"] =
-                                        context
-                                            .read<DocumentsBloc>()
-                                            .masterData[0][index]
-                                            .id
-                                            .toString();
+                                  context.read<DocumentsBloc>().selectedType =
+                                      context
+                                          .read<DocumentsBloc>()
+                                          .masterData[0][index]
+                                          .name;
+                                  AssetsManageDocumentFilterScreen
+                                          .documentFilterMap["type"] =
+                                      context
+                                          .read<DocumentsBloc>()
+                                          .masterData[0][index]
+                                          .id
+                                          .toString();
 
                                   context.read<AssetsBloc>().add(
                                       SelectAssetsDocumentTypeFilter(
@@ -70,9 +71,11 @@ class AssetsDocumentFilterTypeList extends StatelessWidget {
                                               .read<DocumentsBloc>()
                                               .masterData[0][index]
                                               .id
-                                              .toString(), selectedTypeName: context
-                                          .read<DocumentsBloc>()
-                                          .masterData[0][index].name));
+                                              .toString(),
+                                          selectedTypeName: context
+                                              .read<DocumentsBloc>()
+                                              .masterData[0][index]
+                                              .name));
                                   Navigator.pop(context);
                                 });
                           }),
