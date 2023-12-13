@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/screens/assets/assets_manage_document_filter_screen.dart';
+import 'package:toolkit/screens/assets/assets_manage_document_screeen.dart';
+import 'package:toolkit/screens/assets/widgets/add_assets_document_checkbox.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
 import '../../widgets/custom_icon_button_row.dart';
@@ -142,13 +146,28 @@ class AddAssetsDocumentScreen extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     textValue: DatabaseUtil.getText('buttonBack'))),
-            const SizedBox(
-              width: xxTinierSpacing,
-            ),
+            const SizedBox(width: xxTinierSpacing),
             Expanded(
-              child: PrimaryButton(
-                  onPressed: () {}, textValue: StringConstants.kDone),
-            )
+                child: BlocListener<AssetsBloc, AssetsState>(
+                    listener: (context, state) {
+                      if (state is ManageDocumentAdding) {
+                        ProgressBar.show(context);
+                      } else if (state is ManageDocumentAdded) {
+                        ProgressBar.dismiss(context);
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, AssetsManageDocumentScreen.routeName);
+                      } else if (state is ManageDocumentNotAdded) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context, state.errorMessage, '');
+                      }
+                    },
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context.read<AssetsBloc>().add(AddManageDocument(
+                              addDocumentMap: addDocumentApp));
+                        },
+                        textValue: StringConstants.kDone)))
           ],
         ),
       ),

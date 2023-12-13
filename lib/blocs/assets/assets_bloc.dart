@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
@@ -24,7 +25,6 @@ import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
-
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -61,6 +61,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SelectAssetsDocumentTypeFilter>(_selectAssetsDocumentTypeFilter);
     on<ApplyAssetsDocumentFilter>(_applyAssetsDocumentFilter);
     on<ClearAssetsDocumentFilter>(_clearAssetsDocumentFilter);
+    on<AddManageDocument>(_addManageDocument);
   }
 
   int assetTabIndex = 0;
@@ -475,8 +476,37 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
 
   FutureOr<void> _selectAssetsDocument(
       SelectAssetsDocument event, Emitter<AssetsState> emit) {
-    emit(AssetsDocumentSelected(
-        documentId: event.documentId, isChecked: event.isChecked));
+    emit(AssetsDocumentSelected(isChecked: event.isChecked));
+  }
+
+  Future<FutureOr<void>> _addManageDocument(
+      AddManageDocument event, Emitter<AssetsState> emit) async {
+    emit(ManageDocumentAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addDocumentMap = {
+        "hashcode": hashCode,
+        "assetid": assetId,
+        "documents": event.addDocumentMap['documents'],
+        "userid": userId
+      };
+      if (event.addDocumentMap['documents'] == null ||
+          event.addDocumentMap['documents'].toString().isEmpty) {
+        emit(ManageDocumentNotAdded(errorMessage: 'Please Select Document'));
+      } else {
+        AddManageDocumentModel addManageDocumentModel =
+            await _assetsRepository.addManageDocumentRepo(addDocumentMap);
+        if (addManageDocumentModel.status == 200) {
+          emit(ManageDocumentAdded());
+        } else {
+          emit(ManageDocumentNotAdded(
+              errorMessage: addManageDocumentModel.message));
+        }
+      }
+    } catch (e) {
+      emit(ManageDocumentNotAdded(errorMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _selectAssetsDocumentTypeFilter(
