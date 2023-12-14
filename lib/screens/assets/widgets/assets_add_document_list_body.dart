@@ -36,7 +36,6 @@ class AssetsAddDocumentListBody extends StatelessWidget {
                         .replaceAll("[", "")
                         .replaceAll("]", "")
                         .replaceAll(", ", ",");
-                ;
               },
             );
           } else {
