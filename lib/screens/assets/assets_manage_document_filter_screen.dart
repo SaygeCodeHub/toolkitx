@@ -65,7 +65,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                         onTextFieldChanged: (textField) {
                           documentFilterMap["documentName"] = textField;
                         },
-                        hintText: "Search by Document name"),
+                        hintText: StringConstants.kSearchByDocumentName),
                     const SizedBox(height: xxTinySpacing),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Status'),
@@ -89,7 +89,7 @@ class AssetsManageDocumentFilterScreen extends StatelessWidget {
                         onTextFieldChanged: (textField) {
                           documentFilterMap["owner"] = textField;
                         },
-                        hintText: "Search by Owner name"),
+                        hintText: StringConstants.kSearchByOwnerName),
                   ],
                 ),
               );
