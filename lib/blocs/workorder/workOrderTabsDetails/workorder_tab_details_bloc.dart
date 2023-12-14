@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -527,42 +526,42 @@ class WorkOrderTabDetailsBloc
   FutureOr _manageMiscCost(ManageWorkOrderMiscCost event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(ManagingWorkOrderMisCost());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.manageMisCostMap['service'] == null ||
-          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor == '' ||
-          event.manageMisCostMap['quan'] == null ||
-          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency == '' ||
-          event.manageMisCostMap['amount'] == null) {
-        emit(WorkOrderMisCostCannotManage(
-            cannotManageMiscCost: StringConstants.kMiscCostValidation));
-      } else {
-        Map manageMiscCostMap = {
-          "service": event.manageMisCostMap['service'] ?? '',
-          "vendor": event.manageMisCostMap['vendor'] ??
-              WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor,
-          "quan": event.manageMisCostMap['quan'] ?? '',
-          "currency": event.manageMisCostMap['currency'] ??
-              WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency,
-          "amount": event.manageMisCostMap['amount'] ?? '',
-          "hashcode": hashCode,
-          "woid": event.manageMisCostMap['workorderId'] ?? '',
-          "id": WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] ?? ''
-        };
-        ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
-            await _workOrderRepository.manageMiscCost(manageMiscCostMap);
-        if (manageWorkOrderMiscCostModel.status == 200) {
-          emit(WorkOrderMisCostManaged(
-              manageWorkOrderMiscCostModel: manageWorkOrderMiscCostModel));
-        } else {
-          emit(WorkOrderMisCostCannotManage(
-              cannotManageMiscCost:
-                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
-        }
-      }
-    } catch (e) {
-      emit(WorkOrderMisCostCannotManage(cannotManageMiscCost: e.toString()));
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    // if (event.manageMisCostMap['service'] == null ||
+    //     WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor == '' ||
+    //     event.manageMisCostMap['quan'] == null ||
+    //     WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency == '' ||
+    //     event.manageMisCostMap['amount'] == null) {
+    //   emit(WorkOrderMisCostCannotManage(
+    //       cannotManageMiscCost: StringConstants.kMiscCostValidation));
+    // } else {
+    Map manageMiscCostMap = {
+      "service": event.manageMisCostMap['service'] ?? '',
+      "vendor": event.manageMisCostMap['vendor'] ??
+          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor,
+      "quan": event.manageMisCostMap['quan'] ?? '',
+      "currency": event.manageMisCostMap['currency'] ??
+          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency,
+      "amount": event.manageMisCostMap['amount'] ?? '',
+      "hashcode": hashCode,
+      "woid": event.manageMisCostMap['workorderId'] ?? '',
+      "id": WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] ?? ''
+    };
+    ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
+        await _workOrderRepository.manageMiscCost(manageMiscCostMap);
+    if (manageWorkOrderMiscCostModel.status == 200) {
+      emit(WorkOrderMisCostManaged(
+          manageWorkOrderMiscCostModel: manageWorkOrderMiscCostModel));
+    } else {
+      emit(WorkOrderMisCostCannotManage(
+          cannotManageMiscCost:
+              DatabaseUtil.getText('some_unknown_error_please_try_again')));
     }
+    // }
+    // } catch (e) {
+    //   emit(WorkOrderMisCostCannotManage(cannotManageMiscCost: e.toString()));
+    // }
   }
 
   FutureOr _acceptWorkOrder(

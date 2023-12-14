@@ -34,6 +34,10 @@ class WorkOrderFormScreenOne extends StatelessWidget {
         bottomNavigationBar:
             WorkOrderFormOneButton(workOrderDetailsMap: workOrderDetailsMap),
         body: BlocBuilder<WorkOrderBloc, WorkOrderStates>(
+          buildWhen: (previousState, currentState) =>
+              currentState is FetchingWorkOrderMaster ||
+              currentState is WorkOrderMasterFetched ||
+              currentState is WorkOrderMasterNotFetched,
           builder: (context, state) {
             if (state is FetchingWorkOrderMaster) {
               return const Center(child: CircularProgressIndicator());
