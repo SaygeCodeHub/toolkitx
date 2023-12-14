@@ -301,6 +301,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String privateKey =
+          await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
       FetchLocationLogBookModel fetchLocationLogBookModel =
           await _locationRepository.fetchLocationLogBooks(event.pageNo,
               hashCode, userId, jsonEncode(logBookFilterMap), locationId);
@@ -310,7 +312,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         emit(LocationLogBooksFetched(
             locationLogBooksListReachedMax: locationLogBooksListReachedMax,
             locationLogBooks: locationLogBooks,
-            filterMap: logBookFilterMap));
+            filterMap: logBookFilterMap,
+            apiKey: privateKey));
       } else {
         emit(LocationLogBooksNotFetched(
             logBooksNotFetched: StringConstants.kNoRecordsFound,

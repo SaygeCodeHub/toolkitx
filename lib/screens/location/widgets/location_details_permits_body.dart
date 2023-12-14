@@ -9,6 +9,7 @@ import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/location/fetch_location_permits_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../../permit/permit_details_screen.dart';
 import 'location_details_permits_tab.dart';
 
 class LocationDetailsPermitsBody extends StatelessWidget {
@@ -34,6 +35,10 @@ class LocationDetailsPermitsBody extends StatelessWidget {
             if (index < locationPermits.length) {
               return CustomCard(
                 child: ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(context, PermitDetailsScreen.routeName,
+                        arguments: locationPermits[index].id);
+                  },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(
                       padding: const EdgeInsets.only(bottom: xxTinierSpacing),
@@ -45,8 +50,8 @@ class LocationDetailsPermitsBody extends StatelessWidget {
                                     .textTheme
                                     .small
                                     .copyWith(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w600)),
+                                    color: AppColor.black,
+                                    fontWeight: FontWeight.w600)),
                             const SizedBox(width: tiniestSpacing),
                             Text(locationPermits[index].status,
                                 style: Theme.of(context)
