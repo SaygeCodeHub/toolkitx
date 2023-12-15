@@ -27,6 +27,9 @@ class LocationDetailsCheckListsTab extends StatelessWidget {
     return Column(
       children: [
         BlocBuilder<LocationBloc, LocationState>(
+          buildWhen: (previousState, currentState) =>
+              currentState is LocationCheckListsFetched ||
+              currentState is LocationCheckListsNotFetched,
           builder: (context, state) {
             if (state is LocationCheckListsFetched) {
               return CustomIconButtonRow(

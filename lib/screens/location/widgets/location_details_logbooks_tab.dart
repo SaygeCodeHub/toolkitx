@@ -107,7 +107,8 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
               return LocationDetailsLogBooksBody(
                   locationLogBooks: state.locationLogBooks,
                   locationLogBooksListReachedMax:
-                      state.locationLogBooksListReachedMax);
+                      state.locationLogBooksListReachedMax,
+                  apiKey: state.apiKey);
             } else if (state is LocationLogBooksNotFetched) {
               if (context.read<LocationBloc>().logBookFilterMap.isNotEmpty) {
                 return const NoRecordsText(
