@@ -7,18 +7,22 @@ import '../../../blocs/location/location_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/location/fetch_location_logbooks_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../../logBook/logbook_details_screen.dart';
 import 'location_details_logbooks_tab.dart';
 
 class LocationDetailsLogBooksBody extends StatelessWidget {
   final List<LocationLogBooksDatum> locationLogBooks;
   final bool locationLogBooksListReachedMax;
+  final String apiKey;
 
   const LocationDetailsLogBooksBody(
       {Key? key,
       required this.locationLogBooks,
-      required this.locationLogBooksListReachedMax})
+      required this.locationLogBooksListReachedMax,
+      required this.apiKey})
       : super(key: key);
 
   @override
@@ -34,6 +38,13 @@ class LocationDetailsLogBooksBody extends StatelessWidget {
             if (index < locationLogBooks.length) {
               return CustomCard(
                 child: ListTile(
+                  onTap: () {
+                    String encryptId = '';
+                    encryptId = EncryptData.encryptAESPrivateKey(
+                        locationLogBooks[index].id.toString(), apiKey);
+                    Navigator.pushNamed(context, LogBookDetailsScreen.routeName,
+                        arguments: encryptId);
+                  },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(
                       padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
