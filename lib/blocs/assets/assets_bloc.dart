@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
@@ -25,6 +26,7 @@ import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
+
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -67,8 +69,11 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
   List<AddDocumentDatum> addDocumentDatum = [];
+  List<AssetsDowntimeDatum> assetsDowntimeDatum = [];
+  List<ManageDocumentDatum> manageDocumentDatum = [];
   bool hasReachedMax = false;
   bool hasDocumentReachedMax = false;
+  bool hasDowntimeReachedMax = false;
   bool isFromAdd = true;
   Map filters = {};
   Map documentFilters = {};
@@ -184,20 +189,24 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsGetDownTime event, Emitter<AssetsState> emit) async {
     emit(AssetsGetDownTimeFetching());
     try {
-      List popUpMenuItems = [
-        DatabaseUtil.getText("Edit"),
-        DatabaseUtil.getText("Delete"),
-        DatabaseUtil.getText("Cancel"),
-      ];
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
-          await _assetsRepository.fetchAssetsDowntimeRepo(
-              event.pageNo, hashCode!, event.assetId);
-
-      emit(AssetsGetDownTimeFetched(
-          fetchAssetsDowntimeModel: fetchAssetsDowntimeModel,
-          assetsPopUpMenu: popUpMenuItems,
-          showPopUpMenu: true));
+      if(!hasDowntimeReachedMax) {
+        List popUpMenuItems = [
+          DatabaseUtil.getText("Edit"),
+          DatabaseUtil.getText("Delete"),
+          DatabaseUtil.getText("Cancel"),
+        ];
+        log("page============>${event.pageNo}");
+        String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+        FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
+            await _assetsRepository.fetchAssetsDowntimeRepo(
+                event.pageNo, hashCode!, event.assetId);
+        hasDowntimeReachedMax = fetchAssetsDowntimeModel.data.isEmpty;
+        assetsDowntimeDatum.addAll(fetchAssetsDowntimeModel.data);
+        emit(AssetsGetDownTimeFetched(
+            assetsPopUpMenu: popUpMenuItems,
+            showPopUpMenu: true,
+            assetDowntimeDatum: assetsDowntimeDatum));
+      }
     } catch (e) {
       emit(AssetsGetDownTimeError(errorMessage: e.toString()));
     }
@@ -241,8 +250,10 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel =
           await _assetsRepository.fetchAssetsDocument(
               event.pageNo, hashCode!, event.assetsId);
+      hasDocumentReachedMax = fetchAssetsManageDocumentModel.data.isEmpty;
+      manageDocumentDatum.addAll(fetchAssetsManageDocumentModel.data);
       emit(AssetsGetDocumentFetched(
-          fetchAssetsManageDocumentModel: fetchAssetsManageDocumentModel,
+          manageDocumentDatum: manageDocumentDatum,
           assetsPopUpMenu: popUpMenuItems,
           showPopUpMenu: true));
     } catch (e) {

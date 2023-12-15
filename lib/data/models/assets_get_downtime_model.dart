@@ -9,7 +9,7 @@ String fetchAssetsDowntimeModelToJson(FetchAssetsDowntimeModel data) =>
 class FetchAssetsDowntimeModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<AssetsDowntimeDatum> data;
 
   FetchAssetsDowntimeModel({
     required this.status,
@@ -21,7 +21,7 @@ class FetchAssetsDowntimeModel {
       FetchAssetsDowntimeModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<AssetsDowntimeDatum>.from(json["Data"].map((x) => AssetsDowntimeDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,14 +31,14 @@ class FetchAssetsDowntimeModel {
       };
 }
 
-class Datum {
+class AssetsDowntimeDatum {
   final String id;
   final String startdatetime;
   final String enddatetime;
   final int totalmins;
   final String note;
 
-  Datum({
+  AssetsDowntimeDatum({
     required this.id,
     required this.startdatetime,
     required this.enddatetime,
@@ -46,7 +46,7 @@ class Datum {
     required this.note,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory AssetsDowntimeDatum.fromJson(Map<String, dynamic> json) => AssetsDowntimeDatum(
         id: json["id"],
         startdatetime: json["startdatetime"],
         enddatetime: json["enddatetime"],
