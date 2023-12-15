@@ -38,8 +38,8 @@ class AssetsManageDocumentBody extends StatelessWidget {
                                       .textTheme
                                       .small
                                       .copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColor.black))),
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.black))),
                           SizedBox(
                               width: smallerSpacing,
                               child: AssetsManageDocumentPopUp(

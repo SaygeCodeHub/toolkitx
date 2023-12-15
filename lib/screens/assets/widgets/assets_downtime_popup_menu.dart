@@ -9,9 +9,7 @@ import '../../../blocs/assets/assets_bloc.dart';
 
 class AssetsDowntimePopUpMenu extends StatelessWidget {
   const AssetsDowntimePopUpMenu(
-      {super.key,
-      required this.popUpMenuItems,
-      required this.downtimeId});
+      {super.key, required this.popUpMenuItems, required this.downtimeId});
 
   final List popUpMenuItems;
   final String downtimeId;

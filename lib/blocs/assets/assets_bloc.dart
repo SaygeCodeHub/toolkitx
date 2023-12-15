@@ -189,7 +189,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsGetDownTime event, Emitter<AssetsState> emit) async {
     emit(AssetsGetDownTimeFetching());
     try {
-      if(!hasDowntimeReachedMax) {
+      if (!hasDowntimeReachedMax) {
         List popUpMenuItems = [
           DatabaseUtil.getText("Edit"),
           DatabaseUtil.getText("Delete"),

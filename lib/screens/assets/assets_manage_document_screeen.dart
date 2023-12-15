@@ -86,5 +86,3 @@ class AssetsManageDocumentScreen extends StatelessWidget {
             }));
   }
 }
-
-

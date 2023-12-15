@@ -23,7 +23,8 @@ class FetchAssetsManageDocumentModel {
       FetchAssetsManageDocumentModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<ManageDocumentDatum>.from(json["Data"].map((x) => ManageDocumentDatum.fromJson(x))),
+        data: List<ManageDocumentDatum>.from(
+            json["Data"].map((x) => ManageDocumentDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,7 +47,8 @@ class ManageDocumentDatum {
     required this.files,
   });
 
-  factory ManageDocumentDatum.fromJson(Map<String, dynamic> json) => ManageDocumentDatum(
+  factory ManageDocumentDatum.fromJson(Map<String, dynamic> json) =>
+      ManageDocumentDatum(
         docid: json["docid"],
         name: json["name"],
         type: json["type"],

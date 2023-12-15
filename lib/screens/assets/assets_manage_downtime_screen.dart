@@ -22,7 +22,7 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     pageNo = 1;
     context.read<AssetsBloc>().hasDowntimeReachedMax = false;
-    context.read<AssetsBloc>().assetsDowntimeDatum=[];
+    context.read<AssetsBloc>().assetsDowntimeDatum = [];
     context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
         assetId: context.read<AssetsBloc>().assetId, pageNo: pageNo));
     return Scaffold(
@@ -92,4 +92,3 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                 })));
   }
 }
-

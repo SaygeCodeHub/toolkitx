@@ -21,7 +21,8 @@ class FetchAssetsDowntimeModel {
       FetchAssetsDowntimeModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<AssetsDowntimeDatum>.from(json["Data"].map((x) => AssetsDowntimeDatum.fromJson(x))),
+        data: List<AssetsDowntimeDatum>.from(
+            json["Data"].map((x) => AssetsDowntimeDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,7 +47,8 @@ class AssetsDowntimeDatum {
     required this.note,
   });
 
-  factory AssetsDowntimeDatum.fromJson(Map<String, dynamic> json) => AssetsDowntimeDatum(
+  factory AssetsDowntimeDatum.fromJson(Map<String, dynamic> json) =>
+      AssetsDowntimeDatum(
         id: json["id"],
         startdatetime: json["startdatetime"],
         enddatetime: json["enddatetime"],
