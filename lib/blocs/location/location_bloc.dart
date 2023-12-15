@@ -16,6 +16,7 @@ import '../../data/models/location/fetch_location_permits_model.dart';
 import '../../data/models/location/fetch_location_workorders_model.dart';
 import '../../data/models/location/fetch_locations_model.dart';
 import '../../di/app_module.dart';
+import '../../screens/location/widgets/location_filter_screen.dart';
 import 'location_event.dart';
 import 'location_state.dart';
 
@@ -41,6 +42,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   Map assetsFilterMap = {};
   Map permitsFilterMap = {};
   Map checkListFilterMap = {};
+  Map locationFilterMap = {};
 
   LocationBloc() : super(LocationInitial()) {
     on<FetchLocations>(_fetchLocations);
@@ -57,6 +59,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     on<ApplyAssetsListFilter>(_applyAssetsListFilter);
     on<ApplyPermitListFilter>(_applyPermitListFilter);
     on<ApplyCheckListFilter>(_applyCheckListFilter);
+    on<SelectLocationType>(_selectLocationType);
+    on<ApplyLocationFilter>(_applyLocationFilter);
   }
 
   FutureOr<void> _applyLoToListFilter(
@@ -73,15 +77,30 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       FetchLocations event, Emitter<LocationState> emit) async {
     emit(FetchingLocations());
     try {
-      String hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchLocationsModel fetchLocationsModel = await _locationRepository
-          .fetchLocations(event.pageNo, hashCode, '{}');
-      locationListReachedMax = fetchLocationsModel.data.isEmpty;
-      locationDatum.addAll(fetchLocationsModel.data);
-      emit(LocationsFetched(
-          locationDatum: locationDatum,
-          locationListReachedMax: locationListReachedMax));
+      if (event.isFromHome) {
+        String hashCode =
+            await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+        FetchLocationsModel fetchLocationsModel = await _locationRepository
+            .fetchLocations(event.pageNo, hashCode, '{}');
+        locationListReachedMax = fetchLocationsModel.data.isEmpty;
+        locationDatum.addAll(fetchLocationsModel.data);
+        emit(LocationsFetched(
+            locationDatum: locationDatum,
+            locationListReachedMax: locationListReachedMax,
+            filterMap: {}));
+      } else {
+        String hashCode =
+            await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+        FetchLocationsModel fetchLocationsModel =
+            await _locationRepository.fetchLocations(
+                event.pageNo, hashCode, jsonEncode(locationFilterMap));
+        locationListReachedMax = fetchLocationsModel.data.isEmpty;
+        locationDatum.addAll(fetchLocationsModel.data);
+        emit(LocationsFetched(
+            locationDatum: locationDatum,
+            locationListReachedMax: locationListReachedMax,
+            filterMap: locationFilterMap));
+      }
     } catch (e) {
       emit(LocationsCouldNotFetch(locationsNotFetched: e.toString()));
     }
@@ -331,5 +350,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       "et": event.filterMap['et'] ?? '',
       "kword": event.filterMap['kword'] ?? ''
     };
+  }
+
+  FutureOr<void> _selectLocationType(
+      SelectLocationType event, Emitter<LocationState> emit) {
+    emit(LocationTypeSelected(locationTypeMap: event.locationTypeMap));
+  }
+
+  FutureOr<void> _applyLocationFilter(
+      ApplyLocationFilter event, Emitter<LocationState> emit) async {
+    locationFilterMap = {
+      'nm': event.filterMap['nm'] ?? '',
+      'ty': event.filterMap['tyId'] ?? ''
+    };
+    LocationFilterScreen.locationFilterMap = event.filterMap;
   }
 }

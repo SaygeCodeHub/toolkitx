@@ -190,6 +190,7 @@ abstract class StringConstants {
       'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
+  static const String kName = 'Name';
   static const String kSelectDate = 'Select Date';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';

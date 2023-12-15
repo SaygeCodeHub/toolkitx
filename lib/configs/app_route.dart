@@ -67,6 +67,7 @@ import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/location/location_details_screen.dart';
 import '../screens/location/location_list_screen.dart';
+import '../screens/location/widgets/location_filter_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
@@ -446,7 +447,7 @@ class AppRoutes {
         return _createRoute(
             LocationDetailsScreen(expenseId: settings.arguments.toString()));
       case LocationListScreen.routeName:
-        return _createRoute(const LocationListScreen());
+        return _createRoute(const LocationListScreen(isFromHome: true));
       case ExpenseDetailsScreen.routeName:
         return _createRoute(
             ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
@@ -456,6 +457,8 @@ class AppRoutes {
         return _createRoute(const AddAssetsDocumentScreen());
       case AssetsManageDocumentFilterScreen.routeName:
         return _createRoute(const AssetsManageDocumentFilterScreen());
+      case LocationFilterScreen.routeName:
+        return _createRoute(const LocationFilterScreen());
       case AssetsDocumentFilterTypeList.routeName:
         return _createRoute(AssetsDocumentFilterTypeList(
           selectedTypeName: settings.arguments.toString(),

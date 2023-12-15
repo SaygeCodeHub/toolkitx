@@ -15,17 +15,22 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/generic_app_bar.dart';
 import 'location_details_screen.dart';
+import 'widgets/location_filter_screen.dart';
 
 class LocationListScreen extends StatelessWidget {
   static const routeName = 'LocationListScreen';
+  final bool isFromHome;
   static int pageNo = 1;
 
-  const LocationListScreen({Key? key}) : super(key: key);
+  const LocationListScreen({Key? key, this.isFromHome = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
-    context.read<LocationBloc>().add(FetchLocations(pageNo: 1));
+    context
+        .read<LocationBloc>()
+        .add(FetchLocations(pageNo: 1, isFromHome: isFromHome));
     context.read<LocationBloc>().locationDatum.clear();
     context.read<LocationBloc>().locationListReachedMax = false;
     return Scaffold(
@@ -37,11 +42,35 @@ class LocationListScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child: Column(
               children: [
-                CustomIconButtonRow(
-                    primaryOnPress: () {},
-                    secondaryOnPress: () {},
-                    secondaryVisible: false,
-                    clearOnPress: () {}),
+                BlocBuilder<LocationBloc, LocationState>(
+                  buildWhen: (previousState, currentState) =>
+                      currentState is LocationsFetched,
+                  builder: (context, state) {
+                    if (state is LocationsFetched) {
+                      return CustomIconButtonRow(
+                          primaryOnPress: () {
+                            Navigator.pushNamed(
+                                context, LocationFilterScreen.routeName);
+                          },
+                          secondaryOnPress: () {},
+                          clearVisible: state.filterMap.isNotEmpty,
+                          secondaryVisible: false,
+                          clearOnPress: () {
+                            pageNo = 1;
+                            state.filterMap.clear();
+                            LocationFilterScreen.locationFilterMap.clear();
+                            context.read<LocationBloc>().locationDatum.clear();
+                            context
+                                .read<LocationBloc>()
+                                .locationListReachedMax = false;
+                            context.read<LocationBloc>().add(FetchLocations(
+                                pageNo: pageNo, isFromHome: false));
+                          });
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ),
                 const SizedBox(height: xxTinierSpacing),
                 BlocConsumer<LocationBloc, LocationState>(
                     listener: (context, state) {
@@ -97,9 +126,10 @@ class LocationListScreen extends StatelessWidget {
                                       ));
                                     } else {
                                       pageNo++;
-                                      context
-                                          .read<LocationBloc>()
-                                          .add(FetchLocations(pageNo: pageNo));
+                                      context.read<LocationBloc>().add(
+                                          FetchLocations(
+                                              pageNo: pageNo,
+                                              isFromHome: false));
                                       return const Center(
                                         child: CircularProgressIndicator(),
                                       );

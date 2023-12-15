@@ -2,8 +2,9 @@ abstract class LocationEvent {}
 
 class FetchLocations extends LocationEvent {
   final int pageNo;
+  final bool isFromHome;
 
-  FetchLocations({required this.pageNo});
+  FetchLocations({required this.isFromHome, required this.pageNo});
 }
 
 class FetchLocationDetails extends LocationEvent {
@@ -84,4 +85,16 @@ class ApplyCheckListFilter extends LocationEvent {
   final Map filterMap;
 
   ApplyCheckListFilter({required this.filterMap});
+}
+
+class ApplyLocationFilter extends LocationEvent {
+  final Map filterMap;
+
+  ApplyLocationFilter({required this.filterMap});
+}
+
+class SelectLocationType extends LocationEvent {
+  final Map locationTypeMap;
+
+  SelectLocationType({required this.locationTypeMap});
 }
