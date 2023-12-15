@@ -56,8 +56,8 @@ class LocationDetailsWorkOrdersBody extends StatelessWidget {
                                     .textTheme
                                     .small
                                     .copyWith(
-                                    color: AppColor.black,
-                                    fontWeight: FontWeight.w600)),
+                                        color: AppColor.black,
+                                        fontWeight: FontWeight.w600)),
                             const SizedBox(width: tiniestSpacing),
                             Text(workOrderLocations[index].status,
                                 style: Theme.of(context)

@@ -50,8 +50,8 @@ class LocationDetailsPermitsBody extends StatelessWidget {
                                     .textTheme
                                     .small
                                     .copyWith(
-                                    color: AppColor.black,
-                                    fontWeight: FontWeight.w600)),
+                                        color: AppColor.black,
+                                        fontWeight: FontWeight.w600)),
                             const SizedBox(width: tiniestSpacing),
                             Text(locationPermits[index].status,
                                 style: Theme.of(context)

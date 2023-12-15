@@ -51,8 +51,8 @@ class LocationDetailsAssetsBody extends StatelessWidget {
                                     .textTheme
                                     .small
                                     .copyWith(
-                                    color: AppColor.black,
-                                    fontWeight: FontWeight.w600)),
+                                        color: AppColor.black,
+                                        fontWeight: FontWeight.w600)),
                             const SizedBox(width: tiniestSpacing),
                             Text(locationAssets[index].status,
                                 style: Theme.of(context)
