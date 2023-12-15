@@ -5,6 +5,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/location/fetch_location_checklists_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../../checklist/systemUser/sys_user_schedule_dates_screen.dart';
 
 class LocationDetailsCheckListsBody extends StatelessWidget {
   final List<LocationCheckListsDatum> checklistsLocation;
@@ -23,6 +24,11 @@ class LocationDetailsCheckListsBody extends StatelessWidget {
           itemBuilder: (context, index) {
             return CustomCard(
               child: ListTile(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, SystemUserScheduleDatesScreen.routeName,
+                      arguments: checklistsLocation[index].id);
+                },
                 contentPadding: const EdgeInsets.all(xxTinierSpacing),
                 title: Padding(
                     padding: const EdgeInsets.only(bottom: xxTinierSpacing),

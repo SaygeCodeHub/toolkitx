@@ -163,9 +163,11 @@ class LocationLogBooksFetched extends LocationState {
   final List<LocationLogBooksDatum> locationLogBooks;
   final bool locationLogBooksListReachedMax;
   final Map filterMap;
+  final String apiKey;
 
   LocationLogBooksFetched(
-      {required this.filterMap,
+      {required this.apiKey,
+      required this.filterMap,
       required this.locationLogBooksListReachedMax,
       required this.locationLogBooks});
 }
