@@ -91,64 +91,66 @@ class StartLotoScreen extends StatelessWidget {
                       textAlign: TextAlign.justify),
                   const SizedBox(height: xxLargeSpacing),
                   BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
-                    buildWhen: (previousState, currentState) =>
-                        currentState is LotoChecklistQuestionsFetching ||
-                        currentState is LotoChecklistQuestionsFetched ||
-                        currentState is LotoChecklistQuestionsNotFetched,
-                    builder: (context, state) {
-                      if (state is LotoChecklistQuestionsFetching) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is LotoChecklistQuestionsFetched) {
-                        var quickList = state.fetchLotoChecklistQuestionsModel
-                            .data!.questionlist;
-                        return ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: state.fetchLotoChecklistQuestionsModel
-                                .data!.questionlist!.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(quickList![index].title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .small
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.black)),
-                                    const SizedBox(height: xxTinierSpacing),
-                                    state.fetchLotoChecklistQuestionsModel.data!
-                                                .questionlist![index].type !=
-                                            6
-                                        ? AnswerOptionExpansionTile(
-                                            queOptionList: state
-                                                .fetchLotoChecklistQuestionsModel
-                                                .data!
-                                                .questionlist![index]
-                                                .queoptions,
-                                            startLotoMap: startLotoMap,
-                                          )
-                                        : UploadImageMenu(
-                                            isFromCertificate: true,
-                                            onUploadImageResponse:
-                                                (List imageList) {
-                                              startLotoMap['image'] = imageList
-                                                  .toString()
-                                                  .replaceAll("[", "")
-                                                  .replaceAll("]", "");
-                                            },
-                                          ),
-                                  ]);
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Divider();
-                            });
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
+                      buildWhen: (previousState, currentState) =>
+                          currentState is LotoChecklistQuestionsFetching ||
+                          currentState is LotoChecklistQuestionsFetched ||
+                          currentState is LotoChecklistQuestionsNotFetched,
+                      builder: (context, state) {
+                        if (state is LotoChecklistQuestionsFetching) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (state is LotoChecklistQuestionsFetched) {
+                          var quickList = state.fetchLotoChecklistQuestionsModel
+                              .data!.questionlist;
+                          return ListView.separated(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: state.fetchLotoChecklistQuestionsModel
+                                  .data!.questionlist!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(quickList![index].title,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .small
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: AppColor.black)),
+                                      const SizedBox(height: xxTinierSpacing),
+                                      state.fetchLotoChecklistQuestionsModel.data!
+                                                  .questionlist![index].type !=
+                                              6
+                                          ? AnswerOptionExpansionTile(
+                                              queOptionList: state
+                                                  .fetchLotoChecklistQuestionsModel
+                                                  .data!
+                                                  .questionlist![index]
+                                                  .queoptions,
+                                              startLotoMap: startLotoMap,
+                                            )
+                                          : UploadImageMenu(
+                                              isFromCertificate: true,
+                                              onUploadImageResponse:
+                                                  (List imageList) {
+                                                startLotoMap['image'] =
+                                                    imageList
+                                                        .toString()
+                                                        .replaceAll("[", "")
+                                                        .replaceAll("]", "");
+                                              },
+                                            ),
+                                    ]);
+                              },
+                              separatorBuilder: (context, index) {
+                                return const Divider();
+                              });
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }),
                 ],
               ),
             )));
