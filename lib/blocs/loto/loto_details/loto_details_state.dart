@@ -199,3 +199,27 @@ class LotoPhotosNotUploaded extends LotoDetailsState {
 
   LotoPhotosNotUploaded({required this.getError});
 }
+
+class LotoChecklistQuestionsFetching extends LotoDetailsState {}
+
+class LotoChecklistQuestionsFetched extends LotoDetailsState {
+  final FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel;
+  final List answerList;
+
+  LotoChecklistQuestionsFetched(
+      {required this.fetchLotoChecklistQuestionsModel,
+      required this.answerList});
+}
+
+class LotoChecklistQuestionsNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistQuestionsNotFetched({required this.errorMessage});
+}
+
+class AnswerSelected extends LotoDetailsState {
+  final int id;
+  final String text;
+
+  AnswerSelected({required this.id, required this.text});
+}

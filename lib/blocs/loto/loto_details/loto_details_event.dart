@@ -80,3 +80,12 @@ class AddLotoComment extends LotoDetailsEvent {
   final String comment;
   AddLotoComment({required this.comment});
 }
+
+class FetchLotoChecklistQuestions extends LotoDetailsEvent {}
+
+class SelectAnswer extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectAnswer({required this.id, required this.text});
+}
