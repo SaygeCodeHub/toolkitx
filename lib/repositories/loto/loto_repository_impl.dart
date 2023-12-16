@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart'
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
+import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
@@ -136,5 +137,22 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
     return LotoUploadPhotosModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLotoChecklistQuestionsModel> fetchLotoChecklistQuestions(
+      String hashCode,
+      String lotoId,
+      String checklistId,
+      String isRemove) async {
+    Map<String, dynamic> response = {};
+    if (checklistId.isNotEmpty) {
+      response = await DioClient().get(
+          "${ApiConstants.baseUrl}loto/getlotochecklistquestions?lotoid=$lotoId&checklistid=$checklistId&isremove=$isRemove&hashcode=$hashCode");
+    } else {
+      response = await DioClient().get(
+          "${ApiConstants.baseUrl}loto/getlotochecklistquestions?lotoid=$lotoId&isremove=$isRemove&hashcode=$hashCode");
+    }
+    return FetchLotoChecklistQuestionsModel.fromJson(response);
   }
 }

@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
@@ -22,11 +23,13 @@ import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
@@ -35,10 +38,15 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int pageNo = 1;
   String isRemove = '';
   String isWorkforceRemove = '';
+  String checklistId = '';
   String isStartRemove = '0';
   int lotoTabIndex = 0;
   bool lotoWorkforceReachedMax = false;
   static List popUpMenuItemsList = [];
+
+  List answerList = [];
+  List<QuestionList>? questionList;
+  Map allDataForChecklistMap = {};
 
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
@@ -55,6 +63,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<RemoveLotoEvent>(_removeLotoEvent);
     on<AddLotoComment>(_addLotoComment);
     on<LotoUploadPhotos>(_lotoUploadPhotos);
+    on<FetchLotoChecklistQuestions>(_fetchLotoChecklistQuestions);
+    on<SelectAnswer>(_selectAnswer);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -422,5 +432,33 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       add(FetchLotoAssignWorkforce(
           pageNo: 1, isRemove: isRemove, workforceName: ''));
     }
+  }
+
+  Future<FutureOr<void>> _fetchLotoChecklistQuestions(
+      FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoChecklistQuestionsFetching());
+    answerList.clear();
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+          await _lotoRepository.fetchLotoChecklistQuestions(
+              hashCode, lotoId, '', isRemove);
+      if (fetchLotoChecklistQuestionsModel.status == 200) {
+        emit(LotoChecklistQuestionsFetched(
+            fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
+            answerList: answerList));
+      } else {
+        emit(LotoChecklistQuestionsNotFetched(
+            errorMessage: fetchLotoChecklistQuestionsModel.message!));
+      }
+    } catch (e) {
+      emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAnswer(
+      SelectAnswer event, Emitter<LotoDetailsState> emit) {
+    emit(AnswerSelected(id: event.id, text: event.text));
   }
 }
