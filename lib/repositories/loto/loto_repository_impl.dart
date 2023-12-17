@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
+import 'package:toolkit/data/models/loto/save_loto_checklist_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 
@@ -154,5 +155,12 @@ class LotoRepositoryImpl extends LotoRepository {
           "${ApiConstants.baseUrl}loto/getlotochecklistquestions?lotoid=$lotoId&isremove=$isRemove&hashcode=$hashCode");
     }
     return FetchLotoChecklistQuestionsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveLotoChecklistModel> saveLotoChecklist(Map saveLotoChecklistMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}loto/savelotochecklist", saveLotoChecklistMap);
+    return SaveLotoChecklistModel.fromJson(response);
   }
 }

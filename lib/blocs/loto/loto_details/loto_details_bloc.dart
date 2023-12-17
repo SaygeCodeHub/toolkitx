@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.da
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
+import 'package:toolkit/data/models/loto/save_loto_checklist_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
@@ -65,6 +66,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<LotoUploadPhotos>(_lotoUploadPhotos);
     on<FetchLotoChecklistQuestions>(_fetchLotoChecklistQuestions);
     on<SelectAnswer>(_selectAnswer);
+    on<SaveLotoChecklist>(_saveLotoChecklist);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -232,7 +234,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": []
+        "questions": [],
+        "checklistid": event.checklistId
       };
       StartLotoModel startLotoModel =
           await _lotoRepository.startLotoRepo(startLotoMap);
@@ -437,7 +440,6 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   Future<FutureOr<void>> _fetchLotoChecklistQuestions(
       FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistQuestionsFetching());
-    answerList.clear();
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
@@ -460,5 +462,26 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   FutureOr<void> _selectAnswer(
       SelectAnswer event, Emitter<LotoDetailsState> emit) {
     emit(AnswerSelected(id: event.id, text: event.text));
+  }
+
+  Future<FutureOr<void>> _saveLotoChecklist(SaveLotoChecklist event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoChecklistSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveLotoChecklistMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "isremove": isRemove,
+        "questions": answerList,
+        "checklistid": event.saveLotoChecklistMap['checklistid']
+      };
+      SaveLotoChecklistModel saveLotoChecklistModel =
+          await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);
+        emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
+    } catch (e) {
+      emit(LotoChecklistNotSaved(errorMessage: e.toString()));
+    }
   }
 }

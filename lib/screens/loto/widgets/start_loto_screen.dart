@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
@@ -10,6 +12,8 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../checklist/workforce/widgets/upload_image_section.dart';
@@ -17,12 +21,17 @@ import '../../checklist/workforce/widgets/upload_image_section.dart';
 class StartLotoScreen extends StatelessWidget {
   static const routeName = "StartLotoScreen";
   static Map startLotoMap = {};
+  static Map saveLotoChecklistMap = {};
 
   const StartLotoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     context.read<LotoDetailsBloc>().add(FetchLotoChecklistQuestions());
+    context.read<LotoDetailsBloc>().answerList = [];
+    startLotoMap = {};
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText("StartLotoButton")),
         bottomNavigationBar: Padding(
@@ -62,14 +71,29 @@ class StartLotoScreen extends StatelessWidget {
                                     1,
                                 replacement: PrimaryButton(
                                     onPressed: () {
-                                      context
-                                          .read<LotoDetailsBloc>()
-                                          .add(StartLotoEvent());
+                                      saveLotoChecklistMap = {
+                                        "checklistid": state
+                                            .fetchLotoChecklistQuestionsModel
+                                            .data!
+                                            .checklistid
+                                      };
+                                      log('checklismap=================>$saveLotoChecklistMap');
+                                      context.read<LotoDetailsBloc>().add(
+                                      SaveLotoChecklist(
+                                          saveLotoChecklistMap:
+                                              saveLotoChecklistMap));
                                     },
                                     textValue:
                                         DatabaseUtil.getText("nextButtonText")),
                                 child: PrimaryButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .add(StartLotoEvent(checklistId: state
+                                          .fetchLotoChecklistQuestionsModel
+                                          .data!
+                                          .checklistid));
+                                    },
                                     textValue: DatabaseUtil.getText(
                                         "StartLotoButton")),
                               );
@@ -100,19 +124,23 @@ class StartLotoScreen extends StatelessWidget {
                           return const Center(
                               child: CircularProgressIndicator());
                         } else if (state is LotoChecklistQuestionsFetched) {
-                          var quickList = state.fetchLotoChecklistQuestionsModel
-                              .data!.questionlist;
+                          var questionList = state
+                              .fetchLotoChecklistQuestionsModel
+                              .data!
+                              .questionlist;
                           return ListView.separated(
                               physics: const BouncingScrollPhysics(),
                               itemCount: state.fetchLotoChecklistQuestionsModel
                                   .data!.questionlist!.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
+                                saveLotoChecklistMap["questionid"] =
+                                    questionList![index].id;
                                 return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(quickList![index].title,
+                                      Text(questionList[index].title,
                                           style: Theme.of(context)
                                               .textTheme
                                               .small
@@ -130,16 +158,24 @@ class StartLotoScreen extends StatelessWidget {
                                                   .questionlist![index]
                                                   .queoptions,
                                               startLotoMap: startLotoMap,
+                                              questionId: state
+                                                  .fetchLotoChecklistQuestionsModel
+                                                  .data!
+                                                  .questionlist![index]
+                                                  .id,
                                             )
                                           : UploadImageMenu(
                                               isFromCertificate: true,
                                               onUploadImageResponse:
                                                   (List imageList) {
-                                                startLotoMap['image'] =
-                                                    imageList
-                                                        .toString()
-                                                        .replaceAll("[", "")
-                                                        .replaceAll("]", "");
+                                                context.read<LotoDetailsBloc>().answerList.add({
+                                                  "questionid": state.fetchLotoChecklistQuestionsModel.data!
+                                                      .questionlist![index].id,
+                                                  "answer": imageList
+                                                      .toString()
+                                                      .replaceAll("[", "")
+                                                      .replaceAll("]", "")
+                                                });
                                               },
                                             ),
                                     ]);
