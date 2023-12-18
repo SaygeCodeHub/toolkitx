@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
@@ -117,10 +119,12 @@ class StartLotoScreen extends StatelessWidget {
                           currentState is LotoChecklistQuestionsFetched ||
                           currentState is LotoChecklistQuestionsNotFetched,
                       builder: (context, state) {
+                        log('state=============>$state');
                         if (state is LotoChecklistQuestionsFetching) {
                           return const Center(
                               child: CircularProgressIndicator());
                         } else if (state is LotoChecklistQuestionsFetched) {
+                          log('state=============>${state.fetchLotoChecklistQuestionsModel.data!}');
                           var questionList = state
                               .fetchLotoChecklistQuestionsModel
                               .data!

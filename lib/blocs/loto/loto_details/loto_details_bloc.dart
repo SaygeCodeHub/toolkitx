@@ -39,7 +39,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int pageNo = 1;
   String isRemove = '';
   String isWorkforceRemove = '';
-  String checklistId = '';
+  String checklistArrayId = '';
   String isStartRemove = '0';
   int lotoTabIndex = 0;
   bool lotoWorkforceReachedMax = false;
@@ -440,7 +440,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   Future<FutureOr<void>> _fetchLotoChecklistQuestions(
       FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistQuestionsFetching());
-    try {
+    // try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
@@ -454,9 +454,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoChecklistQuestionsNotFetched(
             errorMessage: fetchLotoChecklistQuestionsModel.message!));
       }
-    } catch (e) {
-      emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
+    // }
   }
 
   FutureOr<void> _selectAnswer(
