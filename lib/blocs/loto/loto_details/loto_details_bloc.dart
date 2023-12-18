@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
@@ -39,11 +40,13 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int pageNo = 1;
   String isRemove = '';
   String isWorkforceRemove = '';
-  String checklistArrayId = '';
+  List? checklistArrayIdList = [];
   String isStartRemove = '0';
   int lotoTabIndex = 0;
   bool lotoWorkforceReachedMax = false;
+  bool isFromFirst = true;
   static List popUpMenuItemsList = [];
+  int index = 0;
 
   List answerList = [];
   List<QuestionList>? questionList;
@@ -441,11 +444,15 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistQuestionsFetching());
     // try {
-      String? hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    log('isfirst===============>$isFromFirst');
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    if (isFromFirst == true) {
       FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
           await _lotoRepository.fetchLotoChecklistQuestions(
               hashCode, lotoId, '', isRemove);
+      checklistArrayIdList =
+          fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
       if (fetchLotoChecklistQuestionsModel.status == 200) {
         emit(LotoChecklistQuestionsFetched(
             fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
@@ -454,6 +461,22 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         emit(LotoChecklistQuestionsNotFetched(
             errorMessage: fetchLotoChecklistQuestionsModel.message!));
       }
+    } else {
+      log('index===================>${checklistArrayIdList![index]}');
+      FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+          await _lotoRepository.fetchLotoChecklistQuestions(
+              hashCode, lotoId, checklistArrayIdList![index], isRemove);
+      checklistArrayIdList =
+          fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+      if (fetchLotoChecklistQuestionsModel.status == 200) {
+        emit(LotoChecklistQuestionsFetched(
+            fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
+            answerList: answerList));
+      } else {
+        emit(LotoChecklistQuestionsNotFetched(
+            errorMessage: fetchLotoChecklistQuestionsModel.message!));
+      }
+    }
     // } catch (e) {
     //   emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
     // }
@@ -481,6 +504,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       SaveLotoChecklistModel saveLotoChecklistModel =
           await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);
       emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
+      isFromFirst == true ? index = 0 : index++;
+      isFromFirst = false;
+      add(FetchLotoChecklistQuestions());
     } catch (e) {
       emit(LotoChecklistNotSaved(errorMessage: e.toString()));
     }

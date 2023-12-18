@@ -37,7 +37,7 @@ class FetchLotoChecklistQuestionsModel {
 class Data {
   final String? checklistid;
   final String? name;
-  final List<dynamic>? checklistArray;
+  final String? checklistArray;
   final List<QuestionList>? questionlist;
 
   Data({

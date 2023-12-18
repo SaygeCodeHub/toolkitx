@@ -67,7 +67,7 @@ class StartLotoScreen extends StatelessWidget {
                             if (state is LotoChecklistQuestionsFetched) {
                               return Visibility(
                                 visible: state.fetchLotoChecklistQuestionsModel
-                                        .data!.checklistArray!.length >
+                                        .data!.checklistArray!.length ==
                                     1,
                                 replacement: PrimaryButton(
                                     onPressed: () {
