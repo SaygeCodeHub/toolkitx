@@ -169,14 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  chewie:
-    dependency: "direct main"
-    description:
-      name: chewie
-      sha256: ccfce3350ae9fd419cd336cdf3380f77a08e45171e1e3cb3d499d204de5e7ea8
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.7.1"
   clock:
     dependency: transitive
     description:
@@ -241,14 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  csslib:
-    dependency: transitive
-    description:
-      name: csslib
-      sha256: "831883fb353c8bdc1d71979e5b342c7d88acfbc643113c14ae51e2442ea0f20f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.17.3"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -390,14 +374,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
-  flutter_html:
-    dependency: "direct main"
-    description:
-      name: flutter_html
-      sha256: "02ad69e813ecfc0728a455e4bf892b9379983e050722b1dce00192ee2e41d1ee"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0-beta.2"
   flutter_inappwebview:
     dependency: "direct main"
     description:
@@ -488,22 +464,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  html:
-    dependency: transitive
-    description:
-      name: html
-      sha256: "3a7812d5bcd2894edf53dfaf8cd640876cf6cef50a8f238745c8b8120ea74d3a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.15.4"
-  html_unescape:
-    dependency: "direct main"
-    description:
-      name: html_unescape
-      sha256: "15362d7a18f19d7b742ef8dcb811f5fd2a2df98db9f80ea393c075189e0b61e3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   http:
     dependency: transitive
     description:
@@ -672,14 +632,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  list_counter:
-    dependency: transitive
-    description:
-      name: list_counter
-      sha256: c447ae3dfcd1c55f0152867090e67e219d42fe6d4f2807db4bbe8b8d69912237
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.2"
   logging:
     dependency: transitive
     description:
@@ -1301,62 +1253,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  video_player:
-    dependency: "direct main"
-    description:
-      name: video_player
-      sha256: d3910a8cefc0de8a432a4411dcf85030e885d8fef3ddea291f162253a05dbf01
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.7.1"
-  video_player_android:
-    dependency: transitive
-    description:
-      name: video_player_android
-      sha256: "3fe89ab07fdbce786e7eb25b58532d6eaf189ceddc091cb66cba712f8d9e8e55"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.10"
-  video_player_avfoundation:
-    dependency: transitive
-    description:
-      name: video_player_avfoundation
-      sha256: c3b123a5a56c9812b9029f840c65b92fd65083eb08d69be016b01e8aa018f77d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.10"
-  video_player_platform_interface:
-    dependency: transitive
-    description:
-      name: video_player_platform_interface
-      sha256: be72301bf2c0150ab35a8c34d66e5a99de525f6de1e8d27c0672b836fe48f73a
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.2.1"
-  video_player_web:
-    dependency: transitive
-    description:
-      name: video_player_web
-      sha256: "66fc0d56554143fee4c623f70e45e4272b94fd246283cb67edabb9d1e4122a4f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  wakelock_plus:
-    dependency: transitive
-    description:
-      name: wakelock_plus
-      sha256: aac3f3258f01781ec9212df94eecef1eb9ba9350e106728def405baa096ba413
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
-  wakelock_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: wakelock_plus_platform_interface
-      sha256: "40fabed5da06caff0796dc638e1f07ee395fb18801fbff3255a2372db2d80385"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
   watcher:
     dependency: transitive
     description:
@@ -1414,5 +1310,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0 <4.0.0"
-  flutter: ">=3.13.0"
+  dart: ">=3.1.0-185.0.dev <4.0.0"
+  flutter: ">=3.7.0-0"
