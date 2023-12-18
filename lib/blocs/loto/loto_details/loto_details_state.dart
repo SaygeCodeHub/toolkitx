@@ -221,5 +221,22 @@ class AnswerSelected extends LotoDetailsState {
   final int id;
   final String text;
 
-  AnswerSelected({required this.id, required this.text});
+  AnswerSelected({
+    required this.id,
+    required this.text,
+  });
+}
+
+class LotoChecklistSaving extends LotoDetailsState {}
+
+class LotoChecklistSaved extends LotoDetailsState {
+  final SaveLotoChecklistModel saveLotoChecklistModel;
+
+  LotoChecklistSaved({required this.saveLotoChecklistModel});
+}
+
+class LotoChecklistNotSaved extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistNotSaved({required this.errorMessage});
 }

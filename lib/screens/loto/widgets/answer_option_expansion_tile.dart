@@ -10,9 +10,13 @@ class AnswerOptionExpansionTile extends StatelessWidget {
   final Map startLotoMap;
 
   const AnswerOptionExpansionTile(
-      {super.key, required this.queOptionList, required this.startLotoMap});
+      {super.key,
+      required this.queOptionList,
+      required this.startLotoMap,
+      required this.questionId});
 
   final List<QueOption> queOptionList;
+  final String questionId;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +63,13 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                               id: startLotoMap['optionid'],
                                               text: queOptionList[listIndex]
                                                   .queoptiontext));
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .answerList
+                                          .add({
+                                        "questionid": questionId,
+                                        "answer": startLotoMap['optionid']
+                                      });
                                     });
                               }))
                     ]));
