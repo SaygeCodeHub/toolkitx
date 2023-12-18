@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-SaveLotoChecklistModel saveLotoChecklistModelFromJson(String str) => SaveLotoChecklistModel.fromJson(json.decode(str));
+SaveLotoChecklistModel saveLotoChecklistModelFromJson(String str) =>
+    SaveLotoChecklistModel.fromJson(json.decode(str));
 
-String saveLotoChecklistModelToJson(SaveLotoChecklistModel data) => json.encode(data.toJson());
+String saveLotoChecklistModelToJson(SaveLotoChecklistModel data) =>
+    json.encode(data.toJson());
 
 class SaveLotoChecklistModel {
   final String? id;
@@ -22,23 +23,29 @@ class SaveLotoChecklistModel {
     this.checklistid,
   });
 
-  factory SaveLotoChecklistModel.fromJson(Map<String, dynamic> json) => SaveLotoChecklistModel(
-    id: json["id"],
-    userid: json["userid"],
-    hashcode: json["hashcode"],
-    isremove: json["isremove"],
-    questions: json["questions"] == null ? [] : List<Question>.from(json["questions"]!.map((x) => Question.fromJson(x))),
-    checklistid: json["checklistid"],
-  );
+  factory SaveLotoChecklistModel.fromJson(Map<String, dynamic> json) =>
+      SaveLotoChecklistModel(
+        id: json["id"],
+        userid: json["userid"],
+        hashcode: json["hashcode"],
+        isremove: json["isremove"],
+        questions: json["questions"] == null
+            ? []
+            : List<Question>.from(
+                json["questions"]!.map((x) => Question.fromJson(x))),
+        checklistid: json["checklistid"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "userid": userid,
-    "hashcode": hashcode,
-    "isremove": isremove,
-    "questions": questions == null ? [] : List<dynamic>.from(questions!.map((x) => x.toJson())),
-    "checklistid": checklistid,
-  };
+        "id": id,
+        "userid": userid,
+        "hashcode": hashcode,
+        "isremove": isremove,
+        "questions": questions == null
+            ? []
+            : List<dynamic>.from(questions!.map((x) => x.toJson())),
+        "checklistid": checklistid,
+      };
 }
 
 class Question {
@@ -51,12 +58,12 @@ class Question {
   });
 
   factory Question.fromJson(Map<String, dynamic> json) => Question(
-    questionid: json["questionid"],
-    answer: json["answer"],
-  );
+        questionid: json["questionid"],
+        answer: json["answer"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "questionid": questionid,
-    "answer": answer,
-  };
+        "questionid": questionid,
+        "answer": answer,
+      };
 }

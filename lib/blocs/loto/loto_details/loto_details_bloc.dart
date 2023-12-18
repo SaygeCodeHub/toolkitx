@@ -464,7 +464,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     emit(AnswerSelected(id: event.id, text: event.text));
   }
 
-  Future<FutureOr<void>> _saveLotoChecklist(SaveLotoChecklist event, Emitter<LotoDetailsState> emit) async {
+  Future<FutureOr<void>> _saveLotoChecklist(
+      SaveLotoChecklist event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistSaving());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -479,7 +480,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       };
       SaveLotoChecklistModel saveLotoChecklistModel =
           await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);
-        emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
+      emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
     } catch (e) {
       emit(LotoChecklistNotSaved(errorMessage: e.toString()));
     }

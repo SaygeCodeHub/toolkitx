@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
@@ -77,22 +75,21 @@ class StartLotoScreen extends StatelessWidget {
                                             .data!
                                             .checklistid
                                       };
-                                      log('checklismap=================>$saveLotoChecklistMap');
                                       context.read<LotoDetailsBloc>().add(
-                                      SaveLotoChecklist(
-                                          saveLotoChecklistMap:
-                                              saveLotoChecklistMap));
+                                          SaveLotoChecklist(
+                                              saveLotoChecklistMap:
+                                                  saveLotoChecklistMap));
                                     },
                                     textValue:
                                         DatabaseUtil.getText("nextButtonText")),
                                 child: PrimaryButton(
                                     onPressed: () {
-                                      context
-                                          .read<LotoDetailsBloc>()
-                                          .add(StartLotoEvent(checklistId: state
-                                          .fetchLotoChecklistQuestionsModel
-                                          .data!
-                                          .checklistid));
+                                      context.read<LotoDetailsBloc>().add(
+                                          StartLotoEvent(
+                                              checklistId: state
+                                                  .fetchLotoChecklistQuestionsModel
+                                                  .data!
+                                                  .checklistid));
                                     },
                                     textValue: DatabaseUtil.getText(
                                         "StartLotoButton")),
@@ -168,9 +165,15 @@ class StartLotoScreen extends StatelessWidget {
                                               isFromCertificate: true,
                                               onUploadImageResponse:
                                                   (List imageList) {
-                                                context.read<LotoDetailsBloc>().answerList.add({
-                                                  "questionid": state.fetchLotoChecklistQuestionsModel.data!
-                                                      .questionlist![index].id,
+                                                context
+                                                    .read<LotoDetailsBloc>()
+                                                    .answerList
+                                                    .add({
+                                                  "questionid": state
+                                                      .fetchLotoChecklistQuestionsModel
+                                                      .data!
+                                                      .questionlist![index]
+                                                      .id,
                                                   "answer": imageList
                                                       .toString()
                                                       .replaceAll("[", "")

@@ -158,9 +158,10 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
-  Future<SaveLotoChecklistModel> saveLotoChecklist(Map saveLotoChecklistMap) async {
-    final response = await DioClient()
-        .post("${ApiConstants.baseUrl}loto/savelotochecklist", saveLotoChecklistMap);
+  Future<SaveLotoChecklistModel> saveLotoChecklist(
+      Map saveLotoChecklistMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/savelotochecklist", saveLotoChecklistMap);
     return SaveLotoChecklistModel.fromJson(response);
   }
 }
