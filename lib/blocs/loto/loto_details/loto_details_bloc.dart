@@ -430,7 +430,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
       add(FetchLotoAssignWorkforce(
-          pageNo: 1, isRemove: isStartRemove, workforceName: lotoWorkforceName));
+          pageNo: 1,
+          isRemove: isStartRemove,
+          workforceName: lotoWorkforceName));
     } else {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
@@ -444,37 +446,39 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistQuestionsFetching());
     try {
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    if (isFromFirst == true) {
-      FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
-          await _lotoRepository.fetchLotoChecklistQuestions(
-              hashCode, lotoId, '', isStartRemove);
-      checklistArrayIdList =
-          fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
-      if (fetchLotoChecklistQuestionsModel.status == 200) {
-        emit(LotoChecklistQuestionsFetched(
-            fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
-            answerList: answerList));
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (isFromFirst == true) {
+        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+            await _lotoRepository.fetchLotoChecklistQuestions(
+                hashCode, lotoId, '', isStartRemove);
+        checklistArrayIdList =
+            fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+        if (fetchLotoChecklistQuestionsModel.status == 200) {
+          emit(LotoChecklistQuestionsFetched(
+              fetchLotoChecklistQuestionsModel:
+                  fetchLotoChecklistQuestionsModel,
+              answerList: answerList));
+        } else {
+          emit(LotoChecklistQuestionsNotFetched(
+              errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
       } else {
-        emit(LotoChecklistQuestionsNotFetched(
-            errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+            await _lotoRepository.fetchLotoChecklistQuestions(
+                hashCode, lotoId, checklistArrayIdList![index], isStartRemove);
+        checklistArrayIdList =
+            fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+        if (fetchLotoChecklistQuestionsModel.status == 200) {
+          emit(LotoChecklistQuestionsFetched(
+              fetchLotoChecklistQuestionsModel:
+                  fetchLotoChecklistQuestionsModel,
+              answerList: answerList));
+        } else {
+          emit(LotoChecklistQuestionsNotFetched(
+              errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
       }
-    } else {
-      FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
-          await _lotoRepository.fetchLotoChecklistQuestions(
-              hashCode, lotoId, checklistArrayIdList![index], isStartRemove);
-      checklistArrayIdList =
-          fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
-      if (fetchLotoChecklistQuestionsModel.status == 200) {
-        emit(LotoChecklistQuestionsFetched(
-            fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
-            answerList: answerList));
-      } else {
-        emit(LotoChecklistQuestionsNotFetched(
-            errorMessage: fetchLotoChecklistQuestionsModel.message!));
-      }
-    }
     } catch (e) {
       emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
     }

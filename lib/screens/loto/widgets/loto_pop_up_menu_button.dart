@@ -75,12 +75,12 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('StartRemoveLotoButton')) {
             StartLotoScreen.isFromStartRemoveLoto = true;
-            Navigator.pushNamed(context, StartLotoScreen.routeName).then(
-                (_) => {
-                      context
-                          .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
-                    });
+            Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
+                {
+                  context
+                      .read<LotoDetailsBloc>()
+                      .add(FetchLotoDetails(lotTabIndex: 0))
+                });
           }
           if (value ==
               DatabaseUtil.getText('assign _workforce_for_remove_loto')) {
