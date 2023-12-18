@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
@@ -237,8 +236,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": [],
-        "checklistid": event.checklistId
+        "questions": answerList,
+        "checklistid": checklistArrayIdList![index]
       };
       StartLotoModel startLotoModel =
           await _lotoRepository.startLotoRepo(startLotoMap);
@@ -264,7 +263,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": []
+        "questions": answerList,
+        "removechecklistid": checklistArrayIdList![index]
       };
       StartRemoveLotoModel startRemoveLotoModel =
           await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
@@ -430,27 +430,26 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
       add(FetchLotoAssignWorkforce(
-          pageNo: 1, isRemove: isRemove, workforceName: lotoWorkforceName));
+          pageNo: 1, isRemove: isStartRemove, workforceName: lotoWorkforceName));
     } else {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
       LotoAssignWorkforceScreen.workforceNameController.clear();
       add(FetchLotoAssignWorkforce(
-          pageNo: 1, isRemove: isRemove, workforceName: ''));
+          pageNo: 1, isRemove: isStartRemove, workforceName: ''));
     }
   }
 
   Future<FutureOr<void>> _fetchLotoChecklistQuestions(
       FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
     emit(LotoChecklistQuestionsFetching());
-    // try {
-    log('isfirst===============>$isFromFirst');
+    try {
     String? hashCode =
         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
     if (isFromFirst == true) {
       FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
           await _lotoRepository.fetchLotoChecklistQuestions(
-              hashCode, lotoId, '', isRemove);
+              hashCode, lotoId, '', isStartRemove);
       checklistArrayIdList =
           fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
       if (fetchLotoChecklistQuestionsModel.status == 200) {
@@ -462,10 +461,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
             errorMessage: fetchLotoChecklistQuestionsModel.message!));
       }
     } else {
-      log('index===================>${checklistArrayIdList![index]}');
       FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
           await _lotoRepository.fetchLotoChecklistQuestions(
-              hashCode, lotoId, checklistArrayIdList![index], isRemove);
+              hashCode, lotoId, checklistArrayIdList![index], isStartRemove);
       checklistArrayIdList =
           fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
       if (fetchLotoChecklistQuestionsModel.status == 200) {
@@ -477,9 +475,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
             errorMessage: fetchLotoChecklistQuestionsModel.message!));
       }
     }
-    // } catch (e) {
-    //   emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _selectAnswer(
@@ -497,9 +495,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "id": lotoId,
         "userid": userId,
         "hashcode": hashCode,
-        "isremove": isRemove,
+        "isremove": isStartRemove,
         "questions": answerList,
-        "checklistid": event.saveLotoChecklistMap['checklistid']
+        "checklistid": checklistArrayIdList![index]
       };
       SaveLotoChecklistModel saveLotoChecklistModel =
           await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);

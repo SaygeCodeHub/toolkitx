@@ -116,9 +116,9 @@ class QuestionList {
         maxval: json["maxval"],
         fileextension: json["fileextension"],
         moreinfo: json["moreinfo"],
-        optioncomment: json["optioncomment"],
+        optioncomment: json["optioncomment"] ?? '',
         optionid: json["optionid"],
-        optiontext: json["optiontext"],
+        optiontext: json["optiontext"] ?? '',
         queoptions: List<QueOption>.from(
             json["queoptions"].map((x) => QueOption.fromJson(x))),
       );

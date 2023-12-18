@@ -6,7 +6,6 @@ import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/screens/loto/loto_add_comment_screen.dart';
 import 'package:toolkit/screens/loto/loto_upload_photos_screen.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
-import 'package:toolkit/screens/loto/widgets/start_remove_loto_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -66,6 +65,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('Start')) {
+            StartLotoScreen.isFromStartRemoveLoto = false;
             Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
                 {
                   context
@@ -74,7 +74,8 @@ class LotoPopupMenuButton extends StatelessWidget {
                 });
           }
           if (value == DatabaseUtil.getText('StartRemoveLotoButton')) {
-            Navigator.pushNamed(context, StartRemoveLotoScreen.routeName).then(
+            StartLotoScreen.isFromStartRemoveLoto = true;
+            Navigator.pushNamed(context, StartLotoScreen.routeName).then(
                 (_) => {
                       context
                           .read<LotoDetailsBloc>()
