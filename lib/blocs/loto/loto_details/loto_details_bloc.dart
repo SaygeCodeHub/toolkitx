@@ -520,16 +520,21 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
 
   Future<FutureOr<void>> _fetchLotoAssignedChecklists(
       FetchLotoAssignedChecklists event, Emitter<LotoDetailsState> emit) async {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
     emit(LotoAssignedChecklistFetching());
-    try{
-      FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel = await _lotoRepository.fetchLotoAssignedChecklist(hashCode, lotoId, event.isRemove);
-      if(fetchLotoAssignedChecklistModel.status == 200){
-        emit(LotoAssignedChecklistFetched(fetchLotoAssignedChecklistModel: fetchLotoAssignedChecklistModel));
-      }else{
-        emit(LotoAssignedChecklistNotFetched(errorMessage: fetchLotoAssignedChecklistModel.message!));
+    try {
+      FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel =
+          await _lotoRepository.fetchLotoAssignedChecklist(
+              hashCode, lotoId, event.isRemove);
+      if (fetchLotoAssignedChecklistModel.status == 200) {
+        emit(LotoAssignedChecklistFetched(
+            fetchLotoAssignedChecklistModel: fetchLotoAssignedChecklistModel));
+      } else {
+        emit(LotoAssignedChecklistNotFetched(
+            errorMessage: fetchLotoAssignedChecklistModel.message!));
       }
-    }catch(e){
+    } catch (e) {
       emit(LotoAssignedChecklistNotFetched(errorMessage: e.toString()));
     }
   }

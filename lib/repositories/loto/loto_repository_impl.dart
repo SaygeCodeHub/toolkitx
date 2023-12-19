@@ -167,9 +167,10 @@ class LotoRepositoryImpl extends LotoRepository {
   }
 
   @override
-  Future<FetchLotoAssignedChecklistModel> fetchLotoAssignedChecklist(String hashCode, String lotoId, String isRemove) async {
-    final response = await DioClient()
-        .get("${ApiConstants.baseUrl}loto/getassignedchecklists?lotoid=$lotoId&isremove=$isRemove&hashcode=$hashCode");
+  Future<FetchLotoAssignedChecklistModel> fetchLotoAssignedChecklist(
+      String hashCode, String lotoId, String isRemove) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}loto/getassignedchecklists?lotoid=$lotoId&isremove=$isRemove&hashcode=$hashCode");
     return FetchLotoAssignedChecklistModel.fromJson(response);
   }
 }

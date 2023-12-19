@@ -1,9 +1,12 @@
-
 import 'dart:convert';
 
-FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModelFromJson(String str) => FetchLotoAssignedChecklistModel.fromJson(json.decode(str));
+FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModelFromJson(
+        String str) =>
+    FetchLotoAssignedChecklistModel.fromJson(json.decode(str));
 
-String fetchLotoAssignedChecklistModelToJson(FetchLotoAssignedChecklistModel data) => json.encode(data.toJson());
+String fetchLotoAssignedChecklistModelToJson(
+        FetchLotoAssignedChecklistModel data) =>
+    json.encode(data.toJson());
 
 class FetchLotoAssignedChecklistModel {
   final int? status;
@@ -16,17 +19,22 @@ class FetchLotoAssignedChecklistModel {
     this.data,
   });
 
-  factory FetchLotoAssignedChecklistModel.fromJson(Map<String, dynamic> json) => FetchLotoAssignedChecklistModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: json["Data"] == null ? [] : List<Datum>.from(json["Data"]!.map((x) => Datum.fromJson(x))),
-  );
+  factory FetchLotoAssignedChecklistModel.fromJson(Map<String, dynamic> json) =>
+      FetchLotoAssignedChecklistModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: json["Data"] == null
+            ? []
+            : List<Datum>.from(json["Data"]!.map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -41,14 +49,14 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    checklistid: json["checklistid"],
-    checklistname: json["checklistname"],
-    responseid: json["responseid"],
-  );
+        checklistid: json["checklistid"],
+        checklistname: json["checklistname"],
+        responseid: json["responseid"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "checklistid": checklistid,
-    "checklistname": checklistname,
-    "responseid": responseid,
-  };
+        "checklistid": checklistid,
+        "checklistname": checklistname,
+        "responseid": responseid,
+      };
 }
