@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
@@ -62,4 +63,7 @@ abstract class LotoRepository {
       String hashCode, String lotoId, String checklistId, String isRemove);
 
   Future<SaveLotoChecklistModel> saveLotoChecklist(Map saveLotoChecklistMap);
+
+  Future<FetchLotoAssignedChecklistModel> fetchLotoAssignedChecklist(
+      String hashCode, String lotoId, String isRemove);
 }

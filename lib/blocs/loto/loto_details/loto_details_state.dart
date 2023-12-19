@@ -240,3 +240,17 @@ class LotoChecklistNotSaved extends LotoDetailsState {
 
   LotoChecklistNotSaved({required this.errorMessage});
 }
+
+class LotoAssignedChecklistFetching extends LotoDetailsState {}
+
+class LotoAssignedChecklistFetched extends LotoDetailsState {
+  final FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel;
+
+  LotoAssignedChecklistFetched({required this.fetchLotoAssignedChecklistModel});
+}
+
+class LotoAssignedChecklistNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoAssignedChecklistNotFetched({required this.errorMessage});
+}

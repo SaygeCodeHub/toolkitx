@@ -66,19 +66,16 @@ class RemoveLotoEvent extends LotoDetailsEvent {
 
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
-
   RemoveAssignWorkforce({required this.peopleId});
 }
 
 class LotoUploadPhotos extends LotoDetailsEvent {
   final String filename;
-
   LotoUploadPhotos({required this.filename});
 }
 
 class AddLotoComment extends LotoDetailsEvent {
   final String comment;
-
   AddLotoComment({required this.comment});
 }
 
@@ -92,3 +89,9 @@ class SelectAnswer extends LotoDetailsEvent {
 }
 
 class SaveLotoChecklist extends LotoDetailsEvent {}
+
+class FetchLotoAssignedChecklists extends LotoDetailsEvent {
+  final String isRemove;
+
+  FetchLotoAssignedChecklists({required this.isRemove});
+}

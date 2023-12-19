@@ -415,6 +415,7 @@ abstract class StringConstants {
   static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
   static const String kViewResponse = "View Response";
+  static const String kNoResponse = "No Response";
   static const String kCommentAdded = "Comment Added";
   static const String kMeter = "Meter";
   static const String kDateTaken = "Date Taken";
