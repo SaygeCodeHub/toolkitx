@@ -114,10 +114,10 @@ class QuestionList {
         maxlength: json["maxlength"],
         minval: json["minval"],
         maxval: json["maxval"],
-        fileextension: json["fileextension"],
-        moreinfo: json["moreinfo"],
+        fileextension: json["fileextension"] ?? '',
+        moreinfo: json["moreinfo"] ?? '',
         optioncomment: json["optioncomment"] ?? '',
-        optionid: json["optionid"],
+        optionid: json["optionid"] ?? '',
         optiontext: json["optiontext"] ?? '',
         queoptions: List<QueOption>.from(
             json["queoptions"].map((x) => QueOption.fromJson(x))),
