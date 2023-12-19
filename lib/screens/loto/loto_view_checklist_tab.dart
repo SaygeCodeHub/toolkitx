@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../data/models/loto/loto_details_model.dart';
@@ -26,6 +27,10 @@ class LotoViewChecklistTab extends StatelessWidget {
         Visibility(
           visible: data.isremove == '1' ? false : true,
           child: BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
+            buildWhen: (previousState, currentState) =>
+                currentState is LotoAssignedChecklistFetching ||
+                currentState is LotoAssignedChecklistFetched ||
+                currentState is LotoAssignedChecklistNotFetched,
             builder: (context, state) {
               if (state is LotoAssignedChecklistFetching) {
                 return const Expanded(
@@ -47,7 +52,18 @@ class LotoViewChecklistTab extends StatelessWidget {
                                       fontWeight: FontWeight.w400,
                                       color: AppColor.black)),
                           subtitle: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              state.fetchLotoAssignedChecklistModel.data![index]
+                                          .responseid !=
+                                      null
+                                  ? Navigator.pushNamed(
+                                      context, LotoViewResponseScreen.routeName,
+                                      arguments: state
+                                          .fetchLotoAssignedChecklistModel
+                                          .data![index]
+                                          .checklistid)
+                                  : null;
+                            },
                             child: Visibility(
                               visible: state.fetchLotoAssignedChecklistModel
                                       .data![index].responseid !=

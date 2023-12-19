@@ -25,11 +25,13 @@ import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
@@ -448,29 +450,10 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      if (isFromFirst == true) {
+      if (event.checkListId != "") {
         FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
             await _lotoRepository.fetchLotoChecklistQuestions(
-                hashCode, lotoId, '', isStartRemove);
-        checklistArrayIdList =
-            fetchLotoChecklistQuestionsModel.data!.checklistArray != null ||
-                    fetchLotoChecklistQuestionsModel.data!.checklistArray != ""
-                ? fetchLotoChecklistQuestionsModel.data!.checklistArray
-                    .split(",")
-                : [];
-        if (fetchLotoChecklistQuestionsModel.status == 200) {
-          emit(LotoChecklistQuestionsFetched(
-              fetchLotoChecklistQuestionsModel:
-                  fetchLotoChecklistQuestionsModel,
-              answerList: answerList));
-        } else {
-          emit(LotoChecklistQuestionsNotFetched(
-              errorMessage: fetchLotoChecklistQuestionsModel.message!));
-        }
-      } else {
-        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
-            await _lotoRepository.fetchLotoChecklistQuestions(
-                hashCode, lotoId, checklistArrayIdList[index], isStartRemove);
+                hashCode, lotoId, event.checkListId, isStartRemove);
         checklistArrayIdList =
             fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
         if (fetchLotoChecklistQuestionsModel.status == 200) {
@@ -481,6 +464,42 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         } else {
           emit(LotoChecklistQuestionsNotFetched(
               errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
+      } else {
+        if (isFromFirst == true) {
+          FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+              await _lotoRepository.fetchLotoChecklistQuestions(
+                  hashCode, lotoId, '', isStartRemove);
+          checklistArrayIdList = fetchLotoChecklistQuestionsModel
+                          .data!.checklistArray !=
+                      null ||
+                  fetchLotoChecklistQuestionsModel.data!.checklistArray != ""
+              ? fetchLotoChecklistQuestionsModel.data!.checklistArray.split(",")
+              : [];
+          if (fetchLotoChecklistQuestionsModel.status == 200) {
+            emit(LotoChecklistQuestionsFetched(
+                fetchLotoChecklistQuestionsModel:
+                    fetchLotoChecklistQuestionsModel,
+                answerList: answerList));
+          } else {
+            emit(LotoChecklistQuestionsNotFetched(
+                errorMessage: fetchLotoChecklistQuestionsModel.message!));
+          }
+        } else {
+          FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+              await _lotoRepository.fetchLotoChecklistQuestions(
+                  hashCode, lotoId, checklistArrayIdList[index], isStartRemove);
+          checklistArrayIdList =
+              fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+          if (fetchLotoChecklistQuestionsModel.status == 200) {
+            emit(LotoChecklistQuestionsFetched(
+                fetchLotoChecklistQuestionsModel:
+                    fetchLotoChecklistQuestionsModel,
+                answerList: answerList));
+          } else {
+            emit(LotoChecklistQuestionsNotFetched(
+                errorMessage: fetchLotoChecklistQuestionsModel.message!));
+          }
         }
       }
     } catch (e) {
