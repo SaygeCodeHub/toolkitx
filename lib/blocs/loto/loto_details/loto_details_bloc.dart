@@ -38,11 +38,13 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   int pageNo = 1;
   String isRemove = '0';
   String isWorkforceRemove = '';
-  String checklistId = '';
+  List checklistArrayIdList = [];
   String isStartRemove = '0';
   int lotoTabIndex = 0;
   bool lotoWorkforceReachedMax = false;
+  bool isFromFirst = true;
   static List popUpMenuItemsList = [];
+  int index = 0;
 
   List answerList = [];
   List<QuestionList>? questionList;
@@ -234,8 +236,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": [],
-        "checklistid": event.checklistId
+        "questions": answerList,
+        "checklistid": checklistArrayIdList[index]
       };
       StartLotoModel startLotoModel =
           await _lotoRepository.startLotoRepo(startLotoMap);
@@ -261,7 +263,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": []
+        "questions": answerList,
+        "removechecklistid": checklistArrayIdList[index]
       };
       StartRemoveLotoModel startRemoveLotoModel =
           await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
@@ -427,13 +430,15 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
       add(FetchLotoAssignWorkforce(
-          pageNo: 1, isRemove: isRemove, workforceName: lotoWorkforceName));
+          pageNo: 1,
+          isRemove: isStartRemove,
+          workforceName: lotoWorkforceName));
     } else {
       emit(LotoAssignWorkforceSearched(
           isWorkforceSearched: event.isWorkforceSearched));
       LotoAssignWorkforceScreen.workforceNameController.clear();
       add(FetchLotoAssignWorkforce(
-          pageNo: 1, isRemove: isRemove, workforceName: ''));
+          pageNo: 1, isRemove: isStartRemove, workforceName: ''));
     }
   }
 
@@ -443,16 +448,40 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
-          await _lotoRepository.fetchLotoChecklistQuestions(
-              hashCode, lotoId, '', isRemove);
-      if (fetchLotoChecklistQuestionsModel.status == 200) {
-        emit(LotoChecklistQuestionsFetched(
-            fetchLotoChecklistQuestionsModel: fetchLotoChecklistQuestionsModel,
-            answerList: answerList));
+      if (isFromFirst == true) {
+        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+            await _lotoRepository.fetchLotoChecklistQuestions(
+                hashCode, lotoId, '', isStartRemove);
+        checklistArrayIdList =
+            fetchLotoChecklistQuestionsModel.data!.checklistArray != null ||
+                    fetchLotoChecklistQuestionsModel.data!.checklistArray != ""
+                ? fetchLotoChecklistQuestionsModel.data!.checklistArray
+                    .split(",")
+                : [];
+        if (fetchLotoChecklistQuestionsModel.status == 200) {
+          emit(LotoChecklistQuestionsFetched(
+              fetchLotoChecklistQuestionsModel:
+                  fetchLotoChecklistQuestionsModel,
+              answerList: answerList));
+        } else {
+          emit(LotoChecklistQuestionsNotFetched(
+              errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
       } else {
-        emit(LotoChecklistQuestionsNotFetched(
-            errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+            await _lotoRepository.fetchLotoChecklistQuestions(
+                hashCode, lotoId, checklistArrayIdList[index], isStartRemove);
+        checklistArrayIdList =
+            fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+        if (fetchLotoChecklistQuestionsModel.status == 200) {
+          emit(LotoChecklistQuestionsFetched(
+              fetchLotoChecklistQuestionsModel:
+                  fetchLotoChecklistQuestionsModel,
+              answerList: answerList));
+        } else {
+          emit(LotoChecklistQuestionsNotFetched(
+              errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
       }
     } catch (e) {
       emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
@@ -474,13 +503,16 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "id": lotoId,
         "userid": userId,
         "hashcode": hashCode,
-        "isremove": isRemove,
+        "isremove": isStartRemove,
         "questions": answerList,
-        "checklistid": event.saveLotoChecklistMap['checklistid']
+        "checklistid": checklistArrayIdList[index]
       };
       SaveLotoChecklistModel saveLotoChecklistModel =
           await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);
       emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
+      isFromFirst == true ? index = 0 : index++;
+      isFromFirst = false;
+      add(FetchLotoChecklistQuestions());
     } catch (e) {
       emit(LotoChecklistNotSaved(errorMessage: e.toString()));
     }
