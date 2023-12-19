@@ -197,3 +197,17 @@ class LotoPhotosNotUploaded extends LotoDetailsState {
 
   LotoPhotosNotUploaded({required this.getError});
 }
+
+class LotoAssignedChecklistFetching extends LotoDetailsState {}
+
+class LotoAssignedChecklistFetched extends LotoDetailsState {
+  final FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel;
+
+  LotoAssignedChecklistFetched({required this.fetchLotoAssignedChecklistModel});
+}
+
+class LotoAssignedChecklistNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoAssignedChecklistNotFetched({required this.errorMessage});
+}

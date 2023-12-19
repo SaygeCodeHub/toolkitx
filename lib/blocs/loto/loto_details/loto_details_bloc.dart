@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
@@ -22,18 +23,20 @@ import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
   String lotoId = '';
   String lotoWorkforceName = '';
   int pageNo = 1;
-  String isRemove = '';
+  String isRemove = '0';
   String isWorkforceRemove = '';
   String isStartRemove = '0';
   int lotoTabIndex = 0;
@@ -55,6 +58,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<RemoveLotoEvent>(_removeLotoEvent);
     on<AddLotoComment>(_addLotoComment);
     on<LotoUploadPhotos>(_lotoUploadPhotos);
+    on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -419,6 +423,22 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       LotoAssignWorkforceScreen.workforceNameController.clear();
       add(FetchLotoAssignWorkforce(
           pageNo: 1, isRemove: isRemove, workforceName: ''));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchLotoAssignedChecklists(
+      FetchLotoAssignedChecklists event, Emitter<LotoDetailsState> emit) async {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    emit(LotoAssignedChecklistFetching());
+    try{
+      FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel = await _lotoRepository.fetchLotoAssignedChecklist(hashCode, lotoId, event.isRemove);
+      if(fetchLotoAssignedChecklistModel.status == 200){
+        emit(LotoAssignedChecklistFetched(fetchLotoAssignedChecklistModel: fetchLotoAssignedChecklistModel));
+      }else{
+        emit(LotoAssignedChecklistNotFetched(errorMessage: fetchLotoAssignedChecklistModel.message!));
+      }
+    }catch(e){
+      emit(LotoAssignedChecklistNotFetched(errorMessage: e.toString()));
     }
   }
 }

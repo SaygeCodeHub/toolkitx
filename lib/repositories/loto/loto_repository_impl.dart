@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_assign_workforce_model.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
@@ -136,5 +137,12 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}loto/savefiles", lotoUploadPhotosMap);
     return LotoUploadPhotosModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchLotoAssignedChecklistModel> fetchLotoAssignedChecklist(String hashCode, String lotoId, String isRemove) async {
+    final response = await DioClient()
+        .get("${ApiConstants.baseUrl}loto/getassignedchecklists?lotoid=$lotoId&isremove=$isRemove&hashcode=$hashCode");
+    return FetchLotoAssignedChecklistModel.fromJson(response);
   }
 }
