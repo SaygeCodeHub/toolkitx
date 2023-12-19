@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/loto/loto_view_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
 import 'package:toolkit/screens/loto/widgets/loto_image_tab.dart';
@@ -96,7 +97,8 @@ class LotoDetailsScreen extends StatelessWidget {
                                     .read<LotoDetailsBloc>()
                                     .lotoTabIndex),
                             LotoImageTab(data: data, clientId: state.clientId),
-                            const Text("Tab 3"),
+                            LotoViewChecklistTab(
+                                data: state.fetchLotoDetailsModel.data),
                             LotoRemoveChecklistTab(
                                 data: state.fetchLotoDetailsModel.data),
                             LotoCustomTimeLine(
