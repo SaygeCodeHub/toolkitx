@@ -11,6 +11,8 @@ import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
+import '../../blocs/location/location_bloc.dart';
+import '../../blocs/location/location_event.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
@@ -18,11 +20,14 @@ import '../../widgets/custom_snackbar.dart';
 
 class AssetsFilterScreen extends StatelessWidget {
   static const routeName = "AssetsFilterScreen";
+
   AssetsFilterScreen({super.key});
 
   static Map assetsFilterMap = {};
   final List assetsLocation = [];
   final String selectLocationName = '';
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +72,11 @@ class AssetsFilterScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w500,
                                         color: AppColor.black)),
                             const SizedBox(height: tiniestSpacing),
-                            TextFieldWidget(onTextFieldChanged: (textField) {
-                              assetsFilterMap["name"] = textField;
-                            }),
+                            TextFieldWidget(
+                                value: assetsFilterMap["name"] ?? '',
+                                onTextFieldChanged: (textField) {
+                                  assetsFilterMap["name"] = textField;
+                                }),
                             const SizedBox(height: tinierSpacing),
                             AssetsLocationFilter(
                                 assetsFilterMap: assetsFilterMap,
@@ -100,17 +107,28 @@ class AssetsFilterScreen extends StatelessWidget {
                             const SizedBox(height: mediumSpacing),
                             PrimaryButton(
                                 onPressed: () {
-                                  context.read<AssetsBloc>().add(
-                                      ApplyAssetsFilter(
-                                          assetsFilterMap: assetsFilterMap));
-                                  context.read<AssetsBloc>().assetsDatum = [];
-                                  context.read<AssetsBloc>().hasReachedMax =
-                                      false;
-                                  AssetsListScreen.pageNo = 1;
-                                  context.read<AssetsBloc>().add(
-                                      FetchAssetsList(
-                                          pageNo: 1, isFromHome: false));
-                                  Navigator.pop(context);
+                                  if (isFromLocation == true) {
+                                    context.read<LocationBloc>().add(
+                                        ApplyAssetsListFilter(
+                                            filterMap: assetsFilterMap));
+                                    Navigator.pop(context);
+                                    context.read<LocationBloc>().add(
+                                        FetchLocationDetails(
+                                            locationId: expenseId,
+                                            selectedTabIndex: 7));
+                                  } else {
+                                    context.read<AssetsBloc>().add(
+                                        ApplyAssetsFilter(
+                                            assetsFilterMap: assetsFilterMap));
+                                    context.read<AssetsBloc>().assetsDatum = [];
+                                    context.read<AssetsBloc>().hasReachedMax =
+                                        false;
+                                    AssetsListScreen.pageNo = 1;
+                                    context.read<AssetsBloc>().add(
+                                        FetchAssetsList(
+                                            pageNo: 1, isFromHome: false));
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 textValue: StringConstants.kApply)
                           ]));

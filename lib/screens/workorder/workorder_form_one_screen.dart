@@ -25,6 +25,7 @@ class WorkOrderFormScreenOne extends StatelessWidget {
     isSimilarWorkOrder == false && isFromEdit == false
         ? workOrderDetailsMap.clear()
         : workOrderDetailsMap;
+    context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return Scaffold(
         appBar: GenericAppBar(
             title: (isFromEdit == true)

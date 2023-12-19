@@ -10,6 +10,7 @@ import '../../../configs/app_dimensions.dart';
 class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
+
   const LotoStatusFilter(
       {super.key, required this.data, required this.lotoFilterMap});
 
@@ -34,7 +35,7 @@ class LotoStatusFilter extends StatelessWidget {
                 label: LotoStatusEnum.values[i].name,
                 selected: (lotoFilterMap["status"] == null)
                     ? false
-                    : state.selectedIndex == id,
+                    : lotoFilterMap["status"] == id,
                 onSelected: (bool value) {
                   context
                       .read<LotoListBloc>()

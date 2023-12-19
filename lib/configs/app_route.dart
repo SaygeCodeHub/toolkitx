@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
@@ -10,9 +11,17 @@ import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
-import '../screens/assets/widgets/assets_add_downtime_screen.dart';
+import '../screens/assets/assets_manage_comments_screen.dart';
+import '../screens/assets/assets_manage_document_filter_screen.dart';
+import '../screens/assets/assets_manage_document_screeen.dart';
+import '../screens/assets/assets_manage_meter_reading_screen.dart';
+import '../screens/assets/assets_report_failure_screen.dart';
+import '../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
+import '../screens/assets/widgets/assets_add_comment_screen.dart';
+import '../screens/assets/widgets/assets_document_filter_type_list.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
+import '../screens/assets/widgets/assets_report_failure_location_list.dart';
 import '../screens/calendar/calendar_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
@@ -39,7 +48,10 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/expense/expense_filter_screen.dart';
+import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
+import '../screens/expense/manage_expense_form_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -53,6 +65,9 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/location/location_details_screen.dart';
+import '../screens/location/location_list_screen.dart';
+import '../screens/location/widgets/location_filter_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
@@ -273,7 +288,7 @@ class AppRoutes {
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
       case LogBookFilterScreen.routeName:
-        return _createRoute(LogBookFilterScreen());
+        return _createRoute(const LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
@@ -285,7 +300,7 @@ class AppRoutes {
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
+        return _createRoute(const WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
@@ -306,7 +321,7 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
-        return _createRoute(LotoFilterScreen());
+        return _createRoute(const LotoFilterScreen());
       case LotoLocationFilterList.routeName:
         return _createRoute(LotoLocationFilterList(
             selectLocationName: settings.arguments as String));
@@ -401,8 +416,12 @@ class AppRoutes {
         return _createRoute(const LinkDocumentScreen());
       case AssetsManageDownTimeScreen.routeName:
         return _createRoute(const AssetsManageDownTimeScreen());
-      case AssetsAddDowntimeScreen.routeName:
-        return _createRoute(AssetsAddDowntimeScreen());
+      case AssetsReportFailureLocationList.routeName:
+        return _createRoute(AssetsReportFailureLocationList(
+            selectLocationName: settings.arguments.toString()));
+      case AssetsAddAndEditDowntimeScreen.routeName:
+        return _createRoute(AssetsAddAndEditDowntimeScreen(
+            downtimeId: settings.arguments.toString()));
       case LinkDocumentsFilterScreen.routeName:
         return _createRoute(const LinkDocumentsFilterScreen());
       case AttachDocumentScreen.routeName:
@@ -412,7 +431,38 @@ class AppRoutes {
         return _createRoute(const SafetyNoticeFilterScreen());
       case ExpenseListScreen.routeName:
         return _createRoute(const ExpenseListScreen());
-
+      case AssetsManageDocumentScreen.routeName:
+        return _createRoute(const AssetsManageDocumentScreen());
+      case AssetsManageCommentsScreen.routeName:
+        return _createRoute(const AssetsManageCommentsScreen());
+      case AssetsReportFailureScreen.routeName:
+        return _createRoute(AssetsReportFailureScreen());
+      case AssetsManageMeterReadingScreen.routeName:
+        return _createRoute(const AssetsManageMeterReadingScreen());
+      case AssetsAddCommentScreen.routeName:
+        return _createRoute(const AssetsAddCommentScreen());
+      case ExpenseFilterScreen.routeName:
+        return _createRoute(const ExpenseFilterScreen());
+      case LocationDetailsScreen.routeName:
+        return _createRoute(
+            LocationDetailsScreen(expenseId: settings.arguments.toString()));
+      case LocationListScreen.routeName:
+        return _createRoute(const LocationListScreen(isFromHome: true));
+      case ExpenseDetailsScreen.routeName:
+        return _createRoute(
+            ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
+      case ManageExpenseFormScreen.routeName:
+        return _createRoute(const ManageExpenseFormScreen());
+      case AddAssetsDocumentScreen.routeName:
+        return _createRoute(const AddAssetsDocumentScreen());
+      case AssetsManageDocumentFilterScreen.routeName:
+        return _createRoute(const AssetsManageDocumentFilterScreen());
+      case LocationFilterScreen.routeName:
+        return _createRoute(const LocationFilterScreen());
+      case AssetsDocumentFilterTypeList.routeName:
+        return _createRoute(AssetsDocumentFilterTypeList(
+          selectedTypeName: settings.arguments.toString(),
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

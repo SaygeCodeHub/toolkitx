@@ -8,6 +8,7 @@ class LotoDetailsFetching extends LotoDetailsState {}
 
 class LotoDetailsFetched extends LotoDetailsState {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
+  final String clientId;
   final bool showPopUpMenu;
   final List lotoPopUpMenuList;
 
@@ -15,6 +16,7 @@ class LotoDetailsFetched extends LotoDetailsState {
     required this.fetchLotoDetailsModel,
     required this.showPopUpMenu,
     required this.lotoPopUpMenuList,
+    required this.clientId,
   });
 }
 
@@ -196,6 +198,47 @@ class LotoPhotosNotUploaded extends LotoDetailsState {
   final String getError;
 
   LotoPhotosNotUploaded({required this.getError});
+}
+
+class LotoChecklistQuestionsFetching extends LotoDetailsState {}
+
+class LotoChecklistQuestionsFetched extends LotoDetailsState {
+  final FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel;
+  final List answerList;
+
+  LotoChecklistQuestionsFetched(
+      {required this.fetchLotoChecklistQuestionsModel,
+      required this.answerList});
+}
+
+class LotoChecklistQuestionsNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistQuestionsNotFetched({required this.errorMessage});
+}
+
+class AnswerSelected extends LotoDetailsState {
+  final int id;
+  final String text;
+
+  AnswerSelected({
+    required this.id,
+    required this.text,
+  });
+}
+
+class LotoChecklistSaving extends LotoDetailsState {}
+
+class LotoChecklistSaved extends LotoDetailsState {
+  final SaveLotoChecklistModel saveLotoChecklistModel;
+
+  LotoChecklistSaved({required this.saveLotoChecklistModel});
+}
+
+class LotoChecklistNotSaved extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistNotSaved({required this.errorMessage});
 }
 
 class LotoAssignedChecklistFetching extends LotoDetailsState {}

@@ -52,11 +52,20 @@ class LotoMasterFetchError extends LotoListState {
 
 class LotoStatusFilterSelected extends LotoListState {
   final String selectedIndex;
+
   const LotoStatusFilterSelected(this.selectedIndex);
+
+  @override
+  List<Object> get props => [selectedIndex];
 }
 
 class LotoLocationFilterSelected extends LotoListState {
   final String selectLocationName;
+  final String selectLocationId;
 
-  const LotoLocationFilterSelected(this.selectLocationName);
+  const LotoLocationFilterSelected(
+      this.selectLocationName, this.selectLocationId);
+
+  @override
+  List<Object> get props => [selectLocationName, selectLocationId];
 }

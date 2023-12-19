@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
+import '../expense_details_screen.dart';
 import '../expense_list_screen.dart';
 
 class ExpenseListBody extends StatelessWidget {
@@ -30,7 +31,11 @@ class ExpenseListBody extends StatelessWidget {
               if (index < expenseListDatum.length) {
                 return CustomCard(
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, ExpenseDetailsScreen.routeName,
+                          arguments: expenseListDatum[index].id);
+                    },
                     contentPadding: const EdgeInsets.all(xxTinierSpacing),
                     title: Padding(
                         padding: const EdgeInsets.only(bottom: xxTinierSpacing),
@@ -51,7 +56,13 @@ class ExpenseListBody extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .xxSmall
-                                          .copyWith(color: AppColor.errorRed)))
+                                          .copyWith(color: AppColor.errorRed))),
+                              const Spacer(),
+                              Text(expenseListDatum[index].statustext,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xxSmall
+                                      .copyWith(color: AppColor.deepBlue))
                             ])),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,16 +78,15 @@ class ExpenseListBody extends StatelessWidget {
                         ),
                         const SizedBox(height: tinierSpacing),
                         Text(expenseListDatum[index].location,
-                            style: Theme.of(context).textTheme.xSmall)
+                            style: Theme.of(context).textTheme.xSmall),
                       ],
                     ),
                   ),
                 );
               } else {
                 ExpenseListScreen.pageNo++;
-                context
-                    .read<ExpenseBloc>()
-                    .add(FetchExpenseList(pageNo: ExpenseListScreen.pageNo));
+                context.read<ExpenseBloc>().add(FetchExpenseList(
+                    pageNo: ExpenseListScreen.pageNo, isFromHome: false));
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

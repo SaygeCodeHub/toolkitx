@@ -14,6 +14,7 @@ import '../../configs/app_color.dart';
 
 class ProcessSignInScreen extends StatefulWidget {
   static const routeName = 'ProcessSignInScreen';
+  static bool isSignOut = false;
 
   const ProcessSignInScreen({Key? key}) : super(key: key);
 
@@ -81,7 +82,6 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                                 return AndroidPopUp(
                                   onSecondaryButton: () {
                                     Navigator.pop(context);
-                                    Navigator.pop(context);
                                   },
                                   titleValue: StringConstants.kWarning,
                                   contentValue: StringConstants.kUnauthorized,
@@ -95,6 +95,18 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             );
                           }
                           if (state is SignInProcessingError) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context, state.errorMsg, '');
+                          }
+                          if (state is SignOutProcessing) {
+                            ProgressBar.show(context);
+                          } else if (state is SignOutProcessed) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context,
+                                StringConstants.kSignOutSuccessfully, '');
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          } else if (state is SignOutNotProcessed) {
                             ProgressBar.dismiss(context);
                             showCustomSnackBar(context, state.errorMsg, '');
                           }
@@ -118,7 +130,6 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
-                            Navigator.pop(context);
                           }
                           if (state is SignInUnathorizedError) {
                             showCustomSnackBar(context,
@@ -129,9 +140,13 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                     ],
                     child: PrimaryButton(
                         onPressed: () {
-                          context
-                              .read<SignInProcessBloc>()
-                              .add(SignInProcess(qRCode: result));
+                          ProcessSignInScreen.isSignOut != true
+                              ? context
+                                  .read<SignInProcessBloc>()
+                                  .add(SignInProcess(qRCode: result))
+                              : context
+                                  .read<SignInProcessBloc>()
+                                  .add(ProcessSignOut(qRCode: result));
                         },
                         textValue: StringConstants.kCapture),
                   )),

@@ -47,7 +47,9 @@ class SearchLotoAssignWorkForce extends LotoDetailsEvent {
 }
 
 class StartLotoEvent extends LotoDetailsEvent {
-  StartLotoEvent();
+  final String? checklistId;
+
+  StartLotoEvent({required this.checklistId});
 }
 
 class StartRemoveLotoEvent extends LotoDetailsEvent {
@@ -79,6 +81,21 @@ class LotoUploadPhotos extends LotoDetailsEvent {
 class AddLotoComment extends LotoDetailsEvent {
   final String comment;
   AddLotoComment({required this.comment});
+}
+
+class FetchLotoChecklistQuestions extends LotoDetailsEvent {}
+
+class SelectAnswer extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectAnswer({required this.id, required this.text});
+}
+
+class SaveLotoChecklist extends LotoDetailsEvent {
+  final Map saveLotoChecklistMap;
+
+  SaveLotoChecklist({required this.saveLotoChecklistMap});
 }
 
 class FetchLotoAssignedChecklists extends LotoDetailsEvent {
