@@ -78,7 +78,7 @@ class StartLotoScreen extends StatelessWidget {
                             ? Visibility(
                                 visible: context
                                         .read<LotoDetailsBloc>()
-                                        .checklistArrayIdList!
+                                        .checklistArrayIdList
                                         .length ==
                                     1,
                                 replacement: PrimaryButton(
