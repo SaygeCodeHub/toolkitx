@@ -37,7 +37,7 @@ class FetchLotoChecklistQuestionsModel {
 class Data {
   final String? checklistid;
   final String? name;
-  final String? checklistArray;
+  final dynamic checklistArray;
   final List<QuestionList>? questionlist;
 
   Data({
@@ -49,8 +49,8 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         checklistid: json["checklistid"],
-        name: json["name"],
-        checklistArray: json["checklistArray"],
+        name: json["name"] ?? '',
+        checklistArray: json["checklistArray"] ?? '',
         questionlist: json["questionlist"] == null
             ? []
             : List<QuestionList>.from(
@@ -116,9 +116,9 @@ class QuestionList {
         maxval: json["maxval"],
         fileextension: json["fileextension"],
         moreinfo: json["moreinfo"],
-        optioncomment: json["optioncomment"],
+        optioncomment: json["optioncomment"] ?? '',
         optionid: json["optionid"],
-        optiontext: json["optiontext"],
+        optiontext: json["optiontext"] ?? '',
         queoptions: List<QueOption>.from(
             json["queoptions"].map((x) => QueOption.fromJson(x))),
       );

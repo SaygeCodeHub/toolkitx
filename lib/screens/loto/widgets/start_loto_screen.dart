@@ -20,6 +20,7 @@ class StartLotoScreen extends StatelessWidget {
   static const routeName = "StartLotoScreen";
   static Map startLotoMap = {};
   static Map saveLotoChecklistMap = {};
+  static bool isFromStartRemoveLoto = false;
 
   const StartLotoScreen({super.key});
 
@@ -27,11 +28,15 @@ class StartLotoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
+    context.read<LotoDetailsBloc>().isFromFirst = true;
     context.read<LotoDetailsBloc>().add(FetchLotoChecklistQuestions());
     context.read<LotoDetailsBloc>().answerList = [];
     startLotoMap = {};
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText("StartLotoButton")),
+        appBar: GenericAppBar(
+            title: isFromStartRemoveLoto
+                ? DatabaseUtil.getText("StartRemoveLotoButton")
+                : DatabaseUtil.getText("StartLotoButton")),
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(leftRightMargin),
             child: Row(
@@ -46,58 +51,65 @@ class StartLotoScreen extends StatelessWidget {
                           textValue: DatabaseUtil.getText("buttonBack"))),
                   SizedBox(
                       width: xxSizedBoxWidth,
-                      child: BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
-                          listener: (context, state) {
-                            if (state is LotoStarting) {
-                              ProgressBar.show(context);
-                            } else if (state is LotoStarted) {
-                              ProgressBar.dismiss(context);
-                              showCustomSnackBar(
-                                  context, StringConstants.kLotoStarted, '');
-                            } else if (state is LotoNotStarted) {
-                              ProgressBar.dismiss(context);
-                              showCustomSnackBar(context, state.getError, '');
-                            }
-                          },
-                          buildWhen: (previousState, currentState) =>
-                              currentState is LotoChecklistQuestionsFetched,
-                          builder: (context, state) {
-                            if (state is LotoChecklistQuestionsFetched) {
-                              return Visibility(
-                                visible: state.fetchLotoChecklistQuestionsModel
-                                        .data!.checklistArray!.length >
+                      child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                        listener: (context, state) {
+                          if (state is LotoStarting) {
+                            ProgressBar.show(context);
+                          } else if (state is LotoStarted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(
+                                context, StringConstants.kLotoStarted, '');
+                          } else if (state is LotoNotStarted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context, state.getError, '');
+                          }
+                          if (state is LotoRemoveStarting) {
+                            ProgressBar.show(context);
+                          } else if (state is LotoRemoveStarted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context,
+                                StringConstants.kLotoRemoveStarted, '');
+                          } else if (state is LotoRemoveNotStarted) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context, state.getError, '');
+                          }
+                        },
+                        child: isFromStartRemoveLoto == false
+                            ? Visibility(
+                                visible: context
+                                        .read<LotoDetailsBloc>()
+                                        .checklistArrayIdList
+                                        .length ==
                                     1,
                                 replacement: PrimaryButton(
                                     onPressed: () {
-                                      saveLotoChecklistMap = {
-                                        "checklistid": state
-                                            .fetchLotoChecklistQuestionsModel
-                                            .data!
-                                            .checklistid
-                                      };
-                                      context.read<LotoDetailsBloc>().add(
-                                          SaveLotoChecklist(
-                                              saveLotoChecklistMap:
-                                                  saveLotoChecklistMap));
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .add(SaveLotoChecklist());
                                     },
                                     textValue:
                                         DatabaseUtil.getText("nextButtonText")),
                                 child: PrimaryButton(
                                     onPressed: () {
-                                      context.read<LotoDetailsBloc>().add(
-                                          StartLotoEvent(
-                                              checklistId: state
-                                                  .fetchLotoChecklistQuestionsModel
-                                                  .data!
-                                                  .checklistid));
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .add(StartLotoEvent());
                                     },
                                     textValue: DatabaseUtil.getText(
                                         "StartLotoButton")),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          }))
+                              )
+                            : SizedBox(
+                                width: xxSizedBoxWidth,
+                                child: PrimaryButton(
+                                    onPressed: () {
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .add(StartRemoveLotoEvent());
+                                    },
+                                    textValue: DatabaseUtil.getText(
+                                        "StartRemoveLotoButton")),
+                              ),
+                      ))
                 ])),
         body: Padding(
             padding: const EdgeInsets.only(

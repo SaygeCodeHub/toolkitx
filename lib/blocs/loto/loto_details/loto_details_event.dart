@@ -46,11 +46,7 @@ class SearchLotoAssignWorkForce extends LotoDetailsEvent {
   SearchLotoAssignWorkForce({required this.isWorkforceSearched});
 }
 
-class StartLotoEvent extends LotoDetailsEvent {
-  final String? checklistId;
-
-  StartLotoEvent({required this.checklistId});
-}
+class StartLotoEvent extends LotoDetailsEvent {}
 
 class StartRemoveLotoEvent extends LotoDetailsEvent {
   StartRemoveLotoEvent();
@@ -95,8 +91,4 @@ class SelectAnswer extends LotoDetailsEvent {
   SelectAnswer({required this.id, required this.text});
 }
 
-class SaveLotoChecklist extends LotoDetailsEvent {
-  final Map saveLotoChecklistMap;
-
-  SaveLotoChecklist({required this.saveLotoChecklistMap});
-}
+class SaveLotoChecklist extends LotoDetailsEvent {}
