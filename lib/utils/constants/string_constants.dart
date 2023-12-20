@@ -151,6 +151,7 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kYes = 'Yes';
   static const String kApprovalPending = 'Approval Pending';
   static const String kLastUploaded = 'Last Uploaded : ';
   static const String kViewCertificate = 'View Certificate : ';
@@ -426,4 +427,5 @@ abstract class StringConstants {
   static const String kAddDocument = 'Add Document';
   static const String kSearchByOwnerName = "Search by Owner name";
   static const String kSearchByDocumentName = "Search by Document name";
+  static const String kAssetDocuments = 'Asset Documents';
 }
