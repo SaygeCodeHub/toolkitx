@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
+import 'package:toolkit/data/models/loto/assign_team_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
@@ -72,6 +73,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<SelectAnswer>(_selectAnswer);
     on<SaveLotoChecklist>(_saveLotoChecklist);
     on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
+    on<RemoveAssignTeam>(_removeAssignTeam);
     on<DeleteLotoWorkforce>(_deleteLotoWorkforce);
   }
 
@@ -583,6 +585,31 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoWorkforceNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeAssignTeam(
+      RemoveAssignTeam event, Emitter<LotoDetailsState> emit) async {
+    emit(AssignTeamRemoving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map removeAssignTeamMap = {
+        "hashcode": hashCode,
+        "lotoid": lotoId,
+        "teamid": event.teamId,
+        "userid": userId
+      };
+      AssignTeamForRemoveModel assignTeamForRemoveModel =
+          await _lotoRepository.assignTeamForRemove(removeAssignTeamMap);
+      if (assignTeamForRemoveModel.status == 200) {
+        emit(AssignTeamRemoved());
+      } else {
+        emit(AssignTeamRemoveError(
+            errorMessage: assignTeamForRemoveModel.message!));
+      }
+    } catch (e) {
+      emit(AssignTeamRemoveError(errorMessage: e.toString()));
     }
   }
 }

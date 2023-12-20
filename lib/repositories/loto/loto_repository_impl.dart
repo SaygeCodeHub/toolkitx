@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/loto/assign_team_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
@@ -181,5 +182,14 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}loto/deleteworkforce", deleteWorkforceMap);
     return DeleteLotoWorkforceModel.fromJson(response);
+  }
+
+  @override
+  Future<AssignTeamForRemoveModel> assignTeamForRemove(
+      Map removeAssignTeamForMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}loto/assignteamforremove",
+        removeAssignTeamForMap);
+    return AssignTeamForRemoveModel.fromJson(response);
   }
 }

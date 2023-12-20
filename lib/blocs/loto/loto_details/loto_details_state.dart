@@ -264,3 +264,13 @@ class LotoWorkforceNotDeleted extends LotoDetailsState {
 
   LotoWorkforceNotDeleted({required this.errorMessage});
 }
+
+class AssignTeamRemoving extends LotoDetailsState {}
+
+class AssignTeamRemoved extends LotoDetailsState {}
+
+class AssignTeamRemoveError extends LotoDetailsState {
+  final String errorMessage;
+
+  AssignTeamRemoveError({required this.errorMessage});
+}

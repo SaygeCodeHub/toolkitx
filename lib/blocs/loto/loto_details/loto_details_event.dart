@@ -108,3 +108,9 @@ class DeleteLotoWorkforce extends LotoDetailsEvent {
 
   DeleteLotoWorkforce({required this.deleteWorkforceMap});
 }
+
+class RemoveAssignTeam extends LotoDetailsEvent {
+  final String teamId;
+
+  RemoveAssignTeam({required this.teamId});
+}

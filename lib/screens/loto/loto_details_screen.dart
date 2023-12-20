@@ -112,7 +112,8 @@ class LotoDetailsScreen extends StatelessWidget {
                                     state.fetchLotoDetailsModel,
                                 lotoTabIndex: context
                                     .read<LotoDetailsBloc>()
-                                    .lotoTabIndex),
+                                    .lotoTabIndex,
+                                clientId: state.clientId),
                             LotoImageTab(data: data, clientId: state.clientId),
                             LotoViewChecklistTab(
                                 data: state.fetchLotoDetailsModel.data),
