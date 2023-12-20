@@ -58,17 +58,16 @@ class LotoTabSixScreen extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (context) => AndroidPopUp(
-                                      titleValue: 'Delete Workforce',
-                                      contentValue: DatabaseUtil.getText(
-                                          'DeleteConfirmationImage'),
-                                      onPrimaryButton: () {
-                                        Navigator.pop(context);
-                                        context.read<LotoDetailsBloc>().add(
-                                            DeleteLotoWorkforce(
-                                                deleteWorkforceMap:
-                                                    deleteWorkforceMap));
-                                      },
-                                    ));
+                                    titleValue: 'Delete Workforce',
+                                    contentValue: DatabaseUtil.getText(
+                                        'DeleteConfirmationImage'),
+                                    onPrimaryButton: () {
+                                      Navigator.pop(context);
+                                      context.read<LotoDetailsBloc>().add(
+                                          DeleteLotoWorkforce(
+                                              deleteWorkforceMap:
+                                                  deleteWorkforceMap));
+                                    }));
                           },
                           size: kDeleteIconSize),
                     )));
