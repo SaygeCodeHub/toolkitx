@@ -181,7 +181,8 @@ class LotoData {
             json["maplinks"].map((x) => Maplink.fromJson(x))),
         locdocs:
             List<Locdoc>.from(json["locdocs"].map((x) => Locdoc.fromJson(x))),
-        assetdocs: List<AssetDocuments>.from(json["assetdocs"].map((x) => AssetDocuments.fromJson(x))),
+        assetdocs: List<AssetDocuments>.from(
+            json["assetdocs"].map((x) => AssetDocuments.fromJson(x))),
         commentslist: List<Commentslist>.from(
             json["commentslist"].map((x) => Commentslist.fromJson(x))),
         logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
@@ -318,14 +319,14 @@ class AssetDocuments {
   });
 
   factory AssetDocuments.fromJson(Map<String, dynamic> json) => AssetDocuments(
-    name: json["name"],
-    filename: json["filename"],
-  );
+        name: json["name"],
+        filename: json["filename"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "name": name,
-    "filename": filename,
-  };
+        "name": name,
+        "filename": filename,
+      };
 }
 
 class Log {

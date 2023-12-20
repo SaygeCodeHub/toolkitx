@@ -26,7 +26,8 @@ class LotoDetailsLocationDocuments extends StatelessWidget {
   Widget build(BuildContext context) {
     return Visibility(
       visible: data.locdocs.isNotEmpty,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kLocationDocuments,
@@ -55,7 +56,7 @@ class LotoDetailsLocationDocuments extends StatelessWidget {
                         child: CachedNetworkImage(
                             height: kCachedNetworkImageHeight,
                             imageUrl:
-                            '${ApiConstants.viewDocBaseUrl}${data.locdocs[index].filename}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                                '${ApiConstants.viewDocBaseUrl}${data.locdocs[index].filename}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                             placeholder: (context, url) => Shimmer.fromColors(
                                 baseColor: AppColor.paleGrey,
                                 highlightColor: AppColor.white,

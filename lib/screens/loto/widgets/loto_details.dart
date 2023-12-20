@@ -140,7 +140,7 @@ class LotoDetails extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(data.additionalinfo),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Comments',
+          Text(StringConstants.kComments,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
