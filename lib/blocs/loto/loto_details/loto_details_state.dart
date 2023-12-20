@@ -254,3 +254,13 @@ class LotoAssignedChecklistNotFetched extends LotoDetailsState {
 
   LotoAssignedChecklistNotFetched({required this.errorMessage});
 }
+
+class AssignTeamRemoving extends LotoDetailsState {}
+
+class AssignTeamRemoved extends LotoDetailsState {}
+
+class AssignTeamRemoveError extends LotoDetailsState {
+  final String errorMessage;
+
+  AssignTeamRemoveError({required this.errorMessage});
+}

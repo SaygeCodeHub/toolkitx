@@ -102,3 +102,9 @@ class FetchLotoAssignedChecklists extends LotoDetailsEvent {
 
   FetchLotoAssignedChecklists({required this.isRemove});
 }
+
+class RemoveAssignTeam extends LotoDetailsEvent {
+  final String teamId;
+
+  RemoveAssignTeam({required this.teamId});
+}
