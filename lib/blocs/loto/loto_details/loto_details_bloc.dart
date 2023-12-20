@@ -1,14 +1,18 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
+import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
+import 'package:toolkit/data/models/loto/save_loto_checklist_model.dart';
 import 'package:toolkit/data/models/loto/start_loto_model.dart';
 import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
-
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
@@ -16,6 +20,7 @@ import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
 import '../../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../../di/app_module.dart';
+import '../../../screens/loto/loto_assign_workfoce_screen.dart';
 import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
@@ -29,16 +34,27 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoData> lotoData = [];
   String lotoId = '';
-  String isRemove = '';
+  String lotoWorkforceName = '';
+  int pageNo = 1;
+  String isRemove = '0';
   String isWorkforceRemove = '';
+  List checklistArrayIdList = [];
   String isStartRemove = '0';
   int lotoTabIndex = 0;
-  bool lotoListReachedMax = false;
+  bool lotoWorkforceReachedMax = false;
+  bool isFromFirst = true;
+  static List popUpMenuItemsList = [];
+  int index = 0;
+
+  List answerList = [];
+  List<QuestionList>? questionList;
+  Map allDataForChecklistMap = {};
 
   LotoDetailsBloc() : super(LotoDetailsInitial()) {
     on<FetchLotoDetails>(_fetchLotoDetails);
     on<RemoveAssignWorkforce>(_removeAssignWorkforce);
     on<FetchLotoAssignWorkforce>(_fetchLotoAssignWorkforce);
+    on<SearchLotoAssignWorkForce>(_searchLotoAssignWorkForce);
     on<SaveLotoAssignWorkForce>(_saveLotoAssignWorkforce);
     on<FetchLotoAssignTeam>(_fetchLotoAssignTeam);
     on<SaveLotoAssignTeam>(_saveLotoAssignTeam);
@@ -47,6 +63,12 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
     on<RemoveLotoEvent>(_removeLotoEvent);
+    on<AddLotoComment>(_addLotoComment);
+    on<LotoUploadPhotos>(_lotoUploadPhotos);
+    on<FetchLotoChecklistQuestions>(_fetchLotoChecklistQuestions);
+    on<SelectAnswer>(_selectAnswer);
+    on<SaveLotoChecklist>(_saveLotoChecklist);
+    on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -54,30 +76,55 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     emit(LotoDetailsFetching());
     try {
       lotoTabIndex = event.lotTabIndex;
-      List popUpMenuItems = [
-        DatabaseUtil.getText('Start'),
-        DatabaseUtil.getText('StartRemoveLotoButton'),
-        DatabaseUtil.getText('RemoveLoto'),
-        DatabaseUtil.getText('Apply'),
-        DatabaseUtil.getText('ApproveButton'),
-        DatabaseUtil.getText('assign_workforce'),
-        DatabaseUtil.getText('assign_team'),
-        DatabaseUtil.getText('assign _workforce_for_remove_loto'),
+      List popUpMenuItemsList = [
         DatabaseUtil.getText('AddComment'),
         DatabaseUtil.getText('UploadPhotos'),
         DatabaseUtil.getText('Cancel'),
       ];
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      if (fetchLotoDetailsModel.data.isstart == '1') {
+        popUpMenuItemsList.insert(0, DatabaseUtil.getText('Start'));
+      }
+      if (fetchLotoDetailsModel.data.isapply == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('Apply'));
+      }
+      if (fetchLotoDetailsModel.data.assignwf == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('assign_workforce'));
+      }
+      if (fetchLotoDetailsModel.data.isstartremove == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('RemoveButton'));
+      }
+      if (fetchLotoDetailsModel.data.assignwf == '1') {
+        popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_team'));
+      }
+      if (fetchLotoDetailsModel.data.isapprove == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('ApproveButton'));
+      }
+      if (fetchLotoDetailsModel.data.isreject == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('RejectButton'));
+      }
+      if (fetchLotoDetailsModel.data.assignwfremove == '1') {
+        popUpMenuItemsList.insert(
+            1, DatabaseUtil.getText('assign _workforce_for_remove_loto'));
+      }
+      if (fetchLotoDetailsModel.data.assignwfremove == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('assign_team_for_remove_loto'));
+      }
+
       isWorkforceRemove = fetchLotoDetailsModel.data.assignwfremove;
       isRemove = fetchLotoDetailsModel.data.isremove;
       isStartRemove = fetchLotoDetailsModel.data.isstartremove;
       if (fetchLotoDetailsModel.status == 200) {
         emit(LotoDetailsFetched(
-            fetchLotoDetailsModel: fetchLotoDetailsModel,
-            lotoPopUpMenu: popUpMenuItems,
-            showPopUpMenu: true));
+          fetchLotoDetailsModel: fetchLotoDetailsModel,
+          showPopUpMenu: true,
+          lotoPopUpMenuList: popUpMenuItemsList,
+          clientId: clientId ?? '',
+        ));
       }
     } catch (e) {
       emit(LotoDetailsNotFetched(getError: e.toString()));
@@ -89,12 +136,14 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     emit(LotoAssignWorkforceFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (!lotoListReachedMax) {
+      if (!lotoWorkforceReachedMax) {
         FetchLotoAssignWorkforceModel fetchLotoAssignWorkforceModel =
-            await _lotoRepository.fetchLotoAssignWorkforceModel(
-                hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
+            await _lotoRepository.fetchLotoAssignWorkforceModel(hashCode!,
+                lotoId, event.pageNo, event.workforceName, event.isRemove);
+        pageNo = event.pageNo;
+        lotoWorkforceName = event.workforceName;
         assignWorkforceDatum.addAll(fetchLotoAssignWorkforceModel.data);
-        lotoListReachedMax = fetchLotoAssignWorkforceModel.data.isEmpty;
+        lotoWorkforceReachedMax = fetchLotoAssignWorkforceModel.data.isEmpty;
         emit(LotoAssignWorkforceFetched(
             fetchLotoAssignWorkforceModel: fetchLotoAssignWorkforceModel));
       }
@@ -121,8 +170,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       if (saveLotoAssignWorkforceModel.status == 200) {
         emit(LotoAssignWorkforceSaved(
             saveLotoAssignWorkforceModel: saveLotoAssignWorkforceModel));
-      }
-      {
+      } else {
         emit(LotoAssignWorkforceNotSaved(
             getError: saveLotoAssignWorkforceModel.message));
       }
@@ -188,7 +236,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": []
+        "questions": answerList,
+        "checklistid": checklistArrayIdList[index]
       };
       StartLotoModel startLotoModel =
           await _lotoRepository.startLotoRepo(startLotoMap);
@@ -214,7 +263,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "userid": userId,
         "hashcode": hashCode,
         "isRemove": isStartRemove,
-        "questions": []
+        "questions": answerList,
+        "removechecklistid": checklistArrayIdList[index]
       };
       StartRemoveLotoModel startRemoveLotoModel =
           await _lotoRepository.startRemoveLotoRepo(startRemoveLotoMap);
@@ -323,6 +373,186 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotRemoved(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addLotoComment(
+      AddLotoComment event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoCommentAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addLotoCommentMap = {
+        "comments": event.comment,
+        "lotoid": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+      };
+      AddLotoCommentModel addLotoCommentModel =
+          await _lotoRepository.addLotoCommentRepo(addLotoCommentMap);
+      if (addLotoCommentModel.status == 200) {
+        emit(LotoCommentAdded(addLotoCommentModel: addLotoCommentModel));
+      } else {
+        emit(LotoCommentNotAdded(getError: addLotoCommentModel.message));
+      }
+    } catch (e) {
+      emit(LotoCommentNotAdded(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _lotoUploadPhotos(
+      LotoUploadPhotos event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoPhotosUploading());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map lotoUploadPhotosMap = {
+        "lotoid": lotoId,
+        "filenames": event.filename,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      LotoUploadPhotosModel lotoUploadPhotosModel =
+          await _lotoRepository.lotoUploadPhotosRepo(lotoUploadPhotosMap);
+      if (lotoUploadPhotosModel.status == 200) {
+        emit(LotoPhotosUploaded(lotoUploadPhotosModel: lotoUploadPhotosModel));
+      } else {
+        emit(LotoPhotosNotUploaded(getError: lotoUploadPhotosModel.message));
+      }
+    } catch (e) {
+      emit(LotoPhotosNotUploaded(getError: e.toString()));
+    }
+  }
+
+  FutureOr<void> _searchLotoAssignWorkForce(
+      SearchLotoAssignWorkForce event, Emitter<LotoDetailsState> emit) {
+    if (event.isWorkforceSearched == true) {
+      emit(LotoAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      add(FetchLotoAssignWorkforce(
+          pageNo: 1,
+          isRemove: isStartRemove,
+          workforceName: lotoWorkforceName));
+    } else {
+      emit(LotoAssignWorkforceSearched(
+          isWorkforceSearched: event.isWorkforceSearched));
+      LotoAssignWorkforceScreen.workforceNameController.clear();
+      add(FetchLotoAssignWorkforce(
+          pageNo: 1, isRemove: isStartRemove, workforceName: ''));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchLotoChecklistQuestions(
+      FetchLotoChecklistQuestions event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoChecklistQuestionsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (event.checkListId != "") {
+        FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+            await _lotoRepository.fetchLotoChecklistQuestions(
+                hashCode, lotoId, event.checkListId, isStartRemove);
+        checklistArrayIdList =
+            fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+        if (fetchLotoChecklistQuestionsModel.status == 200) {
+          emit(LotoChecklistQuestionsFetched(
+              fetchLotoChecklistQuestionsModel:
+                  fetchLotoChecklistQuestionsModel,
+              answerList: answerList));
+        } else {
+          emit(LotoChecklistQuestionsNotFetched(
+              errorMessage: fetchLotoChecklistQuestionsModel.message!));
+        }
+      } else {
+        if (isFromFirst == true) {
+          FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+              await _lotoRepository.fetchLotoChecklistQuestions(
+                  hashCode, lotoId, '', isStartRemove);
+          checklistArrayIdList = fetchLotoChecklistQuestionsModel
+                          .data!.checklistArray !=
+                      null ||
+                  fetchLotoChecklistQuestionsModel.data!.checklistArray != ""
+              ? fetchLotoChecklistQuestionsModel.data!.checklistArray.split(",")
+              : [];
+          if (fetchLotoChecklistQuestionsModel.status == 200) {
+            emit(LotoChecklistQuestionsFetched(
+                fetchLotoChecklistQuestionsModel:
+                    fetchLotoChecklistQuestionsModel,
+                answerList: answerList));
+          } else {
+            emit(LotoChecklistQuestionsNotFetched(
+                errorMessage: fetchLotoChecklistQuestionsModel.message!));
+          }
+        } else {
+          FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel =
+              await _lotoRepository.fetchLotoChecklistQuestions(
+                  hashCode, lotoId, checklistArrayIdList[index], isStartRemove);
+          checklistArrayIdList =
+              fetchLotoChecklistQuestionsModel.data?.checklistArray?.split(",");
+          if (fetchLotoChecklistQuestionsModel.status == 200) {
+            emit(LotoChecklistQuestionsFetched(
+                fetchLotoChecklistQuestionsModel:
+                    fetchLotoChecklistQuestionsModel,
+                answerList: answerList));
+          } else {
+            emit(LotoChecklistQuestionsNotFetched(
+                errorMessage: fetchLotoChecklistQuestionsModel.message!));
+          }
+        }
+      }
+    } catch (e) {
+      emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAnswer(
+      SelectAnswer event, Emitter<LotoDetailsState> emit) {
+    emit(AnswerSelected(id: event.id, text: event.text));
+  }
+
+  Future<FutureOr<void>> _saveLotoChecklist(
+      SaveLotoChecklist event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoChecklistSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveLotoChecklistMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "isremove": isStartRemove,
+        "questions": answerList,
+        "checklistid": checklistArrayIdList[index]
+      };
+      SaveLotoChecklistModel saveLotoChecklistModel =
+          await _lotoRepository.saveLotoChecklist(saveLotoChecklistMap);
+      emit(LotoChecklistSaved(saveLotoChecklistModel: saveLotoChecklistModel));
+      isFromFirst == true ? index = 0 : index++;
+      isFromFirst = false;
+      add(FetchLotoChecklistQuestions());
+    } catch (e) {
+      emit(LotoChecklistNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchLotoAssignedChecklists(
+      FetchLotoAssignedChecklists event, Emitter<LotoDetailsState> emit) async {
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    emit(LotoAssignedChecklistFetching());
+    try {
+      FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel =
+          await _lotoRepository.fetchLotoAssignedChecklist(
+              hashCode, lotoId, event.isRemove);
+      if (fetchLotoAssignedChecklistModel.status == 200) {
+        emit(LotoAssignedChecklistFetched(
+            fetchLotoAssignedChecklistModel: fetchLotoAssignedChecklistModel));
+      } else {
+        emit(LotoAssignedChecklistNotFetched(
+            errorMessage: fetchLotoAssignedChecklistModel.message!));
+      }
+    } catch (e) {
+      emit(LotoAssignedChecklistNotFetched(errorMessage: e.toString()));
     }
   }
 }

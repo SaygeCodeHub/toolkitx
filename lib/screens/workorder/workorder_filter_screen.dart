@@ -13,8 +13,10 @@ import 'widgets/workorder_filter_body.dart';
 class WorkOrderFilterScreen extends StatelessWidget {
   static const routeName = 'WorkOrderFilterScreen';
 
-  WorkOrderFilterScreen({Key? key}) : super(key: key);
-  final Map workOrderFilterMap = {};
+  const WorkOrderFilterScreen({Key? key}) : super(key: key);
+  static Map workOrderFilterMap = {};
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class WorkOrderFilterScreen extends StatelessWidget {
               if (state is FetchingWorkOrderMaster) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is WorkOrderMasterFetched) {
-                if (state.fetchWorkOrdersMasterModel.data.isNotEmpty) {}
+                workOrderFilterMap = state.filtersMap;
                 return WorkOrderFilterBody(
                     workOrderFilterMap: workOrderFilterMap,
                     workOderDatum: state.fetchWorkOrdersMasterModel.data);

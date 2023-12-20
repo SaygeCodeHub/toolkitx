@@ -13,13 +13,16 @@ class FetchLotoMaster extends LotoListEvent {}
 
 class SelectLotoStatusFilter extends LotoListEvent {
   final String selectedIndex;
+
   SelectLotoStatusFilter({required this.selectedIndex});
 }
 
 class SelectLotoLocationFilter extends LotoListEvent {
   final String selectLocationName;
+  final String selectLocationId;
 
-  SelectLotoLocationFilter({required this.selectLocationName});
+  SelectLotoLocationFilter(
+      {required this.selectLocationId, required this.selectLocationName});
 }
 
 class ClearLotoListFilter extends LotoListEvent {}

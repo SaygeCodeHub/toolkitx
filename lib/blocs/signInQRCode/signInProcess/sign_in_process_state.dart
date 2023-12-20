@@ -33,3 +33,13 @@ class SignInUnathorizedError extends SignInProcessState {
 
   SignInUnathorizedError({required this.errorMsg});
 }
+
+class SignOutProcessing extends SignInProcessState {}
+
+class SignOutProcessed extends SignInProcessState {}
+
+class SignOutNotProcessed extends SignInProcessState {
+  final String errorMsg;
+
+  SignOutNotProcessed({required this.errorMsg});
+}

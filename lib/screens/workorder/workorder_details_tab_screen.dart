@@ -126,6 +126,18 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderSingleMiscCostNotDeleted) {
               ProgressBar.dismiss(context);
             }
+
+            if (state is DeletingWorkOrderWorkForce) {
+              ProgressBar.show(context);
+            } else if (state is WorkOrderWorkForceDeleted) {
+              ProgressBar.dismiss(context);
+              context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
+                  initialTabIndex: 1,
+                  workOrderId: workOrderMap['workOrderId']));
+            } else if (state is WorkOrderWorkForceNotDeleted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.workForceNotDeleted, '');
+            }
           },
           builder: (context, state) {
             if (state is FetchingWorkOrderTabDetails) {

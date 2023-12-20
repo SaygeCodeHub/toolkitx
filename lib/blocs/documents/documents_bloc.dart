@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
+import 'package:toolkit/data/models/documents/post_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -11,7 +13,6 @@ import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/documents/documents_repository.dart';
-import '../../screens/documents/widgets/documents_details_files.dart';
 import 'documents_events.dart';
 import 'documents_states.dart';
 
@@ -24,8 +25,12 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   List masterData = [];
   bool docListReachedMax = false;
   String selectedType = '';
+  String linkDocSelectedType = '';
   List<DocumentsListDatum> documentsListDatum = [];
   String documentId = '';
+  Map linkDocFilters = {};
+  List<DocumentsToLinkData> documentsToLinkList = [];
+  bool linkDocumentsReachedMax = false;
 
   DocumentsStates get initialState => const DocumentsInitial();
 
@@ -39,6 +44,10 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<ApplyDocumentFilter>(_applyDocumentFilter);
     on<ClearDocumentFilter>(_clearDocumentFilter);
     on<GetDocumentsDetails>(_getDocumentsDetails);
+    on<GetDocumentsToLink>(_fetchDocumentsToLink);
+    on<SaveLinkedDocuments>(_saveLinkedDocuments);
+    on<AttachDocuments>(_attachDocuments);
+    on<DeleteDocuments>(_deleteDocuments);
   }
 
   Future<void> _getDocumentsList(
@@ -49,6 +58,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       if (event.isFromHome == true) {
         docListReachedMax = false;
+        selectedType = '';
         filters = {};
         DocumentsListModel documentsListModel =
             await _documentsRepository.getDocumentsList(
@@ -144,9 +154,9 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      DocumentDetailsFiles.clientId =
+      String clientId =
           await _customerCache.getClientId(CacheKeys.clientId) ?? '';
-      List documentsPopUpMenu = ['Link Documents'];
+      List documentsPopUpMenu = [DatabaseUtil.getText('dms_linkotherdocument')];
       DocumentDetailsModel documentDetailsModel = await _documentsRepository
           .getDocumentsDetails(userId, hashCode, roleId, documentId);
       if (documentDetailsModel.data.canaddcomments == '1') {
@@ -175,9 +185,108 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
       emit(DocumentsDetailsFetched(
           documentDetailsModel: documentDetailsModel,
-          documentsPopUpMenu: documentsPopUpMenu));
+          documentsPopUpMenu: documentsPopUpMenu,
+          clientId: clientId));
     } catch (e) {
       emit(DocumentsDetailsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchDocumentsToLink(
+      GetDocumentsToLink event, Emitter<DocumentsStates> emit) async {
+    emit(const FetchingDocumentsToLink());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (!linkDocumentsReachedMax) {
+        DocumentsToLinkModel documentsToLinkModel =
+            await _documentsRepository.getDocumentsToLink(
+                jsonEncode(linkDocFilters), hashCode, documentId, event.page);
+        documentsToLinkList.addAll(documentsToLinkModel.data);
+        linkDocumentsReachedMax = documentsToLinkModel.data.isEmpty;
+        emit(DocumentsToLinkFetched(
+            documentsToLinkModel: documentsToLinkModel,
+            documentsToLinkList: documentsToLinkList));
+      }
+    } catch (e) {
+      emit(DocumentMasterError(fetchError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveLinkedDocuments(
+      SaveLinkedDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const SavingLikedDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveLinkedDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "documents": event.linkedDocuments,
+        "userid": userId
+      };
+      PostDocumentsModel saveLinkedDocumentsModel = await _documentsRepository
+          .saveLinkedDocuments(saveLinkedDocumentsMap);
+      if (saveLinkedDocumentsModel.message == '1') {
+        emit(LikedDocumentsSaved(
+            saveLinkedDocumentsModel: saveLinkedDocumentsModel));
+      } else {
+        emit(SaveLikedDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SaveLikedDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _attachDocuments(
+      AttachDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const AttachingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map attachDocumentsMap = {
+        "documentid": documentId,
+        "files": event.attachDocumentsMap['files'],
+        "userid": userId,
+        "notes": event.attachDocumentsMap['notes'],
+        "hashcode": hashCode
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.attachDocuments(attachDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(AttachDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(AttachDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteDocuments(
+      DeleteDocuments event, Emitter<DocumentsStates> emit) async {
+    emit(const DeletingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {"fileid": event.fileId, "hashcode": hashCode};
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.deleteDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsDeleted(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(DeleteDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(DeleteDocumentsError(message: e.toString()));
     }
   }
 }

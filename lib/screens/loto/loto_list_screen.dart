@@ -49,6 +49,7 @@ class LotoListScreen extends StatelessWidget {
                         clearOnPress: () {
                           pageNo = 1;
                           context.read<LotoListBloc>().data.clear();
+                          LotoFilterScreen.lotoFilterMap.clear();
                           context
                               .read<LotoListBloc>()
                               .add(ClearLotoListFilter());

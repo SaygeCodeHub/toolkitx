@@ -11,10 +11,12 @@ class FetchLotoDetails extends LotoDetailsEvent {
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
   final int pageNo;
   final String isRemove;
-  final String name;
+  final String workforceName;
 
   FetchLotoAssignWorkforce(
-      {required this.pageNo, required this.isRemove, required this.name});
+      {required this.pageNo,
+      required this.isRemove,
+      required this.workforceName});
 }
 
 class SaveLotoAssignWorkForce extends LotoDetailsEvent {
@@ -38,9 +40,13 @@ class FetchLotoAssignTeam extends LotoDetailsEvent {
       {required this.pageNo, required this.isRemove, required this.name});
 }
 
-class StartLotoEvent extends LotoDetailsEvent {
-  StartLotoEvent();
+class SearchLotoAssignWorkForce extends LotoDetailsEvent {
+  final bool isWorkforceSearched;
+
+  SearchLotoAssignWorkForce({required this.isWorkforceSearched});
 }
+
+class StartLotoEvent extends LotoDetailsEvent {}
 
 class StartRemoveLotoEvent extends LotoDetailsEvent {
   StartRemoveLotoEvent();
@@ -60,5 +66,39 @@ class RemoveLotoEvent extends LotoDetailsEvent {
 
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
+
   RemoveAssignWorkforce({required this.peopleId});
+}
+
+class LotoUploadPhotos extends LotoDetailsEvent {
+  final String filename;
+
+  LotoUploadPhotos({required this.filename});
+}
+
+class AddLotoComment extends LotoDetailsEvent {
+  final String comment;
+
+  AddLotoComment({required this.comment});
+}
+
+class FetchLotoChecklistQuestions extends LotoDetailsEvent {
+  final String checkListId;
+
+  FetchLotoChecklistQuestions({this.checkListId = ""});
+}
+
+class SelectAnswer extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectAnswer({required this.id, required this.text});
+}
+
+class SaveLotoChecklist extends LotoDetailsEvent {}
+
+class FetchLotoAssignedChecklists extends LotoDetailsEvent {
+  final String isRemove;
+
+  FetchLotoAssignedChecklists({required this.isRemove});
 }
