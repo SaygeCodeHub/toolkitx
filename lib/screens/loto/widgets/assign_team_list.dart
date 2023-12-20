@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -96,15 +95,18 @@ class AssignTeamList extends StatelessWidget {
                                         color: AppColor.grey)),
                             trailing: InkWell(
                                 onTap: () {
-                                  context.read<LotoDetailsBloc>().isWorkforceRemove !=
-                                      "1" ? context.read<LotoDetailsBloc>().add(
-                                      SaveLotoAssignTeam(
-                                          teamId: LotoAssignTeamScreen
-                                              .data[index].id)) :
-                                  context.read<LotoDetailsBloc>().add(
-                                      RemoveAssignTeam(
-                                          teamId: LotoAssignTeamScreen
-                                              .data[index].id));
+                                  context
+                                              .read<LotoDetailsBloc>()
+                                              .isWorkforceRemove !=
+                                          "1"
+                                      ? context.read<LotoDetailsBloc>().add(
+                                          SaveLotoAssignTeam(
+                                              teamId: LotoAssignTeamScreen
+                                                  .data[index].id))
+                                      : context.read<LotoDetailsBloc>().add(
+                                          RemoveAssignTeam(
+                                              teamId: LotoAssignTeamScreen
+                                                  .data[index].id));
                                 },
                                 child: const Card(
                                     shape: CircleBorder(),
