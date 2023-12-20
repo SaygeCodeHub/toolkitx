@@ -426,4 +426,5 @@ abstract class StringConstants {
   static const String kAddDocument = 'Add Document';
   static const String kSearchByOwnerName = "Search by Owner name";
   static const String kSearchByDocumentName = "Search by Document name";
+  static const String kWorkforceDeleted = 'Workforce Deleted';
 }

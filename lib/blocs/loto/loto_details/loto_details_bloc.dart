@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_workforce_for_remove_model.dart';
 import 'package:toolkit/data/models/loto/accept_loto_model.dart';
 import 'package:toolkit/data/models/loto/apply_loto_model.dart';
+import 'package:toolkit/data/models/loto/delete_loto_workforce_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
 import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
@@ -71,6 +72,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<SelectAnswer>(_selectAnswer);
     on<SaveLotoChecklist>(_saveLotoChecklist);
     on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
+    on<DeleteLotoWorkforce>(_deleteLotoWorkforce);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -555,6 +557,32 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoAssignedChecklistNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteLotoWorkforce(
+      DeleteLotoWorkforce event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoWorkforceDeleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map deleteWorkforceMap = {
+        "hashcode": hashCode,
+        "lotoworkforceid": event.deleteWorkforceMap['lotoworkforceid'],
+        "type": event.deleteWorkforceMap['type'],
+        "userid": userId,
+        "lotoid": lotoId
+      };
+      DeleteLotoWorkforceModel deleteLotoWorkforceModel =
+          await _lotoRepository.deleteWorkforce(deleteWorkforceMap);
+      if (deleteLotoWorkforceModel.message == '1') {
+        emit(LotoWorkforceDeleted());
+      } else {
+        emit(LotoWorkforceNotDeleted(
+            errorMessage: deleteLotoWorkforceModel.message!));
+      }
+    } catch (e) {
+      emit(LotoWorkforceNotDeleted(errorMessage: e.toString()));
     }
   }
 }
