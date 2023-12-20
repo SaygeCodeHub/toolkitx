@@ -76,7 +76,7 @@ class LotoData {
   final String distributionlist;
   final List<Maplink> maplinks;
   final List<Locdoc> locdocs;
-  final List<dynamic> assetdocs;
+  final List<AssetDocuments> assetdocs;
   final List<Commentslist> commentslist;
   final List<Log> logs;
   final List<Workforce> workforce;
@@ -181,7 +181,7 @@ class LotoData {
             json["maplinks"].map((x) => Maplink.fromJson(x))),
         locdocs:
             List<Locdoc>.from(json["locdocs"].map((x) => Locdoc.fromJson(x))),
-        assetdocs: List<dynamic>.from(json["assetdocs"].map((x) => x)),
+        assetdocs: List<AssetDocuments>.from(json["assetdocs"].map((x) => AssetDocuments.fromJson(x))),
         commentslist: List<Commentslist>.from(
             json["commentslist"].map((x) => Commentslist.fromJson(x))),
         logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
@@ -236,7 +236,7 @@ class LotoData {
         "distributionlist": distributionlist,
         "maplinks": List<dynamic>.from(maplinks.map((x) => x.toJson())),
         "locdocs": List<dynamic>.from(locdocs.map((x) => x.toJson())),
-        "assetdocs": List<dynamic>.from(assetdocs.map((x) => x)),
+        "assetdocs": List<dynamic>.from(assetdocs.map((x) => x.toJson())),
         "commentslist": List<dynamic>.from(commentslist.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
         "workforce": List<dynamic>.from(workforce.map((x) => x.toJson())),
@@ -306,6 +306,26 @@ class Locdoc {
         "name": name,
         "filename": filename,
       };
+}
+
+class AssetDocuments {
+  final String name;
+  final String filename;
+
+  AssetDocuments({
+    required this.name,
+    required this.filename,
+  });
+
+  factory AssetDocuments.fromJson(Map<String, dynamic> json) => AssetDocuments(
+    name: json["name"],
+    filename: json["filename"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "filename": filename,
+  };
 }
 
 class Log {

@@ -151,6 +151,7 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kYes = 'Yes';
   static const String kApprovalPending = 'Approval Pending';
   static const String kLastUploaded = 'Last Uploaded : ';
   static const String kViewCertificate = 'View Certificate : ';
