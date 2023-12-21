@@ -29,6 +29,7 @@ class WorkOrderListScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               WorkOrderFormScreenOne.isSimilarWorkOrder = false;
+              WorkOrderFormScreenOne.isFromEdit = false;
               Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
                   arguments: addWorkOrderMap);
             },
@@ -63,6 +64,7 @@ class WorkOrderListScreen extends StatelessWidget {
                         WorkOrderListScreen.pageNo = 1;
                         context.read<WorkOrderBloc>().data.clear();
                         context.read<WorkOrderBloc>().hasReachedMax = false;
+                        WorkOrderFilterScreen.workOrderFilterMap.clear();
                         context
                             .read<WorkOrderBloc>()
                             .add(WorkOrderClearFilter());

@@ -4,6 +4,7 @@ import '../../data/models/SignInQRCode/assign_to_me_checklist_model.dart';
 import '../../data/models/SignInQRCode/assign_to_me_loto_model.dart';
 import '../../data/models/SignInQRCode/assign_to_me_permit_model.dart';
 import '../../data/models/SignInQRCode/current_signin_model.dart';
+import '../../data/models/SignInQRCode/process_sign_out_model.dart';
 import '../../data/models/SignInQRCode/sign_in_location_details_model.dart';
 import '../../data/models/SignInQRCode/process_singin_model.dart';
 import '../../data/models/SignInQRCode/signin_unathorized_model.dart';
@@ -27,4 +28,6 @@ abstract class SignInRepository {
   Future<ProcessSignInModel> processSignIn(Map processSingInMap);
 
   Future<SignInUnathorizedModel> unathorizedSignIn(Map unathorizedSingInMap);
+
+  Future<ProcessSignOutModel> processSignOut(Map processSignOutMap);
 }

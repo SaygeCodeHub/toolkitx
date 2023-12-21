@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/widgets/custom_choice_chip.dart';
 
 import '../../../blocs/loto/loto_list_bloc.dart';
+import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_dimensions.dart';
 
 class LotoStatusFilter extends StatelessWidget {

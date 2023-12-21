@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_list_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/loto_list_screen.dart';
@@ -7,6 +8,8 @@ import 'package:toolkit/screens/loto/widgets/loto_location_filter.dart';
 import 'package:toolkit/screens/loto/widgets/loto_status_filter.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
+import '../../blocs/location/location_bloc.dart';
+import '../../blocs/location/location_event.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -21,6 +24,8 @@ class LotoFilterScreen extends StatelessWidget {
   final Map lotoFilterMap = {};
   final List location = [];
   final String selectLocationName = '';
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {

@@ -54,6 +54,10 @@ class LotoLocationFilterList extends StatelessWidget {
                                       selectLocationName: context
                                           .read<LotoListBloc>()
                                           .masterData[0][index]
+                                          .name,
+                                      selectLocationId: context
+                                          .read<LotoListBloc>()
+                                          .masterData[0][index]
                                           .id
                                           .toString(),
                                     ));

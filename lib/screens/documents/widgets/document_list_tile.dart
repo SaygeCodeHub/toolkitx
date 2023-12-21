@@ -18,15 +18,21 @@ class DocumentListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<DocumentsBloc>().documentsListDatum.clear();
     return BlocConsumer<DocumentsBloc, DocumentsStates>(
         buildWhen: (previousState, currentState) =>
             ((currentState is DocumentsListFetched) ||
                 (currentState is FetchingDocumentsList &&
-                    DocumentsListScreen.page == 1)) ||
+                    DocumentsListScreen.page == 1 &&
+                    context
+                        .read<DocumentsBloc>()
+                        .documentsListDatum
+                        .isEmpty)) ||
             currentState is DocumentsListError,
         listener: (context, state) {
           if (state is DocumentsListFetched) {
-            if (state.documentsListModel.status == 204) {
+            if (state.documentsListModel.status == 204 &&
+                context.read<DocumentsBloc>().documentsListDatum.isNotEmpty) {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
           }

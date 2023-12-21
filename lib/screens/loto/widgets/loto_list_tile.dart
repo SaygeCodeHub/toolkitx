@@ -24,8 +24,17 @@ class LotoListTile extends StatelessWidget {
         child: Column(
           children: [
             ListTile(
-              onTap: () {},
-              title: Text(context.read<LotoListBloc>().data[index].name,
+              onTap: () {
+                context.read<LotoDetailsBloc>().lotoId = lotoListDatum.id;
+                Navigator.pushNamed(context, LotoDetailsScreen.routeName)
+                    .then((_) => {
+                          LotoListScreen.pageNo = 1,
+                          context.read<LotoListBloc>().data.clear(),
+                          context.read<LotoListBloc>().add(FetchLotoList(
+                              pageNo: LotoListScreen.pageNo, isFromHome: false))
+                        });
+              },
+              title: Text(lotoListDatum.name,
                   style: Theme.of(context).textTheme.small.copyWith(
                       fontWeight: FontWeight.w500, color: AppColor.black)),
               subtitle: Column(
