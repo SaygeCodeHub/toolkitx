@@ -32,7 +32,7 @@ class LotoRejectScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text("Comments",
+              Text(StringConstants.kComments,
                   style: Theme.of(context).textTheme.small.copyWith(
                       fontWeight: FontWeight.w800, color: AppColor.black)),
               const SizedBox(height: xxxTinierSpacing),

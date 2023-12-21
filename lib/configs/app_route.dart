@@ -82,7 +82,6 @@ import '../screens/loto/loto_assign_workfoce_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
 import '../screens/loto/loto_reject_screen.dart';
-import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
