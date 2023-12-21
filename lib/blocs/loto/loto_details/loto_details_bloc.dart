@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/loto/delete_loto_workforce_model.dart';
 import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.dart';
 import 'package:toolkit/data/models/loto/fetch_assigned_checklists.dart';
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
+import 'package:toolkit/data/models/loto/reject_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/save_loto_checklist_model.dart';
@@ -64,6 +65,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<StartRemoveLotoEvent>(_startRemoveLotoEvent);
     on<ApplyLotoEvent>(_applyLotoEvent);
     on<AcceptLotoEvent>(_acceptLotoEvent);
+    on<RejectLotoEvent>(_rejectLotoEvent);
     on<RemoveLotoEvent>(_removeLotoEvent);
     on<AddLotoComment>(_addLotoComment);
     on<LotoUploadPhotos>(_lotoUploadPhotos);
@@ -303,6 +305,29 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       }
     } catch (e) {
       emit(LotoNotApplied(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectLotoEvent(
+      RejectLotoEvent event, Emitter<LotoDetailsState> emit) async {
+    emit(LotoRejecting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map rejectLotoMap = {
+        "id": lotoId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "remark": event.remark
+      };
+      RejectLotoModel rejectLotoModel =
+          await _lotoRepository.rejectLotoRepo(rejectLotoMap);
+      if (rejectLotoModel.status == 200) {
+        emit(LotoRejected(rejectLotoModel: rejectLotoModel));
+      }
+    } catch (e) {
+      emit(LotoNotRejected(getError: e.toString()));
     }
   }
 

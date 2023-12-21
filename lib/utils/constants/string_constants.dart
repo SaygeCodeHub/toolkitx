@@ -293,6 +293,7 @@ abstract class StringConstants {
   static const String kStartCourse = 'Start Course';
   static const String kFeedback = 'Feedback';
   static const String kSkip = 'Skip';
+  static const String kBack = 'Back';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
   static const String kAnswerSaved = "Answer Saved";
@@ -344,6 +345,8 @@ abstract class StringConstants {
   static const String kLotoRemoved = "Loto Removed";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
+  static const String kLotoRejected = "Loto Rejected";
+  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
   static const String kLoginSuccess = 'Logged in Successfully';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
