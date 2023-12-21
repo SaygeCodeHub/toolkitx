@@ -128,7 +128,7 @@ class CertificatesListScreen extends StatelessWidget {
                                                 child: CustomTextButton(
                                                     onPressed: (state
                                                                 .data[index]
-                                                                .accesscertificate ==
+                                                                .accesscertificate !=
                                                             "1")
                                                         ? () {
                                                             String

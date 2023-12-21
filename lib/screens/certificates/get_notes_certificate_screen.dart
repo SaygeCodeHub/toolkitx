@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
-import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -64,67 +63,6 @@ class GetNotesCertificateScreen extends StatelessWidget {
                       data: state.fetchGetNotesModel.data, pageNo: pageNo),
                   Html(data: pageNo != 3 ? text : ''),
                   const SizedBox(height: tinierSpacing),
-                  Row(
-                    children: [
-                      Visibility(
-                          visible: (pageNo > 1) ? !isVisible : isVisible,
-                          child: SizedBox(
-                              width: kPreviousButtonWidth,
-                              child: PrimaryButton(
-                                  onPressed: () {
-                                    pageNo -= 1;
-                                    context
-                                        .read<StartCourseCertificateBloc>()
-                                        .add(GetNotesCertificate(
-                                            topicId: getNotesMap["id"],
-                                            pageNo: pageNo));
-                                  },
-                                  textValue: StringConstants.kPREVIOUS))),
-                      const SizedBox(width: tinierSpacing),
-                      Visibility(
-                          visible: pageNo.toString() !=
-                              state.fetchGetNotesModel.data.notescount,
-                          replacement: SizedBox(
-                              width: kNextButtonWidth,
-                              child: PrimaryButton(
-                                  onPressed: () {
-                                    context
-                                        .read<StartCourseCertificateBloc>()
-                                        .add(UpdateUserTrack(
-                                            certificateId: context
-                                                .read<
-                                                    StartCourseCertificateBloc>()
-                                                .certificateId,
-                                            noteId: state
-                                                .fetchGetNotesModel.data.id,
-                                            idm: getNotesMap["id"]));
-                                    Navigator.pop(context);
-                                  },
-                                  textValue: StringConstants.kFINISH)),
-                          child: SizedBox(
-                              width: kNextButtonWidth,
-                              child: PrimaryButton(
-                                  onPressed: () {
-                                    pageNo++;
-                                    context
-                                        .read<StartCourseCertificateBloc>()
-                                        .add(GetNotesCertificate(
-                                            topicId: getNotesMap["id"],
-                                            pageNo: pageNo));
-                                    context
-                                        .read<StartCourseCertificateBloc>()
-                                        .add(UpdateUserTrack(
-                                            certificateId: context
-                                                .read<
-                                                    StartCourseCertificateBloc>()
-                                                .certificateId,
-                                            noteId: state
-                                                .fetchGetNotesModel.data.id,
-                                            idm: getNotesMap["id"]));
-                                  },
-                                  textValue: StringConstants.kNext))),
-                    ],
-                  )
                 ],
               ),
             );
@@ -132,6 +70,74 @@ class GetNotesCertificateScreen extends StatelessWidget {
             return const SizedBox.shrink();
           }
         },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(xxTinierSpacing),
+        child: BlocBuilder<StartCourseCertificateBloc,
+            StartCourseCertificateState>(
+          buildWhen: (previousState, currentState) =>
+          currentState is FetchingGetNotesCertificate ||
+              currentState is GetNotesCertificateFetched ||
+              currentState is GetNotesCertificateError,
+          builder: (context, state) {
+            if (state is GetNotesCertificateFetched) {
+              return Row(
+                children: [
+                  Visibility(
+                      visible: (pageNo > 1) ? !isVisible : isVisible,
+                      child: Expanded(
+                          child: PrimaryButton(
+                              onPressed: () {
+                                pageNo -= 1;
+                                context.read<StartCourseCertificateBloc>().add(
+                                    GetNotesCertificate(
+                                        topicId: getNotesMap["id"],
+                                        pageNo: pageNo));
+                              },
+                              textValue: StringConstants.kPREVIOUS))),
+                  const SizedBox(width: tinierSpacing),
+                  Visibility(
+                      visible: pageNo.toString() !=
+                          state.fetchGetNotesModel.data.notescount,
+                      replacement: Expanded(
+                          child: PrimaryButton(
+                              onPressed: () {
+                                context.read<StartCourseCertificateBloc>().add(
+                                    UpdateUserTrack(
+                                        certificateId: context
+                                            .read<StartCourseCertificateBloc>()
+                                            .certificateId,
+                                        noteId:
+                                            state.fetchGetNotesModel.data.id,
+                                        idm: getNotesMap["id"]));
+                                Navigator.pop(context);
+                              },
+                              textValue: StringConstants.kFINISH)),
+                      child: Expanded(
+                          child: PrimaryButton(
+                              onPressed: () {
+                                pageNo++;
+                                context.read<StartCourseCertificateBloc>().add(
+                                    GetNotesCertificate(
+                                        topicId: getNotesMap["id"],
+                                        pageNo: pageNo));
+                                context.read<StartCourseCertificateBloc>().add(
+                                    UpdateUserTrack(
+                                        certificateId: context
+                                            .read<StartCourseCertificateBloc>()
+                                            .certificateId,
+                                        noteId:
+                                            state.fetchGetNotesModel.data.id,
+                                        idm: getNotesMap["id"]));
+                              },
+                              textValue: StringConstants.kNext))),
+                ],
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
+        ),
       ),
     );
   }

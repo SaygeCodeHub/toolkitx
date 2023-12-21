@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
@@ -31,6 +32,8 @@ class CertificateListBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      log('hashcode==========>$hashCode');
+      log('userId==========>$userId');
       FetchCertificatesModel fetchCertificatesModel =
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);

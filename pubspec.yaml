@@ -35,6 +35,10 @@ dependencies:
   flutter_inappwebview: ^5.7.2+3
   image_cropper: ^4.0.1
   qr_code_scanner: ^1.0.1
+  video_player: ^2.8.1
+  chewie: ^1.7.4
+  html_unescape:
+  flutter_html:
 
 
 dev_dependencies:
