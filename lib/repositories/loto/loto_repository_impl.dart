@@ -9,7 +9,6 @@ import 'package:toolkit/data/models/loto/fetch_loto_checklist_questions_model.da
 import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/data/models/loto/loto_list_model.dart';
 import 'package:toolkit/data/models/loto/loto_master_model.dart';
-import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/data/models/loto/remove_loto_model.dart';
 import 'package:toolkit/data/models/loto/loto_upload_photos_model.dart';
 import 'package:toolkit/data/models/loto/save_assign_workforce_model.dart';
@@ -31,13 +30,6 @@ class LotoRepositoryImpl extends LotoRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter&userid=$userId");
     return FetchLotoListModel.fromJson(response);
-  }
-
-  @override
-  Future<FetchLotoMasterModel> fetchLotoMasterRepo(String hashCode) async {
-    final response = await DioClient()
-        .get("${ApiConstants.baseUrl}loto/getmaster?hashcode=$hashCode");
-    return FetchLotoMasterModel.fromJson(response);
   }
 
   @override

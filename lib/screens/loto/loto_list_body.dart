@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/loto/widgets/loto_list_tile.dart';
-import '../../blocs/loto/loto_list_bloc.dart';
 import '../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
@@ -32,9 +31,8 @@ class LotoList extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is FetchingLotoList) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
         } else if (state is LotoListFetched) {
           if (context.read<LotoListBloc>().data.isNotEmpty) {
             return Expanded(

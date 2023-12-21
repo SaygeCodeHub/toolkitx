@@ -17,7 +17,6 @@ import '../../data/models/loto/add_loto_comment_model.dart';
 import '../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../data/models/loto/loto_list_model.dart';
 import '../../data/models/loto/loto_master_model.dart';
-import '../../data/models/loto/loto_master_model.dart';
 import '../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../data/models/loto/start_remove_loto_model.dart';
 
@@ -28,8 +27,6 @@ abstract class LotoRepository {
     String userId,
     String filter,
   );
-
-  Future<FetchLotoMasterModel> fetchLotoMasterRepo(String hashCode);
 
   Future<FetchLotoMasterModel> fetchLotoMasterRepo(String hashCode);
 

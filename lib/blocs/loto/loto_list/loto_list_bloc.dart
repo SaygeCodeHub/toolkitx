@@ -47,35 +47,35 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
   Future<FutureOr<void>> _fetchLotoList(
       FetchLotoList event, Emitter<LotoListState> emit) async {
     emit(FetchingLotoList());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      if (event.isFromHome == true) {
-        filters = {};
-        FetchLotoListModel fetchLotoListModel = await _lotoRepository
-            .fetchLotoListRepo(event.pageNo, hashCode!, userId!, '');
-        data.addAll(fetchLotoListModel.data);
-        hasReachedMax = fetchLotoListModel.data.isEmpty;
-        emit(LotoListFetched(
-            fetchLotoListModel: fetchLotoListModel,
-            data: fetchLotoListModel.data,
-            hasReachedMax: hasReachedMax,
-            filtersMap: const {}));
-      } else {
-        FetchLotoListModel fetchLotoListModel =
-            await _lotoRepository.fetchLotoListRepo(
-                event.pageNo, hashCode!, userId!, jsonEncode(filters));
-        data.addAll(fetchLotoListModel.data);
-        hasReachedMax = fetchLotoListModel.data.isEmpty;
-        emit(LotoListFetched(
-            fetchLotoListModel: fetchLotoListModel,
-            data: data,
-            hasReachedMax: hasReachedMax,
-            filtersMap: filters));
-      }
-    } catch (e) {
-      emit(LotoListError(error: e.toString()));
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    if (event.isFromHome == true) {
+      filters = {};
+      FetchLotoListModel fetchLotoListModel = await _lotoRepository
+          .fetchLotoListRepo(event.pageNo, hashCode!, userId!, '');
+      data.addAll(fetchLotoListModel.data);
+      hasReachedMax = fetchLotoListModel.data.isEmpty;
+      emit(LotoListFetched(
+          fetchLotoListModel: fetchLotoListModel,
+          data: fetchLotoListModel.data,
+          hasReachedMax: hasReachedMax,
+          filtersMap: const {}));
+    } else {
+      FetchLotoListModel fetchLotoListModel =
+          await _lotoRepository.fetchLotoListRepo(
+              event.pageNo, hashCode!, userId!, jsonEncode(filters));
+      data.addAll(fetchLotoListModel.data);
+      hasReachedMax = fetchLotoListModel.data.isEmpty;
+      emit(LotoListFetched(
+          fetchLotoListModel: fetchLotoListModel,
+          data: data,
+          hasReachedMax: hasReachedMax,
+          filtersMap: filters));
     }
+    // } catch (e) {
+    //   emit(LotoListError(error: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _fetchLotoMaster(
