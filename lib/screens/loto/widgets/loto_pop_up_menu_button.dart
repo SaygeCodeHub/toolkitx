@@ -99,6 +99,15 @@ class LotoPopupMenuButton extends StatelessWidget {
                           .add(FetchLotoDetails(lotTabIndex: 0))
                     });
           }
+
+          if (value == DatabaseUtil.getText('assign_team_for_remove_loto')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
+                    });
+          }
           if (value == DatabaseUtil.getText('Apply')) {
             showDialog(
                 context: context,

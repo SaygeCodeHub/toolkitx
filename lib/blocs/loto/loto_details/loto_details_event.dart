@@ -102,3 +102,15 @@ class FetchLotoAssignedChecklists extends LotoDetailsEvent {
 
   FetchLotoAssignedChecklists({required this.isRemove});
 }
+
+class DeleteLotoWorkforce extends LotoDetailsEvent {
+  final Map deleteWorkforceMap;
+
+  DeleteLotoWorkforce({required this.deleteWorkforceMap});
+}
+
+class RemoveAssignTeam extends LotoDetailsEvent {
+  final String teamId;
+
+  RemoveAssignTeam({required this.teamId});
+}

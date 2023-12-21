@@ -73,14 +73,14 @@ import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_filter_screen.dart';
+import '../screens/loto/loto_list_screen.dart';
+import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/loto_add_comment_screen.dart';
 import '../screens/loto/loto_assign_team_screen.dart';
 import '../screens/loto/loto_assign_workfoce_screen.dart';
-import '../screens/loto/loto_filter_screen.dart';
-import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
-import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
@@ -321,7 +321,7 @@ class AppRoutes {
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
-        return _createRoute(const LotoFilterScreen());
+        return _createRoute(LotoFilterScreen());
       case LotoLocationFilterList.routeName:
         return _createRoute(LotoLocationFilterList(
             selectLocationName: settings.arguments as String));

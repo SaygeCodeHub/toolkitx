@@ -151,6 +151,7 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kYes = 'Yes';
   static const String kApprovalPending = 'Approval Pending';
   static const String kLastUploaded = 'Last Uploaded : ';
   static const String kViewCertificate = 'View Certificate : ';
@@ -277,6 +278,7 @@ abstract class StringConstants {
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
   static const String kWorkforceRemoved = 'Workforce Removed';
+  static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
@@ -426,4 +428,6 @@ abstract class StringConstants {
   static const String kAddDocument = 'Add Document';
   static const String kSearchByOwnerName = "Search by Owner name";
   static const String kSearchByDocumentName = "Search by Document name";
+  static const String kAssetDocuments = 'Asset Documents';
+  static const String kWorkforceDeleted = 'Workforce Deleted';
 }

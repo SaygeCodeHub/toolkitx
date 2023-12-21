@@ -8,6 +8,7 @@ import 'package:toolkit/screens/loto/widgets/loto_image_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
 import 'package:toolkit/screens/loto/widgets/loto_remove_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/loto_util.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -16,6 +17,8 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
+import '../../widgets/custom_snackbar.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 
 class LotoDetailsScreen extends StatelessWidget {
@@ -49,7 +52,21 @@ class LotoDetailsScreen extends StatelessWidget {
                 }
               })
         ]),
-        body: BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
+        body: BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
+            listener: (context, state) {
+              if (state is LotoWorkforceDeleting) {
+                ProgressBar.show(context);
+              } else if (state is LotoWorkforceDeleted) {
+                ProgressBar.dismiss(context);
+                Navigator.pushReplacementNamed(
+                    context, LotoDetailsScreen.routeName);
+                showCustomSnackBar(
+                    context, StringConstants.kWorkforceDeleted, '');
+              } else if (state is LotoWorkforceNotDeleted) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
+            },
             buildWhen: (previousState, currentState) =>
                 currentState is LotoDetailsFetching ||
                 currentState is LotoDetailsFetched,
@@ -96,7 +113,8 @@ class LotoDetailsScreen extends StatelessWidget {
                                     state.fetchLotoDetailsModel,
                                 lotoTabIndex: context
                                     .read<LotoDetailsBloc>()
-                                    .lotoTabIndex),
+                                    .lotoTabIndex,
+                                clientId: state.clientId),
                             LotoImageTab(data: data, clientId: state.clientId),
                             LotoViewChecklistTab(
                                 data: state.fetchLotoDetailsModel.data),

@@ -13,6 +13,8 @@ class LotoListScreen extends StatelessWidget {
   static int pageNo = 1;
 
   const LotoListScreen({super.key, this.isFromHome = false});
+
+  static List lotoListData = [];
   final bool isFromHome;
 
   @override
@@ -22,19 +24,23 @@ class LotoListScreen extends StatelessWidget {
         .read<LotoListBloc>()
         .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-        appBar: GenericAppBar(title: DatabaseUtil.getText('LOTO')),
-        body: Padding(
-            padding: const EdgeInsets.only(
-                left: leftRightMargin,
-                right: leftRightMargin,
-                top: xxTinierSpacing),
-            child: Column(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                BlocBuilder<LotoListBloc, LotoListState>(
-                    buildWhen: (previous, current) {
+      appBar: GenericAppBar(
+        title: DatabaseUtil.getText('LOTO'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(
+            left: leftRightMargin,
+            right: leftRightMargin,
+            top: xxTinierSpacing),
+        child: Column(
+          children: [
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              BlocBuilder<LotoListBloc, LotoListState>(
+                buildWhen: (previous, current) {
                   return current is LotoListFetched ||
                       current is FetchingLotoList;
-                }, builder: (context, state) {
+                },
+                builder: (context, state) {
                   if (state is LotoListFetched || state is FetchingLotoList) {
                     return CustomIconButtonRow(
                         secondaryVisible: false,
@@ -49,7 +55,6 @@ class LotoListScreen extends StatelessWidget {
                         clearOnPress: () {
                           pageNo = 1;
                           context.read<LotoListBloc>().data.clear();
-                          LotoFilterScreen.lotoFilterMap.clear();
                           context
                               .read<LotoListBloc>()
                               .add(ClearLotoListFilter());
@@ -59,10 +64,14 @@ class LotoListScreen extends StatelessWidget {
                   } else {
                     return const SizedBox.shrink();
                   }
-                })
-              ]),
-              const SizedBox(height: xxTinierSpacing),
-              const LotoList()
-            ])));
+                },
+              )
+            ]),
+            const SizedBox(height: xxTinierSpacing),
+            LotoList(isFromHome: isFromHome)
+          ],
+        ),
+      ),
+    );
   }
 }
