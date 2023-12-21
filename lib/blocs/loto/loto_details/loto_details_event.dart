@@ -52,6 +52,11 @@ class StartRemoveLotoEvent extends LotoDetailsEvent {
   StartRemoveLotoEvent();
 }
 
+class RejectLotoEvent extends LotoDetailsEvent {
+  final String remark;
+  RejectLotoEvent({required this.remark});
+}
+
 class ApplyLotoEvent extends LotoDetailsEvent {
   ApplyLotoEvent();
 }
