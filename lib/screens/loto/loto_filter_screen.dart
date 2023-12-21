@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/loto_list_screen.dart';
 import 'package:toolkit/screens/loto/widgets/loto_location_filter.dart';
 import 'package:toolkit/screens/loto/widgets/loto_status_filter.dart';
 import 'package:toolkit/utils/database_utils.dart';
-
-import '../../blocs/location/location_bloc.dart';
-import '../../blocs/location/location_event.dart';
+import '../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -19,9 +16,10 @@ import '../incident/widgets/date_picker.dart';
 class LotoFilterScreen extends StatelessWidget {
   static const routeName = 'LotoFilterScreen';
 
-  const LotoFilterScreen({super.key});
-
-  static Map lotoFilterMap = {};
+  LotoFilterScreen({super.key});
+  final Map lotoFilterMap = {};
+  final List location = [];
+  final String selectLocationName = '';
   static bool isFromLocation = false;
   static String expenseId = '';
 
@@ -105,22 +103,12 @@ class LotoFilterScreen extends StatelessWidget {
                     PrimaryButton(
                         onPressed: () {
                           context.read<LotoListBloc>().data.clear();
-                          if (isFromLocation == true) {
-                            context.read<LocationBloc>().add(
-                                ApplyLoToListFilter(filterMap: lotoFilterMap));
-                            Navigator.pop(context);
-                            context.read<LocationBloc>().add(
-                                FetchLocationDetails(
-                                    locationId: expenseId,
-                                    selectedTabIndex: 3));
-                          } else {
-                            context.read<LotoListBloc>().add(
-                                ApplyLotoListFilter(filterMap: lotoFilterMap));
-                            Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                                context, LotoListScreen.routeName,
-                                arguments: false);
-                          }
+                          context.read<LotoListBloc>().add(
+                              ApplyLotoListFilter(filterMap: lotoFilterMap));
+                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(
+                              context, LotoListScreen.routeName,
+                              arguments: false);
                         },
                         textValue: DatabaseUtil.getText('Apply'))
                   ],
