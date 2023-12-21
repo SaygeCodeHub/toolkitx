@@ -308,7 +308,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     }
   }
 
-  Future<FutureOr<void>> _rejectLotoEvent(RejectLotoEvent event, Emitter<LotoDetailsState> emit) async {
+  Future<FutureOr<void>> _rejectLotoEvent(
+      RejectLotoEvent event, Emitter<LotoDetailsState> emit) async {
     emit(LotoRejecting());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -318,6 +319,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
         "id": lotoId,
         "userid": userId,
         "hashcode": hashCode,
+        "remark": event.remark
       };
       RejectLotoModel rejectLotoModel =
           await _lotoRepository.rejectLotoRepo(rejectLotoMap);

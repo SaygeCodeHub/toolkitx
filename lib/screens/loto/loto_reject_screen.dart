@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/loto/loto_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
@@ -21,6 +22,7 @@ class LotoRejectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String remark = '';
     return Scaffold(
         appBar: const GenericAppBar(),
         body: Padding(
@@ -34,7 +36,11 @@ class LotoRejectScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.small.copyWith(
                       fontWeight: FontWeight.w800, color: AppColor.black)),
               const SizedBox(height: xxxTinierSpacing),
-              TextFieldWidget(onTextFieldChanged: (textField) {}, maxLines: 4),
+              TextFieldWidget(
+                  onTextFieldChanged: (textField) {
+                    remark = textField;
+                  },
+                  maxLines: 4),
               const SizedBox(height: xxxSmallestSpacing),
               Row(children: [
                 SizedBox(
@@ -53,9 +59,11 @@ class LotoRejectScreen extends StatelessWidget {
                           ProgressBar.show(context);
                         } else if (state is LotoRejected) {
                           ProgressBar.dismiss(context);
+                          Navigator.pushReplacementNamed(
+                              context, LotoDetailsScreen.routeName);
+                          Navigator.pop(context);
                           showCustomSnackBar(
                               context, StringConstants.kLotoRejected, '');
-                          Navigator.pop(context);
                         } else if (state is LotoNotRejected) {
                           ProgressBar.dismiss(context);
                           showCustomSnackBar(
@@ -64,7 +72,9 @@ class LotoRejectScreen extends StatelessWidget {
                       },
                       child: PrimaryButton(
                           onPressed: () {
-                            context.read<LotoDetailsBloc>().add(RejectLotoEvent());
+                            context
+                                .read<LotoDetailsBloc>()
+                                .add(RejectLotoEvent(remark: remark));
                           },
                           textValue: DatabaseUtil.getText('RejectButton')),
                     )),
