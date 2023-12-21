@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/loto/loto_view_checklist_tab.dart';
+import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
+import 'package:toolkit/screens/loto/widgets/loto_image_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
+import 'package:toolkit/screens/loto/widgets/loto_remove_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_tab_six_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/loto_util.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -11,6 +16,8 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
+import '../../widgets/custom_snackbar.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 
 class LotoDetailsScreen extends StatelessWidget {
@@ -33,7 +40,7 @@ class LotoDetailsScreen extends StatelessWidget {
                 if (state is LotoDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return LotoPopupMenuButton(
-                      popUpMenuItems: state.lotoPopUpMenu,
+                      popUpMenuItems: state.lotoPopUpMenuList,
                       fetchLotoDetailsModel: state.fetchLotoDetailsModel,
                     );
                   } else {
@@ -44,7 +51,21 @@ class LotoDetailsScreen extends StatelessWidget {
                 }
               })
         ]),
-        body: BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
+        body: BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
+            listener: (context, state) {
+              if (state is LotoWorkforceDeleting) {
+                ProgressBar.show(context);
+              } else if (state is LotoWorkforceDeleted) {
+                ProgressBar.dismiss(context);
+                Navigator.pushReplacementNamed(
+                    context, LotoDetailsScreen.routeName);
+                showCustomSnackBar(
+                    context, StringConstants.kWorkforceDeleted, '');
+              } else if (state is LotoWorkforceNotDeleted) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
+            },
             buildWhen: (previousState, currentState) =>
                 currentState is LotoDetailsFetching ||
                 currentState is LotoDetailsFetched,
@@ -52,6 +73,7 @@ class LotoDetailsScreen extends StatelessWidget {
               if (state is LotoDetailsFetching) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is LotoDetailsFetched) {
+                var data = state.fetchLotoDetailsModel.data;
                 return Padding(
                     padding: const EdgeInsets.only(top: xxTinierSpacing),
                     child: Column(children: [
@@ -68,12 +90,10 @@ class LotoDetailsScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(state
-                                            .fetchLotoDetailsModel.data.loto),
+                                        Text(data.loto),
                                         StatusTag(tags: [
                                           StatusTagModel(
-                                              title: state.fetchLotoDetailsModel
-                                                  .data.statustext,
+                                              title: data.statustext,
                                               bgColor: AppColor.deepBlue)
                                         ])
                                       ])))),
@@ -92,11 +112,16 @@ class LotoDetailsScreen extends StatelessWidget {
                                     state.fetchLotoDetailsModel,
                                 lotoTabIndex: context
                                     .read<LotoDetailsBloc>()
-                                    .lotoTabIndex),
-                            const Text("Tab 2"),
-                            const Text("Tab 3"),
-                            const Text("Tab 4"),
-                            const Text("Tab 5"),
+                                    .lotoTabIndex,
+                                clientId: state.clientId),
+                            LotoImageTab(data: data, clientId: state.clientId),
+                            LotoViewChecklistTab(
+                                data: state.fetchLotoDetailsModel.data),
+                            LotoRemoveChecklistTab(
+                                data: state.fetchLotoDetailsModel.data),
+                            LotoCustomTimeLine(
+                                fetchLotoDetailsModel:
+                                    state.fetchLotoDetailsModel),
                             LotoTabSixScreen(
                                 fetchLotoDetailsModel:
                                     state.fetchLotoDetailsModel,

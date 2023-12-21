@@ -25,8 +25,10 @@ class FetchingWorkOrderMaster extends WorkOrderStates {}
 
 class WorkOrderMasterFetched extends WorkOrderStates {
   final FetchWorkOrdersMasterModel fetchWorkOrdersMasterModel;
+  final Map filtersMap;
 
-  WorkOrderMasterFetched({required this.fetchWorkOrdersMasterModel});
+  WorkOrderMasterFetched(
+      {required this.filtersMap, required this.fetchWorkOrdersMasterModel});
 }
 
 class WorkOrderMasterNotFetched extends WorkOrderStates {

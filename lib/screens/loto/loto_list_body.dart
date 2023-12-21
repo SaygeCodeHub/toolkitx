@@ -29,11 +29,9 @@ class LotoList extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is FetchingLotoList) {
-            return Center(
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height / 3.5),
-                    child: const CircularProgressIndicator()));
+            return const Expanded(
+              child: Center(child: CircularProgressIndicator()),
+            );
           } else if (state is LotoListFetched) {
             if (context.read<LotoListBloc>().data.isNotEmpty) {
               return Expanded(
@@ -45,9 +43,7 @@ class LotoList extends StatelessWidget {
                           : context.read<LotoListBloc>().data.length + 1,
                       itemBuilder: (context, index) {
                         if (index < context.read<LotoListBloc>().data.length) {
-                          return LotoListTile(
-                              lotoListDatum:
-                                  context.read<LotoListBloc>().data[index]);
+                          return LotoListTile(lotoListDatum: state.data[index]);
                         } else if (!state.hasReachedMax) {
                           LotoListScreen.pageNo++;
                           context.read<LotoListBloc>().add(FetchLotoList(

@@ -10,6 +10,7 @@ import '../../../widgets/custom_card.dart';
 
 class LotoAssignWorkforceCard extends StatelessWidget {
   const LotoAssignWorkforceCard({super.key, required this.workForceDatum});
+
   final LotoWorkforceDatum workForceDatum;
 
   @override
@@ -24,8 +25,14 @@ class LotoAssignWorkforceCard extends StatelessWidget {
                     fontWeight: FontWeight.w500, color: AppColor.grey)),
             trailing: InkWell(
                 onTap: () {
-                  context.read<LotoDetailsBloc>().add(
-                      SaveLotoAssignWorkForce(peopleId: workForceDatum.id));
+                  if (context.read<LotoDetailsBloc>().isWorkforceRemove ==
+                      "1") {
+                    context.read<LotoDetailsBloc>().add(
+                        RemoveAssignWorkforce(peopleId: workForceDatum.id));
+                  } else {
+                    context.read<LotoDetailsBloc>().add(
+                        SaveLotoAssignWorkForce(peopleId: workForceDatum.id));
+                  }
                 },
                 child: const Card(
                     shape: CircleBorder(),

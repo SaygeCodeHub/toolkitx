@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/cache/cache_keys.dart';
@@ -11,6 +12,7 @@ import '../../../di/app_module.dart';
 import '../../../repositories/loto/loto_repository.dart';
 
 part 'loto_list_event.dart';
+
 part 'loto_list_state.dart';
 
 class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
@@ -48,7 +50,6 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-
       if (event.isFromHome == true) {
         filters = {};
         FetchLotoListModel fetchLotoListModel = await _lotoRepository
@@ -57,9 +58,9 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
         hasReachedMax = fetchLotoListModel.data.isEmpty;
         emit(LotoListFetched(
             fetchLotoListModel: fetchLotoListModel,
-            data: data,
+            data: fetchLotoListModel.data,
             hasReachedMax: hasReachedMax,
-            filtersMap: {}));
+            filtersMap: const {}));
       } else {
         FetchLotoListModel fetchLotoListModel =
             await _lotoRepository.fetchLotoListRepo(
@@ -99,7 +100,8 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
 
   FutureOr<void> _selectLotoLocationFilter(
       SelectLotoLocationFilter event, Emitter<LotoListState> emit) {
-    emit(LotoLocationFilterSelected(event.selectLocationName));
+    emit(LotoLocationFilterSelected(
+        event.selectLocationName, event.selectLocationId));
   }
 
   FutureOr<void> _clearLotoListFilter(

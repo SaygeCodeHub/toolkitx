@@ -12,8 +12,6 @@ import '../loto_assign_workfoce_screen.dart';
 import 'loto_assign_workforce_card.dart';
 
 class LotoAssignWorkforceBody extends StatelessWidget {
-  static bool isFirst = true;
-
   const LotoAssignWorkforceBody({super.key});
 
   @override
@@ -35,10 +33,23 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
               pageNo: 1,
               isRemove: LotoAssignWorkforceScreen.isRemove,
-              name: ''));
+              workforceName: ''));
           showCustomSnackBar(context, StringConstants.kWorkforceAssigned, '');
         } else if (state is LotoAssignWorkforceNotSaved) {
-          ProgressBar.dismiss(context);
+          ProgressBar.show(context);
+          showCustomSnackBar(context, StringConstants.kSomethingWentWrong, '');
+        }
+
+        if (state is AssignWorkforceRemoved) {
+          LotoAssignWorkforceScreen.pageNo = 1;
+          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
+          context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
+              pageNo: 1,
+              isRemove: context.read<LotoDetailsBloc>().isRemove,
+              workforceName: ''));
+          showCustomSnackBar(context, StringConstants.kWorkforceRemoved, '');
+        } else if (state is LotoAssignWorkforceNotSaved) {
+          ProgressBar.show(context);
           showCustomSnackBar(context, StringConstants.kSomethingWentWrong, '');
         }
         if (state is LotoAssignWorkforceFetched) {
@@ -53,22 +64,22 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         } else if (state is LotoAssignWorkforceFetched) {
-          isFirst = false;
           if (context.read<LotoDetailsBloc>().assignWorkforceDatum.isNotEmpty) {
             return Expanded(
                 child: ListView.separated(
-                    itemCount:
-                        context.read<LotoDetailsBloc>().lotoListReachedMax ==
-                                true
-                            ? context
+                    itemCount: context
+                                .read<LotoDetailsBloc>()
+                                .lotoWorkforceReachedMax ==
+                            true
+                        ? context
+                            .read<LotoDetailsBloc>()
+                            .assignWorkforceDatum
+                            .length
+                        : context
                                 .read<LotoDetailsBloc>()
                                 .assignWorkforceDatum
-                                .length
-                            : context
-                                    .read<LotoDetailsBloc>()
-                                    .assignWorkforceDatum
-                                    .length +
-                                1,
+                                .length +
+                            1,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       if (index <
@@ -77,19 +88,18 @@ class LotoAssignWorkforceBody extends StatelessWidget {
                               .assignWorkforceDatum
                               .length) {
                         return LotoAssignWorkforceCard(
-                          workForceDatum: context
-                              .read<LotoDetailsBloc>()
-                              .assignWorkforceDatum[index],
-                        );
+                            workForceDatum: context
+                                .read<LotoDetailsBloc>()
+                                .assignWorkforceDatum[index]);
                       } else if (!context
                           .read<LotoDetailsBloc>()
-                          .lotoListReachedMax) {
+                          .lotoWorkforceReachedMax) {
                         LotoAssignWorkforceScreen.pageNo++;
                         context.read<LotoDetailsBloc>().add(
                             FetchLotoAssignWorkforce(
                                 pageNo: LotoAssignWorkforceScreen.pageNo,
                                 isRemove: LotoAssignWorkforceScreen.isRemove,
-                                name: ''));
+                                workforceName: ''));
                         return const Center(
                             child: Padding(
                                 padding: EdgeInsets.all(

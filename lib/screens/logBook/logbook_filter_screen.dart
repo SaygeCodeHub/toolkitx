@@ -4,6 +4,8 @@ import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
 import 'package:toolkit/blocs/LogBook/logbook_events.dart';
 import 'package:toolkit/blocs/LogBook/logbook_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import '../../blocs/location/location_bloc.dart';
+import '../../blocs/location/location_event.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
@@ -22,8 +24,10 @@ import 'widgets/logbook_type_filter.dart';
 class LogBookFilterScreen extends StatelessWidget {
   static const routeName = 'LogBookFilterScreen';
 
-  LogBookFilterScreen({Key? key}) : super(key: key);
-  final Map logbookFilterMap = {};
+  const LogBookFilterScreen({Key? key}) : super(key: key);
+  static Map logbookFilterMap = {};
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -175,13 +179,25 @@ class LogBookFilterScreen extends StatelessWidget {
                                                 'TimeDateValidate'),
                                             '');
                                       } else {
-                                        context.read<LogbookBloc>().add(
-                                            ApplyLogBookFilter(
-                                                filterMap: logbookFilterMap));
-                                        Navigator.pop(context);
-                                        Navigator.pushReplacementNamed(context,
-                                            LogbookListScreen.routeName,
-                                            arguments: false);
+                                        if (isFromLocation == true) {
+                                          context.read<LocationBloc>().add(
+                                              ApplyLogBookListFilter(
+                                                  filterMap: logbookFilterMap));
+                                          Navigator.pop(context);
+                                          context.read<LocationBloc>().add(
+                                              FetchLocationDetails(
+                                                  locationId: expenseId,
+                                                  selectedTabIndex: 5));
+                                        } else {
+                                          context.read<LogbookBloc>().add(
+                                              ApplyLogBookFilter(
+                                                  filterMap: logbookFilterMap));
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacementNamed(
+                                              context,
+                                              LogbookListScreen.routeName,
+                                              arguments: false);
+                                        }
                                       }
                                     },
                                     textValue: StringConstants.kApply)

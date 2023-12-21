@@ -9,7 +9,6 @@ import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
 import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_icon_button.dart';
 import 'widgets/assign_workforce_body.dart';
@@ -62,41 +61,35 @@ class AssignWorkForceScreen extends StatelessWidget {
                                     is WorkOrderAssignWorkforceSearched,
                             builder: (context, state) {
                               if (state is WorkOrderAssignWorkforceSearched) {
-                                return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: kSearchIconHeight),
-                                    child: CustomIconButton(
-                                        onPressed: () {
-                                          FocusScopeNode currentFocus =
-                                              FocusScope.of(context);
-                                          if (!currentFocus.hasPrimaryFocus) {
-                                            currentFocus.unfocus();
-                                          }
-                                          if (workforceNameController.text !=
-                                                  '' ||
-                                              workforceNameController.text
-                                                      .trim() !=
-                                                  '') {
-                                            isWorkforceSearched =
-                                                !isWorkforceSearched;
-                                            pageNo = 1;
-                                            context
-                                                .read<WorkOrderTabDetailsBloc>()
-                                                .assignWorkForceDatum = [];
-                                            context
-                                                .read<WorkOrderTabDetailsBloc>()
-                                                .docListReachedMax = false;
-                                            context
-                                                .read<WorkOrderTabDetailsBloc>()
-                                                .add(SearchWorkOrderWorkforce(
-                                                    isWorkforceSearched:
-                                                        isWorkforceSearched));
-                                          }
-                                        },
-                                        icon:
-                                            (state.isWorkforceSearched == false)
-                                                ? Icons.search
-                                                : Icons.clear));
+                                return CustomIconButton(
+                                    onPressed: () {
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                      if (workforceNameController.text != '' ||
+                                          workforceNameController.text.trim() !=
+                                              '') {
+                                        isWorkforceSearched =
+                                            !isWorkforceSearched;
+                                        pageNo = 1;
+                                        context
+                                            .read<WorkOrderTabDetailsBloc>()
+                                            .assignWorkForceDatum = [];
+                                        context
+                                            .read<WorkOrderTabDetailsBloc>()
+                                            .docListReachedMax = false;
+                                        context
+                                            .read<WorkOrderTabDetailsBloc>()
+                                            .add(SearchWorkOrderWorkforce(
+                                                isWorkforceSearched:
+                                                    isWorkforceSearched));
+                                      }
+                                    },
+                                    icon: (state.isWorkforceSearched == false)
+                                        ? Icons.search
+                                        : Icons.clear);
                               } else {
                                 return const SizedBox.shrink();
                               }

@@ -2,23 +2,29 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
+import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
 import 'package:toolkit/repositories/documents/documents_repository.dart';
 import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
+import 'package:toolkit/repositories/location/location_repository.dart';
+import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
+import '../repositories/assets/assets_repository_impl.dart';
 import '../repositories/calendar/calendar_repository.dart';
 import '../repositories/calendar/calendar_repository_impl.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart';
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
+import '../repositories/expense/expense_repository.dart';
+import '../repositories/expense/expense_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/loto/loto_repository.dart';
@@ -78,6 +84,8 @@ configurableDependencies() {
   getIt.registerLazySingleton<SignInRepository>(() => SignInImpl());
   getIt.registerLazySingleton<CalendarRepository>(
       () => CalendarRepositoryImpl());
+  getIt.registerLazySingleton<LocationRepository>(
+      () => LocationRepositoryImpl());
   getIt.registerLazySingleton<WorkOrderRepository>(
       () => WorkOrderRepositoryImpl());
   getIt.registerLazySingleton<LotoRepository>(() => LotoRepositoryImpl());
@@ -87,4 +95,6 @@ configurableDependencies() {
       () => DocumentsRepositoryImpl());
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
+  getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
+  getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
 }
