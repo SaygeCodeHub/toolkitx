@@ -55,7 +55,12 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('AddComment')) {
-            Navigator.pushNamed(context, LotoAddCommentScreen.routeName);
+            Navigator.pushNamed(context, LotoAddCommentScreen.routeName).then(
+                (_) => {
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
             Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName).then(
