@@ -52,7 +52,6 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 clearOnPress: () {
                   pageNo = 1;
                   state.loToFilterMap.clear();
-                  LotoFilterScreen.lotoFilterMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
                       false;
@@ -75,7 +74,6 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 clearOnPress: () {
                   pageNo = 1;
                   state.filtersMap.clear();
-                  LotoFilterScreen.lotoFilterMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
                       false;

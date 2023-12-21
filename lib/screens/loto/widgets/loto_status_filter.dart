@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/enums/loto_status_enum.dart';
-import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/widgets/custom_choice_chip.dart';
-
 import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_dimensions.dart';
+import '../../../data/models/loto/loto_master_model.dart';
 
 class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
-
   const LotoStatusFilter(
       {super.key, required this.data, required this.lotoFilterMap});
 
@@ -35,7 +33,7 @@ class LotoStatusFilter extends StatelessWidget {
                 label: LotoStatusEnum.values[i].name,
                 selected: (lotoFilterMap["status"] == null)
                     ? false
-                    : lotoFilterMap["status"] == id,
+                    : state.selectedIndex == id,
                 onSelected: (bool value) {
                   context
                       .read<LotoListBloc>()
