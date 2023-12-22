@@ -50,7 +50,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
   Widget build(BuildContext context) {
     log("videolink====>${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
     var link =
-        '${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
+        '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
     var unescape = HtmlUnescape();
     var text = unescape.convert(widget.data.description);
     bool visible = true;
