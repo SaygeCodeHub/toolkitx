@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/loto/loto_view_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_custom_timeline.dart';
+import 'package:toolkit/screens/loto/loto_view_checklist_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_details.dart';
 import 'package:toolkit/screens/loto/widgets/loto_image_tab.dart';
 import 'package:toolkit/screens/loto/widgets/loto_pop_up_menu_button.dart';
@@ -27,9 +27,7 @@ class LotoDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-          lotTabIndex: 0,
-        ));
+    context.read<LotoDetailsBloc>().add(FetchLotoDetails(lotTabIndex: 0));
     return Scaffold(
         appBar: GenericAppBar(actions: [
           BlocBuilder<LotoDetailsBloc, LotoDetailsState>(

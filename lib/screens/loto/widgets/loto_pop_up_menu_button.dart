@@ -55,7 +55,12 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('AddComment')) {
-            Navigator.pushNamed(context, LotoAddCommentScreen.routeName);
+            Navigator.pushNamed(context, LotoAddCommentScreen.routeName).then(
+                (_) => {
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
             Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName).then(
@@ -63,6 +68,14 @@ class LotoPopupMenuButton extends StatelessWidget {
                       context
                           .read<LotoDetailsBloc>()
                           .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
+          }
+          if (value == DatabaseUtil.getText('assign_team')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
           if (value == DatabaseUtil.getText('Start')) {
