@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
@@ -88,9 +90,11 @@ class StartLotoScreen extends StatelessWidget {
                                         DatabaseUtil.getText("nextButtonText")),
                                 child: PrimaryButton(
                                     onPressed: () {
-                                      context
-                                          .read<LotoDetailsBloc>()
-                                          .add(StartLotoEvent());
+                                      log('answerList============>${context
+                                          .read<LotoDetailsBloc>().answerList}');
+                                      // context
+                                      //     .read<LotoDetailsBloc>()
+                                      //     .add(StartLotoEvent());
                                     },
                                     textValue: DatabaseUtil.getText(
                                         "StartLotoButton")),

@@ -42,6 +42,7 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                           data: MediaQuery.of(context)
                               .removePadding(removeTop: true),
                           child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: queOptionList.length,
                               itemBuilder: (context, listIndex) {
