@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
+import 'package:toolkit/utils/firebase_api.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -75,10 +77,19 @@ import 'screens/onboarding/welcome_screen.dart';
 import 'screens/root/root_screen.dart';
 import 'utils/database_utils.dart';
 import 'utils/profile_util.dart';
+// import 'firebase_options.dart';
 
 void main() async {
   await _initApp();
   await _initDependencies();
+  try {
+    await Firebase.initializeApp(
+      // options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print('Firebase initialization failed====================> $e');
+  }
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
