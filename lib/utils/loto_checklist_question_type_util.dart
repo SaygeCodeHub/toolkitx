@@ -77,7 +77,7 @@ class LotoChecklistQuestionTypeUtil {
               answerList.add({"questionid": questionId, "answer": textValue});
             });
       case 8:
-      // return tableControl(index, answerModelList, answerList, context);
+      return const SizedBox.shrink();
       case 9:
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
@@ -143,46 +143,3 @@ class LotoChecklistQuestionTypeUtil {
   }
 }
 
-Widget tableControl(index, answerModelList, answerList, context) {
-  Map tableData = jsonDecode(answerList[index]["answer"]);
-  return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(
-            decoration: BoxDecoration(border: Border.all()),
-            child: DataTable(
-                border: TableBorder.all(),
-                columnSpacing: xxxSmallestSpacing,
-                columns: [
-                  for (int i = 0;
-                  i < answerModelList[index].matrixcols.length;
-                  i++)
-                    DataColumn(
-                        label: Text(answerModelList[index].matrixcols[i]))
-                ],
-                rows: [
-                  for (int j = 0;
-                  j < answerModelList[index].matrixrowcount;
-                  j++)
-                    DataRow(cells: [
-                      for (int k = 0;
-                      k < answerModelList[index].matrixcols.length;
-                      k++)
-                        DataCell(SizedBox(
-                            height: xMediumSpacing,
-                            width: kDataCellWidth,
-                            child: TextFieldWidget(
-                                value: (tableData.toString() == "{}" &&
-                                    answerModelList[index].type == 8)
-                                    ? ""
-                                    : tableData["data"][j][k],
-                                onTextFieldChanged: (String textField) {
-                                  tableData["data"][j][k] = textField;
-                                  answerList[index]["answer"] =
-                                      jsonEncode(tableData);
-                                })))
-                    ])
-                ]))
-      ]));
-}

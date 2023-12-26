@@ -69,43 +69,6 @@ class StartLotoBody extends StatelessWidget {
                                               .queoptions,
                                       context.read<LotoDetailsBloc>().answerList,
                                           context)
-                                  // state.fetchLotoChecklistQuestionsModel.data!
-                                  //             .questionlist![index].type !=
-                                  //         6
-                                  //     ? AnswerOptionExpansionTile(
-                                  //         queOptionList: state
-                                  //             .fetchLotoChecklistQuestionsModel
-                                  //             .data!
-                                  //             .questionlist![index]
-                                  //             .queoptions,
-                                  //         startLotoMap:
-                                  //             StartLotoScreen.startLotoMap,
-                                  //         questionId: state
-                                  //             .fetchLotoChecklistQuestionsModel
-                                  //             .data!
-                                  //             .questionlist![index]
-                                  //             .id,
-                                  //       )
-                                  //     : UploadImageMenu(
-                                  //         isFromCertificate: true,
-                                  //         onUploadImageResponse:
-                                  //             (List imageList) {
-                                  //           context
-                                  //               .read<LotoDetailsBloc>()
-                                  //               .answerList
-                                  //               .add({
-                                  //             "questionid": state
-                                  //                 .fetchLotoChecklistQuestionsModel
-                                  //                 .data!
-                                  //                 .questionlist![index]
-                                  //                 .id,
-                                  //             "answer": imageList
-                                  //                 .toString()
-                                  //                 .replaceAll("[", "")
-                                  //                 .replaceAll("]", "")
-                                  //           });
-                                  //         },
-                                  //       ),
                                 ]);
                           },
                           separatorBuilder: (context, index) {
