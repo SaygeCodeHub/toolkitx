@@ -76,6 +76,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
     on<RemoveAssignTeam>(_removeAssignTeam);
     on<DeleteLotoWorkforce>(_deleteLotoWorkforce);
+    on<SelectLotoChecklistMultiAnswer>(_selectLotoChecklistMultiAnswer);
   }
 
   Future<FutureOr<void>> _fetchLotoDetails(
@@ -636,5 +637,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     } catch (e) {
       emit(AssignTeamRemoveError(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectLotoChecklistMultiAnswer(SelectLotoChecklistMultiAnswer event, Emitter<LotoDetailsState> emit) {
+    emit(LotoMultiCheckListAnswerSelected(isChecked: event.isChecked));
   }
 }

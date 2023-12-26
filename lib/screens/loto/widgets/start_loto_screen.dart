@@ -76,10 +76,14 @@ class StartLotoScreen extends StatelessWidget {
                         child: isFromStartRemoveLoto == false
                             ? Visibility(
                                 visible: context
+                                            .read<LotoDetailsBloc>()
+                                            .checklistArrayIdList
+                                            .length ==
+                                        1 ||
+                                    context
                                         .read<LotoDetailsBloc>()
                                         .checklistArrayIdList
-                                        .length ==
-                                    1,
+                                        .isEmpty,
                                 replacement: PrimaryButton(
                                     onPressed: () {
                                       context
@@ -90,11 +94,10 @@ class StartLotoScreen extends StatelessWidget {
                                         DatabaseUtil.getText("nextButtonText")),
                                 child: PrimaryButton(
                                     onPressed: () {
-                                      log('answerList============>${context
-                                          .read<LotoDetailsBloc>().answerList}');
-                                      // context
-                                      //     .read<LotoDetailsBloc>()
-                                      //     .add(StartLotoEvent());
+                                      log('answerList============>${context.read<LotoDetailsBloc>().answerList}');
+                                      context
+                                          .read<LotoDetailsBloc>()
+                                          .add(StartLotoEvent());
                                     },
                                     textValue: DatabaseUtil.getText(
                                         "StartLotoButton")),

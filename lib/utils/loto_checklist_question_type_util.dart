@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/loto/widgets/loto_select_multi_checklist_answer.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
 import '../screens/checklist/workforce/widgets/upload_image_section.dart';
@@ -15,7 +16,8 @@ class LotoChecklistQuestionTypeUtil {
   Map value = {};
   var valueOfA = 0.0;
 
-  Widget fetchSwitchCaseWidget(type, questionId, queoptions, answerList, context) {
+  Widget fetchSwitchCaseWidget(
+      type, questionId, queoptions, answerList, context) {
     switch (type) {
       case 1:
         return TextFieldWidget(
@@ -23,8 +25,7 @@ class LotoChecklistQuestionTypeUtil {
             maxLength: 250,
             textInputAction: TextInputAction.done,
             onTextFieldChanged: (String textValue) {
-              answerList
-                  .add({"questionid": questionId, "answer": textValue});
+              answerList.add({"questionid": questionId, "answer": textValue});
             });
       case 2:
         return TextFieldWidget(
@@ -32,21 +33,14 @@ class LotoChecklistQuestionTypeUtil {
             maxLength: 250,
             textInputAction: TextInputAction.done,
             onTextFieldChanged: (String textValue) {
-              answerList
-                  .add({"questionid": questionId, "answer": textValue});
+              answerList.add({"questionid": questionId, "answer": textValue});
             });
       case 3:
-      // return DropDownExpansionTile(
-      //   onValueChanged: (String dropDownId, String dropDownString) {
-      //     answerList[index]["answer"] = dropDownId;
-      //   },
-      //   answerModelList: answerModelList,
-      //   index: index,
-      //   value: (answerModelList[index].optiontext.toString() == "null" ||
-      //           answerModelList[index].optiontext.toString() == "")
-      //       ? ''
-      //       : answerModelList[index].optiontext,
-      // );
+        return AnswerOptionExpansionTile(
+          queOptionList: queoptions,
+          startLotoMap: StartLotoScreen.startLotoMap,
+          questionId: questionId,
+        );
       case 4:
         return AnswerOptionExpansionTile(
           queOptionList: queoptions,
@@ -54,30 +48,16 @@ class LotoChecklistQuestionTypeUtil {
           questionId: questionId,
         );
       case 5:
-      // return BlocBuilder<WorkForceCheckListEditAnswerBloc,
-      //         WorkForceCheckListEditAnswerStates>(
-      //     buildWhen: (previousState, currentState) =>
-      //         currentState is CheckListAnswersEdited,
-      //     builder: (context, state) {
-      //       if (state is CheckListAnswersEdited) {
-      //         answerList[index]["answer"] = state.multiSelectId
-      //             .toString()
-      //             .replaceAll("[", "")
-      //             .replaceAll("]", "");
-      //         return MultiSelectExpansionTile(
-      //             answerModelList: answerModelList,
-      //             index: index,
-      //             selectedIdList: state.multiSelectId,
-      //             selectedNamesList: state.multiSelectNames,
-      //             editValue: (answerModelList[index].optiontext.toString() ==
-      //                         "null" ||
-      //                     answerModelList[index].optiontext.toString() == "")
-      //                 ? ''
-      //                 : answerModelList[index].optiontext);
-      //       } else {
-      //         return const SizedBox();
-      //       }
-      //     });
+        return LotoSelectMultiChecklistAnswer(
+          queoptions: queoptions,
+          selectedAnswerList: answerList,
+          onCreatedForChanged: (List<dynamic> id) {
+            answerList.add({
+              "questionid": questionId,
+              "answer": id
+            });
+          },
+        );
       case 6:
         return UploadImageMenu(
           isFromCertificate: true,
@@ -94,8 +74,7 @@ class LotoChecklistQuestionTypeUtil {
             textInputType: TextInputType.number,
             textInputAction: TextInputAction.done,
             onTextFieldChanged: (String textValue) {
-              answerList
-                  .add({"questionid": questionId, "answer": textValue});
+              answerList.add({"questionid": questionId, "answer": textValue});
             });
       case 8:
       // return tableControl(index, answerModelList, answerList, context);
@@ -149,16 +128,14 @@ class LotoChecklistQuestionTypeUtil {
         return DatePickerTextField(
           hintText: StringConstants.kSelectDate,
           onDateChanged: (String date) {
-            answerList
-                .add({"questionid": questionId, "answer": date});
+            answerList.add({"questionid": questionId, "answer": date});
           },
         );
       case 11:
         return TimePickerTextField(
             hintText: StringConstants.kSelectTime,
             onTimeChanged: (String time) {
-              answerList
-                  .add({"questionid": questionId, "answer": time});
+              answerList.add({"questionid": questionId, "answer": time});
             });
       default:
         return Container();
@@ -179,25 +156,25 @@ Widget tableControl(index, answerModelList, answerList, context) {
                 columnSpacing: xxxSmallestSpacing,
                 columns: [
                   for (int i = 0;
-                      i < answerModelList[index].matrixcols.length;
-                      i++)
+                  i < answerModelList[index].matrixcols.length;
+                  i++)
                     DataColumn(
                         label: Text(answerModelList[index].matrixcols[i]))
                 ],
                 rows: [
                   for (int j = 0;
-                      j < answerModelList[index].matrixrowcount;
-                      j++)
+                  j < answerModelList[index].matrixrowcount;
+                  j++)
                     DataRow(cells: [
                       for (int k = 0;
-                          k < answerModelList[index].matrixcols.length;
-                          k++)
+                      k < answerModelList[index].matrixcols.length;
+                      k++)
                         DataCell(SizedBox(
                             height: xMediumSpacing,
                             width: kDataCellWidth,
                             child: TextFieldWidget(
                                 value: (tableData.toString() == "{}" &&
-                                        answerModelList[index].type == 8)
+                                    answerModelList[index].type == 8)
                                     ? ""
                                     : tableData["data"][j][k],
                                 onTextFieldChanged: (String textField) {
