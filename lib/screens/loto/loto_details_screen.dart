@@ -122,8 +122,7 @@ class LotoDetailsScreen extends StatelessWidget {
                                     state.fetchLotoDetailsModel),
                             LotoTabSixScreen(
                                 fetchLotoDetailsModel:
-                                    state.fetchLotoDetailsModel,
-                                lotoTabIndex: 5)
+                                    state.fetchLotoDetailsModel)
                           ])
                     ]));
               } else {

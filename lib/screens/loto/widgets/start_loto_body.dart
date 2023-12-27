@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
+import 'package:toolkit/utils/loto_checklist_question_type_util.dart';
 
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
-import '../../checklist/workforce/widgets/upload_image_section.dart';
-import 'answer_option_expansion_tile.dart';
 
 class StartLotoBody extends StatelessWidget {
   const StartLotoBody({super.key});
@@ -57,43 +56,21 @@ class StartLotoBody extends StatelessWidget {
                                               fontWeight: FontWeight.w500,
                                               color: AppColor.black)),
                                   const SizedBox(height: xxTinierSpacing),
-                                  state.fetchLotoChecklistQuestionsModel.data!
-                                              .questionlist![index].type !=
-                                          6
-                                      ? AnswerOptionExpansionTile(
-                                          queOptionList: state
+                                  LotoChecklistQuestionTypeUtil()
+                                      .fetchSwitchCaseWidget(
+                                          state.fetchLotoChecklistQuestionsModel
+                                              .data!.questionlist![index].type,
+                                          state.fetchLotoChecklistQuestionsModel
+                                              .data!.questionlist![index].id,
+                                          state
                                               .fetchLotoChecklistQuestionsModel
                                               .data!
                                               .questionlist![index]
                                               .queoptions,
-                                          startLotoMap:
-                                              StartLotoScreen.startLotoMap,
-                                          questionId: state
-                                              .fetchLotoChecklistQuestionsModel
-                                              .data!
-                                              .questionlist![index]
-                                              .id,
-                                        )
-                                      : UploadImageMenu(
-                                          isFromCertificate: true,
-                                          onUploadImageResponse:
-                                              (List imageList) {
-                                            context
-                                                .read<LotoDetailsBloc>()
-                                                .answerList
-                                                .add({
-                                              "questionid": state
-                                                  .fetchLotoChecklistQuestionsModel
-                                                  .data!
-                                                  .questionlist![index]
-                                                  .id,
-                                              "answer": imageList
-                                                  .toString()
-                                                  .replaceAll("[", "")
-                                                  .replaceAll("]", "")
-                                            });
-                                          },
-                                        ),
+                                          context
+                                              .read<LotoDetailsBloc>()
+                                              .answerList,
+                                          context)
                                 ]);
                           },
                           separatorBuilder: (context, index) {

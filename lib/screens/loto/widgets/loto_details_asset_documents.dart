@@ -7,14 +7,17 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/loto/loto_details_model.dart';
 import '../../../utils/constants/api_constants.dart';
+import '../../../utils/generic_alphanumeric_generator_util.dart';
 
 class LotoDetailsAssetDocuments extends StatelessWidget {
   const LotoDetailsAssetDocuments({
     super.key,
     required this.data,
+    required this.clientId,
   });
 
   final LotoData data;
+  final String clientId;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +41,8 @@ class LotoDetailsAssetDocuments extends StatelessWidget {
                 return InkWell(
                     onTap: () {
                       launchUrlString(
-                          '${ApiConstants.baseDocUrl}${data.assetdocs[index].filename}',
-                          mode: LaunchMode.inAppWebView);
+                          '${ApiConstants.viewDocBaseUrl}${data.assetdocs[index].filename}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                          mode: LaunchMode.externalApplication);
                     },
                     child: RichText(
                         overflow: TextOverflow.ellipsis,
