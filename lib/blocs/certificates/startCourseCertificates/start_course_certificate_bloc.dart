@@ -1,14 +1,17 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
+import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
+import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../data/models/certificates/get_notes_certificate_model.dart';
 import '../../../data/models/certificates/get_topic_certificate_model.dart';
+import '../../../data/models/certificates/get_workforce_quiz_model.dart';
 import '../../../di/app_module.dart';
 import '../../../repositories/certificates/certificates_repository.dart';
 
@@ -23,12 +26,18 @@ class StartCourseCertificateBloc
   String certificateId = '';
   StartCourseCertificateState get initialState =>
       StartCourseCertificateInitial();
+  String answerId = '';
 
   StartCourseCertificateBloc() : super(StartCourseCertificateInitial()) {
     on<GetCourseCertificate>(_getCourseCertificate);
     on<GetTopicCertificate>(_getTopicCertificate);
     on<GetNotesCertificate>(_getNotesCertificate);
     on<UpdateUserTrack>(_updateUserTrack);
+    on<GetWorkforceQuiz>(_getWorkforceQuiz);
+    on<GetQuizQuestions>(_getQuizQuestions);
+    on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
+    on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
+    on<SubmitCertificateQuiz>(_submitCertificateQuiz);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -59,7 +68,6 @@ class StartCourseCertificateBloc
       GetTopicCertificateModel getTopicCertificateModel =
           await _certificateRepository.getTopicCertificates(
               hashCode!, userId!, event.courseId);
-      log('courseId==============>${event.courseId}');
       if (getTopicCertificateModel.status == 200) {
         emit(GetTopicCertificateFetched(
             getTopicCertificateModel: getTopicCertificateModel));
@@ -109,6 +117,96 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(UserTrackUpdateError(error: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _getWorkforceQuiz(
+      GetWorkforceQuiz event, Emitter<StartCourseCertificateState> emit) async {
+    emit(WorkforceQuizFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      GetWorkforceQuizModel getWorkforceQuizModel = await _certificateRepository
+          .getWorkforceQuiz(hashCode!, userId!, event.quizId);
+      if (getWorkforceQuizModel.status == 200) {
+        emit(
+            WorkforceQuizFetched(getWorkforceQuizModel: getWorkforceQuizModel));
+      }
+    } catch (e) {
+      emit(WorkforceQuizError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _getQuizQuestions(
+      GetQuizQuestions event, Emitter<StartCourseCertificateState> emit) async {
+    emit(QuizQuestionsFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      GetQuizQuestionsModel getQuizQuestionsModel = await _certificateRepository
+          .getQuizQuestions(hashCode!, event.pageNo, event.workforcequizId);
+      if (getQuizQuestionsModel.status == 200) {
+        emit(QuizQuestionsFetched(
+            getQuizQuestionsModel: getQuizQuestionsModel, answerId: ''));
+      }
+    } catch (e) {
+      emit(QuizQuestionsError(getError: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectQuizAnswer(SelectedQuizAnswerEvent event,
+      Emitter<StartCourseCertificateState> emit) {
+    emit(QuizQuestionsFetched(
+        getQuizQuestionsModel: event.getQuizQuestionsModel,
+        answerId: event.answerId));
+  }
+
+  Future<FutureOr<void>> _saveQuestionAnswer(SaveQuizQuestionAnswer event,
+      Emitter<StartCourseCertificateState> emit) async {
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map questionAnswerMap = {
+        "idm": event.questionAnswerMap["idm"],
+        "hashcode": hashCode,
+        "workforcequizid": event.questionAnswerMap["workforcequizid"],
+        "answer": event.questionAnswerMap["answer"],
+        "questionid": event.questionAnswerMap["questionid"]
+      };
+      SaveQuestionAnswerModel saveQuestionAnswerModel =
+          await _certificateRepository.saveQuestionAnswer(questionAnswerMap);
+      if (saveQuestionAnswerModel.status == 200) {
+        emit(QuizQuestionAnswerSaved(
+            saveQuestionAnswerModel: saveQuestionAnswerModel));
+      }
+    } catch (e) {
+      emit(QuizQuestionAnswerError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _submitCertificateQuiz(SubmitCertificateQuiz event,
+      Emitter<StartCourseCertificateState> emit) async {
+    emit(CertificateQuizSubmitting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map finishQuizMap = {
+        "idm": event.finishQuizMap["idm"],
+        "hashcode": hashCode,
+        "workforcequizid": event.finishQuizMap["workforcequizid"],
+        "answer": event.finishQuizMap["answer"],
+        "questionid": event.finishQuizMap["questionid"],
+        "workforceid": userId,
+        "quizid": event.finishQuizMap["quizid"],
+        "certificateid": event.finishQuizMap["certificateid"]
+      };
+      FinishQuizCertificateModel finishQuizCertificateModel =
+          await _certificateRepository.finishQuizCertificate(finishQuizMap);
+      if (finishQuizCertificateModel.status == 200) {
+        emit(CertificateQuizSubmitted(
+            finishQuizCertificateModel: finishQuizCertificateModel));
+      }
+    } catch (e) {
+      emit(CertificateQuizSubmitError(getError: e.toString()));
     }
   }
 }

@@ -21,8 +21,8 @@ class PickAndUploadImageBloc
       getIt<UploadImageRepository>();
   final ImagePicker _imagePicker = ImagePicker();
   final CustomerCache _customerCache = getIt<CustomerCache>();
-  bool isInitial = true;
-  int number = 0;
+  bool isInitialUpload = true;
+  int imageIndex = 0;
 
   PickAndUploadImageStates get initialState => PermissionInitial();
 
@@ -36,8 +36,8 @@ class PickAndUploadImageBloc
   }
 
   _uploadInitial(UploadInitial event, Emitter<PickAndUploadImageStates> emit) {
-    isInitial = true;
-    number = 0;
+    isInitialUpload = true;
+    imageIndex = 0;
     emit(PermissionInitial());
   }
 
@@ -58,47 +58,39 @@ class PickAndUploadImageBloc
       if (!hasPermission) {
         return;
       } else {
-        bool isAttached = false;
+        bool isImageAttached = false;
         List cameraPathsList =
-            List.from((isInitial == false) ? event.cameraImageList : []);
-        List editedCameraList =
-            List.from((isInitial == false) ? event.editedCameraList! : []);
+            List.from((isInitialUpload == false) ? event.cameraImageList : []);
+        imageIndex = isInitialUpload == true ? 0 : imageIndex;
         String imagePath = '';
         final pickedFile = await _imagePicker.pickImage(
             source: ImageSource.camera, imageQuality: 25);
-        isInitial = false;
+        isInitialUpload = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
-          isAttached = true;
+          isImageAttached = true;
           cameraPathsList.add(pickedFile.path);
           for (int i = 0; i < cameraPathsList.length; i++) {
             imagePath = cameraPathsList[i];
           }
-          if (editedCameraList.toString() != "[]") {
-            number = editedCameraList.length - 1;
-            for (int j = 0; j <= cameraPathsList.length; j++) {
-              number = number + 1;
-            }
-          } else {
-            for (int i = 0; i <= cameraPathsList.length; i++) {
-              number = i;
-            }
+          for (int i = 0; i <= cameraPathsList.length; i++) {
+            imageIndex = i;
           }
-          if (isAttached == true) {
+          if (isImageAttached == true) {
             if (event.isSignature == true) {
               add(CropImage(imagePath: imagePath));
             } else {
               add(UploadImageEvent(
                   imageFile: imagePath,
-                  isImageAttached: isAttached,
+                  isImageAttached: isImageAttached,
                   imagesList: cameraPathsList));
             }
           }
         } else {
-          isAttached = false;
+          isImageAttached = false;
           add(UploadImageEvent(
               imageFile: '',
-              isImageAttached: isAttached,
+              isImageAttached: isImageAttached,
               imagesList: cameraPathsList));
         }
       }
@@ -124,49 +116,40 @@ class PickAndUploadImageBloc
       if (!hasPermission) {
         return;
       } else {
-        bool isAttached = false;
-        List galleryPathsList =
-            List.from((isInitial == false) ? event.galleryImagesList : []);
-        List editedGalleryList = [];
-        editedGalleryList = List.from((isInitial == false)
-            ? event.editedGalleryList!
-            : event.editedGalleryList!);
+        bool isImageAttached = false;
+        List galleryPathsList = List.from(
+            (isInitialUpload == false) ? event.galleryImagesList : []);
+        imageIndex = isInitialUpload == true ? 0 : imageIndex;
+
         String imagePath = '';
         final pickedFile =
             await _imagePicker.pickImage(source: ImageSource.gallery);
-        isInitial = false;
+        isInitialUpload = false;
         emit(PickImageLoading());
         if (pickedFile != null) {
-          isAttached = true;
+          isImageAttached = true;
           galleryPathsList.add(pickedFile.path);
           for (int i = 0; i < galleryPathsList.length; i++) {
             imagePath = galleryPathsList[i];
           }
-          if (editedGalleryList.toString() != "[]") {
-            number = editedGalleryList.length - 1;
-            for (int j = 0; j <= galleryPathsList.length; j++) {
-              number = number + 1;
-            }
-          } else {
-            for (int i = 0; i <= galleryPathsList.length; i++) {
-              number = i;
-            }
+          for (int i = 0; i <= galleryPathsList.length; i++) {
+            imageIndex = i;
           }
-          if (isAttached == true) {
+          if (isImageAttached == true) {
             if (event.isSignature == true) {
               add(CropImage(imagePath: imagePath));
             } else {
               add(UploadImageEvent(
                   imageFile: imagePath,
-                  isImageAttached: isAttached,
+                  isImageAttached: isImageAttached,
                   imagesList: galleryPathsList));
             }
           }
         } else {
-          isAttached = false;
+          isImageAttached = false;
           add(UploadImageEvent(
               imageFile: '',
-              isImageAttached: isAttached,
+              isImageAttached: isImageAttached,
               imagesList: galleryPathsList));
         }
       }
@@ -187,7 +170,7 @@ class PickAndUploadImageBloc
             imagePathsList: event.imagesList,
             imagePath: event.imageFile,
             uploadPictureModel: uploadPictureModel,
-            incrementNumber: number));
+            incrementNumber: imageIndex));
       } else {
         emit(ImageNotUploaded(
             imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -199,18 +182,18 @@ class PickAndUploadImageBloc
   }
 
   _removeImage(RemoveImage event, Emitter<PickAndUploadImageStates> emit) {
-    bool isAttached = true;
+    bool isImageAttached = true;
     List images = List.from(event.imagesList);
     if (event.index >= 0 && event.index < images.length) {
       images.removeAt(event.index);
-      number--;
-      images.isEmpty ? isAttached = false : isAttached = true;
+      imageIndex--;
+      images.isEmpty ? isImageAttached = false : isImageAttached = true;
       emit(ImagePickerLoaded(
-          isImageAttached: isAttached,
+          isImageAttached: isImageAttached,
           imagePathsList: images,
           imagePath: '',
           uploadPictureModel: event.uploadPictureModel,
-          incrementNumber: number));
+          incrementNumber: imageIndex));
     }
   }
 

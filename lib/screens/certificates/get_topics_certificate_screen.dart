@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/certificates/get_topic_certificate_body.dart';
+import 'package:toolkit/screens/certificates/widgets/get_topic_certificate_body.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -68,8 +68,8 @@ class GetTopicCertificateScreen extends StatelessWidget {
                     height: smallestSpacing,
                   ),
                   GetTopicCertificateBody(
-                    data: state.getTopicCertificateModel.data,
-                  ),
+                      data: state.getTopicCertificateModel.data,
+                      certificateId: courseId),
                 ],
               ),
             );

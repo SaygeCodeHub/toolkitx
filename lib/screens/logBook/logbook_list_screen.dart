@@ -59,19 +59,19 @@ class LogbookListScreen extends StatelessWidget {
                 }, builder: (context, state) {
                   if (state is LogbookListFetched) {
                     return Visibility(
-                        visible: state.filtersMap.isNotEmpty,
-                        child: CustomTextButton(
-                            onPressed: () {
-                              LogbookList.page = 1;
-                              logbookData.clear();
-                              LogbookList.noMoreData = false;
-                              context
-                                  .read<LogbookBloc>()
-                                  .add(ClearLogBookFilter());
-                              context.read<LogbookBloc>().add(FetchLogbookList(
-                                  isFromHome: isFromHome, pageNo: 1));
-                            },
-                            textValue: DatabaseUtil.getText('Clear')));
+                      visible: state.filtersMap.isNotEmpty,
+                      child: CustomTextButton(
+                        onPressed: () {
+                          LogbookList.page = 1;
+                          logbookData.clear();
+                          LogbookList.noMoreData = false;
+                          context.read<LogbookBloc>().add(ClearLogBookFilter());
+                          context.read<LogbookBloc>().add(FetchLogbookList(
+                              isFromHome: isFromHome, pageNo: 1));
+                        },
+                        textValue: DatabaseUtil.getText('Clear'),
+                      ),
+                    );
                   } else {
                     return const SizedBox();
                   }

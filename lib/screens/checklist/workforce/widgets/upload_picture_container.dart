@@ -46,7 +46,7 @@ class UploadPictureContainer extends StatelessWidget {
                           return AndroidPopUp(
                               titleValue: StringConstants.kDelete,
                               contentValue: StringConstants.kDeleteImage,
-                              onPrimarybtn: () {
+                              onPrimaryButton: () {
                                 Navigator.pop(context);
                                 context.read<PickAndUploadImageBloc>().add(
                                     RemoveImage(

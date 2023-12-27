@@ -18,7 +18,9 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   WorkOrderStates get initialState => WorkOrderInitial();
   final List<WorkOrderDatum> data = [];
   bool hasReachedMax = false;
+  String workOrderId = '';
   Map filtersMap = {};
+  List<List<WorkOrderMasterDatum>> workOrderMasterDatum = [];
 
   WorkOrderBloc() : super(WorkOrderInitial()) {
     on<FetchWorkOrders>(_fetchWorkOrders);
@@ -30,7 +32,13 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   }
 
   _applyFilter(WorkOrderApplyFilter event, Emitter<WorkOrderStates> emit) {
-    filtersMap = event.workOrderFilterMap;
+    filtersMap = {
+      "status": event.workOrderFilterMap['status'] ?? '',
+      "type": event.workOrderFilterMap['type'] ?? '',
+      "st": event.workOrderFilterMap['st'] ?? '',
+      "et": event.workOrderFilterMap['et'] ?? '',
+      "kword": event.workOrderFilterMap['kword'] ?? ''
+    };
   }
 
   _clearFilter(WorkOrderClearFilter event, Emitter<WorkOrderStates> emit) {
@@ -47,6 +55,9 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
           add(WorkOrderClearFilter());
           FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
               .fetchWorkOrders(event.pageNo, hashCode!, '{}');
+          for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
+            workOrderId = fetchWorkOrdersModel.data[i].id;
+          }
           data.addAll(fetchWorkOrdersModel.data);
           hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
           emit(WorkOrdersFetched(
@@ -74,8 +85,10 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       FetchWorkOrdersMasterModel fetchWorkOrdersMasterModel =
           await _workOrderRepository.fetchWorkOrderMaster(hashCode!, userId!);
+      workOrderMasterDatum = fetchWorkOrdersMasterModel.data;
       emit(WorkOrderMasterFetched(
-          fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel));
+          fetchWorkOrdersMasterModel: fetchWorkOrdersMasterModel,
+          filtersMap: filtersMap));
     } catch (e) {
       emit(WorkOrderMasterNotFetched(masterNotFetched: e.toString()));
     }

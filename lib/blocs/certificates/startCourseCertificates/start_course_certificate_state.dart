@@ -63,3 +63,58 @@ class UserTrackUpdateError extends StartCourseCertificateState {
 
   UserTrackUpdateError({required this.error});
 }
+
+class WorkforceQuizFetching extends StartCourseCertificateState {}
+
+class WorkforceQuizFetched extends StartCourseCertificateState {
+  final GetWorkforceQuizModel getWorkforceQuizModel;
+  WorkforceQuizFetched({required this.getWorkforceQuizModel});
+}
+
+class WorkforceQuizError extends StartCourseCertificateState {
+  final String getError;
+
+  WorkforceQuizError({required this.getError});
+}
+
+class QuizQuestionsFetching extends StartCourseCertificateState {}
+
+class QuizQuestionsFetched extends StartCourseCertificateState {
+  final GetQuizQuestionsModel getQuizQuestionsModel;
+  final String answerId;
+  QuizQuestionsFetched(
+      {required this.getQuizQuestionsModel, required this.answerId});
+}
+
+class QuizQuestionsError extends StartCourseCertificateState {
+  final String getError;
+  QuizQuestionsError({required this.getError});
+}
+
+class QuizQuestionAnswerSaving extends StartCourseCertificateState {}
+
+class QuizQuestionAnswerSaved extends StartCourseCertificateState {
+  final SaveQuestionAnswerModel saveQuestionAnswerModel;
+  QuizQuestionAnswerSaved({
+    required this.saveQuestionAnswerModel,
+  });
+}
+
+class QuizQuestionAnswerError extends StartCourseCertificateState {
+  final String getError;
+  QuizQuestionAnswerError({required this.getError});
+}
+
+class CertificateQuizSubmitting extends StartCourseCertificateState {}
+
+class CertificateQuizSubmitted extends StartCourseCertificateState {
+  final FinishQuizCertificateModel finishQuizCertificateModel;
+  CertificateQuizSubmitted({
+    required this.finishQuizCertificateModel,
+  });
+}
+
+class CertificateQuizSubmitError extends StartCourseCertificateState {
+  final String getError;
+  CertificateQuizSubmitError({required this.getError});
+}

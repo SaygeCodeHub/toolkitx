@@ -23,14 +23,13 @@ class CompanyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderCompanyOptions(
-        companyId: workOrderDetailsMap['contractorname'] ?? '',
-        companyName: workOrderDetailsMap['companyid'] ?? ''));
+        companyId: workOrderDetailsMap['companyid'] ?? '',
+        companyName: workOrderDetailsMap['contractorname'] ?? ''));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderCompanyOptionSelected,
         builder: (context, state) {
           if (state is WorkOrderCompanyOptionSelected) {
-            workOrderDetailsMap['companyid'] = state.companyId;
             return ListTile(
                 contentPadding: EdgeInsets.zero,
                 onTap: () async {
@@ -38,9 +37,9 @@ class CompanyListTile extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => WorkOrderCompanyList(
-                                data: data,
-                                companyId: state.companyId,
-                              )));
+                              data: data,
+                              companyId: state.companyId,
+                              workOrderDetailsMap: workOrderDetailsMap)));
                 },
                 title: Text(DatabaseUtil.getText('Company'),
                     style: Theme.of(context).textTheme.xSmall.copyWith(

@@ -1,8 +1,14 @@
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
+import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_certificate_details_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
+import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
+import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 
@@ -25,6 +31,14 @@ class CertificateRepositoryImpl extends CertificateRepository {
         "${ApiConstants.baseUrl}certificate/uploadcertificate",
         uploadCertificateMap);
     return UploadCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FeedbackCertificateModel> feedbackCertificate(
+      String hashCode, String userId, String certificateId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/getfeedbackquestionwithresponse?hashcode=$hashCode&workforceid=$userId&certificateid=$certificateId");
+    return FeedbackCertificateModel.fromJson(response);
   }
 
   @override
@@ -58,5 +72,46 @@ class CertificateRepositoryImpl extends CertificateRepository {
         "${ApiConstants.baseUrl}certificate/UpdateUserTrack",
         updateUserTrackMap);
     return UpdateUserTrackModel.fromJson(response);
+  }
+
+  @override
+  Future<GetWorkforceQuizModel> getWorkforceQuiz(
+      String hashCode, String userId, String quizId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetWorkforceQuiz?hashcode=$hashCode&quizid=$quizId&workforceid=$userId");
+    return GetWorkforceQuizModel.fromJson(response);
+  }
+
+  @override
+  Future<GetQuizQuestionsModel> getQuizQuestions(
+      String hashCode, int pageNo, String workforcequizId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetQuizQuestion?hashcode=$hashCode&workforcequizid=$workforcequizId&pageno=$pageNo");
+    return GetQuizQuestionsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveQuestionAnswerModel> saveQuestionAnswer(
+      Map questionAnswerMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/SaveQuestionAnswer",
+        questionAnswerMap);
+    return SaveQuestionAnswerModel.fromJson(response);
+  }
+
+  @override
+  Future<FinishQuizCertificateModel> finishQuizCertificate(
+      Map finishQuizMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}certificate/FinishQuiz", finishQuizMap);
+    return FinishQuizCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchCertificateDetailsModel> fetchCertificateDetails(
+      String hashCode, String userId, String certificateId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/getcertificate?certificateid=$certificateId&hashcode=$hashCode&workforceid=$userId");
+    return FetchCertificateDetailsModel.fromJson(response);
   }
 }

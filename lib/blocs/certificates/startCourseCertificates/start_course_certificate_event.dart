@@ -32,3 +32,33 @@ class UpdateUserTrack extends StartCourseCertificateEvent {
   UpdateUserTrack(
       {required this.certificateId, required this.noteId, required this.idm});
 }
+
+class GetWorkforceQuiz extends StartCourseCertificateEvent {
+  final String quizId;
+
+  GetWorkforceQuiz({required this.quizId});
+}
+
+class GetQuizQuestions extends StartCourseCertificateEvent {
+  final String workforcequizId;
+  final int pageNo;
+
+  GetQuizQuestions({required this.workforcequizId, required this.pageNo});
+}
+
+class SelectedQuizAnswerEvent extends StartCourseCertificateEvent {
+  final String answerId;
+  final GetQuizQuestionsModel getQuizQuestionsModel;
+  SelectedQuizAnswerEvent(
+      {required this.answerId, required this.getQuizQuestionsModel});
+}
+
+class SaveQuizQuestionAnswer extends StartCourseCertificateEvent {
+  final Map questionAnswerMap;
+  SaveQuizQuestionAnswer({required this.questionAnswerMap});
+}
+
+class SubmitCertificateQuiz extends StartCourseCertificateEvent {
+  final Map finishQuizMap;
+  SubmitCertificateQuiz({required this.finishQuizMap});
+}

@@ -9,6 +9,7 @@ import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
+import 'workorder_item_tab_delete_button.dart';
 
 class WorkOrderTabThreeItemsTab extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -34,22 +35,22 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
               return CustomCard(
                   child: ListTile(
                       contentPadding: const EdgeInsets.all(tinierSpacing),
-                      onTap: () {},
-                      title: Text(data.items[index].item,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.black)),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        CustomIconButton(
-                            icon: Icons.delete,
-                            onPressed: () {},
-                            size: kEditAndDeleteIconTogether),
-                        const SizedBox(width: xxxTinierSpacing),
-                        CustomIconButton(
-                            icon: Icons.edit,
-                            onPressed: () {},
-                            size: kEditAndDeleteIconTogether)
-                      ]),
+                      title: Row(
+                        children: [
+                          Text(data.items[index].item,
+                              style: Theme.of(context).textTheme.small.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.black)),
+                          const Spacer(),
+                          WorkOrderItemTabDeleteButton(
+                              itemId: data.items[index].id),
+                          const SizedBox(width: xxxTinierSpacing),
+                          CustomIconButton(
+                              icon: Icons.edit,
+                              onPressed: () {},
+                              size: kEditAndDeleteIconTogether)
+                        ],
+                      ),
                       subtitle: Padding(
                           padding: const EdgeInsets.only(top: xxxTinierSpacing),
                           child: Column(

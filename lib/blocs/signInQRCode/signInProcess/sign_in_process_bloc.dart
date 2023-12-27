@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/SignInQRCode/process_sign_out_model.dart';
 import 'package:toolkit/data/models/SignInQRCode/process_singin_model.dart';
 import 'package:toolkit/data/models/SignInQRCode/signin_unathorized_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../../repositories/SignInQRCode/signin_repository.dart';
+
 part 'sign_in_process_event.dart';
+
 part 'sign_in_process_state.dart';
 
 class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
@@ -15,10 +18,13 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
   SignInProcessState get initialState => SignInProcessInitial();
+
   SignInProcessBloc() : super(SignInProcessInitial()) {
     on<SignInProcess>(_processSignInProcess);
     on<UnauthorizedSignIn>(_signInUnathorized);
+    on<ProcessSignOut>(_processSignOut);
   }
+  String qrCode = '';
 
   Future<FutureOr<void>> _processSignInProcess(
       SignInProcess event, Emitter<SignInProcessState> emit) async {
@@ -33,6 +39,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
         "qrcode": event.qRCode,
         "hashcode": hashCode
       };
+      qrCode = event.qRCode!;
       ProcessSignInModel processSignInModel =
           await _signInRepository.processSignIn(signInMap);
       if (processSignInModel.message == '1') {
@@ -64,6 +71,29 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
       } else {
         emit(SignInUnathorizedError(errorMsg: StringConstants.kQRError));
       }
+    }
+  }
+
+  Future<FutureOr<void>> _processSignOut(
+      ProcessSignOut event, Emitter<SignInProcessState> emit) async {
+    emit(SignOutProcessing());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userid = await _customerCache.getUserId(CacheKeys.userId);
+      Map processSignOutMap = {
+        "userid": userid,
+        "qrcode": event.qRCode,
+        "hashcode": hashCode
+      };
+      ProcessSignOutModel processSignOutModel =
+          await _signInRepository.processSignOut(processSignOutMap);
+      if (processSignOutModel.status == 200) {
+        emit(SignOutProcessed());
+      } else {
+        emit(SignOutNotProcessed(errorMsg: processSignOutModel.message));
+      }
+    } catch (e) {
+      emit(SignOutNotProcessed(errorMsg: e.toString()));
     }
   }
 }

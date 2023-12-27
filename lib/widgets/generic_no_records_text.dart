@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 
 class NoRecordsText extends StatelessWidget {
   final String text;
+  final TextStyle? style;
 
-  const NoRecordsText({super.key, required this.text});
+  const NoRecordsText({super.key, required this.text, this.style});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height / 3.5),
-            child: Text(text)));
+    return Expanded(
+      child: Center(child: Text(text, style: style)),
+    );
   }
 }
