@@ -119,3 +119,9 @@ class RemoveAssignTeam extends LotoDetailsEvent {
 
   RemoveAssignTeam({required this.teamId});
 }
+
+class SelectLotoChecklistMultiAnswer extends LotoDetailsEvent {
+  final bool isChecked;
+
+  SelectLotoChecklistMultiAnswer({required this.isChecked});
+}

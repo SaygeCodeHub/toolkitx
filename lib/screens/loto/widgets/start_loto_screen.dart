@@ -74,10 +74,14 @@ class StartLotoScreen extends StatelessWidget {
                         child: isFromStartRemoveLoto == false
                             ? Visibility(
                                 visible: context
+                                            .read<LotoDetailsBloc>()
+                                            .checklistArrayIdList
+                                            .length ==
+                                        1 ||
+                                    context
                                         .read<LotoDetailsBloc>()
                                         .checklistArrayIdList
-                                        .length ==
-                                    1,
+                                        .isEmpty,
                                 replacement: PrimaryButton(
                                     onPressed: () {
                                       context

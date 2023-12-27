@@ -123,7 +123,7 @@ class LotoDetails extends StatelessWidget {
           Text(data.purposenames),
           LotoDetailsLocationDocuments(data: data, clientId: clientId),
           const SizedBox(height: xxxSmallestSpacing),
-          LotoDetailsAssetDocuments(data: data),
+          LotoDetailsAssetDocuments(data: data, clientId: clientId),
           Text(DatabaseUtil.getText("safelock_number"),
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),

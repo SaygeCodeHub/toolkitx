@@ -288,3 +288,9 @@ class AssignTeamRemoveError extends LotoDetailsState {
 
   AssignTeamRemoveError({required this.errorMessage});
 }
+
+class LotoMultiCheckListAnswerSelected extends LotoDetailsState {
+  final bool isChecked;
+
+  LotoMultiCheckListAnswerSelected({required this.isChecked});
+}

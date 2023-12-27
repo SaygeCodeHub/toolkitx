@@ -14,13 +14,9 @@ import 'package:toolkit/widgets/custom_icon_button.dart';
 import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 
 class LotoTabSixScreen extends StatelessWidget {
-  const LotoTabSixScreen(
-      {super.key,
-      required this.fetchLotoDetailsModel,
-      required this.lotoTabIndex});
+  const LotoTabSixScreen({super.key, required this.fetchLotoDetailsModel});
 
   final FetchLotoDetailsModel fetchLotoDetailsModel;
-  final int lotoTabIndex;
 
   @override
   Widget build(BuildContext context) {
