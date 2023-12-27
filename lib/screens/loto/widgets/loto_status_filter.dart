@@ -12,7 +12,8 @@ class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
 
-  const LotoStatusFilter({super.key, required this.data, required this.lotoFilterMap});
+  const LotoStatusFilter(
+      {super.key, required this.data, required this.lotoFilterMap});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class LotoStatusFilter extends StatelessWidget {
       String id = LotoStatusEnum.values[i].value.toString();
       Widget item = BlocBuilder<LotoListBloc, LotoListState>(
         buildWhen: (previousState, currentState) =>
-        currentState is LotoStatusFilterSelected,
+            currentState is LotoStatusFilterSelected,
         builder: (context, state) {
           if (state is LotoStatusFilterSelected) {
             log('LotoStatusFilterSelected------>${state.selectedIndex}');

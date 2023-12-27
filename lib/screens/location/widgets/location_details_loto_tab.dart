@@ -21,7 +21,8 @@ class LocationDetailsLoToTab extends StatelessWidget {
   static int pageNo = 1;
   final String expenseId;
 
-  const LocationDetailsLoToTab({Key? key, required this.selectedTabIndex, required this.expenseId})
+  const LocationDetailsLoToTab(
+      {Key? key, required this.selectedTabIndex, required this.expenseId})
       : super(key: key);
 
   @override
@@ -57,7 +58,7 @@ class LocationDetailsLoToTab extends StatelessWidget {
                   state.loToFilterMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
-                  false;
+                      false;
                   context
                       .read<LocationBloc>()
                       .add(FetchLocationLoTo(pageNo: pageNo));
@@ -79,7 +80,7 @@ class LocationDetailsLoToTab extends StatelessWidget {
                   state.filtersMap.clear();
                   context.read<LocationBloc>().locationLoTos.clear();
                   context.read<LocationBloc>().locationLoToListReachedMax =
-                  false;
+                      false;
                   context
                       .read<LocationBloc>()
                       .add(FetchLocationLoTo(pageNo: pageNo));
