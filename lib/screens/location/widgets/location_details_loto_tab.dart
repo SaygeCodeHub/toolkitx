@@ -94,7 +94,7 @@ class LocationDetailsLoToTab extends StatelessWidget {
         const SizedBox(height: xxTinierSpacing),
         BlocConsumer<LocationBloc, LocationState>(
           buildWhen: (previousState, currentState) =>
-          (currentState is FetchingLocationLoTo && pageNo == 1) ||
+              (currentState is FetchingLocationLoTo && pageNo == 1) ||
               currentState is LocationLoToFetched ||
               currentState is LocationLoToNotFetched,
           listener: (context, state) {
