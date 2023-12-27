@@ -52,10 +52,7 @@ class LotoChecklistQuestionTypeUtil {
           queoptions: queoptions,
           selectedAnswerList: answerList,
           onCreatedForChanged: (List<dynamic> id) {
-            answerList.add({
-              "questionid": questionId,
-              "answer": id
-            });
+            answerList.add({"questionid": questionId, "answer": id});
           },
         );
       case 6:
@@ -77,7 +74,7 @@ class LotoChecklistQuestionTypeUtil {
               answerList.add({"questionid": questionId, "answer": textValue});
             });
       case 8:
-      return const SizedBox.shrink();
+        return const SizedBox.shrink();
       case 9:
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
@@ -142,4 +139,3 @@ class LotoChecklistQuestionTypeUtil {
     }
   }
 }
-

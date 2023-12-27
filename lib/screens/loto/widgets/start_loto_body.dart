@@ -67,7 +67,9 @@ class StartLotoBody extends StatelessWidget {
                                               .data!
                                               .questionlist![index]
                                               .queoptions,
-                                      context.read<LotoDetailsBloc>().answerList,
+                                          context
+                                              .read<LotoDetailsBloc>()
+                                              .answerList,
                                           context)
                                 ]);
                           },

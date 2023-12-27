@@ -10,9 +10,9 @@ typedef CreatedForListCallBack = Function(List id);
 class LotoSelectMultiChecklistAnswer extends StatelessWidget {
   const LotoSelectMultiChecklistAnswer(
       {super.key,
-        required this.queoptions,
-        required this.selectedAnswerList,
-        required this.onCreatedForChanged});
+      required this.queoptions,
+      required this.selectedAnswerList,
+      required this.onCreatedForChanged});
 
   final List selectedAnswerList;
   final QueOption queoptions;
@@ -31,10 +31,12 @@ class LotoSelectMultiChecklistAnswer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isChecked = false;
-    context.read<LotoDetailsBloc>().add(SelectLotoChecklistMultiAnswer(isChecked: isChecked));
+    context
+        .read<LotoDetailsBloc>()
+        .add(SelectLotoChecklistMultiAnswer(isChecked: isChecked));
     return BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
       buildWhen: (previousState, currentState) =>
-      currentState is LotoMultiCheckListAnswerSelected,
+          currentState is LotoMultiCheckListAnswerSelected,
       builder: (context, state) {
         if (state is LotoMultiCheckListAnswerSelected) {
           return CheckboxListTile(
@@ -47,7 +49,9 @@ class LotoSelectMultiChecklistAnswer extends StatelessWidget {
               value: selectedAnswerList.contains(queoptions.queoptionid),
               onChanged: (isChecked) {
                 _checkboxChange(isChecked, queoptions.queoptionid);
-                context.read<LotoDetailsBloc>().add(SelectLotoChecklistMultiAnswer(isChecked: isChecked!));
+                context
+                    .read<LotoDetailsBloc>()
+                    .add(SelectLotoChecklistMultiAnswer(isChecked: isChecked!));
               });
         } else {
           return const SizedBox.shrink();

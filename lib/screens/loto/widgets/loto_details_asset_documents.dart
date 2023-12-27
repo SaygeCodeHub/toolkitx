@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -13,7 +12,8 @@ import '../../../utils/generic_alphanumeric_generator_util.dart';
 class LotoDetailsAssetDocuments extends StatelessWidget {
   const LotoDetailsAssetDocuments({
     super.key,
-    required this.data, required this.clientId,
+    required this.data,
+    required this.clientId,
   });
 
   final LotoData data;

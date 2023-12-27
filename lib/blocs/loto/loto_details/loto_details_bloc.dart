@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_team_for_remove_model.dart';
@@ -530,7 +529,6 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
                 errorMessage: fetchLotoChecklistQuestionsModel.message!));
           }
         }
-        log('checklistArrayIdList============>$checklistArrayIdList');
       }
     } catch (e) {
       emit(LotoChecklistQuestionsNotFetched(errorMessage: e.toString()));
@@ -639,7 +637,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     }
   }
 
-  FutureOr<void> _selectLotoChecklistMultiAnswer(SelectLotoChecklistMultiAnswer event, Emitter<LotoDetailsState> emit) {
+  FutureOr<void> _selectLotoChecklistMultiAnswer(
+      SelectLotoChecklistMultiAnswer event, Emitter<LotoDetailsState> emit) {
     emit(LotoMultiCheckListAnswerSelected(isChecked: event.isChecked));
   }
 }
