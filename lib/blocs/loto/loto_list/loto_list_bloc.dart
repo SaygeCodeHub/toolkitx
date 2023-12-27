@@ -95,7 +95,8 @@ class LotoListBloc extends Bloc<LotoListEvent, LotoListState> {
 
   FutureOr<void> _selectLotoStatusFilter(
       SelectLotoStatusFilter event, Emitter<LotoListState> emit) {
-    emit(LotoStatusFilterSelected(event.selectedIndex));
+    emit(LotoStatusFilterSelected(
+        selectedIndex: event.selectedIndex, selected: event.selected));
   }
 
   FutureOr<void> _selectLotoLocationFilter(

@@ -69,6 +69,7 @@ class PermitListScreen extends StatelessWidget {
                   CustomIconButtonRow(
                       isEnabled: true,
                       primaryOnPress: () {
+                        PermitFilterScreen.isFromLocation = false;
                         Navigator.pushNamed(
                             context, PermitFilterScreen.routeName);
                       },

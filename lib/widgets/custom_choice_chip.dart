@@ -25,7 +25,8 @@ class CustomChoiceChip extends StatelessWidget {
             .copyWith(color: AppColor.black, fontWeight: FontWeight.normal),
         backgroundColor: AppColor.lightestGrey,
         selected: selected,
-        selectedColor: AppColor.green,
+        selectedColor:
+            (selected == true) ? AppColor.green : AppColor.lightestGrey,
         onSelected: onSelected);
   }
 }

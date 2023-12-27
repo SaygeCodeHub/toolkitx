@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/enums/loto_status_enum.dart';
@@ -9,13 +11,13 @@ import '../../../data/models/loto/loto_master_model.dart';
 class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
-  const LotoStatusFilter(
-      {super.key, required this.data, required this.lotoFilterMap});
+
+  const LotoStatusFilter({super.key, required this.data, required this.lotoFilterMap});
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoListBloc>().add(
-        SelectLotoStatusFilter(selectedIndex: lotoFilterMap["status"] ?? ''));
+    context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+        selectedIndex: lotoFilterMap["status"] ?? '', selected: true));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
@@ -25,19 +27,21 @@ class LotoStatusFilter extends StatelessWidget {
       String id = LotoStatusEnum.values[i].value.toString();
       Widget item = BlocBuilder<LotoListBloc, LotoListState>(
         buildWhen: (previousState, currentState) =>
-            currentState is LotoStatusFilterSelected,
+        currentState is LotoStatusFilterSelected,
         builder: (context, state) {
           if (state is LotoStatusFilterSelected) {
+            log('LotoStatusFilterSelected------>${state.selectedIndex}');
             lotoFilterMap["status"] = state.selectedIndex;
             return CustomChoiceChip(
                 label: LotoStatusEnum.values[i].name,
                 selected: (lotoFilterMap["status"] == null)
-                    ? false
+                    ? state.selected
                     : state.selectedIndex == id,
                 onSelected: (bool value) {
-                  context
-                      .read<LotoListBloc>()
-                      .add(SelectLotoStatusFilter(selectedIndex: id));
+                  log('on select------>$value');
+                  log('on select val------>${state.selectedIndex == id}');
+                  context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+                      selectedIndex: id, selected: value));
                 });
           } else {
             return const SizedBox.shrink();

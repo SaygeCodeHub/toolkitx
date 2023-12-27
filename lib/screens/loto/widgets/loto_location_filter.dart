@@ -23,13 +23,14 @@ class LotoLocationFilter extends StatelessWidget {
     context.read<LotoListBloc>().add(SelectLotoLocationFilter(
         selectLocationName:
             (lotoFilterMap['locName'] == null) ? '' : lotoFilterMap['locName'],
-        selectLocationId: ''));
+        selectLocationId: lotoFilterMap['loc'] ?? ''));
     return BlocBuilder<LotoListBloc, LotoListState>(
         buildWhen: (previousState, currentState) =>
             currentState is LotoLocationFilterSelected,
         builder: (context, state) {
           if (state is LotoLocationFilterSelected) {
             lotoFilterMap['loc'] = state.selectLocationId;
+            lotoFilterMap['locName'] = state.selectLocationName;
             return Column(
               children: [
                 ListTile(
