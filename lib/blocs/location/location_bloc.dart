@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
@@ -183,7 +182,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       FetchLocationLoToModel fetchLocationLoToModel =
           await _locationRepository.fetchLocationLoTo(event.pageNo, hashCode,
               userId, jsonEncode(loToFilterMap), locationId);
-      log('encode------>${jsonEncode(loToFilterMap)}');
       locationLoToListReachedMax = fetchLocationLoToModel.data.isEmpty;
       locationLoTos.addAll(fetchLocationLoToModel.data);
       if (locationLoTos.isNotEmpty) {

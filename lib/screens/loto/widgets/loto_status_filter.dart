@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/enums/loto_status_enum.dart';
@@ -31,7 +29,6 @@ class LotoStatusFilter extends StatelessWidget {
             currentState is LotoStatusFilterSelected,
         builder: (context, state) {
           if (state is LotoStatusFilterSelected) {
-            log('LotoStatusFilterSelected------>${state.selectedIndex}');
             lotoFilterMap["status"] = state.selectedIndex;
             return CustomChoiceChip(
                 label: LotoStatusEnum.values[i].name,
@@ -39,8 +36,6 @@ class LotoStatusFilter extends StatelessWidget {
                     ? state.selected
                     : state.selectedIndex == id,
                 onSelected: (bool value) {
-                  log('on select------>$value');
-                  log('on select val------>${state.selectedIndex == id}');
                   context.read<LotoListBloc>().add(SelectLotoStatusFilter(
                       selectedIndex: id, selected: value));
                 });

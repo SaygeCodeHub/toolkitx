@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,7 +43,6 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 isEnabled: true,
                 clearVisible: state.loToFilterMap.isNotEmpty,
                 primaryOnPress: () {
-                  log('on tap------->${state.loToFilterMap}');
                   LotoFilterScreen.isFromLocation = true;
                   LotoFilterScreen.lotoFilterMap = state.loToFilterMap;
                   LotoFilterScreen.expenseId = expenseId;
