@@ -19,6 +19,7 @@ import '../../../widgets/custom_card.dart';
 import '../../../widgets/error_section.dart';
 import '../../checklist/systemUser/sys_user_checklist_list_screen.dart';
 import '../../checklist/workforce/workforce_list_screen.dart';
+import '../../equipmentTraceability/equipment_trace_screen.dart';
 import '../../expense/expense_list_screen.dart';
 import '../../incident/incident_list_screen.dart';
 import '../../leavesAndHolidays/leaves_and_holidays_screen.dart';
@@ -229,6 +230,9 @@ class OnLineModules extends StatelessWidget {
         break;
       case 'expensereport':
         Navigator.pushNamed(context, ExpenseListScreen.routeName);
+        break;
+      case 'trace':
+        Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
         break;
     }
   }
