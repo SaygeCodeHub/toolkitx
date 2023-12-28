@@ -8,7 +8,6 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
-import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 
 class QuizQuestionsScreen extends StatelessWidget {
@@ -70,8 +69,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                   const SizedBox(height: mediumSpacing),
                   Row(
                     children: [
-                      SizedBox(
-                          width: xxSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
@@ -87,8 +85,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                   : null,
                               textValue: StringConstants.kNext)),
                       const SizedBox(width: tinierSpacing),
-                      SizedBox(
-                          width: xSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
@@ -113,8 +110,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                   const SizedBox(height: tinierSpacing),
                   Row(
                     children: [
-                      SizedBox(
-                          width: xxSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
@@ -130,8 +126,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                   : null,
                               textValue: StringConstants.kSkip)),
                       const SizedBox(width: tinierSpacing),
-                      SizedBox(
-                          width: xSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: () {
                                 context.read<StartCourseCertificateBloc>().add(

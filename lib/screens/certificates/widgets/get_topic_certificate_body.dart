@@ -98,8 +98,8 @@ class GetTopicCertificateBody extends StatelessWidget {
                     onTap: () {
                       Map workforceQuizMap = {
                         "certificateId": certificateId,
-                        "topicId": data.topiclist[0].id,
-                        "quizId": data.quizlist[0].id
+                        "topicId": data.topiclist[index].id,
+                        "quizId": data.quizlist[index].id
                       };
                       Navigator.pushNamed(context, GetWorkforceScreen.routeName,
                           arguments: workforceQuizMap);

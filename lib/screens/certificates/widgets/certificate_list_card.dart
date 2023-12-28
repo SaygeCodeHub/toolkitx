@@ -27,7 +27,6 @@ class CertificateListCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: tinierSpacing),
             child: Column(children: [
               ListTile(
-                onTap: () {},
                 title: Text(data.name,
                     style: Theme.of(context).textTheme.small.copyWith(
                         fontWeight: FontWeight.w500, color: AppColor.black)),
@@ -36,7 +35,7 @@ class CertificateListCard extends StatelessWidget {
                     height: kImageHeight, width: kImageWidth),
               ),
               const Divider(
-                color: AppColor.lightestGrey,
+                color: AppColor.lightestGrey
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Expanded(
@@ -65,20 +64,26 @@ class CertificateListCard extends StatelessWidget {
                         textValue: StringConstants.kUpload)),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed: () {},
+                        onPressed:data
+                            .expired ==
+                            "1" ? () {} : null,
                         textValue: StringConstants.kDownload)),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed: () {
+                        onPressed:
+                            data
+                            .accesscertificate !=
+                            "1" ? () {
                           String certificateId = data.id;
                           Navigator.pushNamed(
                               context, GetCourseCertificateScreen.routeName,
                               arguments: certificateId);
-                        },
+                        } : null,
                         textValue: StringConstants.kStartCourse)),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed: () {
+                        onPressed: data.accessfeedback ==
+                            "1" ? () {
                           Map certificateMap = {
                             "title": data.name,
                             "id": data.id
@@ -86,7 +91,7 @@ class CertificateListCard extends StatelessWidget {
                           Navigator.pushNamed(
                               context, FeedbackCertificateScreen.routeName,
                               arguments: certificateMap);
-                        },
+                        } : null,
                         textValue: StringConstants.kFeedback))
               ])
             ])));

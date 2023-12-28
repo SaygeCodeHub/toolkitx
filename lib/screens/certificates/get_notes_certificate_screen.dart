@@ -61,7 +61,6 @@ class GetNotesCertificateScreen extends StatelessWidget {
                   const SizedBox(height: tinySpacing),
                   GetNotesCertificateBody(
                       data: state.fetchGetNotesModel.data, pageNo: pageNo),
-                  Html(data: pageNo != 3 ? text : ''),
                   const SizedBox(height: tinierSpacing),
                 ],
               ),
