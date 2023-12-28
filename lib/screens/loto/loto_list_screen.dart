@@ -48,6 +48,7 @@ class LotoListScreen extends StatelessWidget {
                             context.read<LotoListBloc>().filters.isNotEmpty,
                         isEnabled: true,
                         primaryOnPress: () {
+                          LotoFilterScreen.isFromLocation = false;
                           Navigator.pushNamed(
                               context, LotoFilterScreen.routeName);
                         },
@@ -55,6 +56,8 @@ class LotoListScreen extends StatelessWidget {
                         clearOnPress: () {
                           pageNo = 1;
                           context.read<LotoListBloc>().data.clear();
+                          context.read<LotoListBloc>().filters.clear();
+                          LotoFilterScreen.lotoFilterMap.clear();
                           context
                               .read<LotoListBloc>()
                               .add(ClearLotoListFilter());

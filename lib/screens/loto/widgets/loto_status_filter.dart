@@ -9,13 +9,14 @@ import '../../../data/models/loto/loto_master_model.dart';
 class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
+
   const LotoStatusFilter(
       {super.key, required this.data, required this.lotoFilterMap});
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoListBloc>().add(
-        SelectLotoStatusFilter(selectedIndex: lotoFilterMap["status"] ?? ''));
+    context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+        selectedIndex: lotoFilterMap["status"] ?? '', selected: true));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
@@ -32,12 +33,11 @@ class LotoStatusFilter extends StatelessWidget {
             return CustomChoiceChip(
                 label: LotoStatusEnum.values[i].name,
                 selected: (lotoFilterMap["status"] == null)
-                    ? false
+                    ? state.selected
                     : state.selectedIndex == id,
                 onSelected: (bool value) {
-                  context
-                      .read<LotoListBloc>()
-                      .add(SelectLotoStatusFilter(selectedIndex: id));
+                  context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+                      selectedIndex: id, selected: value));
                 });
           } else {
             return const SizedBox.shrink();

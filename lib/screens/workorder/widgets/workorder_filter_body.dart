@@ -123,7 +123,7 @@ class WorkOrderFilterBody extends StatelessWidget {
                           Navigator.pop(context);
                           context.read<LocationBloc>().add(FetchLocationDetails(
                               locationId: WorkOrderFilterScreen.expenseId,
-                              selectedTabIndex: 5));
+                              selectedTabIndex: 4));
                         } else {
                           context.read<WorkOrderBloc>().add(
                               WorkOrderApplyFilter(

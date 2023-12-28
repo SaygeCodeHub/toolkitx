@@ -70,6 +70,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       "et": event.filterMap["et"] ?? '',
       "loc": event.filterMap["loc"] ?? '',
       "status": event.filterMap["status"] ?? '',
+      "locName": event.filterMap["locName"] ?? ''
     };
   }
 
