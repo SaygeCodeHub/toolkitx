@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
@@ -20,28 +21,50 @@ class EquipmentTraceabilityBloc
 
   EquipmentTraceabilityBloc() : super(EquipmentTraceabilityInitial()) {
     on<FetchSearchEquipmentList>(_fetchSearchEquipmentList);
+    on<ApplySearchEquipmentFilter>(_applySearchEquipmentFilter);
+    on<ClearSearchEquipmentFilter>(_clearSearchEquipmentFilter);
   }
 
-  Future<FutureOr<void>> _fetchSearchEquipmentList(
-      FetchSearchEquipmentList event,
+  Map filters = {};
+  bool hasReachedMax = false;
+  List<SearchEquipmentDatum> searchEquipmentDatum = [];
+
+  FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
     emit(SearchEquipmentListFetching());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      FetchSearchEquipmentModel fetchSearchEquipmentModel =
-          await _equipmentTraceabilityRepo.fetchSearchEquipment(
-              event.pageNo, hashCode, userId, '');
-      if (fetchSearchEquipmentModel.status == 200) {
+      if (event.isFromHome) {
+        FetchSearchEquipmentModel fetchSearchEquipmentModel =
+            await _equipmentTraceabilityRepo.fetchSearchEquipment(
+                event.pageNo, hashCode, userId, '{}');
+        searchEquipmentDatum.addAll(fetchSearchEquipmentModel.data);
+        hasReachedMax = fetchSearchEquipmentModel.data.isEmpty;
         emit(SearchEquipmentListFetched(
-            fetchSearchEquipmentModel: fetchSearchEquipmentModel));
+            data: searchEquipmentDatum, filtersMap: {}));
       } else {
-        emit(SearchEquipmentListNotFetched(
-            errorMessage: fetchSearchEquipmentModel.message));
+        FetchSearchEquipmentModel fetchSearchEquipmentModel =
+            await _equipmentTraceabilityRepo.fetchSearchEquipment(
+                event.pageNo, hashCode, userId, jsonEncode(filters));
+        searchEquipmentDatum.addAll(fetchSearchEquipmentModel.data);
+        hasReachedMax = fetchSearchEquipmentModel.data.isEmpty;
+        emit(SearchEquipmentListFetched(
+            data: searchEquipmentDatum, filtersMap: filters));
       }
     } catch (e) {
       emit(SearchEquipmentListNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _applySearchEquipmentFilter(ApplySearchEquipmentFilter event,
+      Emitter<EquipmentTraceabilityState> emit) {
+    filters = event.searchEquipmentFilterMap;
+  }
+
+  FutureOr<void> _clearSearchEquipmentFilter(ClearSearchEquipmentFilter event,
+      Emitter<EquipmentTraceabilityState> emit) {
+    filters = {};
   }
 }

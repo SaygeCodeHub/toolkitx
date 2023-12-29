@@ -7,9 +7,10 @@ class EquipmentTraceabilityInitial extends EquipmentTraceabilityState {}
 class SearchEquipmentListFetching extends EquipmentTraceabilityState {}
 
 class SearchEquipmentListFetched extends EquipmentTraceabilityState {
-  final FetchSearchEquipmentModel fetchSearchEquipmentModel;
+  final List<SearchEquipmentDatum> data;
+  final Map filtersMap;
 
-  SearchEquipmentListFetched({required this.fetchSearchEquipmentModel});
+  SearchEquipmentListFetched({required this.data, required this.filtersMap});
 }
 
 class SearchEquipmentListNotFetched extends EquipmentTraceabilityState {
