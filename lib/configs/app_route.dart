@@ -50,6 +50,7 @@ import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
+import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -471,6 +472,8 @@ class AppRoutes {
         return _createRoute(const LotoRejectScreen());
       case EquipmentTraceScreen.routeName:
         return _createRoute(const EquipmentTraceScreen());
+      case SearchEquipmentListScreen.routeName:
+        return _createRoute(const SearchEquipmentListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
