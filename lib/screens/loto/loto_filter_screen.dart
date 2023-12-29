@@ -30,7 +30,7 @@ class LotoFilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<LotoListBloc>().add(FetchLotoMaster());
     return Scaffold(
-      appBar: const GenericAppBar(title: StringConstants.kFilter),
+      appBar: GenericAppBar(title: DatabaseUtil.getText('Filters')),
       body: BlocConsumer<LotoListBloc, LotoListState>(
         listener: (context, state) {
           if (state is LotoMasterFetchError) {

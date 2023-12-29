@@ -65,7 +65,8 @@ class EquipmentTraceScreen extends StatelessWidget {
       String equipmentModuleName, BuildContext context) {
     switch (equipmentModuleName) {
       case StringConstants.kSearchEquipment:
-        Navigator.pushNamed(context, SearchEquipmentListScreen.routeName);
+        Navigator.pushNamed(context, SearchEquipmentListScreen.routeName,
+            arguments: true);
         break;
     }
   }

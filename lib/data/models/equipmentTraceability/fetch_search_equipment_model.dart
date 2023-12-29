@@ -9,7 +9,7 @@ String fetchSearchEquipmentModelToJson(FetchSearchEquipmentModel data) =>
 class FetchSearchEquipmentModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<SearchEquipmentDatum> data;
 
   FetchSearchEquipmentModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchSearchEquipmentModel {
       FetchSearchEquipmentModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<SearchEquipmentDatum>.from(
+            json["Data"].map((x) => SearchEquipmentDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,14 +32,14 @@ class FetchSearchEquipmentModel {
       };
 }
 
-class Datum {
+class SearchEquipmentDatum {
   final String id;
   final String equipmentcode;
   final String equipmentname;
   final String machinetype;
   final dynamic currentitemcount;
 
-  Datum({
+  SearchEquipmentDatum({
     required this.id,
     required this.equipmentcode,
     required this.equipmentname,
@@ -46,7 +47,8 @@ class Datum {
     required this.currentitemcount,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory SearchEquipmentDatum.fromJson(Map<String, dynamic> json) =>
+      SearchEquipmentDatum(
         id: json["id"],
         equipmentcode: json["equipmentcode"] ?? '',
         equipmentname: json["equipmentname"] ?? '',
