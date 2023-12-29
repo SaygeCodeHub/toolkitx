@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
+import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
@@ -39,7 +40,7 @@ class EquipmentTraceScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(equipment[index].icon, size: 30),
+                    Icon(equipment[index].icon, size: kEquipmentModuleIconSize),
                     const SizedBox(
                       height: xxTinierSpacing,
                     ),
