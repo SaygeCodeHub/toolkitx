@@ -433,9 +433,9 @@ abstract class StringConstants {
   static const String kSearchByDocumentName = "Search by Document name";
   static const String kAssetDocuments = 'Asset Documents';
   static const String kWorkforceDeleted = 'Workforce Deleted';
-  static const String kScanEquipment = 'SCAN EQUIPMENT';
-  static const String kTransferEquipment = 'TRANSFER EQUIPMENT';
-  static const String kSearchEquipment = 'SEARCH EQUIPMENT';
-  static const String kViewMyEquipment = 'VIEW MY EQUIPMENT';
+  static const String kScanEquipment = 'Scan Equipment';
+  static const String kTransferEquipment = 'Transfer Equipment';
+  static const String kSearchEquipment = 'Search Equipment';
+  static const String kViewMyEquipment = 'View my Equipment';
   static const String kTrace = 'Trace';
 }

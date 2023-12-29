@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/equipment_util.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -22,29 +23,49 @@ class EquipmentTraceScreen extends StatelessWidget {
         child: GridView.builder(
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 16 / 7,
+              childAspectRatio: 16 / 9,
               crossAxisCount: 2,
               crossAxisSpacing: leftRightMargin,
               mainAxisSpacing: leftRightMargin),
           itemCount: equipment.length,
           itemBuilder: (context, int index) {
             return InkWell(
-              onTap: () {},
+              onTap: () {
+                _navigateToEquipmentModule(
+                    equipment[index].equipmentModuleName, context);
+              },
               child: CustomCard(
-                color: AppColor.deepBlue,
-                child: Center(
-                    child: Text(
-                  equipment[index].equipmentModuleName,
-                  style: Theme.of(context).textTheme.xSmall.copyWith(
-                        color: AppColor.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                )),
+                color: AppColor.blueGrey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(equipment[index].icon, size: 30),
+                    const SizedBox(
+                      height: xxTinierSpacing,
+                    ),
+                    Text(
+                      equipment[index].equipmentModuleName,
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                            color: AppColor.black,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
         ),
       ),
     );
+  }
+
+  void _navigateToEquipmentModule(
+      String equipmentModuleName, BuildContext context) {
+    switch (equipmentModuleName) {
+      case StringConstants.kSearchEquipment:
+        Navigator.pushNamed(context, SearchEquipmentListScreen.routeName);
+        break;
+    }
   }
 }

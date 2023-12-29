@@ -12,6 +12,7 @@ import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certifi
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
+import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/blocs/location/location_bloc.dart';
@@ -204,6 +205,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
           BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
           BlocProvider(lazy: true, create: (context) => AssetsBloc()),
+          BlocProvider(
+              lazy: false, create: (context) => EquipmentTraceabilityBloc()),
         ],
         child: GestureDetector(
             onTap: () {
