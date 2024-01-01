@@ -16,3 +16,9 @@ class ApplySearchEquipmentFilter extends EquipmentTraceabilityEvent {
 }
 
 class ClearSearchEquipmentFilter extends EquipmentTraceabilityEvent {}
+
+class FetchSearchEquipmentDetails extends EquipmentTraceabilityEvent {
+  final String equipmentId;
+
+  FetchSearchEquipmentDetails({required this.equipmentId});
+}

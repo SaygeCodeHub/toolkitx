@@ -18,3 +18,22 @@ class SearchEquipmentListNotFetched extends EquipmentTraceabilityState {
 
   SearchEquipmentListNotFetched({required this.errorMessage});
 }
+
+class SearchEquipmentDetailsFetching extends EquipmentTraceabilityState {}
+
+class SearchEquipmentDetailsFetched extends EquipmentTraceabilityState {
+  final FetchSearchEquipmentDetailsModel fetchSearchEquipmentDetailsModel;
+  final List popUpMenuItems;
+  final bool showPopMenu;
+
+  SearchEquipmentDetailsFetched(
+      {required this.popUpMenuItems,
+      required this.showPopMenu,
+      required this.fetchSearchEquipmentDetailsModel});
+}
+
+class SearchEquipmentDetailsNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  SearchEquipmentDetailsNotFetched({required this.errorMessage});
+}
