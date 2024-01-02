@@ -12,24 +12,14 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List popUpMenuItems = [
-      "Scan",
-      "Enter",
-      "Search",
-      "Cancel"
-    ];
+    List popUpMenuItems = ["Scan", "Enter", "Search", "Cancel"];
     return PopupMenuButton(
-        onSelected: (value) {
-          // if (value == StringConstants.kManageDownTime) {
-          //   Navigator.pushNamed(context, AssetsManageDownTimeScreen.routeName);
-          // }
-
-        },
+        onSelected: (value) {},
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
-          for (int i = 0; i < popUpMenuItems.length; i++)
-            _buildPopupMenuItem(
-                context, popUpMenuItems[i], popUpMenuItems[i])
-        ]);
+              for (int i = 0; i < popUpMenuItems.length; i++)
+                _buildPopupMenuItem(
+                    context, popUpMenuItems[i], popUpMenuItems[i])
+            ]);
   }
 }

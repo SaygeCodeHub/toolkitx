@@ -17,9 +17,7 @@ class TransferEquipmentScreen extends StatelessWidget {
     return Scaffold(
       appBar: const GenericAppBar(
         title: StringConstants.kTransfer,
-        actions: [
-          TransferEquipmentPopupMenu()
-        ],
+        actions: [TransferEquipmentPopupMenu()],
       ),
       body: Padding(
         padding: const EdgeInsets.only(
