@@ -18,3 +18,17 @@ class SearchEquipmentListNotFetched extends EquipmentTraceabilityState {
 
   SearchEquipmentListNotFetched({required this.errorMessage});
 }
+
+class EquipmentSetParameterFetching extends EquipmentTraceabilityState {}
+
+class EquipmentSetParameterFetched extends EquipmentTraceabilityState {
+  final FetchEquipmentSetParameterModel fetchEquipmentSetParameterModel;
+
+  EquipmentSetParameterFetched({required this.fetchEquipmentSetParameterModel});
+}
+
+class EquipmentSetParameterNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentSetParameterNotFetched({required this.errorMessage});
+}

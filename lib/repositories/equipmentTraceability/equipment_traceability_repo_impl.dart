@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -12,4 +13,14 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
         "${ApiConstants.baseUrl}equipment/getallocated?pageno=$pageNo&userid=$userId&hashcode=$hashCode&filter=$filter");
     return FetchSearchEquipmentModel.fromJson(response);
   }
+
+  @override
+  Future<FetchEquipmentSetParameterModel> fetchEquipmentSetParameter(String hashCode, String equipmentId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}equipment/getcustomparameters?hashcode=$hashCode&equipmentid=$equipmentId"
+    );
+    return FetchEquipmentSetParameterModel.fromJson(response);
+  }
+
+
 }

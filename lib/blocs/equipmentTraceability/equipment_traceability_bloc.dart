@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 
@@ -23,6 +24,7 @@ class EquipmentTraceabilityBloc
     on<FetchSearchEquipmentList>(_fetchSearchEquipmentList);
     on<ApplySearchEquipmentFilter>(_applySearchEquipmentFilter);
     on<ClearSearchEquipmentFilter>(_clearSearchEquipmentFilter);
+    on<FetchEquipmentSetParameter>(_fetchEquipmentSetParameter);
   }
 
   Map filters = {};
@@ -66,5 +68,26 @@ class EquipmentTraceabilityBloc
   FutureOr<void> _clearSearchEquipmentFilter(ClearSearchEquipmentFilter event,
       Emitter<EquipmentTraceabilityState> emit) {
     filters = {};
+  }
+
+
+  Future<FutureOr<void>> _fetchEquipmentSetParameter(FetchEquipmentSetParameter event,
+      Emitter<EquipmentTraceabilityState> emit)
+  async {
+    emit(EquipmentSetParameterFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchEquipmentSetParameterModel fetchEquipmentSetParameterModel =
+      await _equipmentTraceabilityRepo.fetchEquipmentSetParameter(
+          hashCode, event.equipmentId);
+      if(fetchEquipmentSetParameterModel.status == 200) {
+        emit(EquipmentSetParameterFetched(fetchEquipmentSetParameterModel: fetchEquipmentSetParameterModel));
+      } else {
+        emit(EquipmentSetParameterNotFetched(errorMessage: fetchEquipmentSetParameterModel.message));
+      }
+    }
+    catch (e) {
+      emit(EquipmentSetParameterNotFetched(errorMessage: e.toString()));
+    }
   }
 }
