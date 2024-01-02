@@ -65,7 +65,8 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
               const SizedBox(height: xxTinierSpacing),
               Center(
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: xxLargeSpacing),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: xxLargeSpacing),
                       child:
                           BlocListener<SignInProcessBloc, SignInProcessState>(
                         listener: (context, state) {
