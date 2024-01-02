@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 class TransferEquipmentPopupMenu extends StatelessWidget {
   const TransferEquipmentPopupMenu({super.key});
@@ -12,7 +14,12 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List popUpMenuItems = ["Scan", "Enter", "Search", "Cancel"];
+    List popUpMenuItems = [
+      StringConstants.kScan,
+      StringConstants.kEnter,
+      StringConstants.kSearch,
+      DatabaseUtil.getText('Cancel')
+    ];
     return PopupMenuButton(
         onSelected: (value) {},
         position: PopupMenuPosition.under,

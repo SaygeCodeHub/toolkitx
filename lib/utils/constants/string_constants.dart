@@ -441,4 +441,6 @@ abstract class StringConstants {
   static const String kSearchEquipment = 'Search Equipment';
   static const String kViewMyEquipment = 'View my Equipment';
   static const String kTrace = 'Trace';
+  static const String kScan = 'Scan';
+  static const String kEnter = 'Enter';
 }
