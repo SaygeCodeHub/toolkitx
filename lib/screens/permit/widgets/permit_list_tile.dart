@@ -53,7 +53,14 @@ class _PermitListTileState extends State<PermitListTile> {
           }
         },
         builder: (context, state) {
-          if (state is AllPermitsFetched) {
+          if (state is FetchingAllPermits) {
+            return Center(
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 3.5),
+                    child: const CircularProgressIndicator()));
+          }
+          else if (state is AllPermitsFetched) {
             if (state.allPermitModel.data!.isNotEmpty) {
               for (var item in state.allPermitModel.data!) {
                 widget.permitListData.add(item);
@@ -97,12 +104,6 @@ class _PermitListTileState extends State<PermitListTile> {
                 return const SizedBox();
               }
             }
-          } else if (state is FetchingAllPermits) {
-            return Center(
-                child: Padding(
-                    padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height / 3.5),
-                    child: const CircularProgressIndicator()));
           } else {
             return const SizedBox();
           }

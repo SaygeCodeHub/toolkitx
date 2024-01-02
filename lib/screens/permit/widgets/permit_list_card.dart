@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/permit/permit_bloc.dart';
+import '../../../blocs/permit/permit_events.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/all_permits_model.dart';
 import '../../../widgets/custom_card.dart';
@@ -20,7 +23,9 @@ class PermitListCard extends StatelessWidget {
             child: ListTile(
                 onTap: () {
                   Navigator.pushNamed(context, PermitDetailsScreen.routeName,
-                      arguments: allPermitDatum.id);
+                      arguments: allPermitDatum.id).then((_) => context
+                      .read<PermitBloc>()
+                      .add(const GetAllPermits(isFromHome: false, page: 1)));
                 },
                 title: PermitListTileTitle(allPermitDatum: allPermitDatum),
                 subtitle:

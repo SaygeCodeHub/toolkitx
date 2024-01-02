@@ -264,7 +264,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.closePermitMap['controlPerson'] == null) {
         emit(ClosePermitError(
             DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
-      } else {
+      }
+      else if(event.closePermitMap['time'] == null){
+        emit(const ClosePermitError(StringConstants.kPleaseEnterTimeToClosePermit));
+      }
+      else {
         Map closePermitMap = {
           "hashcode": hashCode,
           "permitid": event.closePermitMap['permitId'],
