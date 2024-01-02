@@ -437,7 +437,10 @@ abstract class StringConstants {
   static const String kWorkforceDeleted = 'Workforce Deleted';
   static const String kScanEquipment = 'Scan Equipment';
   static const String kTransferEquipment = 'Transfer Equipment';
+  static const String kTransfer = 'Transfer';
   static const String kSearchEquipment = 'Search Equipment';
   static const String kViewMyEquipment = 'View my Equipment';
   static const String kTrace = 'Trace';
+  static const String kScan = 'Scan';
+  static const String kEnter = 'Enter';
 }
