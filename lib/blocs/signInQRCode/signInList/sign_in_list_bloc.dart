@@ -23,10 +23,18 @@ class SignInListBloc extends Bloc<SignInList, SignInListState> {
   FutureOr<void> _fetchSignInList(
       SignInList event, Emitter<SignInListState> emit) async {
     emit(FetchingSignInList());
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    String? userId = await _customerCache.getUserId(CacheKeys.userId);
-    FetchCurrentSignInModel currentSignInListModel =
-        await _signInRepository.signInList(userId!, hashCode!);
-    emit(SignInListFetched(currentSignInListModel: currentSignInListModel));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      FetchCurrentSignInModel currentSignInListModel =
+          await _signInRepository.signInList(userId!, hashCode!);
+      if (currentSignInListModel.data.toString().isNotEmpty) {
+        emit(SignInListFetched(currentSignInListModel: currentSignInListModel));
+      } else {
+        emit(SignInListError(error: currentSignInListModel.message));
+      }
+    } catch (e) {
+      emit(SignInListError(error: e.toString()));
+    }
   }
 }
