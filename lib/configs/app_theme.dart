@@ -6,6 +6,7 @@ import 'app_spacing.dart';
 ThemeData appTheme = ThemeData(
     colorScheme: colorScheme,
     appBarTheme: appBarTheme,
+    useMaterial3: false,
     listTileTheme: listTileTheme,
     cardTheme: appCardTheme,
     bottomAppBarTheme: bottomAppBarTheme,
