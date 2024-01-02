@@ -47,14 +47,9 @@ class ToDoDocumentMasterDatum {
 
   factory ToDoDocumentMasterDatum.fromJson(Map<String, dynamic> json) =>
       ToDoDocumentMasterDatum(
-        id: json["id"],
-        name: json["name"],
-        notes: json["notes"],
-      );
+          id: json["id"] ?? '',
+          name: json["name"] ?? '',
+          notes: json["notes"] ?? '');
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "notes": notes,
-      };
+  Map<String, dynamic> toJson() => {"id": id, "name": name, "notes": notes};
 }
