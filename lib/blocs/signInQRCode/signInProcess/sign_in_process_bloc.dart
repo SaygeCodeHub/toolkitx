@@ -21,7 +21,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
 
   SignInProcessBloc() : super(SignInProcessInitial()) {
     on<SignInProcess>(_processSignInProcess);
-    on<UnauthorizedSignIn>(_signInUnathorized);
+    on<UnauthorizedSignIn>(_signInUnauthorized);
     on<ProcessSignOut>(_processSignOut);
   }
   String qrCode = '';
@@ -42,7 +42,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
       qrCode = event.qRCode!;
       ProcessSignInModel processSignInModel =
           await _signInRepository.processSignIn(signInMap);
-      if (processSignInModel.message == '1') {
+      if (processSignInModel.status == 200) {
         emit(SignInUnauthorizedPop());
       } else {
         emit(SignInProcessed(processSignInModel: processSignInModel));
@@ -50,7 +50,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
     }
   }
 
-  Future<FutureOr<void>> _signInUnathorized(
+  Future<FutureOr<void>> _signInUnauthorized(
       UnauthorizedSignIn event, Emitter<SignInProcessState> emit) async {
     emit(SignInUnauthorizedProcessing());
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -58,16 +58,18 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
     if (event.qRCode.isEmpty) {
       emit(SignInUnathorizedError(errorMsg: StringConstants.kQRError));
     } else {
-      Map unathorizedSingInMap = {
+      Map unauthorizedSingInMap = {
         "userid": userid,
         "qrcode": event.qRCode,
         "hashcode": hashCode
       };
-      SignInUnathorizedModel signInUnathorizedModel =
-          await _signInRepository.unathorizedSignIn(unathorizedSingInMap);
-      if (signInUnathorizedModel.status == 200) {
-        emit(
-            SignInUnauthorized(signInUnathorizedModel: signInUnathorizedModel));
+      SignInUnathorizedModel signInUnauthorizedModel =
+          await _signInRepository.unathorizedSignIn(unauthorizedSingInMap);
+      if (qrCode == event.qRCode) {
+        if (signInUnauthorizedModel.status == 200) {
+          emit(SignInUnauthorized(
+              signInUnathorizedModel: signInUnauthorizedModel));
+        }
       } else {
         emit(SignInUnathorizedError(errorMsg: StringConstants.kQRError));
       }
@@ -87,8 +89,10 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
       };
       ProcessSignOutModel processSignOutModel =
           await _signInRepository.processSignOut(processSignOutMap);
-      if (processSignOutModel.status == 200) {
-        emit(SignOutProcessed());
+      if (qrCode == event.qRCode) {
+        if (processSignOutModel.status == 200) {
+          emit(SignOutProcessed());
+        }
       } else {
         emit(SignOutNotProcessed(errorMsg: processSignOutModel.message));
       }
