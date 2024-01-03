@@ -23,14 +23,14 @@ class PermitListCard extends StatelessWidget {
             child: ListTile(
                 onTap: () {
                   Navigator.pushNamed(context, PermitDetailsScreen.routeName,
-                      arguments: allPermitDatum.id).whenComplete(()
-                  {
-                    PermitListScreen.page=1;
-                    PermitListScreen.permitListData=[];
-
-                            context.read<PermitBloc>().add(
-                                const GetAllPermits(isFromHome: true, page: 1));
-                          });
+                          arguments: allPermitDatum.id)
+                      .whenComplete(() {
+                    PermitListScreen.page = 1;
+                    context.read<PermitBloc>().permitListData = [];
+                    context
+                        .read<PermitBloc>()
+                        .add(const GetAllPermits(isFromHome: false, page: 1));
+                  });
                 },
                 title: PermitListTileTitle(allPermitDatum: allPermitDatum),
                 subtitle:

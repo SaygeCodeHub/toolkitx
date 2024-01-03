@@ -8,13 +8,9 @@ String allPermitModelToJson(AllPermitModel data) => json.encode(data.toJson());
 class AllPermitModel {
   final int? status;
   final String? message;
-  final List<AllPermitDatum>? data;
+  final List<AllPermitDatum> data;
 
-  AllPermitModel({
-    this.status,
-    this.message,
-    this.data,
-  });
+  AllPermitModel({this.status, this.message, required this.data});
 
   factory AllPermitModel.fromJson(Map<String, dynamic> json) => AllPermitModel(
         status: json["Status"],
@@ -28,9 +24,9 @@ class AllPermitModel {
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
-        "Data": data == null
+        "Data": data.isEmpty
             ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
+            : List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 
