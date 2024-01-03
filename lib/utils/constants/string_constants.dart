@@ -310,7 +310,7 @@ abstract class StringConstants {
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
   static const String kNameValidation = 'Please enter name';
-  static const String kSelectPermits = 'Select Permits';
+  static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
   static const String kGettingStarted = "Getting Started";
