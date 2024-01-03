@@ -7,6 +7,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 
 class WorkOrderTypeExpansionTile extends StatelessWidget {
@@ -31,6 +32,18 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

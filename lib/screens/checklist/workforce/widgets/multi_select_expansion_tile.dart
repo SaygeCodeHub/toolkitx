@@ -5,6 +5,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_bloc.dart';
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_events.dart';
 import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 
 typedef CheckBoxCallBack = Function(String checkboxId, String checkboxValue);
@@ -32,7 +33,18 @@ class MultiSelectExpansionTile extends StatelessWidget {
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
-            collapsedBackgroundColor: AppColor.offWhite,
+            shape: const OutlineInputBorder(
+                borderSide: BorderSide(
+              color: AppColor.grey,
+              width: kExpansionBorderWidth,
+            )),
+            collapsedBackgroundColor: AppColor.white,
+            backgroundColor: AppColor.white,
+            collapsedShape: const OutlineInputBorder(
+                borderSide: BorderSide(
+              color: AppColor.grey,
+              width: kExpansionBorderWidth,
+            )),
             maintainState: true,
             title: Text(
                 (multiSelectNames == "")

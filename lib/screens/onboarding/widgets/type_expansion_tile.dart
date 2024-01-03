@@ -19,14 +19,30 @@ class UserTypeExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginBloc>().add(ChangeUserType(
+        userType: UserType.workForce.type,
+        typeValue: UserType.workForce.value));
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
-            collapsedBackgroundColor: AppColor.offWhite,
+            collapsedShape: const OutlineInputBorder(
+                borderSide: BorderSide(
+              color: AppColor.grey,
+              width: kExpansionBorderWidth,
+            )),
+            collapsedBackgroundColor: AppColor.white,
+            backgroundColor: AppColor.white,
+            shape: const OutlineInputBorder(
+                borderSide: BorderSide(
+              color: AppColor.grey,
+              width: kExpansionBorderWidth,
+            )),
             maintainState: true,
             key: GlobalKey(),
             title: Text(
-                usertype == 'null' ? 'Select' : DatabaseUtil.getText(usertype),
+                usertype == 'null'
+                    ? UserType.workForce.type
+                    : DatabaseUtil.getText(usertype),
                 style: Theme.of(context).textTheme.xSmall),
             children: [
               ListView.builder(

@@ -6,6 +6,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 
@@ -30,6 +31,18 @@ class SelectLeaveTypeExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

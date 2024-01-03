@@ -6,6 +6,7 @@ import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_sta
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import 'incident_reported_authority_fields.dart';
 
@@ -39,6 +40,17 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
                   data: Theme.of(context)
                       .copyWith(dividerColor: AppColor.transparent),
                   child: ExpansionTile(
+                      collapsedShape: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: AppColor.grey,
+                        width: kExpansionBorderWidth,
+                      )),
+                      backgroundColor: AppColor.white,
+                      shape: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: AppColor.grey,
+                        width: kExpansionBorderWidth,
+                      )),
                       maintainState: true,
                       key: GlobalKey(),
                       title: Text(

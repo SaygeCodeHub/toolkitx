@@ -5,6 +5,7 @@ import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_bl
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_event.dart';
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_states.dart';
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../data/models/incident/incident_injury_master.dart';
 
 class InjuryNatureExpansionTile extends StatelessWidget {
@@ -32,6 +33,18 @@ class InjuryNatureExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     maintainState: true,
                     title: Text(
                         (state.selectedInjuryNature.isEmpty)

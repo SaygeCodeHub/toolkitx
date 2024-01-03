@@ -6,6 +6,7 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../workorder_add_mis_cost_screen.dart';
@@ -28,6 +29,17 @@ class WorkOrderMiscCostCurrencyExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    backgroundColor: AppColor.white,
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

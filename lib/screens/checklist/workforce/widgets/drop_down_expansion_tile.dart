@@ -6,6 +6,7 @@ import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edi
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_events.dart';
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
 import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 
 typedef DropDownCallBack = Function(String dropDownId, String dropDownString);
@@ -38,6 +39,16 @@ class DropDownExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     key: GlobalKey(),
                     collapsedBackgroundColor: AppColor.offWhite,
                     title: Text((dropDown == "")

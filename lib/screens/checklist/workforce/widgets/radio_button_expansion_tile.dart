@@ -5,6 +5,7 @@ import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edi
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_events.dart';
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
 import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../utils/database_utils.dart';
 
@@ -37,7 +38,18 @@ class RadioButtonExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedBackgroundColor: AppColor.offWhite,
+                    collapsedShape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColor.grey,
+                      width: kExpansionBorderWidth,
+                    )),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
