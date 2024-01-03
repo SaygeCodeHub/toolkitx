@@ -137,8 +137,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
-    try {
       emit(FetchingAllPermits(filters: filters));
+    try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       if (roleId == '' || event.isFromHome) {

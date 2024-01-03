@@ -42,7 +42,7 @@ class _PermitListTileState extends State<PermitListTile> {
             ((currentState is AllPermitsFetched &&
                     PermitListTile.noMoreData != true) ||
                 (currentState is FetchingAllPermits &&
-                    widget.permitListData.isEmpty)),
+                    widget.permitListData.isEmpty && PermitListScreen.page == 1)),
         listener: (context, state) {
           if (state is AllPermitsFetched) {
             if (state.allPermitModel.status == 204 &&

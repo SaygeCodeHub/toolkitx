@@ -22,7 +22,6 @@ import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
 import '../../utils/database_utils.dart';
-import 'permit_list_screen.dart';
 import 'widgets/ptw_action_menu.dart';
 import '../../widgets/status_tag.dart';
 
@@ -75,7 +74,8 @@ class PermitDetailsScreen extends StatelessWidget {
               if (state is PermitRequested) {
                 ProgressBar.dismiss(context);
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, PermitListScreen.routeName,arguments: false);
+                Navigator.pushNamed(context, PermitDetailsScreen.routeName,
+                    arguments: permitId);
               }
               if (state is RequestPermitError) {
                 ProgressBar.dismiss(context);
