@@ -38,7 +38,7 @@ class ToDoViewDocument extends StatelessWidget {
               onTap: () {
                 launchUrlString(
                     '${ApiConstants.viewDocBaseUrl}${ToDoViewDocumentUtil.viewImageList(documentDetailsDatum.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(todoMap['clientId'])}',
-                    mode: LaunchMode.inAppWebView);
+                    mode: LaunchMode.externalApplication);
               },
               child: CachedNetworkImage(
                   height: kCachedNetworkImageHeight,
