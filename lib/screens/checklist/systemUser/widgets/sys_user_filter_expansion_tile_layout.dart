@@ -9,6 +9,7 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/error_section.dart';
+import '../../../../widgets/expansion_tile_border.dart';
 
 typedef FilterCategoryCallBack = Function(String categoryId);
 
@@ -32,6 +33,11 @@ class FilterExpansionTileLayout extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

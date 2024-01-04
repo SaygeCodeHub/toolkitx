@@ -348,7 +348,8 @@ abstract class StringConstants {
   static const String kLotoRejected = "Loto Rejected";
   static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
-  static const String kLoginSuccess = 'Logged in Successfully';
+  static const String kLoginSuccess =
+      'You are successfully sign-in the location';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
   static const String kUnauthorized =
       'You are not authorized to access the location. Do you still want to continue ? ';
@@ -428,6 +429,7 @@ abstract class StringConstants {
   static const String kReading = "Reading";
   static const String kIsRollover = "Is rollover";
   static const String kSignOutSuccessfully = 'Sign Out successfully';
+  static const String kNoActiveSignIn = 'No Active sign-in Found';
   static const String kAddDocument = 'Add Document';
   static const String kSearchByOwnerName = "Search by Owner name";
   static const String kSearchByDocumentName = "Search by Document name";
@@ -435,7 +437,12 @@ abstract class StringConstants {
   static const String kWorkforceDeleted = 'Workforce Deleted';
   static const String kScanEquipment = 'Scan Equipment';
   static const String kTransferEquipment = 'Transfer Equipment';
+  static const String kTransfer = 'Transfer';
   static const String kSearchEquipment = 'Search Equipment';
   static const String kViewMyEquipment = 'View my Equipment';
   static const String kTrace = 'Trace';
+  static const String kScan = 'Scan';
+  static const String kEnter = 'Enter';
+  static const String kPleaseEnterTimeToClosePermit =
+      'Please enter time to close permit';
 }

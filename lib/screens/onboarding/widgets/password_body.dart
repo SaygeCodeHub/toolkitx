@@ -8,6 +8,7 @@ import '../../../blocs/login/login_events.dart';
 import '../../../blocs/login/login_states.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/enums/user_type_emun.dart';
 import '../../../widgets/circle_avatar.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
@@ -22,6 +23,9 @@ class PasswordBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginBloc>().add(ChangeUserType(
+        userType: UserType.workForce.type,
+        typeValue: UserType.workForce.value));
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       const CircleAvatarWidget(imagePath: 'reset-password.png'),
       const SizedBox(height: xxxMediumSpacing),

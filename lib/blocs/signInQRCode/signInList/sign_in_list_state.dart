@@ -14,7 +14,7 @@ class SignInListFetched extends SignInListState {
 class SignInListError extends SignInListState {
   final String error;
 
-  SignInListError(this.error);
+  SignInListError({required this.error});
 
   List<Object> get props => [error];
 }
