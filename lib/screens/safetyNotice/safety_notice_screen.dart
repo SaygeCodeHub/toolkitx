@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/safetyNotice/safety_notice_history_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_icon_button_row.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -60,7 +61,10 @@ class SafetyNoticeScreen extends StatelessWidget {
                         Navigator.pushNamed(
                             context, SafetyNoticeFilterScreen.routeName);
                       },
-                      secondaryOnPress: () {},
+                      secondaryOnPress: () {
+                        Navigator.pushNamed(context, SafetyNoticeHistoryScreen.routeName).then((value) => context.read<SafetyNoticeBloc>().add(
+                            FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
+                      },
                       secondaryIcon: Icons.history,
                       clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&
                           isFromHomeScreen != true,

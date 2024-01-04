@@ -19,6 +19,7 @@ import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'safety_notice_pop_up_menu_screen.dart';
+import 'safety_notice_screen.dart';
 import 'widgets/safety_notice_details_tab_two.dart';
 import 'widgets/safety_notice_tab_one.dart';
 
@@ -91,8 +92,8 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
               ProgressBar.show(context);
             } else if (state is SafetyNoticeClosed) {
               ProgressBar.dismiss(context);
-              context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, SafetyNoticeScreen.routeName,arguments: false);
             } else if (state is SafetyNoticeNotClosed) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotClosed, '');
@@ -102,8 +103,8 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
               ProgressBar.show(context);
             } else if (state is SafetyNoticeReIssued) {
               ProgressBar.dismiss(context);
-              context.read<SafetyNoticeBloc>().add(FetchSafetyNoticeDetails(
-                  safetyNoticeId: safetyNoticeId, tabIndex: 0));
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, SafetyNoticeScreen.routeName,arguments: false);
             } else if (state is SafetyNoticeFailedToReIssue) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotReIssued, '');
