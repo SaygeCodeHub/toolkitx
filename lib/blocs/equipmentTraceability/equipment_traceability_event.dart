@@ -23,3 +23,8 @@ class FetchEquipmentSetParameter extends EquipmentTraceabilityEvent{
   FetchEquipmentSetParameter({required this.equipmentId});
 
 }
+class FetchSearchEquipmentDetails extends EquipmentTraceabilityEvent {
+  final String equipmentId;
+
+  FetchSearchEquipmentDetails({required this.equipmentId});
+}

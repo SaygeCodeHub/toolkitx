@@ -5,9 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import '../../di/app_module.dart';
 
 part 'equipment_traceability_event.dart';
@@ -22,6 +25,7 @@ class EquipmentTraceabilityBloc
 
   EquipmentTraceabilityBloc() : super(EquipmentTraceabilityInitial()) {
     on<FetchSearchEquipmentList>(_fetchSearchEquipmentList);
+    on<FetchSearchEquipmentDetails>(_fetchSearchEquipmentDetails);
     on<ApplySearchEquipmentFilter>(_applySearchEquipmentFilter);
     on<ClearSearchEquipmentFilter>(_clearSearchEquipmentFilter);
     on<FetchEquipmentSetParameter>(_fetchEquipmentSetParameter);
@@ -54,6 +58,43 @@ class EquipmentTraceabilityBloc
         hasReachedMax = fetchSearchEquipmentModel.data.isEmpty;
         emit(SearchEquipmentListFetched(
             data: searchEquipmentDatum, filtersMap: filters));
+      }
+    } catch (e) {
+      emit(SearchEquipmentListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchSearchEquipmentDetails(FetchSearchEquipmentDetails event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(SearchEquipmentDetailsFetching());
+    List popUpMenuItems = [
+      StringConstants.kTransfer,
+      StringConstants.kSetParameter,
+      StringConstants.kUploadMedia,
+      StringConstants.kSetLocation,
+      DatabaseUtil.getText('Cancel'),
+    ];
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      FetchSearchEquipmentDetailsModel fetchSearchEquipmentDetailsModel =
+          await _equipmentTraceabilityRepo.fetchDetailsEquipment(
+              hashCode, event.equipmentId, userId);
+      if (fetchSearchEquipmentDetailsModel.status == 200) {
+        emit(SearchEquipmentDetailsFetched(
+          fetchSearchEquipmentDetailsModel: fetchSearchEquipmentDetailsModel,
+          popUpMenuItems: popUpMenuItems,
+          showPopMenu: fetchSearchEquipmentDetailsModel.data.cantransfer == "1"
+              ? true
+              : false,
+          clientId: clientId,
+        ));
+      } else {
+        emit(SearchEquipmentDetailsNotFetched(
+            errorMessage: fetchSearchEquipmentDetailsModel.message));
       }
     } catch (e) {
       emit(SearchEquipmentListNotFetched(errorMessage: e.toString()));
