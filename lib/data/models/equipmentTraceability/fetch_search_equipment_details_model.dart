@@ -61,6 +61,7 @@ class SearchEquipmentDetailsData {
   final String currentitemcount;
   final String tooltip;
   final String cantransfer;
+  final List<Imagelist> imagelist;
 
   SearchEquipmentDetailsData({
     required this.id,
@@ -89,6 +90,7 @@ class SearchEquipmentDetailsData {
     required this.currentitemcount,
     required this.tooltip,
     required this.cantransfer,
+    required this.imagelist,
   });
 
   factory SearchEquipmentDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -119,6 +121,8 @@ class SearchEquipmentDetailsData {
         currentitemcount: json["currentitemcount"],
         tooltip: json["tooltip"],
         cantransfer: json["cantransfer"],
+        imagelist: List<Imagelist>.from(
+            json["imagelist"].map((x) => Imagelist.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -148,5 +152,22 @@ class SearchEquipmentDetailsData {
         "currentitemcount": currentitemcount,
         "tooltip": tooltip,
         "cantransfer": cantransfer,
+        "imagelist": List<dynamic>.from(imagelist.map((x) => x.toJson())),
+      };
+}
+
+class Imagelist {
+  final String attachmentUrl;
+
+  Imagelist({
+    required this.attachmentUrl,
+  });
+
+  factory Imagelist.fromJson(Map<String, dynamic> json) => Imagelist(
+        attachmentUrl: json["attachment_url"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "attachment_url": attachmentUrl,
       };
 }

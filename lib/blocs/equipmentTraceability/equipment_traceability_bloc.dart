@@ -76,6 +76,8 @@ class EquipmentTraceabilityBloc
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       FetchSearchEquipmentDetailsModel fetchSearchEquipmentDetailsModel =
           await _equipmentTraceabilityRepo.fetchDetailsEquipment(
               hashCode, event.equipmentId, userId);
@@ -86,6 +88,7 @@ class EquipmentTraceabilityBloc
           showPopMenu: fetchSearchEquipmentDetailsModel.data.cantransfer == "1"
               ? true
               : false,
+          clientId: clientId,
         ));
       } else {
         emit(SearchEquipmentDetailsNotFetched(

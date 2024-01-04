@@ -25,11 +25,13 @@ class SearchEquipmentDetailsFetched extends EquipmentTraceabilityState {
   final FetchSearchEquipmentDetailsModel fetchSearchEquipmentDetailsModel;
   final List popUpMenuItems;
   final bool showPopMenu;
+  final String clientId;
 
   SearchEquipmentDetailsFetched(
       {required this.popUpMenuItems,
       required this.showPopMenu,
-      required this.fetchSearchEquipmentDetailsModel});
+      required this.fetchSearchEquipmentDetailsModel,
+      required this.clientId});
 }
 
 class SearchEquipmentDetailsNotFetched extends EquipmentTraceabilityState {

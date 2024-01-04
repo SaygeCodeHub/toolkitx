@@ -445,8 +445,16 @@ abstract class StringConstants {
   static const String kEnter = 'Enter';
   static const String kPleaseEnterTimeToClosePermit =
       'Please enter time to close permit';
-  static const String kTransfer = 'Transfer';
   static const String kSetParameter = 'Set Parameter';
   static const String kUploadMedia = 'UploadMedia';
   static const String kSetLocation = 'SetLocation';
+  static const String kEquipmentName = "Equipment Name";
+  static const String kEquipmentNo = "Equipment No";
+  static const String kArticleNo = "Article No";
+  static const String kEquipmentCode = "Equipment Code";
+  static const String kTechnicalPositionNo = "Technical Position No";
+  static const String kTechnicalPositionName = "Technical Position Name";
+  static const String kEquipmentRole = "Equipment Role";
+  static const String kEquipmentType = "Equipment Type";
+  static const String kEquipmentSubType = "Equipment Sub-Type";
 }
