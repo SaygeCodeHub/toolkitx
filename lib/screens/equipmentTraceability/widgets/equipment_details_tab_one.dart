@@ -16,9 +16,7 @@ class EquipmentDetailsTabOne extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          left: leftRightMargin,
-          right: leftRightMargin,
-          top: xxTinierSpacing),
+          left: leftRightMargin, right: leftRightMargin, top: xxTinierSpacing),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
