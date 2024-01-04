@@ -487,8 +487,10 @@ class AppRoutes {
 
       case SearchEquipmentFilterScreen.routeName:
         return _createRoute(const SearchEquipmentFilterScreen());
-        case EquipmentSetParameterScreen.routeName:
-        return _createRoute(const EquipmentSetParameterScreen());
+      case EquipmentSetParameterScreen.routeName:
+        return _createRoute(EquipmentSetParameterScreen(
+          equipmentMap: settings.arguments as Map,
+        ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
       default:

@@ -16,14 +16,12 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   }
 
   @override
-  Future<FetchEquipmentSetParameterModel> fetchEquipmentSetParameter(String hashCode, String equipmentId) async {
+  Future<FetchEquipmentSetParameterModel> fetchEquipmentSetParameter(
+      String hashCode, String equipmentId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}equipment/getcustomparameters?hashcode=$hashCode&equipmentid=$equipmentId"
-    );
+        "${ApiConstants.baseUrl}equipment/getcustomparameters?hashcode=$hashCode&equipmentid=$equipmentId");
     return FetchEquipmentSetParameterModel.fromJson(response);
   }
-
-
 
   @override
   Future<FetchSearchEquipmentDetailsModel> fetchDetailsEquipment(

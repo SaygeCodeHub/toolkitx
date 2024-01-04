@@ -8,7 +8,7 @@ abstract class EquipmentTraceabilityRepo {
       int pageNo, String hashCode, String userId, String filter);
 
   Future<FetchEquipmentSetParameterModel> fetchEquipmentSetParameter(
-      String hashCode,String equipmentId);
+      String hashCode, String equipmentId);
 
   Future<FetchSearchEquipmentDetailsModel> fetchDetailsEquipment(
       String hashCode, String equipmentId, String userId);

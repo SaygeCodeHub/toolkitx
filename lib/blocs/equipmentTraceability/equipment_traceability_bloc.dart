@@ -111,24 +111,25 @@ class EquipmentTraceabilityBloc
     filters = {};
   }
 
-
-  Future<FutureOr<void>> _fetchEquipmentSetParameter(FetchEquipmentSetParameter event,
-      Emitter<EquipmentTraceabilityState> emit)
-  async {
+  Future<FutureOr<void>> _fetchEquipmentSetParameter(
+      FetchEquipmentSetParameter event,
+      Emitter<EquipmentTraceabilityState> emit) async {
     emit(EquipmentSetParameterFetching());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchEquipmentSetParameterModel fetchEquipmentSetParameterModel =
-      await _equipmentTraceabilityRepo.fetchEquipmentSetParameter(
-          hashCode, event.equipmentId);
-      if(fetchEquipmentSetParameterModel.status == 200) {
-        emit(EquipmentSetParameterFetched(fetchEquipmentSetParameterModel: fetchEquipmentSetParameterModel));
-      } else {
-        emit(EquipmentSetParameterNotFetched(errorMessage: fetchEquipmentSetParameterModel.message));
-      }
+    // try {
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    FetchEquipmentSetParameterModel fetchEquipmentSetParameterModel =
+        await _equipmentTraceabilityRepo.fetchEquipmentSetParameter(
+            hashCode, event.equipmentId);
+    if (fetchEquipmentSetParameterModel.status == 200) {
+      emit(EquipmentSetParameterFetched(
+          fetchEquipmentSetParameterModel: fetchEquipmentSetParameterModel));
+    } else {
+      emit(EquipmentSetParameterNotFetched(
+          errorMessage: fetchEquipmentSetParameterModel.message));
     }
-    catch (e) {
-      emit(EquipmentSetParameterNotFetched(errorMessage: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(EquipmentSetParameterNotFetched(errorMessage: e.toString()));
+    // }
   }
 }
