@@ -31,7 +31,9 @@ class SearchEquipmentDetailsScreen extends StatelessWidget {
                 if (state is SearchEquipmentDetailsFetched) {
                   if (state.showPopMenu == true) {
                     return SearchEquipmentPopupMenuButton(
-                        popupItems: state.popUpMenuItems);
+                      popupItems: state.popUpMenuItems,
+                      searchEquipmentDetailsMap: searchEquipmentDetailsMap,
+                    );
                   } else {
                     return const SizedBox.shrink();
                   }
