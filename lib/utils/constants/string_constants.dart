@@ -443,4 +443,6 @@ abstract class StringConstants {
   static const String kTrace = 'Trace';
   static const String kScan = 'Scan';
   static const String kEnter = 'Enter';
+  static const String kPleaseEnterTimeToClosePermit =
+      'Please enter time to close permit';
 }
