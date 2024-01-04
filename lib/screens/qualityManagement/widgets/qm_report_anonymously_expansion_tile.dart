@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/enums/report_anonymously_enum.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class ReportAnonymouslyExpansionTile extends StatelessWidget {
   final Map reportNewQAMap;
@@ -32,6 +33,11 @@ class ReportAnonymouslyExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(
