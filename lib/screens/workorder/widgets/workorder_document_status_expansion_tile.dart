@@ -8,6 +8,7 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../data/enums/workorder_document_status_enum.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import '../workorder_assign_document_screen.dart';
 
 class WorkOrderDocumentStatusExpansionTile extends StatelessWidget {
@@ -36,6 +37,11 @@ class WorkOrderDocumentStatusExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     key: GlobalKey(),
                     title: Text(
                         state.statusOption.isEmpty

@@ -41,10 +41,16 @@ class PTWActionMenu extends StatelessWidget {
             context.read<PermitBloc>().add(GeneratePDF(permitId));
           } else if (popUpMenuItems[value] == StringConstants.kClosePermit) {
             Navigator.pushNamed(context, ClosePermitScreen.routeName,
-                arguments: permitDetailsModel);
+                    arguments: permitDetailsModel)
+                .then((value) => context
+                    .read<PermitBloc>()
+                    .add(GetPermitDetails(permitId: permitId)));
           } else if (popUpMenuItems[value] == StringConstants.kOpenPermit) {
             Navigator.pushNamed(context, OpenPermitScreen.routeName,
-                arguments: permitDetailsModel);
+                    arguments: permitDetailsModel)
+                .then((value) => context
+                    .read<PermitBloc>()
+                    .add(GetPermitDetails(permitId: permitId)));
           } else if (popUpMenuItems[value] == StringConstants.kRequestPermit) {
             context.read<PermitBloc>().add(RequestPermit(permitId));
           }

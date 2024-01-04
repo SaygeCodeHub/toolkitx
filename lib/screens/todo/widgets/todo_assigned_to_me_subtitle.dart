@@ -59,28 +59,29 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                   }
                 },
                 child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AndroidPopUp(
-                                contentPadding: EdgeInsets.zero,
-                                titleValue:
-                                    DatabaseUtil.getText('todoConfirmMsgDone'),
-                                onPrimaryButton: () {
-                                  todoMap['todoId'] = assignToMeListDatum.id;
-                                  context
-                                      .read<ToDoBloc>()
-                                      .add(ToDoMarkAsDone(todoMap: todoMap));
-                                  Navigator.pop(context);
-                                },
-                                contentValue: '');
-                          });
-                    },
-                    icon: const Icon(Icons.check_circle,
-                        color: AppColor.green, size: kIconSize)),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AndroidPopUp(
+                              contentPadding: EdgeInsets.zero,
+                              titleValue:
+                                  DatabaseUtil.getText('todoConfirmMsgDone'),
+                              onPrimaryButton: () {
+                                todoMap['todoId'] = assignToMeListDatum.id;
+                                context
+                                    .read<ToDoBloc>()
+                                    .add(ToDoMarkAsDone(todoMap: todoMap));
+                                Navigator.pop(context);
+                              },
+                              contentValue: '');
+                        });
+                  },
+                  icon: const Icon(Icons.check_circle,
+                      color: AppColor.green, size: kIconSize),
+                ),
               ),
               const SizedBox(height: tinierSpacing),
               StatusTag(tags: [

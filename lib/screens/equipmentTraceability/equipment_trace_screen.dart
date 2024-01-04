@@ -9,6 +9,8 @@ import 'package:toolkit/utils/equipment_util.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
+import 'transfer_equipment_screen.dart';
+
 class EquipmentTraceScreen extends StatelessWidget {
   const EquipmentTraceScreen({super.key});
   static const routeName = 'EquipmentTraceScreen';
@@ -66,6 +68,10 @@ class EquipmentTraceScreen extends StatelessWidget {
     switch (equipmentModuleName) {
       case StringConstants.kSearchEquipment:
         Navigator.pushNamed(context, SearchEquipmentListScreen.routeName,
+            arguments: true);
+        break;
+      case StringConstants.kTransferEquipment:
+        Navigator.pushNamed(context, TransferEquipmentScreen.routeName,
             arguments: true);
         break;
     }
