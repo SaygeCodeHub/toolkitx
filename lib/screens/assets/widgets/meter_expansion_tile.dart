@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../blocs/assets/assets_bloc.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/assets/assets_master_model.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class MeterExpansionTile extends StatelessWidget {
   const MeterExpansionTile({
@@ -28,19 +28,12 @@ class MeterExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
-                    key: GlobalKey(),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
+                    key: GlobalKey(),
                     title: Text(state.meterName),
                     children: [
                       MediaQuery(

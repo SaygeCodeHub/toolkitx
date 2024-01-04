@@ -7,9 +7,9 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/todo/todo_event.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/todo/fetch_todo_master_model.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class ToDoCategoryExpansionTile extends StatelessWidget {
   final Map todoMap;
@@ -33,18 +33,11 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

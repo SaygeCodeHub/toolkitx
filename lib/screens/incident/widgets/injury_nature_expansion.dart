@@ -5,8 +5,8 @@ import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_bl
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_event.dart';
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_states.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../data/models/incident/incident_injury_master.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class InjuryNatureExpansionTile extends StatelessWidget {
   final List<IncidentInjuryMasterDatum> injuryNature;
@@ -33,18 +33,11 @@ class InjuryNatureExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     title: Text(
                         (state.selectedInjuryNature.isEmpty)

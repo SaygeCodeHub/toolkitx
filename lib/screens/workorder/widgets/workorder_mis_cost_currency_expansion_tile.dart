@@ -6,9 +6,9 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import '../workorder_add_mis_cost_screen.dart';
 
 class WorkOrderMiscCostCurrencyExpansionTile extends StatelessWidget {
@@ -29,17 +29,11 @@ class WorkOrderMiscCostCurrencyExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

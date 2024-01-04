@@ -5,9 +5,9 @@ import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edi
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_events.dart';
 import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
 import '../../../../configs/app_color.dart';
-import '../../../../configs/app_dimensions.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../utils/database_utils.dart';
+import '../../../../widgets/expansion_tile_border.dart';
 
 typedef RadioButtonCallBack = Function(String radioId, String radioValue);
 
@@ -38,18 +38,11 @@ class RadioButtonExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

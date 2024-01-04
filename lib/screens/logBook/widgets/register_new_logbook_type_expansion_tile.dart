@@ -6,8 +6,8 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/LogBook/logbook_events.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class RegisterNewLogBookTypeExpansionTile extends StatelessWidget {
   final List<List<LogBokFetchMaster>> data;
@@ -35,18 +35,11 @@ class RegisterNewLogBookTypeExpansionTile extends StatelessWidget {
               data: Theme.of(context)
                   .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
-                  collapsedShape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  collapsedShape:
+                      ExpansionTileBorder().buildOutlineInputBorder(),
                   collapsedBackgroundColor: AppColor.white,
                   backgroundColor: AppColor.white,
-                  shape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
                   maintainState: true,
                   title: Text(
                       (reportNewLogBookMap['flags'] == '')

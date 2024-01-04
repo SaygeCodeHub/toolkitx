@@ -5,9 +5,9 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
 import '../../../blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class IncidentReportAnonymousExpansionTile extends StatelessWidget {
   final Map addIncidentMap;
@@ -32,18 +32,11 @@ class IncidentReportAnonymousExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

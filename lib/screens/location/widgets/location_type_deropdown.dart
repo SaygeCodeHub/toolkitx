@@ -9,6 +9,7 @@ import '../../../blocs/location/location_state.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/enums/location_type_enum.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import 'location_filter_screen.dart';
 
 class LocationTypeDropDown extends StatelessWidget {
@@ -31,18 +32,11 @@ class LocationTypeDropDown extends StatelessWidget {
               data: Theme.of(context)
                   .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
-                  collapsedShape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  collapsedShape:
+                      ExpansionTileBorder().buildOutlineInputBorder(),
                   collapsedBackgroundColor: AppColor.white,
                   backgroundColor: AppColor.white,
-                  shape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
                   key: GlobalKey(),
                   title: Text(
                       LocationFilterScreen.locationFilterMap['tyName'] ==

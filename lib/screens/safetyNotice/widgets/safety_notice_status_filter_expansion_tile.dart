@@ -7,9 +7,9 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/enums/safety_notice_status_enum.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import '../safety_notice_filter_screen.dart';
 
 class SafetyNoticeStatusFilterExpansionTile extends StatelessWidget {
@@ -30,18 +30,11 @@ class SafetyNoticeStatusFilterExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
-                    shape: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                      color: AppColor.grey,
-                      width: kExpansionBorderWidth,
-                    )),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

@@ -7,9 +7,9 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/enums/expense_status_enum.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import '../expense_filter_screen.dart';
 
 class ExpenseStatusExpansionTile extends StatelessWidget {
@@ -33,18 +33,11 @@ class ExpenseStatusExpansionTile extends StatelessWidget {
               data: Theme.of(context)
                   .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
-                  collapsedShape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  collapsedShape:
+                      ExpansionTileBorder().buildOutlineInputBorder(),
                   collapsedBackgroundColor: AppColor.white,
                   backgroundColor: AppColor.white,
-                  shape: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColor.grey,
-                    width: kExpansionBorderWidth,
-                  )),
+                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
                   title: Text(
                       (state.statusValueList.isEmpty)
                           ? StringConstants.kSelect
