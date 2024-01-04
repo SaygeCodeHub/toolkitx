@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/incidentDetails/incident_details_bloc.dart';
@@ -81,9 +83,10 @@ class IncidentAddCommentsScreen extends StatelessWidget {
                       onPressed: () {
                         incidentCommentsMap['incidentId'] =
                             incidentListDatum.id;
-                        context.read<IncidentDetailsBloc>().add(
-                            SaveIncidentComments(
-                                saveCommentsMap: incidentCommentsMap));
+                        log('incidentCommentsMap============>$incidentCommentsMap');
+                        // context.read<IncidentDetailsBloc>().add(
+                        //     SaveIncidentComments(
+                        //         saveCommentsMap: incidentCommentsMap));
                       },
                       textValue: StringConstants.kSave)),
             ],
