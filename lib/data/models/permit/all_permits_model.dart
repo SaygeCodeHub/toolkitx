@@ -24,9 +24,8 @@ class AllPermitModel {
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
-        "Data": data.isEmpty
-            ? []
-            : List<dynamic>.from(data.map((x) => x.toJson())),
+        "Data":
+            data.isEmpty ? [] : List<dynamic>.from(data.map((x) => x.toJson())),
       };
 }
 
