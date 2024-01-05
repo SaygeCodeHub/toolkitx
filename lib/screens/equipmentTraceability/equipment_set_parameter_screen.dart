@@ -95,20 +95,18 @@ class EquipmentSetParameterScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(xxTinierSpacing),
-        child: PrimaryButton(
-          onPressed: () {
-            context.read<EquipmentTraceabilityBloc>().answerList.add({
-              "id": equipmentMap["equipmentId"],
-              "answer": equipmentMap["answer"]
-            });
-            context
-                .read<EquipmentTraceabilityBloc>()
-                .add(SaveCustomParameter(saveCustomParameterMap: equipmentMap));
-          },
-          textValue: StringConstants.kSubmit,
-        ),
-      ),
+          padding: const EdgeInsets.all(xxTinierSpacing),
+          child: PrimaryButton(
+            onPressed: () {
+              context.read<EquipmentTraceabilityBloc>().answerList.add({
+                "id": equipmentMap["equipmentId"],
+                "answer": equipmentMap["answer"]
+              });
+              context.read<EquipmentTraceabilityBloc>().add(
+                  SaveCustomParameter(saveCustomParameterMap: equipmentMap));
+            },
+            textValue: StringConstants.kSubmit,
+          )),
     );
   }
 }
