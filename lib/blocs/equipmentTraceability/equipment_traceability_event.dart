@@ -28,3 +28,9 @@ class FetchSearchEquipmentDetails extends EquipmentTraceabilityEvent {
 
   FetchSearchEquipmentDetails({required this.equipmentId});
 }
+
+class SaveCustomParameter extends EquipmentTraceabilityEvent {
+  final Map saveCustomParameterMap;
+
+  SaveCustomParameter({required this.saveCustomParameterMap});
+}

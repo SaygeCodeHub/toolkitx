@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -29,11 +30,13 @@ class EquipmentTraceabilityBloc
     on<ApplySearchEquipmentFilter>(_applySearchEquipmentFilter);
     on<ClearSearchEquipmentFilter>(_clearSearchEquipmentFilter);
     on<FetchEquipmentSetParameter>(_fetchEquipmentSetParameter);
+    on<SaveCustomParameter>(_saveCustomParameter);
   }
 
   Map filters = {};
   bool hasReachedMax = false;
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
+  List answerList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -130,6 +133,34 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EquipmentSetParameterNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveCustomParameter(SaveCustomParameter event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(CustomParameterSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveCustomParameterMap = {
+        "hashcode": hashCode,
+        "userid": userId,
+        "answerlist": answerList,
+        "equipmentid": event.saveCustomParameterMap["equipmentId"]
+      };
+
+      SaveCustomParameterModel saveCustomParameterModel =
+          await _equipmentTraceabilityRepo
+              .saveCustomParameter(saveCustomParameterMap);
+      if (saveCustomParameterModel.status == 200) {
+        emit(CustomParameterSaved());
+      } else {
+        emit(CustomParameterNotSaved(
+            errorMessage: saveCustomParameterModel.message));
+      }
+    } catch (e) {
+      emit(CustomParameterNotSaved(errorMessage: e.toString()));
     }
   }
 }
