@@ -82,7 +82,6 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Cancel')) {}
         if (value == DatabaseUtil.getText('Close')) {
           showDialog(
               context: context,

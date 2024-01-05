@@ -7,6 +7,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
+import '../../utils/incident_view_image_util.dart';
 import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'widgets/safety_notice_add_edit_bottom_app_bar.dart';
@@ -72,7 +73,10 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
               const SizedBox(height: xxTinySpacing),
               const ViewEditSafetyNoticeImages(),
               const SizedBox(height: xxTinySpacing),
-              const SafetyNoticeImageCount(),
+              SafetyNoticeImageCount(
+                  imageLength: ViewImageUtil.viewImageList(
+                          manageSafetyNoticeMap['file_name'] ?? '')
+                      .length),
               const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
                 editedImageList:
