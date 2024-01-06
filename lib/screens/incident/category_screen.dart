@@ -73,15 +73,21 @@ class CategoryScreen extends StatelessWidget {
                               const SizedBox(width: xxTinierSpacing),
                               Expanded(
                                 child: PrimaryButton(
-                                    onPressed: () {
-                                      ReportNewIncidentScreen.imageIndex =
-                                          state.imageIndex;
-                                      ReportNewIncidentScreen.clientId =
-                                          state.clientId;
-                                      Navigator.pushNamed(context,
-                                          ReportNewIncidentScreen.routeName,
-                                          arguments: addAndEditIncidentMap);
-                                    },
+                                    onPressed: state.fetchIncidentMasterModel
+                                            .incidentMasterDatum![7].isNotEmpty
+                                        ? () {
+                                            ReportNewIncidentScreen.imageIndex =
+                                                state.imageIndex;
+                                            ReportNewIncidentScreen.clientId =
+                                                state.clientId;
+                                            Navigator.pushNamed(
+                                                context,
+                                                ReportNewIncidentScreen
+                                                    .routeName,
+                                                arguments:
+                                                    addAndEditIncidentMap);
+                                          }
+                                        : null,
                                     textValue:
                                         DatabaseUtil.getText('nextButtonText')),
                               ),

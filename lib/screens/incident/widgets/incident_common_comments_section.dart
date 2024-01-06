@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -31,6 +32,8 @@ class IncidentCommonCommentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -72,7 +75,8 @@ class IncidentCommonCommentsSection extends StatelessWidget {
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
-                      Text('${state.incrementNumber}/6',
+                      Text(
+                          '${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
