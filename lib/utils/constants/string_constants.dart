@@ -461,4 +461,6 @@ abstract class StringConstants {
   static const String kEquipmentSubType = "Equipment Sub-Type";
   static const String kEnterMileageHere = "enter mileage here";
   static const String kCustomParameterSaved = "Custom parameter saved";
+  static const String kSavedSuccessfully = "Saved Successfully";
+  static const String kUploadImages = "Upload images";
 }

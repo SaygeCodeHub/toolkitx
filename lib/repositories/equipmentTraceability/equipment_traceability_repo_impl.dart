@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -30,6 +33,15 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getequipment?hashcode=$hashCode&equipmentid=$equipmentId&userid=$userId");
     return FetchSearchEquipmentDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveEquipmentImagesModel> saveEquipmentImagesModel(
+      Map saveImageMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}equipment/saveimages", saveImageMap);
+    log('saveImageMap====>$saveImageMap');
+    return SaveEquipmentImagesModel.fromJson(response);
   }
 
   @override
