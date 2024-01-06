@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -79,7 +80,6 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
                           maxLength: 30,
-                          value: workOrderDetailsMap['quan'] ?? '',
                           textInputAction: TextInputAction.done,
                           textInputType: TextInputType.number,
                           onTextFieldChanged: (String textField) {
@@ -163,7 +163,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                               const SizedBox(height: xxxTinierSpacing),
                               TextFieldWidget(
                                   maxLength: 30,
-                                  value: workOrderDetailsMap['quan'] ?? '',
+                                  value: workOrderDetailsMap['quan'] ?? "" ,
                                   textInputAction: TextInputAction.done,
                                   textInputType: TextInputType.number,
                                   onTextFieldChanged: (String textField) {

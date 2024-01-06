@@ -9,6 +9,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
+import '../../../data/enums/workorder_priority_enum.dart';
 import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/assign_workforce_model.dart';
@@ -111,6 +112,7 @@ class WorkOrderTabDetailsBloc
   String currencyName = '';
   String vendorName = '';
   String misCostId = '';
+  String priorityValue = '';
 
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
@@ -159,6 +161,12 @@ class WorkOrderTabDetailsBloc
           'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
           'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
         });
+        // for(var i in WorkOrderPriorityEnum.values){
+        //   priorityValue = WorkOrderPriorityEnum.values.elementAt(i as int).priority;
+        // }
+        for (var element in WorkOrderPriorityEnum.values) {
+          priorityValue = element as String;
+        }
       }
       workOrderDetailsMap = {
         'companyid': fetchWorkOrderDetailsModel.data.companyid,
@@ -168,6 +176,7 @@ class WorkOrderTabDetailsBloc
         'type': fetchWorkOrderDetailsModel.data.type,
         'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
         'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
+        'priorityvalue': priorityValue,
         'category': fetchWorkOrderDetailsModel.data.category,
         'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
         'origination': fetchWorkOrderDetailsModel.data.origination,
