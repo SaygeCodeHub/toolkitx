@@ -92,3 +92,5 @@ class SelectExpenseAddItemsCurrency extends ExpenseEvent {
 
   SelectExpenseAddItemsCurrency({required this.currencyDetailsMap});
 }
+
+class ApproveExpense extends ExpenseEvent {}
