@@ -67,7 +67,19 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Close')) {}
+        if (value == DatabaseUtil.getText('Close')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue:
+                        DatabaseUtil.getText('CloseExpenseReportMessage'),
+                    contentValue: '',
+                    onPrimaryButton: () {
+                      context.read<ExpenseBloc>().add(CloseExpense());
+                    });
+              });
+        }
       },
       position: PopupMenuPosition.under,
       itemBuilder: (BuildContext context) => [

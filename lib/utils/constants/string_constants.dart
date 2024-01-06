@@ -107,6 +107,7 @@ abstract class StringConstants {
       'Please enter emergency contact!'; //
   static const String kAlert = 'Alert'; //
   static const String kViewAll = 'View All'; //
+  static const String kSuccessCode = '1'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
