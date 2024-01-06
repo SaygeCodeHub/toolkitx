@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -30,7 +28,6 @@ class WorkOrderTypeExpansionTile extends StatelessWidget {
             currentState is WorkOrderTypeOptionSelected,
         builder: (context, state) {
           if (state is WorkOrderTypeOptionSelected) {
-            log('state.typeName===========>${state.typeName}');
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),

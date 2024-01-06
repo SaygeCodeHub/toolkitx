@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -30,8 +28,6 @@ class WorkOrderPriorityExpansionTile extends StatelessWidget {
         builder: (context, state) {
           if (state is WorkOrderPriorityOptionSelected) {
             workOrderDetailsMap['priorityid'] = state.priorityId;
-            log('id===========>${workOrderDetailsMap['priorityid']}');
-            log('value============>${priorityNameSwitch(context, workOrderDetailsMap['priorityid'])}');
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
@@ -83,16 +79,17 @@ class WorkOrderPriorityExpansionTile extends StatelessWidget {
           }
         });
   }
- priorityNameSwitch(BuildContext context, String value){
+
+  priorityNameSwitch(BuildContext context, String value) {
     String priorityValue = '';
-   // for (String element in WorkOrderPriorityEnum.values) {
-   //   priorityValue = element;
-   // }
-    switch(value){
+    // for (String element in WorkOrderPriorityEnum.values) {
+    //   priorityValue = element;
+    // }
+    switch (value) {
       case '1':
-         return priorityValue;
+        return priorityValue;
       case '2':
         return priorityValue;
     }
- }
+  }
 }

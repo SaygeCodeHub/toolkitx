@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/assign_workforce_model.dart';
@@ -52,7 +50,6 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
       String hashCode, String workOrderId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
-    log('url======>${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId');
     debugPrint('response======>$response');
     return FetchWorkOrderTabDetailsModel.fromJson(response);
   }
