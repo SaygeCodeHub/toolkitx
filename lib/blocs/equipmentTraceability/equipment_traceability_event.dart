@@ -16,3 +16,21 @@ class ApplySearchEquipmentFilter extends EquipmentTraceabilityEvent {
 }
 
 class ClearSearchEquipmentFilter extends EquipmentTraceabilityEvent {}
+
+class FetchEquipmentSetParameter extends EquipmentTraceabilityEvent {
+  final String equipmentId;
+
+  FetchEquipmentSetParameter({required this.equipmentId});
+}
+
+class FetchSearchEquipmentDetails extends EquipmentTraceabilityEvent {
+  final String equipmentId;
+
+  FetchSearchEquipmentDetails({required this.equipmentId});
+}
+
+class SaveCustomParameter extends EquipmentTraceabilityEvent {
+  final Map saveCustomParameterMap;
+
+  SaveCustomParameter({required this.saveCustomParameterMap});
+}

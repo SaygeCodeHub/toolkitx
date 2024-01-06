@@ -160,3 +160,23 @@ class ExpenseAddItemsCurrencySelected extends ExpenseStates {
 
   ExpenseAddItemsCurrencySelected({required this.currencyDetailsMap});
 }
+
+class ApprovingExpense extends ExpenseStates {}
+
+class ExpenseApproved extends ExpenseStates {}
+
+class ExpenseNotApproved extends ExpenseStates {
+  final String notApproved;
+
+  ExpenseNotApproved({required this.notApproved});
+}
+
+class ClosingExpense extends ExpenseStates {}
+
+class ExpenseClosed extends ExpenseStates {}
+
+class ExpenseNotClosed extends ExpenseStates {
+  final String notClosed;
+
+  ExpenseNotClosed({required this.notClosed});
+}

@@ -29,7 +29,8 @@ class SelectLanguageBody extends StatelessWidget {
     return SearchableList(
         autoFocusOnSearch: false,
         initialList: getLanguagesData,
-        builder: (GetLanguagesData getLanguagesData) {
+        builder: (List<GetLanguagesData> getLanguagesData, int index,
+            GetLanguagesData languageData) {
           return Padding(
               padding: const EdgeInsets.only(bottom: xxTinierSpacing),
               child: CustomCard(
@@ -38,14 +39,14 @@ class SelectLanguageBody extends StatelessWidget {
                   child: ListTile(
                       onTap: () {
                         context.read<LanguageBloc>().add(FetchLanguageKeys(
-                            languageId: getLanguagesData.id.toString(),
+                            languageId: languageData.id.toString(),
                             isFromProfile: isFromProfile));
                       },
                       minVerticalPadding: kLanguagesTileHeight,
                       leading: CachedNetworkImage(
                           height: kLanguageFlagHeight,
                           imageUrl:
-                              '${ApiConstants.baseUrlFlag}${getLanguagesData.flagName}',
+                              '${ApiConstants.baseUrlFlag}${languageData.flagName}',
                           placeholder: (context, url) => Shimmer.fromColors(
                               baseColor: AppColor.paleGrey,
                               highlightColor: AppColor.white,
@@ -59,7 +60,7 @@ class SelectLanguageBody extends StatelessWidget {
                           errorWidget: (context, url, error) => const Icon(
                               Icons.error_outline_sharp,
                               size: kIconSize)),
-                      title: Text(getLanguagesData.langName))));
+                      title: Text(languageData.langName))));
         },
         emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
         filter: (value) => getLanguagesData

@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/expense/approve_expnse_model.dart';
+import 'package:toolkit/data/models/expense/close_expense_model.dart';
 import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
@@ -64,5 +66,19 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/getitemmaster1?hashcode=$hashCode&reportid=$expenseId");
     return FetchItemMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<ApproveExpenseModel> approveExpense(Map approveExpenseMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}api/expense/Approve", approveExpenseMap);
+    return ApproveExpenseModel.fromJson(response);
+  }
+
+  @override
+  Future<CloseExpenseModel> closeExpense(Map closeExpenseMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}api/expense/CloseReport", closeExpenseMap);
+    return CloseExpenseModel.fromJson(response);
   }
 }

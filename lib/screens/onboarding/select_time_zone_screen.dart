@@ -46,7 +46,8 @@ class SelectTimeZoneScreen extends StatelessWidget {
                       child: SearchableList(
                           autoFocusOnSearch: false,
                           initialList: state.getTimeZoneModel.data!,
-                          builder: (TimeZoneData data) {
+                          builder: (List<TimeZoneData> dataList, index,
+                              TimeZoneData data) {
                             return Padding(
                                 padding: const EdgeInsets.only(
                                     bottom: xxTinierSpacing),
