@@ -1,4 +1,3 @@
-import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
@@ -164,14 +163,20 @@ class ExpenseAddItemsCurrencySelected extends ExpenseStates {
 
 class ApprovingExpense extends ExpenseStates {}
 
-class ExpenseApproved extends ExpenseStates {
-  final ApproveExpenseModel approveExpenseModel;
-
-  ExpenseApproved({required this.approveExpenseModel});
-}
+class ExpenseApproved extends ExpenseStates {}
 
 class ExpenseNotApproved extends ExpenseStates {
   final String notApproved;
 
   ExpenseNotApproved({required this.notApproved});
+}
+
+class ClosingExpense extends ExpenseStates {}
+
+class ExpenseClosed extends ExpenseStates {}
+
+class ExpenseNotClosed extends ExpenseStates {
+  final String notClosed;
+
+  ExpenseNotClosed({required this.notClosed});
 }

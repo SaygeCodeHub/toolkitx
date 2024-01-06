@@ -94,3 +94,5 @@ class SelectExpenseAddItemsCurrency extends ExpenseEvent {
 }
 
 class ApproveExpense extends ExpenseEvent {}
+
+class CloseExpense extends ExpenseEvent {}

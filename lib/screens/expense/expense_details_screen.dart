@@ -81,6 +81,19 @@ class ExpenseDetailsScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.notApproved, '');
             }
+            if (state is ClosingExpense) {
+              ProgressBar.show(context);
+            } else if (State is ExpenseClosed) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ExpenseListScreen.routeName,
+                  arguments: false);
+            } else if (state is ExpenseNotClosed) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.notClosed, '');
+            }
           },
           builder: (context, state) {
             if (state is FetchingExpenseDetails) {
