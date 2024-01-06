@@ -1066,7 +1066,8 @@ class WorkOrderTabDetailsBloc
     }
   }
 
-  Future<FutureOr<void>> _assignWorkOrderParts(AssignWorkOrderParts event, Emitter<WorkOrderTabDetailsStates> emit) async {
+  Future<FutureOr<void>> _assignWorkOrderParts(AssignWorkOrderParts event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(WorkOrderPartsAssigning());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
@@ -1083,10 +1084,11 @@ class WorkOrderTabDetailsBloc
       if (workorderAssignItemModel.message == '1') {
         emit(WorkOrderPartsAssigned());
       } else {
-        emit(WorkOrderPartsNotAssigned(errorMessage: workorderAssignItemModel.message));
+        emit(WorkOrderPartsNotAssigned(
+            errorMessage: workorderAssignItemModel.message));
       }
     } catch (e) {
-          emit(WorkOrderPartsNotAssigned(errorMessage: e.toString()));
+      emit(WorkOrderPartsNotAssigned(errorMessage: e.toString()));
     }
   }
 }

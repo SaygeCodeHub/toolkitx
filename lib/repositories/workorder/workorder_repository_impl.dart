@@ -218,9 +218,10 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
-  Future<WorkorderAssignItemModel> workorderAssignItem(Map assignPartMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}workorder/assignitem", assignPartMap);
+  Future<WorkorderAssignItemModel> workorderAssignItem(
+      Map assignPartMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}workorder/assignitem", assignPartMap);
     return WorkorderAssignItemModel.fromJson(response);
   }
 }

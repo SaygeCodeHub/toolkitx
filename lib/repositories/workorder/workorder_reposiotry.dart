@@ -87,6 +87,5 @@ abstract class WorkOrderRepository {
   Future<FetchWorkOrderSingleMiscCostModel> fetchWorkOrderSingleMiscCost(
       String hashCode, String misCostId);
 
-  Future<WorkorderAssignItemModel> workorderAssignItem(
-      Map assignPartMap);
+  Future<WorkorderAssignItemModel> workorderAssignItem(Map assignPartMap);
 }

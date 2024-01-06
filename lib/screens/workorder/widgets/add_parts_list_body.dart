@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
@@ -44,13 +43,13 @@ class AddPartsListBody extends StatelessWidget {
             }
           }
 
-          if(state is WorkOrderPartsAssigning){
+          if (state is WorkOrderPartsAssigning) {
             ProgressBar.show(context);
-          }else if(state is WorkOrderPartsAssigned){
+          } else if (state is WorkOrderPartsAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, StringConstants.kPartAssigned, '');
             Navigator.pop(context);
-          }else if(state is WorkOrderPartsNotAssigned){
+          } else if (state is WorkOrderPartsNotAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.errorMessage, '');
           }

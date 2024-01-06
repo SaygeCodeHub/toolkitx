@@ -63,22 +63,18 @@ class WorkOrderAddPartsScreen extends StatelessWidget {
                                           currentFocus.unfocus();
                                         }
                                         if (nameController.text != '' ||
-                                            nameController.text.trim() !=
-                                                '') {
+                                            nameController.text.trim() != '') {
                                           isSearched = !isSearched;
                                           AddPartsListBody.isFirst = true;
                                           pageNo = 1;
                                           context
-                                              .read<
-                                                  WorkOrderTabDetailsBloc>()
+                                              .read<WorkOrderTabDetailsBloc>()
                                               .addPartsDatum = [];
                                           context
-                                              .read<
-                                                  WorkOrderTabDetailsBloc>()
+                                              .read<WorkOrderTabDetailsBloc>()
                                               .docListReachedMax = false;
                                           context
-                                              .read<
-                                                  WorkOrderTabDetailsBloc>()
+                                              .read<WorkOrderTabDetailsBloc>()
                                               .add(SearchWorkOrderParts(
                                                   isSearched: isSearched));
                                         }

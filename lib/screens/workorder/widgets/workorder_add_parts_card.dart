@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -59,9 +58,13 @@ class WorkOrderAddPartsCard extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) => AndroidPopUp(
-                              titleValue: StringConstants.kAlert,
-                              contentValue: StringConstants.kPleaseInsertValidQuantity,
-                              onPrimaryButton: () => Navigator.pop(context),isNoVisible:false,textValue: StringConstants.kOk,));
+                                titleValue: StringConstants.kAlert,
+                                contentValue:
+                                    StringConstants.kPleaseInsertValidQuantity,
+                                onPrimaryButton: () => Navigator.pop(context),
+                                isNoVisible: false,
+                                textValue: StringConstants.kOk,
+                              ));
                     }
                   },
                   child: const CustomCard(
