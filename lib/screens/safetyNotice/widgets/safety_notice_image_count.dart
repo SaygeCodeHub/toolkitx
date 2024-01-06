@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -9,7 +8,8 @@ import '../../../configs/app_color.dart';
 import '../../../utils/constants/string_constants.dart';
 
 class SafetyNoticeImageCount extends StatelessWidget {
-  const SafetyNoticeImageCount({Key? key, required this.imageLength}) : super(key: key);
+  const SafetyNoticeImageCount({Key? key, required this.imageLength})
+      : super(key: key);
   final int imageLength;
 
   @override

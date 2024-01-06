@@ -93,7 +93,9 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeClosed) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, SafetyNoticeScreen.routeName,arguments: false);
+              Navigator.pushReplacementNamed(
+                  context, SafetyNoticeScreen.routeName,
+                  arguments: false);
             } else if (state is SafetyNoticeNotClosed) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotClosed, '');
@@ -104,7 +106,9 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
             } else if (state is SafetyNoticeReIssued) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, SafetyNoticeScreen.routeName,arguments: false);
+              Navigator.pushReplacementNamed(
+                  context, SafetyNoticeScreen.routeName,
+                  arguments: false);
             } else if (state is SafetyNoticeFailedToReIssue) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.noticeNotReIssued, '');

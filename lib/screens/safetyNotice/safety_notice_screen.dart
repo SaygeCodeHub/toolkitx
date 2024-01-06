@@ -62,8 +62,12 @@ class SafetyNoticeScreen extends StatelessWidget {
                             context, SafetyNoticeFilterScreen.routeName);
                       },
                       secondaryOnPress: () {
-                        Navigator.pushNamed(context, SafetyNoticeHistoryScreen.routeName).then((value) => context.read<SafetyNoticeBloc>().add(
-                            FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
+                        Navigator.pushNamed(
+                                context, SafetyNoticeHistoryScreen.routeName)
+                            .then((value) => context
+                                .read<SafetyNoticeBloc>()
+                                .add(FetchSafetyNotices(
+                                    pageNo: 1, isFromHomeScreen: false)));
                       },
                       secondaryIcon: Icons.history,
                       clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&

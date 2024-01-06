@@ -25,8 +25,9 @@ class SafetyNoticeListCard extends StatelessWidget {
         onTap: () {
           SafetyNoticeDetailsScreen.safetyNoticeId = noticesDatum.id;
           Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName)
-              .then((value) => context.read<SafetyNoticeBloc>().add(
-              FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
+              .then((value) => context
+                  .read<SafetyNoticeBloc>()
+                  .add(FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
@@ -55,7 +56,9 @@ class SafetyNoticeListCard extends StatelessWidget {
               StatusTagModel(
                   title: noticesDatum.isexpired == '1'
                       ? DatabaseUtil.getText('Expired')
-                      : noticesDatum.status == 'Issued' ? DatabaseUtil.getText('Issued') : DatabaseUtil.getText('Created'),
+                      : noticesDatum.status == 'Issued'
+                          ? DatabaseUtil.getText('Issued')
+                          : DatabaseUtil.getText('Created'),
                   bgColor: noticesDatum.isexpired == '0'
                       ? AppColor.deepBlue
                       : AppColor.errorRed)
