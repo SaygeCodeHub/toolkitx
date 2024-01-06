@@ -20,6 +20,7 @@ import 'expense_list_screen.dart';
 import 'expense_details_tab_two.dart';
 import 'expense_pop_up_menu_screen.dart';
 import 'widgets/expense_details_tab_one.dart';
+import 'widgets/expense_item_details_tab.dart';
 
 class ExpenseDetailsScreen extends StatelessWidget {
   static const routeName = 'ExpenseDetailsScreen';
@@ -146,7 +147,7 @@ class ExpenseDetailsScreen extends StatelessWidget {
                     const Divider(
                         height: kDividerHeight, thickness: kDividerWidth),
                     CustomTabBarView(
-                        lengthOfTabs: 2,
+                        lengthOfTabs: 3,
                         tabBarViewIcons: ExpenseTabsUtil().tabBarViewIcons,
                         initialIndex: context.read<ExpenseBloc>().tabIndex,
                         tabBarViewWidgets: [
@@ -157,6 +158,10 @@ class ExpenseDetailsScreen extends StatelessWidget {
                               expenseId: expenseId),
                           ExpenseDetailsTabTwo(
                               tabIndex: 1,
+                              expenseDetailsData:
+                                  state.fetchExpenseDetailsModel.data),
+                          ExpenseItemDetailTab(
+                              tabIndex: 2,
                               expenseDetailsData:
                                   state.fetchExpenseDetailsModel.data)
                         ])
