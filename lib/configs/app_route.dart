@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -478,8 +480,17 @@ class AppRoutes {
         return _createRoute(SearchEquipmentListScreen(
           isFromHome: settings.arguments as bool,
         ));
+      case SearchEquipmentDetailsScreen.routeName:
+        return _createRoute(SearchEquipmentDetailsScreen(
+          searchEquipmentDetailsMap: settings.arguments as Map,
+        ));
+
       case SearchEquipmentFilterScreen.routeName:
         return _createRoute(const SearchEquipmentFilterScreen());
+      case EquipmentSetParameterScreen.routeName:
+        return _createRoute(EquipmentSetParameterScreen(
+          equipmentMap: settings.arguments as Map,
+        ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
       default:
