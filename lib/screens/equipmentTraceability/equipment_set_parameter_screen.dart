@@ -4,8 +4,10 @@ import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/generic_text_field.dart';
@@ -30,7 +32,20 @@ class EquipmentSetParameterScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child:
-            BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+            BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+          listener: (context, state) {
+            if (state is CustomParameterSaving) {
+              ProgressBar.show(context);
+            } else if (state is CustomParameterSaved) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(
+                  context, StringConstants.kCustomParameterSaved, "");
+              Navigator.pop(context);
+            } else if (state is CustomParameterNotSaved) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.errorMessage, "");
+            }
+          },
           builder: (context, state) {
             if (state is EquipmentSetParameterFetching) {
               return const Center(child: CircularProgressIndicator());
@@ -62,7 +77,9 @@ class EquipmentSetParameterScreen extends StatelessWidget {
                             TextFieldWidget(
                               textInputType: TextInputType.number,
                               hintText: StringConstants.kEnterMileageHere,
-                              onTextFieldChanged: (textField) {},
+                              onTextFieldChanged: (textField) {
+                                equipmentMap["answer"] = textField;
+                              },
                             ),
                           ],
                         ),
@@ -78,12 +95,18 @@ class EquipmentSetParameterScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(xxTinierSpacing),
-        child: PrimaryButton(
-          onPressed: () {},
-          textValue: StringConstants.kSubmit,
-        ),
-      ),
+          padding: const EdgeInsets.all(xxTinierSpacing),
+          child: PrimaryButton(
+            onPressed: () {
+              context.read<EquipmentTraceabilityBloc>().answerList.add({
+                "id": equipmentMap["equipmentId"],
+                "answer": equipmentMap["answer"]
+              });
+              context.read<EquipmentTraceabilityBloc>().add(
+                  SaveCustomParameter(saveCustomParameterMap: equipmentMap));
+            },
+            textValue: StringConstants.kSubmit,
+          )),
     );
   }
 }

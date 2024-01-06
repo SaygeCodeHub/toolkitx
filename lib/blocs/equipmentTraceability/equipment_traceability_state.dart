@@ -53,3 +53,13 @@ class SearchEquipmentDetailsNotFetched extends EquipmentTraceabilityState {
 
   SearchEquipmentDetailsNotFetched({required this.errorMessage});
 }
+
+class CustomParameterSaving extends EquipmentTraceabilityState {}
+
+class CustomParameterSaved extends EquipmentTraceabilityState {}
+
+class CustomParameterNotSaved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  CustomParameterNotSaved({required this.errorMessage});
+}
