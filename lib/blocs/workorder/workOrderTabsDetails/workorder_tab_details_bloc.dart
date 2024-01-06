@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -97,6 +98,7 @@ class WorkOrderTabDetailsBloc
     on<SaveWorkOrderComments>(_saveDocuments);
     on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
     on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
+    on<AssignWorkOrderParts>(_assignWorkOrderParts);
   }
 
   int tabIndex = 0;
@@ -1061,6 +1063,30 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderWorkForceNotDeleted(workForceNotDeleted: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _assignWorkOrderParts(AssignWorkOrderParts event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(WorkOrderPartsAssigning());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map assignPartMap = {
+        "hashcode": hashCode,
+        "woid": workOrderId,
+        "itemid": event.assignPartMap['itemid'],
+        "userid": userId,
+        "quan": event.assignPartMap['quan']
+      };
+      WorkorderAssignItemModel workorderAssignItemModel =
+          await _workOrderRepository.workorderAssignItem(assignPartMap);
+      if (workorderAssignItemModel.message == '1') {
+        emit(WorkOrderPartsAssigned());
+      } else {
+        emit(WorkOrderPartsNotAssigned(errorMessage: workorderAssignItemModel.message));
+      }
+    } catch (e) {
+          emit(WorkOrderPartsNotAssigned(errorMessage: e.toString()));
     }
   }
 }

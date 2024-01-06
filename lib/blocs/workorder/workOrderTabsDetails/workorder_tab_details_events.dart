@@ -276,3 +276,9 @@ class DeleteWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {
 
   DeleteWorkOrderWorkForce({required this.workForceId});
 }
+
+class AssignWorkOrderParts extends WorkOrderTabsDetailsEvent {
+  final Map assignPartMap;
+
+  AssignWorkOrderParts({required this.assignPartMap});
+}

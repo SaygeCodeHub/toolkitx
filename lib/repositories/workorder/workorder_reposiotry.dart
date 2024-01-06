@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 
 import '../../data/models/workorder/assign_workforce_model.dart';
 import '../../data/models/workorder/delete_document_model.dart';
@@ -85,4 +86,7 @@ abstract class WorkOrderRepository {
 
   Future<FetchWorkOrderSingleMiscCostModel> fetchWorkOrderSingleMiscCost(
       String hashCode, String misCostId);
+
+  Future<WorkorderAssignItemModel> workorderAssignItem(
+      Map assignPartMap);
 }

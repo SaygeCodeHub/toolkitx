@@ -11,7 +11,6 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../configs/app_color.dart';
-import '../../configs/app_dimensions.dart';
 import 'widgets/add_parts_list_body.dart';
 
 class WorkOrderAddPartsScreen extends StatelessWidget {
@@ -56,40 +55,37 @@ class WorkOrderAddPartsScreen extends StatelessWidget {
                                   currentState is WorkOrderAddPartsListSearched,
                               builder: (context, state) {
                                 if (state is WorkOrderAddPartsListSearched) {
-                                  return Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: kSearchIconHeight),
-                                      child: CustomIconButton(
-                                          onPressed: () {
-                                            FocusScopeNode currentFocus =
-                                                FocusScope.of(context);
-                                            if (!currentFocus.hasPrimaryFocus) {
-                                              currentFocus.unfocus();
-                                            }
-                                            if (nameController.text != '' ||
-                                                nameController.text.trim() !=
-                                                    '') {
-                                              isSearched = !isSearched;
-                                              AddPartsListBody.isFirst = true;
-                                              pageNo = 1;
-                                              context
-                                                  .read<
-                                                      WorkOrderTabDetailsBloc>()
-                                                  .addPartsDatum = [];
-                                              context
-                                                  .read<
-                                                      WorkOrderTabDetailsBloc>()
-                                                  .docListReachedMax = false;
-                                              context
-                                                  .read<
-                                                      WorkOrderTabDetailsBloc>()
-                                                  .add(SearchWorkOrderParts(
-                                                      isSearched: isSearched));
-                                            }
-                                          },
-                                          icon: (state.isSearched == false)
-                                              ? Icons.search
-                                              : Icons.clear));
+                                  return CustomIconButton(
+                                      onPressed: () {
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                        if (nameController.text != '' ||
+                                            nameController.text.trim() !=
+                                                '') {
+                                          isSearched = !isSearched;
+                                          AddPartsListBody.isFirst = true;
+                                          pageNo = 1;
+                                          context
+                                              .read<
+                                                  WorkOrderTabDetailsBloc>()
+                                              .addPartsDatum = [];
+                                          context
+                                              .read<
+                                                  WorkOrderTabDetailsBloc>()
+                                              .docListReachedMax = false;
+                                          context
+                                              .read<
+                                                  WorkOrderTabDetailsBloc>()
+                                              .add(SearchWorkOrderParts(
+                                                  isSearched: isSearched));
+                                        }
+                                      },
+                                      icon: (state.isSearched == false)
+                                          ? Icons.search
+                                          : Icons.clear);
                                 } else {
                                   return const SizedBox.shrink();
                                 }
