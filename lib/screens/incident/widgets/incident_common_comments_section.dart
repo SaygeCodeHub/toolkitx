@@ -75,7 +75,8 @@ class IncidentCommonCommentsSection extends StatelessWidget {
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),
-                      Text('${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
+                      Text(
+                          '${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
                           style: Theme.of(context).textTheme.small.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.w500)),

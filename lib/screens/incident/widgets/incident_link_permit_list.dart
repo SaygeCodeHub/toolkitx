@@ -141,7 +141,8 @@ class _IncidentLinkPermitListState extends State<IncidentLinkPermitList> {
                                                 .linkedpermits!,
                                             index: index));
                                   },
-                                  textValue: StringConstants.kRemove,textColor: AppColor.errorRed)),
+                                  textValue: StringConstants.kRemove,
+                                  textColor: AppColor.errorRed)),
                           title: Text(
                               widget.incidentDetailsModel.data!
                                   .linkedpermits![index].processedPermitName,

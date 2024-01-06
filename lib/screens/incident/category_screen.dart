@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
@@ -74,15 +73,21 @@ class CategoryScreen extends StatelessWidget {
                               const SizedBox(width: xxTinierSpacing),
                               Expanded(
                                 child: PrimaryButton(
-                                    onPressed: state.fetchIncidentMasterModel.incidentMasterDatum![7].isNotEmpty ? () {
-                                      ReportNewIncidentScreen.imageIndex =
-                                          state.imageIndex;
-                                      ReportNewIncidentScreen.clientId =
-                                          state.clientId;
-                                      Navigator.pushNamed(context,
-                                          ReportNewIncidentScreen.routeName,
-                                          arguments: addAndEditIncidentMap);
-                                    } : null,
+                                    onPressed: state.fetchIncidentMasterModel
+                                            .incidentMasterDatum![7].isNotEmpty
+                                        ? () {
+                                            ReportNewIncidentScreen.imageIndex =
+                                                state.imageIndex;
+                                            ReportNewIncidentScreen.clientId =
+                                                state.clientId;
+                                            Navigator.pushNamed(
+                                                context,
+                                                ReportNewIncidentScreen
+                                                    .routeName,
+                                                arguments:
+                                                    addAndEditIncidentMap);
+                                          }
+                                        : null,
                                     textValue:
                                         DatabaseUtil.getText('nextButtonText')),
                               ),
