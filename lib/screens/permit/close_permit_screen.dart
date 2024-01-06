@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
@@ -35,11 +36,10 @@ class ClosePermitScreen extends StatelessWidget {
               }
               if (state is PermitClosed) {
                 ProgressBar.dismiss(context);
-                context
-                    .read<PermitBloc>()
-                    .add(const GetAllPermits(isFromHome: false, page: 1));
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.pushNamed(context, PermitDetailsScreen.routeName,
+                    arguments: permitDetailsModel.data.tab1.id);
               }
               if (state is ClosePermitError) {
                 ProgressBar.dismiss(context);

@@ -8,6 +8,7 @@ import '../../../blocs/todo/todo_event.dart';
 import '../../../blocs/todo/todo_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
   final Map todoMap;
@@ -30,6 +31,11 @@ class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(state.optionName,

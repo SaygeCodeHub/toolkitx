@@ -8,6 +8,7 @@ import '../../../blocs/login/login_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/enums/user_type_emun.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class UserTypeExpansionTile extends StatelessWidget {
   final String typeValue;
@@ -22,11 +23,16 @@ class UserTypeExpansionTile extends StatelessWidget {
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: ExpansionTile(
-            collapsedBackgroundColor: AppColor.offWhite,
+            collapsedShape: ExpansionTileBorder().buildOutlineInputBorder(),
+            collapsedBackgroundColor: AppColor.white,
+            backgroundColor: AppColor.white,
+            shape: ExpansionTileBorder().buildOutlineInputBorder(),
             maintainState: true,
             key: GlobalKey(),
             title: Text(
-                usertype == 'null' ? 'Select' : DatabaseUtil.getText(usertype),
+                usertype == 'null'
+                    ? UserType.workForce.type
+                    : DatabaseUtil.getText(usertype),
                 style: Theme.of(context).textTheme.xSmall),
             children: [
               ListView.builder(

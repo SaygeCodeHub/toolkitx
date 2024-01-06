@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
 
 import '../../../configs/app_color.dart';
@@ -31,7 +32,15 @@ class SearchEquipmentListBody extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(xxxTinierSpacing),
                   child: ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Map searchEquipmentDetailsMap = {
+                        "equipmentId": data[index].id,
+                        "equipmentName": data[index].equipmentname
+                      };
+                      Navigator.pushNamed(
+                          context, SearchEquipmentDetailsScreen.routeName,
+                          arguments: searchEquipmentDetailsMap);
+                    },
                     title: Text(data[index].equipmentname,
                         style: Theme.of(context).textTheme.small.copyWith(
                             fontWeight: FontWeight.w500,
