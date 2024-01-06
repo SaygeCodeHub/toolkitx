@@ -51,7 +51,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   Map filters = {};
   String expenseId = '';
 
-  Future<void> _fetchExpenseList(FetchExpenseList event, Emitter<ExpenseStates> emit) async {
+  Future<void> _fetchExpenseList(
+      FetchExpenseList event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenses());
       String hashCode =
@@ -66,8 +67,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
             ExpensesFetched(expenseListDatum: expenseListData, filtersMap: {}));
       } else {
         FetchExpenseListModel fetchExpenseListModel =
-        await _expenseRepository.fetchExpenseList(
-            event.pageNo, userId, hashCode, jsonEncode(filters));
+            await _expenseRepository.fetchExpenseList(
+                event.pageNo, userId, hashCode, jsonEncode(filters));
         expenseListReachedMax = fetchExpenseListModel.expenseListData.isEmpty;
         expenseListData.addAll(fetchExpenseListModel.expenseListData);
         emit(ExpensesFetched(
@@ -78,7 +79,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     }
   }
 
-  Future<void> _fetchExpenseDetails(FetchExpenseDetails event, Emitter<ExpenseStates> emit) async {
+  Future<void> _fetchExpenseDetails(
+      FetchExpenseDetails event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseDetails());
       String hashCode =
@@ -87,8 +89,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       tabIndex = event.tabIndex;
       expenseId = event.expenseId;
       FetchExpenseDetailsModel fetchExpenseDetailsModel =
-      await _expenseRepository.fetchExpenseDetails(
-          event.expenseId, userId, hashCode);
+          await _expenseRepository.fetchExpenseDetails(
+              event.expenseId, userId, hashCode);
       List popUpMenuList = [];
       if (fetchExpenseDetailsModel.data.canEdit == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Edit'));
@@ -142,13 +144,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     filters = {};
   }
 
-  Future<void> _fetchExpenseMaster(FetchExpenseMaster event, Emitter<ExpenseStates> emit) async {
+  Future<void> _fetchExpenseMaster(
+      FetchExpenseMaster event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseMaster());
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchExpenseMasterModel fetchExpenseMasterModel =
-      await _expenseRepository.fetchExpenseMaster(hashCode);
+          await _expenseRepository.fetchExpenseMaster(hashCode);
       if (fetchExpenseMasterModel.data.isNotEmpty) {
         emit(ExpenseMasterFetched(
             fetchExpenseMasterModel: fetchExpenseMasterModel));
@@ -165,23 +168,24 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     emit(ExpenseCurrencySelected(currencyDetailsMap: event.currencyDetailsMap));
   }
 
-  Future<void> _saveExpense(AddExpense event, Emitter<ExpenseStates> emit) async {
+  Future<void> _saveExpense(
+      AddExpense event, Emitter<ExpenseStates> emit) async {
     emit(SavingAddExpense());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.saveExpenseMap['startdate'] == null &&
-          event.saveExpenseMap['enddate'] == null &&
-          event.saveExpenseMap['currency'] == null ||
+              event.saveExpenseMap['enddate'] == null &&
+              event.saveExpenseMap['currency'] == null ||
           event.saveExpenseMap['currency'].isEmpty) {
         emit(AddExpenseNotSaved(
             expenseNotSaved:
-            DatabaseUtil.getText('DateAndCurrencyCompulsary')));
+                DatabaseUtil.getText('DateAndCurrencyCompulsary')));
       } else if (DateFormat("dd.MM.yyy")
-          .parse(event.saveExpenseMap['startdate'])
-          .compareTo(DateFormat("dd.MM.yyy")
-          .parse(event.saveExpenseMap['enddate'])) >
+              .parse(event.saveExpenseMap['startdate'])
+              .compareTo(DateFormat("dd.MM.yyy")
+                  .parse(event.saveExpenseMap['enddate'])) >
           0) {
         emit(AddExpenseNotSaved(
             expenseNotSaved: DatabaseUtil.getText(
@@ -197,7 +201,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "hashcode": hashCode
         };
         SaveExpenseModel saveExpenseModel =
-        await _expenseRepository.addExpense(saveExpenseMap);
+            await _expenseRepository.addExpense(saveExpenseMap);
         if (saveExpenseModel.status == 200) {
           emit(AddExpenseSaved(saveExpenseModel: saveExpenseModel));
         } else {
@@ -210,23 +214,24 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     }
   }
 
-  Future<void> _updateExpense(UpdateExpense event, Emitter<ExpenseStates> emit) async {
+  Future<void> _updateExpense(
+      UpdateExpense event, Emitter<ExpenseStates> emit) async {
     emit(UpdatingExpense());
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.manageExpenseMap['startdate'] == null &&
-          event.manageExpenseMap['enddate'] == null &&
-          event.manageExpenseMap['currency'] == null ||
+              event.manageExpenseMap['enddate'] == null &&
+              event.manageExpenseMap['currency'] == null ||
           event.manageExpenseMap['currency'].isEmpty) {
         emit(AddExpenseNotSaved(
             expenseNotSaved:
-            DatabaseUtil.getText('DateAndCurrencyCompulsary')));
+                DatabaseUtil.getText('DateAndCurrencyCompulsary')));
       } else if (DateFormat("dd.MM.yyy")
-          .parse(event.manageExpenseMap['startdate'])
-          .compareTo(DateFormat("dd.MM.yyy")
-          .parse(event.manageExpenseMap['enddate'])) >
+              .parse(event.manageExpenseMap['startdate'])
+              .compareTo(DateFormat("dd.MM.yyy")
+                  .parse(event.manageExpenseMap['enddate'])) >
           0) {
         emit(AddExpenseNotSaved(
             expenseNotSaved: DatabaseUtil.getText(
@@ -242,22 +247,22 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "currency2": event.manageExpenseMap['new_currency_id'] ??
               event.manageExpenseMap['currency_id'],
           "showcurrencychangewarning":
-          (event.manageExpenseMap['new_currency_id'] !=
-              event.manageExpenseMap['currency_id'])
-              ? '1'
-              : '0',
+              (event.manageExpenseMap['new_currency_id'] !=
+                      event.manageExpenseMap['currency_id'])
+                  ? '1'
+                  : '0',
           "userid": userId,
           "hashcode": hashCode
         };
 
         UpdateExpenseModel updateExpenseModel =
-        await _expenseRepository.updateExpense(updateExpenseMap);
+            await _expenseRepository.updateExpense(updateExpenseMap);
         if (updateExpenseModel.message == 'Modifyingexpensereport') {
           emit(ExpenseCouldNotUpdate(
               expenseNotUpdated:
-              DatabaseUtil.getText('Modifyingexpensereport')));
+                  DatabaseUtil.getText('Modifyingexpensereport')));
           event.manageExpenseMap['currency_id'] =
-          event.manageExpenseMap['new_currency_id'];
+              event.manageExpenseMap['new_currency_id'];
         } else if (updateExpenseModel.message == '1') {
           emit(ExpenseUpdated(
               updateExpenseModel: updateExpenseModel, expenseId: expenseId));
@@ -271,7 +276,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     }
   }
 
-  Future<void> _submitExpenseForApproval(SubmitExpenseForApproval event, Emitter<ExpenseStates> emit) async {
+  Future<void> _submitExpenseForApproval(
+      SubmitExpenseForApproval event, Emitter<ExpenseStates> emit) async {
     emit(SubmittingExpenseForApproval());
     try {
       String hashCode =
@@ -283,15 +289,15 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "hashcode": hashCode
       };
       ExpenseSubmitForApprovalModel expenseSubmitForApprovalModel =
-      await _expenseRepository
-          .submitExpenseForApproval(submitExpenseForApproval);
+          await _expenseRepository
+              .submitExpenseForApproval(submitExpenseForApproval);
       if (expenseSubmitForApprovalModel.message == '1') {
         emit(ExpenseForApprovalSubmitted(
             expenseSubmitForApprovalModel: expenseSubmitForApprovalModel));
       } else {
         emit(ExpenseForApprovalFailedToSubmit(
             approvalFailedToSubmit:
-            DatabaseUtil.getText('UnknownErrorMessage')));
+                DatabaseUtil.getText('UnknownErrorMessage')));
       }
     } catch (e) {
       emit(ExpenseForApprovalFailedToSubmit(
@@ -299,13 +305,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     }
   }
 
-  Future<void> _fetchItemMaster(FetchExpenseItemMaster event, Emitter<ExpenseStates> emit) async {
+  Future<void> _fetchItemMaster(
+      FetchExpenseItemMaster event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseItemMaster());
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
-      await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
+          await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
       emit(ExpenseItemMasterFetched(
           fetchItemMasterModel: fetchItemMasterModel,
           isScreenChange: event.isScreenChange));
@@ -323,28 +330,29 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     emit(ExpenseItemSelected(itemsMap: event.itemsMap));
   }
 
-  _selectWorkingAtOption(SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
+  _selectWorkingAtOption(
+      SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
     emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
   }
 
-  _selectWorkingAtNumber(SelectExpenseWorkingAtNumber event,
-      Emitter<ExpenseStates> emit) {
+  _selectWorkingAtNumber(
+      SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
     emit(ExpenseWorkingAtNumberSelected(
         workingAtNumberMap: event.workingAtNumberMap));
   }
 
-  _selectAddItemCurrency(SelectExpenseAddItemsCurrency event,
-      Emitter<ExpenseStates> emit) {
+  _selectAddItemCurrency(
+      SelectExpenseAddItemsCurrency event, Emitter<ExpenseStates> emit) {
     emit(ExpenseAddItemsCurrencySelected(
         currencyDetailsMap: event.currencyDetailsMap));
   }
 
-  FutureOr<void> _approveExpense(ApproveExpense event,
-      Emitter<ExpenseStates> emit) async {
+  FutureOr<void> _approveExpense(
+      ApproveExpense event, Emitter<ExpenseStates> emit) async {
     emit(ApprovingExpense());
     try {
       ApproveExpenseModel approveExpenseModel =
-      await _expenseRepository.approveExpense({
+          await _expenseRepository.approveExpense({
         "reportid": expenseId,
         "userid": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
         "hashcode": await _customerCache.getUserId(CacheKeys.userId) ?? ''

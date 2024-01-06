@@ -8,9 +8,11 @@ import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
 abstract class ExpenseRepository {
-  Future<FetchExpenseListModel> fetchExpenseList(int pageNo, String userId, String hashCode, String filter);
+  Future<FetchExpenseListModel> fetchExpenseList(
+      int pageNo, String userId, String hashCode, String filter);
 
-  Future<FetchExpenseDetailsModel> fetchExpenseDetails(String expenseId, String userId, String hashCode);
+  Future<FetchExpenseDetailsModel> fetchExpenseDetails(
+      String expenseId, String userId, String hashCode);
 
   Future<FetchExpenseMasterModel> fetchExpenseMaster(String hashCode);
 

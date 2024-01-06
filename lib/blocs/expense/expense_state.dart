@@ -30,7 +30,8 @@ class ExpenseStatusSelected extends ExpenseStates {
   final List statusValueList;
   final List statusIdList;
 
-  ExpenseStatusSelected({required this.statusIdList, required this.statusValueList});
+  ExpenseStatusSelected(
+      {required this.statusIdList, required this.statusValueList});
 }
 
 class FetchingExpenseDetails extends ExpenseStates {}
@@ -40,9 +41,10 @@ class ExpenseDetailsFetched extends ExpenseStates {
   final List popUpMenuList;
   final Map manageExpenseMap;
 
-  ExpenseDetailsFetched({required this.manageExpenseMap,
-    required this.popUpMenuList,
-    required this.fetchExpenseDetailsModel});
+  ExpenseDetailsFetched(
+      {required this.manageExpenseMap,
+      required this.popUpMenuList,
+      required this.fetchExpenseDetailsModel});
 }
 
 class ExpenseDetailsFailedToFetch extends ExpenseStates {
@@ -120,7 +122,8 @@ class ExpenseItemMasterFetched extends ExpenseStates {
   final FetchItemMasterModel fetchItemMasterModel;
   final bool isScreenChange;
 
-  ExpenseItemMasterFetched({required this.isScreenChange, required this.fetchItemMasterModel});
+  ExpenseItemMasterFetched(
+      {required this.isScreenChange, required this.fetchItemMasterModel});
 }
 
 class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
