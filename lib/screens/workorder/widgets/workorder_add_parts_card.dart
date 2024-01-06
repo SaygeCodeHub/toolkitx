@@ -72,7 +72,7 @@ class WorkOrderAddPartsCard extends StatelessWidget {
                           padding: EdgeInsets.all(xxxTinierSpacing),
                           child: Icon(Icons.add))),
                 )
-              ])
+              ]),
             ])));
   }
 }
