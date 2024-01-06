@@ -53,7 +53,7 @@ class ExpenseDetailsData {
   final String canClose;
   final String ref;
   final String schedule;
-  final List<dynamic> itemlist;
+  final List<Itemlist> itemlist;
   final String total;
   final List<Log> logs;
 
@@ -112,7 +112,8 @@ class ExpenseDetailsData {
           canClose: json["can_close"] ?? '',
           ref: json["ref"] ?? '',
           schedule: json["schedule"] ?? '',
-          itemlist: List<dynamic>.from(json["itemlist"].map((x) => x)),
+          itemlist: List<Itemlist>.from(
+              json["itemlist"].map((x) => Itemlist.fromJson(x))),
           total: json["total"] ?? '',
           logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))));
 
@@ -163,5 +164,39 @@ class Log {
         "created_at": createdAt,
         "action": action,
         "created_by": createdBy,
+      };
+}
+
+class Itemlist {
+  final String id;
+  final String itemname;
+  final String workingat;
+  final String date;
+  final String exchange;
+  final String cost;
+
+  Itemlist(
+      {required this.id,
+      required this.itemname,
+      required this.workingat,
+      required this.date,
+      required this.exchange,
+      required this.cost});
+
+  factory Itemlist.fromJson(Map<String, dynamic> json) => Itemlist(
+      id: json["id"] ?? '',
+      itemname: json["itemname"] ?? '',
+      workingat: json["workingat"] ?? '',
+      date: json["date"] ?? '',
+      exchange: json["exchange"] ?? '',
+      cost: json["cost"] ?? '');
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "itemname": itemname,
+        "workingat": workingat,
+        "date": date,
+        "exchange": exchange,
+        "cost": cost
       };
 }
