@@ -1,3 +1,4 @@
+import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
@@ -159,4 +160,18 @@ class ExpenseAddItemsCurrencySelected extends ExpenseStates {
   final Map currencyDetailsMap;
 
   ExpenseAddItemsCurrencySelected({required this.currencyDetailsMap});
+}
+
+class ApprovingExpense extends ExpenseStates {}
+
+class ExpenseApproved extends ExpenseStates {
+  final ApproveExpenseModel approveExpenseModel;
+
+  ExpenseApproved({required this.approveExpenseModel});
+}
+
+class ExpenseNotApproved extends ExpenseStates {
+  final String notApproved;
+
+  ExpenseNotApproved({required this.notApproved});
 }

@@ -68,6 +68,19 @@ class ExpenseDetailsScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.approvalFailedToSubmit, '');
             }
+            if (state is ApprovingExpense) {
+              ProgressBar.show(context);
+            } else if (state is ExpenseApproved) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ExpenseListScreen.routeName,
+                  arguments: false);
+            } else if (state is ExpenseNotApproved) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.notApproved, '');
+            }
           },
           builder: (context, state) {
             if (state is FetchingExpenseDetails) {

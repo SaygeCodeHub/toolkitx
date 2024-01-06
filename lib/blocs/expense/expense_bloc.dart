@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
@@ -40,6 +42,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseWorkingAtOption>(_selectWorkingAtOption);
     on<SelectExpenseWorkingAtNumber>(_selectWorkingAtNumber);
     on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
+    on<ApproveExpense>(_approveExpense);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -342,5 +345,21 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       SelectExpenseAddItemsCurrency event, Emitter<ExpenseStates> emit) {
     emit(ExpenseAddItemsCurrencySelected(
         currencyDetailsMap: event.currencyDetailsMap));
+  }
+
+  FutureOr<void> _approveExpense(
+      ApproveExpense event, Emitter<ExpenseStates> emit) async {
+    emit(ApprovingExpense());
+    try {
+      ApproveExpenseModel approveExpenseModel =
+          await _expenseRepository.approveExpense({
+        "reportid": expenseId,
+        "userid": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+        "hashcode": await _customerCache.getUserId(CacheKeys.userId) ?? ''
+      });
+      emit(ExpenseApproved(approveExpenseModel: approveExpenseModel));
+    } catch (e) {
+      emit(ExpenseNotApproved(notApproved: e.toString()));
+    }
   }
 }
