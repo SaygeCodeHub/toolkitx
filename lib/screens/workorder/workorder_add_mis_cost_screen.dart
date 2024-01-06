@@ -79,7 +79,6 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
                           maxLength: 30,
-                          value: workOrderDetailsMap['quan'] ?? '',
                           textInputAction: TextInputAction.done,
                           textInputType: TextInputType.number,
                           onTextFieldChanged: (String textField) {
@@ -163,7 +162,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                               const SizedBox(height: xxxTinierSpacing),
                               TextFieldWidget(
                                   maxLength: 30,
-                                  value: workOrderDetailsMap['quan'] ?? '',
+                                  value: workOrderDetailsMap['quan'] ?? "",
                                   textInputAction: TextInputAction.done,
                                   textInputType: TextInputType.number,
                                   onTextFieldChanged: (String textField) {

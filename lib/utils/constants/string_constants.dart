@@ -13,6 +13,7 @@ abstract class StringConstants {
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
+  static const String kNoItems = 'No items!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
@@ -107,6 +108,7 @@ abstract class StringConstants {
       'Please enter emergency contact!'; //
   static const String kAlert = 'Alert'; //
   static const String kViewAll = 'View All'; //
+  static const String kSuccessCode = '1'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
@@ -310,7 +312,7 @@ abstract class StringConstants {
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
   static const String kNameValidation = 'Please enter name';
-  static const String kSelectPermits = 'Select Permits';
+  static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
   static const String kGettingStarted = "Getting Started";
@@ -445,4 +447,21 @@ abstract class StringConstants {
   static const String kEnter = 'Enter';
   static const String kPleaseEnterTimeToClosePermit =
       'Please enter time to close permit';
+  static const String kSetParameter = 'Set Parameter';
+  static const String kUploadMedia = 'UploadMedia';
+  static const String kSetLocation = 'SetLocation';
+  static const String kEquipmentName = "Equipment Name";
+  static const String kEquipmentNo = "Equipment No";
+  static const String kArticleNo = "Article No";
+  static const String kEquipmentCode = "Equipment Code";
+  static const String kTechnicalPositionNo = "Technical Position No";
+  static const String kTechnicalPositionName = "Technical Position Name";
+  static const String kEquipmentRole = "Equipment Role";
+  static const String kEquipmentType = "Equipment Type";
+  static const String kEquipmentSubType = "Equipment Sub-Type";
+  static const String kEnterMileageHere = "enter mileage here";
+  static const String kCustomParameterSaved = "Custom parameter saved";
+  static const String kPartAssigned = 'Part Assigned';
+  static const String kPleaseInsertValidQuantity =
+      'Please insert valid planned quantity';
 }
