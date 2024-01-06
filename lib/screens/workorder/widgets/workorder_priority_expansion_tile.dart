@@ -79,17 +79,4 @@ class WorkOrderPriorityExpansionTile extends StatelessWidget {
           }
         });
   }
-
-  priorityNameSwitch(BuildContext context, String value) {
-    String priorityValue = '';
-    // for (String element in WorkOrderPriorityEnum.values) {
-    //   priorityValue = element;
-    // }
-    switch (value) {
-      case '1':
-        return priorityValue;
-      case '2':
-        return priorityValue;
-    }
-  }
 }
