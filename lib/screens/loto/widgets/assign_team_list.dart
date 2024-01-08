@@ -38,6 +38,24 @@ class AssignTeamList extends StatelessWidget {
             LotoAssignTeamScreen.hasReachedMax == true) {
           showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
         }
+        if (state is AssignTeamRemoved) {
+          LotoAssignTeamScreen.pageNo = 1;
+          LotoAssignTeamScreen.data = [];
+          context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
+              pageNo: LotoAssignTeamScreen.pageNo,
+              isRemove: LotoAssignTeamScreen.isRemove,
+              name: LotoAssignTeamScreen.name));
+          showCustomSnackBar(context, StringConstants.kTeamRemoved, '');
+        } else if (state is LotoAssignTeamNotSaved) {
+          ProgressBar.show(context);
+          showCustomSnackBar(context, StringConstants.kSomethingWentWrong, '');
+        }
+        if (state is LotoAssignTeamFetched) {
+          if (state.fetchLotoAssignTeamModel.status == 204 &&
+              LotoAssignTeamScreen.data.isNotEmpty) {
+            showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
+          }
+        }
       },
       buildWhen: (previousState, currentState) =>
           (currentState is LotoAssignTeamFetching &&
@@ -77,10 +95,18 @@ class AssignTeamList extends StatelessWidget {
                                         color: AppColor.grey)),
                             trailing: InkWell(
                                 onTap: () {
-                                  context.read<LotoDetailsBloc>().add(
-                                      SaveLotoAssignTeam(
-                                          teamId: LotoAssignTeamScreen
-                                              .data[index].id));
+                                  context
+                                              .read<LotoDetailsBloc>()
+                                              .isWorkforceRemove !=
+                                          "1"
+                                      ? context.read<LotoDetailsBloc>().add(
+                                          SaveLotoAssignTeam(
+                                              teamId: LotoAssignTeamScreen
+                                                  .data[index].id))
+                                      : context.read<LotoDetailsBloc>().add(
+                                          RemoveAssignTeam(
+                                              teamId: LotoAssignTeamScreen
+                                                  .data[index].id));
                                 },
                                 child: const Card(
                                     shape: CircleBorder(),

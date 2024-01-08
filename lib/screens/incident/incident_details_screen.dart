@@ -49,7 +49,7 @@ class IncidentDetailsScreen extends StatelessWidget {
                 } else {
                   return const SizedBox();
                 }
-              })
+              }),
         ]),
         body: BlocConsumer<IncidentDetailsBloc, IncidentDetailsStates>(
             buildWhen: (previousState, currentState) =>

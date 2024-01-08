@@ -9,6 +9,7 @@ import '../../../blocs/expense/expense_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/enums/expense_status_enum.dart';
+import '../../../widgets/expansion_tile_border.dart';
 import '../expense_filter_screen.dart';
 
 class ExpenseStatusExpansionTile extends StatelessWidget {
@@ -32,6 +33,11 @@ class ExpenseStatusExpansionTile extends StatelessWidget {
               data: Theme.of(context)
                   .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
+                  collapsedShape:
+                      ExpansionTileBorder().buildOutlineInputBorder(),
+                  collapsedBackgroundColor: AppColor.white,
+                  backgroundColor: AppColor.white,
+                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
                   title: Text(
                       (state.statusValueList.isEmpty)
                           ? StringConstants.kSelect

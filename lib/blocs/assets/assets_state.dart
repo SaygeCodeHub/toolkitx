@@ -88,14 +88,14 @@ class AssetsSiteSelected extends AssetsState {
 class AssetsGetDownTimeFetching extends AssetsState {}
 
 class AssetsGetDownTimeFetched extends AssetsState {
-  final FetchAssetsDowntimeModel fetchAssetsDowntimeModel;
+  final List assetDowntimeDatum;
   final List assetsPopUpMenu;
   final bool showPopUpMenu;
 
   AssetsGetDownTimeFetched({
-    required this.fetchAssetsDowntimeModel,
     required this.assetsPopUpMenu,
     required this.showPopUpMenu,
+    required this.assetDowntimeDatum,
   });
 }
 
@@ -122,12 +122,12 @@ class AssetsDownTimeNotSaved extends AssetsState {
 class AssetsGetDocumentFetching extends AssetsState {}
 
 class AssetsGetDocumentFetched extends AssetsState {
-  final FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel;
+  final List manageDocumentDatum;
   final List assetsPopUpMenu;
   final bool showPopUpMenu;
 
   AssetsGetDocumentFetched({
-    required this.fetchAssetsManageDocumentModel,
+    required this.manageDocumentDatum,
     required this.assetsPopUpMenu,
     required this.showPopUpMenu,
   });
@@ -234,12 +234,14 @@ class AssetsMeterReadingNotSaved extends AssetsState {
 class AssetsMeterSelected extends AssetsState {
   final int id;
   final String meterName;
+
   AssetsMeterSelected({required this.id, required this.meterName});
 }
 
 class AssetsRollOverSelected extends AssetsState {
   final String id;
   final String isRollover;
+
   AssetsRollOverSelected({required this.id, required this.isRollover});
 }
 
@@ -251,4 +253,47 @@ class AssetsDocumentNotDeleted extends AssetsState {
   final String errorMessage;
 
   AssetsDocumentNotDeleted({required this.errorMessage});
+}
+
+class AddAssetsDocumentFetching extends AssetsState {}
+
+class AddAssetsDocumentFetched extends AssetsState {
+  final FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel;
+  final Map documentFilterMap;
+  final List<AddDocumentDatum> data;
+
+  AddAssetsDocumentFetched(
+      {required this.fetchAddAssetsDocumentModel,
+      required this.documentFilterMap,
+      required this.data});
+}
+
+class AddAssetsDocumentNotFetched extends AssetsState {
+  final String errorMessage;
+
+  AddAssetsDocumentNotFetched({required this.errorMessage});
+}
+
+class AssetsDocumentSelected extends AssetsState {
+  final bool isChecked;
+
+  AssetsDocumentSelected({required this.isChecked});
+}
+
+class ManageDocumentAdding extends AssetsState {}
+
+class ManageDocumentAdded extends AssetsState {}
+
+class ManageDocumentNotAdded extends AssetsState {
+  final String errorMessage;
+
+  ManageDocumentNotAdded({required this.errorMessage});
+}
+
+class AssetsDocumentTypeFilterSelected extends AssetsState {
+  final String selectedTypeId;
+  final String selectedTypeName;
+
+  AssetsDocumentTypeFilterSelected(
+      {required this.selectedTypeId, required this.selectedTypeName});
 }

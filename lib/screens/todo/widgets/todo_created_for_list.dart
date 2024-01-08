@@ -62,7 +62,8 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
           child: SearchableList(
               autoFocusOnSearch: false,
               initialList: widget.todoMasterDatum,
-              builder: (ToDoMasterDatum todoMasterDatum) {
+              builder: (List<ToDoMasterDatum> todoDatumList, index,
+                  ToDoMasterDatum todoMasterDatum) {
                 return CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     activeColor: AppColor.deepBlue,

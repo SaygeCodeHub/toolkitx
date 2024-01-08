@@ -21,6 +21,16 @@ class ReportNewIncidentHealthAndSafetyUtil {
           index: index,
           addAndEditIncidentMap: addAndEditIncidentMap,
         );
+      case 5:
+        return IncidentReportCustomFiledInfoExpansionTile(
+          onCustomFieldChanged: (String customFieldOptionId) {
+            customFieldList[index]['id'] =
+                customFieldDatum[index].id.toString();
+            customFieldList[index]['value'] = customFieldOptionId.toString();
+          },
+          index: index,
+          addAndEditIncidentMap: addAndEditIncidentMap,
+        );
       case 2:
         return TextFieldWidget(
             value: (addAndEditIncidentMap['customfields'] == null ||

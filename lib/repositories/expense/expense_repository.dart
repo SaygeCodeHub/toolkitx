@@ -1,3 +1,6 @@
+import '../../data/models/expense/approve_expnse_model.dart';
+import '../../data/models/expense/close_expense_model.dart';
+import '../../data/models/expense/delete_expense_item_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
@@ -24,4 +27,10 @@ abstract class ExpenseRepository {
 
   Future<FetchItemMasterModel> fetchExpenseItemMaster(
       String hashCode, String expenseId);
+
+  Future<ApproveExpenseModel> approveExpense(Map approveExpenseMap);
+
+  Future<CloseExpenseModel> closeExpense(Map closeExpenseMap);
+
+  Future<DeleteExpenseItemModel> deleteExpenseItem(Map deleteExpenseItemMap);
 }

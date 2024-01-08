@@ -7,14 +7,18 @@ import 'package:toolkit/screens/checklist/systemUser/widgets/sys_user_filter_exp
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
 import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_event.dart';
+import '../../../../blocs/location/location_bloc.dart';
+import '../../../../blocs/location/location_event.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/generic_text_field.dart';
 import '../../../../widgets/primary_button.dart';
 
 class FilterSection extends StatelessWidget {
-  FilterSection({Key? key}) : super(key: key);
-  final Map filterDataMap = {};
+  const FilterSection({Key? key}) : super(key: key);
+  static Map filterDataMap = {};
+  static bool isFromLocation = false;
+  static String expenseId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +31,7 @@ class FilterSection extends StatelessWidget {
               style: Theme.of(context).textTheme.medium),
           const SizedBox(height: tinierSpacing),
           TextFieldWidget(
+              value: filterDataMap["checklistname"] ?? '',
               maxLength: 80,
               onTextFieldChanged: (String textValue) {
                 filterDataMap["checklistname"] = textValue;
@@ -53,8 +58,17 @@ class FilterSection extends StatelessWidget {
               },
               child: PrimaryButton(
                   onPressed: () {
-                    context.read<SysUserCheckListBloc>().add(
-                        FilterChecklist(filterChecklistMap: filterDataMap));
+                    if (isFromLocation == true) {
+                      context
+                          .read<LocationBloc>()
+                          .add(ApplyCheckListFilter(filterMap: filterDataMap));
+                      Navigator.pop(context);
+                      context.read<LocationBloc>().add(FetchLocationDetails(
+                          locationId: expenseId, selectedTabIndex: 6));
+                    } else {
+                      context.read<SysUserCheckListBloc>().add(
+                          FilterChecklist(filterChecklistMap: filterDataMap));
+                    }
                   },
                   textValue: StringConstants.kApply))
         ],

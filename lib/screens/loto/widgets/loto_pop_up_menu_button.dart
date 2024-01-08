@@ -6,7 +6,6 @@ import 'package:toolkit/data/models/loto/loto_details_model.dart';
 import 'package:toolkit/screens/loto/loto_add_comment_screen.dart';
 import 'package:toolkit/screens/loto/loto_upload_photos_screen.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
-import 'package:toolkit/screens/loto/widgets/start_remove_loto_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -14,6 +13,7 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/android_pop_up.dart';
 import '../loto_assign_team_screen.dart';
 import '../loto_assign_workfoce_screen.dart';
+import '../loto_reject_screen.dart';
 
 class LotoPopupMenuButton extends StatelessWidget {
   const LotoPopupMenuButton(
@@ -55,7 +55,12 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('AddComment')) {
-            Navigator.pushNamed(context, LotoAddCommentScreen.routeName);
+            Navigator.pushNamed(context, LotoAddCommentScreen.routeName).then(
+                (_) => {
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
             Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName).then(
@@ -65,7 +70,16 @@ class LotoPopupMenuButton extends StatelessWidget {
                           .add(FetchLotoDetails(lotTabIndex: 0))
                     });
           }
+          if (value == DatabaseUtil.getText('assign_team')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
+                    });
+          }
           if (value == DatabaseUtil.getText('Start')) {
+            StartLotoScreen.isFromStartRemoveLoto = false;
             Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
                 {
                   context
@@ -74,12 +88,13 @@ class LotoPopupMenuButton extends StatelessWidget {
                 });
           }
           if (value == DatabaseUtil.getText('StartRemoveLotoButton')) {
-            Navigator.pushNamed(context, StartRemoveLotoScreen.routeName).then(
-                (_) => {
-                      context
-                          .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
-                    });
+            StartLotoScreen.isFromStartRemoveLoto = true;
+            Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
+                {
+                  context
+                      .read<LotoDetailsBloc>()
+                      .add(FetchLotoDetails(lotTabIndex: 0))
+                });
           }
           if (value ==
               DatabaseUtil.getText('assign _workforce_for_remove_loto')) {
@@ -88,6 +103,15 @@ class LotoPopupMenuButton extends StatelessWidget {
                       context
                           .read<LotoDetailsBloc>()
                           .add(FetchLotoDetails(lotTabIndex: 0))
+                    });
+          }
+
+          if (value == DatabaseUtil.getText('assign_team_for_remove_loto')) {
+            Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
+                .then((_) => {
+                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                          lotTabIndex:
+                              context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
           if (value == DatabaseUtil.getText('Apply')) {
@@ -187,6 +211,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                                           .read<LotoDetailsBloc>()
                                           .lotoTabIndex));
                             })));
+          }
+          if (value == DatabaseUtil.getText('RejectButton')) {
+            Navigator.pushNamed(context, LotoRejectScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

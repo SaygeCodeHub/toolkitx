@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
+import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
+import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
@@ -11,11 +16,13 @@ import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
 import '../screens/assets/assets_manage_comments_screen.dart';
+import '../screens/assets/assets_manage_document_filter_screen.dart';
 import '../screens/assets/assets_manage_document_screeen.dart';
 import '../screens/assets/assets_manage_meter_reading_screen.dart';
 import '../screens/assets/assets_report_failure_screen.dart';
 import '../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../screens/assets/widgets/assets_add_comment_screen.dart';
+import '../screens/assets/widgets/assets_document_filter_type_list.dart';
 import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/assets/widgets/assets_report_failure_location_list.dart';
@@ -45,6 +52,10 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/equipmentTraceability/equipment_trace_screen.dart';
+import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
+import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
+import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -64,20 +75,21 @@ import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
 import '../screens/location/location_details_screen.dart';
 import '../screens/location/location_list_screen.dart';
+import '../screens/location/widgets/location_filter_screen.dart';
 import '../screens/logBook/logbook_details_screen.dart';
 import '../screens/logBook/add_logbook_screen.dart';
 import '../screens/logBook/logbook_filter_screen.dart';
 import '../screens/logBook/logbook_list_screen.dart';
+import '../screens/loto/loto_filter_screen.dart';
+import '../screens/loto/loto_list_screen.dart';
+import '../screens/loto/widgets/loto_location_list.dart';
 import '../screens/loto/loto_add_comment_screen.dart';
 import '../screens/loto/loto_assign_team_screen.dart';
 import '../screens/loto/loto_assign_workfoce_screen.dart';
-import '../screens/loto/loto_filter_screen.dart';
-import '../screens/loto/loto_list_screen.dart';
 import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
-import '../screens/loto/widgets/loto_location_list.dart';
+import '../screens/loto/loto_reject_screen.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
-import '../screens/loto/widgets/start_remove_loto_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -284,7 +296,7 @@ class AppRoutes {
         return _createRoute(QualityManagementDetailsScreen(
             qmListMap: settings.arguments as Map));
       case LogBookFilterScreen.routeName:
-        return _createRoute(LogBookFilterScreen());
+        return _createRoute(const LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
@@ -296,7 +308,7 @@ class AppRoutes {
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
-        return _createRoute(WorkOrderFilterScreen());
+        return _createRoute(const WorkOrderFilterScreen());
       case SignInListScreen.routeName:
         return _createRoute(const SignInListScreen());
       case CertificatesListScreen.routeName:
@@ -385,8 +397,6 @@ class AppRoutes {
         return _createRoute(const LotoAssignWorkforceScreen());
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
-      case StartRemoveLotoScreen.routeName:
-        return _createRoute(const StartRemoveLotoScreen());
       case LotoUploadPhotosScreen.routeName:
         return _createRoute(LotoUploadPhotosScreen());
       case LotoAddCommentScreen.routeName:
@@ -443,12 +453,50 @@ class AppRoutes {
         return _createRoute(
             LocationDetailsScreen(expenseId: settings.arguments.toString()));
       case LocationListScreen.routeName:
-        return _createRoute(const LocationListScreen());
+        return _createRoute(const LocationListScreen(isFromHome: true));
       case ExpenseDetailsScreen.routeName:
         return _createRoute(
             ExpenseDetailsScreen(expenseId: settings.arguments.toString()));
       case ManageExpenseFormScreen.routeName:
         return _createRoute(const ManageExpenseFormScreen());
+      case AddAssetsDocumentScreen.routeName:
+        return _createRoute(const AddAssetsDocumentScreen());
+      case AssetsManageDocumentFilterScreen.routeName:
+        return _createRoute(const AssetsManageDocumentFilterScreen());
+      case LocationFilterScreen.routeName:
+        return _createRoute(const LocationFilterScreen());
+      case AssetsDocumentFilterTypeList.routeName:
+        return _createRoute(AssetsDocumentFilterTypeList(
+          selectedTypeName: settings.arguments.toString(),
+        ));
+      case LotoViewResponseScreen.routeName:
+        return _createRoute(LotoViewResponseScreen(
+          checklistId: settings.arguments.toString(),
+        ));
+      case LotoRejectScreen.routeName:
+        return _createRoute(const LotoRejectScreen());
+      case EquipmentTraceScreen.routeName:
+        return _createRoute(const EquipmentTraceScreen());
+      case SearchEquipmentListScreen.routeName:
+        return _createRoute(SearchEquipmentListScreen(
+          isFromHome: settings.arguments as bool,
+        ));
+      case SearchEquipmentDetailsScreen.routeName:
+        return _createRoute(SearchEquipmentDetailsScreen(
+          searchEquipmentDetailsMap: settings.arguments as Map,
+        ));
+
+      case SearchEquipmentFilterScreen.routeName:
+        return _createRoute(const SearchEquipmentFilterScreen());
+      case EquipmentSetParameterScreen.routeName:
+        return _createRoute(EquipmentSetParameterScreen(
+          equipmentMap: settings.arguments as Map,
+        ));
+      case TransferEquipmentScreen.routeName:
+        return _createRoute(const TransferEquipmentScreen());
+
+      case EquipmentSaveImages.routeName:
+        return _createRoute(EquipmentSaveImages());
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -16,17 +16,18 @@ class FetchingPermitsInitial extends PermitStates {
 }
 
 class FetchingAllPermits extends PermitStates {
-  final Map filters;
-
-  const FetchingAllPermits({required this.filters});
+  const FetchingAllPermits();
 }
 
 class AllPermitsFetched extends PermitStates {
   final AllPermitModel allPermitModel;
+  final List<AllPermitDatum> permitListData;
   final Map filters;
 
   const AllPermitsFetched(
-      {required this.filters, required this.allPermitModel});
+      {required this.filters,
+      required this.allPermitModel,
+      required this.permitListData});
 }
 
 class CouldNotFetchPermits extends PermitStates {

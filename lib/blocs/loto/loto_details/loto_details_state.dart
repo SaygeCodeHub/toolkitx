@@ -144,6 +144,20 @@ class LotoNotApplied extends LotoDetailsState {
   LotoNotApplied({required this.getError});
 }
 
+class LotoRejecting extends LotoDetailsState {}
+
+class LotoRejected extends LotoDetailsState {
+  final RejectLotoModel rejectLotoModel;
+
+  LotoRejected({required this.rejectLotoModel});
+}
+
+class LotoNotRejected extends LotoDetailsState {
+  final String getError;
+
+  LotoNotRejected({required this.getError});
+}
+
 class LotoAccepting extends LotoDetailsState {}
 
 class LotoAccepted extends LotoDetailsState {
@@ -198,4 +212,85 @@ class LotoPhotosNotUploaded extends LotoDetailsState {
   final String getError;
 
   LotoPhotosNotUploaded({required this.getError});
+}
+
+class LotoChecklistQuestionsFetching extends LotoDetailsState {}
+
+class LotoChecklistQuestionsFetched extends LotoDetailsState {
+  final FetchLotoChecklistQuestionsModel fetchLotoChecklistQuestionsModel;
+  final List answerList;
+
+  LotoChecklistQuestionsFetched(
+      {required this.fetchLotoChecklistQuestionsModel,
+      required this.answerList});
+}
+
+class LotoChecklistQuestionsNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistQuestionsNotFetched({required this.errorMessage});
+}
+
+class AnswerSelected extends LotoDetailsState {
+  final int id;
+  final String text;
+
+  AnswerSelected({
+    required this.id,
+    required this.text,
+  });
+}
+
+class LotoChecklistSaving extends LotoDetailsState {}
+
+class LotoChecklistSaved extends LotoDetailsState {
+  final SaveLotoChecklistModel saveLotoChecklistModel;
+
+  LotoChecklistSaved({required this.saveLotoChecklistModel});
+}
+
+class LotoChecklistNotSaved extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoChecklistNotSaved({required this.errorMessage});
+}
+
+class LotoAssignedChecklistFetching extends LotoDetailsState {}
+
+class LotoAssignedChecklistFetched extends LotoDetailsState {
+  final FetchLotoAssignedChecklistModel fetchLotoAssignedChecklistModel;
+
+  LotoAssignedChecklistFetched({required this.fetchLotoAssignedChecklistModel});
+}
+
+class LotoAssignedChecklistNotFetched extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoAssignedChecklistNotFetched({required this.errorMessage});
+}
+
+class LotoWorkforceDeleting extends LotoDetailsState {}
+
+class LotoWorkforceDeleted extends LotoDetailsState {}
+
+class LotoWorkforceNotDeleted extends LotoDetailsState {
+  final String errorMessage;
+
+  LotoWorkforceNotDeleted({required this.errorMessage});
+}
+
+class AssignTeamRemoving extends LotoDetailsState {}
+
+class AssignTeamRemoved extends LotoDetailsState {}
+
+class AssignTeamRemoveError extends LotoDetailsState {
+  final String errorMessage;
+
+  AssignTeamRemoveError({required this.errorMessage});
+}
+
+class LotoMultiCheckListAnswerSelected extends LotoDetailsState {
+  final bool isChecked;
+
+  LotoMultiCheckListAnswerSelected({required this.isChecked});
 }

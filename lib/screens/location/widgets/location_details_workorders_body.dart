@@ -9,6 +9,7 @@ import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/location/fetch_location_workorders_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../../workorder/workorder_details_tab_screen.dart';
 import 'location_details_workorders_tab.dart';
 
 class LocationDetailsWorkOrdersBody extends StatelessWidget {
@@ -34,6 +35,16 @@ class LocationDetailsWorkOrdersBody extends StatelessWidget {
             if (index < workOrderLocations.length) {
               return CustomCard(
                 child: ListTile(
+                  onTap: () {
+                    WorkOrderDetailsTabScreen.workOrderMap['workOrderId'] =
+                        workOrderLocations[index].id;
+                    WorkOrderDetailsTabScreen.workOrderMap['workOrderName'] =
+                        workOrderLocations[index].woname;
+                    WorkOrderDetailsTabScreen.workOrderMap['status'] =
+                        workOrderLocations[index].status;
+                    Navigator.pushNamed(
+                        context, WorkOrderDetailsTabScreen.routeName);
+                  },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(
                       padding: const EdgeInsets.only(bottom: xxTinierSpacing),
@@ -81,8 +92,7 @@ class LocationDetailsWorkOrdersBody extends StatelessWidget {
               LocationDetailsWorkOrdersTab.pageNo++;
               context.read<LocationBloc>().add(FetchLocationWorkOrders(
                   pageNo: LocationDetailsWorkOrdersTab.pageNo));
-              return const Expanded(
-                  child: Center(child: CircularProgressIndicator()));
+              return const Center(child: CircularProgressIndicator());
             }
           },
           separatorBuilder: (context, index) {

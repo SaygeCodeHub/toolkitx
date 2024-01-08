@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/LogBook/fetch_logbook_master_model.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class LogBookActivityExpansionTile extends StatelessWidget {
   final List<List<LogBokFetchMaster>> data;
@@ -31,6 +32,11 @@ class LogBookActivityExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text((state.activityName == '')

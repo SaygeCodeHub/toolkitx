@@ -46,12 +46,15 @@ class SearchLotoAssignWorkForce extends LotoDetailsEvent {
   SearchLotoAssignWorkForce({required this.isWorkforceSearched});
 }
 
-class StartLotoEvent extends LotoDetailsEvent {
-  StartLotoEvent();
-}
+class StartLotoEvent extends LotoDetailsEvent {}
 
 class StartRemoveLotoEvent extends LotoDetailsEvent {
   StartRemoveLotoEvent();
+}
+
+class RejectLotoEvent extends LotoDetailsEvent {
+  final String remark;
+  RejectLotoEvent({required this.remark});
 }
 
 class ApplyLotoEvent extends LotoDetailsEvent {
@@ -68,15 +71,57 @@ class RemoveLotoEvent extends LotoDetailsEvent {
 
 class RemoveAssignWorkforce extends LotoDetailsEvent {
   final int peopleId;
+
   RemoveAssignWorkforce({required this.peopleId});
 }
 
 class LotoUploadPhotos extends LotoDetailsEvent {
   final String filename;
+
   LotoUploadPhotos({required this.filename});
 }
 
 class AddLotoComment extends LotoDetailsEvent {
   final String comment;
+
   AddLotoComment({required this.comment});
+}
+
+class FetchLotoChecklistQuestions extends LotoDetailsEvent {
+  final String checkListId;
+
+  FetchLotoChecklistQuestions({this.checkListId = ""});
+}
+
+class SelectAnswer extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectAnswer({required this.id, required this.text});
+}
+
+class SaveLotoChecklist extends LotoDetailsEvent {}
+
+class FetchLotoAssignedChecklists extends LotoDetailsEvent {
+  final String isRemove;
+
+  FetchLotoAssignedChecklists({required this.isRemove});
+}
+
+class DeleteLotoWorkforce extends LotoDetailsEvent {
+  final Map deleteWorkforceMap;
+
+  DeleteLotoWorkforce({required this.deleteWorkforceMap});
+}
+
+class RemoveAssignTeam extends LotoDetailsEvent {
+  final String teamId;
+
+  RemoveAssignTeam({required this.teamId});
+}
+
+class SelectLotoChecklistMultiAnswer extends LotoDetailsEvent {
+  final bool isChecked;
+
+  SelectLotoChecklistMultiAnswer({required this.isChecked});
 }

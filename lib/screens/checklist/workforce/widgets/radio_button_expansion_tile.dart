@@ -7,6 +7,7 @@ import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edi
 import '../../../../configs/app_color.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../utils/database_utils.dart';
+import '../../../../widgets/expansion_tile_border.dart';
 
 typedef RadioButtonCallBack = Function(String radioId, String radioValue);
 
@@ -37,7 +38,11 @@ class RadioButtonExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedBackgroundColor: AppColor.offWhite,
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

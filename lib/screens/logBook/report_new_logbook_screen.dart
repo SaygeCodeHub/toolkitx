@@ -56,7 +56,8 @@ class ReportNewLogBookScreen extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(
-                      context, LogbookListScreen.routeName);
+                      context, LogbookListScreen.routeName,
+                      arguments: false);
                 } else if (state is NewLogBookNotReported) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.logbookNotReported, '');
