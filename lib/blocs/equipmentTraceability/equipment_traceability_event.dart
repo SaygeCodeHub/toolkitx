@@ -34,3 +34,9 @@ class SaveCustomParameter extends EquipmentTraceabilityEvent {
 
   SaveCustomParameter({required this.saveCustomParameterMap});
 }
+
+class EquipmentSaveImage extends EquipmentTraceabilityEvent {
+  final Map saveImagesMap;
+
+  EquipmentSaveImage({required this.saveImagesMap});
+}
