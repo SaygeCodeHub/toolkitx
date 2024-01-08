@@ -29,7 +29,7 @@ dependencies:
   connectivity_plus:
   shared_preferences:
   permission_handler:
-  searchable_listview: ^2.4.0
+  searchable_listview:
   cached_network_image:
   signature: ^5.4.0
   flutter_inappwebview: ^5.7.2+3

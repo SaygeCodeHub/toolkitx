@@ -70,7 +70,7 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
                     controlAffinity: ListTileControlAffinity.trailing,
                     title: Text(todoMasterDatum.name),
                     value:
-                        selectedCreatedForIdList.contains(todoMasterDatum.id),
+                    selectedCreatedForIdList.contains(todoMasterDatum.id),
                     onChanged: (isChecked) {
                       setState(() {
                         checkBoxChange(isChecked!, todoMasterDatum.id,
