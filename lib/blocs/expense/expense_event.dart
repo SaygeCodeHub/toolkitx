@@ -96,3 +96,9 @@ class SelectExpenseAddItemsCurrency extends ExpenseEvent {
 class ApproveExpense extends ExpenseEvent {}
 
 class CloseExpense extends ExpenseEvent {}
+
+class DeleteExpenseItem extends ExpenseEvent {
+  final String itemId;
+
+  DeleteExpenseItem({required this.itemId});
+}
