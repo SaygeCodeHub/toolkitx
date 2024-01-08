@@ -180,3 +180,13 @@ class ExpenseNotClosed extends ExpenseStates {
 
   ExpenseNotClosed({required this.notClosed});
 }
+
+class DeletingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemDeleted extends ExpenseStates {}
+
+class ExpenseItemNotDeleted extends ExpenseStates {
+  final String itemNotDeleted;
+
+  ExpenseItemNotDeleted({required this.itemNotDeleted});
+}
