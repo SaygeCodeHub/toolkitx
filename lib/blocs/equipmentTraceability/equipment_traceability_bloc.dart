@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
@@ -91,7 +89,7 @@ class EquipmentTraceabilityBloc
           await _equipmentTraceabilityRepo.fetchDetailsEquipment(
               hashCode, event.equipmentId, userId);
       equipmentId = event.equipmentId;
-      log('id===========>$equipmentId');
+
       if (fetchSearchEquipmentDetailsModel.status == 200) {
         emit(SearchEquipmentDetailsFetched(
           fetchSearchEquipmentDetailsModel: fetchSearchEquipmentDetailsModel,
