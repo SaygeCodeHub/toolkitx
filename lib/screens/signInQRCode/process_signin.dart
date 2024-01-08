@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:toolkit/blocs/signInQRCode/signInProcess/sign_in_process_bloc.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
+import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
@@ -14,6 +16,7 @@ import '../../configs/app_color.dart';
 
 class ProcessSignInScreen extends StatefulWidget {
   static const routeName = 'ProcessSignInScreen';
+  static bool isSignOut = false;
 
   const ProcessSignInScreen({Key? key}) : super(key: key);
 
@@ -43,7 +46,7 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 5,
+            flex: 4,
             child: QRView(
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,
@@ -56,12 +59,16 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
           ),
           Expanded(
             flex: 1,
-            child: Center(
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                  child: MultiBlocListener(
-                    listeners: [
-                      BlocListener<SignInProcessBloc, SignInProcessState>(
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text('Fetched Code : $result'),
+              const SizedBox(height: xxTinierSpacing),
+              Center(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: xxLargeSpacing),
+                      child:
+                          BlocListener<SignInProcessBloc, SignInProcessState>(
                         listener: (context, state) {
                           if (state is SignInProcessing) {
                             ProgressBar.show(context);
@@ -71,7 +78,9 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             showCustomSnackBar(
                                 context, StringConstants.kLoginSuccess, '');
                             Navigator.pop(context);
-                            Navigator.pop(context);
+
+                            Navigator.pushReplacementNamed(
+                                context, SignInListScreen.routeName);
                           }
                           if (state is SignInUnauthorizedPop) {
                             ProgressBar.dismiss(context);
@@ -80,7 +89,6 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                               builder: (context) {
                                 return AndroidPopUp(
                                   onSecondaryButton: () {
-                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                   },
                                   titleValue: StringConstants.kWarning,
@@ -98,10 +106,20 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             ProgressBar.dismiss(context);
                             showCustomSnackBar(context, state.errorMsg, '');
                           }
-                        },
-                      ),
-                      BlocListener<SignInProcessBloc, SignInProcessState>(
-                        listener: (context, state) {
+                          if (state is SignOutProcessing) {
+                            ProgressBar.show(context);
+                          } else if (state is SignOutProcessed) {
+                            ProgressBar.dismiss(context);
+                            showCustomSnackBar(context,
+                                StringConstants.kSignOutSuccessfully, '');
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          } else if (state is SignOutNotProcessed) {
+                            ProgressBar.dismiss(context);
+                            Navigator.pop(context);
+                            showCustomSnackBar(
+                                context, StringConstants.kNoActiveSignIn, '');
+                          }
                           if (state is SignInUnauthorizedProcessing) {
                             showDialog(
                               context: context,
@@ -118,24 +136,27 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, SignInListScreen.routeName);
                           }
                           if (state is SignInUnathorizedError) {
                             showCustomSnackBar(context,
                                 StringConstants.kUnauthorizedError, '');
                           }
                         },
-                      ),
-                    ],
-                    child: PrimaryButton(
-                        onPressed: () {
-                          context
-                              .read<SignInProcessBloc>()
-                              .add(SignInProcess(qRCode: result));
-                        },
-                        textValue: StringConstants.kCapture),
-                  )),
-            ),
+                        child: PrimaryButton(
+                            onPressed: () {
+                              ProcessSignInScreen.isSignOut != true
+                                  ? context
+                                      .read<SignInProcessBloc>()
+                                      .add(SignInProcess(qRCode: result))
+                                  : context
+                                      .read<SignInProcessBloc>()
+                                      .add(ProcessSignOut(qRCode: result));
+                            },
+                            textValue: StringConstants.kCapture),
+                      )))
+            ]),
           )
         ],
       ),

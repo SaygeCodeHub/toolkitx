@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/SignInQRCode/assign_to_me_checklist_model.da
 import 'package:toolkit/data/models/SignInQRCode/assign_to_me_loto_model.dart';
 import 'package:toolkit/data/models/SignInQRCode/assign_to_me_permit_model.dart';
 import 'package:toolkit/data/models/SignInQRCode/assign_to_me_workorder_model.dart';
+import 'package:toolkit/data/models/SignInQRCode/process_sign_out_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository.dart';
 
 import '../../data/models/SignInQRCode/current_signin_model.dart';
@@ -78,5 +79,12 @@ class SignInImpl extends SignInRepository {
         "${ApiConstants.baseUrl}common/processunauthorizedsignin",
         unathorizedSingInMap);
     return SignInUnathorizedModel.fromJson(response);
+  }
+
+  @override
+  Future<ProcessSignOutModel> processSignOut(Map processSignOutMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}common/processsignout", processSignOutMap);
+    return ProcessSignOutModel.fromJson(response);
   }
 }

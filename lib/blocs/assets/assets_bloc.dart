@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
+import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
+import 'package:toolkit/data/models/assets/fetch_add_assets_document_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
 import 'package:toolkit/data/models/assets/fetch_assets_comment_model.dart';
 import 'package:toolkit/data/models/assets/save_assets_downtime_model.dart';
@@ -22,6 +25,7 @@ import '../../screens/assets/widgets/assets_add_and_edit_downtime_screen.dart';
 import '../../utils/database_utils.dart';
 
 part 'assets_event.dart';
+
 part 'assets_state.dart';
 
 class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
@@ -52,15 +56,29 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     on<SaveAssetsMeterReading>(_saveAssetsMeterReading);
     on<SelectAssetsMeter>(_selectAssetsMeter);
     on<SelectAssetsRollOver>(_selectAssetsRollOver);
+    on<DeleteAssetsDocument>(_deleteAssetsDocument);
+    on<FetchAddAssetsDocument>(_fetchAddAssetsDocument);
+    on<SelectAssetsDocument>(_selectAssetsDocument);
+    on<SelectAssetsDocumentTypeFilter>(_selectAssetsDocumentTypeFilter);
+    on<ApplyAssetsDocumentFilter>(_applyAssetsDocumentFilter);
+    on<ClearAssetsDocumentFilter>(_clearAssetsDocumentFilter);
+    on<AddManageDocument>(_addManageDocument);
   }
 
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
+  List<AddDocumentDatum> addDocumentDatum = [];
+  List<AssetsDowntimeDatum> assetsDowntimeDatum = [];
+  List<ManageDocumentDatum> manageDocumentDatum = [];
   bool hasReachedMax = false;
+  bool hasDocumentReachedMax = false;
+  bool hasDowntimeReachedMax = false;
   bool isFromAdd = true;
   Map filters = {};
+  Map documentFilters = {};
   List assetMasterData = [];
   String selectLocationName = '';
+  String selectTypeName = '';
   String assetId = "";
 
   Future<FutureOr<void>> _fetchAssetsList(
@@ -68,7 +86,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     emit(AssetsListFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.isFromHome == true) {
+      if (event.isFromHome == false) {
         FetchAssetsListModel fetchAssetsListModel = await _assetsRepository
             .fetchAssetsListRepo(event.pageNo, hashCode!, "");
         assetsDatum.addAll(fetchAssetsListModel.data);
@@ -170,20 +188,23 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsGetDownTime event, Emitter<AssetsState> emit) async {
     emit(AssetsGetDownTimeFetching());
     try {
-      List popUpMenuItems = [
-        DatabaseUtil.getText("Edit"),
-        DatabaseUtil.getText("Delete"),
-        DatabaseUtil.getText("Cancel"),
-      ];
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
-          await _assetsRepository.fetchAssetsDowntimeRepo(
-              event.pageNo, hashCode!, event.assetId);
-
-      emit(AssetsGetDownTimeFetched(
-          fetchAssetsDowntimeModel: fetchAssetsDowntimeModel,
-          assetsPopUpMenu: popUpMenuItems,
-          showPopUpMenu: true));
+      if (!hasDowntimeReachedMax) {
+        List popUpMenuItems = [
+          DatabaseUtil.getText("Edit"),
+          DatabaseUtil.getText("Delete"),
+          DatabaseUtil.getText("Cancel"),
+        ];
+        String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+        FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
+            await _assetsRepository.fetchAssetsDowntimeRepo(
+                event.pageNo, hashCode!, event.assetId);
+        hasDowntimeReachedMax = fetchAssetsDowntimeModel.data.isEmpty;
+        assetsDowntimeDatum.addAll(fetchAssetsDowntimeModel.data);
+        emit(AssetsGetDownTimeFetched(
+            assetsPopUpMenu: popUpMenuItems,
+            showPopUpMenu: true,
+            assetDowntimeDatum: assetsDowntimeDatum));
+      }
     } catch (e) {
       emit(AssetsGetDownTimeError(errorMessage: e.toString()));
     }
@@ -227,8 +248,10 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsManageDocumentModel fetchAssetsManageDocumentModel =
           await _assetsRepository.fetchAssetsDocument(
               event.pageNo, hashCode!, event.assetsId);
+      hasDocumentReachedMax = fetchAssetsManageDocumentModel.data.isEmpty;
+      manageDocumentDatum.addAll(fetchAssetsManageDocumentModel.data);
       emit(AssetsGetDocumentFetched(
-          fetchAssetsManageDocumentModel: fetchAssetsManageDocumentModel,
+          manageDocumentDatum: manageDocumentDatum,
           assetsPopUpMenu: popUpMenuItems,
           showPopUpMenu: true));
     } catch (e) {
@@ -402,5 +425,114 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   FutureOr<void> _selectAssetsRollOver(
       SelectAssetsRollOver event, Emitter<AssetsState> emit) {
     emit(AssetsRollOverSelected(id: event.id, isRollover: event.isRollover));
+  }
+
+  Future<FutureOr<void>> _deleteAssetsDocument(
+      DeleteAssetsDocument event, Emitter<AssetsState> emit) async {
+    emit(AssetsDocumentDeleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map deleteDocumentMap = {
+        "docid": event.documentId,
+        "assetid": assetId,
+        "hashcode": hashCode
+      };
+      AssetsDeleteDocumentModel assetsDeleteDocumentModel =
+          await _assetsRepository.assetsDeleteDocumentRepo(deleteDocumentMap);
+      if (assetsDeleteDocumentModel.status == 200) {
+        emit(AssetsDocumentDeleted());
+      } else {
+        emit(AssetsDownTimeNotDeleted(
+            errorMessage: assetsDeleteDocumentModel.message));
+      }
+    } catch (e) {
+      emit(AssetsDownTimeNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAddAssetsDocument(
+      FetchAddAssetsDocument event, Emitter<AssetsState> emit) async {
+    emit(AddAssetsDocumentFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (event.isFromHome) {
+        FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+            await _assetsRepository.fetchAddAssetsDocument(
+                event.pageNo, hashCode, assetId, '{}');
+        hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
+        addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+        emit(AddAssetsDocumentFetched(
+            fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
+            documentFilterMap: {},
+            data: fetchAddAssetsDocumentModel.data));
+      } else {
+        FetchAddAssetsDocumentModel fetchAddAssetsDocumentModel =
+            await _assetsRepository.fetchAddAssetsDocument(
+                event.pageNo, hashCode, assetId, jsonEncode(documentFilters));
+        hasDocumentReachedMax = fetchAddAssetsDocumentModel.data.isEmpty;
+        addDocumentDatum.addAll(fetchAddAssetsDocumentModel.data);
+        if (fetchAddAssetsDocumentModel.status == 200) {
+          emit(AddAssetsDocumentFetched(
+              fetchAddAssetsDocumentModel: fetchAddAssetsDocumentModel,
+              documentFilterMap: documentFilters,
+              data: fetchAddAssetsDocumentModel.data));
+        }
+      }
+    } catch (e) {
+      emit(AddAssetsDocumentNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAssetsDocument(
+      SelectAssetsDocument event, Emitter<AssetsState> emit) {
+    emit(AssetsDocumentSelected(isChecked: event.isChecked));
+  }
+
+  Future<FutureOr<void>> _addManageDocument(
+      AddManageDocument event, Emitter<AssetsState> emit) async {
+    emit(ManageDocumentAdding());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map addDocumentMap = {
+        "hashcode": hashCode,
+        "assetid": assetId,
+        "documents": event.addDocumentMap['documents'],
+        "userid": userId
+      };
+      if (event.addDocumentMap['documents'] == null ||
+          event.addDocumentMap['documents'].toString().isEmpty) {
+        emit(ManageDocumentNotAdded(errorMessage: 'Please Select Document'));
+      } else {
+        AddManageDocumentModel addManageDocumentModel =
+            await _assetsRepository.addManageDocumentRepo(addDocumentMap);
+        if (addManageDocumentModel.status == 200) {
+          emit(ManageDocumentAdded());
+        } else {
+          emit(ManageDocumentNotAdded(
+              errorMessage: addManageDocumentModel.message));
+        }
+      }
+    } catch (e) {
+      emit(ManageDocumentNotAdded(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectAssetsDocumentTypeFilter(
+      SelectAssetsDocumentTypeFilter event, Emitter<AssetsState> emit) {
+    emit(AssetsDocumentTypeFilterSelected(
+        selectedTypeId: event.selectedTypeId,
+        selectedTypeName: event.selectedTypeName));
+  }
+
+  FutureOr<void> _applyAssetsDocumentFilter(
+      ApplyAssetsDocumentFilter event, Emitter<AssetsState> emit) {
+    documentFilters = event.assetsDocumentFilterMap;
+  }
+
+  FutureOr<void> _clearAssetsDocumentFilter(
+      ClearAssetsDocumentFilter event, Emitter<AssetsState> emit) {
+    documentFilters = {};
   }
 }

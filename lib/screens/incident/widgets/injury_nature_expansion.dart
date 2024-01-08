@@ -6,6 +6,7 @@ import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_ev
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../data/models/incident/incident_injury_master.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class InjuryNatureExpansionTile extends StatelessWidget {
   final List<IncidentInjuryMasterDatum> injuryNature;
@@ -32,6 +33,11 @@ class InjuryNatureExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     title: Text(
                         (state.selectedInjuryNature.isEmpty)

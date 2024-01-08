@@ -65,6 +65,7 @@ class LogbookListScreen extends StatelessWidget {
                           LogbookList.page = 1;
                           logbookData.clear();
                           LogbookList.noMoreData = false;
+                          LogBookFilterScreen.logbookFilterMap.clear();
                           context.read<LogbookBloc>().add(ClearLogBookFilter());
                           context.read<LogbookBloc>().add(FetchLogbookList(
                               isFromHome: isFromHome, pageNo: 1));
@@ -79,6 +80,7 @@ class LogbookListScreen extends StatelessWidget {
                 CustomIconButtonRow(
                   isEnabled: true,
                   primaryOnPress: () {
+                    LogBookFilterScreen.isFromLocation = false;
                     Navigator.pushNamed(context, LogBookFilterScreen.routeName);
                   },
                   secondaryVisible: false,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/loto/loto_list/loto_list_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/widgets/loto_location_list.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -22,13 +22,15 @@ class LotoLocationFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<LotoListBloc>().add(SelectLotoLocationFilter(
         selectLocationName:
-            (lotoFilterMap['loc'] == null) ? '' : lotoFilterMap['loc']));
+            (lotoFilterMap['locName'] == null) ? '' : lotoFilterMap['locName'],
+        selectLocationId: lotoFilterMap['loc'] ?? ''));
     return BlocBuilder<LotoListBloc, LotoListState>(
         buildWhen: (previousState, currentState) =>
             currentState is LotoLocationFilterSelected,
         builder: (context, state) {
           if (state is LotoLocationFilterSelected) {
-            lotoFilterMap['loc'] = state.selectLocationName;
+            lotoFilterMap['loc'] = state.selectLocationId;
+            lotoFilterMap['locName'] = state.selectLocationName;
             return Column(
               children: [
                 ListTile(
@@ -71,7 +73,7 @@ class LotoLocationFilter extends StatelessWidget {
                           TextFieldWidget(
                               hintText: DatabaseUtil.getText('OtherLocation'),
                               onTextFieldChanged: (String textField) {
-                                lotoFilterMap['loc'] =
+                                lotoFilterMap['locName'] =
                                     (state.selectLocationName == 'Other'
                                         ? textField
                                         : '');

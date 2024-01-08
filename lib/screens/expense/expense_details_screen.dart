@@ -20,6 +20,7 @@ import 'expense_list_screen.dart';
 import 'expense_details_tab_two.dart';
 import 'expense_pop_up_menu_screen.dart';
 import 'widgets/expense_details_tab_one.dart';
+import 'widgets/expense_item_details_tab.dart';
 
 class ExpenseDetailsScreen extends StatelessWidget {
   static const routeName = 'ExpenseDetailsScreen';
@@ -67,6 +68,44 @@ class ExpenseDetailsScreen extends StatelessWidget {
             } else if (state is ExpenseForApprovalFailedToSubmit) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.approvalFailedToSubmit, '');
+            }
+            if (state is ApprovingExpense) {
+              ProgressBar.show(context);
+            } else if (state is ExpenseApproved) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ExpenseListScreen.routeName,
+                  arguments: false);
+            } else if (state is ExpenseNotApproved) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.notApproved, '');
+            }
+            if (state is ClosingExpense) {
+              ProgressBar.show(context);
+            } else if (State is ExpenseClosed) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ExpenseListScreen.routeName,
+                  arguments: false);
+            } else if (state is ExpenseNotClosed) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.notClosed, '');
+            }
+            if (state is DeletingExpenseItem) {
+              ProgressBar.show(context);
+            } else if (state is ExpenseItemDeleted) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              context
+                  .read<ExpenseBloc>()
+                  .add(FetchExpenseDetails(tabIndex: 2, expenseId: expenseId));
+            } else if (state is ExpenseItemNotDeleted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.itemNotDeleted, '');
             }
           },
           builder: (context, state) {
@@ -120,7 +159,7 @@ class ExpenseDetailsScreen extends StatelessWidget {
                     const Divider(
                         height: kDividerHeight, thickness: kDividerWidth),
                     CustomTabBarView(
-                        lengthOfTabs: 2,
+                        lengthOfTabs: 3,
                         tabBarViewIcons: ExpenseTabsUtil().tabBarViewIcons,
                         initialIndex: context.read<ExpenseBloc>().tabIndex,
                         tabBarViewWidgets: [
@@ -131,6 +170,10 @@ class ExpenseDetailsScreen extends StatelessWidget {
                               expenseId: expenseId),
                           ExpenseDetailsTabTwo(
                               tabIndex: 1,
+                              expenseDetailsData:
+                                  state.fetchExpenseDetailsModel.data),
+                          ExpenseItemDetailTab(
+                              tabIndex: 2,
                               expenseDetailsData:
                                   state.fetchExpenseDetailsModel.data)
                         ])

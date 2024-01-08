@@ -8,6 +8,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class LogBookHandoverExpansionTile extends StatelessWidget {
   final Map reportNewLogBookMap;
@@ -29,6 +30,11 @@ class LogBookHandoverExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text((state.handoverValue == '')

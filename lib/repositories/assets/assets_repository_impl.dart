@@ -1,7 +1,10 @@
+import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
+import 'package:toolkit/data/models/assets/assets_delete_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_delete_downtime_model.dart';
 import 'package:toolkit/data/models/assets/assets_details_model.dart';
 import 'package:toolkit/data/models/assets/assets_list_model.dart';
 import 'package:toolkit/data/models/assets/assets_master_model.dart';
+import 'package:toolkit/data/models/assets/fetch_add_assets_document_model.dart';
 import 'package:toolkit/data/models/assets/fetch_asset_single_downtime_model.dart';
 import 'package:toolkit/data/models/assets/fetch_assets_comment_model.dart';
 import 'package:toolkit/data/models/assets/fetch_assets_document_model.dart';
@@ -109,5 +112,29 @@ class AssetsRepositoryImpl extends AssetsRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}asset/savemeterreading", assetsMeterReadingMap);
     return SaveAssetsMeterReadingModel.fromJson(response);
+  }
+
+  @override
+  Future<AssetsDeleteDocumentModel> assetsDeleteDocumentRepo(
+      Map deleteDocumentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/deletedocument", deleteDocumentMap);
+    return AssetsDeleteDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchAddAssetsDocumentModel> fetchAddAssetsDocument(
+      int pageNo, String hashCode, String assetId, String filter) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}asset/getdocumentsforasset?pageno=$pageNo&hashcode=$hashCode&assetid=$assetId==&filter=$filter");
+    return FetchAddAssetsDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<AddManageDocumentModel> addManageDocumentRepo(
+      Map addDocumentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}asset/managedocuments", addDocumentMap);
+    return AddManageDocumentModel.fromJson(response);
   }
 }

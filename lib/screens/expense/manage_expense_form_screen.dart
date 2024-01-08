@@ -99,7 +99,7 @@ class ManageExpenseFormScreen extends StatelessWidget {
                           manageExpenseMap['purpose'] = textField;
                         }),
                     ExpenseCurrencyListTile(
-                        data: state.fetchExpenseMasterModel.data)
+                        data: state.fetchExpenseMasterModel.data),
                   ],
                 ),
               ),

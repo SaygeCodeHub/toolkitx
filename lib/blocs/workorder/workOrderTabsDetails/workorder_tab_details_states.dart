@@ -463,3 +463,13 @@ class WorkOrderWorkForceNotDeleted extends WorkOrderTabDetailsStates {
 
   WorkOrderWorkForceNotDeleted({required this.workForceNotDeleted});
 }
+
+class WorkOrderPartsAssigning extends WorkOrderTabDetailsStates {}
+
+class WorkOrderPartsAssigned extends WorkOrderTabDetailsStates {}
+
+class WorkOrderPartsNotAssigned extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderPartsNotAssigned({required this.errorMessage});
+}

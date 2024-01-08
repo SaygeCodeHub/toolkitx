@@ -13,9 +13,13 @@ import '../../configs/app_spacing.dart';
 import '../../utils/location_tabs_util.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/generic_app_bar.dart';
+import 'widgets/location_details_checklists_tab.dart';
+import 'widgets/location_details_assets_tab.dart';
+import 'widgets/location_details_logbooks_tab.dart';
 import 'widgets/location_details_loto_tab.dart';
 import 'widgets/location_details_permits_tab.dart';
 import 'widgets/location_details_tab_one.dart';
+import 'widgets/location_details_workorders_tab.dart';
 import 'widgets/location_documents_tab.dart';
 
 class LocationDetailsScreen extends StatelessWidget {
@@ -29,7 +33,7 @@ class LocationDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context
         .read<LocationBloc>()
-        .add(FetchLocationDetails(locationId: expenseId, selectedTabIndex: 1));
+        .add(FetchLocationDetails(locationId: expenseId, selectedTabIndex: 0));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kLocationDetails),
         body: BlocBuilder<LocationBloc, LocationState>(
@@ -68,13 +72,23 @@ class LocationDetailsScreen extends StatelessWidget {
                         tabBarViewWidgets: [
                           LocationDetailsTabOne(
                               data: state.fetchLocationDetailsModel.data,
-                              selectedTabIndex: 1),
+                              selectedTabIndex: 0),
                           LocationDocumentsTab(
                               data: state.fetchLocationDetailsModel.data,
-                              selectedTabIndex: 2,
+                              selectedTabIndex: 1,
                               clientId: state.clientId),
-                          const LocationDetailsPermitsTab(selectedTabIndex: 4),
-                          const LocationDetailsLoToTab(selectedTabIndex: 5)
+                          LocationDetailsPermitsTab(
+                              selectedTabIndex: 2, expenseId: expenseId),
+                          LocationDetailsLoToTab(
+                              selectedTabIndex: 3, expenseId: expenseId),
+                          LocationDetailsWorkOrdersTab(
+                              selectedTabIndex: 4, expenseId: expenseId),
+                          LocationDetailsLogBooksTab(
+                              selectedTabIndex: 5, expenseId: expenseId),
+                          LocationDetailsCheckListsTab(
+                              selectedTabIndex: 6, expenseId: expenseId),
+                          LocationDetailsAssetsTab(
+                              selectedTabIndex: 7, expenseId: expenseId)
                         ])
                   ]));
             } else if (state is LocationDetailsNotFetched) {

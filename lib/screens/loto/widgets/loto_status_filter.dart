@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/enums/loto_status_enum.dart';
-import 'package:toolkit/data/models/loto/loto_master_model.dart';
 import 'package:toolkit/widgets/custom_choice_chip.dart';
-
 import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_dimensions.dart';
+import '../../../data/models/loto/loto_master_model.dart';
 
 class LotoStatusFilter extends StatelessWidget {
   final List<List<LotoMasterDatum>> data;
   final Map lotoFilterMap;
+
   const LotoStatusFilter(
       {super.key, required this.data, required this.lotoFilterMap});
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoListBloc>().add(
-        SelectLotoStatusFilter(selectedIndex: lotoFilterMap["status"] ?? ''));
+    context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+        selectedIndex: lotoFilterMap["status"] ?? '', selected: true));
     return Wrap(spacing: kFilterTags, children: choiceChips());
   }
 
@@ -33,12 +33,11 @@ class LotoStatusFilter extends StatelessWidget {
             return CustomChoiceChip(
                 label: LotoStatusEnum.values[i].name,
                 selected: (lotoFilterMap["status"] == null)
-                    ? false
+                    ? state.selected
                     : state.selectedIndex == id,
                 onSelected: (bool value) {
-                  context
-                      .read<LotoListBloc>()
-                      .add(SelectLotoStatusFilter(selectedIndex: id));
+                  context.read<LotoListBloc>().add(SelectLotoStatusFilter(
+                      selectedIndex: id, selected: value));
                 });
           } else {
             return const SizedBox.shrink();

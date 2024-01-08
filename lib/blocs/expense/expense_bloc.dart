@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,9 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/expense/approve_expnse_model.dart';
+import '../../data/models/expense/close_expense_model.dart';
+import '../../data/models/expense/delete_expense_item_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
@@ -41,6 +45,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseWorkingAtOption>(_selectWorkingAtOption);
     on<SelectExpenseWorkingAtNumber>(_selectWorkingAtNumber);
     on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
+    on<ApproveExpense>(_approveExpense);
+    on<CloseExpense>(_closeExpense);
+    on<DeleteExpenseItem>(_deleteExpenseItem);
     on<SaveExpenseItem>(_saveItem);
   }
 
@@ -344,6 +351,71 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       Emitter<ExpenseStates> emit) {
     emit(ExpenseAddItemsCurrencySelected(
         currencyDetailsMap: event.currencyDetailsMap));
+  }
+
+  FutureOr<void> _approveExpense(
+      ApproveExpense event, Emitter<ExpenseStates> emit) async {
+    emit(ApprovingExpense());
+    try {
+      ApproveExpenseModel approveExpenseModel =
+          await _expenseRepository.approveExpense({
+        "reportid": expenseId,
+        "userid": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+        "hashcode": await _customerCache.getUserId(CacheKeys.userId) ?? ''
+      });
+      if (approveExpenseModel.message == StringConstants.kSuccessCode) {
+        emit(ExpenseApproved());
+      } else {
+        emit(ExpenseNotApproved(
+            notApproved:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ExpenseNotApproved(notApproved: e.toString()));
+    }
+  }
+
+  FutureOr<void> _closeExpense(
+      CloseExpense event, Emitter<ExpenseStates> emit) async {
+    emit(ClosingExpense());
+    try {
+      CloseExpenseModel closeExpenseModel =
+          await _expenseRepository.closeExpense({
+        "reportid": expenseId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
+        "hashcode": await _customerCache.getUserId(CacheKeys.hashcode) ?? ''
+      });
+      if (closeExpenseModel.message == StringConstants.kSuccessCode) {
+        emit(ExpenseClosed());
+      } else {
+        emit(ExpenseNotClosed(
+            notClosed:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ExpenseNotClosed(notClosed: e.toString()));
+    }
+  }
+
+  FutureOr<void> _deleteExpenseItem(
+      DeleteExpenseItem event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(DeletingExpenseItem());
+      DeleteExpenseItemModel deleteExpenseItemModel =
+          await _expenseRepository.deleteExpenseItem({
+        "id": event.itemId,
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? ''
+      });
+      if (deleteExpenseItemModel.status == 200) {
+        emit(ExpenseItemDeleted());
+      } else {
+        emit(ExpenseItemNotDeleted(
+            itemNotDeleted:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ExpenseItemNotDeleted(itemNotDeleted: e.toString()));
+    }
   }
 
   Future<void> _saveItem(SaveExpenseItem event,

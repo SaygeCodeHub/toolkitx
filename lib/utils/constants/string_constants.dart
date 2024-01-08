@@ -13,10 +13,12 @@ abstract class StringConstants {
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
+  static const String kNoItems = 'No items!'; //
   static const String kNoLoto = 'No loto!'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kDeleteItem = 'Do you want to delete this item'; //
   static const String kParts = 'Parts'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
@@ -107,6 +109,7 @@ abstract class StringConstants {
       'Please enter emergency contact!'; //
   static const String kAlert = 'Alert'; //
   static const String kViewAll = 'View All'; //
+  static const String kSuccessCode = '1'; //
   static const String kCannotUnlinkPermit = 'Cannot unlink permit!';
   static const String kFiles = 'Files';
   static const String kOtpGenerated = 'OTP generated';
@@ -155,6 +158,7 @@ abstract class StringConstants {
   static const String kDownloadPdf = 'Pdf';
   static const String kOk = 'Ok';
   static const String kNo = 'No';
+  static const String kYes = 'Yes';
   static const String kApprovalPending = 'Approval Pending';
   static const String kLastUploaded = 'Last Uploaded : ';
   static const String kViewCertificate = 'View Certificate : ';
@@ -194,6 +198,7 @@ abstract class StringConstants {
       'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
+  static const String kName = 'Name';
   static const String kSelectDate = 'Select Date';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
@@ -280,6 +285,7 @@ abstract class StringConstants {
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
   static const String kWorkforceRemoved = 'Workforce Removed';
+  static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
@@ -294,6 +300,7 @@ abstract class StringConstants {
   static const String kStartCourse = 'Start Course';
   static const String kFeedback = 'Feedback';
   static const String kSkip = 'Skip';
+  static const String kBack = 'Back';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
   static const String kAnswerSaved = "Answer Saved";
@@ -310,7 +317,7 @@ abstract class StringConstants {
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
   static const String kNameValidation = 'Please enter name';
-  static const String kSelectPermits = 'Select Permits';
+  static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
   static const String kGettingStarted = "Getting Started";
@@ -345,8 +352,11 @@ abstract class StringConstants {
   static const String kLotoRemoved = "Loto Removed";
   static const String kPleaseVerifyEverything =
       "Please verify everything before performing this action";
+  static const String kLotoRejected = "Loto Rejected";
+  static const String kWantToApproveLoto = "Do you want to approve LOTO?";
   static const String kLocationDocuments = "Location Documents";
-  static const String kLoginSuccess = 'Logged in Successfully';
+  static const String kLoginSuccess =
+      'You are successfully sign-in the location';
   static const String kConfirmAssetWithQR = "Confirm Asset with QRCode";
   static const String kUnauthorized =
       'You are not authorized to access the location. Do you still want to continue ? ';
@@ -399,6 +409,7 @@ abstract class StringConstants {
   static const String kDowntimeSaved = "Downtime Saved";
   static const String kDowntimeDeleted = "Downtime Deleted";
   static const String kDeleteDowntime = "Delete Downtime";
+  static const String kDeleteDocument = "Delete Document";
   static const String kEndDate = "End Date";
   static const String kStartTime = "Start Time";
   static const String kEndTime = "End Time";
@@ -417,10 +428,45 @@ abstract class StringConstants {
   static const String kDepreciationFactor = "Depreciation Factor";
   static const String kNoLinkedDoc = 'No Linked Documents!';
   static const String kViewResponse = "View Response";
+  static const String kNoResponse = "No Response";
   static const String kCommentAdded = "Comment Added";
   static const String kMeter = "Meter";
   static const String kDateTaken = "Date Taken";
   static const String kTimeTaken = "Time Taken";
   static const String kReading = "Reading";
   static const String kIsRollover = "Is rollover";
+  static const String kSignOutSuccessfully = 'Sign Out successfully';
+  static const String kNoActiveSignIn = 'No Active sign-in Found';
+  static const String kAddDocument = 'Add Document';
+  static const String kSearchByOwnerName = "Search by Owner name";
+  static const String kSearchByDocumentName = "Search by Document name";
+  static const String kAssetDocuments = 'Asset Documents';
+  static const String kWorkforceDeleted = 'Workforce Deleted';
+  static const String kScanEquipment = 'Scan Equipment';
+  static const String kTransferEquipment = 'Transfer Equipment';
+  static const String kTransfer = 'Transfer';
+  static const String kSearchEquipment = 'Search Equipment';
+  static const String kViewMyEquipment = 'View my Equipment';
+  static const String kTrace = 'Trace';
+  static const String kScan = 'Scan';
+  static const String kEnter = 'Enter';
+  static const String kPleaseEnterTimeToClosePermit =
+      'Please enter time to close permit';
+  static const String kSetParameter = 'Set Parameter';
+  static const String kUploadMedia = 'UploadMedia';
+  static const String kSetLocation = 'SetLocation';
+  static const String kEquipmentName = "Equipment Name";
+  static const String kEquipmentNo = "Equipment No";
+  static const String kArticleNo = "Article No";
+  static const String kEquipmentCode = "Equipment Code";
+  static const String kTechnicalPositionNo = "Technical Position No";
+  static const String kTechnicalPositionName = "Technical Position Name";
+  static const String kEquipmentRole = "Equipment Role";
+  static const String kEquipmentType = "Equipment Type";
+  static const String kEquipmentSubType = "Equipment Sub-Type";
+  static const String kEnterMileageHere = "enter mileage here";
+  static const String kCustomParameterSaved = "Custom parameter saved";
+  static const String kPartAssigned = 'Part Assigned';
+  static const String kPleaseInsertValidQuantity =
+      'Please insert valid planned quantity';
 }

@@ -4,11 +4,13 @@ import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../blocs/location/location_bloc.dart';
 import '../../../blocs/location/location_event.dart';
+import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/location/fetch_location_loto_model.dart';
 import '../../../widgets/custom_card.dart';
+import '../../loto/loto_details_screen.dart';
 import 'location_details_loto_tab.dart';
 
 class LocationDetailsLoToBody extends StatelessWidget {
@@ -34,6 +36,11 @@ class LocationDetailsLoToBody extends StatelessWidget {
             if (index < locationLoTos.length) {
               return CustomCard(
                 child: ListTile(
+                  onTap: () {
+                    context.read<LotoDetailsBloc>().lotoId =
+                        locationLoTos[index].id;
+                    Navigator.pushNamed(context, LotoDetailsScreen.routeName);
+                  },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(
                       padding: const EdgeInsets.only(bottom: xxTinierSpacing),
@@ -78,8 +85,7 @@ class LocationDetailsLoToBody extends StatelessWidget {
               LocationDetailsLoToTab.pageNo++;
               context.read<LocationBloc>().add(
                   FetchLocationLoTo(pageNo: LocationDetailsLoToTab.pageNo));
-              return const Expanded(
-                  child: Center(child: CircularProgressIndicator()));
+              return const Center(child: CircularProgressIndicator());
             }
           },
           separatorBuilder: (context, index) {

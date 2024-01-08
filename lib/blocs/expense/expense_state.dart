@@ -162,6 +162,36 @@ class ExpenseAddItemsCurrencySelected extends ExpenseStates {
   ExpenseAddItemsCurrencySelected({required this.currencyDetailsMap});
 }
 
+class ApprovingExpense extends ExpenseStates {}
+
+class ExpenseApproved extends ExpenseStates {}
+
+class ExpenseNotApproved extends ExpenseStates {
+  final String notApproved;
+
+  ExpenseNotApproved({required this.notApproved});
+}
+
+class ClosingExpense extends ExpenseStates {}
+
+class ExpenseClosed extends ExpenseStates {}
+
+class ExpenseNotClosed extends ExpenseStates {
+  final String notClosed;
+
+  ExpenseNotClosed({required this.notClosed});
+}
+
+class DeletingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemDeleted extends ExpenseStates {}
+
+class ExpenseItemNotDeleted extends ExpenseStates {
+  final String itemNotDeleted;
+
+  ExpenseItemNotDeleted({required this.itemNotDeleted});
+}
+
 class SavingExpenseItem extends ExpenseStates {}
 
 class ExpenseItemSaved extends ExpenseStates {

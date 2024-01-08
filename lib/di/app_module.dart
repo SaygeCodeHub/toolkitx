@@ -7,6 +7,8 @@ import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
 import 'package:toolkit/repositories/documents/documents_repository.dart';
 import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
+import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
+import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo_impl.dart';
 import 'package:toolkit/repositories/incident/incident_repository.dart';
 import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
@@ -97,4 +99,6 @@ configurableDependencies() {
       () => SafetyNoticeRepositoryImpl());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
+  getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
+      () => EquipmentTraceabilityRepoImpl());
 }

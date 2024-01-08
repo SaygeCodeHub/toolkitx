@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../blocs/location/location_bloc.dart';
+import '../../../blocs/location/location_event.dart';
 import '../../../blocs/workorder/workorder_bloc.dart';
 import '../../../blocs/workorder/workorder_events.dart';
 import '../../../configs/app_spacing.dart';
@@ -12,6 +14,7 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../incident/widgets/date_picker.dart';
+import '../workorder_filter_screen.dart';
 import '../workorder_list_screen.dart';
 import 'workorder_status_filter.dart';
 import 'workorder_type_filter.dart';
@@ -113,12 +116,23 @@ class WorkOrderFilterBody extends StatelessWidget {
                         showCustomSnackBar(context,
                             DatabaseUtil.getText('TimeDateValidate'), '');
                       } else {
-                        context.read<WorkOrderBloc>().add(WorkOrderApplyFilter(
-                            workOrderFilterMap: workOrderFilterMap));
-                        Navigator.pop(context);
-                        Navigator.pushReplacementNamed(
-                            context, WorkOrderListScreen.routeName,
-                            arguments: false);
+                        if (WorkOrderFilterScreen.isFromLocation == true) {
+                          context.read<LocationBloc>().add(
+                              ApplyWorkOrderListFilter(
+                                  filterMap: workOrderFilterMap));
+                          Navigator.pop(context);
+                          context.read<LocationBloc>().add(FetchLocationDetails(
+                              locationId: WorkOrderFilterScreen.expenseId,
+                              selectedTabIndex: 4));
+                        } else {
+                          context.read<WorkOrderBloc>().add(
+                              WorkOrderApplyFilter(
+                                  workOrderFilterMap: workOrderFilterMap));
+                          Navigator.pop(context);
+                          Navigator.pushReplacementNamed(
+                              context, WorkOrderListScreen.routeName,
+                              arguments: false);
+                        }
                       }
                     },
                     textValue: DatabaseUtil.getText('Apply'))

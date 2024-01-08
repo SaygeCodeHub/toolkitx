@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/assets/assets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class IsRolloverExpansionTile extends StatelessWidget {
   const IsRolloverExpansionTile({
@@ -26,9 +27,12 @@ class IsRolloverExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    key: GlobalKey(),
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     collapsedBackgroundColor: AppColor.white,
                     backgroundColor: AppColor.white,
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    key: GlobalKey(),
                     title: Text(state.isRollover),
                     children: [
                       MediaQuery(

@@ -26,42 +26,42 @@ class PermitAdditionalInfo extends StatelessWidget {
           Text(DatabaseUtil.getText('MethodStatement'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           Text(permitDetailsModel.data.tab2.methodStatement,
               style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
+          const SizedBox(height: xxTinierSpacing),
           Text(DatabaseUtil.getText('RelevantInfo'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           Text(permitDetailsModel.data.tab2.generalMessage,
               style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
+          const SizedBox(height: xxTinierSpacing),
           Text(DatabaseUtil.getText('SpecialWork'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           Text(permitDetailsModel.data.tab2.specialWork,
               style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
+          const SizedBox(height: xxTinierSpacing),
           Text(DatabaseUtil.getText('SpecificPPE'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           Text(permitDetailsModel.data.tab2.specialppe,
               style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
+          const SizedBox(height: xxTinierSpacing),
           Text(DatabaseUtil.getText('Protectivemeasures'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           Text(permitDetailsModel.data.tab2.protectivemeasures,
               style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
+          const SizedBox(height: xxTinierSpacing),
           Text(DatabaseUtil.getText('Layout'),
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
+          const SizedBox(height: tiniestSpacing),
           InkWell(
               onTap: () {
                 launchUrlString(permitDetailsModel.data.tab2.layoutLink,
@@ -72,26 +72,29 @@ class PermitAdditionalInfo extends StatelessWidget {
                       .textTheme
                       .small
                       .copyWith(color: AppColor.deepBlue))),
-          const SizedBox(height: tinySpacing),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: permitDetailsModel.data.tab2.customfields.length,
-              itemBuilder: (context, index) {
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                          permitDetailsModel
-                              .data.tab2.customfields[index].title,
-                          style: Theme.of(context).textTheme.medium),
-                      const SizedBox(height: xxTinierSpacing),
-                      Text(
-                          permitDetailsModel
-                              .data.tab2.customfields[index].fieldvalue,
-                          style: Theme.of(context).textTheme.small)
-                    ]);
-              })
+          const SizedBox(height: xxTinierSpacing),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: permitDetailsModel.data.tab2.customfields.length,
+            itemBuilder: (context, index) {
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(permitDetailsModel.data.tab2.customfields[index].title,
+                        style: Theme.of(context).textTheme.medium),
+                    const SizedBox(height: tiniestSpacing),
+                    Text(
+                        permitDetailsModel
+                            .data.tab2.customfields[index].fieldvalue,
+                        style: Theme.of(context).textTheme.small)
+                  ]);
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: xxTinierSpacing);
+            },
+          )
         ]));
   }
 }

@@ -50,6 +50,8 @@ class ApplyAssetsFilter extends AssetsEvent {
 
 class ClearAssetsFilter extends AssetsEvent {}
 
+class ClearAssetsDocumentFilter extends AssetsEvent {}
+
 class FetchAssetsGetDownTime extends AssetsEvent {
   final String assetId;
   final int pageNo;
@@ -120,5 +122,44 @@ class SelectAssetsMeter extends AssetsEvent {
 class SelectAssetsRollOver extends AssetsEvent {
   final String id;
   final String isRollover;
+
   SelectAssetsRollOver({required this.id, required this.isRollover});
+}
+
+class DeleteAssetsDocument extends AssetsEvent {
+  final String documentId;
+
+  DeleteAssetsDocument({required this.documentId});
+}
+
+class FetchAddAssetsDocument extends AssetsEvent {
+  final int pageNo;
+  final bool isFromHome;
+
+  FetchAddAssetsDocument({required this.pageNo, required this.isFromHome});
+}
+
+class SelectAssetsDocument extends AssetsEvent {
+  final bool isChecked;
+
+  SelectAssetsDocument({required this.isChecked});
+}
+
+class AddManageDocument extends AssetsEvent {
+  final Map addDocumentMap;
+  AddManageDocument({required this.addDocumentMap});
+}
+
+class SelectAssetsDocumentTypeFilter extends AssetsEvent {
+  final String selectedTypeId;
+  final String selectedTypeName;
+
+  SelectAssetsDocumentTypeFilter(
+      {required this.selectedTypeId, required this.selectedTypeName});
+}
+
+class ApplyAssetsDocumentFilter extends AssetsEvent {
+  final Map assetsDocumentFilterMap;
+
+  ApplyAssetsDocumentFilter({required this.assetsDocumentFilterMap});
 }
