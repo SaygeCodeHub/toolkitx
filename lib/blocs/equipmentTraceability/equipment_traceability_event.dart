@@ -40,3 +40,9 @@ class EquipmentSaveImage extends EquipmentTraceabilityEvent {
 
   EquipmentSaveImage({required this.saveImagesMap});
 }
+
+class EquipmentSaveLocation extends EquipmentTraceabilityEvent {
+  final Map equipmentSaveLocationMap;
+
+  EquipmentSaveLocation({required this.equipmentSaveLocationMap});
+}

@@ -77,3 +77,13 @@ class CustomParameterNotSaved extends EquipmentTraceabilityState {
 
   CustomParameterNotSaved({required this.errorMessage});
 }
+
+class EquipmentLocationSaving extends EquipmentTraceabilityState {}
+
+class EquipmentLocationSaved extends EquipmentTraceabilityState {}
+
+class EquipmentLocationNotSaved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentLocationNotSaved({required this.errorMessage});
+}
