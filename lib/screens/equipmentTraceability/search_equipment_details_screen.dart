@@ -29,12 +29,13 @@ class SearchEquipmentDetailsScreen extends StatelessWidget {
           actions: [
             BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
               listener: (context, state) {
-                if(state is EquipmentLocationSaving){
+                if (state is EquipmentLocationSaving) {
                   ProgressBar.show(context);
-                }else if(state is EquipmentLocationSaved){
+                } else if (state is EquipmentLocationSaved) {
                   ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, StringConstants.kLocationSavedSuccessfully, '');
-                }else if(state is EquipmentLocationNotSaved){
+                  showCustomSnackBar(
+                      context, StringConstants.kLocationSavedSuccessfully, '');
+                } else if (state is EquipmentLocationNotSaved) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
                 }

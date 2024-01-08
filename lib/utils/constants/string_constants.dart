@@ -467,5 +467,6 @@ abstract class StringConstants {
       'Please insert valid planned quantity';
   static const String kSavedSuccessfully = "Saved Successfully";
   static const String kUploadImages = "Upload images";
-  static const String kLocationSavedSuccessfully = "Location saved successfully";
+  static const String kLocationSavedSuccessfully =
+      "Location saved successfully";
 }

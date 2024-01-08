@@ -51,7 +51,8 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   }
 
   @override
-  Future<EquipmentSaveLocationModel> equipmentSaveLocation(Map equipmentSaveLocationMap) async {
+  Future<EquipmentSaveLocationModel> equipmentSaveLocation(
+      Map equipmentSaveLocationMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}equipment/savelocation",
         equipmentSaveLocationMap);

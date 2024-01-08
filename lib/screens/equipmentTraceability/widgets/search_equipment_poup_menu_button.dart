@@ -35,7 +35,8 @@ class SearchEquipmentPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, EquipmentSaveImages.routeName);
           }
           if (value == StringConstants.kSetLocation) {
-            context.read<EquipmentTraceabilityBloc>().add(EquipmentSaveLocation(equipmentSaveLocationMap: equipmentSaveLocationMap));
+            context.read<EquipmentTraceabilityBloc>().add(EquipmentSaveLocation(
+                equipmentSaveLocationMap: equipmentSaveLocationMap));
           }
         },
         position: PopupMenuPosition.under,
