@@ -32,7 +32,7 @@ class TransferEquipmentScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(xxTinierSpacing),
                   child: Text(
-                    'Please Search OR Scan the equipment from top menu bar',
+                    StringConstants.kPleaseSearchOrScanTheEquipment,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                           color: AppColor.errorRed,
                           fontWeight: FontWeight.w400,

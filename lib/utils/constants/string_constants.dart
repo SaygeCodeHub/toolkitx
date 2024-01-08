@@ -469,4 +469,6 @@ abstract class StringConstants {
   static const String kUploadImages = "Upload images";
   static const String kLocationSavedSuccessfully =
       "Location saved successfully";
+  static const String kPleaseSearchOrScanTheEquipment =
+      'Please Search OR Scan the equipment from top menu bar';
 }
