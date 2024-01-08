@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
+import 'package:toolkit/utils/notifications/notification_util.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -79,6 +81,7 @@ import 'utils/profile_util.dart';
 void main() async {
   await _initApp();
   await _initDependencies();
+  await _initFirebase();
   runApp(const MyApp());
 }
 
@@ -88,6 +91,11 @@ _initApp() async {
   await Hive.initFlutter();
   DatabaseUtil.box = await Hive.openBox('languages_box');
   ProfileUtil.packageInfo = await PackageInfo.fromPlatform();
+}
+
+_initFirebase() async {
+  await Firebase.initializeApp();
+  await NotificationUtil().initNotifications();
 }
 
 _initDependencies() async {
