@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -230,18 +231,22 @@ class EquipmentTraceabilityBloc
 
   Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event, Emitter<EquipmentTraceabilityState> emit) async {
     emit(EquipmentSetParameterFetching());
+    log('EquipmentSetParameterFetching');
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      log('here================>');
       FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
           await _equipmentTraceabilityRepo.fetchEquipmentByCode(
           hashCode, userId, event.code);
+      log('event.code================>${event.code}');
       if (fetchEquipmentByCodeModel.status == 200) {
-        emit(EquipmentLocationSaved());
+        emit(EquipmentByCodeFetched(fetchEquipmentByCodeModel: fetchEquipmentByCodeModel));
       } else {
+        emit(EquipmentByCodeNotFetched(errorMessage: fetchEquipmentByCodeModel.message));
       }
     } catch (e) {
-
+      emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
   }
 }

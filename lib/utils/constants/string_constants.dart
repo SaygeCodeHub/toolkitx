@@ -471,4 +471,5 @@ abstract class StringConstants {
       "Location saved successfully";
   static const String kPleaseSearchOrScanTheEquipment =
       'Please Search OR Scan the equipment from top menu bar';
+  static const String kClose = 'Close';
 }
