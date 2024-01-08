@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
@@ -47,5 +48,14 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
         "${ApiConstants.baseUrl}equipment/savecustomparameter",
         saveCustomParameterMap);
     return SaveCustomParameterModel.fromJson(response);
+  }
+
+  @override
+  Future<EquipmentSaveLocationModel> equipmentSaveLocation(
+      Map equipmentSaveLocationMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}equipment/savelocation",
+        equipmentSaveLocationMap);
+    return EquipmentSaveLocationModel.fromJson(response);
   }
 }

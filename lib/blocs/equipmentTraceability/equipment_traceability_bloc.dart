@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
@@ -32,6 +33,7 @@ class EquipmentTraceabilityBloc
     on<FetchEquipmentSetParameter>(_fetchEquipmentSetParameter);
     on<SaveCustomParameter>(_saveCustomParameter);
     on<EquipmentSaveImage>(_equipmentSaveImage);
+    on<EquipmentSaveLocation>(_equipmentSaveLocation);
   }
 
   Map filters = {};
@@ -193,6 +195,34 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EquipmentImageNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _equipmentSaveLocation(EquipmentSaveLocation event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentLocationSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map equipmentSaveLocationMap = {
+        "id": equipmentId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "equipmentid": equipmentId,
+        "latitude": "",
+        "longitude": ""
+      };
+      EquipmentSaveLocationModel equipmentSaveLocationModel =
+          await _equipmentTraceabilityRepo
+              .equipmentSaveLocation(equipmentSaveLocationMap);
+      if (equipmentSaveLocationModel.status == 200) {
+        emit(EquipmentLocationSaved());
+      } else {
+        emit(EquipmentLocationNotSaved(
+            errorMessage: equipmentSaveLocationModel.message));
+      }
+    } catch (e) {
+      emit(EquipmentLocationNotSaved(errorMessage: e.toString()));
     }
   }
 }
