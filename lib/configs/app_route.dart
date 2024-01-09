@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
@@ -493,6 +494,9 @@ class AppRoutes {
         ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
+
+      case EquipmentSaveImages.routeName:
+        return _createRoute(EquipmentSaveImages());
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/equipment_details_tabs_util.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/custom_tabbar_view.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import 'widgets/equipment_details_tab_one.dart';
 import 'widgets/equipment_details_tab_two.dart';
@@ -24,7 +27,19 @@ class SearchEquipmentDetailsScreen extends StatelessWidget {
       appBar: GenericAppBar(
           title: searchEquipmentDetailsMap["equipmentName"],
           actions: [
-            BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+            BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+              listener: (context, state) {
+                if (state is EquipmentLocationSaving) {
+                  ProgressBar.show(context);
+                } else if (state is EquipmentLocationSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(
+                      context, StringConstants.kLocationSavedSuccessfully, '');
+                } else if (state is EquipmentLocationNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
+              },
               buildWhen: (previousState, currentState) =>
                   currentState is SearchEquipmentDetailsFetched,
               builder: (context, state) {

@@ -454,8 +454,8 @@ abstract class StringConstants {
   static const String kPleaseEnterTimeToClosePermit =
       'Please enter time to close permit';
   static const String kSetParameter = 'Set Parameter';
-  static const String kUploadMedia = 'UploadMedia';
-  static const String kSetLocation = 'SetLocation';
+  static const String kUploadMedia = 'Upload Media';
+  static const String kSetLocation = 'Set Location';
   static const String kEquipmentName = "Equipment Name";
   static const String kEquipmentNo = "Equipment No";
   static const String kArticleNo = "Article No";
@@ -470,4 +470,8 @@ abstract class StringConstants {
   static const String kPartAssigned = 'Part Assigned';
   static const String kPleaseInsertValidQuantity =
       'Please insert valid planned quantity';
+  static const String kSavedSuccessfully = "Saved Successfully";
+  static const String kUploadImages = "Upload images";
+  static const String kLocationSavedSuccessfully =
+      "Location saved successfully";
 }

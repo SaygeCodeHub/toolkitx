@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
@@ -12,6 +12,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
+import '../../data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../di/app_module.dart';
 
 part 'equipment_traceability_event.dart';
@@ -31,11 +32,14 @@ class EquipmentTraceabilityBloc
     on<ClearSearchEquipmentFilter>(_clearSearchEquipmentFilter);
     on<FetchEquipmentSetParameter>(_fetchEquipmentSetParameter);
     on<SaveCustomParameter>(_saveCustomParameter);
+    on<EquipmentSaveImage>(_equipmentSaveImage);
+    on<EquipmentSaveLocation>(_equipmentSaveLocation);
   }
 
   Map filters = {};
   bool hasReachedMax = false;
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
+  String equipmentId = "";
   List answerList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
@@ -86,6 +90,8 @@ class EquipmentTraceabilityBloc
       FetchSearchEquipmentDetailsModel fetchSearchEquipmentDetailsModel =
           await _equipmentTraceabilityRepo.fetchDetailsEquipment(
               hashCode, event.equipmentId, userId);
+      equipmentId = event.equipmentId;
+
       if (fetchSearchEquipmentDetailsModel.status == 200) {
         emit(SearchEquipmentDetailsFetched(
           fetchSearchEquipmentDetailsModel: fetchSearchEquipmentDetailsModel,
@@ -161,6 +167,62 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(CustomParameterNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _equipmentSaveImage(EquipmentSaveImage event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentImageSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveImageMap = {
+        "userid": userId,
+        "notes": event.saveImagesMap["notes"] ?? '',
+        "filename": event.saveImagesMap["filename"],
+        "equipmentid": equipmentId,
+        "hashcode": hashCode
+      };
+      SaveEquipmentImagesModel saveEquipmentImagesModel =
+          await _equipmentTraceabilityRepo
+              .saveEquipmentImagesModel(saveImageMap);
+      if (saveEquipmentImagesModel.status == 200) {
+        emit(EquipmentImageSaved(
+            saveEquipmentImagesModel: saveEquipmentImagesModel));
+      } else {
+        emit(EquipmentImageNotSaved(
+            errorMessage: saveEquipmentImagesModel.message));
+      }
+    } catch (e) {
+      emit(EquipmentImageNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _equipmentSaveLocation(EquipmentSaveLocation event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentLocationSaving());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map equipmentSaveLocationMap = {
+        "id": equipmentId,
+        "userid": userId,
+        "hashcode": hashCode,
+        "equipmentid": equipmentId,
+        "latitude": "",
+        "longitude": ""
+      };
+      EquipmentSaveLocationModel equipmentSaveLocationModel =
+          await _equipmentTraceabilityRepo
+              .equipmentSaveLocation(equipmentSaveLocationMap);
+      if (equipmentSaveLocationModel.status == 200) {
+        emit(EquipmentLocationSaved());
+      } else {
+        emit(EquipmentLocationNotSaved(
+            errorMessage: equipmentSaveLocationModel.message));
+      }
+    } catch (e) {
+      emit(EquipmentLocationNotSaved(errorMessage: e.toString()));
     }
   }
 }
