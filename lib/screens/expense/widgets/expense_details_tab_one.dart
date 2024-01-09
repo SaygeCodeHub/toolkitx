@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -12,6 +14,8 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_floating_action_button.dart';
 import 'addItemsWidgets/expense_add_item_form_one.dart';
 import 'addItemsWidgets/expense_add_item_form_two.dart';
+import 'addItemsWidgets/expense_add_item_hotel_layout.dart';
+import 'addItemsWidgets/expense_item_meal_layout.dart';
 import 'expense_add_item_bottom_bar.dart';
 import 'expense_details_tab_one_body.dart';
 
@@ -21,11 +25,10 @@ class ExpenseDetailsTabOne extends StatelessWidget {
   final String expenseId;
   static List itemMasterList = [];
 
-  const ExpenseDetailsTabOne(
-      {Key? key,
-      required this.tabIndex,
-      required this.expenseDetailsData,
-      required this.expenseId})
+  const ExpenseDetailsTabOne({Key? key,
+    required this.tabIndex,
+    required this.expenseDetailsData,
+    required this.expenseId})
       : super(key: key);
   static Map addItemMap = {};
 
@@ -35,7 +38,8 @@ class ExpenseDetailsTabOne extends StatelessWidget {
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      bottomNavigationBar: ExpenseAddItemBottomBar(expenseId: expenseId),
+      bottomNavigationBar: ExpenseAddItemBottomBar(
+          expenseId: expenseId, expenseDetailsData: expenseDetailsData),
       floatingActionButton: BlocBuilder<ExpenseBloc, ExpenseStates>(
         buildWhen: (previousState, currentState) =>
             currentState is FetchingExpenseItemMaster ||
@@ -58,18 +62,25 @@ class ExpenseDetailsTabOne extends StatelessWidget {
       ),
       body: BlocBuilder<ExpenseBloc, ExpenseStates>(
         buildWhen: (previousState, currentState) =>
-            currentState is FetchingExpenseItemMaster ||
+        currentState is FetchingExpenseItemMaster ||
             currentState is ExpenseItemMasterFetched,
         builder: (context, state) {
-          if (state is FetchingExpenseItemMaster) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ExpenseItemMasterFetched) {
+          log('bool----->${context.read<ExpenseBloc>().isScreenChange == true}');
+          if (state is ExpenseItemMasterFetched) {
             itemMasterList.addAll(state.fetchItemMasterModel.data);
             if (state.isScreenChange == false) {
               return const ExpenseAddItemFormOne();
             } else {
-              return ExpenseAddItemFormTwo(
-                  expenseDetailsData: expenseDetailsData);
+              if (ExpenseDetailsTabOne.addItemMap['itemid'] == '6') {
+                return const ExpenseAddItemHotelLayout();
+              } else if (ExpenseDetailsTabOne.addItemMap['itemid'] == '3' &&
+                  context.read<ExpenseBloc>().isScreenChange == true) {
+                return ExpenseItemMealLayout(
+                    expenseDetailsData: expenseDetailsData);
+              } else {
+                return ExpenseAddItemFormTwo(
+                    expenseDetailsData: expenseDetailsData);
+              }
             }
           } else if (state is ExpenseItemMasterCouldNotFetch) {
             return const Center(child: Text(StringConstants.kNoRecordsFound));

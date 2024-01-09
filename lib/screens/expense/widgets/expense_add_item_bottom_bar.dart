@@ -7,6 +7,7 @@ import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../blocs/expense/expense_state.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
@@ -14,8 +15,10 @@ import 'expense_details_tab_one.dart';
 
 class ExpenseAddItemBottomBar extends StatelessWidget {
   final String expenseId;
+  final ExpenseDetailsData expenseDetailsData;
 
-  const ExpenseAddItemBottomBar({Key? key, required this.expenseId})
+  const ExpenseAddItemBottomBar(
+      {Key? key, required this.expenseId, required this.expenseDetailsData})
       : super(key: key);
 
   @override
