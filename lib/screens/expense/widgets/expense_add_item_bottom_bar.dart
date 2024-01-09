@@ -45,7 +45,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
               child: Row(children: [
                 Expanded(
                     child: PrimaryButton(
-                      onPressed: () {
+                  onPressed: () {
                     if (ExpenseDetailsTabOne.addItemMap['itemid'] == '') {
                       context
                           .read<ExpenseBloc>()
