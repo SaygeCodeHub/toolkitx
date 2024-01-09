@@ -67,6 +67,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                   onPressed: () {
+                    // if()
                     context.read<ExpenseBloc>().add(
                         FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
                   },
@@ -85,8 +86,22 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                                     .kExpenseAddItemDateAndItemValidation,
                                 '');
                           } else {
-                            context.read<ExpenseBloc>().add(
-                                FetchExpenseItemMaster(isScreenChange: true));
+                            if (ExpenseDetailsTabOne.addItemMap['itemid'] ==
+                                '3') {
+                              context.read<ExpenseBloc>().add(
+                                  FetchExpenseItemMaster(isScreenChange: true));
+                              context.read<ExpenseBloc>().add(
+                                      FetchExpenseItemCustomFields(
+                                          customFieldsMap: {
+                                        "itemid": ExpenseDetailsTabOne
+                                                .addItemMap['itemid'] ??
+                                            '',
+                                        "expenseitemid": expenseDetailsData.id
+                                      }));
+                            } else {
+                              context.read<ExpenseBloc>().add(
+                                  FetchExpenseItemMaster(isScreenChange: true));
+                            }
                           }
                         },
                         textValue: DatabaseUtil.getText('nextButtonText')))

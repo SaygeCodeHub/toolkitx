@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_state.dart';
@@ -7,7 +5,9 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
+import '../../../../blocs/expense/expense_event.dart';
 import '../../../../data/models/expense/fetch_expense_details_model.dart';
+import '../expense_details_tab_one.dart';
 
 class ExpenseItemMealLayout extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
@@ -16,6 +16,12 @@ class ExpenseItemMealLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<ExpenseBloc>()
+        .add(FetchExpenseItemCustomFields(customFieldsMap: {
+          "itemid": ExpenseDetailsTabOne.addItemMap['itemid'] ?? '',
+          "expenseitemid": expenseDetailsData.id
+        }));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is FetchingExpenseCustomFields ||
@@ -28,7 +34,6 @@ class ExpenseItemMealLayout extends StatelessWidget {
           return ListView.separated(
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                log('length----->${state.expenseItemCustomFieldsModel.data.length}');
                 switch (state.expenseItemCustomFieldsModel.data[index].type) {
                   case 3:
                     return Column(
@@ -48,6 +53,7 @@ class ExpenseItemMealLayout extends StatelessWidget {
                                 .data[index].queoptions.length,
                             itemBuilder: (context, itemIndex) {
                               return RadioListTile(
+                                  contentPadding: EdgeInsets.zero,
                                   title: Text(state
                                       .expenseItemCustomFieldsModel
                                       .data[index]

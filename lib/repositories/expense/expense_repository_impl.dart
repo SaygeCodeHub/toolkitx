@@ -20,14 +20,16 @@ import 'expense_repository.dart';
 
 class ExpenseRepositoryImpl extends ExpenseRepository {
   @override
-  Future<FetchExpenseListModel> fetchExpenseList(int pageNo, String userId, String hashCode, String filter) async {
+  Future<FetchExpenseListModel> fetchExpenseList(
+      int pageNo, String userId, String hashCode, String filter) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/get?pageno=$pageNo&userid=$userId&hashcode=$hashCode&filter=$filter");
     return FetchExpenseListModel.fromJson(response);
   }
 
   @override
-  Future<FetchExpenseDetailsModel> fetchExpenseDetails(String expenseId, String userId, String hashCode) async {
+  Future<FetchExpenseDetailsModel> fetchExpenseDetails(
+      String expenseId, String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/getreport?reportid=$expenseId&userid=$userId&hashcode=$hashCode");
     return FetchExpenseDetailsModel.fromJson(response);
@@ -55,7 +57,8 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   }
 
   @override
-  Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(Map submitForApprovalMap) async {
+  Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
+      Map submitForApprovalMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}expense/SubmitForApproval",
         submitForApprovalMap);
@@ -63,7 +66,8 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   }
 
   @override
-  Future<FetchItemMasterModel> fetchExpenseItemMaster(String hashCode, String expenseId) async {
+  Future<FetchItemMasterModel> fetchExpenseItemMaster(
+      String hashCode, String expenseId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/getitemmaster1?hashcode=$hashCode&reportid=$expenseId");
     return FetchItemMasterModel.fromJson(response);
@@ -84,7 +88,8 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   }
 
   @override
-  Future<DeleteExpenseItemModel> deleteExpenseItem(Map deleteExpenseItemMap) async {
+  Future<DeleteExpenseItemModel> deleteExpenseItem(
+      Map deleteExpenseItemMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}expense/deleteitem", deleteExpenseItemMap);
     return DeleteExpenseItemModel.fromJson(response);

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -25,16 +23,18 @@ class ExpenseDetailsTabOne extends StatelessWidget {
   final String expenseId;
   static List itemMasterList = [];
 
-  const ExpenseDetailsTabOne({Key? key,
-    required this.tabIndex,
-    required this.expenseDetailsData,
-    required this.expenseId})
+  const ExpenseDetailsTabOne(
+      {Key? key,
+      required this.tabIndex,
+      required this.expenseDetailsData,
+      required this.expenseId})
       : super(key: key);
   static Map addItemMap = {};
 
   @override
   Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<ExpenseBloc>().isScreenChange = false;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -62,31 +62,38 @@ class ExpenseDetailsTabOne extends StatelessWidget {
       ),
       body: BlocBuilder<ExpenseBloc, ExpenseStates>(
         buildWhen: (previousState, currentState) =>
-        currentState is FetchingExpenseItemMaster ||
-            currentState is ExpenseItemMasterFetched,
+            currentState is FetchingExpenseItemMaster ||
+            currentState is ExpenseItemMasterFetched ||
+            currentState is ExpenseItemMasterCouldNotFetch,
         builder: (context, state) {
-          log('bool----->${context.read<ExpenseBloc>().isScreenChange == true}');
           if (state is ExpenseItemMasterFetched) {
             itemMasterList.addAll(state.fetchItemMasterModel.data);
             if (state.isScreenChange == false) {
               return const ExpenseAddItemFormOne();
-            } else {
+            } else if (state.isScreenChange == true) {
               if (ExpenseDetailsTabOne.addItemMap['itemid'] == '6') {
                 return const ExpenseAddItemHotelLayout();
-              } else if (ExpenseDetailsTabOne.addItemMap['itemid'] == '3' &&
-                  context.read<ExpenseBloc>().isScreenChange == true) {
+              } else if (ExpenseDetailsTabOne.addItemMap['itemid'] == '3') {
                 return ExpenseItemMealLayout(
                     expenseDetailsData: expenseDetailsData);
               } else {
                 return ExpenseAddItemFormTwo(
                     expenseDetailsData: expenseDetailsData);
               }
+            } else {
+              return const SizedBox.shrink();
             }
           } else if (state is ExpenseItemMasterCouldNotFetch) {
             return const Center(child: Text(StringConstants.kNoRecordsFound));
           } else {
-            return ExpenseDetailsTabOneBody(
-                expenseDetailsData: expenseDetailsData);
+            if (state is ExpenseDetailsFetched) {
+              return ExpenseDetailsTabOneBody(
+                  expenseDetailsData: expenseDetailsData);
+            } else if (state is FetchingExpenseItemMaster) {
+              return const SizedBox.shrink();
+            } else {
+              return const SizedBox.shrink();
+            }
           }
         },
       ),

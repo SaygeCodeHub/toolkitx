@@ -111,8 +111,6 @@ class SaveExpenseItem extends ExpenseEvent {
 
 class FetchExpenseItemCustomFields extends ExpenseEvent {
   final Map customFieldsMap;
-  final bool isScreenChange;
 
-  FetchExpenseItemCustomFields(
-      {required this.isScreenChange, required this.customFieldsMap});
+  FetchExpenseItemCustomFields({required this.customFieldsMap});
 }
