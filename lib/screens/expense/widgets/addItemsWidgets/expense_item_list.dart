@@ -12,6 +12,7 @@ import '../expense_details_tab_one.dart';
 
 class ExpenseItemList extends StatelessWidget {
   final Map itemMap;
+  static String itemId = '';
 
   const ExpenseItemList({Key? key, required this.itemMap}) : super(key: key);
 
@@ -62,6 +63,7 @@ class ExpenseItemList extends StatelessWidget {
                                       .toString();
                                   ExpenseDetailsTabOne.addItemMap['itemid'] =
                                       itemMap['item_id'] ?? '';
+                                  itemId = itemMap['item_id'] ?? '';
                                   itemMap['item_name'] = ExpenseDetailsTabOne
                                       .itemMasterList[0][index].name;
                                   context.read<ExpenseBloc>().add(

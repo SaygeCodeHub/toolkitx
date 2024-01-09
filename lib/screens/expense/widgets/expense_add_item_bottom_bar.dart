@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -11,14 +13,14 @@ import '../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
+import 'addItemsWidgets/expense_item_list.dart';
 import 'expense_details_tab_one.dart';
 
 class ExpenseAddItemBottomBar extends StatelessWidget {
   final String expenseId;
   final ExpenseDetailsData expenseDetailsData;
 
-  const ExpenseAddItemBottomBar(
-      {Key? key, required this.expenseId, required this.expenseDetailsData})
+  const ExpenseAddItemBottomBar({Key? key, required this.expenseId, required this.expenseDetailsData})
       : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
         }
       },
       buildWhen: (previousState, currentState) =>
-          currentState is FetchingExpenseItemMaster ||
+      currentState is FetchingExpenseItemMaster ||
           currentState is ExpenseItemMasterFetched,
       builder: (context, state) {
         if (state is ExpenseItemMasterFetched) {
@@ -44,21 +46,47 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
               child: Row(children: [
                 Expanded(
                     child: PrimaryButton(
-                  onPressed: () {
-                    context
-                        .read<ExpenseBloc>()
-                        .add(FetchExpenseItemMaster(isScreenChange: false));
+                      onPressed: () {
+                    if (ExpenseDetailsTabOne.addItemMap['itemid'] == '') {
+                      context
+                          .read<ExpenseBloc>()
+                          .add(FetchExpenseItemMaster(isScreenChange: true));
+                      ExpenseDetailsTabOne.addItemMap['itemid'] =
+                          ExpenseItemList.itemId;
+                      context
+                          .read<ExpenseBloc>()
+                          .add(FetchExpenseItemCustomFields(customFieldsMap: {
+                            "itemid": ExpenseDetailsTabOne.addItemMap['itemid'],
+                            "expenseitemid": expenseDetailsData.id
+                          }));
+                    } else {
+                      context
+                          .read<ExpenseBloc>()
+                          .add(FetchExpenseItemMaster(isScreenChange: false));
+                    }
                   },
                   textValue: DatabaseUtil.getText('buttonBack'),
                 )),
                 const SizedBox(width: xxTinierSpacing),
-                Expanded(
-                    child: PrimaryButton(
-                        onPressed: () {
-                          context.read<ExpenseBloc>().add(SaveExpenseItem(
-                              expenseItemMap: ExpenseDetailsTabOne.addItemMap));
-                        },
-                        textValue: DatabaseUtil.getText('buttonSave')))
+                (ExpenseDetailsTabOne.addItemMap['itemid'] == '6' ||
+                        ExpenseDetailsTabOne.addItemMap['itemid'] == '3')
+                    ? Expanded(
+                        child: PrimaryButton(
+                            onPressed: () {
+                              log('item id----->${ExpenseDetailsTabOne.addItemMap['itemid']}');
+                              ExpenseDetailsTabOne.addItemMap['itemid'] = '';
+                              context.read<ExpenseBloc>().add(
+                                  FetchExpenseItemMaster(isScreenChange: true));
+                            },
+                            textValue: DatabaseUtil.getText('nextButtonText')))
+                    : Expanded(
+                        child: PrimaryButton(
+                            onPressed: () {
+                              context.read<ExpenseBloc>().add(SaveExpenseItem(
+                                  expenseItemMap:
+                                      ExpenseDetailsTabOne.addItemMap));
+                            },
+                            textValue: DatabaseUtil.getText('buttonSave')))
               ]),
             );
           } else {
@@ -66,13 +94,12 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
               child: Row(children: [
                 Expanded(
                     child: PrimaryButton(
-                  onPressed: () {
-                    // if()
-                    context.read<ExpenseBloc>().add(
-                        FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
-                  },
-                  textValue: DatabaseUtil.getText('buttonBack'),
-                )),
+                      onPressed: () {
+                        context.read<ExpenseBloc>().add(
+                            FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
+                      },
+                      textValue: DatabaseUtil.getText('buttonBack'),
+                    )),
                 const SizedBox(width: xxTinierSpacing),
                 Expanded(
                     child: PrimaryButton(
@@ -91,10 +118,10 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                               context.read<ExpenseBloc>().add(
                                   FetchExpenseItemMaster(isScreenChange: true));
                               context.read<ExpenseBloc>().add(
-                                      FetchExpenseItemCustomFields(
-                                          customFieldsMap: {
+                                  FetchExpenseItemCustomFields(
+                                      customFieldsMap: {
                                         "itemid": ExpenseDetailsTabOne
-                                                .addItemMap['itemid'] ??
+                                            .addItemMap['itemid'] ??
                                             '',
                                         "expenseitemid": expenseDetailsData.id
                                       }));

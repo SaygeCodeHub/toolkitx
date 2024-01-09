@@ -34,7 +34,6 @@ class ExpenseDetailsTabOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<ExpenseBloc>().isScreenChange = false;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -90,7 +89,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
               return ExpenseDetailsTabOneBody(
                   expenseDetailsData: expenseDetailsData);
             } else if (state is FetchingExpenseItemMaster) {
-              return const SizedBox.shrink();
+              return const Center(child: CircularProgressIndicator());
             } else {
               return const SizedBox.shrink();
             }
