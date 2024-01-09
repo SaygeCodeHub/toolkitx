@@ -23,9 +23,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ProfileBloc>().add(FetchUserProfile());
-    return WillPopScope(
-        onWillPop: () async {
-          return false;
+    return PopScope(
+        onPopInvoked: (pop) async {
+          return;
         },
         child: Scaffold(
             body: Padding(
