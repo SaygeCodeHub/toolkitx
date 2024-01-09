@@ -36,7 +36,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
         }
       },
       buildWhen: (previousState, currentState) =>
-      currentState is FetchingExpenseItemMaster ||
+          currentState is FetchingExpenseItemMaster ||
           currentState is ExpenseItemMasterFetched,
       builder: (context, state) {
         if (state is ExpenseItemMasterFetched) {
