@@ -24,11 +24,11 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
     ];
     return PopupMenuButton(
         onSelected: (value) {
-          if(value == StringConstants.kScan){}
-          if(value == StringConstants.kEnter){
+          if (value == StringConstants.kScan) {}
+          if (value == StringConstants.kEnter) {
             Navigator.pushNamed(context, EnterEquipmentCodeScreen.routeName);
           }
-          if(value == StringConstants.kSearch){}
+          if (value == StringConstants.kSearch) {}
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [

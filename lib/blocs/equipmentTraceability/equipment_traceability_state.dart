@@ -91,9 +91,11 @@ class EquipmentLocationNotSaved extends EquipmentTraceabilityState {
 class EquipmentByCodeFetching extends EquipmentTraceabilityState {}
 
 class EquipmentByCodeFetched extends EquipmentTraceabilityState {
-  final  FetchEquipmentByCodeModel fetchEquipmentByCodeModel;
+  final FetchEquipmentByCodeModel fetchEquipmentByCodeModel;
+  final List equipmentList;
 
-  EquipmentByCodeFetched({required this.fetchEquipmentByCodeModel});
+  EquipmentByCodeFetched(
+      {required this.fetchEquipmentByCodeModel, required this.equipmentList});
 }
 
 class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {

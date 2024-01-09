@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -43,7 +42,9 @@ class EquipmentTraceabilityBloc
   bool hasReachedMax = false;
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
   String equipmentId = "";
+  String code = "";
   List answerList = [];
+  List equipmentList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -229,21 +230,37 @@ class EquipmentTraceabilityBloc
     }
   }
 
-  Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event, Emitter<EquipmentTraceabilityState> emit) async {
-    emit(EquipmentSetParameterFetching());
-    log('EquipmentSetParameterFetching');
+  Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentByCodeFetching());
     try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      log('here================>');
       FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
           await _equipmentTraceabilityRepo.fetchEquipmentByCode(
-          hashCode, userId, event.code);
-      log('event.code================>${event.code}');
+              hashCode, event.code, userId);
+      code = event.code;
       if (fetchEquipmentByCodeModel.status == 200) {
-        emit(EquipmentByCodeFetched(fetchEquipmentByCodeModel: fetchEquipmentByCodeModel));
+        if (equipmentList.indexWhere((element) =>
+                element["id"].toString().trim() ==
+                fetchEquipmentByCodeModel.data.id.trim()) ==
+            -1) {
+          equipmentList.add({
+            "id": fetchEquipmentByCodeModel.data.id.trim(),
+            "equipmentcode":
+                fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+            "equipmentname":
+                fetchEquipmentByCodeModel.data.equipmentname.trim(),
+          });
+        }
+
+        emit(EquipmentByCodeFetched(
+            fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
+            equipmentList: equipmentList));
       } else {
-        emit(EquipmentByCodeNotFetched(errorMessage: fetchEquipmentByCodeModel.message));
+        emit(EquipmentByCodeNotFetched(
+            errorMessage: fetchEquipmentByCodeModel.message));
       }
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));

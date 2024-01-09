@@ -61,7 +61,8 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   }
 
   @override
-  Future<FetchEquipmentByCodeModel> fetchEquipmentByCode(String hashCode, String code, String userId) async {
+  Future<FetchEquipmentByCodeModel> fetchEquipmentByCode(
+      String hashCode, String code, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getequipmentbycode?code=$code&userid=$hashCode&hashcode=$hashCode");
     return FetchEquipmentByCodeModel.fromJson(response);
