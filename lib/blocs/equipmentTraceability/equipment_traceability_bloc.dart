@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
@@ -34,13 +35,16 @@ class EquipmentTraceabilityBloc
     on<SaveCustomParameter>(_saveCustomParameter);
     on<EquipmentSaveImage>(_equipmentSaveImage);
     on<EquipmentSaveLocation>(_equipmentSaveLocation);
+    on<FetchEquipmentByCode>(_fetchEquipmentByCode);
   }
 
   Map filters = {};
   bool hasReachedMax = false;
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
   String equipmentId = "";
+  String code = "";
   List answerList = [];
+  List equipmentList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -223,6 +227,43 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EquipmentLocationNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentByCodeFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
+          await _equipmentTraceabilityRepo.fetchEquipmentByCode(
+              hashCode, event.code, userId);
+      code = event.code;
+      if (fetchEquipmentByCodeModel.status == 200) {
+        if (equipmentList.indexWhere((element) =>
+                element["id"].toString().trim() ==
+                fetchEquipmentByCodeModel.data.id.trim()) ==
+            -1) {
+          equipmentList.add({
+            "id": fetchEquipmentByCodeModel.data.id.trim(),
+            "equipmentcode":
+                fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+            "equipmentname":
+                fetchEquipmentByCodeModel.data.equipmentname.trim(),
+          });
+        }
+
+        emit(EquipmentByCodeFetched(
+            fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
+            equipmentList: equipmentList));
+      } else {
+        emit(EquipmentByCodeNotFetched(
+            errorMessage: fetchEquipmentByCodeModel.message));
+      }
+    } catch (e) {
+      emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
   }
 }

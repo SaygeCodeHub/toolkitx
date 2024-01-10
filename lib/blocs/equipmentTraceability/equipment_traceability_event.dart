@@ -46,3 +46,9 @@ class EquipmentSaveLocation extends EquipmentTraceabilityEvent {
 
   EquipmentSaveLocation({required this.equipmentSaveLocationMap});
 }
+
+class FetchEquipmentByCode extends EquipmentTraceabilityEvent {
+  final String code;
+
+  FetchEquipmentByCode({required this.code});
+}

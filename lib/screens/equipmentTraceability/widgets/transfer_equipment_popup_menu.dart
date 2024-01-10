@@ -3,6 +3,8 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
+import '../enter_equipment_code_screen.dart';
+
 class TransferEquipmentPopupMenu extends StatelessWidget {
   const TransferEquipmentPopupMenu({super.key});
 
@@ -21,7 +23,13 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
       DatabaseUtil.getText('Cancel')
     ];
     return PopupMenuButton(
-        onSelected: (value) {},
+        onSelected: (value) {
+          if (value == StringConstants.kScan) {}
+          if (value == StringConstants.kEnter) {
+            Navigator.pushNamed(context, EnterEquipmentCodeScreen.routeName);
+          }
+          if (value == StringConstants.kSearch) {}
+        },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
               for (int i = 0; i < popUpMenuItems.length; i++)
