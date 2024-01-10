@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/client/save_user_device_model.dart';
 import 'package:toolkit/repositories/client/client_repository.dart';
 
 import '../../data/models/client/client_list_model.dart';
@@ -19,5 +20,12 @@ class ClientRepositoryImpl extends ClientRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}common/processclient", processClientMap);
     return HomeScreenModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveUserDeviceModel> saveUserDevice(Map saveUserDeviceMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}common/saveuserdevice", saveUserDeviceMap);
+    return SaveUserDeviceModel.fromJson(response);
   }
 }

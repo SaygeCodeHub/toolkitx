@@ -3,18 +3,23 @@ import 'dart:async';
 import 'package:toolkit/blocs/home/home_events.dart';
 import 'package:toolkit/blocs/home/home_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/client/save_user_device_model.dart';
+import 'package:toolkit/utils/notifications/notification_util.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/enums/date_enum.dart';
 import '../../di/app_module.dart';
+import '../../repositories/client/client_repository.dart';
 
 class HomeBloc extends Bloc<HomeEvents, HomeStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final ClientRepository _clientRepository = getIt<ClientRepository>();
 
   HomeBloc() : super(const HomeInitial()) {
     on<SetDateAndTime>(_setDateAndTime);
     on<StartTimer>(_startTimer);
+    on<SaveUserDevice>(_saveUserDevice);
   }
 
   FutureOr<void> _startTimer(StartTimer event, Emitter<HomeStates> emit) {
@@ -67,6 +72,23 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
           timeZoneName: '',
           image: '',
           dateFormat: ''));
+    }
+  }
+
+  Future<void> _saveUserDevice(
+      SaveUserDevice event, Emitter<HomeStates> emit) async {
+    String hashcode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
+    String token = await NotificationUtil().initNotifications() ?? "";
+    Map saveUserDeviceMap = {
+      "hashcode": hashcode,
+      "deviceid": "xxx",
+      "token": token
+    };
+    SaveUserDeviceModel saveUserDeviceModel =
+        await _clientRepository.saveUserDevice(saveUserDeviceMap);
+    if (saveUserDeviceModel.status == 200) {
+      _customerCache.setFCMToken(CacheKeys.fcmToken, token);
     }
   }
 }

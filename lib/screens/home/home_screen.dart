@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<HomeBloc>().add(const StartTimer());
     context.read<ClientBloc>().add(FetchHomeScreenData());
+    context.read<HomeBloc>().add(const SaveUserDevice());
     return Scaffold(
         body: Padding(
             padding: const EdgeInsets.all(kBodyMargin),
