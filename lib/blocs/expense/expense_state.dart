@@ -220,3 +220,9 @@ class ExpenseCustomFieldsNotFetched extends ExpenseStates {
 
   ExpenseCustomFieldsNotFetched({required this.fieldsNotFetched});
 }
+
+class FetchingWorkingAtNumberData extends ExpenseStates {}
+
+class WorkingAtNumberDataFetched extends ExpenseStates {}
+
+class WorkingAtNumberDataNotFetched extends ExpenseStates {}

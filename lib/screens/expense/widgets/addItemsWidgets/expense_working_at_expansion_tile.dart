@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -22,7 +24,7 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
         .add(SelectExpenseWorkingAtOption(workingAt: ''));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
-          currentState is ExpenseWorkingAtOptionSelected,
+      currentState is ExpenseWorkingAtOptionSelected,
       builder: (context, state) {
         if (state is ExpenseWorkingAtOptionSelected) {
           return Theme(
@@ -30,7 +32,7 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                   .copyWith(dividerColor: AppColor.transparent),
               child: ExpansionTile(
                   collapsedShape:
-                      ExpansionTileBorder().buildOutlineInputBorder(),
+                  ExpansionTileBorder().buildOutlineInputBorder(),
                   collapsedBackgroundColor: AppColor.white,
                   backgroundColor: AppColor.white,
                   shape: ExpansionTileBorder().buildOutlineInputBorder(),
@@ -65,6 +67,7 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                                 workingAt = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .status;
+                                log('working at----->$workingAt');
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
                                         workingAt: workingAt));

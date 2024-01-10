@@ -114,3 +114,9 @@ class FetchExpenseItemCustomFields extends ExpenseEvent {
 
   FetchExpenseItemCustomFields({required this.customFieldsMap});
 }
+
+class FetchWorkingAtNumberData extends ExpenseEvent {
+  final String workingAt;
+
+  FetchWorkingAtNumberData({required this.workingAt});
+}
