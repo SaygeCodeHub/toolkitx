@@ -20,6 +20,8 @@ abstract class StringConstants {
   static const String kNoParts = 'No items/parts!'; //
   static const String kDeleteItem = 'Do you want to delete this item'; //
   static const String kParts = 'Parts'; //
+  static const String kTypeOfRoom = 'Type of Room '; //
+  static const String kNameOfHotel = 'Name of hotel :'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -127,6 +129,10 @@ abstract class StringConstants {
   static const String kWorkingAt = 'Working at'; //
   static const String kSelectItem = 'Select Item'; //
   static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
+  static const String kExpenseAddItemAmountAndCurrencyValidation =
+      'Amount and Currency are compulsory.'; //
+  static const String kExpenseAddItemDateAndItemValidation =
+      'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
