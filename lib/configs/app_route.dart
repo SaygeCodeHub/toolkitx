@@ -57,6 +57,7 @@ import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
+import '../screens/equipmentTraceability/widgets/view_my_request_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -500,6 +501,8 @@ class AppRoutes {
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
         return _createRoute(const EnterEquipmentCodeScreen());
+      case ViewMyRequestScreen.routeName:
+        return _createRoute(const ViewMyRequestScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
