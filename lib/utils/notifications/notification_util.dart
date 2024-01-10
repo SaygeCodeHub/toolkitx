@@ -7,8 +7,19 @@ class NotificationUtil {
 
   Future<void> initNotifications() async {
     await pushNotifications.requestPermission();
-    final fcmToken = await pushNotifications.getToken();
-    log('FCM Token $fcmToken');
+    // check in shared preferences if fcm token exists
+    // if true {do not call  final fcmToken = await pushNotifications.getToken();}
+
+    // if false { call this final fcmToken = await pushNotifications.getToken();} and
+    // 1.Call POST API :
+    // url : -https://api.toolkitx.com/api/common/saveuserdevice
+    //{
+    //   "hashcode": "okjh+5Bd0X6pP58cPSvDG/qAaxg9XtHmDbAGb9Bko2OKMQJSpw2qxnJPUnp7aBIb|3|2|1|cet_3",
+    //   "deviceid": "xxx",
+    //   "token": "fcmToken"
+    // }
+
+    // 2.and on success of the above api save it in the preferences
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
 }
