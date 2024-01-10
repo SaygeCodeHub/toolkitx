@@ -103,3 +103,9 @@ class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
 
   EquipmentByCodeNotFetched({required this.errorMessage});
 }
+
+class SearchEquipmentSelected extends EquipmentTraceabilityState {
+  final bool isChecked;
+
+  SearchEquipmentSelected({required this.isChecked});
+}

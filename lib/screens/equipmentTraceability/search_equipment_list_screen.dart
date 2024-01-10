@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_filter_screen.dart';
+import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
@@ -17,7 +18,9 @@ class SearchEquipmentListScreen extends StatelessWidget {
 
   static const routeName = 'SearchEquipmentListScreen';
   static int pageNo = 1;
+  static bool isTransferScreen = false;
   final bool isFromHome;
+  static List codeList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +111,8 @@ class SearchEquipmentListScreen extends StatelessWidget {
                       return const SizedBox.shrink();
                     }
                   })
-            ])));
+            ])),
+    bottomNavigationBar: PrimaryButton(onPressed: () {}, textValue: ''),
+    );
   }
 }

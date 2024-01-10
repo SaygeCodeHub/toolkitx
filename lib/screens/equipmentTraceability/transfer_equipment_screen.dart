@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
@@ -47,6 +49,7 @@ class TransferEquipmentScreen extends StatelessWidget {
                         .isEmpty) ||
                 currentState is EquipmentByCodeFetched,
             builder: (context, state) {
+              log("state============>$state");
               if (state is EquipmentByCodeFetching) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is EquipmentByCodeFetched) {

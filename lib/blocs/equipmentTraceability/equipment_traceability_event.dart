@@ -52,3 +52,9 @@ class FetchEquipmentByCode extends EquipmentTraceabilityEvent {
 
   FetchEquipmentByCode({required this.code});
 }
+
+class SelectSearchEquipment extends EquipmentTraceabilityEvent {
+  final bool isChecked;
+
+  SelectSearchEquipment({required this.isChecked});
+}

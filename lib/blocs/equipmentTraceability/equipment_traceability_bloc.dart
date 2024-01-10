@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -36,6 +37,7 @@ class EquipmentTraceabilityBloc
     on<EquipmentSaveImage>(_equipmentSaveImage);
     on<EquipmentSaveLocation>(_equipmentSaveLocation);
     on<FetchEquipmentByCode>(_fetchEquipmentByCode);
+    on<SelectSearchEquipment>(_selectSearchEquipment);
   }
 
   Map filters = {};
@@ -241,7 +243,9 @@ class EquipmentTraceabilityBloc
           await _equipmentTraceabilityRepo.fetchEquipmentByCode(
               hashCode, event.code, userId);
       code = event.code;
+      log('BlocCode============>$code');
       if (fetchEquipmentByCodeModel.status == 200) {
+        log('here');
         if (equipmentList.indexWhere((element) =>
                 element["id"].toString().trim() ==
                 fetchEquipmentByCodeModel.data.id.trim()) ==
@@ -253,6 +257,8 @@ class EquipmentTraceabilityBloc
             "equipmentname":
                 fetchEquipmentByCodeModel.data.equipmentname.trim(),
           });
+          log("list=============>$equipmentList");
+
         }
 
         emit(EquipmentByCodeFetched(
@@ -265,5 +271,11 @@ class EquipmentTraceabilityBloc
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectSearchEquipment(
+      SelectSearchEquipment event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(SearchEquipmentSelected(isChecked: event.isChecked));
+    log("isCheckedBloc===========>${event.isChecked}");
   }
 }
