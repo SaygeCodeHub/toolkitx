@@ -16,7 +16,7 @@ class ExpenseAddItemHotelLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Name of hotel :',
+          Text(StringConstants.kNameOfHotel,
               style: Theme.of(context)
                   .textTheme
                   .xSmall
@@ -27,9 +27,7 @@ class ExpenseAddItemHotelLayout extends StatelessWidget {
               maxLength: 100,
               textInputAction: TextInputAction.next,
               textInputType: TextInputType.text,
-              onTextFieldChanged: (String textField) {
-                // manageExpenseMap['location'] = textField;
-              }),
+              onTextFieldChanged: (String textField) {}),
           const SizedBox(height: xxTinySpacing),
           RichText(
             text: TextSpan(
