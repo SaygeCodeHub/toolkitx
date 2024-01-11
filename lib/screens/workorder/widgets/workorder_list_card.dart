@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorders_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../workorder_details_tab_screen.dart';
+import '../workorder_list_screen.dart';
 
 class WorkOrderListCard extends StatelessWidget {
   final WorkOrderDatum data;
@@ -24,7 +24,10 @@ class WorkOrderListCard extends StatelessWidget {
             'workOrderName': data.woname
           };
           WorkOrderDetailsTabScreen.workOrderMap = workOrderMap;
-          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName)
+              .then((value) => Navigator.pushReplacementNamed(
+                  context, WorkOrderListScreen.routeName,
+                  arguments: false));
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
