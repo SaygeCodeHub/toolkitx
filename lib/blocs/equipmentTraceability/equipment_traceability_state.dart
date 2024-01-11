@@ -54,6 +54,20 @@ class SearchEquipmentDetailsNotFetched extends EquipmentTraceabilityState {
   SearchEquipmentDetailsNotFetched({required this.errorMessage});
 }
 
+class EquipmentImageSaving extends EquipmentTraceabilityState {}
+
+class EquipmentImageSaved extends EquipmentTraceabilityState {
+  final SaveEquipmentImagesModel saveEquipmentImagesModel;
+
+  EquipmentImageSaved({required this.saveEquipmentImagesModel});
+}
+
+class EquipmentImageNotSaved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentImageNotSaved({required this.errorMessage});
+}
+
 class CustomParameterSaving extends EquipmentTraceabilityState {}
 
 class CustomParameterSaved extends EquipmentTraceabilityState {}
@@ -62,4 +76,30 @@ class CustomParameterNotSaved extends EquipmentTraceabilityState {
   final String errorMessage;
 
   CustomParameterNotSaved({required this.errorMessage});
+}
+
+class EquipmentLocationSaving extends EquipmentTraceabilityState {}
+
+class EquipmentLocationSaved extends EquipmentTraceabilityState {}
+
+class EquipmentLocationNotSaved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentLocationNotSaved({required this.errorMessage});
+}
+
+class EquipmentByCodeFetching extends EquipmentTraceabilityState {}
+
+class EquipmentByCodeFetched extends EquipmentTraceabilityState {
+  final FetchEquipmentByCodeModel fetchEquipmentByCodeModel;
+  final List equipmentList;
+
+  EquipmentByCodeFetched(
+      {required this.fetchEquipmentByCodeModel, required this.equipmentList});
+}
+
+class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentByCodeNotFetched({required this.errorMessage});
 }

@@ -96,3 +96,21 @@ class SelectExpenseAddItemsCurrency extends ExpenseEvent {
 class ApproveExpense extends ExpenseEvent {}
 
 class CloseExpense extends ExpenseEvent {}
+
+class DeleteExpenseItem extends ExpenseEvent {
+  final String itemId;
+
+  DeleteExpenseItem({required this.itemId});
+}
+
+class SaveExpenseItem extends ExpenseEvent {
+  final Map expenseItemMap;
+
+  SaveExpenseItem({required this.expenseItemMap});
+}
+
+class FetchExpenseItemCustomFields extends ExpenseEvent {
+  final Map customFieldsMap;
+
+  FetchExpenseItemCustomFields({required this.customFieldsMap});
+}

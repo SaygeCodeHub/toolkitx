@@ -10,11 +10,14 @@ import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/close_expense_model.dart';
+import '../../data/models/expense/delete_expense_item_model.dart';
+import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
@@ -45,6 +48,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<SelectExpenseAddItemsCurrency>(_selectAddItemCurrency);
     on<ApproveExpense>(_approveExpense);
     on<CloseExpense>(_closeExpense);
+    on<DeleteExpenseItem>(_deleteExpenseItem);
+    on<SaveExpenseItem>(_saveItem);
+    on<FetchExpenseItemCustomFields>(_fetchItemCustomFields);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -52,6 +58,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   int tabIndex = 0;
   Map filters = {};
   String expenseId = '';
+  bool isScreenChange = false;
 
   Future<void> _fetchExpenseList(
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
@@ -311,13 +318,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       FetchExpenseItemMaster event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseItemMaster());
+      isScreenChange = event.isScreenChange;
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
           await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
       emit(ExpenseItemMasterFetched(
           fetchItemMasterModel: fetchItemMasterModel,
-          isScreenChange: event.isScreenChange));
+          isScreenChange: isScreenChange));
       add(SelectExpenseDate(date: ''));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
@@ -390,6 +398,93 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseNotClosed(notClosed: e.toString()));
+    }
+  }
+
+  FutureOr<void> _deleteExpenseItem(
+      DeleteExpenseItem event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(DeletingExpenseItem());
+      DeleteExpenseItemModel deleteExpenseItemModel =
+          await _expenseRepository.deleteExpenseItem({
+        "id": event.itemId,
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? ''
+      });
+      if (deleteExpenseItemModel.status == 200) {
+        emit(ExpenseItemDeleted());
+      } else {
+        emit(ExpenseItemNotDeleted(
+            itemNotDeleted:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ExpenseItemNotDeleted(itemNotDeleted: e.toString()));
+    }
+  }
+
+  Future<void> _saveItem(
+      SaveExpenseItem event, Emitter<ExpenseStates> emit) async {
+    emit(SavingExpenseItem());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.expenseItemMap['amount'] == null &&
+          event.expenseItemMap['reportcurrency'] == null) {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved:
+                StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
+      } else {
+        Map saveItemMap = {
+          "id": "",
+          "expenseid": expenseId,
+          "date": event.expenseItemMap['date'] ?? '',
+          "itemid": event.expenseItemMap['itemid'] ?? '',
+          "amount": event.expenseItemMap['amount'] ?? '',
+          "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
+          "description": event.expenseItemMap['description'] ?? '',
+          "currency": event.expenseItemMap['currency'] ?? '',
+          "filenames": event.expenseItemMap['filenames'] ?? '',
+          "reportcurrency": event.expenseItemMap['reportcurrency'] ??
+              event.expenseItemMap['currency'],
+          "workingatid": event.expenseItemMap['workingatid'] ?? '',
+          "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
+          "userid": userId,
+          "hashcode": hashCode,
+          "questions": []
+        };
+        SaveExpenseItemModel saveExpenseItemModel =
+            await _expenseRepository.saveExpenseItem(saveItemMap);
+        if (saveExpenseItemModel.message == '1') {
+          emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
+        } else {
+          emit(ExpenseItemCouldNotSave(
+              itemNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseItemCouldNotSave(itemNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchItemCustomFields(
+      FetchExpenseItemCustomFields event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseCustomFields());
+      event.customFieldsMap['hashcode'] =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      ExpenseItemCustomFieldsModel expenseItemCustomFieldsModel =
+          await _expenseRepository
+              .fetchExpenseItemCustomFields(event.customFieldsMap);
+      if (expenseItemCustomFieldsModel.status == 200) {
+        emit(ExpenseCustomFieldsFetched(
+            expenseItemCustomFieldsModel: expenseItemCustomFieldsModel));
+      } else {
+        emit(ExpenseCustomFieldsNotFetched(
+            fieldsNotFetched: DatabaseUtil.getText('UnknownErrorMessage')));
+      }
+    } catch (e) {
+      emit(ExpenseCustomFieldsNotFetched(fieldsNotFetched: e.toString()));
     }
   }
 }

@@ -1,8 +1,10 @@
+import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -179,4 +181,42 @@ class ExpenseNotClosed extends ExpenseStates {
   final String notClosed;
 
   ExpenseNotClosed({required this.notClosed});
+}
+
+class DeletingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemDeleted extends ExpenseStates {}
+
+class ExpenseItemNotDeleted extends ExpenseStates {
+  final String itemNotDeleted;
+
+  ExpenseItemNotDeleted({required this.itemNotDeleted});
+}
+
+class SavingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemSaved extends ExpenseStates {
+  final SaveExpenseItemModel saveExpenseItemModel;
+
+  ExpenseItemSaved({required this.saveExpenseItemModel});
+}
+
+class ExpenseItemCouldNotSave extends ExpenseStates {
+  final String itemNotSaved;
+
+  ExpenseItemCouldNotSave({required this.itemNotSaved});
+}
+
+class FetchingExpenseCustomFields extends ExpenseStates {}
+
+class ExpenseCustomFieldsFetched extends ExpenseStates {
+  final ExpenseItemCustomFieldsModel expenseItemCustomFieldsModel;
+
+  ExpenseCustomFieldsFetched({required this.expenseItemCustomFieldsModel});
+}
+
+class ExpenseCustomFieldsNotFetched extends ExpenseStates {
+  final String fieldsNotFetched;
+
+  ExpenseCustomFieldsNotFetched({required this.fieldsNotFetched});
 }

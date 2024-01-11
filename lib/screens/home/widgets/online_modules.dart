@@ -234,6 +234,9 @@ class OnLineModules extends StatelessWidget {
       case 'trace':
         Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
         break;
+      case 'meetingRoom':
+        Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
+        break;
     }
   }
 }
