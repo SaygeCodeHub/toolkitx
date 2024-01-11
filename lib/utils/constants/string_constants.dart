@@ -18,7 +18,10 @@ abstract class StringConstants {
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
+  static const String kDeleteItem = 'Do you want to delete this item'; //
   static const String kParts = 'Parts'; //
+  static const String kTypeOfRoom = 'Type of Room '; //
+  static const String kNameOfHotel = 'Name of hotel :'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -126,6 +129,10 @@ abstract class StringConstants {
   static const String kWorkingAt = 'Working at'; //
   static const String kSelectItem = 'Select Item'; //
   static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
+  static const String kExpenseAddItemAmountAndCurrencyValidation =
+      'Amount and Currency are compulsory.'; //
+  static const String kExpenseAddItemDateAndItemValidation =
+      'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
@@ -448,8 +455,8 @@ abstract class StringConstants {
   static const String kPleaseEnterTimeToClosePermit =
       'Please enter time to close permit';
   static const String kSetParameter = 'Set Parameter';
-  static const String kUploadMedia = 'UploadMedia';
-  static const String kSetLocation = 'SetLocation';
+  static const String kUploadMedia = 'Upload Media';
+  static const String kSetLocation = 'Set Location';
   static const String kEquipmentName = "Equipment Name";
   static const String kEquipmentNo = "Equipment No";
   static const String kArticleNo = "Article No";
@@ -464,4 +471,11 @@ abstract class StringConstants {
   static const String kPartAssigned = 'Part Assigned';
   static const String kPleaseInsertValidQuantity =
       'Please insert valid planned quantity';
+  static const String kSavedSuccessfully = "Saved Successfully";
+  static const String kUploadImages = "Upload images";
+  static const String kLocationSavedSuccessfully =
+      "Location saved successfully";
+  static const String kPleaseSearchOrScanTheEquipment =
+      'Please Search OR Scan the equipment from top menu bar';
+  static const String kClose = 'Close';
 }

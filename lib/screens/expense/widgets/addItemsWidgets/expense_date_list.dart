@@ -57,7 +57,8 @@ class ExpenseDateList extends StatelessWidget {
                                 groupValue: date,
                                 onChanged: (value) {
                                   ExpenseDetailsTabOne.addItemMap['date'] =
-                                      date;
+                                      ExpenseDetailsTabOne
+                                          .itemMasterList[2][index].date;
                                   context.read<ExpenseBloc>().add(
                                       SelectExpenseDate(
                                           date: ExpenseDetailsTabOne

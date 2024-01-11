@@ -95,6 +95,18 @@ class ExpenseDetailsScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.notClosed, '');
             }
+            if (state is DeletingExpenseItem) {
+              ProgressBar.show(context);
+            } else if (state is ExpenseItemDeleted) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              context
+                  .read<ExpenseBloc>()
+                  .add(FetchExpenseDetails(tabIndex: 2, expenseId: expenseId));
+            } else if (state is ExpenseItemNotDeleted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.itemNotDeleted, '');
+            }
           },
           builder: (context, state) {
             if (state is FetchingExpenseDetails) {

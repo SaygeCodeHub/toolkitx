@@ -1,10 +1,13 @@
 import 'package:toolkit/data/models/expense/approve_expnse_model.dart';
 import 'package:toolkit/data/models/expense/close_expense_model.dart';
+import 'package:toolkit/data/models/expense/delete_expense_item_model.dart';
+import 'package:toolkit/data/models/expense/expense_item_custom_field_model.dart';
 import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
 import 'package:toolkit/data/models/expense/fetch_item_master_model.dart';
+import 'package:toolkit/data/models/expense/save_expense_item_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_model.dart';
 import 'package:toolkit/data/models/expense/update_expense_model.dart';
 
@@ -80,5 +83,28 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}api/expense/CloseReport", closeExpenseMap);
     return CloseExpenseModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteExpenseItemModel> deleteExpenseItem(
+      Map deleteExpenseItemMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}expense/deleteitem", deleteExpenseItemMap);
+    return DeleteExpenseItemModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveExpenseItemModel> saveExpenseItem(Map saveItemMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}expense/saveitem", saveItemMap);
+    return SaveExpenseItemModel.fromJson(response);
+  }
+
+  @override
+  Future<ExpenseItemCustomFieldsModel> fetchExpenseItemCustomFields(
+      Map customFieldsMap) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}expense/getitemcustomfields?expenseitemid=${customFieldsMap['expenseitemid']}&itemid=${customFieldsMap['itemid']}&hashcode=${customFieldsMap['hashcode']}");
+    return ExpenseItemCustomFieldsModel.fromJson(response);
   }
 }

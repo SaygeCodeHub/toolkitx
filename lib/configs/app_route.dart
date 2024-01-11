@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
@@ -51,6 +52,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
@@ -493,6 +495,11 @@ class AppRoutes {
         ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
+
+      case EquipmentSaveImages.routeName:
+        return _createRoute(EquipmentSaveImages());
+      case EnterEquipmentCodeScreen.routeName:
+        return _createRoute(const EnterEquipmentCodeScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
