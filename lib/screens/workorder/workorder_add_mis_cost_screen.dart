@@ -119,6 +119,8 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
                 if (state is FetchingWorkOrderSingleMiscCost) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is SingleWorkOrderMiscCostFetched) {
+                  print(
+                      'mis cost datum---->${state.fetchWorkOrderSingleMiscCostModel.data.toJson()}');
                   singleMiscCostDatum
                       .add(state.fetchWorkOrderSingleMiscCostModel.data);
                   return Padding(

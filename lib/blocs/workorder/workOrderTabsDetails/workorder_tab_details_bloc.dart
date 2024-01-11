@@ -10,6 +10,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
+import '../../../data/enums/workorder_priority_enum.dart';
 import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/assign_workforce_model.dart';
@@ -40,6 +41,7 @@ import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../../../screens/workorder/workorder_edit_workforce_screen.dart';
+import '../../../screens/workorder/workorder_form_one_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
 
@@ -53,6 +55,7 @@ class WorkOrderTabDetailsBloc
   String workOrderWorkforceName = '';
   String workOrderId = '';
   List<AddPartsDatum> addPartsDatum = [];
+  String priorityValue = '';
 
   WorkOrderTabDetailsStates get initialState => WorkOrderTabDetailsInitial();
 
@@ -287,8 +290,21 @@ class WorkOrderTabDetailsBloc
 
   _selectPriorityOptions(SelectWorkOrderPriorityOptions event,
       Emitter<WorkOrderTabDetailsStates> emit) {
+    if (WorkOrderFormScreenOne.isFromEdit == true) {
+      for (int i = 0; i < WorkOrderPriorityEnum.values.length; i++) {
+        if (WorkOrderPriorityEnum.values
+            .elementAt(i)
+            .value
+            .toString()
+            .contains(event.priorityId)) {
+          priorityValue = WorkOrderPriorityEnum.values.elementAt(i).priority;
+        }
+      }
+    } else {
+      priorityValue = event.priorityValue;
+    }
     emit(WorkOrderPriorityOptionSelected(
-        priorityId: event.priorityId, priorityValue: event.priorityValue));
+        priorityId: event.priorityId, priorityValue: priorityValue));
   }
 
   _selectCategoryOptions(SelectWorkOrderCategoryOptions event,
@@ -532,10 +548,11 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (event.manageMisCostMap['service'] == null ||
-          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor == '' ||
+          event.manageMisCostMap['service'] == '' ||
+          event.manageMisCostMap['quan'] == '' ||
           event.manageMisCostMap['quan'] == null ||
-          WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency == '' ||
-          event.manageMisCostMap['amount'] == null) {
+          event.manageMisCostMap['amount'] == null ||
+          event.manageMisCostMap['amount'] == '') {
         emit(WorkOrderMisCostCannotManage(
             cannotManageMiscCost: StringConstants.kMiscCostValidation));
       } else {
@@ -889,6 +906,7 @@ class WorkOrderTabDetailsBloc
           WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
       "userid": userId
     };
+    print('documents map---->${jsonEncode(saveDocumentsMap)}');
     SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
         await _workOrderRepository.saveDocuments(saveDocumentsMap);
     if (saveWorkOrderDocumentsModel.status == 200) {
@@ -904,25 +922,24 @@ class WorkOrderTabDetailsBloc
   FutureOr _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderSingleMiscCost());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
-          await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
-              WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
-      WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
-          fetchWorkOrderSingleMiscCostModel.data.id;
-      WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
-          fetchWorkOrderSingleMiscCostModel.data.service;
-      WorkOrderAddMisCostScreen.workOrderDetailsMap['amount'] =
-          fetchWorkOrderSingleMiscCostModel.data.amount;
-      WorkOrderAddMisCostScreen.workOrderDetailsMap['quan'] =
-          fetchWorkOrderSingleMiscCostModel.data.quan;
-      emit(SingleWorkOrderMiscCostFetched(
-          fetchWorkOrderSingleMiscCostModel:
-              fetchWorkOrderSingleMiscCostModel));
-    } catch (e) {
-      emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
-    }
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
+        await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
+            WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
+    WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
+        fetchWorkOrderSingleMiscCostModel.data.id;
+    WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
+        fetchWorkOrderSingleMiscCostModel.data.service;
+    WorkOrderAddMisCostScreen.workOrderDetailsMap['amount'] =
+        fetchWorkOrderSingleMiscCostModel.data.amount;
+    WorkOrderAddMisCostScreen.workOrderDetailsMap['quan'] =
+        fetchWorkOrderSingleMiscCostModel.data.quan;
+    emit(SingleWorkOrderMiscCostFetched(
+        fetchWorkOrderSingleMiscCostModel: fetchWorkOrderSingleMiscCostModel));
+    // } catch (e) {
+    //   emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
+    // }
   }
 
   FutureOr<void> _saveDocuments(SaveWorkOrderComments event,

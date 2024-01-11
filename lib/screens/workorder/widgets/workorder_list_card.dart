@@ -67,11 +67,12 @@ class WorkOrderListCard extends StatelessWidget {
                         .xSmall
                         .copyWith(color: AppColor.grey)),
                 const SizedBox(width: tiniestSpacing),
-                Text(data.type,
-                    style: Theme.of(context)
-                        .textTheme
-                        .xSmall
-                        .copyWith(color: AppColor.grey))
+                Expanded(
+                  child: Text(data.type,
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                          color: AppColor.grey,
+                          overflow: TextOverflow.ellipsis)),
+                )
               ],
             )
           ],
