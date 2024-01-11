@@ -290,7 +290,8 @@ class WorkOrderTabDetailsBloc
 
   _selectPriorityOptions(SelectWorkOrderPriorityOptions event,
       Emitter<WorkOrderTabDetailsStates> emit) {
-    if (WorkOrderFormScreenOne.isFromEdit == true) {
+    if (WorkOrderFormScreenOne.isFromEdit == true ||
+        WorkOrderFormScreenOne.isSimilarWorkOrder == true) {
       for (int i = 0; i < WorkOrderPriorityEnum.values.length; i++) {
         if (WorkOrderPriorityEnum.values
             .elementAt(i)
