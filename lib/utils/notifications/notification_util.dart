@@ -9,15 +9,17 @@ class NotificationUtil {
   final pushNotifications = FirebaseMessaging.instance;
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
-  Future<String?> initNotifications() async {
+  Future<void> initNotifications() async {
     await pushNotifications.requestPermission();
+  }
+
+  ifTokenExists<bool>() async {
     String? fcmToken = await _customerCache.getFCMToken(CacheKeys.fcmToken);
-    if (fcmToken == null) {
-      fcmToken = await pushNotifications.getToken();
-      return fcmToken;
-    } else {
-      return fcmToken;
-    }
+    return fcmToken != null;
+  }
+
+  getToken<String>() async {
+    return await pushNotifications.getToken();
   }
 }
 

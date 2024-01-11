@@ -77,18 +77,21 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
 
   Future<void> _saveUserDevice(
       SaveUserDevice event, Emitter<HomeStates> emit) async {
-    String hashcode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
-    String token = await NotificationUtil().initNotifications() ?? "";
-    Map saveUserDeviceMap = {
-      "hashcode": hashcode,
-      "deviceid": "xxx",
-      "token": token
-    };
-    SaveUserDeviceModel saveUserDeviceModel =
-        await _clientRepository.saveUserDevice(saveUserDeviceMap);
-    if (saveUserDeviceModel.status == 200) {
-      _customerCache.setFCMToken(CacheKeys.fcmToken, token);
+    bool tokenAvailable = await NotificationUtil().ifTokenExists();
+    if (!tokenAvailable) {
+      String hashcode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
+      String newToken = await NotificationUtil().getToken();
+      Map saveUserDeviceMap = {
+        "hashcode": hashcode,
+        "deviceid": "xxx",
+        "token": newToken
+      };
+      SaveUserDeviceModel saveUserDeviceModel =
+          await _clientRepository.saveUserDevice(saveUserDeviceMap);
+      if (saveUserDeviceModel.status == 200) {
+        _customerCache.setFCMToken(CacheKeys.fcmToken, newToken);
+      }
     }
   }
 }
