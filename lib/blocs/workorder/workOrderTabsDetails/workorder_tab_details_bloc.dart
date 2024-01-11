@@ -906,7 +906,6 @@ class WorkOrderTabDetailsBloc
           WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
       "userid": userId
     };
-    print('documents map---->${jsonEncode(saveDocumentsMap)}');
     SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
         await _workOrderRepository.saveDocuments(saveDocumentsMap);
     if (saveWorkOrderDocumentsModel.status == 200) {
