@@ -87,3 +87,19 @@ class EquipmentLocationNotSaved extends EquipmentTraceabilityState {
 
   EquipmentLocationNotSaved({required this.errorMessage});
 }
+
+class EquipmentByCodeFetching extends EquipmentTraceabilityState {}
+
+class EquipmentByCodeFetched extends EquipmentTraceabilityState {
+  final FetchEquipmentByCodeModel fetchEquipmentByCodeModel;
+  final List equipmentList;
+
+  EquipmentByCodeFetched(
+      {required this.fetchEquipmentByCodeModel, required this.equipmentList});
+}
+
+class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentByCodeNotFetched({required this.errorMessage});
+}

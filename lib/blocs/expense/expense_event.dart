@@ -102,3 +102,15 @@ class DeleteExpenseItem extends ExpenseEvent {
 
   DeleteExpenseItem({required this.itemId});
 }
+
+class SaveExpenseItem extends ExpenseEvent {
+  final Map expenseItemMap;
+
+  SaveExpenseItem({required this.expenseItemMap});
+}
+
+class FetchExpenseItemCustomFields extends ExpenseEvent {
+  final Map customFieldsMap;
+
+  FetchExpenseItemCustomFields({required this.customFieldsMap});
+}

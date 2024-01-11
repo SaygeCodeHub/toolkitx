@@ -53,7 +53,7 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
                                 title: Text(ExpenseDetailsTabOne
-                                    .itemMasterList[3][index].workingatnumber),
+                                    .itemMasterList[3][index].workingat),
                                 value: ExpenseDetailsTabOne
                                     .itemMasterList[3][index].workingat,
                                 groupValue: workingAtNumberMap[
@@ -64,6 +64,15 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                       ExpenseDetailsTabOne
                                           .itemMasterList[3][index].workingat;
                                   workingAtNumberMap['working_at_number'] =
+                                      ExpenseDetailsTabOne
+                                          .itemMasterList[3][index]
+                                          .workingatnumber;
+                                  ExpenseDetailsTabOne
+                                          .addItemMap['workingatid'] =
+                                      ExpenseDetailsTabOne
+                                          .itemMasterList[3][index].workingat;
+                                  ExpenseDetailsTabOne
+                                          .addItemMap['workingatnumber'] =
                                       ExpenseDetailsTabOne
                                           .itemMasterList[3][index]
                                           .workingatnumber;
