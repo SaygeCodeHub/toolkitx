@@ -1,12 +1,15 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
@@ -28,7 +31,11 @@ class LeavesAndHolidaysBloc
     on<FetchLeavesAndHolidaysMaster>(_fetchMaster);
     on<SelectLeaveType>(_selectLeaveType);
     on<ApplyForLeave>(_applyForLeave);
+    on<GetTimeSheet>(_getTimeSheet);
   }
+
+  String year = "";
+  String month = "";
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -145,6 +152,31 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(CouldNotApplyForLeave(couldNotApplyForLeave: e.toString()));
+    }
+  }
+
+  FutureOr<void> _getTimeSheet(
+      GetTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(GetTimeSheetFetching());
+    try {
+      year = event.year;
+      month = event.month;
+
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      FetchTimeSheetModel fetchTimeSheetModel =
+          await _leavesAndHolidaysRepository.fetchTimeSheet(
+              event.year, event.month, userId!, hashCode!);
+
+      if (fetchTimeSheetModel.status == 200) {
+        emit(GetTimeSheetFetched(fetchTimeSheetModel: fetchTimeSheetModel));
+      } else {
+        emit(GetTimeSheetNotFetched(errorMessage: fetchTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(GetTimeSheetNotFetched(errorMessage: e.toString()));
     }
   }
 }

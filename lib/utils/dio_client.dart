@@ -8,6 +8,7 @@ class DioClient {
 
   Future<dynamic> get(String requestUrl, [Map? body]) async {
     dynamic jsonResponse;
+
     try {
       final response = await dio.get(requestUrl, options: Options());
       jsonResponse = (response.data);
