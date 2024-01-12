@@ -80,7 +80,8 @@ class WorkOrderAssignDocumentScreen extends StatelessWidget {
                       workOrderDocumentMap['documents'] = state.documentList
                           .toString()
                           .replaceAll("[", "")
-                          .replaceAll("]", "");
+                          .replaceAll("]", "")
+                          .replaceAll(" ", "");
                       return WorkOrderAssignDocumentBody(
                           fetchWorkOrderDocumentsModel:
                               state.fetchWorkOrderDocumentsModel);
