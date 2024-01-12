@@ -28,8 +28,8 @@ abstract class ExpenseRepository {
   Future<ExpenseSubmitForApprovalModel> submitExpenseForApproval(
       Map submitForApprovalMap);
 
-  Future<FetchItemMasterModel> fetchExpenseItemMaster(String hashCode,
-      String expenseId);
+  Future<FetchItemMasterModel> fetchExpenseItemMaster(
+      String hashCode, String expenseId);
 
   Future<ApproveExpenseModel> approveExpense(Map approveExpenseMap);
 
