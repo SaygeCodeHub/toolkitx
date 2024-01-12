@@ -346,7 +346,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
     emit(ExpenseWorkingAtOptionSelected(
         workingAt: event.workingAt, workingAtValue: event.workingAtValue));
-    print('bloc value----->${event.workingAt}');
     add(FetchWorkingAtNumberData(groupBy: event.workingAt));
   }
 
