@@ -122,9 +122,12 @@ class WorkForceListScreen extends StatelessWidget {
                                 "isRejected": state.workforceGetCheckListModel
                                     .data![index].isrejected
                               };
-                              Navigator.pushNamed(
-                                  context, WorkForceQuestionsScreen.routeName,
-                                  arguments: checklistDataMap);
+                              Navigator.pushNamed(context,
+                                      WorkForceQuestionsScreen.routeName,
+                                      arguments: checklistDataMap)
+                                  .then((value) => context
+                                      .read<WorkForceListBloc>()
+                                      .add(FetchWorkForceList()));
                             }),
                       ));
                     },

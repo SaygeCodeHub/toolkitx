@@ -27,22 +27,23 @@ class CheckListHeaderBloc
   FutureOr<void> _fetchEditHeader(FetchCheckListEditHeader event,
       Emitter<CheckListHeaderStates> emit) async {
     emit(FetchingCheckListEditHeader(scheduleId: event.scheduleId));
-    try {
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      CheckListEditHeaderDetailsModel checkListEditHeaderDetailsModel =
-          await _sysUserCheckListRepository.fetchCheckListEditHeader(
-              event.scheduleId, hashCode);
-      if (checkListEditHeaderDetailsModel.status == 200) {
-        emit(CheckListEditHeaderFetched(
-            getCheckListEditHeaderModel: checkListEditHeaderDetailsModel));
-      } else {
-        emit(CheckListEditHeaderError(
-            noHeaderMessage: StringConstants.kNoHeader));
-      }
-    } catch (e) {
-      emit(CheckListEditHeaderError(
-          noHeaderMessage: StringConstants.kSomethingWentWrong));
+    // try {
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    print('schedule id--->${event.scheduleId}');
+    CheckListEditHeaderDetailsModel checkListEditHeaderDetailsModel =
+        await _sysUserCheckListRepository.fetchCheckListEditHeader(
+            event.scheduleId, hashCode);
+    if (checkListEditHeaderDetailsModel.status == 200) {
+      emit(CheckListEditHeaderFetched(
+          getCheckListEditHeaderModel: checkListEditHeaderDetailsModel));
+    } else {
+      emit(
+          CheckListEditHeaderError(noHeaderMessage: StringConstants.kNoHeader));
     }
+    // } catch (e) {
+    //   emit(CheckListEditHeaderError(
+    //       noHeaderMessage: StringConstants.kSomethingWentWrong));
+    // }
   }
 
   FutureOr<void> _submitHeader(
