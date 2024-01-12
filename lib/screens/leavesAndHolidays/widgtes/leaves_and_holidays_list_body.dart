@@ -56,7 +56,14 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                     Text(
                         "${StringConstants.kSubmissionDate} ${data.dates[index].submissionDate}",
                         style: Theme.of(context).textTheme.xSmall.copyWith(
-                            fontWeight: FontWeight.w400, color: AppColor.grey))
+                            fontWeight: FontWeight.w400, color: AppColor.grey)),
+                    SizedBox(height: 20,),
+                    data.dates[index].isoverdue == "1"? const CustomCard(shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(xxxTiniestSpacing))
+                    ),color: AppColor.yellow,child: Padding(
+                      padding: EdgeInsets.all(xxxTinierSpacing),
+                      child: Text(StringConstants.kOverdue,style: TextStyle(color: AppColor.white),),
+                    )) : Text('')
                   ],
                 ),
                 trailing: Column(
