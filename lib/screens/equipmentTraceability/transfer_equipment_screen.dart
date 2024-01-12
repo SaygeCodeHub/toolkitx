@@ -65,14 +65,14 @@ class TransferEquipmentScreen extends StatelessWidget {
                       title: Text(
                           context
                               .read<EquipmentTraceabilityBloc>()
-                              .equipmentList[index]["equipmentname"],
+                              .equipmentList[index]["equipmentname"] ?? '',
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.w500,
                               color: AppColor.black)),
                       subtitle: Text(
                           context
                               .read<EquipmentTraceabilityBloc>()
-                              .equipmentList[index]["equipmentcode"],
+                              .equipmentList[index]["equipmentcode"] ?? '',
                           style: Theme.of(context).textTheme.xSmall.copyWith(
                               fontWeight: FontWeight.w500,
                               color: AppColor.grey)),

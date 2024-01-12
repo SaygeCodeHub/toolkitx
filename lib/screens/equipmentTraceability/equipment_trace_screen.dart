@@ -34,6 +34,7 @@ class EquipmentTraceScreen extends StatelessWidget {
           itemBuilder: (context, int index) {
             return InkWell(
               onTap: () {
+                SearchEquipmentListScreen.isTransferScreen = false;
                 _navigateToEquipmentModule(
                     equipment[index].equipmentModuleName, context);
               },

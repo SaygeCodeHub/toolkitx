@@ -30,6 +30,7 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
             Navigator.pushNamed(context, EnterEquipmentCodeScreen.routeName);
           }
           if (value == StringConstants.kSearch) {
+            SearchEquipmentListScreen.isTransferScreen = true;
             Navigator.pushNamed(context, SearchEquipmentListScreen.routeName,
                 arguments: false);
           }

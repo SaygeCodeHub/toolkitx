@@ -47,6 +47,7 @@ class EquipmentTraceabilityBloc
   String code = "";
   List answerList = [];
   List equipmentList = [];
+  List equipmentCodeList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -235,42 +236,77 @@ class EquipmentTraceabilityBloc
   Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event,
       Emitter<EquipmentTraceabilityState> emit) async {
     emit(EquipmentByCodeFetching());
-    try {
-      String? hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
-          await _equipmentTraceabilityRepo.fetchEquipmentByCode(
-              hashCode, event.code, userId);
-      code = event.code;
-      log('BlocCode============>$code');
-      if (fetchEquipmentByCodeModel.status == 200) {
-        log('here');
-        if (equipmentList.indexWhere((element) =>
-                element["id"].toString().trim() ==
-                fetchEquipmentByCodeModel.data.id.trim()) ==
-            -1) {
-          equipmentList.add({
-            "id": fetchEquipmentByCodeModel.data.id.trim(),
-            "equipmentcode":
-                fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-            "equipmentname":
-                fetchEquipmentByCodeModel.data.equipmentname.trim(),
-          });
-          log("list=============>$equipmentList");
+    // try {
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
+        await _equipmentTraceabilityRepo.fetchEquipmentByCode(
+            hashCode, event.code, userId);
+    code = event.code;
 
+    log('BlocCode============>$code');
+
+    log('equipmentList index of============>${equipmentList.indexWhere((element) => element.toString().trim() == fetchEquipmentByCodeModel.data.id.toString().trim())}');
+    if (fetchEquipmentByCodeModel.status == 200) {
+      // log('equipmentList============>${equipmentCodeList.contains(fetchEquipmentByCodeModel.data.id.toString())}');
+      // if(equipmentCodeList.isNotEmpty){
+      //   for(int i = 0; i < equipmentCodeList.length; i++){
+      //     if(equipmentCodeList.contains(fetchEquipmentByCodeModel.data.id.toString().trim())){
+      //       print('equipmentList[i].id---->${equipmentCodeList[i]}');
+      //       equipmentCodeList.remove(equipmentCodeList[i]);
+      //     }else{
+      //       equipmentList.add({
+      //         "id": fetchEquipmentByCodeModel.data.id.trim(),
+      //         "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+      //         "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
+      //       });
+      //     }
+      //   }
+      // }
+      print('equiCodelist----------->$equipmentCodeList');
+      bool doesCodeExist = false;
+      for (int i = 0; i < equipmentCodeList.length; i++) {
+        String codeString = equipmentCodeList[i].toString();
+        print('codeString----------->$codeString');
+        print('dataId----------->${fetchEquipmentByCodeModel.data.id.toString()}');
+        if (codeString.contains(fetchEquipmentByCodeModel.data.id.toString())) {
+          if (equipmentList.indexWhere((element) =>
+          element.toString().trim() ==
+              fetchEquipmentByCodeModel.data.id.trim()) == -1) {
+            equipmentList.add({
+              "id": fetchEquipmentByCodeModel.data.id.trim(),
+              "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+              "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
+            });
+          }
+          break;
         }
+        print('doesStringExist============>$doesCodeExist');
 
-        emit(EquipmentByCodeFetched(
-            fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
-            equipmentList: equipmentList));
-      } else {
-        emit(EquipmentByCodeNotFetched(
-            errorMessage: fetchEquipmentByCodeModel.message));
       }
-    } catch (e) {
-      emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
+
+    // if (equipmentList.indexWhere((element) =>
+    // element.toString().trim() ==
+    //     fetchEquipmentByCodeModel.data.id.trim()) == -1) {
+    //   equipmentList.add({
+    //     "id": fetchEquipmentByCodeModel.data.id.trim(),
+    //     "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+    //     "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
+    //   });
+    //   }
+      log("Bloclist=============>$equipmentList");
+
+      emit(EquipmentByCodeFetched(
+          fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
+          equipmentList: equipmentList));
+    } else {
+      emit(EquipmentByCodeNotFetched(
+          errorMessage: fetchEquipmentByCodeModel.message));
     }
+    // } catch (e) {
+    //   emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
+    // }
   }
 
   FutureOr<void> _selectSearchEquipment(

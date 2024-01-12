@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
@@ -112,7 +114,16 @@ class SearchEquipmentListScreen extends StatelessWidget {
                     }
                   })
             ])),
-    bottomNavigationBar: PrimaryButton(onPressed: () {}, textValue: ''),
+    bottomNavigationBar: SearchEquipmentListScreen.isTransferScreen == true ?  Padding(
+      padding: const EdgeInsets.all(xxTinierSpacing),
+      child: PrimaryButton(onPressed: () {
+        log('list==============>$codeList');
+        for(var code in codeList){
+        context.read<EquipmentTraceabilityBloc>().add(FetchEquipmentByCode(code: code));
+        }
+        Navigator.pop(context);
+      }, textValue: StringConstants.kDone),
+    ) : const SizedBox.shrink(),
     );
   }
 }

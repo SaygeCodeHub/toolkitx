@@ -41,9 +41,11 @@ class SearchEquipmentListBody extends StatelessWidget {
                         "equipmentId": data[index].id,
                         "equipmentName": data[index].equipmentname
                       };
-                      Navigator.pushNamed(
-                          context, SearchEquipmentDetailsScreen.routeName,
-                          arguments: searchEquipmentDetailsMap);
+                      SearchEquipmentListScreen.isTransferScreen != true
+                          ? Navigator.pushNamed(
+                              context, SearchEquipmentDetailsScreen.routeName,
+                              arguments: searchEquipmentDetailsMap)
+                          : null;
                     },
                     title: Text(data[index].equipmentname,
                         style: Theme.of(context).textTheme.small.copyWith(
@@ -64,22 +66,18 @@ class SearchEquipmentListBody extends StatelessWidget {
                                 color: AppColor.grey)),
                       ],
                     ),
-                    trailing: SearchEquipmentCheckbox(
-                      selectedCreatedForIdList: context
-                          .read<EquipmentTraceabilityBloc>()
-                          .equipmentList,
-                      data: data[index],
-                      onCreatedForChanged: (List<dynamic> codeList) {
-                        log('codeList===========>$codeList');
-                        String code = codeList
-                            .toString()
-                            .replaceAll("[", "")
-                            .replaceAll("]", "")
-                            .replaceAll(", ", ",");
-                        log('code===========>$code');
-                      },
-                      codeList: SearchEquipmentListScreen.codeList,
-                    ),
+                    trailing: SearchEquipmentListScreen.isTransferScreen == true
+                        ? SearchEquipmentCheckbox(
+                            selectedCreatedForIdList: context
+                                .read<EquipmentTraceabilityBloc>()
+                                .equipmentCodeList,
+                            data: data[index],
+                            onCreatedForChanged: (List codeList) {
+                              SearchEquipmentListScreen.codeList = codeList;
+                            },
+                            codeList: SearchEquipmentListScreen.codeList,
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ),
               );
@@ -130,7 +128,7 @@ class _SearchEquipmentCheckboxState extends State<SearchEquipmentCheckbox> {
       widget.onCreatedForChanged(widget.codeList);
     } else {
       widget.selectedCreatedForIdList.remove(equipmentId);
-      widget.codeList.add(code);
+      widget.codeList.remove(code);
       widget.onCreatedForChanged(widget.codeList);
     }
   }
