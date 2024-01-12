@@ -59,8 +59,9 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                                           contentValue: '',
                                           onPrimaryButton: () {
                                             context
-                                                .read<WorkOrderTabDetailsBloc>()
-                                                .misCostId = data.id;
+                                                    .read<WorkOrderTabDetailsBloc>()
+                                                    .misCostId =
+                                                data.misccost[index].id;
                                             context
                                                 .read<WorkOrderTabDetailsBloc>()
                                                 .add(
