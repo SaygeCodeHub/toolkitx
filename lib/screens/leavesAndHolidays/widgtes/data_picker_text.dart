@@ -78,7 +78,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextButton> {
                               });
                             },
                             maximumDate:
-                                DateTime(DateTime.now().year, 12 ~/ 12, 31))),
+                                DateTime(DateTime.now().year, 1 ~/ 1, 31))),
                     CustomTextButton(
                         onPressed: () {
                           if (isFirstTime != false) {

@@ -78,8 +78,12 @@ class LeavesAndHolidaysScreen extends StatelessWidget {
                     var data = state.fetchTimeSheetModel.data;
                     return Expanded(
                         child: Column(children: [
-                      const Text(StringConstants.kSubmissionPeriod),
-                      const Text(StringConstants.kMonthly),
+                      const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(StringConstants.kSubmissionPeriod),
+                            Text(StringConstants.kMonthly)
+                          ]),
                       const SizedBox(height: xxTinierSpacing),
                       const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
