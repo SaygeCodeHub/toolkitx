@@ -32,8 +32,6 @@ class LeavesAndHolidaysBloc
     on<SelectLeaveType>(_selectLeaveType);
     on<ApplyForLeave>(_applyForLeave);
     on<GetTimeSheet>(_getTimeSheet);
-    on<SelectTimeSheetChecklistMultiAnswer>(
-        _selectTimeSheetChecklistMultiAnswer);
   }
 
   String year = "";
@@ -159,7 +157,7 @@ class LeavesAndHolidaysBloc
 
   FutureOr<void> _getTimeSheet(
       GetTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
-    emit(GetTimeSheetSaving());
+    emit(GetTimeSheetFetching());
     try {
       year = event.year;
       month = event.month;
@@ -173,18 +171,12 @@ class LeavesAndHolidaysBloc
               event.year, event.month, userId!, hashCode!);
 
       if (fetchTimeSheetModel.status == 200) {
-        emit(GetTimeSheetSaved(fetchTimeSheetModel: fetchTimeSheetModel));
+        emit(GetTimeSheetFetched(fetchTimeSheetModel: fetchTimeSheetModel));
       } else {
-        emit(GetTimeSheetNotSaved(errorMessage: fetchTimeSheetModel.message));
+        emit(GetTimeSheetNotFetched(errorMessage: fetchTimeSheetModel.message));
       }
     } catch (e) {
-      emit(GetTimeSheetNotSaved(errorMessage: e.toString()));
+      emit(GetTimeSheetNotFetched(errorMessage: e.toString()));
     }
-  }
-
-  FutureOr<void> _selectTimeSheetChecklistMultiAnswer(
-      SelectTimeSheetChecklistMultiAnswer event,
-      Emitter<LeavesAndHolidaysStates> emit) async {
-    emit(SelectTimeSheetChecklistMultiAnswerSaved(isChecked: event.isChecked));
   }
 }

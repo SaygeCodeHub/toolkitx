@@ -120,11 +120,12 @@ class _DatePickerTextFieldState extends State<DatePickerTextButton> {
             dateInput.isEmpty
                 ? Text(
                     DateFormat('MMMM yyyy').format(DateTime.now()),
-                    style: const TextStyle(fontSize: 22, color: AppColor.black),
+                    style: const TextStyle(
+                        fontSize: kDatePickerTextSize, color: AppColor.black),
                   )
                 : Text(dateInput,
-                    style:
-                        const TextStyle(fontSize: 20, color: AppColor.black)),
+                    style: const TextStyle(
+                        fontSize: kDatePickerTextSize, color: AppColor.black)),
             const Icon(Icons.calendar_month, color: AppColor.black),
           ],
         ));

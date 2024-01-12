@@ -9,7 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio:
-  intl: ^0.18.1
+  intl:
   get_it:
   shimmer:
   encrypt:

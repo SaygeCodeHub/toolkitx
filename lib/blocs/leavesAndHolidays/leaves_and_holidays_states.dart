@@ -77,21 +77,15 @@ class ApplyForLeaveManagerConfirmationNeeded extends LeavesAndHolidaysStates {
   ApplyForLeaveManagerConfirmationNeeded({required this.confirmationMessage});
 }
 
-class GetTimeSheetSaving extends LeavesAndHolidaysStates {}
+class GetTimeSheetFetching extends LeavesAndHolidaysStates {}
 
-class GetTimeSheetSaved extends LeavesAndHolidaysStates {
+class GetTimeSheetFetched extends LeavesAndHolidaysStates {
   final FetchTimeSheetModel fetchTimeSheetModel;
 
-  GetTimeSheetSaved({required this.fetchTimeSheetModel});
+  GetTimeSheetFetched({required this.fetchTimeSheetModel});
 }
 
-class GetTimeSheetNotSaved extends LeavesAndHolidaysStates {
+class GetTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
-  GetTimeSheetNotSaved({required this.errorMessage});
-}
-
-class SelectTimeSheetChecklistMultiAnswerSaved extends LeavesAndHolidaysStates {
-  final bool isChecked;
-
-  SelectTimeSheetChecklistMultiAnswerSaved({required this.isChecked});
+  GetTimeSheetNotFetched({required this.errorMessage});
 }

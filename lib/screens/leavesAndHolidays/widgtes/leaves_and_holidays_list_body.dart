@@ -58,7 +58,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                         style: Theme.of(context).textTheme.xSmall.copyWith(
                             fontWeight: FontWeight.w400, color: AppColor.grey)),
                     const SizedBox(
-                      height: 20,
+                      height: xxxSmallestSpacing,
                     ),
                     data.dates[index].isoverdue == "1"
                         ? const CustomCard(

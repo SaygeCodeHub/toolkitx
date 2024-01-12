@@ -67,14 +67,14 @@ class LeavesAndHolidaysScreen extends StatelessWidget {
             const SizedBox(height: tiniestSpacing),
             BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
                 buildWhen: (previous, currentState) =>
-                    currentState is GetTimeSheetSaving ||
-                    currentState is GetTimeSheetSaved ||
-                    currentState is GetTimeSheetNotSaved,
+                    currentState is GetTimeSheetFetching ||
+                    currentState is GetTimeSheetFetched ||
+                    currentState is GetTimeSheetNotFetched,
                 builder: (context, state) {
-                  if (state is GetTimeSheetSaving) {
+                  if (state is GetTimeSheetFetching) {
                     return const Expanded(
                         child: Center(child: CircularProgressIndicator()));
-                  } else if (state is GetTimeSheetSaved) {
+                  } else if (state is GetTimeSheetFetched) {
                     var data = state.fetchTimeSheetModel.data;
                     return Expanded(
                         child: Column(children: [
@@ -97,18 +97,13 @@ class LeavesAndHolidaysScreen extends StatelessWidget {
                         SizedBox(
                             width: smallerSpacing,
                             child: Checkbox(
-                                value: isChecked,
-                                onChanged: (value) {
-                                  context.read<LeavesAndHolidaysBloc>().add(
-                                      SelectTimeSheetChecklistMultiAnswer(
-                                          isChecked: isChecked));
-                                }))
+                                value: isChecked, onChanged: (value) {}))
                       ]),
                       Expanded(
                           child: LeavesAndHolidaysListBody(
                               data: data, isChecked: isChecked))
                     ]));
-                  } else if (state is GetTimeSheetNotSaved) {
+                  } else if (state is GetTimeSheetNotFetched) {
                     return const Text(StringConstants.kDataNotCorrect);
                   }
                   return const SizedBox.shrink();
