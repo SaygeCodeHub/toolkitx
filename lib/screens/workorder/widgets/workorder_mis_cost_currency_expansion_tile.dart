@@ -16,9 +16,11 @@ class WorkOrderMiscCostCurrencyExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<WorkOrderTabDetailsBloc>()
-        .add(WorkOrderSelectCurrencyOption(currencyName: ''));
+    context.read<WorkOrderTabDetailsBloc>().add(WorkOrderSelectCurrencyOption(
+        currencyName:
+            (context.read<WorkOrderTabDetailsBloc>().currencyName.isNotEmpty)
+                ? context.read<WorkOrderTabDetailsBloc>().currencyName
+                : ''));
 
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
