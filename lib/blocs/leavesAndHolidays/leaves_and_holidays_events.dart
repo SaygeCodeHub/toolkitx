@@ -27,8 +27,3 @@ class GetTimeSheet extends LeavesAndHolidaysEvent {
   final String month;
   GetTimeSheet({required this.year, required this.month});
 }
-
-class SelectTimeSheetChecklistMultiAnswer extends LeavesAndHolidaysEvent {
-  bool isChecked;
-  SelectTimeSheetChecklistMultiAnswer({required this.isChecked});
-}
