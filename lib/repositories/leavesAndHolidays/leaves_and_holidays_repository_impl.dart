@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
@@ -46,5 +47,13 @@ class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}timesheet/get?year=$year&month=$month&userid=$userId&hashcode=$hashCode");
     return FetchTimeSheetModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchCheckInTimeSheetModel> fetchCheckInTimeSheet(
+      String date, String userId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}timesheet/getcheckIns?date=$date&userid=$userId&hashcode=$hashCode");
+    return FetchCheckInTimeSheetModel.fromJson(response);
   }
 }

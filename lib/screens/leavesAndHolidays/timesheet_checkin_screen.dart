@@ -1,0 +1,159 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_icon_button.dart';
+import 'package:toolkit/widgets/error_section.dart';
+import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/primary_button.dart';
+import '../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import '../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
+import '../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
+import '../../configs/app_color.dart';
+import '../../configs/app_spacing.dart';
+import '../../utils/constants/string_constants.dart';
+
+class TimeSheetCheckInScreen extends StatelessWidget {
+  static const routeName = 'TimesheetCheckInScreen';
+
+  const TimeSheetCheckInScreen({super.key, required this.timeSheetMap});
+
+  final Map timeSheetMap;
+
+  @override
+  Widget build(BuildContext context) {
+    log('MAP=============>$timeSheetMap');
+    context
+        .read<LeavesAndHolidaysBloc>()
+        .add(FetchCheckInTimeSheet(date: timeSheetMap['date']));
+    return Scaffold(
+      appBar: GenericAppBar(
+        title: timeSheetMap['date'],
+        actions: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(right: xxTinierSpacing),
+              child: Text(
+                  timeSheetMap['status'] == 1 ? StringConstants.kSubmitted : '',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: AppColor.deepBlue)),
+            ),
+          ),
+        ],
+      ),
+      body: BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+          buildWhen: (previous, currentState) =>
+              currentState is CheckInTimeSheetFetching ||
+              currentState is CheckInTimeSheetFetched ||
+              currentState is CheckInTimeSheetNotFetched,
+          builder: (context, state) {
+            if (state is CheckInTimeSheetFetching) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is CheckInTimeSheetFetched) {
+              var data = state.fetchCheckInTimeSheetModel.data;
+              return ListView.separated(
+                itemCount: data.checkins.length,
+                itemBuilder: (context, index) {
+                  return CustomCard(
+                    child: Padding(
+                      padding: const EdgeInsets.all(xxTinierSpacing),
+                      child: ListTile(
+                        leading: CustomCard(
+                            child: Padding(
+                          padding: const EdgeInsets.all(tiniestSpacing),
+                          child: Text(
+                              "${data.checkins[index].starttime}-${data.checkins[index].endtime}"),
+                        )),
+                        title: Padding(
+                          padding: const EdgeInsets.all(tiniestSpacing),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(data.checkins[index].workingat,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColor.deepBlue)),
+                              CustomIconButton(
+                                  icon: Icons.edit, onPressed: () {}),
+                            ],
+                          ),
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.all(tiniestSpacing),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "${data.checkins[index].breakmins} mins break",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              CustomIconButton(
+                                  icon: Icons.delete, onPressed: () {})
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: xxTinierSpacing);
+                },
+              );
+            } else if (state is CheckInTimeSheetNotFetched) {
+              return Center(
+                child: GenericReloadButton(
+                    onPressed: () {
+                      context.read<LeavesAndHolidaysBloc>().add(
+                          FetchCheckInTimeSheet(date: timeSheetMap['date']));
+                    },
+                    textValue: StringConstants.kReload),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
+      bottomNavigationBar: Visibility(
+        visible: timeSheetMap['status'] == 0,
+        child: Padding(
+          padding: const EdgeInsets.all(xxTinierSpacing),
+          child: BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+            buildWhen: (previous, currentState) =>
+                currentState is CheckInTimeSheetFetching ||
+                currentState is CheckInTimeSheetFetched,
+            builder: (context, state) {
+              if (state is CheckInTimeSheetFetching) {
+                return const SizedBox.shrink();
+              } else if (state is CheckInTimeSheetFetched) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                        child: PrimaryButton(
+                            onPressed: () {},
+                            textValue: StringConstants.kAddTimeSheet)),
+                    Visibility(
+                      visible: state
+                          .fetchCheckInTimeSheetModel.data.checkins.isNotEmpty,
+                      child: Expanded(
+                          child: Padding(
+                        padding: const EdgeInsets.only(left: tiniestSpacing),
+                        child: PrimaryButton(
+                            onPressed: () {},
+                            textValue: StringConstants.kSubmitTimeSheet),
+                      )),
+                    )
+                  ],
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

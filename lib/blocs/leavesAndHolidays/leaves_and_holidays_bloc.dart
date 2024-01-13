@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -32,6 +32,7 @@ class LeavesAndHolidaysBloc
     on<SelectLeaveType>(_selectLeaveType);
     on<ApplyForLeave>(_applyForLeave);
     on<GetTimeSheet>(_getTimeSheet);
+    on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
   }
 
   String year = "";
@@ -177,6 +178,28 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(GetTimeSheetNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchCheckInTimeSheet(FetchCheckInTimeSheet event,
+      Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(CheckInTimeSheetFetching());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
+          await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
+              event.date, userId!, hashCode!);
+      if (fetchCheckInTimeSheetModel.status == 200) {
+        emit(CheckInTimeSheetFetched(
+            fetchCheckInTimeSheetModel: fetchCheckInTimeSheetModel));
+      } else {
+        emit(CheckInTimeSheetNotFetched(
+            errorMessage: fetchCheckInTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(CheckInTimeSheetNotFetched(errorMessage: e.toString()));
     }
   }
 }
