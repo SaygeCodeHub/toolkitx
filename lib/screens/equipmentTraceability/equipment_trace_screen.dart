@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
-import 'package:toolkit/screens/equipmentTraceability/widgets/view_my_request_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/view_my_request_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/equipment_util.dart';
 import 'package:toolkit/widgets/custom_card.dart';

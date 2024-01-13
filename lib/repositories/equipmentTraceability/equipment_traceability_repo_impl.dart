@@ -1,5 +1,7 @@
+
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_my_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
@@ -66,5 +68,12 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getequipmentbycode?code=$code&userid=$hashCode&hashcode=$hashCode");
     return FetchEquipmentByCodeModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchMyRequestModel> fetchMyRequest(int pageNo, String userId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}equipment/getpendingtransferrequests?pageno=$pageNo&userid=$userId&hashcode=$hashCode");
+    return FetchMyRequestModel.fromJson(response);
   }
 }

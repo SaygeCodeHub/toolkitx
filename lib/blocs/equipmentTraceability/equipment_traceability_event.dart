@@ -52,3 +52,9 @@ class FetchEquipmentByCode extends EquipmentTraceabilityEvent {
 
   FetchEquipmentByCode({required this.code});
 }
+
+class FetchMyRequest extends EquipmentTraceabilityEvent {
+  final int pageNo;
+
+  FetchMyRequest({required this.pageNo});
+}
