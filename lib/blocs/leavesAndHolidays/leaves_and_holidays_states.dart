@@ -1,4 +1,5 @@
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
@@ -74,4 +75,17 @@ class ApplyForLeaveManagerConfirmationNeeded extends LeavesAndHolidaysStates {
   final String confirmationMessage;
 
   ApplyForLeaveManagerConfirmationNeeded({required this.confirmationMessage});
+}
+
+class GetTimeSheetFetching extends LeavesAndHolidaysStates {}
+
+class GetTimeSheetFetched extends LeavesAndHolidaysStates {
+  final FetchTimeSheetModel fetchTimeSheetModel;
+
+  GetTimeSheetFetched({required this.fetchTimeSheetModel});
+}
+
+class GetTimeSheetNotFetched extends LeavesAndHolidaysStates {
+  final String errorMessage;
+  GetTimeSheetNotFetched({required this.errorMessage});
 }

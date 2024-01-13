@@ -21,3 +21,9 @@ class ApplyForLeave extends LeavesAndHolidaysEvent {
 
   ApplyForLeave({required this.applyForLeaveMap});
 }
+
+class GetTimeSheet extends LeavesAndHolidaysEvent {
+  final String year;
+  final String month;
+  GetTimeSheet({required this.year, required this.month});
+}
