@@ -1,11 +1,16 @@
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/status_tag_model.dart';
 import '../../../data/models/workorder/fetch_assign_workforce_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/status_tag.dart';
+import 'assign_workforce_body.dart';
 
 class AssignWorkForceStatusTags extends StatelessWidget {
   final AssignWorkForceDatum assignWorkForceDatum;
@@ -32,9 +37,16 @@ class AssignWorkForceStatusTags extends StatelessWidget {
         FloatingActionButton.small(
             heroTag: "btn$index",
             backgroundColor: AppColor.blueGrey,
-            onPressed: () {},
+            onPressed: () {
+              AssignWorkForceBody.assignWorkForceMap['peopleid'] = context
+                  .read<WorkOrderTabDetailsBloc>()
+                  .assignWorkForceDatum[index].id;
+              context.read<WorkOrderTabDetailsBloc>().add(AssignWorkForce(
+                  assignWorkOrderMap: AssignWorkForceBody.assignWorkForceMap,
+                  showWarningCount: '1'));
+            },
             child:
-                const Icon(Icons.add, size: kIconSize, color: AppColor.black))
+            const Icon(Icons.add, size: kIconSize, color: AppColor.black))
       ],
     );
   }
