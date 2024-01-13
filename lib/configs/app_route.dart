@@ -57,6 +57,7 @@ import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
+import '../screens/equipmentTraceability/send_transfer_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
@@ -504,6 +505,8 @@ class AppRoutes {
       case TimeSheetCheckInScreen.routeName:
         return _createRoute(
             TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+      case SendTransferScreen.routeName:
+        return _createRoute(const SendTransferScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -103,3 +103,17 @@ class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
 
   EquipmentByCodeNotFetched({required this.errorMessage});
 }
+
+class TransferTypeSelected extends EquipmentTraceabilityState {
+  final String transferType;
+
+  TransferTypeSelected({required this.transferType});
+}
+
+class WarehouseSelected extends EquipmentTraceabilityState {
+  final String id;
+  final String warehouse;
+  final FetchWarehouseModel fetchWarehouseModel;
+
+  WarehouseSelected({required this.warehouse,required this.id, required this.fetchWarehouseModel});
+}

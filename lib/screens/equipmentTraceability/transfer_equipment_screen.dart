@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/equipmentTraceability/send_transfer_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -108,7 +109,9 @@ class TransferEquipmentScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(xxTinierSpacing),
               child: PrimaryButton(
-                  onPressed: () {}, textValue: StringConstants.kTransfer),
+                  onPressed: () {
+                    Navigator.pushNamed(context, SendTransferScreen.routeName);
+                  }, textValue: StringConstants.kTransfer),
             );
           } else {
             return const SizedBox.shrink();

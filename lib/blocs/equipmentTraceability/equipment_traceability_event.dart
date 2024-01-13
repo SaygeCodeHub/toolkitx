@@ -52,3 +52,16 @@ class FetchEquipmentByCode extends EquipmentTraceabilityEvent {
 
   FetchEquipmentByCode({required this.code});
 }
+
+class SelectTransferTypeName extends EquipmentTraceabilityEvent {
+  final String transferType;
+
+  SelectTransferTypeName({required this.transferType});
+}
+
+class SelectWarehouse extends EquipmentTraceabilityEvent {
+  final String id;
+  final String warehouse;
+
+  SelectWarehouse({required this.warehouse,required this.id});
+}

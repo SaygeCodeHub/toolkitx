@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/equipmentTraceability/equipment_save_locatio
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -36,6 +37,8 @@ class EquipmentTraceabilityBloc
     on<EquipmentSaveImage>(_equipmentSaveImage);
     on<EquipmentSaveLocation>(_equipmentSaveLocation);
     on<FetchEquipmentByCode>(_fetchEquipmentByCode);
+    on<SelectTransferTypeName>(_selectTransferType);
+    on<SelectWarehouse>(_selectWarehouse);
   }
 
   Map filters = {};
@@ -43,6 +46,7 @@ class EquipmentTraceabilityBloc
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
   String equipmentId = "";
   String code = "";
+  String transferType = "";
   List answerList = [];
   List equipmentList = [];
 
@@ -265,5 +269,19 @@ class EquipmentTraceabilityBloc
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectTransferType(SelectTransferTypeName event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(TransferTypeSelected(transferType: event.transferType));
+    transferType = event.transferType;
+  }
+
+  Future<FutureOr<void>> _selectWarehouse(SelectWarehouse event, Emitter<EquipmentTraceabilityState> emit) async {
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    FetchWarehouseModel fetchWarehouseModel =
+        await _equipmentTraceabilityRepo.fetchWarehouse(
+        hashCode);
+    emit(WarehouseSelected(warehouse: event.warehouse, id: event.id, fetchWarehouseModel: fetchWarehouseModel,));
   }
 }
