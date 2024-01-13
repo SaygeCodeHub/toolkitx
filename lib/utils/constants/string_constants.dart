@@ -488,4 +488,5 @@ abstract class StringConstants {
   static const String kClose = 'Close';
   static const String kAddTimeSheet = 'Add TimeSheet';
   static const String kSubmitTimeSheet = 'Submit TimeSheet';
+  static const String kMinsBreak = 'mins break';
 }

@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/widgets/custom_card.dart';
-import 'package:toolkit/widgets/custom_icon_button.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -13,6 +9,7 @@ import '../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
+import 'widgtes/timesheet_checkin_body.dart';
 
 class TimeSheetCheckInScreen extends StatelessWidget {
   static const routeName = 'TimesheetCheckInScreen';
@@ -23,7 +20,6 @@ class TimeSheetCheckInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('MAP=============>$timeSheetMap');
     context
         .read<LeavesAndHolidaysBloc>()
         .add(FetchCheckInTimeSheet(date: timeSheetMap['date']));
@@ -52,56 +48,7 @@ class TimeSheetCheckInScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is CheckInTimeSheetFetched) {
               var data = state.fetchCheckInTimeSheetModel.data;
-              return ListView.separated(
-                itemCount: data.checkins.length,
-                itemBuilder: (context, index) {
-                  return CustomCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(xxTinierSpacing),
-                      child: ListTile(
-                        leading: CustomCard(
-                            child: Padding(
-                          padding: const EdgeInsets.all(tiniestSpacing),
-                          child: Text(
-                              "${data.checkins[index].starttime}-${data.checkins[index].endtime}"),
-                        )),
-                        title: Padding(
-                          padding: const EdgeInsets.all(tiniestSpacing),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(data.checkins[index].workingat,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColor.deepBlue)),
-                              CustomIconButton(
-                                  icon: Icons.edit, onPressed: () {}),
-                            ],
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.all(tiniestSpacing),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${data.checkins[index].breakmins} mins break",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              CustomIconButton(
-                                  icon: Icons.delete, onPressed: () {})
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: xxTinierSpacing);
-                },
-              );
+              return TimeSheetCheckInBody(checkInList: data.checkins);
             } else if (state is CheckInTimeSheetNotFetched) {
               return Center(
                 child: GenericReloadButton(
