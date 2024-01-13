@@ -1,7 +1,6 @@
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
-import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
 import '../../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
@@ -259,8 +258,10 @@ class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
 
 class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
   final FetchAssignWorkForceModel fetchAssignWorkForceModel;
-
-  AssignWorkOrderFetched({required this.fetchAssignWorkForceModel});
+  final List<AssignWorkForceDatum> assignWorkForceDatum;
+  AssignWorkOrderFetched(
+      {required this.assignWorkForceDatum,
+      required this.fetchAssignWorkForceModel});
 }
 
 class AssignWorkOrderNotFetched extends WorkOrderTabDetailsStates {
@@ -381,16 +382,18 @@ class SingleWorkOrderMiscCostNotFetched extends WorkOrderTabDetailsStates {
 
 class AssigningWorkForce extends WorkOrderTabDetailsStates {}
 
-class WorkForceAssigned extends WorkOrderTabDetailsStates {
-  final AssignWorkOrderModel assignWorkOrderModel;
-
-  WorkForceAssigned({required this.assignWorkOrderModel});
-}
+class WorkForceAssigned extends WorkOrderTabDetailsStates {}
 
 class WorkForceNotAssigned extends WorkOrderTabDetailsStates {
   final String workForceNotFetched;
 
   WorkForceNotAssigned({required this.workForceNotFetched});
+}
+
+class WorkforceAssignDialog extends WorkOrderTabDetailsStates {
+  final String dialogText;
+
+  WorkforceAssignDialog({required this.dialogText});
 }
 
 class DeletingWorkOrderSingleMiscCost extends WorkOrderTabDetailsStates {}
