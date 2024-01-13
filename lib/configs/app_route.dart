@@ -52,6 +52,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
@@ -497,6 +498,8 @@ class AppRoutes {
 
       case EquipmentSaveImages.routeName:
         return _createRoute(EquipmentSaveImages());
+      case EnterEquipmentCodeScreen.routeName:
+        return _createRoute(const EnterEquipmentCodeScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

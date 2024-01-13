@@ -23,14 +23,15 @@ class WorkOrderListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context
         .read<WorkOrderBloc>()
-        .add(FetchWorkOrders(pageNo: pageNo, isFromHome: isFromHome));
+        .add(FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               WorkOrderFormScreenOne.isSimilarWorkOrder = false;
               WorkOrderFormScreenOne.isFromEdit = false;
-              Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
+              Navigator.pushReplacementNamed(
+                  context, WorkOrderFormScreenOne.routeName,
                   arguments: addWorkOrderMap);
             },
             child: const Icon(Icons.add)),

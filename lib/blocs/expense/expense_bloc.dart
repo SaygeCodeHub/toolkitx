@@ -13,6 +13,7 @@ import '../../data/models/expense/close_expense_model.dart';
 import '../../data/models/expense/delete_expense_item_model.dart';
 import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
+import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -51,6 +52,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<DeleteExpenseItem>(_deleteExpenseItem);
     on<SaveExpenseItem>(_saveItem);
     on<FetchExpenseItemCustomFields>(_fetchItemCustomFields);
+    on<FetchWorkingAtNumberData>(_fetchWorkingAtNumberData);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -342,7 +344,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   _selectWorkingAtOption(
       SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
-    emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
+    emit(ExpenseWorkingAtOptionSelected(
+        workingAt: event.workingAt, workingAtValue: event.workingAtValue));
+    add(FetchWorkingAtNumberData(groupBy: event.workingAt));
   }
 
   _selectWorkingAtNumber(
@@ -485,6 +489,28 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseCustomFieldsNotFetched(fieldsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchWorkingAtNumberData(
+      FetchWorkingAtNumberData event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingWorkingAtNumberData());
+      ExpenseWorkingAtNumberDataModel expenseWorkingAtNumberDataModel =
+          await _expenseRepository.fetchWorkingAtNumberData({
+        "groupby": event.groupBy,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (expenseWorkingAtNumberDataModel.data.isNotEmpty) {
+        emit(WorkingAtNumberDataFetched(
+            expenseWorkingAtNumberDataModel: expenseWorkingAtNumberDataModel));
+      } else {
+        emit(WorkingAtNumberDataNotFetched(
+            dataNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(WorkingAtNumberDataNotFetched(dataNotFetched: e.toString()));
     }
   }
 }

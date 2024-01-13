@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
@@ -57,5 +58,13 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
         "${ApiConstants.baseUrl}equipment/savelocation",
         equipmentSaveLocationMap);
     return EquipmentSaveLocationModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchEquipmentByCodeModel> fetchEquipmentByCode(
+      String hashCode, String code, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}equipment/getequipmentbycode?code=$code&userid=$hashCode&hashcode=$hashCode");
+    return FetchEquipmentByCodeModel.fromJson(response);
   }
 }

@@ -471,8 +471,19 @@ abstract class StringConstants {
   static const String kPartAssigned = 'Part Assigned';
   static const String kPleaseInsertValidQuantity =
       'Please insert valid planned quantity';
+  static String kMethodOfReporting = "Method of reporting";
+  static String kRegularReporting = "Regular Reporting";
+  static const String kSubmitAll = "Submit all :";
+  static const String kSubmissionDate = "Submission Date :";
+  static const String kNotSubmitted = "Not Submitted";
+  static const String kDataNotCorrect = "Date is not correct";
+  static String kSubmissionPeriod = "Submission Period";
+  static String kMonthly = "Monthly";
   static const String kSavedSuccessfully = "Saved Successfully";
   static const String kUploadImages = "Upload images";
   static const String kLocationSavedSuccessfully =
       "Location saved successfully";
+  static const String kPleaseSearchOrScanTheEquipment =
+      'Please Search OR Scan the equipment from top menu bar';
+  static const String kClose = 'Close';
 }
