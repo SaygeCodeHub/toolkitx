@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
+
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
@@ -88,4 +90,17 @@ class GetTimeSheetFetched extends LeavesAndHolidaysStates {
 class GetTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
   GetTimeSheetNotFetched({required this.errorMessage});
+}
+
+class CheckInTimeSheetFetching extends LeavesAndHolidaysStates {}
+
+class CheckInTimeSheetFetched extends LeavesAndHolidaysStates {
+  final FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel;
+
+  CheckInTimeSheetFetched({required this.fetchCheckInTimeSheetModel});
+}
+
+class CheckInTimeSheetNotFetched extends LeavesAndHolidaysStates {
+  final String errorMessage;
+  CheckInTimeSheetNotFetched({required this.errorMessage});
 }
