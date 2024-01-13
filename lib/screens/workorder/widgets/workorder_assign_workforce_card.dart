@@ -24,7 +24,7 @@ class WorkOrderAssignWorkforceCard extends StatelessWidget {
                     .xSmall
                     .copyWith(fontWeight: FontWeight.w500)),
             subtitle:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const SizedBox(height: xxTinierSpacing),
               Text(assignWorkForceDatum.jobTitle),
               const SizedBox(height: xxTinierSpacing),

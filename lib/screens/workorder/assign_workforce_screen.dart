@@ -19,19 +19,18 @@ class AssignWorkForceScreen extends StatelessWidget {
   static int pageNo = 1;
   static bool isWorkforceSearched = false;
   static TextEditingController workforceNameController =
-  TextEditingController();
+      TextEditingController();
 
   const AssignWorkForceScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     context.read<WorkOrderTabDetailsBloc>().add(FetchAssignWorkForceList(
         pageNo: 1,
         workOrderWorkforceName: '',
         workOrderId: context.read<WorkOrderBloc>().workOrderId));
     context.read<WorkOrderTabDetailsBloc>().assignWorkForceListReachedMax =
-    false;
+        false;
     context.read<WorkOrderTabDetailsBloc>().add(
         SearchWorkOrderWorkforce(isWorkforceSearched: isWorkforceSearched));
     return Scaffold(
@@ -56,14 +55,14 @@ class AssignWorkForceScreen extends StatelessWidget {
                           suffixIcon: BlocBuilder<WorkOrderTabDetailsBloc,
                               WorkOrderTabDetailsStates>(
                             buildWhen: (previousState, currentState) =>
-                            currentState
-                            is WorkOrderAssignWorkforceSearched,
+                                currentState
+                                    is WorkOrderAssignWorkforceSearched,
                             builder: (context, state) {
                               if (state is WorkOrderAssignWorkforceSearched) {
                                 return CustomIconButton(
                                     onPressed: () {
                                       FocusScopeNode currentFocus =
-                                      FocusScope.of(context);
+                                          FocusScope.of(context);
                                       if (!currentFocus.hasPrimaryFocus) {
                                         currentFocus.unfocus();
                                       }
@@ -71,7 +70,7 @@ class AssignWorkForceScreen extends StatelessWidget {
                                           workforceNameController.text.trim() !=
                                               '') {
                                         isWorkforceSearched =
-                                        !isWorkforceSearched;
+                                            !isWorkforceSearched;
                                         pageNo = 1;
                                         context
                                             .read<WorkOrderTabDetailsBloc>()
@@ -82,8 +81,8 @@ class AssignWorkForceScreen extends StatelessWidget {
                                         context
                                             .read<WorkOrderTabDetailsBloc>()
                                             .add(SearchWorkOrderWorkforce(
-                                            isWorkforceSearched:
-                                            isWorkforceSearched));
+                                                isWorkforceSearched:
+                                                    isWorkforceSearched));
                                       }
                                     },
                                     icon: (state.isWorkforceSearched == false)
@@ -100,13 +99,13 @@ class AssignWorkForceScreen extends StatelessWidget {
                               .copyWith(color: AppColor.grey),
                           hintText: StringConstants.kSearch,
                           contentPadding:
-                          const EdgeInsets.all(xxxTinierSpacing),
+                              const EdgeInsets.all(xxxTinierSpacing),
                           enabledBorder: const OutlineInputBorder(
                               borderSide:
-                              BorderSide(color: AppColor.lightGrey)),
+                                  BorderSide(color: AppColor.lightGrey)),
                           focusedBorder: const OutlineInputBorder(
                               borderSide:
-                              BorderSide(color: AppColor.lightGrey)),
+                                  BorderSide(color: AppColor.lightGrey)),
                           filled: true,
                           fillColor: AppColor.white))),
               const AssignWorkForceBody(),

@@ -123,7 +123,7 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? getClientId =
-      await _customerCache.getClientId(CacheKeys.clientId);
+          await _customerCache.getClientId(CacheKeys.clientId);
       clientId = getClientId!;
       popUpMenuItemsList = [
         DatabaseUtil.getText('Edit'),
@@ -135,8 +135,8 @@ class WorkOrderTabDetailsBloc
         DatabaseUtil.getText('AddComment')
       ];
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
-      await _workOrderRepository.fetchWorkOrderDetails(
-          hashCode!, event.workOrderId);
+          await _workOrderRepository.fetchWorkOrderDetails(
+              hashCode!, event.workOrderId);
       tabIndex = event.initialTabIndex;
       if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
         popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
@@ -158,8 +158,8 @@ class WorkOrderTabDetailsBloc
       }
       List customFieldList = [];
       for (int i = 0;
-      i < fetchWorkOrderDetailsModel.data.customfields.length;
-      i++) {
+          i < fetchWorkOrderDetailsModel.data.customfields.length;
+          i++) {
         customFieldList.add({
           'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
           'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
@@ -251,7 +251,7 @@ class WorkOrderTabDetailsBloc
         'hashcode': hashCode
       };
       DeleteItemTabItemModel deleteItemTabItemModel =
-      await _workOrderRepository.deleteItemTabItem(deleteItemTabItemMap);
+          await _workOrderRepository.deleteItemTabItem(deleteItemTabItemMap);
       if (deleteItemTabItemModel.status == 200) {
         emit(
             ItemTabItemDeleted(deleteItemTabItemModel: deleteItemTabItemModel));
@@ -276,7 +276,7 @@ class WorkOrderTabDetailsBloc
         'hashcode': hashCode
       };
       DeleteDocumentModel deleteDocumentModel =
-      await _workOrderRepository.deleteDocument(deleteDocumentMap);
+          await _workOrderRepository.deleteDocument(deleteDocumentMap);
       if (deleteDocumentModel.status == 200) {
         emit(DocumentDeleted(deleteDocumentModel: deleteDocumentModel));
       } else {
@@ -346,9 +346,9 @@ class WorkOrderTabDetailsBloc
         "plannedstartdate": event.workOrderDetailsMap['plannedstartdate'] ?? '',
         "plannedstarttime": event.workOrderDetailsMap['plannedstarttime'] ?? '',
         "plannedfinishdate":
-        event.workOrderDetailsMap['plannedfinishdate'] ?? '',
+            event.workOrderDetailsMap['plannedfinishdate'] ?? '',
         "plannedfinishtime":
-        event.workOrderDetailsMap['plannedfinishtime'] ?? '',
+            event.workOrderDetailsMap['plannedfinishtime'] ?? '',
         "otherlocation": event.workOrderDetailsMap['otherlocation'] ?? '',
         "customfields": event.workOrderDetailsMap['customfields'] ?? '',
         "originationid": event.workOrderDetailsMap['originationid'] ?? '',
@@ -358,15 +358,15 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       SaveNewAndSimilarWorkOrderModel saveNewAndSimilarWorkOrderModel =
-      await _workOrderRepository
-          .saveNewAndSimilarWorkOrder(saveNewAndSimilarWorkOrderMap);
+          await _workOrderRepository
+              .saveNewAndSimilarWorkOrder(saveNewAndSimilarWorkOrderMap);
       if (saveNewAndSimilarWorkOrderModel.status == 200) {
         emit(NewAndSimilarWorkOrderSaved(
             saveNewAndSimilarWorkOrderModel: saveNewAndSimilarWorkOrderModel));
       } else {
         emit(NewAndSimilarWorkOrderNotSaved(
             workOrderNotSaved:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(NewAndSimilarWorkOrderNotSaved(workOrderNotSaved: e.toString()));
@@ -391,13 +391,13 @@ class WorkOrderTabDetailsBloc
         "description": event.updateWorkOrderDetailsMap['description'] ?? '',
         "specialtyid": event.updateWorkOrderDetailsMap['specialtyid'] ?? '',
         "plannedstartdate":
-        event.updateWorkOrderDetailsMap['plannedstartdate'] ?? '',
+            event.updateWorkOrderDetailsMap['plannedstartdate'] ?? '',
         "plannedstarttime":
-        event.updateWorkOrderDetailsMap['plannedstarttime'] ?? '',
+            event.updateWorkOrderDetailsMap['plannedstarttime'] ?? '',
         "plannedfinishdate":
-        event.updateWorkOrderDetailsMap['plannedfinishdate'] ?? '',
+            event.updateWorkOrderDetailsMap['plannedfinishdate'] ?? '',
         "plannedfinishtime":
-        event.updateWorkOrderDetailsMap['plannedfinishtime'] ?? '',
+            event.updateWorkOrderDetailsMap['plannedfinishtime'] ?? '',
         "otherlocation": event.updateWorkOrderDetailsMap['otherlocation'] ?? '',
         "customfields": event.updateWorkOrderDetailsMap['customfields'] ?? '',
         "originationid": event.updateWorkOrderDetailsMap['originationid'] ?? '',
@@ -409,15 +409,15 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       UpdateWorkOrderDetailsModel updateWorkOrderDetailsModel =
-      await _workOrderRepository
-          .updateWorkOrderDetails(updateWorkOrderDetailsMap);
+          await _workOrderRepository
+              .updateWorkOrderDetails(updateWorkOrderDetailsMap);
       if (updateWorkOrderDetailsModel.status == 200) {
         emit(WorkOrderDetailsUpdated(
             updateWorkOrderDetailsModel: updateWorkOrderDetailsModel));
       } else {
         emit(WorkOrderDetailsCouldNotUpdate(
             detailsNotFetched:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(WorkOrderDetailsCouldNotUpdate(detailsNotFetched: e.toString()));
@@ -468,9 +468,9 @@ class WorkOrderTabDetailsBloc
         emit(WorkOrderDownTimeCannotManage(
             downTimeCannotManage: DatabaseUtil.getText('TimeDateValidate')));
       } else if (DateFormat('dd.MM.yyyy')
-          .parse(event.manageDownTimeMap['startdate'])
-          .compareTo(DateFormat('dd.MM.yyyy')
-          .parse(event.manageDownTimeMap['enddate'])) >
+              .parse(event.manageDownTimeMap['startdate'])
+              .compareTo(DateFormat('dd.MM.yyyy')
+                  .parse(event.manageDownTimeMap['enddate'])) >
           0) {
         emit(WorkOrderDownTimeCannotManage(
             downTimeCannotManage: DatabaseUtil.getText('shouldbegreater')));
@@ -486,14 +486,14 @@ class WorkOrderTabDetailsBloc
           "id": event.manageDownTimeMap['downTimeId'] ?? ''
         };
         ManageWorkOrderDownTimeModel manageWorkOrderDownTimeModel =
-        await _workOrderRepository.manageDownTime(manageDownTimeMap);
+            await _workOrderRepository.manageDownTime(manageDownTimeMap);
         if (manageWorkOrderDownTimeModel.status == 200) {
           emit(WorkOrderDownTimeManaged(
               manageWorkOrderDownTimeModel: manageWorkOrderDownTimeModel));
         } else {
           emit(WorkOrderDownTimeCannotManage(
               downTimeCannotManage:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -506,12 +506,12 @@ class WorkOrderTabDetailsBloc
     if (WorkOrderAddMisCostScreen.workOrderDetailsMap['vendor'] == null &&
         WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
-      i < WorkOrderAddMisCostScreen.workOrderMasterDatum[8].length;
-      i++) {
+          i < WorkOrderAddMisCostScreen.workOrderMasterDatum[8].length;
+          i++) {
         if (WorkOrderAddMisCostScreen.workOrderMasterDatum[8][i].id
             .toString()
             .contains(
-            WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor)) {
+                WorkOrderAddMisCostScreen.singleMiscCostDatum[0].vendor)) {
           vendorName =
               WorkOrderAddMisCostScreen.workOrderMasterDatum[8][i].name;
         }
@@ -527,12 +527,12 @@ class WorkOrderTabDetailsBloc
     if (WorkOrderAddMisCostScreen.workOrderDetailsMap['currency'] == null &&
         WorkOrderAddMisCostScreen.isFromEdit == true) {
       for (int i = 0;
-      i < WorkOrderAddMisCostScreen.workOrderMasterDatum[7].length;
-      i++) {
+          i < WorkOrderAddMisCostScreen.workOrderMasterDatum[7].length;
+          i++) {
         if (WorkOrderAddMisCostScreen.workOrderMasterDatum[7][i].id
             .toString()
             .contains(
-            WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency)) {
+                WorkOrderAddMisCostScreen.singleMiscCostDatum[0].currency)) {
           currencyName =
               WorkOrderAddMisCostScreen.workOrderMasterDatum[7][i].currency;
         }
@@ -570,14 +570,14 @@ class WorkOrderTabDetailsBloc
           "id": WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] ?? ''
         };
         ManageWorkOrderMiscCostModel manageWorkOrderMiscCostModel =
-        await _workOrderRepository.manageMiscCost(manageMiscCostMap);
+            await _workOrderRepository.manageMiscCost(manageMiscCostMap);
         if (manageWorkOrderMiscCostModel.status == 200) {
           emit(WorkOrderMisCostManaged(
               manageWorkOrderMiscCostModel: manageWorkOrderMiscCostModel));
         } else {
           emit(WorkOrderMisCostCannotManage(
               cannotManageMiscCost:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -597,13 +597,13 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       AcceptWorkOrderModel acceptWorkOrderModel =
-      await _workOrderRepository.acceptWorkOrder(acceptWorkOrderMap);
+          await _workOrderRepository.acceptWorkOrder(acceptWorkOrderMap);
       if (acceptWorkOrderModel.status == 200) {
         emit(WorkOrderAccepted(acceptWorkOrderModel: acceptWorkOrderModel));
       } else {
         emit(WorkOrderNotAccepted(
             workOrderNotAccepted:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(WorkOrderNotAccepted(workOrderNotAccepted: e.toString()));
@@ -622,13 +622,13 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       HoldWorkOrderModel holdWorkOrderModel =
-      await _workOrderRepository.holdWorkOrder(holdWorkOrderMap);
+          await _workOrderRepository.holdWorkOrder(holdWorkOrderMap);
       if (holdWorkOrderModel.status == 200) {
         emit(WorkOrderGotOnHold(holdWorkOrderModel: holdWorkOrderModel));
       } else {
         emit(WorkOrderCannotHold(
             workOrderCannotHold:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(WorkOrderCannotHold(workOrderCannotHold: e.toString()));
@@ -641,8 +641,8 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchWorkOrderSingleDownTimeModel fetchWorkOrderSingleDownTimeModel =
-      await _workOrderRepository.fetchWorkOrderSingleDownTime(
-          hashCode!, event.downTimeId);
+          await _workOrderRepository.fetchWorkOrderSingleDownTime(
+              hashCode!, event.downTimeId);
       WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['startdate'] =
           fetchWorkOrderSingleDownTimeModel.data.startdate;
       WorkOrderAddAndEditDownTimeScreen.addAndEditDownTimeMap['starttime'] =
@@ -668,11 +668,11 @@ class WorkOrderTabDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (!assignWorkForceListReachedMax) {
         FetchAssignWorkForceModel fetchAssignWorkForceModel =
-        await _workOrderRepository.fetchAssignWorkForce(
-            event.pageNo,
-            hashCode!,
-            WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-            event.workOrderWorkforceName);
+            await _workOrderRepository.fetchAssignWorkForce(
+                event.pageNo,
+                hashCode!,
+                WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+                event.workOrderWorkforceName);
         pageNo = event.pageNo;
         workOrderWorkforceName = event.workOrderWorkforceName;
         assignWorkForceDatum.clear();
@@ -694,8 +694,8 @@ class WorkOrderTabDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (!docListReachedMax) {
         FetchAssignPartsModel fetchAssignPartsModel =
-        await _workOrderRepository.fetchAssignPartsModel(
-            event.pageNo, hashCode!, event.workOrderId, event.partName);
+            await _workOrderRepository.fetchAssignPartsModel(
+                event.pageNo, hashCode!, event.workOrderId, event.partName);
         pageNo = event.pageNo;
         workOrderId = event.workOrderId;
         partName = event.partName;
@@ -720,13 +720,13 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       RejectWorkOrderModel rejectWorkOrderModel =
-      await _workOrderRepository.rejectWorkOrder(rejectWorkOrderMap);
+          await _workOrderRepository.rejectWorkOrder(rejectWorkOrderMap);
       if (rejectWorkOrderModel.status == 200) {
         emit(WorkOrderRejected(rejectWorkOrderModel: rejectWorkOrderModel));
       } else {
         emit(WorkOrderNotRejected(
             workOrderNotRejected:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(WorkOrderNotRejected(workOrderNotRejected: e.toString()));
@@ -748,7 +748,7 @@ class WorkOrderTabDetailsBloc
         "showswwarning": event.showWarningCount
       };
       AssignWorkOrderModel assignWorkOrderModel =
-      await _workOrderRepository.assignWorkForce(assignWorkForceMap);
+          await _workOrderRepository.assignWorkForce(assignWorkForceMap);
       if (event.assignWorkOrderMap['hrs'] == null) {
         emit(WorkForceNotAssigned(
             workForceNotFetched: "Please insert valid work hours"));
@@ -760,7 +760,7 @@ class WorkOrderTabDetailsBloc
         } else {
           emit(WorkForceNotAssigned(
               workForceNotFetched:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -788,13 +788,13 @@ class WorkOrderTabDetailsBloc
           "hashcode": hashCode
         };
         StartWorkOrderModel startWorkOrderModel =
-        await _workOrderRepository.startWorkOrder(startWorkOrderMap);
+            await _workOrderRepository.startWorkOrder(startWorkOrderMap);
         if (startWorkOrderModel.status == 200) {
           emit(WorkOderStarted(startWorkOrderModel: startWorkOrderModel));
         } else {
           emit(WorkOderNotStarted(
               workOrderNotStarted:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -842,12 +842,12 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel =
-      await _workOrderRepository.fetchWorkOrderDocuments(
-          1,
-          hashCode!,
-          WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-          '',
-          jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
+          await _workOrderRepository.fetchWorkOrderDocuments(
+              1,
+              hashCode!,
+              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              '',
+              jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       emit(WorkOrderDocumentsFetched(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           documentList: [],
@@ -910,18 +910,18 @@ class WorkOrderTabDetailsBloc
       "hashcode": hashCode,
       "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
       "documents":
-      WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
+          WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
       "userid": userId
     };
     SaveWorkOrderDocumentsModel saveWorkOrderDocumentsModel =
-    await _workOrderRepository.saveDocuments(saveDocumentsMap);
+        await _workOrderRepository.saveDocuments(saveDocumentsMap);
     if (saveWorkOrderDocumentsModel.status == 200) {
       emit(WorkOrderDocumentsSaved(
           saveWorkOrderDocuments: saveWorkOrderDocumentsModel));
     } else {
       emit(WorkOrderDocumentsNotSaved(
           documentsNotSaved:
-          DatabaseUtil.getText('some_unknown_error_please_try_again')));
+              DatabaseUtil.getText('some_unknown_error_please_try_again')));
     }
   }
 
@@ -931,8 +931,8 @@ class WorkOrderTabDetailsBloc
     // try {
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
-    await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
-        WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
+        await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
+            WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
     WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
         fetchWorkOrderSingleMiscCostModel.data.id;
     WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
@@ -961,21 +961,21 @@ class WorkOrderTabDetailsBloc
         Map saveWorkOrderCommentsMap = {
           "userid": userId,
           "workorderid":
-          WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] ?? '',
+              WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] ?? '',
           "hashcode": hashCode,
           "comments":
-          WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? ''
+              WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? ''
         };
         SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
-        await _workOrderRepository
-            .saveWorkOrderComments(saveWorkOrderCommentsMap);
+            await _workOrderRepository
+                .saveWorkOrderComments(saveWorkOrderCommentsMap);
         if (saveWorkOrderCommentsModel.status == 200) {
           emit(WorkOrderCommentsSaved(
               saveWorkOrderCommentsModel: saveWorkOrderCommentsModel));
         } else {
           emit(WorkOrderCommentsNotSaved(
               commentsNotSaved:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -995,12 +995,12 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       DeleteWorkOrderSingleMiscCostModel deleteWorkOrderSingleMiscCostModel =
-      await _workOrderRepository
-          .deleteWorkOrderSingleMiscCost(deleteSingleMiscCostMap);
+          await _workOrderRepository
+              .deleteWorkOrderSingleMiscCost(deleteSingleMiscCostMap);
       if (deleteWorkOrderSingleMiscCostModel.status == 200) {
         emit(WorkOrderSingleMiscCostDeleted(
             deleteWorkOrderSingleMiscCostModel:
-            deleteWorkOrderSingleMiscCostModel));
+                deleteWorkOrderSingleMiscCostModel));
       } else {
         emit(WorkOrderSingleMiscCostNotDeleted(
             miscCostNotDeleted: deleteWorkOrderSingleMiscCostModel.message));
@@ -1018,16 +1018,16 @@ class WorkOrderTabDetailsBloc
     String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
     try {
       if (WorkOrderEditWorkForceScreen
-          .editWorkOrderWorkForceMap['plannedhrs'] ==
-          null ||
+                  .editWorkOrderWorkForceMap['plannedhrs'] ==
+              null ||
           WorkOrderEditWorkForceScreen
-              .editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
+                  .editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
               WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['actualhrs'] ==
+                      .editWorkOrderWorkForceMap['actualhrs'] ==
                   null) {
         emit(WorkOrderWorkForceNotEdited(
             workForceNotEdited:
-            DatabaseUtil.getText('ValidPlannedActualHours')));
+                DatabaseUtil.getText('ValidPlannedActualHours')));
       } else {
         String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
             WorkOrderEditWorkForceScreen
@@ -1035,27 +1035,27 @@ class WorkOrderTabDetailsBloc
             apiKey);
         Map editWorkForceMap = {
           "workorderid": WorkOrderEditWorkForceScreen
-              .editWorkOrderWorkForceMap['workorderId'] ??
+                  .editWorkOrderWorkForceMap['workorderId'] ??
               '',
           "workforceid": decryptedWorkForceId,
           "plannedhrs": WorkOrderEditWorkForceScreen
-              .editWorkOrderWorkForceMap['plannedhrs'] ??
+                  .editWorkOrderWorkForceMap['plannedhrs'] ??
               '',
           "actualhrs": WorkOrderEditWorkForceScreen
-              .editWorkOrderWorkForceMap['actualhrs'] ??
+                  .editWorkOrderWorkForceMap['actualhrs'] ??
               '',
           "userid": userId,
           "hashcode": hashCode
         };
         EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
-        await _workOrderRepository.editWorkForce(editWorkForceMap);
+            await _workOrderRepository.editWorkForce(editWorkForceMap);
         if (editWorkOrderWorkForceModel.status == 200) {
           emit(WorkOrderWorkForceEdited(
               editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
         } else {
           emit(WorkOrderWorkForceNotEdited(
               workForceNotEdited:
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
         }
       }
     } catch (e) {
@@ -1075,14 +1075,14 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       DeleteWorkOrderWorkForceModel deleteWorkOrderWorkForceModel =
-      await _workOrderRepository.deleteWorkOrderWorkForce(deleteWorkForce);
+          await _workOrderRepository.deleteWorkOrderWorkForce(deleteWorkForce);
       if (deleteWorkOrderWorkForceModel.message == '1') {
         emit(WorkOrderWorkForceDeleted(
             deleteWorkOrderWorkForceModel: deleteWorkOrderWorkForceModel));
       } else {
         emit(WorkOrderWorkForceNotDeleted(
             workForceNotDeleted:
-            DatabaseUtil.getText('some_unknown_error_please_try_again')));
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
     } catch (e) {
       emit(WorkOrderWorkForceNotDeleted(workForceNotDeleted: e.toString()));
@@ -1103,7 +1103,7 @@ class WorkOrderTabDetailsBloc
         "quan": event.assignPartMap['quan']
       };
       WorkorderAssignItemModel workorderAssignItemModel =
-      await _workOrderRepository.workorderAssignItem(assignPartMap);
+          await _workOrderRepository.workorderAssignItem(assignPartMap);
       if (workorderAssignItemModel.message == '1') {
         emit(WorkOrderPartsAssigned());
       } else {

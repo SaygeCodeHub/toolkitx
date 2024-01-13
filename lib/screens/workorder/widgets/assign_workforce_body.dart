@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/workorder/widgets/workorder_assign_workforce_card.dart';
@@ -26,12 +25,12 @@ class AssignWorkForceBody extends StatelessWidget {
     AssignWorkForceBody.assignWorkForceMap['hrs'] = null;
     return BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
-        (currentState is FetchingAssignWorkOrder &&
-            AssignWorkForceScreen.pageNo == 1 &&
-            context
-                .read<WorkOrderTabDetailsBloc>()
-                .assignWorkForceDatum
-                .isEmpty) ||
+            (currentState is FetchingAssignWorkOrder &&
+                AssignWorkForceScreen.pageNo == 1 &&
+                context
+                    .read<WorkOrderTabDetailsBloc>()
+                    .assignWorkForceDatum
+                    .isEmpty) ||
             currentState is AssignWorkOrderFetched ||
             currentState is AssignWorkOrderNotFetched ||
             currentState is WorkOrderAssignWorkforceSearched,
@@ -50,13 +49,15 @@ class AssignWorkForceBody extends StatelessWidget {
           } else if (state is WorkForceAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, "Workforce Assigned", '');
-            context.read<WorkOrderTabDetailsBloc>().add(
-                SearchWorkOrderWorkforce(isWorkforceSearched: false));
-            Navigator.pushReplacementNamed(context, AssignWorkForceScreen.routeName);
+            context
+                .read<WorkOrderTabDetailsBloc>()
+                .add(SearchWorkOrderWorkforce(isWorkforceSearched: false));
+            Navigator.pushReplacementNamed(
+                context, AssignWorkForceScreen.routeName);
           } else if (state is WorkForceNotAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.workForceNotFetched, '');
-          }else if(state is WorkforceAssignDialog){
+          } else if (state is WorkforceAssignDialog) {
             ProgressBar.dismiss(context);
             showDialog(
               context: context,
@@ -70,33 +71,23 @@ class AssignWorkForceBody extends StatelessWidget {
             return const Expanded(
                 child: Center(child: CircularProgressIndicator()));
           } else if (state is AssignWorkOrderFetched) {
-            if (state
-                .assignWorkForceDatum
-                .isNotEmpty) {
+            if (state.assignWorkForceDatum.isNotEmpty) {
               return Expanded(
                   child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: context
-                          .read<WorkOrderTabDetailsBloc>()
-                          .assignWorkForceListReachedMax ==
-                          true
-                          ? state
-                          .assignWorkForceDatum
-                          .length
-                          : state
-                          .assignWorkForceDatum
-                          .length +
-                          1,
+                                  .read<WorkOrderTabDetailsBloc>()
+                                  .assignWorkForceListReachedMax ==
+                              true
+                          ? state.assignWorkForceDatum.length
+                          : state.assignWorkForceDatum.length + 1,
                       itemBuilder: (context, index) {
-                        if (index <
-                            state
-                                .assignWorkForceDatum
-                                .length) {
+                        if (index < state.assignWorkForceDatum.length) {
                           return WorkOrderAssignWorkforceCard(
                               index: index,
-                              assignWorkForceDatum: state
-                                  .assignWorkForceDatum[index]);
+                              assignWorkForceDatum:
+                                  state.assignWorkForceDatum[index]);
                         } else if (!context
                             .read<WorkOrderTabDetailsBloc>()
                             .assignWorkForceListReachedMax) {
@@ -123,9 +114,7 @@ class AssignWorkForceBody extends StatelessWidget {
                         return const SizedBox(height: xxTinierSpacing);
                       }));
             } else if (state.fetchAssignWorkForceModel.status == 204 &&
-                state
-                    .assignWorkForceDatum
-                    .isEmpty) {
+                state.assignWorkForceDatum.isEmpty) {
               return NoRecordsText(
                   text: DatabaseUtil.getText('no_records_found'));
             } else {
@@ -139,7 +128,7 @@ class AssignWorkForceBody extends StatelessWidget {
                           pageNo: AssignWorkForceScreen.pageNo,
                           workOrderWorkforceName: '',
                           workOrderId:
-                          context.read<WorkOrderBloc>().workOrderId));
+                              context.read<WorkOrderBloc>().workOrderId));
                 },
                 textValue: StringConstants.kReload);
           } else {

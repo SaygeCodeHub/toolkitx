@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,13 +39,14 @@ class AssignWorkForceStatusTags extends StatelessWidget {
             onPressed: () {
               AssignWorkForceBody.assignWorkForceMap['peopleid'] = context
                   .read<WorkOrderTabDetailsBloc>()
-                  .assignWorkForceDatum[index].id;
+                  .assignWorkForceDatum[index]
+                  .id;
               context.read<WorkOrderTabDetailsBloc>().add(AssignWorkForce(
                   assignWorkOrderMap: AssignWorkForceBody.assignWorkForceMap,
                   showWarningCount: '1'));
             },
             child:
-            const Icon(Icons.add, size: kIconSize, color: AppColor.black))
+                const Icon(Icons.add, size: kIconSize, color: AppColor.black))
       ],
     );
   }

@@ -35,10 +35,10 @@ class WorkOrderTabDetailsFetched extends WorkOrderTabDetailsStates {
 
   WorkOrderTabDetailsFetched(
       {required this.workOrderDetailsMap,
-        required this.popUpMenuList,
-        this.clientId = '',
-        required this.tabInitialIndex,
-        required this.fetchWorkOrderDetailsModel});
+      required this.popUpMenuList,
+      this.clientId = '',
+      required this.tabInitialIndex,
+      required this.fetchWorkOrderDetailsModel});
 }
 
 class WorkOrderTabDetailsNotFetched extends WorkOrderTabDetailsStates {
@@ -258,8 +258,10 @@ class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
 
 class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
   final FetchAssignWorkForceModel fetchAssignWorkForceModel;
-  final  List<AssignWorkForceDatum> assignWorkForceDatum;
-  AssignWorkOrderFetched({required this.assignWorkForceDatum, required this.fetchAssignWorkForceModel});
+  final List<AssignWorkForceDatum> assignWorkForceDatum;
+  AssignWorkOrderFetched(
+      {required this.assignWorkForceDatum,
+      required this.fetchAssignWorkForceModel});
 }
 
 class AssignWorkOrderNotFetched extends WorkOrderTabDetailsStates {
@@ -331,8 +333,8 @@ class WorkOrderDocumentsFetched extends WorkOrderTabDetailsStates {
 
   WorkOrderDocumentsFetched(
       {required this.filterMap,
-        required this.documentList,
-        required this.fetchWorkOrderDocumentsModel});
+      required this.documentList,
+      required this.fetchWorkOrderDocumentsModel});
 }
 
 class WorkOrderDocumentsNotFetched extends WorkOrderTabDetailsStates {
