@@ -11,6 +11,7 @@ import '../../../di/app_module.dart';
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
+import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
@@ -35,6 +36,7 @@ class LeavesAndHolidaysBloc
     on<ApplyForLeave>(_applyForLeave);
     on<GetTimeSheet>(_getTimeSheet);
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
+    on<DeleteTimeSheet>(_deleteTimeSheet);
     on<SelectTimeSheetWorkingAt>(_selectTimeSheetWorkingAt);
     on<FetchTimeSheetWorkingAtNumberData>(_fetchTimeSheetWorkingAtNumberData);
   }
@@ -193,7 +195,6 @@ class LeavesAndHolidaysBloc
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
       final String? userId = await _customerCache.getUserId(CacheKeys.userId);
-
       FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
           await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
               event.date, userId!, hashCode!);
@@ -206,6 +207,30 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(CheckInTimeSheetNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _deleteTimeSheet(
+      DeleteTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetDeleting());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map deleteTimeSheetMap = {
+        "idm": "",
+        "id": event.timeId,
+        "hashcode": hashCode
+      };
+      DeleteTimeSheetModel deleteTimeSheetModel =
+          await _leavesAndHolidaysRepository
+              .deleteTimeSheetRepo(deleteTimeSheetMap);
+      if (deleteTimeSheetModel.status == 200) {
+        emit(TimeSheetDeleted());
+      } else {
+        emit(TimeSheetNotDeleted(errorMessage: deleteTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotDeleted(errorMessage: e.toString()));
     }
   }
 

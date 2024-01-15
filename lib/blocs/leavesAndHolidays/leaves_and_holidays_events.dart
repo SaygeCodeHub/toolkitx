@@ -33,6 +33,12 @@ class FetchCheckInTimeSheet extends LeavesAndHolidaysEvent {
   FetchCheckInTimeSheet({required this.date});
 }
 
+class DeleteTimeSheet extends LeavesAndHolidaysEvent {
+  final String timeId;
+
+  DeleteTimeSheet({required this.timeId});
+}
+
 class SelectTimeSheetWorkingAt extends LeavesAndHolidaysEvent {
   final String value;
   final String status;
