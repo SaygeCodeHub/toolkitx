@@ -75,6 +75,7 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import '../screens/location/location_details_screen.dart';
 import '../screens/location/location_list_screen.dart';
 import '../screens/location/widgets/location_filter_screen.dart';
@@ -504,6 +505,9 @@ class AppRoutes {
       case TimeSheetCheckInScreen.routeName:
         return _createRoute(
             TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+      case AddAndEditTimeSheetScreen.routeName:
+        return _createRoute(
+            AddAndEditTimeSheetScreen(date: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

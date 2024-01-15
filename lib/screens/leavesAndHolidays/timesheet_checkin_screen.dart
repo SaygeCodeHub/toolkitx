@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -79,7 +80,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                   children: [
                     Expanded(
                         child: PrimaryButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, AddAndEditTimeSheetScreen.routeName,
+                                  arguments: timeSheetMap['date']);
+                            },
                             textValue: StringConstants.kAddTimeSheet)),
                     Visibility(
                       visible: state
