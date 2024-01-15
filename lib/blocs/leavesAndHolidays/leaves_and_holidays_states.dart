@@ -104,3 +104,13 @@ class CheckInTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
   CheckInTimeSheetNotFetched({required this.errorMessage});
 }
+
+class TimeSheetDeleting extends LeavesAndHolidaysStates {}
+
+class TimeSheetDeleted extends LeavesAndHolidaysStates {}
+
+class TimeSheetNotDeleted extends LeavesAndHolidaysStates {
+  final String errorMessage;
+
+  TimeSheetNotDeleted({required this.errorMessage});
+}
