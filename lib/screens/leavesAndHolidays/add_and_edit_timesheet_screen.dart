@@ -72,6 +72,7 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         fontWeight: FontWeight.w500, color: AppColor.black)),
                 const SizedBox(height: xxTinierSpacing),
                 TextFieldWidget(
+                  maxLines: 3,
                   onTextFieldChanged: (textField) {},
                 )
               ],
