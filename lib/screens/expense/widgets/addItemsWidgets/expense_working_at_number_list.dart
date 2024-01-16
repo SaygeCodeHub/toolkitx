@@ -90,13 +90,13 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                                 .data[index]
                                                 .name;
                                         ExpenseDetailsTabOne
-                                                .addItemMap['workingatid'] =
+                                                .manageItemsMap['workingatid'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .id;
-                                        ExpenseDetailsTabOne
-                                                .addItemMap['workingatnumber'] =
+                                        ExpenseDetailsTabOne.manageItemsMap[
+                                                'workingatnumber'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]

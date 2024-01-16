@@ -123,9 +123,12 @@ class FetchingExpenseItemMaster extends ExpenseStates {}
 class ExpenseItemMasterFetched extends ExpenseStates {
   final FetchItemMasterModel fetchItemMasterModel;
   final bool isScreenChange;
+  final String apiKey;
 
   ExpenseItemMasterFetched(
-      {required this.isScreenChange, required this.fetchItemMasterModel});
+      {required this.apiKey,
+      required this.isScreenChange,
+      required this.fetchItemMasterModel});
 }
 
 class ExpenseItemMasterCouldNotFetch extends ExpenseStates {

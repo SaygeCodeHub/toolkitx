@@ -12,6 +12,7 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/equipmentTraceability/fetch_my_request_model.dart';
 import '../../data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import '../../data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../di/app_module.dart';
@@ -36,11 +37,14 @@ class EquipmentTraceabilityBloc
     on<EquipmentSaveImage>(_equipmentSaveImage);
     on<EquipmentSaveLocation>(_equipmentSaveLocation);
     on<FetchEquipmentByCode>(_fetchEquipmentByCode);
+    on<FetchMyRequest>(_fetchMyRequest);
   }
 
   Map filters = {};
   bool hasReachedMax = false;
+  bool requestReachedMax = false;
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
+  List<MyRequestTransfer> myRequestData = [];
   String equipmentId = "";
   String code = "";
   List answerList = [];
@@ -264,6 +268,32 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchMyRequest(
+      FetchMyRequest event, Emitter<EquipmentTraceabilityState> emit) async {
+    emit(MyRequestFetching());
+    try {
+      List popUpMenuItems = [
+        DatabaseUtil.getText('approve'),
+        DatabaseUtil.getText('Reject'),
+        DatabaseUtil.getText('Cancel')
+      ];
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
+          .fetchMyRequest(event.pageNo, userId, hashCode);
+      if (fetchMyRequestModel.status == 200) {
+        emit(MyRequestFetched(
+            fetchMyRequestModel: fetchMyRequestModel,
+            popUpMenuItems: popUpMenuItems));
+      } else {
+        emit(MyRequestNotFetched(errorMessage: fetchMyRequestModel.message));
+      }
+    } catch (e) {
+      emit(MyRequestNotFetched(errorMessage: e.toString()));
     }
   }
 }

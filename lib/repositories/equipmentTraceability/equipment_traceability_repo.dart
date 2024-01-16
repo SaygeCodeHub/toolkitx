@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 
 import '../../data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
+import '../../data/models/equipmentTraceability/fetch_my_request_model.dart';
 import '../../data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../data/models/equipmentTraceability/save_custom_parameter_model.dart';
 
@@ -27,4 +28,7 @@ abstract class EquipmentTraceabilityRepo {
 
   Future<FetchEquipmentByCodeModel> fetchEquipmentByCode(
       String hashCode, String code, String userId);
+
+  Future<FetchMyRequestModel> fetchMyRequest(
+      int pageNo, String userId, String hashCode);
 }

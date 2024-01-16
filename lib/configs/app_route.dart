@@ -58,6 +58,7 @@ import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
+import '../screens/equipmentTraceability/view_my_request_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -508,6 +509,8 @@ class AppRoutes {
       case AddAndEditTimeSheetScreen.routeName:
         return _createRoute(
             AddAndEditTimeSheetScreen(date: settings.arguments.toString()));
+      case ViewMyRequestScreen.routeName:
+        return _createRoute(const ViewMyRequestScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
