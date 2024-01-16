@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
+import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -27,6 +28,14 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(xxTinierSpacing),
               child: ListTile(
+                onTap: () {
+                  Map timeSheetMap = {
+                    'date': data.dates[index].fulldate,
+                    'status': data.dates[index].status
+                  };
+                  Navigator.pushNamed(context, TimeSheetCheckInScreen.routeName,
+                      arguments: timeSheetMap);
+                },
                 title: Row(
                   children: [
                     Text("${data.dates[index].day} ${data.dates[index].date}",
@@ -73,7 +82,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                 style: TextStyle(color: AppColor.white),
                               ),
                             ))
-                        : const Text('')
+                        : const SizedBox.shrink()
                   ],
                 ),
                 trailing: Column(

@@ -6,6 +6,7 @@ import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
+import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -57,6 +58,7 @@ import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
+import '../screens/equipmentTraceability/view_my_request_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -500,6 +502,11 @@ class AppRoutes {
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
         return _createRoute(const EnterEquipmentCodeScreen());
+      case TimeSheetCheckInScreen.routeName:
+        return _createRoute(
+            TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+      case ViewMyRequestScreen.routeName:
+        return _createRoute(const ViewMyRequestScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

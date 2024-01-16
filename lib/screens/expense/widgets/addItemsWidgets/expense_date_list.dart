@@ -56,7 +56,7 @@ class ExpenseDateList extends StatelessWidget {
                                     .itemMasterList[2][index].date,
                                 groupValue: date,
                                 onChanged: (value) {
-                                  ExpenseDetailsTabOne.addItemMap['date'] =
+                                  ExpenseDetailsTabOne.manageItemsMap['date'] =
                                       ExpenseDetailsTabOne
                                           .itemMasterList[2][index].date;
                                   context.read<ExpenseBloc>().add(
