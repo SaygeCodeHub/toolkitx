@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_my_request_model.dart';
@@ -76,7 +74,6 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
       int pageNo, String userId, String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getpendingtransferrequests?pageno=$pageNo&userid=$userId&hashcode=$hashCode");
-    log("response==============>$response");
     return FetchMyRequestModel.fromJson(response);
   }
 }
