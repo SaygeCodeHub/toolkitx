@@ -33,8 +33,8 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
           const SizedBox(height: xxxTinierSpacing),
           TextFieldWidget(
               maxLength: 20,
-              textInputAction: TextInputAction.done,
-              textInputType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              textInputType: TextInputType.number,
               onTextFieldChanged: (String textField) {
                 ExpenseDetailsTabOne.manageItemsMap['amount'] = textField;
               }),

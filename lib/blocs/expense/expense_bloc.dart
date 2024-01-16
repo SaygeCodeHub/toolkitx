@@ -442,6 +442,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
             itemNotSaved:
                 StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
       } else {
+        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
+            .expenseCustomFieldsList
+            .where((map) => map.isNotEmpty)
+            .toList();
         Map saveItemMap = {
           "id": event.expenseItemMap['id'] ?? '',
           "expenseid": expenseId,
@@ -458,10 +462,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
           "userid": userId,
           "hashcode": hashCode,
-          "questions": ExpenseHotelAndMealLayout.expenseCustomFieldsList
+          "questions": filteredList
         };
         SaveExpenseItemModel saveExpenseItemModel =
-            await _expenseRepository.saveExpenseItem(saveItemMap);
+        await _expenseRepository.saveExpenseItem(saveItemMap);
         if (saveExpenseItemModel.message == '1') {
           emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
         } else {

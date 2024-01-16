@@ -10,6 +10,7 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../data/enums/expense_working_at_enum.dart';
 import '../../../../widgets/expansion_tile_border.dart';
+import '../expense_details_tab_one.dart';
 
 class ExpenseWorkingAtExpansionTile extends StatelessWidget {
   const ExpenseWorkingAtExpansionTile({Key? key}) : super(key: key);
@@ -69,6 +70,8 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                                 workingAtValue = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .status;
+                                ExpenseDetailsTabOne
+                                    .manageItemsMap['workingatid'] = workingAt;
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
                                         workingAt: workingAt,

@@ -5,20 +5,20 @@ import 'package:toolkit/widgets/generic_text_field.dart';
 import '../configs/app_color.dart';
 import '../configs/app_spacing.dart';
 import '../data/models/expense/expense_item_custom_field_model.dart';
-import '../screens/expense/widgets/expense_details_tab_one.dart';
 import 'constants/string_constants.dart';
 
+typedef ExpenseCustomFieldCallBack = Function(String answers);
+
 class ExpenseAddItemCustomFieldUtil {
-  viewCustomFields(
-      context, List<CustomFieldData> data, expenseCustomFieldList) {
-    expenseCustomFieldList.add({"questionid": "", "answer": ""});
+  viewCustomFields(context, List<CustomFieldData> data,
+      List<Map<String, dynamic>> expenseCustomFieldList) {
     return Visibility(
       visible: data.isNotEmpty,
       child: ListView.builder(
           itemCount: data.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            expenseCustomFieldList[index]['questionid'] = data[index].id;
+            expenseCustomFieldList.add({});
             switch (data[index].type) {
               case 1:
                 return Column(
@@ -36,6 +36,8 @@ class ExpenseAddItemCustomFieldUtil {
                         textInputAction: TextInputAction.done,
                         value: '',
                         onTextFieldChanged: (String textValue) {
+                          expenseCustomFieldList[index]['questionid'] =
+                              data[index].id;
                           expenseCustomFieldList[index]['answer'] = textValue;
                         }),
                     const SizedBox(height: xxTinierSpacing),
@@ -52,7 +54,13 @@ class ExpenseAddItemCustomFieldUtil {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxTinierSpacing),
                     CustomQuestionsRadioTile(
-                        queOption: data[index].queoptions, index: index)
+                      queOption: data[index].queoptions,
+                      expenseCustomFieldCallBack: (String answers) {
+                        expenseCustomFieldList[index]['questionid'] =
+                            data[index].id;
+                        expenseCustomFieldList[index]['answer'] = answers;
+                      },
+                    )
                   ],
                 );
               default:
@@ -64,11 +72,13 @@ class ExpenseAddItemCustomFieldUtil {
 }
 
 class CustomQuestionsRadioTile extends StatefulWidget {
+  final ExpenseCustomFieldCallBack expenseCustomFieldCallBack;
   final List<QueOption> queOption;
-  final int index;
 
   const CustomQuestionsRadioTile(
-      {super.key, required this.queOption, required this.index});
+      {super.key,
+      required this.queOption,
+      required this.expenseCustomFieldCallBack});
 
   @override
   State<CustomQuestionsRadioTile> createState() =>
@@ -106,8 +116,7 @@ class _CustomQuestionsRadioTileState extends State<CustomQuestionsRadioTile> {
                             widget.queOption[itemIndex].queoptionid.toString();
                         questionAnswer =
                             widget.queOption[itemIndex].queoptiontext;
-                        ExpenseDetailsTabOne.manageItemsMap['answer'] =
-                            questionId;
+                        widget.expenseCustomFieldCallBack(questionAnswer);
                       });
                     });
               })
