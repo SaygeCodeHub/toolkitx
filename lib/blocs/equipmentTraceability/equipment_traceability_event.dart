@@ -58,3 +58,19 @@ class FetchMyRequest extends EquipmentTraceabilityEvent {
 
   FetchMyRequest({required this.pageNo});
 }
+
+class SelectTransferTypeName extends EquipmentTraceabilityEvent {
+  final String transferType;
+  final String transferValue;
+
+  SelectTransferTypeName(
+      {required this.transferType, required this.transferValue});
+}
+
+class SelectWarehouse extends EquipmentTraceabilityEvent {
+  final Map warehouseMap;
+
+  SelectWarehouse({required this.warehouseMap});
+}
+
+class FetchWarehouse extends EquipmentTraceabilityEvent {}

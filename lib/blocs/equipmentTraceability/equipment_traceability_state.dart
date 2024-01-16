@@ -119,3 +119,31 @@ class MyRequestNotFetched extends EquipmentTraceabilityState {
 
   MyRequestNotFetched({required this.errorMessage});
 }
+
+class TransferTypeSelected extends EquipmentTraceabilityState {
+  final String transferType;
+  final String transferValue;
+
+  TransferTypeSelected(
+      {required this.transferType, required this.transferValue});
+}
+
+class WarehouseSelected extends EquipmentTraceabilityState {
+  final Map warehouseMap;
+
+  WarehouseSelected({required this.warehouseMap});
+}
+
+class EquipmentWareHouseFetching extends EquipmentTraceabilityState {}
+
+class EquipmentWareHouseFetched extends EquipmentTraceabilityState {
+  final FetchWarehouseModel fetchWarehouseModel;
+
+  EquipmentWareHouseFetched({required this.fetchWarehouseModel});
+}
+
+class EquipmentWareHouseNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentWareHouseNotFetched({required this.errorMessage});
+}
