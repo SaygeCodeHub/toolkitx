@@ -493,4 +493,5 @@ abstract class StringConstants {
       'Do you want to delete this entry ?';
   static const String kWarehouse = "Warehouse";
   static const String kEmployee = "Employee";
+  static const String kPositions = "Positions";
 }
