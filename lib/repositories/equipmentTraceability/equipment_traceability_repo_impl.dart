@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_my_request_model.dart';
@@ -82,6 +84,7 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   Future<FetchWarehouseModel> fetchWarehouse(String hashCode) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getwarehouses?hashcode=$hashCode");
+    log("response===========>$response");
     return FetchWarehouseModel.fromJson(response);
   }
 }

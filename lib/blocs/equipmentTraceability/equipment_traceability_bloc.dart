@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -41,6 +42,7 @@ class EquipmentTraceabilityBloc
     on<FetchMyRequest>(_fetchMyRequest);
     on<SelectTransferTypeName>(_selectTransferType);
     on<SelectWarehouse>(_selectWarehouse);
+    on<FetchWarehouse>(_fetchWarehouse);
   }
 
   Map filters = {};
@@ -50,7 +52,7 @@ class EquipmentTraceabilityBloc
   List<MyRequestTransfer> myRequestData = [];
   String equipmentId = "";
   String code = "";
-  String transferType = "";
+  String transferValue = "";
   List answerList = [];
   List equipmentList = [];
 
@@ -301,17 +303,36 @@ class EquipmentTraceabilityBloc
     }
   }
 
-  FutureOr<void> _selectTransferType(SelectTransferTypeName event, Emitter<EquipmentTraceabilityState> emit) {
-    emit(TransferTypeSelected(transferType: event.transferType));
-    transferType = event.transferType;
+  FutureOr<void> _selectTransferType(
+      SelectTransferTypeName event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(TransferTypeSelected(
+        transferType: event.transferType, transferValue: event.transferValue));
+    transferValue = event.transferValue;
   }
 
-  Future<FutureOr<void>> _selectWarehouse(SelectWarehouse event, Emitter<EquipmentTraceabilityState> emit) async {
+  Future<FutureOr<void>> _selectWarehouse(
+      SelectWarehouse event, Emitter<EquipmentTraceabilityState> emit) async {
+    emit(WarehouseSelected(warehouseMap: event.warehouseMap));
+  }
+
+  Future<FutureOr<void>> _fetchWarehouse(
+      FetchWarehouse event, Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EquipmentWareHouseFetching());
+    // try {
+    log("here=========>");
     String? hashCode =
         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
     FetchWarehouseModel fetchWarehouseModel =
-        await _equipmentTraceabilityRepo.fetchWarehouse(
-        hashCode);
-    emit(WarehouseSelected(warehouse: event.warehouse, id: event.id, fetchWarehouseModel: fetchWarehouseModel,));
+        await _equipmentTraceabilityRepo.fetchWarehouse(hashCode);
+    if (fetchWarehouseModel.status == 200) {
+      emit(EquipmentWareHouseFetched(fetchWarehouseModel: fetchWarehouseModel));
+    }
+    // else {
+    //   emit(EquipmentWareHouseNotFetched(
+    //       errorMessage: fetchWarehouseModel.message));
+    // }
+    // } catch (e) {
+    //   emit(EquipmentWareHouseNotFetched(errorMessage: e.toString()));
+    // }
   }
 }

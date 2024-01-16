@@ -111,7 +111,8 @@ class TransferEquipmentScreen extends StatelessWidget {
               child: PrimaryButton(
                   onPressed: () {
                     Navigator.pushNamed(context, SendTransferScreen.routeName);
-                  }, textValue: StringConstants.kTransfer),
+                  },
+                  textValue: StringConstants.kTransfer),
             );
           } else {
             return const SizedBox.shrink();

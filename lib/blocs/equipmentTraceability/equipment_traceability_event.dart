@@ -61,13 +61,16 @@ class FetchMyRequest extends EquipmentTraceabilityEvent {
 
 class SelectTransferTypeName extends EquipmentTraceabilityEvent {
   final String transferType;
+  final String transferValue;
 
-  SelectTransferTypeName({required this.transferType});
+  SelectTransferTypeName(
+      {required this.transferType, required this.transferValue});
 }
 
 class SelectWarehouse extends EquipmentTraceabilityEvent {
-  final String id;
-  final String warehouse;
+  final Map warehouseMap;
 
-  SelectWarehouse({required this.warehouse,required this.id});
+  SelectWarehouse({required this.warehouseMap});
 }
+
+class FetchWarehouse extends EquipmentTraceabilityEvent {}

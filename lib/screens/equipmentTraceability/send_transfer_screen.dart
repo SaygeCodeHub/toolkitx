@@ -8,16 +8,18 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
-import 'widgets/select_warehouse_expansion_tile.dart';
+import 'widgets/select_warehouse_list_tile.dart';
 
 class SendTransferScreen extends StatelessWidget {
   static const routeName = "SendTransferScreen";
+
   const SendTransferScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context.read<EquipmentTraceabilityBloc>().add(SelectTransferTypeName(transferType: ''));
-
+    context
+        .read<EquipmentTraceabilityBloc>()
+        .add(SelectTransferTypeName(transferType: '', transferValue: ''));
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kTransfer),
       body: Padding(
@@ -29,20 +31,12 @@ class SendTransferScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Select',
-                style: Theme.of(context)
-                    .textTheme
-                    .xSmall
-                    .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
+                style: Theme.of(context).textTheme.xSmall.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
             const SizedBox(height: tiniestSpacing),
             const SelectTransferType(),
             const SizedBox(height: xxxTinierSpacing),
-            Text('Warehouse',
-                style: Theme.of(context)
-                    .textTheme
-                    .xSmall
-                    .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
-            const SizedBox(height: tiniestSpacing),
-            const SelectWarehouseExpansionTile()
+            const SelectWarehouseListTile(),
           ],
         ),
       ),

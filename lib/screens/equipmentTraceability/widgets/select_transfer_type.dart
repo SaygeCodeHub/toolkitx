@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/enums/equipment_transfer_warehouse_enum.dart';
 
 import '../../../configs/app_color.dart';
-import '../../../configs/app_spacing.dart';
+import '../../../configs/app_dimensions.dart';
 import '../../../widgets/expansion_tile_border.dart';
 
 class SelectTransferType extends StatelessWidget {
@@ -12,9 +13,11 @@ class SelectTransferType extends StatelessWidget {
     super.key,
   });
 
+  static String transferType = '';
+  static String transferValue = '';
+
   @override
   Widget build(BuildContext context) {
-    List transferTypeList = [StringConstants.kWarehouse, StringConstants.kEmployee];
     return BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
         buildWhen: (previousState, currentState) =>
             currentState is TransferTypeSelected,
@@ -37,18 +40,33 @@ class SelectTransferType extends StatelessWidget {
                               .removePadding(removeTop: true),
                           child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: transferTypeList.length,
-                              itemBuilder: (context, listIndex) {
+                              itemCount:
+                                  EquipmentTransferWarehouseEnum.values.length,
+                              itemBuilder: (context, index) {
                                 return ListTile(
                                     contentPadding: const EdgeInsets.only(
-                                        left: xxTinierSpacing),
-                                    title: Text(transferTypeList[listIndex]),
+                                        left: kExpansionTileMargin,
+                                        right: kExpansionTileMargin),
+                                    title: Text(
+                                        EquipmentTransferWarehouseEnum.values
+                                            .elementAt(index)
+                                            .type,
+                                        style:
+                                            Theme.of(context).textTheme.xSmall),
                                     onTap: () {
+                                      transferValue =
+                                          EquipmentTransferWarehouseEnum.values
+                                              .elementAt(index)
+                                              .value;
+                                      transferType =
+                                          EquipmentTransferWarehouseEnum.values
+                                              .elementAt(index)
+                                              .type;
                                       context
                                           .read<EquipmentTraceabilityBloc>()
                                           .add(SelectTransferTypeName(
-                                              transferType:
-                                                  transferTypeList[listIndex]));
+                                              transferType: transferType,
+                                              transferValue: transferValue));
                                     });
                               }))
                     ]));
