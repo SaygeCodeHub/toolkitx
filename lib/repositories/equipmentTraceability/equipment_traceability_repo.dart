@@ -2,6 +2,8 @@ import 'package:toolkit/data/models/equipmentTraceability/equipment_save_locatio
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
 
 import '../../data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import '../../data/models/equipmentTraceability/fetch_my_request_model.dart';
@@ -31,4 +33,11 @@ abstract class EquipmentTraceabilityRepo {
 
   Future<FetchMyRequestModel> fetchMyRequest(
       int pageNo, String userId, String hashCode);
+
+  Future<FetchWarehouseModel> fetchWarehouse(String hashCode);
+
+  Future<FetchWarehousePositionsModel> fetchWarehousePositions(
+    String warehouseid,
+    String hashCode,
+  );
 }

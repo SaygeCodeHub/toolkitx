@@ -57,6 +57,7 @@ import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
+import '../screens/equipmentTraceability/send_transfer_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
 import '../screens/equipmentTraceability/view_my_request_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
@@ -76,6 +77,7 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import '../screens/location/location_details_screen.dart';
 import '../screens/location/location_list_screen.dart';
 import '../screens/location/widgets/location_filter_screen.dart';
@@ -505,8 +507,13 @@ class AppRoutes {
       case TimeSheetCheckInScreen.routeName:
         return _createRoute(
             TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+      case AddAndEditTimeSheetScreen.routeName:
+        return _createRoute(
+            AddAndEditTimeSheetScreen(date: settings.arguments.toString()));
       case ViewMyRequestScreen.routeName:
         return _createRoute(const ViewMyRequestScreen());
+      case SendTransferScreen.routeName:
+        return _createRoute(const SendTransferScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

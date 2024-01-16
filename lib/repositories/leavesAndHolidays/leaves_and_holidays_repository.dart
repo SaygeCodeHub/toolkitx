@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/leavesAndHolidays/delete_timesheet_model.dar
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
@@ -25,4 +26,7 @@ abstract class LeavesAndHolidaysRepository {
       String date, String userId, String hashCode);
 
   Future<DeleteTimeSheetModel> deleteTimeSheetRepo(Map deleteTimeSheetMap);
+
+  Future<FetchWorkingAtTimeSheetModel> fetchWorkingAtTimeSheet(
+      String groupby, String userId, String hashCode);
 }
