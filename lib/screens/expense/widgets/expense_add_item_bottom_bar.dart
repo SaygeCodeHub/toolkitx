@@ -87,7 +87,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                         child: PrimaryButton(
                             onPressed: () {
                               if (ExpenseDetailsTabOne.manageItemsMap.keys
-                                  .contains('workingatnumber') ==
+                                      .contains('workingatnumber') ==
                                   false) {
                                 showDialog(
                                     context: context,
@@ -111,7 +111,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                                     ExpenseItemList.itemId;
                                 context.read<ExpenseBloc>().add(SaveExpenseItem(
                                     expenseItemMap:
-                                    ExpenseDetailsTabOne.manageItemsMap));
+                                        ExpenseDetailsTabOne.manageItemsMap));
                               }
                             },
                             textValue: DatabaseUtil.getText('buttonSave')))
@@ -147,23 +147,23 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                               context.read<ExpenseBloc>().add(
                                   FetchExpenseItemMaster(isScreenChange: true));
                               context.read<ExpenseBloc>().add(
-                                  FetchExpenseItemCustomFields(
-                                      customFieldsMap: {
+                                      FetchExpenseItemCustomFields(
+                                          customFieldsMap: {
                                         "itemid": ExpenseDetailsTabOne
-                                            .manageItemsMap['itemid'] ??
+                                                .manageItemsMap['itemid'] ??
                                             '',
                                         "expenseitemid": expenseDetailsData.id
                                       }));
                             } else if (ExpenseDetailsTabOne
-                                .manageItemsMap['itemid'] ==
+                                    .manageItemsMap['itemid'] ==
                                 '6') {
                               context.read<ExpenseBloc>().add(
                                   FetchExpenseItemMaster(isScreenChange: true));
                               context.read<ExpenseBloc>().add(
-                                  FetchExpenseItemCustomFields(
-                                      customFieldsMap: {
+                                      FetchExpenseItemCustomFields(
+                                          customFieldsMap: {
                                         "itemid": ExpenseDetailsTabOne
-                                            .manageItemsMap['itemid'] ??
+                                                .manageItemsMap['itemid'] ??
                                             '',
                                         "expenseitemid": expenseDetailsData.id
                                       }));
