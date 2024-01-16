@@ -104,6 +104,22 @@ class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
   EquipmentByCodeNotFetched({required this.errorMessage});
 }
 
+class MyRequestFetching extends EquipmentTraceabilityState {}
+
+class MyRequestFetched extends EquipmentTraceabilityState {
+  final FetchMyRequestModel fetchMyRequestModel;
+  final List popUpMenuItems;
+
+  MyRequestFetched(
+      {required this.fetchMyRequestModel, required this.popUpMenuItems});
+}
+
+class MyRequestNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  MyRequestNotFetched({required this.errorMessage});
+}
+
 class TransferTypeSelected extends EquipmentTraceabilityState {
   final String transferType;
 

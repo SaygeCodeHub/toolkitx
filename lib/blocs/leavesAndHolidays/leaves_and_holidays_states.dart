@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
@@ -103,4 +104,36 @@ class CheckInTimeSheetFetched extends LeavesAndHolidaysStates {
 class CheckInTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
   CheckInTimeSheetNotFetched({required this.errorMessage});
+}
+
+class TimeSheetDeleting extends LeavesAndHolidaysStates {}
+
+class TimeSheetDeleted extends LeavesAndHolidaysStates {}
+
+class TimeSheetNotDeleted extends LeavesAndHolidaysStates {
+  final String errorMessage;
+
+  TimeSheetNotDeleted({required this.errorMessage});
+}
+
+class TimeSheetWorkingAtSelected extends LeavesAndHolidaysStates {
+  final String value;
+  final String status;
+
+  TimeSheetWorkingAtSelected({required this.value, required this.status});
+}
+
+class TimeSheetWorkingAtFetched extends LeavesAndHolidaysStates {
+  final FetchWorkingAtTimeSheetModel fetchWorkingAtTimeSheetModel;
+  final String workingAt;
+  final String workingAtValue;
+  TimeSheetWorkingAtFetched(
+      {required this.workingAt,
+      required this.workingAtValue,
+      required this.fetchWorkingAtTimeSheetModel});
+}
+
+class TimeSheetWorkingAtNotFetched extends LeavesAndHolidaysStates {
+  final String errorMessage;
+  TimeSheetWorkingAtNotFetched({required this.errorMessage});
 }

@@ -5,6 +5,8 @@ import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_and_holidays_
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 
+import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
+import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'leaves_and_holidays_repository.dart';
@@ -55,5 +57,21 @@ class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}timesheet/getcheckIns?date=$date&userid=$userId&hashcode=$hashCode");
     return FetchCheckInTimeSheetModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteTimeSheetModel> deleteTimeSheetRepo(
+      Map deleteTimeSheetMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}timesheet/delete", deleteTimeSheetMap);
+    return DeleteTimeSheetModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkingAtTimeSheetModel> fetchWorkingAtTimeSheet(
+      String groupby, String userId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}timesheet/getemployeeworkingat?groupby=$groupby&userid=$userId&hashcode=$hashCode");
+    return FetchWorkingAtTimeSheetModel.fromJson(response);
   }
 }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import '../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
 import '../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
+import '../../widgets/custom_snackbar.dart';
 import 'widgtes/timesheet_checkin_body.dart';
 
 class TimeSheetCheckInScreen extends StatelessWidget {
@@ -38,30 +41,47 @@ class TimeSheetCheckInScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
-          buildWhen: (previous, currentState) =>
-              currentState is CheckInTimeSheetFetching ||
-              currentState is CheckInTimeSheetFetched ||
-              currentState is CheckInTimeSheetNotFetched,
-          builder: (context, state) {
-            if (state is CheckInTimeSheetFetching) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is CheckInTimeSheetFetched) {
-              var data = state.fetchCheckInTimeSheetModel.data;
-              return TimeSheetCheckInBody(checkInList: data.checkins);
-            } else if (state is CheckInTimeSheetNotFetched) {
-              return Center(
-                child: GenericReloadButton(
-                    onPressed: () {
-                      context.read<LeavesAndHolidaysBloc>().add(
-                          FetchCheckInTimeSheet(date: timeSheetMap['date']));
-                    },
-                    textValue: StringConstants.kReload),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
+      body: BlocConsumer<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+        buildWhen: (previous, currentState) =>
+            currentState is CheckInTimeSheetFetching ||
+            currentState is CheckInTimeSheetFetched ||
+            currentState is CheckInTimeSheetNotFetched,
+        builder: (context, state) {
+          if (state is CheckInTimeSheetFetching) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is CheckInTimeSheetFetched) {
+            var data = state.fetchCheckInTimeSheetModel.data;
+            return TimeSheetCheckInBody(
+                checkInList: data.checkins, timeSheetMap: timeSheetMap);
+          } else if (state is CheckInTimeSheetNotFetched) {
+            return Center(
+              child: GenericReloadButton(
+                  onPressed: () {
+                    context
+                        .read<LeavesAndHolidaysBloc>()
+                        .add(FetchCheckInTimeSheet(date: timeSheetMap['date']));
+                  },
+                  textValue: StringConstants.kReload),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+        listener: (BuildContext context, LeavesAndHolidaysStates state) {
+          if (state is TimeSheetDeleting) {
+            ProgressBar.show(context);
+          } else if (state is TimeSheetDeleted) {
+            ProgressBar.dismiss(context);
+            Navigator.pop(context);
+            context
+                .read<LeavesAndHolidaysBloc>()
+                .add(FetchCheckInTimeSheet(date: timeSheetMap['date']));
+          } else if (state is TimeSheetNotDeleted) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, state.errorMessage, "");
+          }
+        },
+      ),
       bottomNavigationBar: Visibility(
         visible: timeSheetMap['status'] == 0,
         child: Padding(
@@ -79,7 +99,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                   children: [
                     Expanded(
                         child: PrimaryButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, AddAndEditTimeSheetScreen.routeName,
+                                  arguments: timeSheetMap['date']);
+                            },
                             textValue: StringConstants.kAddTimeSheet)),
                     Visibility(
                       visible: state
