@@ -16,6 +16,7 @@ import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_time_sheet_details_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
@@ -39,6 +40,7 @@ class LeavesAndHolidaysBloc
     on<DeleteTimeSheet>(_deleteTimeSheet);
     on<SelectTimeSheetWorkingAt>(_selectTimeSheetWorkingAt);
     on<FetchTimeSheetWorkingAtNumberData>(_fetchTimeSheetWorkingAtNumberData);
+    on<FetchTimeSheetDetails>(_fetchTimeSheetDetails);
   }
 
   String year = "";
@@ -262,6 +264,28 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetWorkingAtNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchTimeSheetDetails(
+      FetchTimeSheetDetails event,
+      Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetDetailsFetching());
+    try {
+      final String? hashCode =
+      await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchTimeSheetDetailsModel fetchTimeSheetDetailsModel =
+      await _leavesAndHolidaysRepository.fetchTimeSheetDetails(
+          event.timesheetdetailId, hashCode!);
+      if (fetchTimeSheetDetailsModel.status == 200) {
+        emit(TimeSheetDetailsFetched(
+            fetchTimeSheetDetailsModel: fetchTimeSheetDetailsModel));
+      } else {
+        emit(TimeSheetDetailsNotFetched(
+            errorMessage: fetchTimeSheetDetailsModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 }

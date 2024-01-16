@@ -14,18 +14,21 @@ import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 
 class AddAndEditTimeSheetScreen extends StatelessWidget {
-  const AddAndEditTimeSheetScreen({super.key, required this.date});
+  const AddAndEditTimeSheetScreen({super.key, required this.editTimeSheetMap});
 
   static const routeName = 'TimeSheetWorkingAtScreen';
-  final String date;
+  final Map editTimeSheetMap;
 
   @override
   Widget build(BuildContext context) {
     context
         .read<LeavesAndHolidaysBloc>()
-        .add(FetchCheckInTimeSheet(date: date));
+        .add(FetchTimeSheetDetails(timesheetdetailId: editTimeSheetMap['id']));
+    // context
+    //     .read<LeavesAndHolidaysBloc>()
+    //     .add(FetchCheckInTimeSheet(date: editTimeSheetMap['date']));
     return Scaffold(
-      appBar: GenericAppBar(title: date),
+      appBar: GenericAppBar(title: editTimeSheetMap['date']),
       body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,

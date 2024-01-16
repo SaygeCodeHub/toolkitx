@@ -508,7 +508,7 @@ class AppRoutes {
             TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
       case AddAndEditTimeSheetScreen.routeName:
         return _createRoute(
-            AddAndEditTimeSheetScreen(date: settings.arguments.toString()));
+            AddAndEditTimeSheetScreen(editTimeSheetMap: settings.arguments as Map));
       case ViewMyRequestScreen.routeName:
         return _createRoute(const ViewMyRequestScreen());
       default:

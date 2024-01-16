@@ -6,6 +6,7 @@ import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_time_sheet_details_model.dart';
 
 abstract class LeavesAndHolidaysStates {}
 
@@ -136,4 +137,17 @@ class TimeSheetWorkingAtFetched extends LeavesAndHolidaysStates {
 class TimeSheetWorkingAtNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
   TimeSheetWorkingAtNotFetched({required this.errorMessage});
+}
+
+class TimeSheetDetailsFetching extends LeavesAndHolidaysStates {}
+
+class TimeSheetDetailsFetched extends LeavesAndHolidaysStates {
+  final FetchTimeSheetDetailsModel fetchTimeSheetDetailsModel;
+
+  TimeSheetDetailsFetched({required this.fetchTimeSheetDetailsModel});
+}
+
+class TimeSheetDetailsNotFetched extends LeavesAndHolidaysStates {
+  final String errorMessage;
+  TimeSheetDetailsNotFetched({required this.errorMessage});
 }

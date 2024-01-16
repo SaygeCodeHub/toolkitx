@@ -55,3 +55,8 @@ class FetchTimeSheetWorkingAtNumberData extends LeavesAndHolidaysEvent {
     required this.workingAtValue,
   });
 }
+
+class FetchTimeSheetDetails extends LeavesAndHolidaysEvent {
+  final String timesheetdetailId;
+  FetchTimeSheetDetails({required this.timesheetdetailId});
+}
