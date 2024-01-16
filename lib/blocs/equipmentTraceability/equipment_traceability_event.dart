@@ -74,3 +74,11 @@ class SelectWarehouse extends EquipmentTraceabilityEvent {
 }
 
 class FetchWarehouse extends EquipmentTraceabilityEvent {}
+
+class SelectWarehousePositions extends EquipmentTraceabilityEvent {
+  final Map positionsMap;
+
+  SelectWarehousePositions({required this.positionsMap});
+}
+
+class FetchWarehousePositions extends EquipmentTraceabilityEvent {}

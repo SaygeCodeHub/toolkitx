@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_cod
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -42,6 +43,8 @@ class EquipmentTraceabilityBloc
     on<SelectTransferTypeName>(_selectTransferType);
     on<SelectWarehouse>(_selectWarehouse);
     on<FetchWarehouse>(_fetchWarehouse);
+    on<SelectWarehousePositions>(_selectWarehousePositions);
+    on<FetchWarehousePositions>(_fetchWarehousePositions);
   }
 
   Map filters = {};
@@ -331,6 +334,33 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EquipmentWareHouseNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectWarehousePositions(SelectWarehousePositions event,
+      Emitter<EquipmentTraceabilityState> emit) {
+    emit(WarehousePositionsSelected(positionsMap: event.positionsMap));
+    add(FetchWarehousePositions());
+  }
+
+  Future<FutureOr<void>> _fetchWarehousePositions(FetchWarehousePositions event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(WarehousePositionsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchWarehousePositionsModel fetchWarehousePositionsModel =
+          await _equipmentTraceabilityRepo.fetchWarehousePositions(
+              transferValue, hashCode);
+      if (fetchWarehousePositionsModel.status == 200) {
+        emit(WarehousePositionsFetched(
+            fetchWarehousePositionsModel: fetchWarehousePositionsModel));
+      } else {
+        emit(WarehousePositionsNotFetched(
+            errorMessage: fetchWarehousePositionsModel.message));
+      }
+    } catch (e) {
+      emit(WarehousePositionsNotFetched(errorMessage: e.toString()));
     }
   }
 }

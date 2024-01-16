@@ -147,3 +147,23 @@ class EquipmentWareHouseNotFetched extends EquipmentTraceabilityState {
 
   EquipmentWareHouseNotFetched({required this.errorMessage});
 }
+
+class WarehousePositionsSelected extends EquipmentTraceabilityState {
+  final Map positionsMap;
+
+  WarehousePositionsSelected({required this.positionsMap});
+}
+
+class WarehousePositionsFetching extends EquipmentTraceabilityState {}
+
+class WarehousePositionsFetched extends EquipmentTraceabilityState {
+  final FetchWarehousePositionsModel fetchWarehousePositionsModel;
+
+  WarehousePositionsFetched({required this.fetchWarehousePositionsModel});
+}
+
+class WarehousePositionsNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  WarehousePositionsNotFetched({required this.errorMessage});
+}

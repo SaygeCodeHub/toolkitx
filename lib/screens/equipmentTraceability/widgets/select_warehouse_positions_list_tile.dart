@@ -2,39 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/equipmentTraceability/widgets/equipment_warehouse_list_screen.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/screens/equipmentTraceability/widgets/warehouse_positions_list.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 
-class SelectWarehouseListTile extends StatelessWidget {
-  static Map warehouseMap = {};
+class SelectWarehousePositionsListTile extends StatelessWidget {
+  static Map positionsMap = {};
 
-  const SelectWarehouseListTile({Key? key}) : super(key: key);
+  const SelectWarehousePositionsListTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context
         .read<EquipmentTraceabilityBloc>()
-        .add(SelectWarehouse(warehouseMap: {}));
+        .add(SelectWarehousePositions(positionsMap: {}));
     return BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
       buildWhen: (previousState, currentState) =>
-          currentState is WarehouseSelected,
+          currentState is WarehousePositionsSelected,
       builder: (context, state) {
-        if (state is WarehouseSelected) {
+        if (state is WarehousePositionsSelected) {
           return ListTile(
               contentPadding: EdgeInsets.zero,
               onTap: () async {
                 await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) =>
-                        EquipmentWarehouseList(warehouseMap: warehouseMap)));
+                        WarehousePositionsList(positionsMap: positionsMap)));
               },
-              title: Text(StringConstants.kWarehouse,
+              title: Text("Positions",
                   style: Theme.of(context).textTheme.xSmall.copyWith(
                       fontWeight: FontWeight.w500, color: AppColor.black)),
               subtitle: Text(
-                state.warehouseMap['warehouse'] ?? '',
+                state.positionsMap['position'] ?? '',
                 style: Theme.of(context)
                     .textTheme
                     .xSmall
