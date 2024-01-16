@@ -16,9 +16,13 @@ import 'widgtes/timesheet_checkin_body.dart';
 class TimeSheetCheckInScreen extends StatelessWidget {
   static const routeName = 'TimesheetCheckInScreen';
 
-  const TimeSheetCheckInScreen({super.key, required this.timeSheetMap});
+  const TimeSheetCheckInScreen(
+      {super.key,
+      required this.timeSheetMap,
+      required this.submitTimeSheetMap});
 
   final Map timeSheetMap;
+  final Map submitTimeSheetMap;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +83,15 @@ class TimeSheetCheckInScreen extends StatelessWidget {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.errorMessage, "");
           }
+          if (state is TimeSheetSubmitting) {
+            ProgressBar.show(context);
+          } else if (state is TimeSheetSubmitted) {
+            ProgressBar.dismiss(context);
+            Navigator.pop(context);
+          } else if (state is TimeSheetNotSubmitted) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, state.errorMessage, "");
+          }
         },
       ),
       bottomNavigationBar: Visibility(
@@ -107,7 +120,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                           child: Padding(
                         padding: const EdgeInsets.only(left: tiniestSpacing),
                         child: PrimaryButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<LeavesAndHolidaysBloc>().add(
+                                  SubmitTimeSheet(
+                                      submitTimeSheetMap: submitTimeSheetMap));
+                            },
                             textValue: StringConstants.kSubmitTimeSheet),
                       )),
                     )

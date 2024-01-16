@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_details_model
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 
 import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'leaves_and_holidays_repository.dart';
@@ -64,5 +65,13 @@ class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}timesheet/delete", deleteTimeSheetMap);
     return DeleteTimeSheetModel.fromJson(response);
+  }
+
+  @override
+  Future<SubmitTimeSheetModel> submitTimeSheetRepo(
+      Map submitTimeSheetMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}timesheet/submittimesheet", submitTimeSheetMap);
+    return SubmitTimeSheetModel.fromJson(response);
   }
 }

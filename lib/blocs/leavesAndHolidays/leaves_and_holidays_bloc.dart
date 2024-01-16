@@ -14,6 +14,7 @@ import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
@@ -35,6 +36,7 @@ class LeavesAndHolidaysBloc
     on<GetTimeSheet>(_getTimeSheet);
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
     on<DeleteTimeSheet>(_deleteTimeSheet);
+    on<SubmitTimeSheet>(_submitTimeSheet);
   }
 
   String year = "";
@@ -226,6 +228,38 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _submitTimeSheet(
+      SubmitTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSubmitting());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map submitTimeSheetMap = {
+        "idm": [
+          {
+            "id": '',
+          }
+        ],
+        "timesheetids": [
+          {
+            "id": '',
+          }
+        ],
+        "hashcode": hashCode
+      };
+      SubmitTimeSheetModel submitTimeSheetModel =
+      await _leavesAndHolidaysRepository
+          .submitTimeSheetRepo(submitTimeSheetMap);
+      if (submitTimeSheetModel.status == 200) {
+        emit(TimeSheetSubmitted());
+      } else {
+        emit(TimeSheetNotSubmitted(errorMessage: submitTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotSubmitted(errorMessage: e.toString()));
     }
   }
 }

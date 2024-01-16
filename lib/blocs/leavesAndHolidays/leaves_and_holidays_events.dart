@@ -38,3 +38,9 @@ class DeleteTimeSheet extends LeavesAndHolidaysEvent {
 
   DeleteTimeSheet({required this.timeId});
 }
+
+class SubmitTimeSheet extends LeavesAndHolidaysEvent {
+  final Map submitTimeSheetMap;
+
+  SubmitTimeSheet({required this.submitTimeSheetMap});
+}

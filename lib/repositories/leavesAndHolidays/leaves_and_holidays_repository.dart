@@ -6,6 +6,7 @@ import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 
 abstract class LeavesAndHolidaysRepository {
   Future<FetchLeavesSummaryModel> fetchLeavesSummary(
@@ -25,4 +26,6 @@ abstract class LeavesAndHolidaysRepository {
       String date, String userId, String hashCode);
 
   Future<DeleteTimeSheetModel> deleteTimeSheetRepo(Map deleteTimeSheetMap);
+
+  Future<SubmitTimeSheetModel> submitTimeSheetRepo(Map submitTimeSheetMap);
 }

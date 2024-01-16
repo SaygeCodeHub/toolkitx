@@ -503,7 +503,8 @@ class AppRoutes {
         return _createRoute(const EnterEquipmentCodeScreen());
       case TimeSheetCheckInScreen.routeName:
         return _createRoute(
-            TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+            TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map,
+                submitTimeSheetMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }
