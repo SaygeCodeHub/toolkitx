@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -318,21 +317,20 @@ class EquipmentTraceabilityBloc
   Future<FutureOr<void>> _fetchWarehouse(
       FetchWarehouse event, Emitter<EquipmentTraceabilityState> emit) async {
     emit(EquipmentWareHouseFetching());
-    // try {
-    log("here=========>");
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    FetchWarehouseModel fetchWarehouseModel =
-        await _equipmentTraceabilityRepo.fetchWarehouse(hashCode);
-    if (fetchWarehouseModel.status == 200) {
-      emit(EquipmentWareHouseFetched(fetchWarehouseModel: fetchWarehouseModel));
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchWarehouseModel fetchWarehouseModel =
+          await _equipmentTraceabilityRepo.fetchWarehouse(hashCode);
+      if (fetchWarehouseModel.status == 200) {
+        emit(EquipmentWareHouseFetched(
+            fetchWarehouseModel: fetchWarehouseModel));
+      } else {
+        emit(EquipmentWareHouseNotFetched(
+            errorMessage: fetchWarehouseModel.message));
+      }
+    } catch (e) {
+      emit(EquipmentWareHouseNotFetched(errorMessage: e.toString()));
     }
-    // else {
-    //   emit(EquipmentWareHouseNotFetched(
-    //       errorMessage: fetchWarehouseModel.message));
-    // }
-    // } catch (e) {
-    //   emit(EquipmentWareHouseNotFetched(errorMessage: e.toString()));
-    // }
   }
 }
