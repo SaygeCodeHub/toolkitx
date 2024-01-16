@@ -46,16 +46,17 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                   onPressed: () {
-                    if (ExpenseDetailsTabOne.addItemMap['itemid'] == '') {
+                    if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '') {
                       context
                           .read<ExpenseBloc>()
                           .add(FetchExpenseItemMaster(isScreenChange: true));
-                      ExpenseDetailsTabOne.addItemMap['itemid'] =
+                      ExpenseDetailsTabOne.manageItemsMap['itemid'] =
                           ExpenseItemList.itemId;
                       context
                           .read<ExpenseBloc>()
                           .add(FetchExpenseItemCustomFields(customFieldsMap: {
-                            "itemid": ExpenseDetailsTabOne.addItemMap['itemid'],
+                            "itemid":
+                                ExpenseDetailsTabOne.manageItemsMap['itemid'],
                             "expenseitemid": expenseDetailsData.id
                           }));
                     } else {
@@ -67,12 +68,13 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                   textValue: DatabaseUtil.getText('buttonBack'),
                 )),
                 const SizedBox(width: xxTinierSpacing),
-                (ExpenseDetailsTabOne.addItemMap['itemid'] == '6' ||
-                        ExpenseDetailsTabOne.addItemMap['itemid'] == '3')
+                (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6' ||
+                        ExpenseDetailsTabOne.manageItemsMap['itemid'] == '3')
                     ? Expanded(
                         child: PrimaryButton(
                             onPressed: () {
-                              ExpenseDetailsTabOne.addItemMap['itemid'] = '';
+                              ExpenseDetailsTabOne.manageItemsMap['itemid'] =
+                                  '';
                               context.read<ExpenseBloc>().add(
                                   FetchExpenseItemMaster(isScreenChange: true));
                             },
@@ -82,7 +84,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                             onPressed: () {
                               context.read<ExpenseBloc>().add(SaveExpenseItem(
                                   expenseItemMap:
-                                      ExpenseDetailsTabOne.addItemMap));
+                                      ExpenseDetailsTabOne.manageItemsMap));
                             },
                             textValue: DatabaseUtil.getText('buttonSave')))
               ]),
@@ -102,8 +104,9 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          if (ExpenseDetailsTabOne.addItemMap['date'] == null &&
-                              ExpenseDetailsTabOne.addItemMap['itemid'] ==
+                          if (ExpenseDetailsTabOne.manageItemsMap['date'] ==
+                                  null &&
+                              ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
                                   null) {
                             showCustomSnackBar(
                                 context,
@@ -111,7 +114,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                                     .kExpenseAddItemDateAndItemValidation,
                                 '');
                           } else {
-                            if (ExpenseDetailsTabOne.addItemMap['itemid'] ==
+                            if (ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
                                 '3') {
                               context.read<ExpenseBloc>().add(
                                   FetchExpenseItemMaster(isScreenChange: true));
@@ -119,7 +122,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                                       FetchExpenseItemCustomFields(
                                           customFieldsMap: {
                                         "itemid": ExpenseDetailsTabOne
-                                                .addItemMap['itemid'] ??
+                                                .manageItemsMap['itemid'] ??
                                             '',
                                         "expenseitemid": expenseDetailsData.id
                                       }));

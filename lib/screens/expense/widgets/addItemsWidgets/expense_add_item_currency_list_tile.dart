@@ -33,7 +33,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
       builder: (context, state) {
         if (state is ExpenseAddItemsCurrencySelected) {
           expenseDetailsData.currency.isNotEmpty
-              ? ExpenseDetailsTabOne.addItemMap['currency'] =
+              ? ExpenseDetailsTabOne.manageItemsMap['currency'] =
                   expenseDetailsData.currency
               : state.currencyDetailsMap['currency_id'] ??
                   expenseDetailsData.currency;
@@ -79,7 +79,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                       textInputAction: TextInputAction.done,
                       textInputType: TextInputType.number,
                       onTextFieldChanged: (String textField) {
-                        ExpenseDetailsTabOne.addItemMap['exchange_rate'] =
+                        ExpenseDetailsTabOne.manageItemsMap['exchange_rate'] =
                             textField;
                       })),
               const SizedBox(height: xxTinySpacing),

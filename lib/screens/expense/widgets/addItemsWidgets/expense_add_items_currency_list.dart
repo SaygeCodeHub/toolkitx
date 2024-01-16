@@ -52,7 +52,7 @@ class ExpenseAddItemsCurrencyList extends StatelessWidget {
                                         .itemMasterList[1][index].id
                                         .toString();
                                 ExpenseDetailsTabOne
-                                        .addItemMap['reportcurrency'] =
+                                        .manageItemsMap['reportcurrency'] =
                                     currencyDetailsMap['currency_id'] ?? '';
                                 currencyDetailsMap['currency_name'] =
                                     ExpenseDetailsTabOne
