@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -83,5 +84,13 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}equipment/getwarehouses?hashcode=$hashCode");
     return FetchWarehouseModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWarehousePositionsModel> fetchWarehousePositions(
+      String warehouseid, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}equipment/getpositions?warehouseid=$warehouseid&hashcode=$hashCode");
+    return FetchWarehousePositionsModel.fromJson(response);
   }
 }
