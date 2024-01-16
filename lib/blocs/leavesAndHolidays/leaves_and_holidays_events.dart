@@ -21,3 +21,20 @@ class ApplyForLeave extends LeavesAndHolidaysEvent {
 
   ApplyForLeave({required this.applyForLeaveMap});
 }
+
+class GetTimeSheet extends LeavesAndHolidaysEvent {
+  final String year;
+  final String month;
+  GetTimeSheet({required this.year, required this.month});
+}
+
+class FetchCheckInTimeSheet extends LeavesAndHolidaysEvent {
+  final String date;
+  FetchCheckInTimeSheet({required this.date});
+}
+
+class DeleteTimeSheet extends LeavesAndHolidaysEvent {
+  final String timeId;
+
+  DeleteTimeSheet({required this.timeId});
+}

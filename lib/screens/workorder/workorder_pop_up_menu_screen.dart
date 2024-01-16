@@ -61,6 +61,9 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
           WorkOrderAddMisCostScreen.workOrderMasterDatum =
               context.read<WorkOrderBloc>().workOrderMasterDatum;
+          WorkOrderAddMisCostScreen.singleMiscCostDatum.clear();
+          context.read<WorkOrderTabDetailsBloc>().vendorName = '';
+          context.read<WorkOrderTabDetailsBloc>().currencyName = '';
           WorkOrderAddMisCostScreen.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderAddMisCostScreen.routeName);
         }

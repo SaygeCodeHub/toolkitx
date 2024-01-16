@@ -21,7 +21,7 @@ class WorkOrderPriorityExpansionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(SelectWorkOrderPriorityOptions(
         priorityId: workOrderDetailsMap['priorityid'] ?? '',
-        priorityValue: ''));
+        priorityValue: context.read<WorkOrderTabDetailsBloc>().priorityValue));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderPriorityOptionSelected,

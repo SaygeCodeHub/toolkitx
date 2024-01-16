@@ -17,9 +17,11 @@ class WorkOrderMisCostVendorExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<WorkOrderTabDetailsBloc>().add(WorkOrderSelectVendorOption(
-          vendorName: '',
+          vendorName:
+              (context.read<WorkOrderTabDetailsBloc>().vendorName.isNotEmpty)
+                  ? context.read<WorkOrderTabDetailsBloc>().vendorName
+                  : '',
         ));
-
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is WorkOrderVendorOptionSelected,
