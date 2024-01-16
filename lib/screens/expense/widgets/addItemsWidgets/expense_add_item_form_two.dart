@@ -36,7 +36,7 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
               textInputAction: TextInputAction.done,
               textInputType: TextInputType.text,
               onTextFieldChanged: (String textField) {
-                ExpenseDetailsTabOne.addItemMap['amount'] = textField;
+                ExpenseDetailsTabOne.manageItemsMap['amount'] = textField;
               }),
           const SizedBox(height: xxTinySpacing),
           Text(DatabaseUtil.getText('Description'),
@@ -51,7 +51,7 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
               textInputAction: TextInputAction.done,
               textInputType: TextInputType.text,
               onTextFieldChanged: (String textField) {
-                ExpenseDetailsTabOne.addItemMap['description'] = textField;
+                ExpenseDetailsTabOne.manageItemsMap['description'] = textField;
               }),
           const SizedBox(height: xxTinySpacing),
           const ExpenseAddedImageCountWidget(),
@@ -59,10 +59,11 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
           UploadImageMenu(
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {
-                ExpenseDetailsTabOne.addItemMap['filenames'] = uploadImageList
-                    .toString()
-                    .replaceAll('[', '')
-                    .replaceAll(']', '');
+                ExpenseDetailsTabOne.manageItemsMap['filenames'] =
+                    uploadImageList
+                        .toString()
+                        .replaceAll('[', '')
+                        .replaceAll(']', '');
               }),
         ],
       ),

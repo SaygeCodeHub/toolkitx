@@ -12,8 +12,7 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_floating_action_button.dart';
 import 'addItemsWidgets/expense_add_item_form_one.dart';
 import 'addItemsWidgets/expense_add_item_form_two.dart';
-import 'addItemsWidgets/expense_add_item_hotel_layout.dart';
-import 'addItemsWidgets/expense_item_meal_layout.dart';
+import 'addItemsWidgets/expense_hotel_and_meal_layout.dart';
 import 'expense_add_item_bottom_bar.dart';
 import 'expense_details_tab_one_body.dart';
 
@@ -29,7 +28,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
       required this.expenseDetailsData,
       required this.expenseId})
       : super(key: key);
-  static Map addItemMap = {};
+  static Map manageItemsMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +69,14 @@ class ExpenseDetailsTabOne extends StatelessWidget {
             if (state.isScreenChange == false) {
               return const ExpenseAddItemFormOne();
             } else if (state.isScreenChange == true) {
-              if (ExpenseDetailsTabOne.addItemMap['itemid'] == '6') {
-                return const ExpenseAddItemHotelLayout();
-              } else if (ExpenseDetailsTabOne.addItemMap['itemid'] == '3') {
-                return ExpenseItemMealLayout(
-                    expenseDetailsData: expenseDetailsData);
+              if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6') {
+                return ExpenseHotelAndMealLayout(
+                  expenseDetailsData: expenseDetailsData,
+                );
+              } else if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '3') {
+                return ExpenseHotelAndMealLayout(
+                  expenseDetailsData: expenseDetailsData,
+                );
               } else {
                 return ExpenseAddItemFormTwo(
                     expenseDetailsData: expenseDetailsData);
