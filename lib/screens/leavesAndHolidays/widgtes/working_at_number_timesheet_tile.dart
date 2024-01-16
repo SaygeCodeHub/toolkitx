@@ -1,72 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import '../../../../blocs/expense/expense_bloc.dart';
+import '../../../../blocs/expense/expense_event.dart';
+import '../../../../blocs/expense/expense_state.dart';
+import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
+import '../../../../utils/constants/string_constants.dart';
+import '../../expense/widgets/addItemsWidgets/expense_working_at_number_list.dart';
 
-import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
-import '../../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
-import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
-import '../../../widgets/expansion_tile_border.dart';
+class TimSheetWorkingAtNumberListTile extends StatelessWidget {
+  static Map workingAtNumberMap = {};
 
-class WorkingAtNumberTimeSheetTile extends StatelessWidget {
-  const WorkingAtNumberTimeSheetTile({super.key});
-
-  static String workingAt = '';
-  static String workingAtValue = '';
+  const TimSheetWorkingAtNumberListTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<LeavesAndHolidaysBloc>().add(
-        FetchTimeSheetWorkingAtNumberData(workingAt: '', workingAtValue: ''));
-    return BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
-        buildWhen: (previousState, currentState) =>
-            currentState is TimeSheetWorkingAtFetched,
-        builder: (context, state) {
-          if (state is TimeSheetWorkingAtFetched) {
-            return Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: AppColor.transparent),
-                child: ExpansionTile(
-                  title: Text(state.workingAt,
-                      style: Theme.of(context).textTheme.xSmall),
-                  collapsedShape:
-                      ExpansionTileBorder().buildOutlineInputBorder(),
-                  collapsedBackgroundColor: AppColor.white,
-                  backgroundColor: AppColor.white,
-                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
-                  key: GlobalKey(),
-                  children: [
-                    ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: state.fetchWorkingAtTimeSheetModel.data.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                            contentPadding: const EdgeInsets.only(
-                                left: kExpansionTileMargin,
-                                right: kExpansionTileMargin),
-                            title: Text(
-                                state.fetchWorkingAtTimeSheetModel.data[index]
-                                    .name,
-                                style: Theme.of(context).textTheme.xSmall),
-                            onTap: () {
-                              workingAt = state.fetchWorkingAtTimeSheetModel
-                                  .data[index].name;
-                              workingAtValue = state
-                                  .fetchWorkingAtTimeSheetModel.data[index].id;
-                              context.read<LeavesAndHolidaysBloc>().add(
-                                  FetchTimeSheetWorkingAtNumberData(
-                                      workingAt: workingAt,
-                                      workingAtValue: workingAtValue));
-                            });
-                      },
-                    )
-                  ],
-                ));
-          } else {
-            return const SizedBox.shrink();
-          }
-        });
+    context
+        .read<ExpenseBloc>()
+        .add(SelectExpenseWorkingAtNumber(workingAtNumberMap: {}));
+    return BlocBuilder<ExpenseBloc, ExpenseStates>(
+      buildWhen: (previousState, currentState) =>
+          currentState is ExpenseWorkingAtNumberSelected,
+      builder: (context, state) {
+        if (state is ExpenseWorkingAtNumberSelected) {
+          return ListTile(
+              contentPadding: EdgeInsets.zero,
+              onTap: () async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ExpenseWorkingAtNumberList(
+                        workingAtNumberMap: workingAtNumberMap)));
+              },
+              title: Text(
+                StringConstants.kWorkingAtNumber,
+                style: Theme.of(context).textTheme.xSmall.copyWith(
+                    color: AppColor.black, fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                state.workingAtNumberMap['working_at_number'] ?? '',
+                style: Theme.of(context)
+                    .textTheme
+                    .xSmall
+                    .copyWith(color: AppColor.black),
+              ),
+              trailing:
+                  const Icon(Icons.navigate_next_rounded, size: kIconSize));
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
   }
 }
