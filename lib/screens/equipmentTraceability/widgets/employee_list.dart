@@ -7,28 +7,27 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../widgets/generic_app_bar.dart';
 
-class WarehousePositionsList extends StatelessWidget {
-  final Map positionsMap;
+class EmployeeList extends StatelessWidget {
+  final Map employeeMap;
 
-  const WarehousePositionsList({Key? key, required this.positionsMap})
-      : super(key: key);
+  const EmployeeList({Key? key, required this.employeeMap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<EquipmentTraceabilityBloc>().add(FetchWarehousePositions());
+    context.read<EquipmentTraceabilityBloc>().add(FetchEmployee());
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectPositions),
         body:
             BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
           buildWhen: (previousState, currentState) =>
-              currentState is WarehousePositionsSelected ||
-              currentState is WarehousePositionsFetching ||
-              currentState is WarehousePositionsFetched ||
-              currentState is WarehousePositionsNotFetched,
+              currentState is EmployeeSelected ||
+              currentState is EmployeeFetching ||
+              currentState is EmployeeFetched ||
+              currentState is EmployeeNotFetched,
           builder: (context, state) {
-            if (state is WarehousePositionsFetching) {
+            if (state is EmployeeFetching) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is WarehousePositionsFetched) {
+            } else if (state is EmployeeFetched) {
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Padding(
@@ -38,8 +37,7 @@ class WarehousePositionsList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Visibility(
-                            visible: state
-                                .fetchWarehousePositionsModel.data.isNotEmpty,
+                            visible: state.fetchEmployeesModel.data.isNotEmpty,
                             replacement: Padding(
                               padding: EdgeInsets.only(
                                   top:
@@ -53,8 +51,8 @@ class WarehousePositionsList extends StatelessWidget {
                                 padding: EdgeInsets.zero,
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount: state
-                                    .fetchWarehousePositionsModel.data.length,
+                                itemCount:
+                                    state.fetchEmployeesModel.data.length,
                                 itemBuilder: (context, index) {
                                   return RadioListTile(
                                       contentPadding: EdgeInsets.zero,
@@ -62,27 +60,23 @@ class WarehousePositionsList extends StatelessWidget {
                                       activeColor: AppColor.deepBlue,
                                       controlAffinity:
                                           ListTileControlAffinity.trailing,
-                                      title: Text(state
-                                          .fetchWarehousePositionsModel
-                                          .data[index]
-                                          .name),
-                                      value: state.fetchWarehousePositionsModel
-                                          .data[index].id,
+                                      title: Text(state.fetchEmployeesModel
+                                          .data[index].name),
+                                      value: state
+                                          .fetchEmployeesModel.data[index].id,
                                       groupValue:
-                                          positionsMap['positionid'] ?? '',
+                                          employeeMap['employeeid'] ?? '',
                                       onChanged: (value) {
-                                        positionsMap['positionid'] = state
-                                            .fetchWarehousePositionsModel
-                                            .data[index]
-                                            .id;
-                                        positionsMap['position'] = state
-                                            .fetchWarehousePositionsModel
+                                        employeeMap['employeeid'] = state
+                                            .fetchEmployeesModel.data[index].id;
+                                        employeeMap['employee'] = state
+                                            .fetchEmployeesModel
                                             .data[index]
                                             .name;
                                         context
                                             .read<EquipmentTraceabilityBloc>()
-                                            .add(SelectWarehousePositions(
-                                                positionsMap: positionsMap));
+                                            .add(SelectEmployee(
+                                                employeeMap: employeeMap));
                                         Navigator.pop(context);
                                       });
                                 }),
@@ -90,7 +84,7 @@ class WarehousePositionsList extends StatelessWidget {
                           const SizedBox(height: xxxSmallerSpacing)
                         ])),
               );
-            } else if (state is EquipmentWareHouseNotFetched) {
+            } else if (state is EmployeeNotFetched) {
               return Center(child: Text(state.errorMessage));
             } else {
               return const SizedBox.shrink();

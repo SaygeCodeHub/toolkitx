@@ -10,6 +10,7 @@ import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import 'widgets/select_employee_list_tile.dart';
 import 'widgets/select_warehouse_list_tile.dart';
 
 class SendTransferScreen extends StatelessWidget {
@@ -40,7 +41,9 @@ class SendTransferScreen extends StatelessWidget {
             const SizedBox(height: xxxTinierSpacing),
             const SelectWarehouseListTile(),
             const SizedBox(height: xxxTinierSpacing),
-            const SelectWarehousePositionsListTile()
+            const SelectWarehousePositionsListTile(),
+            const SizedBox(height: xxxTinierSpacing),
+            const SelectEmployeeListTile()
           ],
         ),
       ),
