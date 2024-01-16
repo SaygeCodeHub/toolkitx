@@ -448,7 +448,7 @@ abstract class StringConstants {
   static const String kTransferEquipment = 'Transfer Equipment';
   static const String kTransfer = 'Transfer';
   static const String kSearchEquipment = 'Search Equipment';
-  static const String kViewMyEquipment = 'View my Equipment';
+  static const String kViewMyRequest = 'View my request';
   static const String kTrace = 'Trace';
   static const String kScan = 'Scan';
   static const String kEnter = 'Enter';
@@ -486,4 +486,9 @@ abstract class StringConstants {
   static const String kPleaseSearchOrScanTheEquipment =
       'Please Search OR Scan the equipment from top menu bar';
   static const String kClose = 'Close';
+  static const String kAddTimeSheet = 'Add TimeSheet';
+  static const String kSubmitTimeSheet = 'Submit TimeSheet';
+  static const String kMinsBreak = 'mins break';
+  static const String kDoYouWantToDeleteThisEntry =
+      'Do you want to delete this entry ?';
 }
