@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchMyRequestModel fetchMyRequestModelFromJson(String str) => FetchMyRequestModel.fromJson(json.decode(str));
+FetchMyRequestModel fetchMyRequestModelFromJson(String str) =>
+    FetchMyRequestModel.fromJson(json.decode(str));
 
-String fetchMyRequestModelToJson(FetchMyRequestModel data) => json.encode(data.toJson());
+String fetchMyRequestModelToJson(FetchMyRequestModel data) =>
+    json.encode(data.toJson());
 
 class FetchMyRequestModel {
   final int status;
@@ -16,22 +17,23 @@ class FetchMyRequestModel {
     required this.data,
   });
 
-  factory FetchMyRequestModel.fromJson(Map<String, dynamic> json) => FetchMyRequestModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory FetchMyRequestModel.fromJson(Map<String, dynamic> json) =>
+      FetchMyRequestModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
-  final List<MyRequestTransfer> transfers;
-  final List<Workorder> workorders;
+  final List<MyRequestTransfer>? transfers;
+  final List<Workorder>? workorders;
 
   Data({
     required this.transfers,
@@ -39,22 +41,28 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    transfers: List<MyRequestTransfer>.from(json["transfers"].map((x) => MyRequestTransfer.fromJson(x))),
-    workorders: List<Workorder>.from(json["workorders"].map((x) => Workorder.fromJson(x))),
-  );
+        transfers: (json["transfers"] != null)
+            ? List<MyRequestTransfer>.from(
+                json["transfers"].map((x) => MyRequestTransfer.fromJson(x)))
+            : [],
+        workorders: (json["workorders"] != null)
+            ? List<Workorder>.from(
+                json["workorders"].map((x) => Workorder.fromJson(x)))
+            : [],
+      );
 
   Map<String, dynamic> toJson() => {
-    "transfers": List<dynamic>.from(transfers.map((x) => x.toJson())),
-    "workorders": List<dynamic>.from(workorders.map((x) => x.toJson())),
-  };
+        "transfers": List<dynamic>.from(transfers!.map((x) => x.toJson())),
+        "workorders": List<dynamic>.from(workorders!.map((x) => x.toJson())),
+      };
 }
 
 class MyRequestTransfer {
-  final String id;
-  final String equipmentcode;
-  final String equipmentname;
-  final int groupid;
-  final int destinationOwnertype;
+  final String? id;
+  final String? equipmentcode;
+  final String? equipmentname;
+  final int? groupid;
+  final int? destinationOwnertype;
 
   MyRequestTransfer({
     required this.id,
@@ -64,26 +72,27 @@ class MyRequestTransfer {
     required this.destinationOwnertype,
   });
 
-  factory MyRequestTransfer.fromJson(Map<String, dynamic> json) => MyRequestTransfer(
-    id: json["id"],
-    equipmentcode: json["equipmentcode"],
-    equipmentname: json["equipmentname"],
-    groupid: json["groupid"],
-    destinationOwnertype: json["destination_ownertype"],
-  );
+  factory MyRequestTransfer.fromJson(Map<String, dynamic> json) =>
+      MyRequestTransfer(
+        id: json["id"],
+        equipmentcode: json["equipmentcode"],
+        equipmentname: json["equipmentname"],
+        groupid: json["groupid"],
+        destinationOwnertype: json["destination_ownertype"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "equipmentcode": equipmentcode,
-    "equipmentname": equipmentname,
-    "groupid": groupid,
-    "destination_ownertype": destinationOwnertype,
-  };
+        "id": id,
+        "equipmentcode": equipmentcode,
+        "equipmentname": equipmentname,
+        "groupid": groupid,
+        "destination_ownertype": destinationOwnertype,
+      };
 }
 
 class Workorder {
-  final int id;
-  final String woname;
+  final int? id;
+  final String? woname;
 
   Workorder({
     required this.id,
@@ -91,12 +100,12 @@ class Workorder {
   });
 
   factory Workorder.fromJson(Map<String, dynamic> json) => Workorder(
-    id: json["id"],
-    woname: json["woname"],
-  );
+        id: json["id"],
+        woname: json["woname"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "woname": woname,
-  };
+        "id": id,
+        "woname": woname,
+      };
 }

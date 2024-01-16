@@ -274,18 +274,26 @@ class EquipmentTraceabilityBloc
   Future<FutureOr<void>> _fetchMyRequest(
       FetchMyRequest event, Emitter<EquipmentTraceabilityState> emit) async {
     emit(MyRequestFetching());
-    // try {
+    try {
+      List popUpMenuItems = [
+        DatabaseUtil.getText('approve'),
+        DatabaseUtil.getText('Reject'),
+        DatabaseUtil.getText('Cancel')
+      ];
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
           .fetchMyRequest(event.pageNo, userId, hashCode);
-    myRequestData.addAll(fetchMyRequestModel.data.transfers);
-    requestReachedMax = fetchMyRequestModel.data.transfers.isEmpty;
+      if (fetchMyRequestModel.status == 200) {
         emit(MyRequestFetched(
-            myRequestData: fetchMyRequestModel.data.transfers));
-    // } catch (e) {
-    //   emit(MyRequestNotFetched(errorMessage: e.toString()));
-    // }
+            fetchMyRequestModel: fetchMyRequestModel,
+            popUpMenuItems: popUpMenuItems));
+      } else {
+        emit(MyRequestNotFetched(errorMessage: fetchMyRequestModel.message));
+      }
+    } catch (e) {
+      emit(MyRequestNotFetched(errorMessage: e.toString()));
+    }
   }
 }
