@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchEmployeesModel fetchEmployeesModelFromJson(String str) => FetchEmployeesModel.fromJson(json.decode(str));
+FetchEmployeesModel fetchEmployeesModelFromJson(String str) =>
+    FetchEmployeesModel.fromJson(json.decode(str));
 
-String fetchEmployeesModelToJson(FetchEmployeesModel data) => json.encode(data.toJson());
+String fetchEmployeesModelToJson(FetchEmployeesModel data) =>
+    json.encode(data.toJson());
 
 class FetchEmployeesModel {
   final int status;
@@ -16,17 +17,18 @@ class FetchEmployeesModel {
     required this.data,
   });
 
-  factory FetchEmployeesModel.fromJson(Map<String, dynamic> json) => FetchEmployeesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-  );
+  factory FetchEmployeesModel.fromJson(Map<String, dynamic> json) =>
+      FetchEmployeesModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -39,12 +41,12 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-  );
+        id: json["id"],
+        name: json["name"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-  };
+        "id": id,
+        "name": name,
+      };
 }

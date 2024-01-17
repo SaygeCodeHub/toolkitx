@@ -20,7 +20,7 @@ class SelectEmployeeListTile extends StatelessWidget {
         .add(SelectEmployee(employeeMap: {}));
     return BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
       buildWhen: (previousState, currentState) =>
-      currentState is EmployeeSelected,
+          currentState is EmployeeSelected,
       builder: (context, state) {
         if (state is EmployeeSelected) {
           return ListTile(
@@ -41,7 +41,7 @@ class SelectEmployeeListTile extends StatelessWidget {
                     .copyWith(color: AppColor.black),
               ),
               trailing:
-              const Icon(Icons.navigate_next_rounded, size: kIconSize));
+                  const Icon(Icons.navigate_next_rounded, size: kIconSize));
         } else {
           return const SizedBox.shrink();
         }

@@ -42,9 +42,9 @@ class SendTransferScreen extends StatelessWidget {
             const SizedBox(height: xxxTinierSpacing),
             BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
               buildWhen: (previousState, currentState) =>
-              currentState is TransferTypeSelected,
+                  currentState is TransferTypeSelected,
               builder: (context, state) {
-                if(state is TransferTypeSelected) {
+                if (state is TransferTypeSelected) {
                   return Column(
                     children: [
                       Visibility(
@@ -62,7 +62,7 @@ class SendTransferScreen extends StatelessWidget {
                           child: const SelectEmployeeListTile())
                     ],
                   );
-                }else{
+                } else {
                   return const SizedBox.shrink();
                 }
               },

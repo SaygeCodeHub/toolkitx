@@ -367,11 +367,13 @@ class EquipmentTraceabilityBloc
     }
   }
 
-  FutureOr<void> _selectEmployee(SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
+  FutureOr<void> _selectEmployee(
+      SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
     emit(EmployeeSelected(employeeMap: event.employeeMap));
   }
 
-  Future<FutureOr<void>> _fetchEmployee(FetchEmployee event, Emitter<EquipmentTraceabilityState> emit) async {
+  Future<FutureOr<void>> _fetchEmployee(
+      FetchEmployee event, Emitter<EquipmentTraceabilityState> emit) async {
     emit(EmployeeFetching());
     try {
       String? hashCode =
@@ -381,13 +383,10 @@ class EquipmentTraceabilityBloc
       if (fetchEmployeesModel.status == 200) {
         emit(EmployeeFetched(fetchEmployeesModel: fetchEmployeesModel));
       } else {
-        emit(EmployeeNotFetched(
-            errorMessage: fetchEmployeesModel.message));
+        emit(EmployeeNotFetched(errorMessage: fetchEmployeesModel.message));
       }
     } catch (e) {
       emit(EmployeeNotFetched(errorMessage: e.toString()));
     }
   }
-
-
 }
