@@ -55,3 +55,9 @@ class FetchTimeSheetWorkingAtNumberData extends LeavesAndHolidaysEvent {
     required this.workingAtValue,
   });
 }
+
+class SaveTimeSheet extends LeavesAndHolidaysEvent {
+  final Map saveTimeSheetMap;
+
+  SaveTimeSheet({required this.saveTimeSheetMap});
+}

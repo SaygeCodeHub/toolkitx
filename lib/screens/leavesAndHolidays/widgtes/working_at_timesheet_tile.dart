@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
@@ -69,6 +70,9 @@ class WorkingAtTimeSheetTile extends StatelessWidget {
                                 workingAtValue = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .status;
+                                AddAndEditTimeSheetScreen
+                                        .saveTimeSheetMap['workingatid'] =
+                                    workingAt;
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
                                         workingAt: workingAt,

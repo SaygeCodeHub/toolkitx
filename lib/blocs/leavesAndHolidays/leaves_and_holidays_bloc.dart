@@ -9,13 +9,13 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
-import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
@@ -37,13 +37,11 @@ class LeavesAndHolidaysBloc
     on<GetTimeSheet>(_getTimeSheet);
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
     on<DeleteTimeSheet>(_deleteTimeSheet);
-    on<SelectTimeSheetWorkingAt>(_selectTimeSheetWorkingAt);
-    on<FetchTimeSheetWorkingAtNumberData>(_fetchTimeSheetWorkingAtNumberData);
+    on<SaveTimeSheet>(_saveTimeSheet);
   }
 
   String year = "";
   String month = "";
-  String groupBy = "";
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -216,6 +214,7 @@ class LeavesAndHolidaysBloc
     try {
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
+
       Map deleteTimeSheetMap = {
         "idm": "",
         "id": event.timeId,
@@ -234,34 +233,36 @@ class LeavesAndHolidaysBloc
     }
   }
 
-  FutureOr<void> _selectTimeSheetWorkingAt(
-      SelectTimeSheetWorkingAt event, Emitter<LeavesAndHolidaysStates> emit) {
-    emit(TimeSheetWorkingAtSelected(status: event.status, value: event.value));
-    groupBy = event.value;
-    add(FetchTimeSheetWorkingAtNumberData(workingAt: '', workingAtValue: ''));
-  }
-
-  FutureOr<void> _fetchTimeSheetWorkingAtNumberData(
-      FetchTimeSheetWorkingAtNumberData event,
-      Emitter<LeavesAndHolidaysStates> emit) async {
+  FutureOr<void> _saveTimeSheet(
+      SaveTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSaving());
     try {
-      final String? hasCode =
+      final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
       final String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      FetchWorkingAtTimeSheetModel fetchWorkingAtTimeSheetModel =
-          await _leavesAndHolidaysRepository.fetchWorkingAtTimeSheet(
-              groupBy, userId!, hasCode!);
-      if (fetchWorkingAtTimeSheetModel.status == 200) {
-        emit(TimeSheetWorkingAtFetched(
-            fetchWorkingAtTimeSheetModel: fetchWorkingAtTimeSheetModel,
-            workingAt: event.workingAt,
-            workingAtValue: event.workingAtValue));
+      Map saveTimeSheetMap = {
+        "idm": "",
+        "workingatid": event.saveTimeSheetMap['workingatid'],
+        "workingatnumber": event.saveTimeSheetMap['working_at_number_id'],
+        "reportdate": event.saveTimeSheetMap['date'],
+        "starttime": event.saveTimeSheetMap['starttime'],
+        "endtime": event.saveTimeSheetMap['endtime'],
+        "breakmins": event.saveTimeSheetMap['breakmins'],
+        "description": event.saveTimeSheetMap['description'],
+        "userid": userId,
+        "id": "",
+        "hashcode": hashCode
+      };
+      SaveTimeSheetModel saveTimeSheetModel =
+          await _leavesAndHolidaysRepository.saveTimeSheet(saveTimeSheetMap);
+
+      if (saveTimeSheetModel.status == 200) {
+        emit(TimeSheetSaved(saveTimeSheetModel: saveTimeSheetModel));
       } else {
-        emit(TimeSheetWorkingAtNotFetched(
-            errorMessage: fetchWorkingAtTimeSheetModel.message));
+        emit(TimeSheetNotSaved(errorMessage: saveTimeSheetModel.message));
       }
     } catch (e) {
-      emit(TimeSheetWorkingAtNotFetched(errorMessage: e.toString()));
+      emit(TimeSheetNotSaved(errorMessage: e.toString()));
     }
   }
 }
