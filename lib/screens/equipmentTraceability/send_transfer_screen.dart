@@ -20,6 +20,7 @@ class SendTransferScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SelectTransferType.transferValue = "";
     context
         .read<EquipmentTraceabilityBloc>()
         .add(SelectTransferTypeName(transferType: '', transferValue: ''));
@@ -39,11 +40,33 @@ class SendTransferScreen extends StatelessWidget {
             const SizedBox(height: tiniestSpacing),
             const SelectTransferType(),
             const SizedBox(height: xxxTinierSpacing),
-            const SelectWarehouseListTile(),
-            const SizedBox(height: xxxTinierSpacing),
-            const SelectWarehousePositionsListTile(),
-            const SizedBox(height: xxxTinierSpacing),
-            const SelectEmployeeListTile()
+            BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+              buildWhen: (previousState, currentState) =>
+              currentState is TransferTypeSelected,
+              builder: (context, state) {
+                if(state is TransferTypeSelected) {
+                  return Column(
+                    children: [
+                      Visibility(
+                          visible: SelectTransferType.transferValue == "1",
+                          child: const Column(
+                            children: [
+                              SelectWarehouseListTile(),
+                              SizedBox(height: xxxTinierSpacing),
+                              SelectWarehousePositionsListTile(),
+                            ],
+                          )),
+                      const SizedBox(height: xxxTinierSpacing),
+                      Visibility(
+                          visible: SelectTransferType.transferValue == "2",
+                          child: const SelectEmployeeListTile())
+                    ],
+                  );
+                }else{
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
           ],
         ),
       ),

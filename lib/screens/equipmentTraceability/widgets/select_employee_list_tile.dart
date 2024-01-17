@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/widgets/employee_list.dart';
-import 'package:toolkit/screens/equipmentTraceability/widgets/equipment_warehouse_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../configs/app_color.dart';
