@@ -100,9 +100,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                     Expanded(
                         child: PrimaryButton(
                             onPressed: () {
+                              AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap['date'] =
+                                  timeSheetMap['date'];
                               Navigator.pushNamed(
-                                  context, AddAndEditTimeSheetScreen.routeName,
-                                  arguments: timeSheetMap['date']);
+                                  context, AddAndEditTimeSheetScreen.routeName);
                             },
                             textValue: StringConstants.kAddTimeSheet)),
                     Visibility(

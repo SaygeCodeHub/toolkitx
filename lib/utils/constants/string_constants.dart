@@ -22,6 +22,9 @@ abstract class StringConstants {
   static const String kParts = 'Parts'; //
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
+  static const String kExpenseWorkingAtNumber =
+      'Working at Number cannot be empty!    '; //
+  static const String kGoBack = 'Go Back'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
