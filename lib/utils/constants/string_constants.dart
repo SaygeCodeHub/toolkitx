@@ -494,8 +494,8 @@ abstract class StringConstants {
   static const String kMinsBreak = 'mins break';
   static const String kDoYouWantToDeleteThisEntry =
       'Do you want to delete this entry ?';
-  static const String kWarehouse = "Warehouse";
+  static String kWarehouse = "Warehouse";
   static const String kEmployee = "Employee";
-  static const String kPositions = "Positions";
+  static String kPositions = "Positions";
   static const String kSelectPositions = "Select Positions";
 }
