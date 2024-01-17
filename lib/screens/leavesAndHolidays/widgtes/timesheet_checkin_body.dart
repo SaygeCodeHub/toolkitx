@@ -19,7 +19,6 @@ class TimeSheetCheckInBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ListView.separated(
       itemCount: checkInList.length,
       itemBuilder: (context, index) {
@@ -47,10 +46,14 @@ class TimeSheetCheckInBody extends StatelessWidget {
                         child: CustomIconButton(
                             icon: Icons.edit,
                             onPressed: () {
-                              timeSheetMap['id'] = checkInList[index].id;
+                              AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap['date'] =
+                                  timeSheetMap['date'];
+                              AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap['timeSheetDetailsId'] =
+                                  checkInList[index].id;
                               Navigator.pushNamed(
-                                  context, AddAndEditTimeSheetScreen.routeName,
-                                  arguments: timeSheetMap);
+                                  context, AddAndEditTimeSheetScreen.routeName);
                             })),
                   ],
                 ),

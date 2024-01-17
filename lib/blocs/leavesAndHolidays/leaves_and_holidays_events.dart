@@ -56,7 +56,14 @@ class FetchTimeSheetWorkingAtNumberData extends LeavesAndHolidaysEvent {
   });
 }
 
+class SaveTimeSheet extends LeavesAndHolidaysEvent {
+  final Map saveTimeSheetMap;
+
+  SaveTimeSheet({required this.saveTimeSheetMap});
+}
+
 class FetchTimeSheetDetails extends LeavesAndHolidaysEvent {
-  final String timesheetdetailId;
-  FetchTimeSheetDetails({required this.timesheetdetailId});
+  final String timeSheetDetailsId;
+
+  FetchTimeSheetDetails({required this.timeSheetDetailsId});
 }

@@ -8,6 +8,7 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../expense/widgets/addItemsWidgets/expense_working_at_number_list.dart';
+import '../add_and_edit_timesheet_screen.dart';
 
 class TimSheetWorkingAtNumberListTile extends StatelessWidget {
   static Map workingAtNumberMap = {};
@@ -24,12 +25,17 @@ class TimSheetWorkingAtNumberListTile extends StatelessWidget {
           currentState is ExpenseWorkingAtNumberSelected,
       builder: (context, state) {
         if (state is ExpenseWorkingAtNumberSelected) {
+          AddAndEditTimeSheetScreen.saveTimeSheetMap['working_at_number_id'] =
+              state.workingAtNumberMap['new_working_at_number'] ?? '';
           return ListTile(
               contentPadding: EdgeInsets.zero,
               onTap: () async {
                 await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ExpenseWorkingAtNumberList(
-                        workingAtNumberMap: workingAtNumberMap)));
+                        workingAtNumberMap: state.workingAtNumberMap)));
+                AddAndEditTimeSheetScreen
+                        .saveTimeSheetMap['working_at_number_id'] =
+                    workingAtNumberMap['working_at_number_id'];
               },
               title: Text(
                 StringConstants.kWorkingAtNumber,

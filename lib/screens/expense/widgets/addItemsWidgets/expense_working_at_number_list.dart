@@ -78,23 +78,28 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                           '',
                                       onChanged: (value) {
                                         workingAtNumberMap[
-                                                'working_at_number_id'] =
-                                            state
-                                                .expenseWorkingAtNumberDataModel
-                                                .data[index]
-                                                .id;
+                                                    'working_at_number_id'] ==
+                                                workingAtNumberMap[
+                                                    'working_at_number_id']
+                                            ? workingAtNumberMap[
+                                                'new_working_at_number'] = value
+                                            : workingAtNumberMap[
+                                                'working_at_number_id'] = '';
+
                                         workingAtNumberMap[
                                                 'working_at_number'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .name;
+
                                         ExpenseDetailsTabOne
                                                 .manageItemsMap['workingatid'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .id;
+
                                         ExpenseDetailsTabOne.manageItemsMap[
                                                 'workingatnumber'] =
                                             state

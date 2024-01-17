@@ -63,9 +63,8 @@ class TimeSheetCheckInScreen extends StatelessWidget {
               return Center(
                 child: GenericReloadButton(
                     onPressed: () {
-                      context
-                          .read<LeavesAndHolidaysBloc>()
-                          .add(FetchCheckInTimeSheet(date: timeSheetMap['date']));
+                      context.read<LeavesAndHolidaysBloc>().add(
+                          FetchCheckInTimeSheet(date: timeSheetMap['date']));
                     },
                     textValue: StringConstants.kReload),
               );
@@ -107,9 +106,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                     Expanded(
                         child: PrimaryButton(
                             onPressed: () {
+                              AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap['date'] =
+                                  timeSheetMap['date'];
                               Navigator.pushNamed(
-                                  context, AddAndEditTimeSheetScreen.routeName,
-                                  arguments: timeSheetMap);
+                                  context, AddAndEditTimeSheetScreen.routeName);
                             },
                             textValue: StringConstants.kAddTimeSheet)),
                     Visibility(

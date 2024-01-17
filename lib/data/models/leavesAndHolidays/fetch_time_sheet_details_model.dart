@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchTimeSheetDetailsModel fetchTimeSheetDetailsModelFromJson(String str) => FetchTimeSheetDetailsModel.fromJson(json.decode(str));
+FetchTimeSheetDetailsModel fetchTimeSheetDetailsModelFromJson(String str) =>
+    FetchTimeSheetDetailsModel.fromJson(json.decode(str));
 
-String fetchTimeSheetDetailsModelToJson(FetchTimeSheetDetailsModel data) => json.encode(data.toJson());
+String fetchTimeSheetDetailsModelToJson(FetchTimeSheetDetailsModel data) =>
+    json.encode(data.toJson());
 
 class FetchTimeSheetDetailsModel {
   int status;
@@ -15,17 +17,18 @@ class FetchTimeSheetDetailsModel {
     required this.data,
   });
 
-  factory FetchTimeSheetDetailsModel.fromJson(Map<String, dynamic> json) => FetchTimeSheetDetailsModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory FetchTimeSheetDetailsModel.fromJson(Map<String, dynamic> json) =>
+      FetchTimeSheetDetailsModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
@@ -56,30 +59,30 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    reportdate: json["reportdate"],
-    starttime: json["starttime"],
-    endtime: json["endtime"],
-    woid: json["woid"],
-    wbsid: json["wbsid"],
-    projectid: json["projectid"],
-    generalwbsid: json["generalwbsid"],
-    checkinFor: json["checkin_for"],
-    breakmins: json["breakmins"],
-    description: json["description"],
-    approve: json["approve"],
-  );
+        reportdate: json["reportdate"],
+        starttime: json["starttime"],
+        endtime: json["endtime"],
+        woid: json["woid"],
+        wbsid: json["wbsid"],
+        projectid: json["projectid"],
+        generalwbsid: json["generalwbsid"],
+        checkinFor: json["checkin_for"],
+        breakmins: json["breakmins"],
+        description: json["description"],
+        approve: json["approve"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "reportdate": reportdate,
-    "starttime": starttime,
-    "endtime": endtime,
-    "woid": woid,
-    "wbsid": wbsid,
-    "projectid": projectid,
-    "generalwbsid": generalwbsid,
-    "checkin_for": checkinFor,
-    "breakmins": breakmins,
-    "description": description,
-    "approve": approve,
-  };
+        "reportdate": reportdate,
+        "starttime": starttime,
+        "endtime": endtime,
+        "woid": woid,
+        "wbsid": wbsid,
+        "projectid": projectid,
+        "generalwbsid": generalwbsid,
+        "checkin_for": checkinFor,
+        "breakmins": breakmins,
+        "description": description,
+        "approve": approve,
+      };
 }

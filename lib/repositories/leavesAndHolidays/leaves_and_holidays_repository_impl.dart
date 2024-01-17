@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import 'package:toolkit/data/models/leavesAndHolidays/save_timesheet_model.dart';
 
 import '../../data/models/leavesAndHolidays/fetch_employee_working_at_model.dart';
 import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
@@ -77,10 +78,17 @@ class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
   }
 
   @override
+  Future<SaveTimeSheetModel> saveTimeSheet(Map saveTimeSheetMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}timesheet/save", saveTimeSheetMap);
+    return SaveTimeSheetModel.fromJson(response);
+  }
+
+  @override
   Future<FetchTimeSheetDetailsModel> fetchTimeSheetDetails(
-      String timesheetdetailId, String hashCode) async {
+      String hashCode, String timeSheetDetailsId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}timesheet/gettimsheetdetails?timesheetdetaiid=$timesheetdetailId&hashcode=$hashCode");
+        "${ApiConstants.baseUrl}timesheet/gettimsheetdetails?timesheetdetaiid=$timeSheetDetailsId&hashcode=$hashCode");
     return FetchTimeSheetDetailsModel.fromJson(response);
   }
 }
