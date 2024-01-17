@@ -64,7 +64,9 @@ class ExpenseItemList extends StatelessWidget {
                                   ExpenseDetailsTabOne
                                           .manageItemsMap['itemid'] =
                                       itemMap['item_id'] ?? '';
-                                  itemId = itemMap['item_id'] ?? '';
+                                  itemId = ExpenseDetailsTabOne
+                                      .itemMasterList[0][index].id
+                                      .toString();
                                   itemMap['item_name'] = ExpenseDetailsTabOne
                                       .itemMasterList[0][index].name;
                                   context.read<ExpenseBloc>().add(

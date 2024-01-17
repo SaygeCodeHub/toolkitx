@@ -10,7 +10,7 @@ import '../expense_details_tab_one.dart';
 
 class ExpenseHotelAndMealLayout extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
-  static List expenseCustomFieldsList = [];
+  static List<Map<String, dynamic>> expenseCustomFieldsList = [];
 
   const ExpenseHotelAndMealLayout(
       {super.key, required this.expenseDetailsData});
