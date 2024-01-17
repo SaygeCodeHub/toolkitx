@@ -48,14 +48,13 @@ class SendTransferScreen extends StatelessWidget {
                   return Column(
                     children: [
                       Visibility(
+                        visible: SelectTransferType.transferValue == "1",
+                        child: const SelectWarehouseListTile(),
+                      ),
+                      const SizedBox(height: xxxTinierSpacing),
+                      Visibility(
                           visible: SelectTransferType.transferValue == "1",
-                          child: const Column(
-                            children: [
-                              SelectWarehouseListTile(),
-                              SizedBox(height: xxxTinierSpacing),
-                              SelectWarehousePositionsListTile(),
-                            ],
-                          )),
+                          child: const SelectWarehousePositionsListTile()),
                       const SizedBox(height: xxxTinierSpacing),
                       Visibility(
                           visible: SelectTransferType.transferValue == "2",
