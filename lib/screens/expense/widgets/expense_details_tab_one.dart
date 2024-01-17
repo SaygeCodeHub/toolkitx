@@ -75,8 +75,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
                 );
               } else if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '3') {
                 return ExpenseHotelAndMealLayout(
-                  expenseDetailsData: expenseDetailsData,
-                );
+                    expenseDetailsData: expenseDetailsData);
               } else {
                 return ExpenseAddItemFormTwo(
                     expenseDetailsData: expenseDetailsData);

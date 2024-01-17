@@ -76,7 +76,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                   visible: state.currencyDetailsMap['currency_name'] != null,
                   child: TextFieldWidget(
                       maxLength: 20,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.next,
                       textInputType: TextInputType.number,
                       onTextFieldChanged: (String textField) {
                         ExpenseDetailsTabOne.manageItemsMap['exchange_rate'] =
