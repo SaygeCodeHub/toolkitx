@@ -17,13 +17,9 @@ import 'widgtes/timesheet_checkin_body.dart';
 class TimeSheetCheckInScreen extends StatelessWidget {
   static const routeName = 'TimesheetCheckInScreen';
 
-  const TimeSheetCheckInScreen(
-      {super.key,
-      required this.timeSheetMap,
-      required this.submitTimeSheetMap});
+  const TimeSheetCheckInScreen({super.key, required this.timeSheetMap});
 
   final Map timeSheetMap;
-  final Map submitTimeSheetMap;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +128,7 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                             onPressed: () {
                               context.read<LeavesAndHolidaysBloc>().add(
                                   SubmitTimeSheet(
-                                      submitTimeSheetMap: submitTimeSheetMap));
+                                      submitTimeSheetMap: timeSheetMap));
                             },
                             textValue: StringConstants.kSubmitTimeSheet),
                       )),
