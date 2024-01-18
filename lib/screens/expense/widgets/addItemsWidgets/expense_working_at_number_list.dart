@@ -89,18 +89,12 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .name;
-                                        ExpenseDetailsTabOne
-                                                .addItemMap['workingatid'] =
+                                        ExpenseDetailsTabOne.manageItemsMap[
+                                                'workingatnumber'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .id;
-                                        ExpenseDetailsTabOne
-                                                .addItemMap['workingatnumber'] =
-                                            state
-                                                .expenseWorkingAtNumberDataModel
-                                                .data[index]
-                                                .name;
                                         context.read<ExpenseBloc>().add(
                                             SelectExpenseWorkingAtNumber(
                                                 workingAtNumberMap:

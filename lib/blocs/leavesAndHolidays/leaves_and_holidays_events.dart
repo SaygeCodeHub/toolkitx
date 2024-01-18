@@ -39,6 +39,29 @@ class DeleteTimeSheet extends LeavesAndHolidaysEvent {
   DeleteTimeSheet({required this.timeId});
 }
 
+class SelectTimeSheetWorkingAt extends LeavesAndHolidaysEvent {
+  final String value;
+  final String status;
+
+  SelectTimeSheetWorkingAt({required this.value, required this.status});
+}
+
+class FetchTimeSheetWorkingAtNumberData extends LeavesAndHolidaysEvent {
+  final String workingAt;
+  final String workingAtValue;
+
+  FetchTimeSheetWorkingAtNumberData({
+    required this.workingAt,
+    required this.workingAtValue,
+  });
+}
+
+class SaveTimeSheet extends LeavesAndHolidaysEvent {
+  final Map saveTimeSheetMap;
+
+  SaveTimeSheet({required this.saveTimeSheetMap});
+}
+
 class SubmitTimeSheet extends LeavesAndHolidaysEvent {
   final Map submitTimeSheetMap;
 

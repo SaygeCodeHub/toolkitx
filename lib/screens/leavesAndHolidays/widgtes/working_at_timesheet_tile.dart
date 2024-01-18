@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
@@ -10,10 +11,9 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../data/enums/expense_working_at_enum.dart';
 import '../../../../widgets/expansion_tile_border.dart';
-import '../expense_details_tab_one.dart';
 
-class ExpenseWorkingAtExpansionTile extends StatelessWidget {
-  const ExpenseWorkingAtExpansionTile({Key? key}) : super(key: key);
+class WorkingAtTimeSheetTile extends StatelessWidget {
+  const WorkingAtTimeSheetTile({Key? key}) : super(key: key);
   static String workingAt = '';
   static String workingAtValue = '';
 
@@ -70,8 +70,9 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                                 workingAtValue = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .status;
-                                ExpenseDetailsTabOne
-                                    .manageItemsMap['workingatid'] = workingAt;
+                                AddAndEditTimeSheetScreen
+                                        .saveTimeSheetMap['workingatid'] =
+                                    workingAt;
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
                                         workingAt: workingAt,

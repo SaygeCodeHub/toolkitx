@@ -23,6 +23,7 @@ import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_hotel_and_meal_layout.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';
 
@@ -323,11 +324,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       isScreenChange = event.isScreenChange;
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
           await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
       emit(ExpenseItemMasterFetched(
           fetchItemMasterModel: fetchItemMasterModel,
-          isScreenChange: isScreenChange));
+          isScreenChange: isScreenChange,
+          apiKey: apiKey));
       add(SelectExpenseDate(date: ''));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
@@ -439,8 +442,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
             itemNotSaved:
                 StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
       } else {
+        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
+            .expenseCustomFieldsList
+            .where((map) => map.isNotEmpty)
+            .toList();
         Map saveItemMap = {
-          "id": "",
+          "id": event.expenseItemMap['id'] ?? '',
           "expenseid": expenseId,
           "date": event.expenseItemMap['date'] ?? '',
           "itemid": event.expenseItemMap['itemid'] ?? '',
@@ -455,7 +462,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
           "userid": userId,
           "hashcode": hashCode,
-          "questions": []
+          "questions": filteredList
         };
         SaveExpenseItemModel saveExpenseItemModel =
             await _expenseRepository.saveExpenseItem(saveItemMap);

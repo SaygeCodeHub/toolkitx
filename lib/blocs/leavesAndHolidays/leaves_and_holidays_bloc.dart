@@ -1,19 +1,21 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
-import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import 'leaves_and_holidays_events.dart';
@@ -36,6 +38,7 @@ class LeavesAndHolidaysBloc
     on<GetTimeSheet>(_getTimeSheet);
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
     on<DeleteTimeSheet>(_deleteTimeSheet);
+    on<SaveTimeSheet>(_saveTimeSheet);
     on<SubmitTimeSheet>(_submitTimeSheet);
   }
 
@@ -228,6 +231,39 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _saveTimeSheet(
+      SaveTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSaving());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveTimeSheetMap = {
+        "idm": "",
+        "workingatid": event.saveTimeSheetMap['workingatid'],
+        "workingatnumber": event.saveTimeSheetMap['working_at_number_id'],
+        "reportdate": event.saveTimeSheetMap['date'],
+        "starttime": event.saveTimeSheetMap['starttime'],
+        "endtime": event.saveTimeSheetMap['endtime'],
+        "breakmins": event.saveTimeSheetMap['breakmins'],
+        "description": event.saveTimeSheetMap['description'],
+        "userid": userId,
+        "id": "",
+        "hashcode": hashCode
+      };
+      SaveTimeSheetModel saveTimeSheetModel =
+          await _leavesAndHolidaysRepository.saveTimeSheet(saveTimeSheetMap);
+
+      if (saveTimeSheetModel.status == 200) {
+        emit(TimeSheetSaved(saveTimeSheetModel: saveTimeSheetModel));
+      } else {
+        emit(TimeSheetNotSaved(errorMessage: saveTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotSaved(errorMessage: e.toString()));
     }
   }
 

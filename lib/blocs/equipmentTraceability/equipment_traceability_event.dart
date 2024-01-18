@@ -52,3 +52,45 @@ class FetchEquipmentByCode extends EquipmentTraceabilityEvent {
 
   FetchEquipmentByCode({required this.code});
 }
+
+class FetchMyRequest extends EquipmentTraceabilityEvent {
+  final int pageNo;
+
+  FetchMyRequest({required this.pageNo});
+}
+
+class SelectTransferTypeName extends EquipmentTraceabilityEvent {
+  final String transferType;
+  final String transferValue;
+
+  SelectTransferTypeName(
+      {required this.transferType, required this.transferValue});
+}
+
+class SelectWarehouse extends EquipmentTraceabilityEvent {
+  final Map warehouseMap;
+
+  SelectWarehouse({required this.warehouseMap});
+}
+
+class FetchWarehouse extends EquipmentTraceabilityEvent {}
+
+class SelectWarehousePositions extends EquipmentTraceabilityEvent {
+  final Map positionsMap;
+
+  SelectWarehousePositions({required this.positionsMap});
+}
+
+class FetchWarehousePositions extends EquipmentTraceabilityEvent {}
+
+class SelectEmployee extends EquipmentTraceabilityEvent {
+  final Map employeeMap;
+
+  SelectEmployee({required this.employeeMap});
+}
+
+class FetchEmployee extends EquipmentTraceabilityEvent {}
+
+class SendTransferRequest extends EquipmentTraceabilityEvent {
+  SendTransferRequest();
+}
