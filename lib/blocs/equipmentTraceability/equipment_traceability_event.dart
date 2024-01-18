@@ -94,3 +94,15 @@ class FetchEmployee extends EquipmentTraceabilityEvent {}
 class SendTransferRequest extends EquipmentTraceabilityEvent {
   SendTransferRequest();
 }
+
+class SelectWorkOrderEquipment extends EquipmentTraceabilityEvent {
+  final Map workOrderEquipmentMap;
+
+  SelectWorkOrderEquipment({required this.workOrderEquipmentMap});
+}
+
+class ApproveTransferRequest extends EquipmentTraceabilityEvent {
+  final String requestId;
+
+  ApproveTransferRequest({required this.requestId});
+}

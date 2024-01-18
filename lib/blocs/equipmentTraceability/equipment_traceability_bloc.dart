@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -50,6 +51,8 @@ class EquipmentTraceabilityBloc
     on<SelectEmployee>(_selectEmployee);
     on<FetchEmployee>(_fetchEmployee);
     on<SendTransferRequest>(_sendTransferRequest);
+    on<SelectWorkOrderEquipment>(_selectWorkOrderEquipment);
+    on<ApproveTransferRequest>(_approveTransferRequest);
   }
 
   Map filters = {};
@@ -62,6 +65,8 @@ class EquipmentTraceabilityBloc
   String transferValue = "";
   String personId = "";
   String positionId = "";
+  String workOrderId = "";
+  List equipmentWorkOrderList = [];
   List answerList = [];
   List equipmentList = [];
 
@@ -302,6 +307,7 @@ class EquipmentTraceabilityBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
           .fetchMyRequest(event.pageNo, userId, hashCode);
+      equipmentWorkOrderList = fetchMyRequestModel.data.workorders!;
       if (fetchMyRequestModel.status == 200) {
         emit(MyRequestFetched(
             fetchMyRequestModel: fetchMyRequestModel,
@@ -377,7 +383,7 @@ class EquipmentTraceabilityBloc
   FutureOr<void> _selectEmployee(
       SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
     emit(EmployeeSelected(employeeMap: event.employeeMap));
-    personId = event.employeeMap['employeeid'];
+    personId = event.employeeMap['employeeid'] ?? '';
   }
 
   Future<FutureOr<void>> _fetchEmployee(
@@ -424,6 +430,42 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(TransferRequestNotSent(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectWorkOrderEquipment(SelectWorkOrderEquipment event,
+      Emitter<EquipmentTraceabilityState> emit) {
+    emit(EquipmentWorkOrderSelected(
+        workOrderEquipmentMap: event.workOrderEquipmentMap));
+    workOrderId = event.workOrderEquipmentMap["workorderid"] ?? '';
+  }
+
+  Future<FutureOr<void>> _approveTransferRequest(ApproveTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestApproving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map approveTransferRequestMap = {
+        "hashcode": hashCode,
+        "userid": userId,
+        "equipmentlist": [
+          {"id": event.requestId}
+        ],
+        "woid": workOrderId
+      };
+      ApproveTransferRequestModel approveTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .approveTransferRequest(approveTransferRequestMap);
+      if (approveTransferRequestModel.status == 200) {
+        emit(TransferRequestApproved());
+      } else {
+        emit(TransferRequestNotApproved(
+            errorMessage: approveTransferRequestModel.message));
+      }
+    } catch (e) {
+      emit(TransferRequestNotApproved(errorMessage: e.toString()));
     }
   }
 }

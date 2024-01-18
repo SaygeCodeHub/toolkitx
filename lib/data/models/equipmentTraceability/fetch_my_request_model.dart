@@ -33,7 +33,7 @@ class FetchMyRequestModel {
 
 class Data {
   final List<MyRequestTransfer>? transfers;
-  final List<Workorder>? workorders;
+  final List<EquipmentWorkorder>? workorders;
 
   Data({
     required this.transfers,
@@ -46,8 +46,8 @@ class Data {
                 json["transfers"].map((x) => MyRequestTransfer.fromJson(x)))
             : [],
         workorders: (json["workorders"] != null)
-            ? List<Workorder>.from(
-                json["workorders"].map((x) => Workorder.fromJson(x)))
+            ? List<EquipmentWorkorder>.from(
+                json["workorders"].map((x) => EquipmentWorkorder.fromJson(x)))
             : [],
       );
 
@@ -90,16 +90,17 @@ class MyRequestTransfer {
       };
 }
 
-class Workorder {
+class EquipmentWorkorder {
   final int? id;
   final String? woname;
 
-  Workorder({
+  EquipmentWorkorder({
     required this.id,
     required this.woname,
   });
 
-  factory Workorder.fromJson(Map<String, dynamic> json) => Workorder(
+  factory EquipmentWorkorder.fromJson(Map<String, dynamic> json) =>
+      EquipmentWorkorder(
         id: json["id"],
         woname: json["woname"],
       );

@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
+import '../approve_equipment_request_screen.dart';
+
 class ViewMyRequestPopUp extends StatelessWidget {
   const ViewMyRequestPopUp({
     super.key,
     required this.popUpMenuItems,
+    required this.requestId,
   });
+
   final List popUpMenuItems;
+  final String requestId;
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
@@ -19,6 +24,12 @@ class ViewMyRequestPopUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: (value) {
+          if (value == DatabaseUtil.getText('approve')) {
+            Navigator.pushNamed(
+                context, ApproveEquipmentRequestScreen.routeName,
+                arguments: requestId);
+          }
+          if (value == DatabaseUtil.getText('Reject')) {}
           if (value == DatabaseUtil.getText("Cancel")) {}
         },
         position: PopupMenuPosition.under,
