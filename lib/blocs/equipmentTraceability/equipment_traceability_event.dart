@@ -82,3 +82,11 @@ class SelectWarehousePositions extends EquipmentTraceabilityEvent {
 }
 
 class FetchWarehousePositions extends EquipmentTraceabilityEvent {}
+
+class SelectEmployee extends EquipmentTraceabilityEvent {
+  final Map employeeMap;
+
+  SelectEmployee({required this.employeeMap});
+}
+
+class FetchEmployee extends EquipmentTraceabilityEvent {}

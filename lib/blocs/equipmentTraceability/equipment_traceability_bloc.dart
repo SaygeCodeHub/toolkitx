@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
@@ -45,6 +46,8 @@ class EquipmentTraceabilityBloc
     on<FetchWarehouse>(_fetchWarehouse);
     on<SelectWarehousePositions>(_selectWarehousePositions);
     on<FetchWarehousePositions>(_fetchWarehousePositions);
+    on<SelectEmployee>(_selectEmployee);
+    on<FetchEmployee>(_fetchEmployee);
   }
 
   Map filters = {};
@@ -361,6 +364,29 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(WarehousePositionsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectEmployee(
+      SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(EmployeeSelected(employeeMap: event.employeeMap));
+  }
+
+  Future<FutureOr<void>> _fetchEmployee(
+      FetchEmployee event, Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EmployeeFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchEmployeesModel fetchEmployeesModel =
+          await _equipmentTraceabilityRepo.fetchEmployees(hashCode);
+      if (fetchEmployeesModel.status == 200) {
+        emit(EmployeeFetched(fetchEmployeesModel: fetchEmployeesModel));
+      } else {
+        emit(EmployeeNotFetched(errorMessage: fetchEmployeesModel.message));
+      }
+    } catch (e) {
+      emit(EmployeeNotFetched(errorMessage: e.toString()));
     }
   }
 }

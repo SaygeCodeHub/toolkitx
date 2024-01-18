@@ -104,6 +104,8 @@ class TransferEquipmentScreen extends StatelessWidget {
           )),
       bottomNavigationBar:
           BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+        buildWhen: (previousState, currentState) =>
+            currentState is EquipmentByCodeFetched,
         builder: (context, state) {
           if (state is EquipmentByCodeFetched) {
             return Padding(

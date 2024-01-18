@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_details_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
@@ -40,4 +41,6 @@ abstract class EquipmentTraceabilityRepo {
     String warehouseid,
     String hashCode,
   );
+
+  Future<FetchEmployeesModel> fetchEmployees(String hashCode);
 }
