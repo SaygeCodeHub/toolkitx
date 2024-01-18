@@ -72,4 +72,60 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
         deleteDocumentsMap);
     return PostDocumentsModel.fromJson(response);
   }
+
+  @override
+  Future<PostDocumentsModel> approveDocuments(Map approveDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/approvedocument", approveDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> closeDocuments(Map closeDocumentsMsp) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/closedocument", closeDocumentsMsp);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> openDocumentFopInformation(
+      Map openDocumentFopInformationMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/opendocumentforinformation",
+        openDocumentFopInformationMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> openDocumentFopReview(
+      Map openDocumentFopReviewMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/opendocumentforreview",
+        openDocumentFopReviewMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> rejectDocuments(Map rejectDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/rejectdocument", rejectDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> saveDocumentComments(
+      Map saveDocumentCommentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/savecomments",
+        saveDocumentCommentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> withdrawDocuments(Map withdrawDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/withdrawdocument",
+        withdrawDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
 }

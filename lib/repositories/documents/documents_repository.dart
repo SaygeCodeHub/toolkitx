@@ -26,4 +26,20 @@ abstract class DocumentsRepository {
   Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap);
 
   Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap);
+
+  Future<PostDocumentsModel> approveDocuments(Map approveDocumentsMap);
+
+  Future<PostDocumentsModel> rejectDocuments(Map rejectDocumentsMap);
+
+  Future<PostDocumentsModel> withdrawDocuments(Map withdrawDocumentsMap);
+
+  Future<PostDocumentsModel> closeDocuments(Map closeDocumentsMsp);
+
+  Future<PostDocumentsModel> saveDocumentComments(Map saveDocumentCommentsMap);
+
+  Future<PostDocumentsModel> openDocumentFopInformation(
+      Map openDocumentFopInformationMap);
+
+  Future<PostDocumentsModel> openDocumentFopReview(
+      Map openDocumentFopReviewMap);
 }

@@ -51,7 +51,8 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
           } else if (popUpMenuItems[value] ==
-              DatabaseUtil.getText('withdraw')) {}
+              DatabaseUtil.getText('withdraw')) {} else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('dms_openforinformation')) {}
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
