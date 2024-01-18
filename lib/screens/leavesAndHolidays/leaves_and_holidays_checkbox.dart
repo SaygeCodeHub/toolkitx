@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../configs/app_color.dart';
 
-typedef CreatedForListCallBack = Function(List codeList);
+typedef CreatedForListCallBack = Function(List idList);
 
-class SearchEquipmentCheckbox extends StatefulWidget {
-  const SearchEquipmentCheckbox({
+class TimeSheetCheckbox extends StatefulWidget {
+  const TimeSheetCheckbox({
     super.key,
     required this.selectedCreatedForIdList,
     required this.id,
@@ -17,14 +17,16 @@ class SearchEquipmentCheckbox extends StatefulWidget {
   final CreatedForListCallBack onCreatedForChanged;
   final List idList;
   @override
-  State<SearchEquipmentCheckbox> createState() =>
-      _SearchEquipmentCheckboxState();
+  State<TimeSheetCheckbox> createState() => _TimeSheetCheckboxState();
 }
 
-class _SearchEquipmentCheckboxState extends State<SearchEquipmentCheckbox> {
+class _TimeSheetCheckboxState extends State<TimeSheetCheckbox> {
   void _checkboxChange(isSelected, id) {
     if (isSelected) {
       widget.selectedCreatedForIdList.add(id);
+      widget.onCreatedForChanged(widget.idList);
+    } else if (isSelected) {
+      widget.selectedCreatedForIdList.addAll(id);
       widget.onCreatedForChanged(widget.idList);
     } else {
       widget.selectedCreatedForIdList.remove(id);

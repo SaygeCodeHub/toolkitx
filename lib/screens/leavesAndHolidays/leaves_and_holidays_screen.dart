@@ -19,6 +19,7 @@ import 'widgtes/leaves_and_holidays_list_body.dart';
 
 class LeavesAndHolidaysScreen extends StatelessWidget {
   static const routeName = 'LeavesAndHolidaysScreen';
+  static List leavesAndHolidaysIdList = [];
 
   const LeavesAndHolidaysScreen({Key? key}) : super(key: key);
 
@@ -97,11 +98,11 @@ class LeavesAndHolidaysScreen extends StatelessWidget {
                         const Text(StringConstants.kSubmitAll),
                         SizedBox(
                             width: smallerSpacing,
-                            child: SearchEquipmentCheckbox(
-                              selectedCreatedForIdList: const [],
-                              id: '',
-                              onCreatedForChanged: (List<dynamic> idList) {},
-                              idList: const [],
+                            child: TimeSheetCheckbox(
+                              id: "",
+                              idList: [],
+                              onCreatedForChanged: (idList) {},
+                              selectedCreatedForIdList: [],
                             ))
                       ]),
                       Expanded(

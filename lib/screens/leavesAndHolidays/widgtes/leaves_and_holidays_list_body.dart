@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
+import '../leaves_and_holidays_checkbox.dart';
 
 class LeavesAndHolidaysListBody extends StatelessWidget {
   const LeavesAndHolidaysListBody({
@@ -17,6 +21,8 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
 
   final TimesheetData data;
   final bool isChecked;
+  static List leavesAndHolidaysIdList = [];
+  static int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -95,18 +101,36 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                           )
                         : const Text(StringConstants.kNotSubmitted,
                             style: TextStyle(color: AppColor.deepBlue)),
-                    Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: xxxSmallestSpacing,
-                              bottom: xxxSmallestSpacing),
-                          child: (data.dates[index].id != '' &&
-                                  data.dates[index].hours != '-')
-                              ? Checkbox(
-                                  activeColor: AppColor.blueGrey,
-                                  value: isChecked,
-                                  onChanged: ((value) {}))
-                              : const SizedBox.shrink()),
+                    BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+                      buildWhen: (previous, currentState) =>
+                          currentState is GetTimeSheetFetching ||
+                          currentState is GetTimeSheetFetched ||
+                          currentState is GetTimeSheetNotFetched,
+                      builder: (context, state) {
+                        if (state is GetTimeSheetFetched) {
+                          return Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: xxxSmallestSpacing,
+                                    bottom: xxxSmallestSpacing),
+                                child: (data.dates[index].id != '' &&
+                                        data.dates[index].hours != '-')
+                                    ? TimeSheetCheckbox(
+                                        selectedCreatedForIdList:
+                                            leavesAndHolidaysIdList,
+                                        id: state.fetchTimeSheetModel.data
+                                            .dates[index].id,
+                                        onCreatedForChanged:
+                                            (List<dynamic> idList) {},
+                                        idList: const [],
+                                      )
+                                    : const SizedBox.shrink()),
+                          );
+                        } else if (state is GetTimeSheetNotFetched) {
+                          return const Text(StringConstants.kDataNotCorrect);
+                        }
+                        return const SizedBox.shrink();
+                      },
                     )
                   ],
                 ),
