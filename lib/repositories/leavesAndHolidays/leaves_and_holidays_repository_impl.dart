@@ -87,8 +87,8 @@ class LeavesAndHolidaysRepositoryImpl extends LeavesAndHolidaysRepository {
   @override
   Future<SubmitTimeSheetModel> submitTimeSheetRepo(
       Map submitTimeSheetMap) async {
-    final response = await DioClient()
-        .post("${ApiConstants.baseUrl}timesheet/submittimesheet", submitTimeSheetMap);
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}timesheet/submittimesheet", submitTimeSheetMap);
     return SubmitTimeSheetModel.fromJson(response);
   }
 }

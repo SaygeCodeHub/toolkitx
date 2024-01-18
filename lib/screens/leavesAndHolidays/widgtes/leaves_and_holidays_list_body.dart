@@ -38,13 +38,23 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                     'status': data.dates[index].status
                   };
                   Navigator.pushNamed(context, TimeSheetCheckInScreen.routeName,
-                      arguments: timeSheetMap).then((_) => context.read<LeavesAndHolidaysBloc>().add(GetTimeSheet(
-                      month: context.read<LeavesAndHolidaysBloc>().month == ''
-                          ? DateFormat('M').format(DateTime.now())
-                          : context.read<LeavesAndHolidaysBloc>().month,
-                      year: context.read<LeavesAndHolidaysBloc>().year == ''
-                          ? DateFormat('yyyy').format(DateTime.now())
-                          : context.read<LeavesAndHolidaysBloc>().year)));
+                          arguments: timeSheetMap)
+                      .then((_) => context.read<LeavesAndHolidaysBloc>().add(
+                          GetTimeSheet(
+                              month: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .month ==
+                                      ''
+                                  ? DateFormat('M').format(DateTime.now())
+                                  : context.read<LeavesAndHolidaysBloc>().month,
+                              year: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .year ==
+                                      ''
+                                  ? DateFormat('yyyy').format(DateTime.now())
+                                  : context
+                                      .read<LeavesAndHolidaysBloc>()
+                                      .year)));
                 },
                 title: Row(
                   children: [

@@ -44,6 +44,7 @@ class LeavesAndHolidaysBloc
 
   String year = "";
   String month = "";
+  List timeSheetIdList = [];
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -198,6 +199,8 @@ class LeavesAndHolidaysBloc
       FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
           await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
               event.date, userId!, hashCode!);
+      timeSheetIdList.clear();
+      timeSheetIdList.add({'id': fetchCheckInTimeSheetModel.data.timesheetid});
       if (fetchCheckInTimeSheetModel.status == 200) {
         emit(CheckInTimeSheetFetched(
             fetchCheckInTimeSheetModel: fetchCheckInTimeSheetModel));
@@ -274,21 +277,13 @@ class LeavesAndHolidaysBloc
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
       Map submitTimeSheetMap = {
-        "idm": [
-          {
-            "id": '',
-          }
-        ],
-        "timesheetids": [
-          {
-            "id": '',
-          }
-        ],
+        "idm": timeSheetIdList,
+        "timesheetids": timeSheetIdList,
         "hashcode": hashCode
       };
       SubmitTimeSheetModel submitTimeSheetModel =
-      await _leavesAndHolidaysRepository
-          .submitTimeSheetRepo(submitTimeSheetMap);
+          await _leavesAndHolidaysRepository
+              .submitTimeSheetRepo(submitTimeSheetMap);
       if (submitTimeSheetModel.status == 200) {
         emit(TimeSheetSubmitted());
       } else {

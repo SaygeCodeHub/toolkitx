@@ -89,6 +89,8 @@ class TimeSheetCheckInScreen extends StatelessWidget {
           } else if (state is TimeSheetSubmitted) {
             ProgressBar.dismiss(context);
             Navigator.pop(context);
+            showCustomSnackBar(
+                context, StringConstants.kTimeSheetSubmittedSuccessfully, "");
           } else if (state is TimeSheetNotSubmitted) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.errorMessage, "");

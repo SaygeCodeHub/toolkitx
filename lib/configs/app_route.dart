@@ -505,11 +505,11 @@ class AppRoutes {
       case EnterEquipmentCodeScreen.routeName:
         return _createRoute(const EnterEquipmentCodeScreen());
       case TimeSheetCheckInScreen.routeName:
-        return _createRoute(
-            TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map,
-                submitTimeSheetMap: settings.arguments as Map));
-        case AddAndEditTimeSheetScreen.routeName:
-          return _createRoute(const AddAndEditTimeSheetScreen());
+        return _createRoute(TimeSheetCheckInScreen(
+            timeSheetMap: settings.arguments as Map,
+            submitTimeSheetMap: settings.arguments as Map));
+      case AddAndEditTimeSheetScreen.routeName:
+        return _createRoute(const AddAndEditTimeSheetScreen());
       case ViewMyRequestScreen.routeName:
         return _createRoute(const ViewMyRequestScreen());
       case SendTransferScreen.routeName:
