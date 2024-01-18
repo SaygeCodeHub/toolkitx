@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/send_transfer_rquest_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'equipment_traceability_repo.dart';
@@ -100,5 +101,14 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}common/getallemployees?hashcode=$hashCode");
     return FetchEmployeesModel.fromJson(response);
+  }
+
+  @override
+  Future<SendTransferRequestModel> sendTransferRequest(
+      Map sendTransferRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}equipment/sendtransferrequest",
+        sendTransferRequestMap);
+    return SendTransferRequestModel.fromJson(response);
   }
 }

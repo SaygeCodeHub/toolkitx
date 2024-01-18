@@ -10,6 +10,7 @@ import '../../data/models/equipmentTraceability/fetch_equipment_set_parameter_mo
 import '../../data/models/equipmentTraceability/fetch_my_request_model.dart';
 import '../../data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../data/models/equipmentTraceability/save_custom_parameter_model.dart';
+import '../../data/models/equipmentTraceability/send_transfer_rquest_model.dart';
 
 abstract class EquipmentTraceabilityRepo {
   Future<FetchSearchEquipmentModel> fetchSearchEquipment(
@@ -43,4 +44,7 @@ abstract class EquipmentTraceabilityRepo {
   );
 
   Future<FetchEmployeesModel> fetchEmployees(String hashCode);
+
+  Future<SendTransferRequestModel> sendTransferRequest(
+      Map sendTransferRequestMap);
 }

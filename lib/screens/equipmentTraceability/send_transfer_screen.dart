@@ -5,8 +5,10 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/widgets/select_transfer_type.dart';
 import 'package:toolkit/screens/equipmentTraceability/widgets/select_warehouse_positions_list_tile.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -21,6 +23,9 @@ class SendTransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SelectTransferType.transferValue = "";
+    SelectEmployeeListTile.employeeMap = {};
+    SelectWarehouseListTile.warehouseMap = {};
+    SelectWarehousePositionsListTile.positionsMap = {};
     context
         .read<EquipmentTraceabilityBloc>()
         .add(SelectTransferTypeName(transferType: '', transferValue: ''));
@@ -40,7 +45,20 @@ class SendTransferScreen extends StatelessWidget {
             const SizedBox(height: tiniestSpacing),
             const SelectTransferType(),
             const SizedBox(height: xxxTinierSpacing),
-            BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+            BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+              listener: (context, state) {
+                if (state is TransferRequestSending) {
+                  ProgressBar.show(context);
+                } else if (state is TransferRequestSent) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, 'Transferred Successfully', '');
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                } else if (state is TransferRequestNotSent) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
+              },
               buildWhen: (previousState, currentState) =>
                   currentState is TransferTypeSelected,
               builder: (context, state) {
@@ -72,7 +90,12 @@ class SendTransferScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
-            onPressed: () {}, textValue: StringConstants.kTransfer),
+            onPressed: () {
+              context
+                  .read<EquipmentTraceabilityBloc>()
+                  .add(SendTransferRequest());
+            },
+            textValue: StringConstants.kTransfer),
       ),
     );
   }

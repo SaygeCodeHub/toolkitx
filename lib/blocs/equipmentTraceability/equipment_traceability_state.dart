@@ -187,3 +187,13 @@ class EmployeeNotFetched extends EquipmentTraceabilityState {
 
   EmployeeNotFetched({required this.errorMessage});
 }
+
+class TransferRequestSending extends EquipmentTraceabilityState {}
+
+class TransferRequestSent extends EquipmentTraceabilityState {}
+
+class TransferRequestNotSent extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotSent({required this.errorMessage});
+}
