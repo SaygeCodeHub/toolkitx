@@ -104,9 +104,11 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   }
 
   @override
-  Future<SendTransferRequestModel> sendTransferRequest(Map sendTransferRequestMap) async {
+  Future<SendTransferRequestModel> sendTransferRequest(
+      Map sendTransferRequestMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}equipment/sendtransferrequest",sendTransferRequestMap);
+        "${ApiConstants.baseUrl}equipment/sendtransferrequest",
+        sendTransferRequestMap);
     return SendTransferRequestModel.fromJson(response);
   }
 }

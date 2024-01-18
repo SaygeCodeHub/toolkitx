@@ -47,14 +47,14 @@ class SendTransferScreen extends StatelessWidget {
             const SizedBox(height: xxxTinierSpacing),
             BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
               listener: (context, state) {
-                if(state is TransferRequestSending){
+                if (state is TransferRequestSending) {
                   ProgressBar.show(context);
-                }else if(state is TransferRequestSent){
+                } else if (state is TransferRequestSent) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, 'Transferred Successfully', '');
                   Navigator.pop(context);
                   Navigator.pop(context);
-                }else if(state is TransferRequestNotSent){
+                } else if (state is TransferRequestNotSent) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
                 }
@@ -91,8 +91,11 @@ class SendTransferScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              context.read<EquipmentTraceabilityBloc>().add(SendTransferRequest());
-            }, textValue: StringConstants.kTransfer),
+              context
+                  .read<EquipmentTraceabilityBloc>()
+                  .add(SendTransferRequest());
+            },
+            textValue: StringConstants.kTransfer),
       ),
     );
   }

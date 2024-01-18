@@ -401,7 +401,7 @@ class EquipmentTraceabilityBloc
   Future<FutureOr<void>> _sendTransferRequest(SendTransferRequest event,
       Emitter<EquipmentTraceabilityState> emit) async {
     emit(TransferRequestSending());
-    try{
+    try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
@@ -422,9 +422,8 @@ class EquipmentTraceabilityBloc
         emit(TransferRequestNotSent(
             errorMessage: sendTransferRequestModel.message));
       }
-    }catch(e){
-      emit(TransferRequestNotSent(
-          errorMessage: e.toString()));
+    } catch (e) {
+      emit(TransferRequestNotSent(errorMessage: e.toString()));
     }
   }
 }
