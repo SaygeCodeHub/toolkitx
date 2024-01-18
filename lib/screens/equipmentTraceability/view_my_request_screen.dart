@@ -5,6 +5,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/widgets/view_my_request_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -62,6 +63,7 @@ class ViewMyRequestScreen extends StatelessWidget {
                                 color: AppColor.grey)),
                         trailing: ViewMyRequestPopUp(
                           popUpMenuItems: state.popUpMenuItems,
+                          requestId: data.transfers![index].id!,
                         ),
                       ),
                     );
@@ -69,9 +71,11 @@ class ViewMyRequestScreen extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return const SizedBox(height: xxTinierSpacing);
                   });
-            } else {
-              return const SizedBox.shrink();
+            } else if (state is MyRequestNotFetched) {
+              return Center(
+                  child: Text(DatabaseUtil.getText('no_records_found')));
             }
+            return const SizedBox.shrink();
           },
         ),
       ),

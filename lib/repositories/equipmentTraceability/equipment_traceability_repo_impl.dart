@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -110,5 +111,14 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
         "${ApiConstants.baseUrl}equipment/sendtransferrequest",
         sendTransferRequestMap);
     return SendTransferRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<ApproveTransferRequestModel> approveTransferRequest(
+      Map approveTransferRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}equipment/approvetransferrequest",
+        approveTransferRequestMap);
+    return ApproveTransferRequestModel.fromJson(response);
   }
 }

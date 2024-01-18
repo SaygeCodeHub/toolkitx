@@ -502,4 +502,5 @@ abstract class StringConstants {
   static const String kSelectPositions = "Select Positions";
   static const String kSelectWarehouse = "Select Warehouse";
   static const String kSelectEmployee = "Select Employee";
+  static const String kWorkorder = "Workorder";
 }
