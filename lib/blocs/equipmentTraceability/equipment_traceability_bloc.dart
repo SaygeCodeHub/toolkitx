@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/send_transfer_rquest_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -48,6 +49,7 @@ class EquipmentTraceabilityBloc
     on<FetchWarehousePositions>(_fetchWarehousePositions);
     on<SelectEmployee>(_selectEmployee);
     on<FetchEmployee>(_fetchEmployee);
+    on<SendTransferRequest>(_sendTransferRequest);
   }
 
   Map filters = {};
@@ -58,6 +60,8 @@ class EquipmentTraceabilityBloc
   String equipmentId = "";
   String code = "";
   String transferValue = "";
+  String personId = "";
+  String positionId = "";
   List answerList = [];
   List equipmentList = [];
 
@@ -267,6 +271,8 @@ class EquipmentTraceabilityBloc
                 fetchEquipmentByCodeModel.data.equipmentcode.trim(),
             "equipmentname":
                 fetchEquipmentByCodeModel.data.equipmentname.trim(),
+            "currentitemcount": 0,
+            "usercount": 0
           });
         }
 
@@ -343,6 +349,7 @@ class EquipmentTraceabilityBloc
   FutureOr<void> _selectWarehousePositions(SelectWarehousePositions event,
       Emitter<EquipmentTraceabilityState> emit) {
     emit(WarehousePositionsSelected(positionsMap: event.positionsMap));
+    positionId = event.positionsMap['positionid'];
     add(FetchWarehousePositions());
   }
 
@@ -370,6 +377,7 @@ class EquipmentTraceabilityBloc
   FutureOr<void> _selectEmployee(
       SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
     emit(EmployeeSelected(employeeMap: event.employeeMap));
+    personId = event.employeeMap['employeeid'];
   }
 
   Future<FutureOr<void>> _fetchEmployee(
@@ -387,6 +395,36 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(EmployeeNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _sendTransferRequest(SendTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestSending());
+    try{
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map transferRequestMap = {
+        "hashcode": hashCode,
+        "transferto": transferValue,
+        "positionid": transferValue == '1' ? positionId : '',
+        "personid": transferValue == '2' ? personId : '',
+        "userid": userId,
+        "equipmentlist": equipmentList
+      };
+      SendTransferRequestModel sendTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .sendTransferRequest(transferRequestMap);
+      if (sendTransferRequestModel.status == 200) {
+        emit(TransferRequestSent());
+      } else {
+        emit(TransferRequestNotSent(
+            errorMessage: sendTransferRequestModel.message));
+      }
+    }catch(e){
+      emit(TransferRequestNotSent(
+          errorMessage: e.toString()));
     }
   }
 }

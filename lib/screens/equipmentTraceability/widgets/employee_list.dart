@@ -16,7 +16,7 @@ class EmployeeList extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<EquipmentTraceabilityBloc>().add(FetchEmployee());
     return Scaffold(
-        appBar: const GenericAppBar(title: StringConstants.kSelectPositions),
+        appBar: const GenericAppBar(title: StringConstants.kSelectEmployee),
         body:
             BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
           buildWhen: (previousState, currentState) =>

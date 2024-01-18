@@ -90,3 +90,7 @@ class SelectEmployee extends EquipmentTraceabilityEvent {
 }
 
 class FetchEmployee extends EquipmentTraceabilityEvent {}
+
+class SendTransferRequest extends EquipmentTraceabilityEvent {
+  SendTransferRequest();
+}
