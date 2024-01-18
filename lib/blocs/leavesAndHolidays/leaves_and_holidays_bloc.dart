@@ -16,6 +16,7 @@ import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_mod
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
@@ -38,10 +39,12 @@ class LeavesAndHolidaysBloc
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
     on<DeleteTimeSheet>(_deleteTimeSheet);
     on<SaveTimeSheet>(_saveTimeSheet);
+    on<SubmitTimeSheet>(_submitTimeSheet);
   }
 
   String year = "";
   String month = "";
+  List timeSheetIdList = [];
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -196,6 +199,8 @@ class LeavesAndHolidaysBloc
       FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
           await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
               event.date, userId!, hashCode!);
+      timeSheetIdList.clear();
+      timeSheetIdList.add({'id': fetchCheckInTimeSheetModel.data.timesheetid});
       if (fetchCheckInTimeSheetModel.status == 200) {
         emit(CheckInTimeSheetFetched(
             fetchCheckInTimeSheetModel: fetchCheckInTimeSheetModel));
@@ -214,7 +219,6 @@ class LeavesAndHolidaysBloc
     try {
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
-
       Map deleteTimeSheetMap = {
         "idm": "",
         "id": event.timeId,
@@ -263,6 +267,30 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _submitTimeSheet(
+      SubmitTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSubmitting());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map submitTimeSheetMap = {
+        "idm": timeSheetIdList,
+        "timesheetids": timeSheetIdList,
+        "hashcode": hashCode
+      };
+      SubmitTimeSheetModel submitTimeSheetModel =
+          await _leavesAndHolidaysRepository
+              .submitTimeSheetRepo(submitTimeSheetMap);
+      if (submitTimeSheetModel.status == 200) {
+        emit(TimeSheetSubmitted());
+      } else {
+        emit(TimeSheetNotSubmitted(errorMessage: submitTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotSubmitted(errorMessage: e.toString()));
     }
   }
 }

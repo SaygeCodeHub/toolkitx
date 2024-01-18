@@ -80,6 +80,17 @@ class TimeSheetCheckInScreen extends StatelessWidget {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.errorMessage, "");
           }
+          if (state is TimeSheetSubmitting) {
+            ProgressBar.show(context);
+          } else if (state is TimeSheetSubmitted) {
+            ProgressBar.dismiss(context);
+            Navigator.pop(context);
+            showCustomSnackBar(
+                context, StringConstants.kTimeSheetSubmittedSuccessfully, "");
+          } else if (state is TimeSheetNotSubmitted) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, state.errorMessage, "");
+          }
         },
       ),
       bottomNavigationBar: Visibility(
@@ -114,7 +125,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                           child: Padding(
                         padding: const EdgeInsets.only(left: tiniestSpacing),
                         child: PrimaryButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<LeavesAndHolidaysBloc>().add(
+                                  SubmitTimeSheet(
+                                      submitTimeSheetMap: timeSheetMap));
+                            },
                             textValue: StringConstants.kSubmitTimeSheet),
                       )),
                     )

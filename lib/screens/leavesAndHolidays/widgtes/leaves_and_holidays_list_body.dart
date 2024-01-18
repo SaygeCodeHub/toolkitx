@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
@@ -34,7 +38,23 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                     'status': data.dates[index].status
                   };
                   Navigator.pushNamed(context, TimeSheetCheckInScreen.routeName,
-                      arguments: timeSheetMap);
+                          arguments: timeSheetMap)
+                      .then((_) => context.read<LeavesAndHolidaysBloc>().add(
+                          GetTimeSheet(
+                              month: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .month ==
+                                      ''
+                                  ? DateFormat('M').format(DateTime.now())
+                                  : context.read<LeavesAndHolidaysBloc>().month,
+                              year: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .year ==
+                                      ''
+                                  ? DateFormat('yyyy').format(DateTime.now())
+                                  : context
+                                      .read<LeavesAndHolidaysBloc>()
+                                      .year)));
                 },
                 title: Row(
                   children: [
