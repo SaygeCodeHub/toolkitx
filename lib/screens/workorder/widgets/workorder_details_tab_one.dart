@@ -74,7 +74,7 @@ class WorkOrderDetailsTabOne extends StatelessWidget {
               style: Theme.of(context).textTheme.medium,
             ),
             const SizedBox(height: xxTinierSpacing),
-            Text(data.type, style: Theme.of(context).textTheme.small),
+            Text(data.workordertype, style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
             Text(
               DatabaseUtil.getText('Subject'),
@@ -116,7 +116,8 @@ class WorkOrderDetailsTabOne extends StatelessWidget {
               style: Theme.of(context).textTheme.medium,
             ),
             const SizedBox(height: xxTinierSpacing),
-            Text(data.safetymeasure, style: Theme.of(context).textTheme.small),
+            Text(data.safetymeasurenames,
+                style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
           ],
         ));

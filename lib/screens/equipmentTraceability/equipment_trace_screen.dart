@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/view_my_request_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/equipment_util.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -72,8 +73,10 @@ class EquipmentTraceScreen extends StatelessWidget {
             arguments: true);
         break;
       case StringConstants.kTransferEquipment:
-        Navigator.pushNamed(context, TransferEquipmentScreen.routeName,
-            arguments: true);
+        Navigator.pushNamed(context, TransferEquipmentScreen.routeName);
+        break;
+      case StringConstants.kViewMyRequest:
+        Navigator.pushNamed(context, ViewMyRequestScreen.routeName);
         break;
     }
   }

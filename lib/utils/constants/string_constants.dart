@@ -22,6 +22,9 @@ abstract class StringConstants {
   static const String kParts = 'Parts'; //
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
+  static const String kExpenseWorkingAtNumber =
+      'Working at Number cannot be empty!    '; //
+  static const String kGoBack = 'Go Back'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -448,7 +451,7 @@ abstract class StringConstants {
   static const String kTransferEquipment = 'Transfer Equipment';
   static const String kTransfer = 'Transfer';
   static const String kSearchEquipment = 'Search Equipment';
-  static const String kViewMyEquipment = 'View my Equipment';
+  static const String kViewMyRequest = 'View my request';
   static const String kTrace = 'Trace';
   static const String kScan = 'Scan';
   static const String kEnter = 'Enter';
@@ -471,6 +474,14 @@ abstract class StringConstants {
   static const String kPartAssigned = 'Part Assigned';
   static const String kPleaseInsertValidQuantity =
       'Please insert valid planned quantity';
+  static String kMethodOfReporting = "Method of reporting";
+  static String kRegularReporting = "Regular Reporting";
+  static const String kSubmitAll = "Submit all :";
+  static const String kSubmissionDate = "Submission Date :";
+  static const String kNotSubmitted = "Not Submitted";
+  static const String kDataNotCorrect = "Date is not correct";
+  static String kSubmissionPeriod = "Submission Period";
+  static String kMonthly = "Monthly";
   static const String kSavedSuccessfully = "Saved Successfully";
   static const String kUploadImages = "Upload images";
   static const String kLocationSavedSuccessfully =
@@ -478,4 +489,18 @@ abstract class StringConstants {
   static const String kPleaseSearchOrScanTheEquipment =
       'Please Search OR Scan the equipment from top menu bar';
   static const String kClose = 'Close';
+  static const String kAddTimeSheet = 'Add TimeSheet';
+  static const String kSubmitTimeSheet = 'Submit TimeSheet';
+  static const String kMinsBreak = 'mins break';
+  static const String kTimeSheetSubmittedSuccessfully =
+      'TimeSheet Submitted Successfully';
+  static const String kDoYouWantToDeleteThisEntry =
+      'Do you want to delete this entry ?';
+  static const String kWarehouse = "Warehouse";
+  static const String kEmployee = "Employee";
+  static const String kPositions = "Positions";
+  static const String kSelectPositions = "Select Positions";
+  static const String kSelectWarehouse = "Select Warehouse";
+  static const String kSelectEmployee = "Select Employee";
+  static const String kWorkorder = "Workorder";
 }

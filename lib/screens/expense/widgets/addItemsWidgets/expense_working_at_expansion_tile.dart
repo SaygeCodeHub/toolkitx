@@ -10,16 +10,18 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../data/enums/expense_working_at_enum.dart';
 import '../../../../widgets/expansion_tile_border.dart';
+import '../expense_details_tab_one.dart';
 
 class ExpenseWorkingAtExpansionTile extends StatelessWidget {
   const ExpenseWorkingAtExpansionTile({Key? key}) : super(key: key);
   static String workingAt = '';
+  static String workingAtValue = '';
 
   @override
   Widget build(BuildContext context) {
     context
         .read<ExpenseBloc>()
-        .add(SelectExpenseWorkingAtOption(workingAt: ''));
+        .add(SelectExpenseWorkingAtOption(workingAt: '', workingAtValue: ''));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is ExpenseWorkingAtOptionSelected,
@@ -36,9 +38,9 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                   shape: ExpansionTileBorder().buildOutlineInputBorder(),
                   key: GlobalKey(),
                   title: Text(
-                      (state.workingAt.isEmpty)
+                      (state.workingAtValue.isEmpty)
                           ? StringConstants.kSelect
-                          : state.workingAt,
+                          : state.workingAtValue,
                       style: Theme.of(context).textTheme.xSmall),
                   children: [
                     ListView.builder(
@@ -59,15 +61,21 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                               controlAffinity: ListTileControlAffinity.trailing,
                               value: ExpenseWorkingAtEnum.values
                                   .elementAt(index)
-                                  .status,
+                                  .value,
                               groupValue: workingAt,
                               onChanged: (value) {
                                 workingAt = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
+                                    .value;
+                                workingAtValue = ExpenseWorkingAtEnum.values
+                                    .elementAt(index)
                                     .status;
+                                ExpenseDetailsTabOne
+                                    .manageItemsMap['workingatid'] = workingAt;
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
-                                        workingAt: workingAt));
+                                        workingAt: workingAt,
+                                        workingAtValue: workingAtValue));
                               });
                         })
                   ]));

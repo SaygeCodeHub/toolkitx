@@ -13,6 +13,7 @@ import '../../data/models/expense/close_expense_model.dart';
 import '../../data/models/expense/delete_expense_item_model.dart';
 import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
+import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -22,6 +23,7 @@ import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_hotel_and_meal_layout.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';
 
@@ -51,6 +53,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<DeleteExpenseItem>(_deleteExpenseItem);
     on<SaveExpenseItem>(_saveItem);
     on<FetchExpenseItemCustomFields>(_fetchItemCustomFields);
+    on<FetchWorkingAtNumberData>(_fetchWorkingAtNumberData);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -321,11 +324,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       isScreenChange = event.isScreenChange;
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
           await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
       emit(ExpenseItemMasterFetched(
           fetchItemMasterModel: fetchItemMasterModel,
-          isScreenChange: isScreenChange));
+          isScreenChange: isScreenChange,
+          apiKey: apiKey));
       add(SelectExpenseDate(date: ''));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
@@ -342,7 +347,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   _selectWorkingAtOption(
       SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
-    emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
+    emit(ExpenseWorkingAtOptionSelected(
+        workingAt: event.workingAt, workingAtValue: event.workingAtValue));
+    add(FetchWorkingAtNumberData(groupBy: event.workingAt));
   }
 
   _selectWorkingAtNumber(
@@ -435,8 +442,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
             itemNotSaved:
                 StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
       } else {
+        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
+            .expenseCustomFieldsList
+            .where((map) => map.isNotEmpty)
+            .toList();
         Map saveItemMap = {
-          "id": "",
+          "id": event.expenseItemMap['id'] ?? '',
           "expenseid": expenseId,
           "date": event.expenseItemMap['date'] ?? '',
           "itemid": event.expenseItemMap['itemid'] ?? '',
@@ -451,7 +462,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
           "userid": userId,
           "hashcode": hashCode,
-          "questions": []
+          "questions": filteredList
         };
         SaveExpenseItemModel saveExpenseItemModel =
             await _expenseRepository.saveExpenseItem(saveItemMap);
@@ -485,6 +496,28 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseCustomFieldsNotFetched(fieldsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchWorkingAtNumberData(
+      FetchWorkingAtNumberData event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingWorkingAtNumberData());
+      ExpenseWorkingAtNumberDataModel expenseWorkingAtNumberDataModel =
+          await _expenseRepository.fetchWorkingAtNumberData({
+        "groupby": event.groupBy,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (expenseWorkingAtNumberDataModel.data.isNotEmpty) {
+        emit(WorkingAtNumberDataFetched(
+            expenseWorkingAtNumberDataModel: expenseWorkingAtNumberDataModel));
+      } else {
+        emit(WorkingAtNumberDataNotFetched(
+            dataNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(WorkingAtNumberDataNotFetched(dataNotFetched: e.toString()));
     }
   }
 }

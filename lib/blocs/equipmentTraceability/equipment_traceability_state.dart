@@ -104,6 +104,116 @@ class EquipmentByCodeNotFetched extends EquipmentTraceabilityState {
   EquipmentByCodeNotFetched({required this.errorMessage});
 }
 
+class MyRequestFetching extends EquipmentTraceabilityState {}
+
+class MyRequestFetched extends EquipmentTraceabilityState {
+  final FetchMyRequestModel fetchMyRequestModel;
+  final List popUpMenuItems;
+
+  MyRequestFetched(
+      {required this.fetchMyRequestModel, required this.popUpMenuItems});
+}
+
+class MyRequestNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  MyRequestNotFetched({required this.errorMessage});
+}
+
+class TransferTypeSelected extends EquipmentTraceabilityState {
+  final String transferType;
+  final String transferValue;
+
+  TransferTypeSelected(
+      {required this.transferType, required this.transferValue});
+}
+
+class WarehouseSelected extends EquipmentTraceabilityState {
+  final Map warehouseMap;
+
+  WarehouseSelected({required this.warehouseMap});
+}
+
+class EquipmentWareHouseFetching extends EquipmentTraceabilityState {}
+
+class EquipmentWareHouseFetched extends EquipmentTraceabilityState {
+  final FetchWarehouseModel fetchWarehouseModel;
+
+  EquipmentWareHouseFetched({required this.fetchWarehouseModel});
+}
+
+class EquipmentWareHouseNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EquipmentWareHouseNotFetched({required this.errorMessage});
+}
+
+class WarehousePositionsSelected extends EquipmentTraceabilityState {
+  final Map positionsMap;
+
+  WarehousePositionsSelected({required this.positionsMap});
+}
+
+class WarehousePositionsFetching extends EquipmentTraceabilityState {}
+
+class WarehousePositionsFetched extends EquipmentTraceabilityState {
+  final FetchWarehousePositionsModel fetchWarehousePositionsModel;
+
+  WarehousePositionsFetched({required this.fetchWarehousePositionsModel});
+}
+
+class WarehousePositionsNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  WarehousePositionsNotFetched({required this.errorMessage});
+}
+
+class EmployeeSelected extends EquipmentTraceabilityState {
+  final Map employeeMap;
+
+  EmployeeSelected({required this.employeeMap});
+}
+
+class EmployeeFetching extends EquipmentTraceabilityState {}
+
+class EmployeeFetched extends EquipmentTraceabilityState {
+  final FetchEmployeesModel fetchEmployeesModel;
+
+  EmployeeFetched({required this.fetchEmployeesModel});
+}
+
+class EmployeeNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EmployeeNotFetched({required this.errorMessage});
+}
+
+class TransferRequestSending extends EquipmentTraceabilityState {}
+
+class TransferRequestSent extends EquipmentTraceabilityState {}
+
+class TransferRequestNotSent extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotSent({required this.errorMessage});
+}
+
+class EquipmentWorkOrderSelected extends EquipmentTraceabilityState {
+  final Map workOrderEquipmentMap;
+
+  EquipmentWorkOrderSelected({required this.workOrderEquipmentMap});
+}
+
+class TransferRequestApproving extends EquipmentTraceabilityState {}
+
+class TransferRequestApproved extends EquipmentTraceabilityState {}
+
+class TransferRequestNotApproved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotApproved({required this.errorMessage});
+}
+
 class SearchEquipmentSelected extends EquipmentTraceabilityState {
   final bool isChecked;
 

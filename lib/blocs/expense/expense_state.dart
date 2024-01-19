@@ -1,5 +1,6 @@
 import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
+import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
 import '../../data/models/expense/fetch_expense_master_model.dart';
@@ -122,9 +123,12 @@ class FetchingExpenseItemMaster extends ExpenseStates {}
 class ExpenseItemMasterFetched extends ExpenseStates {
   final FetchItemMasterModel fetchItemMasterModel;
   final bool isScreenChange;
+  final String apiKey;
 
   ExpenseItemMasterFetched(
-      {required this.isScreenChange, required this.fetchItemMasterModel});
+      {required this.apiKey,
+      required this.isScreenChange,
+      required this.fetchItemMasterModel});
 }
 
 class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
@@ -147,8 +151,10 @@ class ExpenseItemSelected extends ExpenseStates {
 
 class ExpenseWorkingAtOptionSelected extends ExpenseStates {
   final String workingAt;
+  final String workingAtValue;
 
-  ExpenseWorkingAtOptionSelected({required this.workingAt});
+  ExpenseWorkingAtOptionSelected(
+      {required this.workingAtValue, required this.workingAt});
 }
 
 class ExpenseWorkingAtNumberSelected extends ExpenseStates {
@@ -219,4 +225,18 @@ class ExpenseCustomFieldsNotFetched extends ExpenseStates {
   final String fieldsNotFetched;
 
   ExpenseCustomFieldsNotFetched({required this.fieldsNotFetched});
+}
+
+class FetchingWorkingAtNumberData extends ExpenseStates {}
+
+class WorkingAtNumberDataFetched extends ExpenseStates {
+  final ExpenseWorkingAtNumberDataModel expenseWorkingAtNumberDataModel;
+
+  WorkingAtNumberDataFetched({required this.expenseWorkingAtNumberDataModel});
+}
+
+class WorkingAtNumberDataNotFetched extends ExpenseStates {
+  final String dataNotFetched;
+
+  WorkingAtNumberDataNotFetched({required this.dataNotFetched});
 }

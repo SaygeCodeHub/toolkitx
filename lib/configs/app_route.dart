@@ -6,6 +6,7 @@ import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
+import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -52,11 +53,14 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/equipmentTraceability/approve_equipment_request_screen.dart';
 import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_list_screen.dart';
+import '../screens/equipmentTraceability/send_transfer_screen.dart';
 import '../screens/equipmentTraceability/transfer_equipment_screen.dart';
+import '../screens/equipmentTraceability/view_my_request_screen.dart';
 import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
@@ -74,6 +78,7 @@ import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
 import '../screens/leavesAndHolidays/leaves_summary_screen.dart';
+import '../screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import '../screens/location/location_details_screen.dart';
 import '../screens/location/location_list_screen.dart';
 import '../screens/location/widgets/location_filter_screen.dart';
@@ -500,6 +505,18 @@ class AppRoutes {
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
         return _createRoute(const EnterEquipmentCodeScreen());
+      case TimeSheetCheckInScreen.routeName:
+        return _createRoute(
+            TimeSheetCheckInScreen(timeSheetMap: settings.arguments as Map));
+      case AddAndEditTimeSheetScreen.routeName:
+        return _createRoute(const AddAndEditTimeSheetScreen());
+      case ViewMyRequestScreen.routeName:
+        return _createRoute(const ViewMyRequestScreen());
+      case SendTransferScreen.routeName:
+        return _createRoute(const SendTransferScreen());
+      case ApproveEquipmentRequestScreen.routeName:
+        return _createRoute(ApproveEquipmentRequestScreen(
+            requestId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
