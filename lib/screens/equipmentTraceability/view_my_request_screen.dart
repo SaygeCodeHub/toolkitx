@@ -52,8 +52,7 @@ class ViewMyRequestScreen extends StatelessWidget {
             }
             if (state is TransferRequestNotRejected) {
               ProgressBar.dismiss(context);
-              showCustomSnackBar(
-                  context, state.errorMessage, '');
+              showCustomSnackBar(context, state.errorMessage, '');
             }
           },
           buildWhen: (previousState, currentState) =>

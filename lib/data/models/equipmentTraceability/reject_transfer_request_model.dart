@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-RejectTransferRequestModel rejectTransferRequestModelFromJson(String str) => RejectTransferRequestModel.fromJson(json.decode(str));
+RejectTransferRequestModel rejectTransferRequestModelFromJson(String str) =>
+    RejectTransferRequestModel.fromJson(json.decode(str));
 
-String rejectTransferRequestModelToJson(RejectTransferRequestModel data) => json.encode(data.toJson());
+String rejectTransferRequestModelToJson(RejectTransferRequestModel data) =>
+    json.encode(data.toJson());
 
 class RejectTransferRequestModel {
   final int status;
@@ -15,25 +17,24 @@ class RejectTransferRequestModel {
     required this.data,
   });
 
-  factory RejectTransferRequestModel.fromJson(Map<String, dynamic> json) => RejectTransferRequestModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory RejectTransferRequestModel.fromJson(Map<String, dynamic> json) =>
+      RejectTransferRequestModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
   Data();
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-  );
+  factory Data.fromJson(Map<String, dynamic> json) => Data();
 
-  Map<String, dynamic> toJson() => {
-  };
+  Map<String, dynamic> toJson() => {};
 }

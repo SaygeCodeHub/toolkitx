@@ -471,7 +471,8 @@ class EquipmentTraceabilityBloc
     }
   }
 
-  Future<FutureOr<void>> _rejectTransferRequest(RejectTransferRequest event, Emitter<EquipmentTraceabilityState> emit) async {
+  Future<FutureOr<void>> _rejectTransferRequest(RejectTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
     emit(TransferRequestRejecting());
     try {
       String? hashCode =
@@ -481,14 +482,12 @@ class EquipmentTraceabilityBloc
         "hashcode": hashCode,
         "userid": userId,
         "equipmentlist": [
-          {
-            "id": event.requestId
-          }
+          {"id": event.requestId}
         ]
       };
       RejectTransferRequestModel rejectTransferRequestModel =
           await _equipmentTraceabilityRepo
-          .rejectTransferRequest(rejectTransferRequestMap);
+              .rejectTransferRequest(rejectTransferRequestMap);
       if (rejectTransferRequestModel.status == 200) {
         emit(TransferRequestRejected());
       } else {
