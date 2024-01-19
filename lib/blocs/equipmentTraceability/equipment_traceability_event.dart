@@ -106,3 +106,9 @@ class ApproveTransferRequest extends EquipmentTraceabilityEvent {
 
   ApproveTransferRequest({required this.requestId});
 }
+
+class RejectTransferRequest extends EquipmentTraceabilityEvent {
+  final String requestId;
+
+  RejectTransferRequest({required this.requestId});
+}

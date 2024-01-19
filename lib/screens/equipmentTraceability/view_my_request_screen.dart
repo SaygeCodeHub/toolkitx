@@ -11,6 +11,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../configs/app_color.dart';
 import '../../widgets/custom_snackbar.dart';
+import '../../widgets/progress_bar.dart';
 
 class ViewMyRequestScreen extends StatelessWidget {
   static const routeName = "ViewMyRequestScreen";
@@ -37,6 +38,21 @@ class ViewMyRequestScreen extends StatelessWidget {
             if (state is MyRequestFetched &&
                 context.read<EquipmentTraceabilityBloc>().requestReachedMax) {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
+            }
+            if (state is TransferRequestRejecting) {
+              ProgressBar.show(context);
+            }
+            if (state is TransferRequestRejected) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, "Rejected", '');
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, ViewMyRequestScreen.routeName);
+            }
+            if (state is TransferRequestNotRejected) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(
+                  context, state.errorMessage, '');
             }
           },
           buildWhen: (previousState, currentState) =>
