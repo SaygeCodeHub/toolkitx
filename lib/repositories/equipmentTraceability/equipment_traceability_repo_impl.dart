@@ -1,3 +1,4 @@
+
 import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
@@ -126,7 +127,7 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
   @override
   Future<RejectTransferRequestModel> rejectTransferRequest(Map rejectTransferRequestMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}equipment/arejecttransferrequest",
+        "${ApiConstants.baseUrl}equipment/rejecttransferrequest",
         rejectTransferRequestMap);
     return RejectTransferRequestModel.fromJson(response);
   }

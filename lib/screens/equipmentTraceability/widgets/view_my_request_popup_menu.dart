@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 
@@ -37,7 +38,7 @@ class ViewMyRequestPopUp extends StatelessWidget {
                 context: context,
                 builder: (context) => AndroidPopUp(
                       titleValue: DatabaseUtil.getText('Reject'),
-                      contentValue: "Are you sure to reject?",
+                      contentValue: StringConstants.kAreYouSureToReject,
                       onPrimaryButton: () {
                         context
                             .read<EquipmentTraceabilityBloc>()

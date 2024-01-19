@@ -44,10 +44,11 @@ class ViewMyRequestScreen extends StatelessWidget {
             }
             if (state is TransferRequestRejected) {
               ProgressBar.dismiss(context);
-              showCustomSnackBar(context, "Rejected", '');
+              showCustomSnackBar(context, StringConstants.kRequestRejected, '');
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, ViewMyRequestScreen.routeName);
+              context
+                  .read<EquipmentTraceabilityBloc>()
+                  .add(FetchMyRequest(pageNo: pageNo));
             }
             if (state is TransferRequestNotRejected) {
               ProgressBar.dismiss(context);
