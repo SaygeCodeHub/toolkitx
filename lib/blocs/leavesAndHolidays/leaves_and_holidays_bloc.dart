@@ -38,10 +38,12 @@ class LeavesAndHolidaysBloc
     on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
     on<DeleteTimeSheet>(_deleteTimeSheet);
     on<SaveTimeSheet>(_saveTimeSheet);
+    on<SelectCheckBox>(_selectCheckBox);
   }
 
   String year = "";
   String month = "";
+  List timeSheetIdList = [];
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -264,5 +266,10 @@ class LeavesAndHolidaysBloc
     } catch (e) {
       emit(TimeSheetNotSaved(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectCheckBox(
+      SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    emit(SelectedCheckBox(isChecked: event.isChecked));
   }
 }

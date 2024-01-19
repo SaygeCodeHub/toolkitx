@@ -12,7 +12,6 @@ import 'package:toolkit/widgets/secondary_button.dart';
 import '../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import '../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../configs/app_spacing.dart';
-import 'leaves_and_holidays_checkbox.dart';
 import 'leaves_details_screen.dart';
 import 'leaves_summary_screen.dart';
 import 'widgtes/leaves_and_holidays_list_body.dart';
@@ -94,17 +93,19 @@ class LeavesAndHolidaysScreen extends StatelessWidget {
                             Text(StringConstants.kRegularReporting),
                           ]),
                       const SizedBox(height: smallerSpacing),
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                        const Text(StringConstants.kSubmitAll),
-                        SizedBox(
-                            width: smallerSpacing,
-                            child: TimeSheetCheckbox(
-                              id: "",
-                              idList: [],
-                              onCreatedForChanged: (idList) {},
-                              selectedCreatedForIdList: [],
-                            ))
-                      ]),
+                      const Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(StringConstants.kSubmitAll),
+                            // SizedBox(
+                            //     width: smallerSpacing,
+                            //     child: TimeSheetCheckbox(
+                            //       id: data.dates[].status,
+                            //       idList: [],
+                            //       onCreatedForChanged: (idList) {},
+                            //       selectedCreatedForIdList: [],
+                            //     ))
+                          ]),
                       Expanded(
                           child: LeavesAndHolidaysListBody(
                               data: data, isChecked: isChecked))

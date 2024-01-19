@@ -22,7 +22,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
   final TimesheetData data;
   final bool isChecked;
   static List leavesAndHolidaysIdList = [];
-  static int index = 0;
+  static int index = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +121,18 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                         id: state.fetchTimeSheetModel.data
                                             .dates[index].id,
                                         onCreatedForChanged:
-                                            (List<dynamic> idList) {},
-                                        idList: const [],
+                                            (List<dynamic> idList) {
+                                          context
+                                              .read<LeavesAndHolidaysBloc>()
+                                              .timeSheetIdList
+                                              .add({
+                                            "id": idList
+                                                .toString()
+                                                .replaceAll('[', "")
+                                                .replaceAll(']', "")
+                                                .replaceAll(',', ",")
+                                          });
+                                        },
                                       )
                                     : const SizedBox.shrink()),
                           );

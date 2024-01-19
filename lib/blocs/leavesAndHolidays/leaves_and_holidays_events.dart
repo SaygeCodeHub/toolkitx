@@ -61,3 +61,9 @@ class SaveTimeSheet extends LeavesAndHolidaysEvent {
 
   SaveTimeSheet({required this.saveTimeSheetMap});
 }
+
+class SelectCheckBox extends LeavesAndHolidaysEvent {
+  final bool isChecked;
+
+  SelectCheckBox({required this.isChecked});
+}
