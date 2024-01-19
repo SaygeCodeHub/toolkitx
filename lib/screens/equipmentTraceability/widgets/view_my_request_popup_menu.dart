@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../approve_equipment_request_screen.dart';
 
@@ -29,7 +33,19 @@ class ViewMyRequestPopUp extends StatelessWidget {
                 context, ApproveEquipmentRequestScreen.routeName,
                 arguments: requestId);
           }
-          if (value == DatabaseUtil.getText('Reject')) {}
+          if (value == DatabaseUtil.getText('Reject')) {
+            showDialog(
+                context: context,
+                builder: (context) => AndroidPopUp(
+                      titleValue: DatabaseUtil.getText('Reject'),
+                      contentValue: StringConstants.kAreYouSureToReject,
+                      onPrimaryButton: () {
+                        context
+                            .read<EquipmentTraceabilityBloc>()
+                            .add(RejectTransferRequest(requestId: requestId));
+                      },
+                    ));
+          }
           if (value == DatabaseUtil.getText("Cancel")) {}
         },
         position: PopupMenuPosition.under,

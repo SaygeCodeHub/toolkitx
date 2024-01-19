@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_pa
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/reject_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/send_transfer_rquest_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
@@ -53,6 +54,7 @@ class EquipmentTraceabilityBloc
     on<SendTransferRequest>(_sendTransferRequest);
     on<SelectWorkOrderEquipment>(_selectWorkOrderEquipment);
     on<ApproveTransferRequest>(_approveTransferRequest);
+    on<RejectTransferRequest>(_rejectTransferRequest);
   }
 
   Map filters = {};
@@ -466,6 +468,34 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(TransferRequestNotApproved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectTransferRequest(RejectTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestRejecting());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectTransferRequestMap = {
+        "hashcode": hashCode,
+        "userid": userId,
+        "equipmentlist": [
+          {"id": event.requestId}
+        ]
+      };
+      RejectTransferRequestModel rejectTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .rejectTransferRequest(rejectTransferRequestMap);
+      if (rejectTransferRequestModel.status == 200) {
+        emit(TransferRequestRejected());
+      } else {
+        emit(TransferRequestNotRejected(
+            errorMessage: rejectTransferRequestModel.message));
+      }
+    } catch (e) {
+      emit(TransferRequestNotRejected(errorMessage: e.toString()));
     }
   }
 }

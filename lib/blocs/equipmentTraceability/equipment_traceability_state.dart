@@ -213,3 +213,13 @@ class TransferRequestNotApproved extends EquipmentTraceabilityState {
 
   TransferRequestNotApproved({required this.errorMessage});
 }
+
+class TransferRequestRejecting extends EquipmentTraceabilityState {}
+
+class TransferRequestRejected extends EquipmentTraceabilityState {}
+
+class TransferRequestNotRejected extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotRejected({required this.errorMessage});
+}
