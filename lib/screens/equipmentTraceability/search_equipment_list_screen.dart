@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -117,7 +116,6 @@ class SearchEquipmentListScreen extends StatelessWidget {
     bottomNavigationBar: SearchEquipmentListScreen.isTransferScreen == true ?  Padding(
       padding: const EdgeInsets.all(xxTinierSpacing),
       child: PrimaryButton(onPressed: () {
-        log('list==============>$codeList');
         for(var code in codeList){
         context.read<EquipmentTraceabilityBloc>().add(FetchEquipmentByCode(code: code));
         }

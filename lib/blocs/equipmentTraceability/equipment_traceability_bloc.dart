@@ -302,6 +302,8 @@ class EquipmentTraceabilityBloc
               "id": fetchEquipmentByCodeModel.data.id.trim(),
               "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
               "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
+              "currentitemcount": 0,
+              "usercount": 0
             });
           }
           break;
