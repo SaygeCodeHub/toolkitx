@@ -5,11 +5,13 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/widgets/view_my_request_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../configs/app_color.dart';
 import '../../widgets/custom_snackbar.dart';
+import '../../widgets/progress_bar.dart';
 
 class ViewMyRequestScreen extends StatelessWidget {
   static const routeName = "ViewMyRequestScreen";
@@ -37,6 +39,21 @@ class ViewMyRequestScreen extends StatelessWidget {
                 context.read<EquipmentTraceabilityBloc>().requestReachedMax) {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
+            if (state is TransferRequestRejecting) {
+              ProgressBar.show(context);
+            }
+            if (state is TransferRequestRejected) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, StringConstants.kRequestRejected, '');
+              Navigator.pop(context);
+              context
+                  .read<EquipmentTraceabilityBloc>()
+                  .add(FetchMyRequest(pageNo: pageNo));
+            }
+            if (state is TransferRequestNotRejected) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.errorMessage, '');
+            }
           },
           buildWhen: (previousState, currentState) =>
               (currentState is MyRequestFetching && pageNo == 1) ||
@@ -62,6 +79,7 @@ class ViewMyRequestScreen extends StatelessWidget {
                                 color: AppColor.grey)),
                         trailing: ViewMyRequestPopUp(
                           popUpMenuItems: state.popUpMenuItems,
+                          requestId: data.transfers![index].id!,
                         ),
                       ),
                     );
@@ -69,9 +87,11 @@ class ViewMyRequestScreen extends StatelessWidget {
                   separatorBuilder: (context, index) {
                     return const SizedBox(height: xxTinierSpacing);
                   });
-            } else {
-              return const SizedBox.shrink();
+            } else if (state is MyRequestNotFetched) {
+              return Center(
+                  child: Text(DatabaseUtil.getText('no_records_found')));
             }
+            return const SizedBox.shrink();
           },
         ),
       ),

@@ -53,6 +53,7 @@ import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
+import '../screens/equipmentTraceability/approve_equipment_request_screen.dart';
 import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
 import '../screens/equipmentTraceability/equipment_trace_screen.dart';
 import '../screens/equipmentTraceability/search_equipment_filter_screen.dart';
@@ -513,6 +514,9 @@ class AppRoutes {
         return _createRoute(const ViewMyRequestScreen());
       case SendTransferScreen.routeName:
         return _createRoute(const SendTransferScreen());
+      case ApproveEquipmentRequestScreen.routeName:
+        return _createRoute(ApproveEquipmentRequestScreen(
+            requestId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
