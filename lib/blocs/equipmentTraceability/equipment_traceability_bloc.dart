@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
@@ -262,85 +261,69 @@ class EquipmentTraceabilityBloc
   Future<FutureOr<void>> _fetchEquipmentByCode(FetchEquipmentByCode event,
       Emitter<EquipmentTraceabilityState> emit) async {
     emit(EquipmentByCodeFetching());
-    // try {
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-    FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
-        await _equipmentTraceabilityRepo.fetchEquipmentByCode(
-            hashCode, event.code, userId);
-    code = event.code;
-
-    log('BlocCode============>$code');
-
-    log('equipmentList index of============>${equipmentList.indexWhere((element) => element.toString().trim() == fetchEquipmentByCodeModel.data.id.toString().trim())}');
-    if (fetchEquipmentByCodeModel.status == 200) {
-      // log('equipmentList============>${equipmentCodeList.contains(fetchEquipmentByCodeModel.data.id.toString())}');
-      // if(equipmentCodeList.isNotEmpty){
-      //   for(int i = 0; i < equipmentCodeList.length; i++){
-      //     if(equipmentCodeList.contains(fetchEquipmentByCodeModel.data.id.toString().trim())){
-      //       print('equipmentList[i].id---->${equipmentCodeList[i]}');
-      //       equipmentCodeList.remove(equipmentCodeList[i]);
-      //     }else{
-      //       equipmentList.add({
-      //         "id": fetchEquipmentByCodeModel.data.id.trim(),
-      //         "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-      //         "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
-      //       });
-      //     }
-      //   }
-      // }
-      print('equiCodelist----------->$equipmentCodeList');
-      bool doesCodeExist = false;
-      for (int i = 0; i < equipmentCodeList.length; i++) {
-        String codeString = equipmentCodeList[i].toString();
-        print('codeString----------->$codeString');
-        print('dataId----------->${fetchEquipmentByCodeModel.data.id.toString()}');
-        if (codeString.contains(fetchEquipmentByCodeModel.data.id.toString())) {
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchEquipmentByCodeModel fetchEquipmentByCodeModel =
+          await _equipmentTraceabilityRepo.fetchEquipmentByCode(
+              hashCode, event.code, userId);
+      code = event.code;
+      if (fetchEquipmentByCodeModel.status == 200) {
+        if (equipmentCodeList.isNotEmpty) {
+          for (int i = 0; i < equipmentCodeList.length; i++) {
+            String codeString = equipmentCodeList[i].toString();
+            if (codeString
+                .contains(fetchEquipmentByCodeModel.data.id.toString())) {
+              if (equipmentList.indexWhere((element) =>
+                      element["id"].toString().trim() ==
+                      fetchEquipmentByCodeModel.data.id.trim()) ==
+                  -1) {
+                equipmentList.add({
+                  "id": fetchEquipmentByCodeModel.data.id.trim(),
+                  "equipmentcode":
+                      fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+                  "equipmentname":
+                      fetchEquipmentByCodeModel.data.equipmentname.trim(),
+                  "currentitemcount": 0,
+                  "usercount": 0
+                });
+              }
+              break;
+            }
+          }
+        } else {
           if (equipmentList.indexWhere((element) =>
-          element.toString().trim() ==
-              fetchEquipmentByCodeModel.data.id.trim()) == -1) {
+                  element.toString().trim() ==
+                  fetchEquipmentByCodeModel.data.id.trim()) ==
+              -1) {
             equipmentList.add({
               "id": fetchEquipmentByCodeModel.data.id.trim(),
-              "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-              "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
+              "equipmentcode":
+                  fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+              "equipmentname":
+                  fetchEquipmentByCodeModel.data.equipmentname.trim(),
               "currentitemcount": 0,
               "usercount": 0
             });
           }
-          break;
         }
-        print('doesStringExist============>$doesCodeExist');
 
+        emit(EquipmentByCodeFetched(
+            fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
+            equipmentList: equipmentList));
+      } else {
+        emit(EquipmentByCodeNotFetched(
+            errorMessage: fetchEquipmentByCodeModel.message));
       }
-
-    // if (equipmentList.indexWhere((element) =>
-    // element.toString().trim() ==
-    //     fetchEquipmentByCodeModel.data.id.trim()) == -1) {
-    //   equipmentList.add({
-    //     "id": fetchEquipmentByCodeModel.data.id.trim(),
-    //     "equipmentcode": fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-    //     "equipmentname": fetchEquipmentByCodeModel.data.equipmentname.trim(),
-    //   });
-    //   }
-      log("Bloclist=============>$equipmentList");
-
-      emit(EquipmentByCodeFetched(
-          fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
-          equipmentList: equipmentList));
-    } else {
-      emit(EquipmentByCodeNotFetched(
-          errorMessage: fetchEquipmentByCodeModel.message));
+    } catch (e) {
+      emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
-    // } catch (e) {
-    //   emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
-    // }
   }
 
   FutureOr<void> _selectSearchEquipment(
       SelectSearchEquipment event, Emitter<EquipmentTraceabilityState> emit) {
     emit(SearchEquipmentSelected(isChecked: event.isChecked));
-    log("isCheckedBloc===========>${event.isChecked}");
   }
 
   Future<FutureOr<void>> _fetchMyRequest(

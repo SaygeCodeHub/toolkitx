@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
@@ -32,96 +31,98 @@ class SearchEquipmentListScreen extends StatelessWidget {
         .read<EquipmentTraceabilityBloc>()
         .add(FetchSearchEquipmentList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-        appBar: const GenericAppBar(title: StringConstants.kSearchEquipment),
-        body: Padding(
-            padding: const EdgeInsets.only(
-                left: leftRightMargin,
-                right: leftRightMargin,
-                top: xxTinierSpacing),
-            child: Column(children: [
-              BlocBuilder<EquipmentTraceabilityBloc,
-                  EquipmentTraceabilityState>(
-                buildWhen: (previousState, currentState) {
-                  if (currentState is SearchEquipmentListFetching &&
-                      isFromHome == true) {
-                    return true;
-                  } else if (currentState is SearchEquipmentListFetched) {
-                    return true;
+      appBar: const GenericAppBar(title: StringConstants.kSearchEquipment),
+      body: Padding(
+          padding: const EdgeInsets.only(
+              left: leftRightMargin,
+              right: leftRightMargin,
+              top: xxTinierSpacing),
+          child: Column(children: [
+            BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+              buildWhen: (previousState, currentState) {
+                if (currentState is SearchEquipmentListFetching &&
+                    isFromHome == true) {
+                  return true;
+                } else if (currentState is SearchEquipmentListFetched) {
+                  return true;
+                }
+                return false;
+              },
+              builder: (context, state) {
+                if (state is SearchEquipmentListFetched) {
+                  return CustomIconButtonRow(
+                      primaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, SearchEquipmentFilterScreen.routeName);
+                      },
+                      secondaryOnPress: () {},
+                      secondaryVisible: false,
+                      clearVisible:
+                          state.filtersMap.isNotEmpty && isFromHome != true,
+                      clearOnPress: () {
+                        pageNo = 1;
+                        context
+                            .read<EquipmentTraceabilityBloc>()
+                            .hasReachedMax = false;
+                        context
+                            .read<EquipmentTraceabilityBloc>()
+                            .searchEquipmentDatum
+                            .clear();
+                        context
+                            .read<EquipmentTraceabilityBloc>()
+                            .add(ClearSearchEquipmentFilter());
+                        context.read<EquipmentTraceabilityBloc>().add(
+                            FetchSearchEquipmentList(
+                                pageNo: 1, isFromHome: isFromHome));
+                      });
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+                buildWhen: (previousState, currentState) =>
+                    (currentState is SearchEquipmentListFetching &&
+                        pageNo == 1) ||
+                    (currentState is SearchEquipmentListFetched),
+                listener: (context, state) {
+                  if (state is SearchEquipmentListFetched &&
+                      context.read<EquipmentTraceabilityBloc>().hasReachedMax) {
+                    showCustomSnackBar(
+                        context, StringConstants.kAllDataLoaded, '');
                   }
-                  return false;
                 },
                 builder: (context, state) {
-                  if (state is SearchEquipmentListFetched) {
-                    return CustomIconButtonRow(
-                        primaryOnPress: () {
-                          Navigator.pushNamed(
-                              context, SearchEquipmentFilterScreen.routeName);
-                        },
-                        secondaryOnPress: () {},
-                        secondaryVisible: false,
-                        clearVisible:
-                            state.filtersMap.isNotEmpty && isFromHome != true,
-                        clearOnPress: () {
-                          pageNo = 1;
-                          context
-                              .read<EquipmentTraceabilityBloc>()
-                              .hasReachedMax = false;
-                          context
-                              .read<EquipmentTraceabilityBloc>()
-                              .searchEquipmentDatum
-                              .clear();
-                          context
-                              .read<EquipmentTraceabilityBloc>()
-                              .add(ClearSearchEquipmentFilter());
-                          context.read<EquipmentTraceabilityBloc>().add(
-                              FetchSearchEquipmentList(
-                                  pageNo: 1, isFromHome: isFromHome));
-                        });
+                  if (state is SearchEquipmentListFetching) {
+                    return const Expanded(
+                        child: Center(child: CircularProgressIndicator()));
+                  } else if (state is SearchEquipmentListFetched) {
+                    if (state.data.isNotEmpty) {
+                      return SearchEquipmentListBody(data: state.data);
+                    } else {
+                      return NoRecordsText(
+                          text: DatabaseUtil.getText('no_records_found'));
+                    }
                   } else {
                     return const SizedBox.shrink();
                   }
-                },
-              ),
-              BlocConsumer<EquipmentTraceabilityBloc,
-                      EquipmentTraceabilityState>(
-                  buildWhen: (previousState, currentState) =>
-                      (currentState is SearchEquipmentListFetching &&
-                          pageNo == 1) ||
-                      (currentState is SearchEquipmentListFetched),
-                  listener: (context, state) {
-                    if (state is SearchEquipmentListFetched &&
-                        context
-                            .read<EquipmentTraceabilityBloc>()
-                            .hasReachedMax) {
-                      showCustomSnackBar(
-                          context, StringConstants.kAllDataLoaded, '');
+                })
+          ])),
+      bottomNavigationBar: SearchEquipmentListScreen.isTransferScreen == true
+          ? Padding(
+              padding: const EdgeInsets.all(xxTinierSpacing),
+              child: PrimaryButton(
+                  onPressed: () {
+                    for (var code in codeList) {
+                      context
+                          .read<EquipmentTraceabilityBloc>()
+                          .add(FetchEquipmentByCode(code: code));
                     }
+                    Navigator.pop(context);
                   },
-                  builder: (context, state) {
-                    if (state is SearchEquipmentListFetching) {
-                      return const Expanded(
-                          child: Center(child: CircularProgressIndicator()));
-                    } else if (state is SearchEquipmentListFetched) {
-                      if (state.data.isNotEmpty) {
-                        return SearchEquipmentListBody(data: state.data);
-                      } else {
-                        return NoRecordsText(
-                            text: DatabaseUtil.getText('no_records_found'));
-                      }
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  })
-            ])),
-    bottomNavigationBar: SearchEquipmentListScreen.isTransferScreen == true ?  Padding(
-      padding: const EdgeInsets.all(xxTinierSpacing),
-      child: PrimaryButton(onPressed: () {
-        for(var code in codeList){
-        context.read<EquipmentTraceabilityBloc>().add(FetchEquipmentByCode(code: code));
-        }
-        Navigator.pop(context);
-      }, textValue: StringConstants.kDone),
-    ) : const SizedBox.shrink(),
+                  textValue: StringConstants.kDone),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }
