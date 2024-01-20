@@ -270,6 +270,6 @@ class LeavesAndHolidaysBloc
 
   FutureOr<void> _selectCheckBox(
       SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
-    emit(SelectedCheckBox(isChecked: event.isChecked));
+    emit(CheckBoxSelected(isChecked: event.isChecked));
   }
 }

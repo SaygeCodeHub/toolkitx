@@ -5,7 +5,6 @@ import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
-import '../../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
@@ -101,46 +100,26 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                           )
                         : const Text(StringConstants.kNotSubmitted,
                             style: TextStyle(color: AppColor.deepBlue)),
-                    BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
-                      buildWhen: (previous, currentState) =>
-                          currentState is GetTimeSheetFetching ||
-                          currentState is GetTimeSheetFetched ||
-                          currentState is GetTimeSheetNotFetched,
-                      builder: (context, state) {
-                        if (state is GetTimeSheetFetched) {
-                          return Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: xxxSmallestSpacing,
-                                    bottom: xxxSmallestSpacing),
-                                child: (data.dates[index].id != '' &&
-                                        data.dates[index].hours != '-')
-                                    ? TimeSheetCheckbox(
-                                        selectedCreatedForIdList:
-                                            leavesAndHolidaysIdList,
-                                        id: state.fetchTimeSheetModel.data
-                                            .dates[index].id,
-                                        onCreatedForChanged:
-                                            (List<dynamic> idList) {
-                                          context
-                                              .read<LeavesAndHolidaysBloc>()
-                                              .timeSheetIdList
-                                              .add({
-                                            "id": idList
-                                                .toString()
-                                                .replaceAll('[', "")
-                                                .replaceAll(']', "")
-                                                .replaceAll(',', ",")
-                                          });
-                                        },
-                                      )
-                                    : const SizedBox.shrink()),
-                          );
-                        } else if (state is GetTimeSheetNotFetched) {
-                          return const Text(StringConstants.kDataNotCorrect);
-                        }
-                        return const SizedBox.shrink();
-                      },
+                    Expanded(
+                      child: (data.dates[index].id != '' &&
+                              data.dates[index].hours != '-')
+                          ? TimeSheetCheckbox(
+                              selectedCreatedForIdList: leavesAndHolidaysIdList,
+                              id: data.dates[index].id,
+                              onCreatedForChanged: (List<dynamic> idList) {
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .timeSheetIdList
+                                    .add({
+                                  "id": idList
+                                      .toString()
+                                      .replaceAll('[', "")
+                                      .replaceAll(']', "")
+                                      .replaceAll(',', ",")
+                                });
+                              },
+                            )
+                          : const SizedBox.shrink(),
                     )
                   ],
                 ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
@@ -40,14 +42,16 @@ class TimeSheetCheckbox extends StatelessWidget {
         .add(SelectCheckBox(isChecked: isChecked));
     return BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
       buildWhen: (previousState, currentState) =>
-          currentState is SelectedCheckBox,
+          currentState is CheckBoxSelected,
       builder: (context, state) {
-        if (state is SelectedCheckBox) {
+        log("state==================>$state");
+        if (state is CheckBoxSelected) {
           return Checkbox(
             activeColor: AppColor.deepBlue,
             value: selectedCreatedForIdList.contains(id),
             onChanged: (isChecked) {
               _checkboxChange(isChecked, id);
+              log("checked=========>");
               context
                   .read<LeavesAndHolidaysBloc>()
                   .add(SelectCheckBox(isChecked: isChecked!));
