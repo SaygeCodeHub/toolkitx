@@ -6,6 +6,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
 import '../attach_document_screen.dart';
+import '../documents_approve_and_reject_screen.dart';
 import '../link_document_screen.dart';
 
 class DocumentsDetailsPopUpMenu extends StatelessWidget {
@@ -46,10 +47,15 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
                 arguments: documentDetailsModel);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
+            DocumentsApproveAndRejectScreen.isFromReject = false;
+            Navigator.pushNamed(context, DocumentsApproveAndRejectScreen.routeName);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
+
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
+            DocumentsApproveAndRejectScreen.isFromReject = true;
+            Navigator.pushNamed(context, DocumentsApproveAndRejectScreen.routeName);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {} else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_openforinformation')) {}

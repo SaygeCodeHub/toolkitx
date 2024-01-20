@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -48,6 +49,7 @@ import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_approve_and_reject_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
@@ -513,6 +515,8 @@ class AppRoutes {
         return _createRoute(const ViewMyRequestScreen());
       case SendTransferScreen.routeName:
         return _createRoute(const SendTransferScreen());
+        case DocumentsApproveAndRejectScreen.routeName:
+        return _createRoute(const DocumentsApproveAndRejectScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
