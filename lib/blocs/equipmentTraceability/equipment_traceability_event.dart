@@ -112,3 +112,9 @@ class SelectSearchEquipment extends EquipmentTraceabilityEvent {
 
   SelectSearchEquipment({required this.isChecked});
 }
+
+class RejectTransferRequest extends EquipmentTraceabilityEvent {
+  final String requestId;
+
+  RejectTransferRequest({required this.requestId});
+}

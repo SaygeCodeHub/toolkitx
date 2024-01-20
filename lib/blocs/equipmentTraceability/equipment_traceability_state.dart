@@ -219,3 +219,13 @@ class SearchEquipmentSelected extends EquipmentTraceabilityState {
 
   SearchEquipmentSelected({required this.isChecked});
 }
+
+class TransferRequestRejecting extends EquipmentTraceabilityState {}
+
+class TransferRequestRejected extends EquipmentTraceabilityState {}
+
+class TransferRequestNotRejected extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotRejected({required this.errorMessage});
+}
