@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/reject_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/send_transfer_rquest_model.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -45,6 +49,13 @@ class EquipmentTraceabilityBloc
     on<FetchWarehouse>(_fetchWarehouse);
     on<SelectWarehousePositions>(_selectWarehousePositions);
     on<FetchWarehousePositions>(_fetchWarehousePositions);
+    on<SelectEmployee>(_selectEmployee);
+    on<FetchEmployee>(_fetchEmployee);
+    on<SendTransferRequest>(_sendTransferRequest);
+    on<SelectWorkOrderEquipment>(_selectWorkOrderEquipment);
+    on<ApproveTransferRequest>(_approveTransferRequest);
+    on<SelectSearchEquipment>(_selectSearchEquipment);
+    on<RejectTransferRequest>(_rejectTransferRequest);
   }
 
   Map filters = {};
@@ -55,8 +66,13 @@ class EquipmentTraceabilityBloc
   String equipmentId = "";
   String code = "";
   String transferValue = "";
+  String personId = "";
+  String positionId = "";
+  String workOrderId = "";
+  List equipmentWorkOrderList = [];
   List answerList = [];
   List equipmentList = [];
+  List equipmentCodeList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -254,17 +270,43 @@ class EquipmentTraceabilityBloc
               hashCode, event.code, userId);
       code = event.code;
       if (fetchEquipmentByCodeModel.status == 200) {
-        if (equipmentList.indexWhere((element) =>
-                element["id"].toString().trim() ==
-                fetchEquipmentByCodeModel.data.id.trim()) ==
-            -1) {
-          equipmentList.add({
-            "id": fetchEquipmentByCodeModel.data.id.trim(),
-            "equipmentcode":
-                fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-            "equipmentname":
-                fetchEquipmentByCodeModel.data.equipmentname.trim(),
-          });
+        if (equipmentCodeList.isNotEmpty) {
+          for (int i = 0; i < equipmentCodeList.length; i++) {
+            String codeString = equipmentCodeList[i].toString();
+            if (codeString
+                .contains(fetchEquipmentByCodeModel.data.id.toString())) {
+              if (equipmentList.indexWhere((element) =>
+                      element["id"].toString().trim() ==
+                      fetchEquipmentByCodeModel.data.id.trim()) ==
+                  -1) {
+                equipmentList.add({
+                  "id": fetchEquipmentByCodeModel.data.id.trim(),
+                  "equipmentcode":
+                      fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+                  "equipmentname":
+                      fetchEquipmentByCodeModel.data.equipmentname.trim(),
+                  "currentitemcount": 0,
+                  "usercount": 0
+                });
+              }
+              break;
+            }
+          }
+        } else {
+          if (equipmentList.indexWhere((element) =>
+                  element.toString().trim() ==
+                  fetchEquipmentByCodeModel.data.id.trim()) ==
+              -1) {
+            equipmentList.add({
+              "id": fetchEquipmentByCodeModel.data.id.trim(),
+              "equipmentcode":
+                  fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+              "equipmentname":
+                  fetchEquipmentByCodeModel.data.equipmentname.trim(),
+              "currentitemcount": 0,
+              "usercount": 0
+            });
+          }
         }
 
         emit(EquipmentByCodeFetched(
@@ -277,6 +319,11 @@ class EquipmentTraceabilityBloc
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectSearchEquipment(
+      SelectSearchEquipment event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(SearchEquipmentSelected(isChecked: event.isChecked));
   }
 
   Future<FutureOr<void>> _fetchMyRequest(
@@ -293,6 +340,7 @@ class EquipmentTraceabilityBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
           .fetchMyRequest(event.pageNo, userId, hashCode);
+      equipmentWorkOrderList = fetchMyRequestModel.data.workorders!;
       if (fetchMyRequestModel.status == 200) {
         emit(MyRequestFetched(
             fetchMyRequestModel: fetchMyRequestModel,
@@ -340,6 +388,7 @@ class EquipmentTraceabilityBloc
   FutureOr<void> _selectWarehousePositions(SelectWarehousePositions event,
       Emitter<EquipmentTraceabilityState> emit) {
     emit(WarehousePositionsSelected(positionsMap: event.positionsMap));
+    positionId = event.positionsMap['positionid'];
     add(FetchWarehousePositions());
   }
 
@@ -361,6 +410,123 @@ class EquipmentTraceabilityBloc
       }
     } catch (e) {
       emit(WarehousePositionsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectEmployee(
+      SelectEmployee event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(EmployeeSelected(employeeMap: event.employeeMap));
+    personId = event.employeeMap['employeeid'] ?? '';
+  }
+
+  Future<FutureOr<void>> _fetchEmployee(
+      FetchEmployee event, Emitter<EquipmentTraceabilityState> emit) async {
+    emit(EmployeeFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchEmployeesModel fetchEmployeesModel =
+          await _equipmentTraceabilityRepo.fetchEmployees(hashCode);
+      if (fetchEmployeesModel.status == 200) {
+        emit(EmployeeFetched(fetchEmployeesModel: fetchEmployeesModel));
+      } else {
+        emit(EmployeeNotFetched(errorMessage: fetchEmployeesModel.message));
+      }
+    } catch (e) {
+      emit(EmployeeNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _sendTransferRequest(SendTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestSending());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map transferRequestMap = {
+        "hashcode": hashCode,
+        "transferto": transferValue,
+        "positionid": transferValue == '1' ? positionId : '',
+        "personid": transferValue == '2' ? personId : '',
+        "userid": userId,
+        "equipmentlist": equipmentList
+      };
+      SendTransferRequestModel sendTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .sendTransferRequest(transferRequestMap);
+      if (sendTransferRequestModel.status == 200) {
+        emit(TransferRequestSent());
+      } else {
+        emit(TransferRequestNotSent(
+            errorMessage: sendTransferRequestModel.message));
+      }
+    } catch (e) {
+      emit(TransferRequestNotSent(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectWorkOrderEquipment(SelectWorkOrderEquipment event,
+      Emitter<EquipmentTraceabilityState> emit) {
+    emit(EquipmentWorkOrderSelected(
+        workOrderEquipmentMap: event.workOrderEquipmentMap));
+    workOrderId = event.workOrderEquipmentMap["workorderid"] ?? '';
+  }
+
+  Future<FutureOr<void>> _approveTransferRequest(ApproveTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestApproving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map approveTransferRequestMap = {
+        "hashcode": hashCode,
+        "userid": userId,
+        "equipmentlist": [
+          {"id": event.requestId}
+        ],
+        "woid": workOrderId
+      };
+      ApproveTransferRequestModel approveTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .approveTransferRequest(approveTransferRequestMap);
+      if (approveTransferRequestModel.status == 200) {
+        emit(TransferRequestApproved());
+      } else {
+        emit(TransferRequestNotApproved(
+            errorMessage: approveTransferRequestModel.message));
+      }
+    } catch (e) {
+      emit(TransferRequestNotApproved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectTransferRequest(RejectTransferRequest event,
+      Emitter<EquipmentTraceabilityState> emit) async {
+    emit(TransferRequestRejecting());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectTransferRequestMap = {
+        "hashcode": hashCode,
+        "userid": userId,
+        "equipmentlist": [
+          {"id": event.requestId}
+        ]
+      };
+      RejectTransferRequestModel rejectTransferRequestModel =
+          await _equipmentTraceabilityRepo
+              .rejectTransferRequest(rejectTransferRequestMap);
+      if (rejectTransferRequestModel.status == 200) {
+        emit(TransferRequestRejected());
+      } else {
+        emit(TransferRequestNotRejected(
+            errorMessage: rejectTransferRequestModel.message));
+      }
+    } catch (e) {
+      emit(TransferRequestNotRejected(errorMessage: e.toString()));
     }
   }
 }

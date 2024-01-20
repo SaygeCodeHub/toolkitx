@@ -492,9 +492,17 @@ abstract class StringConstants {
   static const String kAddTimeSheet = 'Add TimeSheet';
   static const String kSubmitTimeSheet = 'Submit TimeSheet';
   static const String kMinsBreak = 'mins break';
+  static const String kTimeSheetSubmittedSuccessfully =
+      'TimeSheet Submitted Successfully';
   static const String kDoYouWantToDeleteThisEntry =
       'Do you want to delete this entry ?';
   static const String kWarehouse = "Warehouse";
   static const String kEmployee = "Employee";
   static const String kPositions = "Positions";
+  static const String kSelectPositions = "Select Positions";
+  static const String kSelectWarehouse = "Select Warehouse";
+  static const String kSelectEmployee = "Select Employee";
+  static const String kWorkorder = "Workorder";
+  static const String kAreYouSureToReject = "Are you sure to reject?";
+  static const String kRequestRejected = "Request Rejected";
 }

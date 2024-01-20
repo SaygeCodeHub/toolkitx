@@ -9,6 +9,7 @@ import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_time_sheet_details_model.dart';
 import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 
 abstract class LeavesAndHolidaysRepository {
   Future<FetchLeavesSummaryModel> fetchLeavesSummary(
@@ -33,6 +34,8 @@ abstract class LeavesAndHolidaysRepository {
       String groupby, String userId, String hashCode);
 
   Future<SaveTimeSheetModel> saveTimeSheet(Map saveTimeSheetMap);
+
+  Future<SubmitTimeSheetModel> submitTimeSheetRepo(Map submitTimeSheetMap);
 
   Future<FetchTimeSheetDetailsModel> fetchTimeSheetDetails(
       String hashCode, String timeSheetDetailsId);

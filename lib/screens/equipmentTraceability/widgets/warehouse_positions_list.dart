@@ -17,7 +17,7 @@ class WarehousePositionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<EquipmentTraceabilityBloc>().add(FetchWarehousePositions());
     return Scaffold(
-        appBar: const GenericAppBar(title: "Select Positions"),
+        appBar: const GenericAppBar(title: StringConstants.kSelectPositions),
         body:
             BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
           buildWhen: (previousState, currentState) =>

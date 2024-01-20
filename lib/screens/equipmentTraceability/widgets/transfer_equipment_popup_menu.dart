@@ -4,6 +4,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../enter_equipment_code_screen.dart';
+import '../search_equipment_list_screen.dart';
 
 class TransferEquipmentPopupMenu extends StatelessWidget {
   const TransferEquipmentPopupMenu({super.key});
@@ -28,7 +29,11 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
           if (value == StringConstants.kEnter) {
             Navigator.pushNamed(context, EnterEquipmentCodeScreen.routeName);
           }
-          if (value == StringConstants.kSearch) {}
+          if (value == StringConstants.kSearch) {
+            SearchEquipmentListScreen.isTransferScreen = true;
+            Navigator.pushNamed(context, SearchEquipmentListScreen.routeName,
+                arguments: false);
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [

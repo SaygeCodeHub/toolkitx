@@ -167,3 +167,65 @@ class WarehousePositionsNotFetched extends EquipmentTraceabilityState {
 
   WarehousePositionsNotFetched({required this.errorMessage});
 }
+
+class EmployeeSelected extends EquipmentTraceabilityState {
+  final Map employeeMap;
+
+  EmployeeSelected({required this.employeeMap});
+}
+
+class EmployeeFetching extends EquipmentTraceabilityState {}
+
+class EmployeeFetched extends EquipmentTraceabilityState {
+  final FetchEmployeesModel fetchEmployeesModel;
+
+  EmployeeFetched({required this.fetchEmployeesModel});
+}
+
+class EmployeeNotFetched extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  EmployeeNotFetched({required this.errorMessage});
+}
+
+class TransferRequestSending extends EquipmentTraceabilityState {}
+
+class TransferRequestSent extends EquipmentTraceabilityState {}
+
+class TransferRequestNotSent extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotSent({required this.errorMessage});
+}
+
+class EquipmentWorkOrderSelected extends EquipmentTraceabilityState {
+  final Map workOrderEquipmentMap;
+
+  EquipmentWorkOrderSelected({required this.workOrderEquipmentMap});
+}
+
+class TransferRequestApproving extends EquipmentTraceabilityState {}
+
+class TransferRequestApproved extends EquipmentTraceabilityState {}
+
+class TransferRequestNotApproved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotApproved({required this.errorMessage});
+}
+
+class SearchEquipmentSelected extends EquipmentTraceabilityState {
+  final bool isChecked;
+
+  SearchEquipmentSelected({required this.isChecked});
+}
+
+class TransferRequestRejecting extends EquipmentTraceabilityState {}
+
+class TransferRequestRejected extends EquipmentTraceabilityState {}
+
+class TransferRequestNotRejected extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotRejected({required this.errorMessage});
+}

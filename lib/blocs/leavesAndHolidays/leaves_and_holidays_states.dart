@@ -154,6 +154,16 @@ class TimeSheetNotSaved extends LeavesAndHolidaysStates {
   TimeSheetNotSaved({required this.errorMessage});
 }
 
+class TimeSheetSubmitting extends LeavesAndHolidaysStates {}
+
+class TimeSheetSubmitted extends LeavesAndHolidaysStates {}
+
+class TimeSheetNotSubmitted extends LeavesAndHolidaysStates {
+  final String errorMessage;
+
+  TimeSheetNotSubmitted({required this.errorMessage});
+}
+
 class FetchingTimeSheetDetails extends LeavesAndHolidaysStates {}
 
 class TimeSheetDetailsFetched extends LeavesAndHolidaysStates {
