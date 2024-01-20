@@ -54,6 +54,7 @@ class EquipmentTraceabilityBloc
     on<SendTransferRequest>(_sendTransferRequest);
     on<SelectWorkOrderEquipment>(_selectWorkOrderEquipment);
     on<ApproveTransferRequest>(_approveTransferRequest);
+    on<SelectSearchEquipment>(_selectSearchEquipment);
     on<RejectTransferRequest>(_rejectTransferRequest);
   }
 
@@ -71,6 +72,7 @@ class EquipmentTraceabilityBloc
   List equipmentWorkOrderList = [];
   List answerList = [];
   List equipmentList = [];
+  List equipmentCodeList = [];
 
   FutureOr<void> _fetchSearchEquipmentList(FetchSearchEquipmentList event,
       Emitter<EquipmentTraceabilityState> emit) async {
@@ -268,19 +270,43 @@ class EquipmentTraceabilityBloc
               hashCode, event.code, userId);
       code = event.code;
       if (fetchEquipmentByCodeModel.status == 200) {
-        if (equipmentList.indexWhere((element) =>
-                element["id"].toString().trim() ==
-                fetchEquipmentByCodeModel.data.id.trim()) ==
-            -1) {
-          equipmentList.add({
-            "id": fetchEquipmentByCodeModel.data.id.trim(),
-            "equipmentcode":
-                fetchEquipmentByCodeModel.data.equipmentcode.trim(),
-            "equipmentname":
-                fetchEquipmentByCodeModel.data.equipmentname.trim(),
-            "currentitemcount": 0,
-            "usercount": 0
-          });
+        if (equipmentCodeList.isNotEmpty) {
+          for (int i = 0; i < equipmentCodeList.length; i++) {
+            String codeString = equipmentCodeList[i].toString();
+            if (codeString
+                .contains(fetchEquipmentByCodeModel.data.id.toString())) {
+              if (equipmentList.indexWhere((element) =>
+                      element["id"].toString().trim() ==
+                      fetchEquipmentByCodeModel.data.id.trim()) ==
+                  -1) {
+                equipmentList.add({
+                  "id": fetchEquipmentByCodeModel.data.id.trim(),
+                  "equipmentcode":
+                      fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+                  "equipmentname":
+                      fetchEquipmentByCodeModel.data.equipmentname.trim(),
+                  "currentitemcount": 0,
+                  "usercount": 0
+                });
+              }
+              break;
+            }
+          }
+        } else {
+          if (equipmentList.indexWhere((element) =>
+                  element.toString().trim() ==
+                  fetchEquipmentByCodeModel.data.id.trim()) ==
+              -1) {
+            equipmentList.add({
+              "id": fetchEquipmentByCodeModel.data.id.trim(),
+              "equipmentcode":
+                  fetchEquipmentByCodeModel.data.equipmentcode.trim(),
+              "equipmentname":
+                  fetchEquipmentByCodeModel.data.equipmentname.trim(),
+              "currentitemcount": 0,
+              "usercount": 0
+            });
+          }
         }
 
         emit(EquipmentByCodeFetched(
@@ -293,6 +319,11 @@ class EquipmentTraceabilityBloc
     } catch (e) {
       emit(EquipmentByCodeNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectSearchEquipment(
+      SelectSearchEquipment event, Emitter<EquipmentTraceabilityState> emit) {
+    emit(SearchEquipmentSelected(isChecked: event.isChecked));
   }
 
   Future<FutureOr<void>> _fetchMyRequest(

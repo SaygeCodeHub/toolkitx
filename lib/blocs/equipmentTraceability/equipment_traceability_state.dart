@@ -214,6 +214,12 @@ class TransferRequestNotApproved extends EquipmentTraceabilityState {
   TransferRequestNotApproved({required this.errorMessage});
 }
 
+class SearchEquipmentSelected extends EquipmentTraceabilityState {
+  final bool isChecked;
+
+  SearchEquipmentSelected({required this.isChecked});
+}
+
 class TransferRequestRejecting extends EquipmentTraceabilityState {}
 
 class TransferRequestRejected extends EquipmentTraceabilityState {}
