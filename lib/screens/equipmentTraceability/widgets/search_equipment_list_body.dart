@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
+import 'package:toolkit/screens/equipmentTraceability/widgets/search_equipment_checkbox.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -19,6 +20,7 @@ class SearchEquipmentListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SearchEquipmentListScreen.codeList = [];
     return Expanded(
       child: ListView.separated(
           itemCount: (context.read<EquipmentTraceabilityBloc>().hasReachedMax)
@@ -37,9 +39,11 @@ class SearchEquipmentListBody extends StatelessWidget {
                         "equipmentId": data[index].id,
                         "equipmentName": data[index].equipmentname
                       };
-                      Navigator.pushNamed(
-                          context, SearchEquipmentDetailsScreen.routeName,
-                          arguments: searchEquipmentDetailsMap);
+                      SearchEquipmentListScreen.isTransferScreen != true
+                          ? Navigator.pushNamed(
+                              context, SearchEquipmentDetailsScreen.routeName,
+                              arguments: searchEquipmentDetailsMap)
+                          : null;
                     },
                     title: Text(data[index].equipmentname,
                         style: Theme.of(context).textTheme.small.copyWith(
@@ -60,6 +64,18 @@ class SearchEquipmentListBody extends StatelessWidget {
                                 color: AppColor.grey)),
                       ],
                     ),
+                    trailing: SearchEquipmentListScreen.isTransferScreen == true
+                        ? SearchEquipmentCheckbox(
+                            selectedCreatedForIdList: context
+                                .read<EquipmentTraceabilityBloc>()
+                                .equipmentCodeList,
+                            data: data[index],
+                            onCreatedForChanged: (List codeList) {
+                              SearchEquipmentListScreen.codeList = codeList;
+                            },
+                            codeList: SearchEquipmentListScreen.codeList,
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ),
               );

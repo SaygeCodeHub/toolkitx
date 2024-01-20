@@ -61,3 +61,9 @@ class SaveTimeSheet extends LeavesAndHolidaysEvent {
 
   SaveTimeSheet({required this.saveTimeSheetMap});
 }
+
+class SubmitTimeSheet extends LeavesAndHolidaysEvent {
+  final Map submitTimeSheetMap;
+
+  SubmitTimeSheet({required this.submitTimeSheetMap});
+}

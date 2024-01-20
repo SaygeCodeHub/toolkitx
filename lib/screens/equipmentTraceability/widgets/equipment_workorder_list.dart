@@ -7,28 +7,29 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../widgets/generic_app_bar.dart';
 
-class EquipmentWarehouseList extends StatelessWidget {
-  final Map warehouseMap;
+class EquipmentWorkOrderList extends StatelessWidget {
+  final Map workOrderEquipmentMap;
 
-  const EquipmentWarehouseList({Key? key, required this.warehouseMap})
+  const EquipmentWorkOrderList({Key? key, required this.workOrderEquipmentMap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<EquipmentTraceabilityBloc>().add(FetchWarehouse());
+    context.read<EquipmentTraceabilityBloc>().add(FetchMyRequest(pageNo: 1));
     return Scaffold(
-        appBar: const GenericAppBar(title: StringConstants.kSelectWarehouse),
+        appBar: const GenericAppBar(title: StringConstants.kSelectEmployee),
         body:
             BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
           buildWhen: (previousState, currentState) =>
-              currentState is WarehouseSelected ||
-              currentState is EquipmentWareHouseFetching ||
-              currentState is EquipmentWareHouseFetched ||
-              currentState is EquipmentWareHouseNotFetched,
+              currentState is EquipmentWorkOrderSelected ||
+              currentState is MyRequestFetching ||
+              currentState is MyRequestFetched ||
+              currentState is MyRequestNotFetched,
           builder: (context, state) {
-            if (state is EquipmentWareHouseFetching) {
+            if (state is MyRequestFetching) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is EquipmentWareHouseFetched) {
+            } else if (state is MyRequestFetched) {
+              var list = state.fetchMyRequestModel.data.workorders!;
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Padding(
@@ -38,7 +39,7 @@ class EquipmentWarehouseList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Visibility(
-                            visible: state.fetchWarehouseModel.data.isNotEmpty,
+                            visible: list.isNotEmpty,
                             replacement: Padding(
                               padding: EdgeInsets.only(
                                   top:
@@ -52,8 +53,7 @@ class EquipmentWarehouseList extends StatelessWidget {
                                 padding: EdgeInsets.zero,
                                 physics: const NeverScrollableScrollPhysics(),
                                 shrinkWrap: true,
-                                itemCount:
-                                    state.fetchWarehouseModel.data.length,
+                                itemCount: list.length,
                                 itemBuilder: (context, index) {
                                   return RadioListTile(
                                       contentPadding: EdgeInsets.zero,
@@ -61,23 +61,21 @@ class EquipmentWarehouseList extends StatelessWidget {
                                       activeColor: AppColor.deepBlue,
                                       controlAffinity:
                                           ListTileControlAffinity.trailing,
-                                      title: Text(state.fetchWarehouseModel
-                                          .data[index].name),
-                                      value: state
-                                          .fetchWarehouseModel.data[index].id,
+                                      title: Text(list[index].woname!),
+                                      value: list[index].id!,
                                       groupValue:
-                                          warehouseMap['warehouseid'] ?? '',
+                                          workOrderEquipmentMap['workorder'] ??
+                                              '',
                                       onChanged: (value) {
-                                        warehouseMap['warehouseid'] = state
-                                            .fetchWarehouseModel.data[index].id;
-                                        warehouseMap['warehouse'] = state
-                                            .fetchWarehouseModel
-                                            .data[index]
-                                            .name;
+                                        workOrderEquipmentMap['workorderid'] =
+                                            list[index].id.toString();
+                                        workOrderEquipmentMap['workorder'] =
+                                            list[index].woname;
                                         context
                                             .read<EquipmentTraceabilityBloc>()
-                                            .add(SelectWarehouse(
-                                                warehouseMap: warehouseMap));
+                                            .add(SelectWorkOrderEquipment(
+                                                workOrderEquipmentMap:
+                                                    workOrderEquipmentMap));
                                         Navigator.pop(context);
                                       });
                                 }),
@@ -85,7 +83,7 @@ class EquipmentWarehouseList extends StatelessWidget {
                           const SizedBox(height: xxxSmallerSpacing)
                         ])),
               );
-            } else if (state is EquipmentWareHouseNotFetched) {
+            } else if (state is EmployeeNotFetched) {
               return Center(child: Text(state.errorMessage));
             } else {
               return const SizedBox.shrink();

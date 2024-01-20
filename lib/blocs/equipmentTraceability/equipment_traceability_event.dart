@@ -82,3 +82,39 @@ class SelectWarehousePositions extends EquipmentTraceabilityEvent {
 }
 
 class FetchWarehousePositions extends EquipmentTraceabilityEvent {}
+
+class SelectEmployee extends EquipmentTraceabilityEvent {
+  final Map employeeMap;
+
+  SelectEmployee({required this.employeeMap});
+}
+
+class FetchEmployee extends EquipmentTraceabilityEvent {}
+
+class SendTransferRequest extends EquipmentTraceabilityEvent {
+  SendTransferRequest();
+}
+
+class SelectWorkOrderEquipment extends EquipmentTraceabilityEvent {
+  final Map workOrderEquipmentMap;
+
+  SelectWorkOrderEquipment({required this.workOrderEquipmentMap});
+}
+
+class ApproveTransferRequest extends EquipmentTraceabilityEvent {
+  final String requestId;
+
+  ApproveTransferRequest({required this.requestId});
+}
+
+class SelectSearchEquipment extends EquipmentTraceabilityEvent {
+  final bool isChecked;
+
+  SelectSearchEquipment({required this.isChecked});
+}
+
+class RejectTransferRequest extends EquipmentTraceabilityEvent {
+  final String requestId;
+
+  RejectTransferRequest({required this.requestId});
+}
