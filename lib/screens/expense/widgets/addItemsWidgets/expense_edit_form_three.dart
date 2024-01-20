@@ -10,6 +10,7 @@ import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
 import '../../../../widgets/android_pop_up.dart';
 import '../../../../widgets/custom_snackbar.dart';
+import '../../../../widgets/generic_app_bar.dart';
 import '../../../../widgets/generic_text_field.dart';
 import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
@@ -34,7 +35,7 @@ class ExpenseEditFormThree extends StatelessWidget {
                 .editExpenseMap['item_details_model'].description ??
             '';
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const GenericAppBar(title: StringConstants.kEditItem),
       bottomNavigationBar: BlocListener<ExpenseBloc, ExpenseStates>(
         listener: (context, state) {
           if (state is SavingExpenseItem) {

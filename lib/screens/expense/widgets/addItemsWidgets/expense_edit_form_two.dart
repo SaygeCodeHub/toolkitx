@@ -6,8 +6,10 @@ import '../../../../blocs/expense/expense_event.dart';
 import '../../../../blocs/expense/expense_state.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../data/models/expense/fetch_expense_details_model.dart';
+import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
 import '../../../../utils/expense_add_item_custom_field_util.dart';
+import '../../../../widgets/generic_app_bar.dart';
 import '../../../../widgets/primary_button.dart';
 import 'expense_edit_form_three.dart';
 import 'expense_edit_items_screen.dart';
@@ -28,7 +30,7 @@ class ExpenseEditFormTwo extends StatelessWidget {
           "expenseitemid": expenseDetailsData.id
         }));
     return Scaffold(
-        appBar: AppBar(),
+        appBar: const GenericAppBar(title: StringConstants.kEditItem),
         bottomNavigationBar: BottomAppBar(
           child: PrimaryButton(
               onPressed: () {

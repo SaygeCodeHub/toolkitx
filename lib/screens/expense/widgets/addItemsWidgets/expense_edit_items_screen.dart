@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
@@ -35,7 +36,7 @@ class ExpenseEditItemsScreen extends StatelessWidget {
             tabIndex: 2, expenseId: editExpenseMap['expense_id']));
       },
       child: Scaffold(
-          appBar: AppBar(),
+          appBar: const GenericAppBar(title: StringConstants.kEditItem),
           bottomNavigationBar: BottomAppBar(
             child: PrimaryButton(
               onPressed: () {
