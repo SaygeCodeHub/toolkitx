@@ -70,7 +70,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                             .copyWith(color: AppColor.black)),
                   ),
                   trailing:
-                  const Icon(Icons.navigate_next_rounded, size: kIconSize)),
+                      const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
                 visible: state.currencyDetailsMap['currency_name'] != null,
                 child: Text(DatabaseUtil.getText('Exchangerate'),

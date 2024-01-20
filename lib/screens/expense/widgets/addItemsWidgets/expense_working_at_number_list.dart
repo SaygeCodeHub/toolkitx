@@ -50,11 +50,11 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                             replacement: Padding(
                               padding: EdgeInsets.only(
                                   top:
-                                  MediaQuery.of(context).size.height / 2.7),
+                                      MediaQuery.of(context).size.height / 2.7),
                               child: Center(
                                   child: Text(StringConstants.kNoRecordsFound,
                                       style:
-                                      Theme.of(context).textTheme.medium)),
+                                          Theme.of(context).textTheme.medium)),
                             ),
                             child: ListView.builder(
                                 padding: EdgeInsets.zero,
@@ -68,7 +68,7 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                       dense: true,
                                       activeColor: AppColor.deepBlue,
                                       controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                          ListTileControlAffinity.trailing,
                                       title: Text(state
                                           .expenseWorkingAtNumberDataModel
                                           .data[index]
@@ -78,7 +78,7 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                           .data[index]
                                           .id,
                                       groupValue: workingAtNumberMap[
-                                      'working_at_number_id'] ??
+                                              'working_at_number_id'] ??
                                           '',
                                       onChanged: (value) {
                                         context
