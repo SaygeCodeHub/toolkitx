@@ -10,6 +10,8 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../widgets/generic_app_bar.dart';
 import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
+import 'expense_working_at_expansion_tile.dart';
 
 class ExpenseWorkingAtNumberList extends StatelessWidget {
   final Map workingAtNumberMap;
@@ -19,6 +21,8 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ExpenseBloc>().add(FetchWorkingAtNumberData(
+        groupBy: ExpenseWorkingAtExpansionTile.workingAt));
     return Scaffold(
         appBar:
             const GenericAppBar(title: StringConstants.kSelectWorkingAtNumber),
@@ -46,11 +50,11 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                             replacement: Padding(
                               padding: EdgeInsets.only(
                                   top:
-                                      MediaQuery.of(context).size.height / 2.7),
+                                  MediaQuery.of(context).size.height / 2.7),
                               child: Center(
                                   child: Text(StringConstants.kNoRecordsFound,
                                       style:
-                                          Theme.of(context).textTheme.medium)),
+                                      Theme.of(context).textTheme.medium)),
                             ),
                             child: ListView.builder(
                                 padding: EdgeInsets.zero,
@@ -64,7 +68,7 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                       dense: true,
                                       activeColor: AppColor.deepBlue,
                                       controlAffinity:
-                                          ListTileControlAffinity.trailing,
+                                      ListTileControlAffinity.trailing,
                                       title: Text(state
                                           .expenseWorkingAtNumberDataModel
                                           .data[index]
@@ -74,9 +78,13 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                           .data[index]
                                           .id,
                                       groupValue: workingAtNumberMap[
-                                              'working_at_number_id'] ??
+                                      'working_at_number_id'] ??
                                           '',
                                       onChanged: (value) {
+                                        context
+                                            .read<ExpenseBloc>()
+                                            .expenseWorkingAtNumberMap
+                                            .clear();
                                         workingAtNumberMap[
                                                 'working_at_number_id'] =
                                             state
@@ -90,6 +98,12 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                                 .data[index]
                                                 .name;
                                         ExpenseDetailsTabOne.manageItemsMap[
+                                                'workingatnumber'] =
+                                            state
+                                                .expenseWorkingAtNumberDataModel
+                                                .data[index]
+                                                .id;
+                                        ExpenseEditItemsScreen.editExpenseMap[
                                                 'workingatnumber'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
