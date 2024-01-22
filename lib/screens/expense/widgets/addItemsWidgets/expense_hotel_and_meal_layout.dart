@@ -7,6 +7,7 @@ import '../../../../blocs/expense/expense_state.dart';
 import '../../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../../utils/expense_add_item_custom_field_util.dart';
 import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
 
 class ExpenseHotelAndMealLayout extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
@@ -20,7 +21,10 @@ class ExpenseHotelAndMealLayout extends StatelessWidget {
     context
         .read<ExpenseBloc>()
         .add(FetchExpenseItemCustomFields(customFieldsMap: {
-          "itemid": ExpenseDetailsTabOne.manageItemsMap['itemid'] ?? '',
+          "itemid": (ExpenseEditItemsScreen.editExpenseMap['itemid'] != null ||
+                  ExpenseEditItemsScreen.editExpenseMap['itemid'] != '')
+              ? ExpenseEditItemsScreen.editExpenseMap['itemid']
+              : ExpenseDetailsTabOne.manageItemsMap['itemid'] ?? '',
           "expenseitemid": expenseDetailsData.id
         }));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(

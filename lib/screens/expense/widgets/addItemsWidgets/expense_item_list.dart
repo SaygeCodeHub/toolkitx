@@ -6,18 +6,22 @@ import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
+import '../../../../data/models/expense/fetch_item_master_model.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/generic_app_bar.dart';
 import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
 
 class ExpenseItemList extends StatelessWidget {
   final Map itemMap;
   static String itemId = '';
 
   const ExpenseItemList({Key? key, required this.itemMap}) : super(key: key);
+  static List<List<ItemMasterDatum>> fetchItemMaster = [];
 
   @override
   Widget build(BuildContext context) {
+    fetchItemMaster = context.read<ExpenseBloc>().fetchItemMaster;
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectItem),
         body: SingleChildScrollView(
@@ -29,7 +33,7 @@ class ExpenseItemList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Visibility(
-                      visible:
+                      visible: fetchItemMaster[0].isNotEmpty ||
                           ExpenseDetailsTabOne.itemMasterList[0].isNotEmpty,
                       replacement: Padding(
                         padding: EdgeInsets.only(
@@ -42,8 +46,9 @@ class ExpenseItemList extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount:
-                              ExpenseDetailsTabOne.itemMasterList[0].length,
+                          itemCount: fetchItemMaster.isNotEmpty
+                              ? fetchItemMaster[0].length
+                              : ExpenseDetailsTabOne.itemMasterList[0].length,
                           itemBuilder: (context, index) {
                             return RadioListTile(
                                 contentPadding: EdgeInsets.zero,
@@ -51,24 +56,39 @@ class ExpenseItemList extends StatelessWidget {
                                 activeColor: AppColor.deepBlue,
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                title: Text(ExpenseDetailsTabOne
-                                    .itemMasterList[0][index].name),
-                                value: ExpenseDetailsTabOne
-                                    .itemMasterList[0][index].id
-                                    .toString(),
+                                title: Text((fetchItemMaster.isNotEmpty)
+                                    ? fetchItemMaster[0][index].name
+                                    : ExpenseDetailsTabOne
+                                        .itemMasterList[0][index].name),
+                                value: (fetchItemMaster.isNotEmpty)
+                                    ? fetchItemMaster[0][index].id.toString()
+                                    : ExpenseDetailsTabOne
+                                        .itemMasterList[0][index].id
+                                        .toString(),
                                 groupValue: itemMap['item_id'],
                                 onChanged: (value) {
-                                  itemMap['item_id'] = ExpenseDetailsTabOne
-                                      .itemMasterList[0][index].id
-                                      .toString();
+                                  itemMap['item_id'] = (fetchItemMaster
+                                          .isNotEmpty)
+                                      ? fetchItemMaster[0][index].id.toString()
+                                      : ExpenseDetailsTabOne
+                                          .itemMasterList[0][index].id
+                                          .toString();
                                   ExpenseDetailsTabOne
                                           .manageItemsMap['itemid'] =
                                       itemMap['item_id'] ?? '';
-                                  itemId = ExpenseDetailsTabOne
-                                      .itemMasterList[0][index].id
-                                      .toString();
-                                  itemMap['item_name'] = ExpenseDetailsTabOne
-                                      .itemMasterList[0][index].name;
+                                  ExpenseEditItemsScreen
+                                          .editExpenseMap['itemid'] =
+                                      itemMap['item_id'] ?? '';
+                                  itemId = (fetchItemMaster.isNotEmpty)
+                                      ? fetchItemMaster[0][index].id.toString()
+                                      : ExpenseDetailsTabOne
+                                          .itemMasterList[0][index].id
+                                          .toString();
+                                  itemMap['item_name'] =
+                                      (fetchItemMaster.isNotEmpty)
+                                          ? fetchItemMaster[0][index].name
+                                          : ExpenseDetailsTabOne
+                                              .itemMasterList[0][index].name;
                                   context.read<ExpenseBloc>().add(
                                       SelectExpenseItem(itemsMap: itemMap));
                                   Navigator.pop(context);

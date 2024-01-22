@@ -3,6 +3,7 @@ import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
+import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
 import '../../data/models/expense/save_expense_item_model.dart';
@@ -239,4 +240,18 @@ class WorkingAtNumberDataNotFetched extends ExpenseStates {
   final String dataNotFetched;
 
   WorkingAtNumberDataNotFetched({required this.dataNotFetched});
+}
+
+class FetchingExpenseItemDetails extends ExpenseStates {}
+
+class ExpenseItemDetailsFetched extends ExpenseStates {
+  final FetchExpenseItemDetailsModel fetchExpenseItemDetailsModel;
+
+  ExpenseItemDetailsFetched({required this.fetchExpenseItemDetailsModel});
+}
+
+class ExpenseItemDetailsNotFetched extends ExpenseStates {
+  final String itemDetailsNotFetched;
+
+  ExpenseItemDetailsNotFetched({required this.itemDetailsNotFetched});
 }

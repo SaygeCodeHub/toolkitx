@@ -8,15 +8,19 @@ import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
+import '../../../../data/models/expense/fetch_item_master_model.dart';
 import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
 
 class ExpenseDateList extends StatelessWidget {
   final String date;
 
   const ExpenseDateList({Key? key, required this.date}) : super(key: key);
+  static List<List<ItemMasterDatum>> fetchItemMaster = [];
 
   @override
   Widget build(BuildContext context) {
+    fetchItemMaster = context.read<ExpenseBloc>().fetchItemMaster;
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectDate),
         body: SingleChildScrollView(
@@ -28,7 +32,7 @@ class ExpenseDateList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Visibility(
-                      visible:
+                      visible: fetchItemMaster[2].isNotEmpty ||
                           ExpenseDetailsTabOne.itemMasterList[2].isNotEmpty,
                       replacement: Padding(
                         padding: EdgeInsets.only(
@@ -41,8 +45,9 @@ class ExpenseDateList extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount:
-                              ExpenseDetailsTabOne.itemMasterList[2].length,
+                          itemCount: fetchItemMaster.isNotEmpty
+                              ? fetchItemMaster[2].length
+                              : ExpenseDetailsTabOne.itemMasterList[2].length,
                           itemBuilder: (context, index) {
                             return RadioListTile(
                                 contentPadding: EdgeInsets.zero,
@@ -50,19 +55,34 @@ class ExpenseDateList extends StatelessWidget {
                                 activeColor: AppColor.deepBlue,
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                title: Text(ExpenseDetailsTabOne
-                                    .itemMasterList[2][index].date),
-                                value: ExpenseDetailsTabOne
-                                    .itemMasterList[2][index].date,
+                                title: Text((fetchItemMaster.isNotEmpty)
+                                    ? fetchItemMaster[2][index].date
+                                    : ExpenseDetailsTabOne
+                                        .itemMasterList[2][index].date),
+                                value: (fetchItemMaster.isNotEmpty)
+                                    ? fetchItemMaster[2][index].date
+                                    : ExpenseDetailsTabOne
+                                        .itemMasterList[2][index].date,
                                 groupValue: date,
                                 onChanged: (value) {
                                   ExpenseDetailsTabOne.manageItemsMap['date'] =
-                                      ExpenseDetailsTabOne
-                                          .itemMasterList[2][index].date;
+                                      (fetchItemMaster.isNotEmpty)
+                                          ? fetchItemMaster[2][index].date
+                                          : ExpenseDetailsTabOne
+                                              .itemMasterList[2][index].date;
+                                  ExpenseEditItemsScreen
+                                          .editExpenseMap['date'] =
+                                      (fetchItemMaster.isNotEmpty)
+                                          ? fetchItemMaster[2][index].date
+                                          : ExpenseDetailsTabOne
+                                              .itemMasterList[2][index].date;
                                   context.read<ExpenseBloc>().add(
                                       SelectExpenseDate(
-                                          date: ExpenseDetailsTabOne
-                                              .itemMasterList[2][index].date));
+                                          date: (fetchItemMaster.isNotEmpty)
+                                              ? fetchItemMaster[2][index].date
+                                              : ExpenseDetailsTabOne
+                                                  .itemMasterList[2][index]
+                                                  .date));
                                   Navigator.pop(context);
                                 });
                           }),

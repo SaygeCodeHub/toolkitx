@@ -13,6 +13,8 @@ import '../../../widgets/custom_floating_action_button.dart';
 import 'addItemsWidgets/expense_add_item_form_one.dart';
 import 'addItemsWidgets/expense_add_item_form_two.dart';
 import 'addItemsWidgets/expense_hotel_and_meal_layout.dart';
+import 'addItemsWidgets/expense_working_at_expansion_tile.dart';
+import 'addItemsWidgets/expense_working_at_number_list_tile.dart';
 import 'expense_add_item_bottom_bar.dart';
 import 'expense_details_tab_one_body.dart';
 
@@ -67,6 +69,11 @@ class ExpenseDetailsTabOne extends StatelessWidget {
           if (state is ExpenseItemMasterFetched) {
             itemMasterList.addAll(state.fetchItemMasterModel.data);
             if (state.isScreenChange == false) {
+              context.read<ExpenseBloc>().expenseWorkingAtMap.clear();
+              ExpenseWorkingAtExpansionTile.workingAt = '';
+              ExpenseWorkingAtExpansionTile.workingAtValue = '';
+              context.read<ExpenseBloc>().expenseWorkingAtNumberMap.clear();
+              ExpenseWorkingAtNumberListTile.workingAtNumberMap.clear();
               return const ExpenseAddItemFormOne();
             } else if (state.isScreenChange == true) {
               if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6') {

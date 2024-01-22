@@ -13,6 +13,7 @@ import '../../../../utils/database_utils.dart';
 import '../../../../widgets/generic_text_field.dart';
 import '../expense_details_tab_one.dart';
 import 'expense_add_items_currency_list.dart';
+import 'expense_edit_items_screen.dart';
 
 class ExpenseAddItemCurrencyListTile extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
@@ -23,13 +24,20 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ExpenseEditItemsScreen.editExpenseMap['currency'] =
+        ExpenseEditItemsScreen.editExpenseMap['item_details_model'].currency ??
+            '';
     context
         .read<ExpenseBloc>()
         .add(SelectExpenseAddItemsCurrency(currencyDetailsMap: {
-          'currency_id': expenseDetailsData.currency,
+          'currency_id': ExpenseEditItemsScreen
+                  .editExpenseMap['item_details_model'].currency ??
+              '',
           'currency_name': expenseDetailsData.currencyname
         }));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
+      buildWhen: (previousState, currentState) =>
+          currentState is ExpenseAddItemsCurrencySelected,
       builder: (context, state) {
         if (state is ExpenseAddItemsCurrencySelected) {
           expenseDetailsData.currency.isNotEmpty
@@ -75,6 +83,10 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
               Visibility(
                   visible: state.currencyDetailsMap['currency_name'] != null,
                   child: TextFieldWidget(
+                      value: ExpenseEditItemsScreen
+                              .editExpenseMap['item_details_model']
+                              .exchangerate ??
+                          '',
                       maxLength: 20,
                       textInputAction: TextInputAction.next,
                       textInputType: TextInputType.number,

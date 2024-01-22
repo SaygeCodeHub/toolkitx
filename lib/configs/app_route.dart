@@ -11,6 +11,7 @@ import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/widgets/custom_qr_scanner.dart';
 import '../data/models/documents/documents_details_models.dart';
+import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -66,6 +67,9 @@ import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
 import '../screens/expense/manage_expense_form_screen.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_form_three.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -501,7 +505,14 @@ class AppRoutes {
         ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
-
+      case ExpenseEditItemsScreen.routeName:
+        return _createRoute(ExpenseEditItemsScreen(
+            expenseItemId: settings.arguments.toString()));
+      case ExpenseEditFormTwo.routeName:
+        return _createRoute(ExpenseEditFormTwo(
+            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+      case ExpenseEditFormThree.routeName:
+        return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
