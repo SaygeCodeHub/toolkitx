@@ -10,6 +10,8 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../widgets/generic_app_bar.dart';
 import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
+import 'expense_working_at_expansion_tile.dart';
 
 class ExpenseWorkingAtNumberList extends StatelessWidget {
   final Map workingAtNumberMap;
@@ -19,6 +21,8 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ExpenseBloc>().add(FetchWorkingAtNumberData(
+        groupBy: ExpenseWorkingAtExpansionTile.workingAt));
     return Scaffold(
         appBar:
             const GenericAppBar(title: StringConstants.kSelectWorkingAtNumber),
@@ -77,35 +81,34 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                               'working_at_number_id'] ??
                                           '',
                                       onChanged: (value) {
+                                        context
+                                            .read<ExpenseBloc>()
+                                            .expenseWorkingAtNumberMap
+                                            .clear();
                                         workingAtNumberMap[
-                                                    'working_at_number_id'] ==
-                                                workingAtNumberMap[
-                                                    'working_at_number_id']
-                                            ? workingAtNumberMap[
-                                                'new_working_at_number'] = value
-                                            : workingAtNumberMap[
-                                                'working_at_number_id'] = '';
-
+                                                'working_at_number_id'] =
+                                            state
+                                                .expenseWorkingAtNumberDataModel
+                                                .data[index]
+                                                .id;
                                         workingAtNumberMap[
                                                 'working_at_number'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .name;
-
-                                        ExpenseDetailsTabOne
-                                                .manageItemsMap['workingatid'] =
-                                            state
-                                                .expenseWorkingAtNumberDataModel
-                                                .data[index]
-                                                .id;
-
                                         ExpenseDetailsTabOne.manageItemsMap[
                                                 'workingatnumber'] =
                                             state
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
-                                                .name;
+                                                .id;
+                                        ExpenseEditItemsScreen.editExpenseMap[
+                                                'workingatnumber'] =
+                                            state
+                                                .expenseWorkingAtNumberDataModel
+                                                .data[index]
+                                                .id;
                                         context.read<ExpenseBloc>().add(
                                             SelectExpenseWorkingAtNumber(
                                                 workingAtNumberMap:
