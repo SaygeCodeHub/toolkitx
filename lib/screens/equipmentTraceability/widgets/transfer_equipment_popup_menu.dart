@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_qr_scanner.dart';
 
+import '../../../blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import '../enter_equipment_code_screen.dart';
 import '../search_equipment_list_screen.dart';
 
-class TransferEquipmentPopupMenu extends StatelessWidget {
+class TransferEquipmentPopupMenu extends StatefulWidget {
   const TransferEquipmentPopupMenu({super.key});
 
+  @override
+  State<TransferEquipmentPopupMenu> createState() =>
+      _TransferEquipmentPopupMenuState();
+}
+
+class _TransferEquipmentPopupMenuState
+    extends State<TransferEquipmentPopupMenu> {
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
         value: position,
@@ -25,7 +35,21 @@ class TransferEquipmentPopupMenu extends StatelessWidget {
     ];
     return PopupMenuButton(
         onSelected: (value) {
-          if (value == StringConstants.kScan) {}
+          Future<void> scanCode() async {
+            final code = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CustomQRCodeScanner()),
+            );
+            if (!mounted) return;
+            context
+                .read<EquipmentTraceabilityBloc>()
+                .add(FetchEquipmentByCode(code: code));
+          }
+
+          if (value == StringConstants.kScan) {
+            scanCode();
+          }
           if (value == StringConstants.kEnter) {
             Navigator.pushNamed(context, EnterEquipmentCodeScreen.routeName);
           }
