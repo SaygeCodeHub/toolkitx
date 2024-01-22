@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
@@ -294,7 +293,6 @@ class EquipmentTraceabilityBloc
             }
           }
         } else {
-          log('else=======>');
           if (equipmentList.indexWhere((element) =>
                   element.toString().trim() ==
                   fetchEquipmentByCodeModel.data.id.trim()) ==
@@ -314,9 +312,7 @@ class EquipmentTraceabilityBloc
         emit(EquipmentByCodeFetched(
             fetchEquipmentByCodeModel: fetchEquipmentByCodeModel,
             equipmentList: equipmentList));
-      }
-      else {
-        log('EquipmentByCodeNotFetched=======>');
+      } else {
         emit(EquipmentByCodeNotFetched(
             errorMessage: fetchEquipmentByCodeModel.message));
       }

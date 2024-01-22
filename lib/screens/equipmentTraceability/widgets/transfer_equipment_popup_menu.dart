@@ -13,10 +13,12 @@ class TransferEquipmentPopupMenu extends StatefulWidget {
   const TransferEquipmentPopupMenu({super.key});
 
   @override
-  State<TransferEquipmentPopupMenu> createState() => _TransferEquipmentPopupMenuState();
+  State<TransferEquipmentPopupMenu> createState() =>
+      _TransferEquipmentPopupMenuState();
 }
 
-class _TransferEquipmentPopupMenuState extends State<TransferEquipmentPopupMenu> {
+class _TransferEquipmentPopupMenuState
+    extends State<TransferEquipmentPopupMenu> {
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
         value: position,
@@ -32,17 +34,19 @@ class _TransferEquipmentPopupMenuState extends State<TransferEquipmentPopupMenu>
       DatabaseUtil.getText('Cancel')
     ];
     return PopupMenuButton(
-        onSelected: (value)  {
+        onSelected: (value) {
           Future<void> scanCode() async {
             final code = await Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CustomQRCodeScanner()),
+              MaterialPageRoute(
+                  builder: (context) => const CustomQRCodeScanner()),
             );
             if (!mounted) return;
             context
                 .read<EquipmentTraceabilityBloc>()
                 .add(FetchEquipmentByCode(code: code));
           }
+
           if (value == StringConstants.kScan) {
             scanCode();
           }
