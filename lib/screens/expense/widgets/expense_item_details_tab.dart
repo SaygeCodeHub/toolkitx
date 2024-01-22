@@ -83,10 +83,15 @@ class ExpenseItemDetailTab extends StatelessWidget {
                                       .expenseWorkingAtMap
                                       .clear();
                                   ExpenseWorkingAtExpansionTile.workingAt = '';
-                                  Navigator.pushNamed(
-                                      context, ExpenseEditItemsScreen.routeName,
-                                      arguments: expenseDetailsData
-                                          .itemlist[index].id);
+                                  Navigator.pushNamed(context,
+                                          ExpenseEditItemsScreen.routeName,
+                                          arguments: expenseDetailsData
+                                              .itemlist[index].id)
+                                      .then((value) => context
+                                          .read<ExpenseBloc>()
+                                          .add(FetchExpenseDetails(
+                                              tabIndex: 2,
+                                              expenseId: expenseId)));
                                 },
                                 textValue: DatabaseUtil.getText('Edit')))
                       ];

@@ -30,68 +30,62 @@ class ExpenseEditItemsScreen extends StatelessWidget {
     context
         .read<ExpenseBloc>()
         .add(FetchExpenseItemDetails(expenseItemId: expenseItemId));
-    return PopScope(
-      onPopInvoked: (pop) {
-        context.read<ExpenseBloc>().add(FetchExpenseDetails(
-            tabIndex: 2, expenseId: editExpenseMap['expense_id']));
-      },
-      child: Scaffold(
-        appBar: const GenericAppBar(title: StringConstants.kEditItem),
-        bottomNavigationBar: BottomAppBar(
-          child: PrimaryButton(
-            onPressed: () {
-              if (editExpenseMap['itemid'] == '3' ||
-                  editExpenseMap['itemid'] == '6') {
-                Navigator.pushNamed(context, ExpenseEditFormTwo.routeName,
-                    arguments: editExpenseMap['details_model']);
-              } else {
-                Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
-              }
-            },
-            textValue: DatabaseUtil.getText('nextButtonText'),
-          ),
-        ),
-        body: BlocBuilder<ExpenseBloc, ExpenseStates>(
-          buildWhen: (previousState, currentState) =>
-              currentState is FetchingExpenseItemDetails ||
-              currentState is ExpenseItemDetailsFetched ||
-              currentState is ExpenseItemDetailsNotFetched,
-          builder: (context, state) {
-            if (state is FetchingExpenseItemDetails) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ExpenseItemDetailsFetched) {
-              editExpenseMap['item_details_model'] =
-                  state.fetchExpenseItemDetailsModel.data;
-              editExpenseMap['id'] = state.fetchExpenseItemDetailsModel.data.id;
-              return Padding(
-                padding: const EdgeInsets.only(
-                    left: leftRightMargin,
-                    right: leftRightMargin,
-                    top: xxTinierSpacing),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const ExpenseDateExpansionTile(),
-                    const ExpenseItemListTile(),
-                    Text(StringConstants.kWorkingAt,
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: xxxTinierSpacing),
-                    const ExpenseWorkingAtExpansionTile(),
-                    const ExpenseWorkingAtNumberListTile(),
-                    const SizedBox(height: xxTinySpacing)
-                  ],
-                ),
-              );
-            } else if (state is ExpenseItemDetailsNotFetched) {
-              return NoRecordsText(text: state.itemDetailsNotFetched);
+    return Scaffold(
+      appBar: const GenericAppBar(title: StringConstants.kEditItem),
+      bottomNavigationBar: BottomAppBar(
+        child: PrimaryButton(
+          onPressed: () {
+            if (editExpenseMap['itemid'] == '3' ||
+                editExpenseMap['itemid'] == '6') {
+              Navigator.pushNamed(context, ExpenseEditFormTwo.routeName,
+                  arguments: editExpenseMap['details_model']);
             } else {
-              return const SizedBox.shrink();
+              Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
             }
           },
+          textValue: DatabaseUtil.getText('nextButtonText'),
         ),
+      ),
+      body: BlocBuilder<ExpenseBloc, ExpenseStates>(
+        buildWhen: (previousState, currentState) =>
+            currentState is FetchingExpenseItemDetails ||
+            currentState is ExpenseItemDetailsFetched ||
+            currentState is ExpenseItemDetailsNotFetched,
+        builder: (context, state) {
+          if (state is FetchingExpenseItemDetails) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ExpenseItemDetailsFetched) {
+            editExpenseMap['item_details_model'] =
+                state.fetchExpenseItemDetailsModel.data;
+            editExpenseMap['id'] = state.fetchExpenseItemDetailsModel.data.id;
+            return Padding(
+              padding: const EdgeInsets.only(
+                  left: leftRightMargin,
+                  right: leftRightMargin,
+                  top: xxTinierSpacing),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ExpenseDateExpansionTile(),
+                  const ExpenseItemListTile(),
+                  Text(StringConstants.kWorkingAt,
+                      style: Theme.of(context)
+                          .textTheme
+                          .xSmall
+                          .copyWith(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: xxxTinierSpacing),
+                  const ExpenseWorkingAtExpansionTile(),
+                  const ExpenseWorkingAtNumberListTile(),
+                  const SizedBox(height: xxTinySpacing)
+                ],
+              ),
+            );
+          } else if (state is ExpenseItemDetailsNotFetched) {
+            return NoRecordsText(text: state.itemDetailsNotFetched);
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
