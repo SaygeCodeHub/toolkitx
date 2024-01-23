@@ -48,6 +48,13 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<SaveLinkedDocuments>(_saveLinkedDocuments);
     on<AttachDocuments>(_attachDocuments);
     on<DeleteDocuments>(_deleteDocuments);
+    on<OpenDocumentsForInformation>(_openDocumentsForInformation);
+    on<OpenDocumentsForReview>(_openDocumentsForReview);
+    on<ApproveDocument>(_approveDocuments);
+    on<RejectDocument>(_rejectDocument);
+    on<WithdrawDocument>(_withdrawDocument);
+    on<CloseDocument>(_closeDocument);
+    on<SaveDocumentComments>(_saveDocumentComments);
   }
 
   Future<void> _getDocumentsList(
@@ -171,9 +178,9 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       if (documentDetailsModel.data.canclose == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_closedocument'));
       }
-      if (documentDetailsModel.data.canedit == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('Edit'));
-      }
+      // if (documentDetailsModel.data.canedit == '1') {
+      //   documentsPopUpMenu.add(DatabaseUtil.getText('Edit'));
+      // }
       if (documentDetailsModel.data.canopen == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('Open'));
       }
@@ -181,6 +188,9 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
       }
       if (documentDetailsModel.data.canwithdraw == '1') {
+        documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
+      }
+      if (documentDetailsModel.data.canopen == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
       }
       emit(DocumentsDetailsFetched(
@@ -287,6 +297,192 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
     } catch (e) {
       emit(DeleteDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _openDocumentsForInformation(
+      OpenDocumentsForInformation event, Emitter<DocumentsStates> emit) async {
+    emit(const OpeningDocumentsForInformation());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openDocumentForInfoMap = {
+        "hashcode": hashCode,
+        "documentid": event.documentId,
+        "userid": userId
+      };
+      PostDocumentsModel postDocumentsModel = await _documentsRepository
+          .openDocumentFopInformation(openDocumentForInfoMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentOpenedForInformation(
+            postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(OpenDocumentsForInformationError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(OpenDocumentsForInformationError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _openDocumentsForReview(
+      OpenDocumentsForReview event, Emitter<DocumentsStates> emit) async {
+    emit(const OpeningDocumentsForReview());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "duedate": "2023-08-14",
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA=="
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.openDocumentFopReview(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentOpenedForReview(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(OpenDocumentsForReviewError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(OpenDocumentsForReviewError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _approveDocuments(
+      ApproveDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const ApprovingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "comments": "Approved",
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.approveDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsApproved(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(ApproveDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ApproveDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectDocument(
+      RejectDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const RejectingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "comments": "Rejecteed",
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.rejectDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsRejected(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(RejectDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(RejectDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _withdrawDocument(
+      WithdrawDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const WithdrawingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+        "hashcode": hashCode,
+        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.withdrawDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsWithdrawn(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(WithdrawDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WithdrawDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _closeDocument(
+      CloseDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const ClosingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+        "hashcode": hashCode
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.closeDocuments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsClosed(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(CloseDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(CloseDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveDocumentComments(
+      SaveDocumentComments event, Emitter<DocumentsStates> emit) async {
+    emit(const SavingDocumentComments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDocumentsMap = {
+        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+        "documentid": "k3YypYo0qq9glAb9lxQqug==",
+        "comments": "Comments1",
+        "files": "638276145347570986_name.png",
+        "refno": "1",
+        "hashcode": hashCode
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.saveDocumentComments(deleteDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentCommentsSaved(postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(SaveDocumentCommentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(SaveDocumentCommentsError(message: e.toString()));
     }
   }
 }

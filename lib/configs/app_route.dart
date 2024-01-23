@@ -49,6 +49,7 @@ import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_approve_and_reject_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
@@ -526,6 +527,8 @@ class AppRoutes {
       case ApproveEquipmentRequestScreen.routeName:
         return _createRoute(ApproveEquipmentRequestScreen(
             requestId: settings.arguments.toString()));
+      case DocumentsApproveAndRejectScreen.routeName:
+        return _createRoute(const DocumentsApproveAndRejectScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
