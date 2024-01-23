@@ -9,16 +9,9 @@ import '../../../blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import '../enter_equipment_code_screen.dart';
 import '../search_equipment_list_screen.dart';
 
-class TransferEquipmentPopupMenu extends StatefulWidget {
+class TransferEquipmentPopupMenu extends StatelessWidget {
   const TransferEquipmentPopupMenu({super.key});
 
-  @override
-  State<TransferEquipmentPopupMenu> createState() =>
-      _TransferEquipmentPopupMenuState();
-}
-
-class _TransferEquipmentPopupMenuState
-    extends State<TransferEquipmentPopupMenu> {
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
         value: position,
@@ -35,16 +28,23 @@ class _TransferEquipmentPopupMenuState
     ];
     return PopupMenuButton(
         onSelected: (value) {
+          String code = '';
           Future<void> scanCode() async {
-            final code = await Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CustomQRCodeScanner()),
+                  builder: (context) => CustomQRCodeScanner(
+                        onCaptured: (String qrCode) {
+                          code = qrCode;
+                        },
+                        onPressed: () {
+                          context
+                              .read<EquipmentTraceabilityBloc>()
+                              .add(FetchEquipmentByCode(code: code));
+                          Navigator.pop(context);
+                        },
+                      )),
             );
-            if (!mounted) return;
-            context
-                .read<EquipmentTraceabilityBloc>()
-                .add(FetchEquipmentByCode(code: code));
           }
 
           if (value == StringConstants.kScan) {

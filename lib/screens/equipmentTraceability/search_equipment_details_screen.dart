@@ -13,19 +13,22 @@ import 'widgets/equipment_details_tab_two.dart';
 import 'widgets/search_equipment_poup_menu_button.dart';
 
 class SearchEquipmentDetailsScreen extends StatelessWidget {
-  const SearchEquipmentDetailsScreen(
-      {super.key, required this.searchEquipmentDetailsMap});
+  const SearchEquipmentDetailsScreen({
+    super.key,
+  });
 
   static const routeName = 'EquipmentDetailsScreen';
-  final Map searchEquipmentDetailsMap;
+  static Map searchEquipmentDetailsMap = {};
 
   @override
   Widget build(BuildContext context) {
     context.read<EquipmentTraceabilityBloc>().add(FetchSearchEquipmentDetails(
-        equipmentId: searchEquipmentDetailsMap["equipmentId"]));
+        equipmentId: searchEquipmentDetailsMap["equipmentId"] ??
+            context.read<EquipmentTraceabilityBloc>().equipmentIdByQR));
     return Scaffold(
       appBar: GenericAppBar(
-          title: searchEquipmentDetailsMap["equipmentName"],
+          title: searchEquipmentDetailsMap["equipmentName"] ??
+              context.read<EquipmentTraceabilityBloc>().equipmentName,
           actions: [
             BlocConsumer<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
               listener: (context, state) {

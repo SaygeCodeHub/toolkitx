@@ -64,6 +64,8 @@ class EquipmentTraceabilityBloc
   List<SearchEquipmentDatum> searchEquipmentDatum = [];
   List<MyRequestTransfer> myRequestData = [];
   String equipmentId = "";
+  String equipmentIdByQR = "";
+  String equipmentName = "";
   String code = "";
   String transferValue = "";
   String personId = "";
@@ -307,6 +309,8 @@ class EquipmentTraceabilityBloc
               "usercount": 0
             });
           }
+          equipmentIdByQR = fetchEquipmentByCodeModel.data.id;
+          equipmentName = fetchEquipmentByCodeModel.data.equipmentname;
         }
 
         emit(EquipmentByCodeFetched(
