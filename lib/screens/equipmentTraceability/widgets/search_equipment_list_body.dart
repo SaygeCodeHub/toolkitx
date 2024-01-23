@@ -39,10 +39,11 @@ class SearchEquipmentListBody extends StatelessWidget {
                         "equipmentId": data[index].id,
                         "equipmentName": data[index].equipmentname
                       };
+                      SearchEquipmentDetailsScreen.searchEquipmentDetailsMap =
+                          searchEquipmentDetailsMap;
                       SearchEquipmentListScreen.isTransferScreen != true
                           ? Navigator.pushNamed(
-                              context, SearchEquipmentDetailsScreen.routeName,
-                              arguments: searchEquipmentDetailsMap)
+                              context, SearchEquipmentDetailsScreen.routeName)
                           : null;
                     },
                     title: Text(data[index].equipmentname,
