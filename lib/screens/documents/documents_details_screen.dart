@@ -60,6 +60,17 @@ class DocumentsDetailsScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.message, '');
               }
+              if (state is OpeningDocumentsForInformation) {
+                ProgressBar.show(context);
+              }
+              if (state is DocumentOpenedForInformation) {
+                ProgressBar.dismiss(context);
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+              if (state is OpenDocumentsForInformationError) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.message, '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentsDetails ||

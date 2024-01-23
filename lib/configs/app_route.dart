@@ -9,7 +9,6 @@ import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
-import 'package:toolkit/widgets/custom_qr_scanner.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
@@ -50,6 +49,7 @@ import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
 import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_approve_and_reject_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
@@ -493,9 +493,7 @@ class AppRoutes {
           isFromHome: settings.arguments as bool,
         ));
       case SearchEquipmentDetailsScreen.routeName:
-        return _createRoute(SearchEquipmentDetailsScreen(
-          searchEquipmentDetailsMap: settings.arguments as Map,
-        ));
+        return _createRoute(const SearchEquipmentDetailsScreen());
 
       case SearchEquipmentFilterScreen.routeName:
         return _createRoute(const SearchEquipmentFilterScreen());
@@ -529,8 +527,8 @@ class AppRoutes {
       case ApproveEquipmentRequestScreen.routeName:
         return _createRoute(ApproveEquipmentRequestScreen(
             requestId: settings.arguments.toString()));
-      case CustomQRCodeScanner.routeName:
-        return _createRoute(const CustomQRCodeScanner());
+      case DocumentsApproveAndRejectScreen.routeName:
+        return _createRoute(const DocumentsApproveAndRejectScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

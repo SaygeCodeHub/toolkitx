@@ -178,3 +178,115 @@ class DeleteDocumentsError extends DocumentsStates {
 
   const DeleteDocumentsError({required this.message});
 }
+
+class OpeningDocumentsForInformation extends DocumentsStates {
+  const OpeningDocumentsForInformation();
+}
+
+class DocumentOpenedForInformation extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentOpenedForInformation({required this.postDocumentsModel});
+}
+
+class OpenDocumentsForInformationError extends DocumentsStates {
+  final String message;
+
+  const OpenDocumentsForInformationError({required this.message});
+}
+
+class OpeningDocumentsForReview extends DocumentsStates {
+  const OpeningDocumentsForReview();
+}
+
+class DocumentOpenedForReview extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentOpenedForReview({required this.postDocumentsModel});
+}
+
+class OpenDocumentsForReviewError extends DocumentsStates {
+  final String message;
+
+  const OpenDocumentsForReviewError({required this.message});
+}
+
+class ApprovingDocuments extends DocumentsStates {
+  const ApprovingDocuments();
+}
+
+class DocumentsApproved extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsApproved({required this.postDocumentsModel});
+}
+
+class ApproveDocumentsError extends DocumentsStates {
+  final String message;
+
+  const ApproveDocumentsError({required this.message});
+}
+
+class RejectingDocuments extends DocumentsStates {
+  const RejectingDocuments();
+}
+
+class DocumentsRejected extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsRejected({required this.postDocumentsModel});
+}
+
+class RejectDocumentsError extends DocumentsStates {
+  final String message;
+
+  const RejectDocumentsError({required this.message});
+}
+
+class WithdrawingDocuments extends DocumentsStates {
+  const WithdrawingDocuments();
+}
+
+class DocumentsWithdrawn extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsWithdrawn({required this.postDocumentsModel});
+}
+
+class WithdrawDocumentsError extends DocumentsStates {
+  final String message;
+
+  const WithdrawDocumentsError({required this.message});
+}
+
+class ClosingDocuments extends DocumentsStates {
+  const ClosingDocuments();
+}
+
+class DocumentsClosed extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentsClosed({required this.postDocumentsModel});
+}
+
+class CloseDocumentsError extends DocumentsStates {
+  final String message;
+
+  const CloseDocumentsError({required this.message});
+}
+
+class SavingDocumentComments extends DocumentsStates {
+  const SavingDocumentComments();
+}
+
+class DocumentCommentsSaved extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentCommentsSaved({required this.postDocumentsModel});
+}
+
+class SaveDocumentCommentsError extends DocumentsStates {
+  final String message;
+
+  const SaveDocumentCommentsError({required this.message});
+}

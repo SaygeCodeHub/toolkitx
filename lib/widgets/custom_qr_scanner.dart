@@ -7,9 +7,14 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import '../../configs/app_color.dart';
 
+typedef CreatedForStringCallBack = Function(String qrCode);
+
 class CustomQRCodeScanner extends StatefulWidget {
-  static const routeName = 'CustomQRCodeScanner';
-  const CustomQRCodeScanner({Key? key}) : super(key: key);
+  const CustomQRCodeScanner(
+      {Key? key, this.onPressed, required this.onCaptured})
+      : super(key: key);
+  final Function()? onPressed;
+  final CreatedForStringCallBack onCaptured;
 
   @override
   State<CustomQRCodeScanner> createState() => _CustomQRCodeScannerState();
@@ -58,9 +63,10 @@ class _CustomQRCodeScannerState extends State<CustomQRCodeScanner> {
                   child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: xxLargeSpacing),
                 child: PrimaryButton(
-                    onPressed: () {
-                      Navigator.pop(context, result);
-                    },
+                    onPressed: widget.onPressed ??
+                        () {
+                          Navigator.pop(context, result);
+                        },
                     textValue: StringConstants.kCapture),
               ))
             ]),
@@ -75,6 +81,7 @@ class _CustomQRCodeScannerState extends State<CustomQRCodeScanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData.code.toString();
+        widget.onCaptured(result);
       });
     });
   }
