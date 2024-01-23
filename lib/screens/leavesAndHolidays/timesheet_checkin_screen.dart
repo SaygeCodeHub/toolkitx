@@ -117,6 +117,7 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                     Expanded(
                         child: PrimaryButton(
                             onPressed: () {
+                              AddAndEditTimeSheetScreen.isFromEdit = false;
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];

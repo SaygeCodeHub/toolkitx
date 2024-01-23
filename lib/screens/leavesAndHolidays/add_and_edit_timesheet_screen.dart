@@ -23,6 +23,7 @@ import '../../widgets/progress_bar.dart';
 class AddAndEditTimeSheetScreen extends StatelessWidget {
   static Map saveTimeSheetMap = {};
   static const routeName = 'TimeSheetWorkingAtScreen';
+  static bool isFromEdit = false;
 
   const AddAndEditTimeSheetScreen({
     super.key,
@@ -30,10 +31,10 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log("timeSheetDetailsId===========>${saveTimeSheetMap['timeSheetDetailsId']}");
-    log("time===========>${saveTimeSheetMap["starttime"]}");
+    log("Id===========>${saveTimeSheetMap['id']}");
+    log("date===========>${saveTimeSheetMap["date"]}");
     context.read<LeavesAndHolidaysBloc>().add(FetchTimeSheetDetails(
-        timeSheetDetailsId: saveTimeSheetMap['timeSheetDetailsId']));
+        timeSheetDetailsId: AddAndEditTimeSheetScreen.saveTimeSheetMap['id']));
     return Scaffold(
       appBar: GenericAppBar(title: saveTimeSheetMap['date']),
       body: Padding(
@@ -58,7 +59,8 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                   log("state==================>$state");
                   if (state is FetchingTimeSheetDetails) {
                     return Padding(
-                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.35),
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.35),
                       child: const Center(child: CircularProgressIndicator()),
                     );
                   } else if (state is TimeSheetDetailsFetched) {
@@ -80,8 +82,9 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TimePickerTextField(
-                          editTime: AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["starttime"] ??
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["starttime"] :
                               "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['starttime'] = time;
@@ -94,8 +97,9 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TimePickerTextField(
-                          editTime: AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["endtime"] ??
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["endtime"] :
                               "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['endtime'] = time;
@@ -109,9 +113,10 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         const SizedBox(height: xxTinierSpacing),
                         TextFieldWidget(
                           textInputType: TextInputType.number,
-                          value: AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["breakmins"] ??
-                              "",
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["breakmins"]
+                              : "",
                           onTextFieldChanged: (textField) {
                             saveTimeSheetMap['breakmins'] = textField;
                           },
@@ -123,8 +128,9 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TextFieldWidget(
-                          value: AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["description"] ??
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["description"] :
                               "",
                           maxLines: 3,
                           textInputAction: TextInputAction.done,
@@ -134,16 +140,18 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         )
                       ],
                     );
-                  } else if (state is TimeSheetDetailsNotFetched){
+                  } else if (state is TimeSheetDetailsNotFetched) {
                     return Center(
                       child: GenericReloadButton(
                           onPressed: () {
-                            context.read<LeavesAndHolidaysBloc>().add(FetchTimeSheetDetails(
-                                timeSheetDetailsId: saveTimeSheetMap['timeSheetDetailsId']));
+                            context.read<LeavesAndHolidaysBloc>().add(
+                                FetchTimeSheetDetails(
+                                    timeSheetDetailsId: saveTimeSheetMap[
+                                        'timeSheetDetailsId']));
                           },
                           textValue: StringConstants.kReload),
                     );
-                  }else {
+                  } else {
                     return const SizedBox.shrink();
                   }
                 },

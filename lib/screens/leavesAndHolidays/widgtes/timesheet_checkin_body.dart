@@ -46,11 +46,12 @@ class TimeSheetCheckInBody extends StatelessWidget {
                         child: CustomIconButton(
                             icon: Icons.edit,
                             onPressed: () {
+                              AddAndEditTimeSheetScreen.isFromEdit = true;
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];
                               AddAndEditTimeSheetScreen
-                                      .saveTimeSheetMap['timeSheetDetailsId'] =
+                                      .saveTimeSheetMap['id'] =
                                   checkInList[index].id;
                               Navigator.pushNamed(
                                   context, AddAndEditTimeSheetScreen.routeName);
