@@ -197,3 +197,35 @@ class TransferRequestNotSent extends EquipmentTraceabilityState {
 
   TransferRequestNotSent({required this.errorMessage});
 }
+
+class EquipmentWorkOrderSelected extends EquipmentTraceabilityState {
+  final Map workOrderEquipmentMap;
+
+  EquipmentWorkOrderSelected({required this.workOrderEquipmentMap});
+}
+
+class TransferRequestApproving extends EquipmentTraceabilityState {}
+
+class TransferRequestApproved extends EquipmentTraceabilityState {}
+
+class TransferRequestNotApproved extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotApproved({required this.errorMessage});
+}
+
+class SearchEquipmentSelected extends EquipmentTraceabilityState {
+  final bool isChecked;
+
+  SearchEquipmentSelected({required this.isChecked});
+}
+
+class TransferRequestRejecting extends EquipmentTraceabilityState {}
+
+class TransferRequestRejected extends EquipmentTraceabilityState {}
+
+class TransferRequestNotRejected extends EquipmentTraceabilityState {
+  final String errorMessage;
+
+  TransferRequestNotRejected({required this.errorMessage});
+}

@@ -22,6 +22,7 @@ abstract class StringConstants {
   static const String kParts = 'Parts'; //
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
+  static const String kEditItem = 'Edit Item'; //
   static const String kExpenseWorkingAtNumber =
       'Working at Number cannot be empty!    '; //
   static const String kGoBack = 'Go Back'; //
@@ -492,6 +493,8 @@ abstract class StringConstants {
   static const String kAddTimeSheet = 'Add TimeSheet';
   static const String kSubmitTimeSheet = 'Submit TimeSheet';
   static const String kMinsBreak = 'mins break';
+  static const String kTimeSheetSubmittedSuccessfully =
+      'TimeSheet Submitted Successfully';
   static const String kDoYouWantToDeleteThisEntry =
       'Do you want to delete this entry ?';
   static const String kWarehouse = "Warehouse";
@@ -500,4 +503,8 @@ abstract class StringConstants {
   static const String kSelectPositions = "Select Positions";
   static const String kSelectWarehouse = "Select Warehouse";
   static const String kSelectEmployee = "Select Employee";
+  static const String kWorkorder = "Workorder";
+  static const String kAreYouSureToReject = "Are you sure to reject?";
+  static const String kRequestRejected = "Request Rejected";
+  static const String kFetchedCode = "Fetched Code :";
 }

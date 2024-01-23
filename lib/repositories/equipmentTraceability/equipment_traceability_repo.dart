@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -8,6 +9,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positi
 
 import '../../data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import '../../data/models/equipmentTraceability/fetch_my_request_model.dart';
+import '../../data/models/equipmentTraceability/reject_transfer_request_model.dart';
 import '../../data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import '../../data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import '../../data/models/equipmentTraceability/send_transfer_rquest_model.dart';
@@ -47,4 +49,10 @@ abstract class EquipmentTraceabilityRepo {
 
   Future<SendTransferRequestModel> sendTransferRequest(
       Map sendTransferRequestMap);
+
+  Future<ApproveTransferRequestModel> approveTransferRequest(
+      Map approveTransferRequestMap);
+
+  Future<RejectTransferRequestModel> rejectTransferRequest(
+      Map rejectTransferRequestMap);
 }

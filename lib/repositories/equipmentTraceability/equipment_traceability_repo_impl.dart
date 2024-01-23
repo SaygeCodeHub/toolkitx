@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_employees_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_by_code_model.dart';
@@ -7,6 +8,7 @@ import 'package:toolkit/data/models/equipmentTraceability/fetch_search_equipment
 import 'package:toolkit/data/models/equipmentTraceability/fetch_equipment_set_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/fetch_warehouse_positions_model.dart';
+import 'package:toolkit/data/models/equipmentTraceability/reject_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_custom_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/save_equipement_images_parameter_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/send_transfer_rquest_model.dart';
@@ -110,5 +112,23 @@ class EquipmentTraceabilityRepoImpl extends EquipmentTraceabilityRepo {
         "${ApiConstants.baseUrl}equipment/sendtransferrequest",
         sendTransferRequestMap);
     return SendTransferRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<ApproveTransferRequestModel> approveTransferRequest(
+      Map approveTransferRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}equipment/approvetransferrequest",
+        approveTransferRequestMap);
+    return ApproveTransferRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<RejectTransferRequestModel> rejectTransferRequest(
+      Map rejectTransferRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}equipment/rejecttransferrequest",
+        rejectTransferRequestMap);
+    return RejectTransferRequestModel.fromJson(response);
   }
 }

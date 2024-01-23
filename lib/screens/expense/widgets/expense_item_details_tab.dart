@@ -13,13 +13,19 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
+import 'addItemsWidgets/expense_edit_items_screen.dart';
+import 'addItemsWidgets/expense_working_at_expansion_tile.dart';
 
 class ExpenseItemDetailTab extends StatelessWidget {
   final int tabIndex;
   final ExpenseDetailsData expenseDetailsData;
+  final String expenseId;
 
   const ExpenseItemDetailTab(
-      {super.key, required this.tabIndex, required this.expenseDetailsData});
+      {super.key,
+      required this.tabIndex,
+      required this.expenseDetailsData,
+      required this.expenseId});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +72,27 @@ class ExpenseItemDetailTab extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             child: CustomTextButton(
                                 textColor: AppColor.black,
-                                onPressed: () => null,
+                                onPressed: () {
+                                  ExpenseEditItemsScreen
+                                          .editExpenseMap['details_model'] =
+                                      expenseDetailsData;
+                                  ExpenseEditItemsScreen
+                                      .editExpenseMap['expense_id'] = expenseId;
+                                  context
+                                      .read<ExpenseBloc>()
+                                      .expenseWorkingAtMap
+                                      .clear();
+                                  ExpenseWorkingAtExpansionTile.workingAt = '';
+                                  Navigator.pushNamed(context,
+                                          ExpenseEditItemsScreen.routeName,
+                                          arguments: expenseDetailsData
+                                              .itemlist[index].id)
+                                      .then((value) => context
+                                          .read<ExpenseBloc>()
+                                          .add(FetchExpenseDetails(
+                                              tabIndex: 2,
+                                              expenseId: expenseId)));
+                                },
                                 textValue: DatabaseUtil.getText('Edit')))
                       ];
                     },

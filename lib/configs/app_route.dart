@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -11,6 +10,7 @@ import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart'
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
+import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -489,9 +489,7 @@ class AppRoutes {
           isFromHome: settings.arguments as bool,
         ));
       case SearchEquipmentDetailsScreen.routeName:
-        return _createRoute(SearchEquipmentDetailsScreen(
-          searchEquipmentDetailsMap: settings.arguments as Map,
-        ));
+        return _createRoute(const SearchEquipmentDetailsScreen());
 
       case SearchEquipmentFilterScreen.routeName:
         return _createRoute(const SearchEquipmentFilterScreen());
@@ -501,7 +499,14 @@ class AppRoutes {
         ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
-
+      case ExpenseEditItemsScreen.routeName:
+        return _createRoute(ExpenseEditItemsScreen(
+            expenseItemId: settings.arguments.toString()));
+      case ExpenseEditFormTwo.routeName:
+        return _createRoute(ExpenseEditFormTwo(
+            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+      case ExpenseEditFormThree.routeName:
+        return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
@@ -515,6 +520,9 @@ class AppRoutes {
         return _createRoute(const ViewMyRequestScreen());
       case SendTransferScreen.routeName:
         return _createRoute(const SendTransferScreen());
+      case ApproveEquipmentRequestScreen.routeName:
+        return _createRoute(ApproveEquipmentRequestScreen(
+            requestId: settings.arguments.toString()));
         case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
       default:
