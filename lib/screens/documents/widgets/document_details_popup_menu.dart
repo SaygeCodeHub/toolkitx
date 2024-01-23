@@ -48,16 +48,18 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = false;
-            Navigator.pushNamed(context, DocumentsApproveAndRejectScreen.routeName);
+            Navigator.pushNamed(
+                context, DocumentsApproveAndRejectScreen.routeName);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
-
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = true;
-            Navigator.pushNamed(context, DocumentsApproveAndRejectScreen.routeName);
+            Navigator.pushNamed(
+                context, DocumentsApproveAndRejectScreen.routeName);
           } else if (popUpMenuItems[value] ==
-              DatabaseUtil.getText('withdraw')) {} else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('withdraw')) {
+          } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_openforinformation')) {}
         },
         position: PopupMenuPosition.under,

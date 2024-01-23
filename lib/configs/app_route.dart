@@ -527,7 +527,7 @@ class AppRoutes {
       case ApproveEquipmentRequestScreen.routeName:
         return _createRoute(ApproveEquipmentRequestScreen(
             requestId: settings.arguments.toString()));
-        case DocumentsApproveAndRejectScreen.routeName:
+      case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
       default:
         return _createRoute(const WelcomeScreen());

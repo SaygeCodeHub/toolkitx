@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
@@ -16,11 +16,13 @@ class DocumentsApproveAndRejectScreen extends StatelessWidget {
   static const routeName = 'DocumentsAddCommentsScreen';
   static bool isFromReject = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GenericAppBar(title: isFromReject == true ? DatabaseUtil.getText("dms_rejectdocument"): DatabaseUtil.getText("dms_approvedocument")),
+      appBar: GenericAppBar(
+          title: isFromReject == true
+              ? DatabaseUtil.getText("dms_rejectdocument")
+              : DatabaseUtil.getText("dms_approvedocument")),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -29,17 +31,23 @@ class DocumentsApproveAndRejectScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Comments" ,style: Theme.of(context).textTheme.xSmall.copyWith(
-                fontWeight: FontWeight.w500, color: AppColor.black)),
-            const SizedBox(height: 10),
-            TextFieldWidget(maxLines: 2,onTextFieldChanged: (textField) {
-
-            },),
-            const SizedBox(height: 10),
-            UploadImageMenu(onUploadImageResponse: (uploadImageList) {
-
-            },),
-            PrimaryButton(onPressed: (){}, textValue: isFromReject == true ? DatabaseUtil.getText('Reject'):DatabaseUtil.getText('approve')),
+            Text(StringConstants.kComments,
+                style: Theme.of(context).textTheme.xSmall.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
+            const SizedBox(height: xxTinierSpacing),
+            TextFieldWidget(
+              maxLines: 2,
+              onTextFieldChanged: (textField) {},
+            ),
+            const SizedBox(height: xxxTinySpacing),
+            UploadImageMenu(
+              onUploadImageResponse: (uploadImageList) {},
+            ),
+            PrimaryButton(
+                onPressed: () {},
+                textValue: isFromReject == true
+                    ? DatabaseUtil.getText('Reject')
+                    : DatabaseUtil.getText('approve')),
           ],
         ),
       ),
