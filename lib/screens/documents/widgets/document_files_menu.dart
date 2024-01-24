@@ -44,9 +44,10 @@ class DocumentsFilesMenu extends StatelessWidget {
             AttachDocumentScreen.attachDocumentMap = documentFileMap;
             AttachDocumentScreen.isFromUploadVersion = true;
             Navigator.pushNamed(context, AttachDocumentScreen.routeName,
-                arguments: documentDetailsModel).then((_) => context
-                .read<DocumentsBloc>()
-                .add(const GetDocumentsDetails()));
+                    arguments: documentDetailsModel)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] == DatabaseUtil.getText('Delete')) {
             showDialog(
                 context: context,

@@ -35,12 +35,9 @@ class DocumentDetailsFiles extends StatelessWidget {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               Map documentMap = {
-                'name': documentDetailsModel
-                    .data.fileList[index].filename,
-                'version': documentDetailsModel
-                    .data.fileList[index].version,
-                'fileid': documentDetailsModel
-                    .data.fileList[index].fileid,
+                'name': documentDetailsModel.data.fileList[index].filename,
+                'version': documentDetailsModel.data.fileList[index].version,
+                'fileid': documentDetailsModel.data.fileList[index].fileid,
               };
               DocumentsFilesMenu.documentFileMap = documentMap;
               return CustomCard(

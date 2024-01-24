@@ -26,7 +26,8 @@ abstract class DocumentsRepository {
 
   Future<PostDocumentsModel> attachDocuments(Map attachDocumentsMap);
 
-  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(Map uploadFileVersionMap);
+  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(
+      Map uploadFileVersionMap);
 
   Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap);
 

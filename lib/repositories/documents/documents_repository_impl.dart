@@ -68,9 +68,11 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(Map uploadFileVersionMap) async {
+  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(
+      Map uploadFileVersionMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}document/uploadfileversion", uploadFileVersionMap);
+        "${ApiConstants.baseUrl}document/uploadfileversion",
+        uploadFileVersionMap);
     return DocumentUploadFileVersionModel.fromJson(response);
   }
 
@@ -137,5 +139,4 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
         withdrawDocumentsMap);
     return PostDocumentsModel.fromJson(response);
   }
-
 }

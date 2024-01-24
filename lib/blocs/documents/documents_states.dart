@@ -169,7 +169,8 @@ class DocumentFileVersionUploading extends DocumentsStates {}
 class DocumentFileVersionUploaded extends DocumentsStates {
   final DocumentUploadFileVersionModel documentUploadFileVersionModel;
 
-  const DocumentFileVersionUploaded({required this.documentUploadFileVersionModel});
+  const DocumentFileVersionUploaded(
+      {required this.documentUploadFileVersionModel});
 }
 
 class DocumentFileVersionNotUploaded extends DocumentsStates {

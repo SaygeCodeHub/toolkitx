@@ -260,7 +260,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      if(event.attachDocumentsMap['files'] != null){
+      if (event.attachDocumentsMap['files'] != null) {
         Map attachDocumentsMap = {
           "documentid": documentId,
           "files": event.attachDocumentsMap['files'],
@@ -286,13 +286,14 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     }
   }
 
-  Future<FutureOr<void>> _uploadDocumentFileVersion(UploadDocumentFileVersion event, Emitter<DocumentsStates> emit) async {
+  Future<FutureOr<void>> _uploadDocumentFileVersion(
+      UploadDocumentFileVersion event, Emitter<DocumentsStates> emit) async {
     emit(DocumentFileVersionUploading());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      if(event.uploadFileVersionMap['filename'] !=null){
+      if (event.uploadFileVersionMap['filename'] != null) {
         Map uploadFileVersionMap = {
           "fileid": event.uploadFileVersionMap['fileid'],
           "filename": event.uploadFileVersionMap['filename'],
@@ -525,6 +526,4 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       emit(SaveDocumentCommentsError(message: e.toString()));
     }
   }
-
-
 }
