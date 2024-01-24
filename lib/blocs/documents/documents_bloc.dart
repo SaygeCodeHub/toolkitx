@@ -182,7 +182,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_closedocument'));
       }
       if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('Open'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforreview'));
       }
       if (documentDetailsModel.data.canreject == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
@@ -191,7 +191,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
       }
       if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforinformation'));
       }
       emit(DocumentsDetailsFetched(
           documentDetailsModel: documentDetailsModel,
@@ -372,16 +372,17 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openDocumentFopInformationMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "duedate": "2023-08-14",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA=="
+        "documentid": documentId,
+        "duedate": event.dueDate,
+        "userid": userId
       };
-      PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.openDocumentFopReview(deleteDocumentsMap);
+      PostDocumentsModel postDocumentsModel = await _documentsRepository
+          .openDocumentFopReview(openDocumentFopInformationMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentOpenedForReview(postDocumentsModel: postDocumentsModel));
+        emit(DocumentOpenedForReview());
       } else {
         emit(OpenDocumentsForReviewError(
             message:

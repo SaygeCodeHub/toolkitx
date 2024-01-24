@@ -82,10 +82,9 @@ class OpenDocumentsForInformation extends DocumentsEvents {
 }
 
 class OpenDocumentsForReview extends DocumentsEvents {
-  final String documentId;
   final String dueDate;
 
-  OpenDocumentsForReview({required this.documentId, required this.dueDate});
+  OpenDocumentsForReview({required this.dueDate});
 }
 
 class ApproveDocument extends DocumentsEvents {

@@ -12,6 +12,7 @@ import '../add_document_comments_screen.dart';
 import '../attach_document_screen.dart';
 import '../documents_approve_and_reject_screen.dart';
 import '../link_document_screen.dart';
+import '../open_document_for_review_screen.dart';
 
 class DocumentsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -72,7 +73,15 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {
           } else if (popUpMenuItems[value] ==
-              DatabaseUtil.getText('dms_openforinformation')) {}
+              DatabaseUtil.getText('dms_openforinformation')) {
+          } else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('dms_openforreview')) {
+            Navigator.pushNamed(context, OpenDocumentForReviewScreen.routeName,
+                    arguments: documentDetailsModel)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
