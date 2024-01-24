@@ -259,11 +259,7 @@ class WithdrawingDocuments extends DocumentsStates {
   const WithdrawingDocuments();
 }
 
-class DocumentsWithdrawn extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsWithdrawn({required this.postDocumentsModel});
-}
+class DocumentsWithdrawn extends DocumentsStates {}
 
 class WithdrawDocumentsError extends DocumentsStates {
   final String message;
