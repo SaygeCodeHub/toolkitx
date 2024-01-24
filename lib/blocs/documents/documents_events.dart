@@ -84,10 +84,9 @@ class OpenDocumentsForReview extends DocumentsEvents {
 }
 
 class ApproveDocument extends DocumentsEvents {
-  final String documentId;
   final String comment;
 
-  ApproveDocument({required this.documentId, required this.comment});
+  ApproveDocument({required this.comment});
 }
 
 class RejectDocument extends DocumentsEvents {

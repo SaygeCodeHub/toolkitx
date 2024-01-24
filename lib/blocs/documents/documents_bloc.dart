@@ -397,17 +397,18 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map approveDocumentsMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "comments": "Approved",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.approveDocuments(deleteDocumentsMap);
+          await _documentsRepository.approveDocuments(approveDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsApproved(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsApproved());
       } else {
         emit(ApproveDocumentsError(
             message:
