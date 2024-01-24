@@ -34,6 +34,15 @@ class DocumentDetailsFiles extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
+              Map documentMap = {
+                'name': documentDetailsModel
+                    .data.fileList[index].filename,
+                'version': documentDetailsModel
+                    .data.fileList[index].version,
+                'fileid': documentDetailsModel
+                    .data.fileList[index].fileid,
+              };
+              DocumentsFilesMenu.documentFileMap = documentMap;
               return CustomCard(
                   child: Padding(
                       padding:
@@ -73,10 +82,11 @@ class DocumentDetailsFiles extends StatelessWidget {
                                     ])
                               ]),
                           trailing: DocumentsFilesMenu(
-                              popUpMenuItems: DocumentsUtil.fileMenuOptions(
-                                  documentDetailsModel.data.fileList[index]),
-                              fileData:
-                                  documentDetailsModel.data.fileList[index]))));
+                            popUpMenuItems: DocumentsUtil.fileMenuOptions(
+                                documentDetailsModel.data.fileList[index]),
+                            fileData: documentDetailsModel.data.fileList[index],
+                            documentDetailsModel: documentDetailsModel,
+                          ))));
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: tinierSpacing);

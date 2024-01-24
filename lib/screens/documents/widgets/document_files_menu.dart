@@ -9,13 +9,19 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/android_pop_up.dart';
+import '../attach_document_screen.dart';
 
 class DocumentsFilesMenu extends StatelessWidget {
   final FileList fileData;
   final List popUpMenuItems;
+  final DocumentDetailsModel documentDetailsModel;
+  static Map documentFileMap = {};
 
   const DocumentsFilesMenu(
-      {Key? key, required this.popUpMenuItems, required this.fileData})
+      {Key? key,
+      required this.popUpMenuItems,
+      required this.fileData,
+      required this.documentDetailsModel})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
@@ -35,6 +41,12 @@ class DocumentsFilesMenu extends StatelessWidget {
         onSelected: (value) {
           if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_uploadnewversion')) {
+            AttachDocumentScreen.attachDocumentMap = documentFileMap;
+            AttachDocumentScreen.isFromUploadVersion = true;
+            Navigator.pushNamed(context, AttachDocumentScreen.routeName,
+                arguments: documentDetailsModel).then((_) => context
+                .read<DocumentsBloc>()
+                .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] == DatabaseUtil.getText('Delete')) {
             showDialog(
                 context: context,
