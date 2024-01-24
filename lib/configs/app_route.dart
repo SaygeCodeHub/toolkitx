@@ -46,6 +46,7 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/add_document_comments_screen.dart';
 import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
@@ -529,6 +530,8 @@ class AppRoutes {
             requestId: settings.arguments.toString()));
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
+      case AddDocumentCommentsScreen.routeName:
+        return _createRoute(const AddDocumentCommentsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
