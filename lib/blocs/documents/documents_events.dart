@@ -75,11 +75,7 @@ class DeleteDocuments extends DocumentsEvents {
   DeleteDocuments({required this.fileId});
 }
 
-class OpenDocumentsForInformation extends DocumentsEvents {
-  final String documentId;
-
-  OpenDocumentsForInformation({required this.documentId});
-}
+class OpenDocumentsForInformation extends DocumentsEvents {}
 
 class OpenDocumentsForReview extends DocumentsEvents {
   final String dueDate;
@@ -101,11 +97,7 @@ class RejectDocument extends DocumentsEvents {
   RejectDocument({required this.documentId, required this.comment});
 }
 
-class WithdrawDocument extends DocumentsEvents {
-  final String documentId;
-
-  WithdrawDocument({required this.documentId});
-}
+class WithdrawDocument extends DocumentsEvents {}
 
 class CloseDocument extends DocumentsEvents {
   final String documentId;

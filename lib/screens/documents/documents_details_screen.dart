@@ -71,6 +71,17 @@ class DocumentsDetailsScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.message, '');
               }
+              if (state is WithdrawingDocuments) {
+                ProgressBar.show(context);
+              }
+              if (state is DocumentsWithdrawn) {
+                ProgressBar.dismiss(context);
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+              if (state is WithdrawDocumentsError) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.message, '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentsDetails ||

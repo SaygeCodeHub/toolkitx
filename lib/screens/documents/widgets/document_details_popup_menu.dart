@@ -72,8 +72,10 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
                 context, DocumentsApproveAndRejectScreen.routeName);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {
+            context.read<DocumentsBloc>().add(WithdrawDocument());
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_openforinformation')) {
+            context.read<DocumentsBloc>().add(OpenDocumentsForInformation());
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_openforreview')) {
             Navigator.pushNamed(context, OpenDocumentForReviewScreen.routeName,

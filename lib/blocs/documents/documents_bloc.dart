@@ -183,15 +183,13 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
       if (documentDetailsModel.data.canopen == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforreview'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforinformation'));
       }
       if (documentDetailsModel.data.canreject == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
       }
       if (documentDetailsModel.data.canwithdraw == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
-      }
-      if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforinformation'));
       }
       emit(DocumentsDetailsFetched(
           documentDetailsModel: documentDetailsModel,
@@ -348,7 +346,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map openDocumentForInfoMap = {
         "hashcode": hashCode,
-        "documentid": event.documentId,
+        "documentid": documentId,
         "userid": userId
       };
       PostDocumentsModel postDocumentsModel = await _documentsRepository
@@ -453,16 +451,17 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map withdrawDocumentsMap = {
+        "documentid": hashCode,
+        "userid": userId,
         "hashcode": hashCode,
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.withdrawDocuments(deleteDocumentsMap);
+          await _documentsRepository.withdrawDocuments(withdrawDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsWithdrawn(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsWithdrawn());
       } else {
         emit(WithdrawDocumentsError(
             message:
