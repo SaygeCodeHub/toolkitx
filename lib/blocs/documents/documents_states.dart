@@ -295,14 +295,10 @@ class SavingDocumentComments extends DocumentsStates {
   const SavingDocumentComments();
 }
 
-class DocumentCommentsSaved extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentCommentsSaved({required this.postDocumentsModel});
-}
+class DocumentCommentsSaved extends DocumentsStates {}
 
 class SaveDocumentCommentsError extends DocumentsStates {
-  final String message;
+  final String errorMessage;
 
-  const SaveDocumentCommentsError({required this.message});
+  const SaveDocumentCommentsError({required this.errorMessage});
 }

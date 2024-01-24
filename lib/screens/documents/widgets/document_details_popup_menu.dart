@@ -8,6 +8,7 @@ import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
+import '../add_document_comments_screen.dart';
 import '../attach_document_screen.dart';
 import '../documents_approve_and_reject_screen.dart';
 import '../link_document_screen.dart';
@@ -44,6 +45,10 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
             Navigator.pushNamed(context, LinkDocumentScreen.routeName);
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('AddComments')) {
+            Navigator.pushNamed(context, AddDocumentCommentsScreen.routeName)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_attachdocument')) {
             AttachDocumentScreen.isFromUploadVersion = false;

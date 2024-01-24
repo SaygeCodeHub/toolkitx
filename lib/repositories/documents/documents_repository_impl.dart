@@ -6,6 +6,7 @@ import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
 import '../../data/models/documents/post_document_model.dart';
+import '../../data/models/documents/save_document_comments_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'documents_repository.dart';
@@ -124,12 +125,12 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
-  Future<PostDocumentsModel> saveDocumentComments(
+  Future<SaveDocumentCommentsModel> saveDocumentComments(
       Map saveDocumentCommentsMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}document/savecomments",
         saveDocumentCommentsMap);
-    return PostDocumentsModel.fromJson(response);
+    return SaveDocumentCommentsModel.fromJson(response);
   }
 
   @override
