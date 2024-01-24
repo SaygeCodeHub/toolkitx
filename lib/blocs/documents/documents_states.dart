@@ -215,11 +215,7 @@ class OpeningDocumentsForReview extends DocumentsStates {
   const OpeningDocumentsForReview();
 }
 
-class DocumentOpenedForReview extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentOpenedForReview({required this.postDocumentsModel});
-}
+class DocumentOpenedForReview extends DocumentsStates {}
 
 class OpenDocumentsForReviewError extends DocumentsStates {
   final String message;

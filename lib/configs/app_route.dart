@@ -55,6 +55,7 @@ import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
+import '../screens/documents/open_document_for_review_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/equipmentTraceability/approve_equipment_request_screen.dart';
 import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
@@ -532,6 +533,8 @@ class AppRoutes {
         return _createRoute(const DocumentsApproveAndRejectScreen());
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
+      case OpenDocumentForReviewScreen.routeName:
+        return _createRoute(const OpenDocumentForReviewScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
