@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
 
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
@@ -163,6 +164,21 @@ class AttachDocumentsError extends DocumentsStates {
   const AttachDocumentsError({required this.message});
 }
 
+class DocumentFileVersionUploading extends DocumentsStates {}
+
+class DocumentFileVersionUploaded extends DocumentsStates {
+  final DocumentUploadFileVersionModel documentUploadFileVersionModel;
+
+  const DocumentFileVersionUploaded(
+      {required this.documentUploadFileVersionModel});
+}
+
+class DocumentFileVersionNotUploaded extends DocumentsStates {
+  final String errorMessage;
+
+  const DocumentFileVersionNotUploaded({required this.errorMessage});
+}
+
 class DeletingDocuments extends DocumentsStates {
   const DeletingDocuments();
 }
@@ -279,14 +295,10 @@ class SavingDocumentComments extends DocumentsStates {
   const SavingDocumentComments();
 }
 
-class DocumentCommentsSaved extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentCommentsSaved({required this.postDocumentsModel});
-}
+class DocumentCommentsSaved extends DocumentsStates {}
 
 class SaveDocumentCommentsError extends DocumentsStates {
-  final String message;
+  final String errorMessage;
 
-  const SaveDocumentCommentsError({required this.message});
+  const SaveDocumentCommentsError({required this.errorMessage});
 }
