@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/documents/documents_bloc.dart';
+import 'package:toolkit/blocs/documents/documents_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_dimensions.dart';
@@ -43,8 +46,12 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
               DatabaseUtil.getText('AddComments')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_attachdocument')) {
+            AttachDocumentScreen.isFromUploadVersion = false;
             Navigator.pushNamed(context, AttachDocumentScreen.routeName,
-                arguments: documentDetailsModel);
+                    arguments: documentDetailsModel)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = false;

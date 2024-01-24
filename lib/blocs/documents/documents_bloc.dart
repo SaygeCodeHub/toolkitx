@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
 import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
 import 'package:toolkit/data/models/documents/post_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -47,6 +48,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<GetDocumentsToLink>(_fetchDocumentsToLink);
     on<SaveLinkedDocuments>(_saveLinkedDocuments);
     on<AttachDocuments>(_attachDocuments);
+    on<UploadDocumentFileVersion>(_uploadDocumentFileVersion);
     on<DeleteDocuments>(_deleteDocuments);
     on<OpenDocumentsForInformation>(_openDocumentsForInformation);
     on<OpenDocumentsForReview>(_openDocumentsForReview);
@@ -258,24 +260,63 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      Map attachDocumentsMap = {
-        "documentid": documentId,
-        "files": event.attachDocumentsMap['files'],
-        "userid": userId,
-        "notes": event.attachDocumentsMap['notes'],
-        "hashcode": hashCode
-      };
-      PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.attachDocuments(attachDocumentsMap);
-      if (postDocumentsModel.message == '1') {
-        emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+      if (event.attachDocumentsMap['files'] != null) {
+        Map attachDocumentsMap = {
+          "documentid": documentId,
+          "files": event.attachDocumentsMap['files'],
+          "userid": userId,
+          "notes": event.attachDocumentsMap['notes'],
+          "hashcode": hashCode
+        };
+        PostDocumentsModel postDocumentsModel =
+            await _documentsRepository.attachDocuments(attachDocumentsMap);
+        if (postDocumentsModel.message == '1') {
+          emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+        } else {
+          emit(AttachDocumentsError(
+              message:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       } else {
         emit(AttachDocumentsError(
-            message:
-                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+            message: DatabaseUtil.getText('PleaseSelectAnyDocOrImage')));
       }
     } catch (e) {
       emit(AttachDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _uploadDocumentFileVersion(
+      UploadDocumentFileVersion event, Emitter<DocumentsStates> emit) async {
+    emit(DocumentFileVersionUploading());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.uploadFileVersionMap['filename'] != null) {
+        Map uploadFileVersionMap = {
+          "fileid": event.uploadFileVersionMap['fileid'],
+          "filename": event.uploadFileVersionMap['filename'],
+          "userid": userId,
+          "notes": event.uploadFileVersionMap['notes'],
+          "hashcode": hashCode
+        };
+        DocumentUploadFileVersionModel documentUploadFileVersionModel =
+            await _documentsRepository
+                .documentUploadFileVersion(uploadFileVersionMap);
+        if (documentUploadFileVersionModel.message == '1') {
+          emit(DocumentFileVersionUploaded(
+              documentUploadFileVersionModel: documentUploadFileVersionModel));
+        } else {
+          emit(DocumentFileVersionNotUploaded(
+              errorMessage: documentUploadFileVersionModel.message));
+        }
+      } else {
+        emit(DocumentFileVersionNotUploaded(
+            errorMessage: DatabaseUtil.getText('PleaseSelectAnyDocOrImage')));
+      }
+    } catch (e) {
+      emit(DocumentFileVersionNotUploaded(errorMessage: e.toString()));
     }
   }
 

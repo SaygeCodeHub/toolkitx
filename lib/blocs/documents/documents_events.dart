@@ -63,6 +63,12 @@ class AttachDocuments extends DocumentsEvents {
   AttachDocuments({required this.attachDocumentsMap});
 }
 
+class UploadDocumentFileVersion extends DocumentsEvents {
+  final Map uploadFileVersionMap;
+
+  UploadDocumentFileVersion({required this.uploadFileVersionMap});
+}
+
 class DeleteDocuments extends DocumentsEvents {
   final String fileId;
 

@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
+
 import '../../data/models/documents/document_master_model.dart';
 import '../../data/models/documents/document_roles_model.dart';
 import '../../data/models/documents/documents_details_models.dart';
@@ -63,6 +65,15 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}document/attachfiles", attachDocumentsMap);
     return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(
+      Map uploadFileVersionMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/uploadfileversion",
+        uploadFileVersionMap);
+    return DocumentUploadFileVersionModel.fromJson(response);
   }
 
   @override
