@@ -10,13 +10,11 @@ typedef CreatedForListCallBack = Function(List idList);
 class TimeSheetCheckbox extends StatelessWidget {
   const TimeSheetCheckbox({
     super.key,
-    required this.selectedCreatedForIdList,
     required this.id,
     required this.onCreatedForChanged,
   });
 
   final String id;
-  final List selectedCreatedForIdList;
   final CreatedForListCallBack onCreatedForChanged;
   static List idsList = [];
   void _checkboxChange(isSelected, id) {

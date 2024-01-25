@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -31,9 +29,6 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          addIds(data.dates[index].hours, data.dates[index].id,
-              data.dates[index].status, leavesAndHolidaysIdList);
-          log("leavesAndHolidaysIdList================>$leavesAndHolidaysIdList");
           return CustomCard(
             elevation: xxTiniestSpacing,
             child: Padding(
@@ -128,7 +123,6 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                   data.dates[index].hours == '-') &&
                               data.dates[index].status == 0))
                           ? TimeSheetCheckbox(
-                              selectedCreatedForIdList: leavesAndHolidaysIdList,
                               id: data.dates[index].id,
                               onCreatedForChanged: (List<dynamic> idList) {
                                 context
@@ -141,8 +135,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                       .replaceAll(']', "")
                                       .replaceAll(',', ",")
                                 });
-                              },
-                            )
+                              })
                           : const SizedBox.shrink(),
                     )
                   ],
@@ -155,15 +148,5 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
           return const SizedBox(height: tinierSpacing);
         },
         itemCount: data.dates.length);
-  }
-}
-
-addIds(String hours, String id, int status, List leavesAndHolidaysIdList) {
-  if (id != '' && (hours != '-' || hours == '-') && status == 0) {
-    if (leavesAndHolidaysIdList
-            .indexWhere((element) => element.toString().trim() == id.trim()) ==
-        -1) {
-      leavesAndHolidaysIdList.add(id);
-    }
   }
 }

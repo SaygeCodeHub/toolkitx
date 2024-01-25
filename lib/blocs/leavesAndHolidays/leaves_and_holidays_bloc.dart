@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +19,6 @@ import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
-import '../../screens/leavesAndHolidays/widgtes/leaves_and_holidays_list_body.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -309,13 +307,9 @@ class LeavesAndHolidaysBloc
 
   FutureOr<void> _selectAllCheckBox(
       SelectAllCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
-    for (int i = 0;
-        i <= LeavesAndHolidaysListBody.leavesAndHolidaysIdList.length;
-        i++) {
-      TimeSheetCheckbox.idsList
-          .add(LeavesAndHolidaysListBody.leavesAndHolidaysIdList[i]);
+    for (int i = 0; i <= event.dates.length - 1; i++) {
+      TimeSheetCheckbox.idsList.add(event.dates[i].id);
       add(SelectCheckBox(isChecked: isChecked));
-      log('ischecked=============>$isChecked');
     }
   }
 }

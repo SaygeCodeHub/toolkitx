@@ -91,6 +91,7 @@ class GetTimeSheetFetched extends LeavesAndHolidaysStates {
 
 class GetTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
+
   GetTimeSheetNotFetched({required this.errorMessage});
 }
 
@@ -104,6 +105,7 @@ class CheckInTimeSheetFetched extends LeavesAndHolidaysStates {
 
 class CheckInTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
+
   CheckInTimeSheetNotFetched({required this.errorMessage});
 }
 
@@ -128,6 +130,7 @@ class TimeSheetWorkingAtFetched extends LeavesAndHolidaysStates {
   final FetchWorkingAtTimeSheetModel fetchWorkingAtTimeSheetModel;
   final String workingAt;
   final String workingAtValue;
+
   TimeSheetWorkingAtFetched(
       {required this.workingAt,
       required this.workingAtValue,
@@ -136,6 +139,7 @@ class TimeSheetWorkingAtFetched extends LeavesAndHolidaysStates {
 
 class TimeSheetWorkingAtNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
+
   TimeSheetWorkingAtNotFetched({required this.errorMessage});
 }
 
