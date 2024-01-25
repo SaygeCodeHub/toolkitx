@@ -421,21 +421,22 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   Future<FutureOr<void>> _rejectDocument(
       RejectDocument event, Emitter<DocumentsStates> emit) async {
-    emit(const RejectingDocuments());
+    emit(RejectingDocuments());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectDocumentsMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "comments": "Rejecteed",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.rejectDocuments(deleteDocumentsMap);
+          await _documentsRepository.rejectDocuments(rejectDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsRejected(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsRejected());
       } else {
         emit(RejectDocumentsError(
             message:

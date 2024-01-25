@@ -72,7 +72,10 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
               DatabaseUtil.getText('dms_rejectdocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = true;
             Navigator.pushNamed(
-                context, DocumentsApproveAndRejectScreen.routeName);
+                    context, DocumentsApproveAndRejectScreen.routeName)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {
             context.read<DocumentsBloc>().add(WithdrawDocument());
