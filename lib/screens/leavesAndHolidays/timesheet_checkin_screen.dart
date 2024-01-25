@@ -53,7 +53,6 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                 currentState is CheckInTimeSheetFetched ||
                 currentState is CheckInTimeSheetNotFetched,
             builder: (context, state) {
-
               if (state is CheckInTimeSheetFetching) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is CheckInTimeSheetFetched) {

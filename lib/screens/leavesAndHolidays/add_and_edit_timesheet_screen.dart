@@ -84,8 +84,8 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         TimePickerTextField(
                           editTime: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["starttime"] :
-                              "",
+                                  .saveTimeSheetMap["starttime"]
+                              : "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['starttime'] = time;
                           },
@@ -99,8 +99,8 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         TimePickerTextField(
                           editTime: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["endtime"] :
-                              "",
+                                  .saveTimeSheetMap["endtime"]
+                              : "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['endtime'] = time;
                           },
@@ -130,8 +130,8 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         TextFieldWidget(
                           value: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                                  .saveTimeSheetMap["description"] :
-                              "",
+                                  .saveTimeSheetMap["description"]
+                              : "",
                           maxLines: 3,
                           textInputAction: TextInputAction.done,
                           onTextFieldChanged: (textField) {
@@ -152,7 +152,11 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                           textValue: StringConstants.kReload),
                     );
                   } else {
-                    return const SizedBox.shrink();
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.35),
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
                   }
                 },
               ),
