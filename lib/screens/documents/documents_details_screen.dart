@@ -82,6 +82,21 @@ class DocumentsDetailsScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.message, '');
               }
+              if (state is ClosingDocuments) {
+                ProgressBar.show(context);
+              }
+              if (state is DocumentsClosed) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                context
+                    .read<DocumentsBloc>()
+                    .add(GetDocumentsList(page: 1, isFromHome: false));
+              }
+              if (state is CloseDocumentsError) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.message, '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingDocumentsDetails ||

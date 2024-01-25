@@ -257,15 +257,9 @@ class WithdrawDocumentsError extends DocumentsStates {
   const WithdrawDocumentsError({required this.message});
 }
 
-class ClosingDocuments extends DocumentsStates {
-  const ClosingDocuments();
-}
+class ClosingDocuments extends DocumentsStates {}
 
-class DocumentsClosed extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsClosed({required this.postDocumentsModel});
-}
+class DocumentsClosed extends DocumentsStates {}
 
 class CloseDocumentsError extends DocumentsStates {
   final String message;

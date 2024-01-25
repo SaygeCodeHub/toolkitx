@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -68,6 +69,17 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
                     .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
+            showDialog(
+              context: context,
+              builder: (context) => AndroidPopUp(
+                titleValue: 'Document Management',
+                contentValue:
+                    'Are you sure you want to close this document management ? ',
+                onPrimaryButton: () {
+                  context.read<DocumentsBloc>().add(CloseDocument());
+                },
+              ),
+            );
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = true;

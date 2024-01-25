@@ -476,19 +476,20 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   Future<FutureOr<void>> _closeDocument(
       CloseDocument event, Emitter<DocumentsStates> emit) async {
-    emit(const ClosingDocuments());
+    emit(ClosingDocuments());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map closeDocumentsMsp = {
+        "documentid": documentId,
+        "userid": userId,
         "hashcode": hashCode
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.closeDocuments(deleteDocumentsMap);
+          await _documentsRepository.closeDocuments(closeDocumentsMsp);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsClosed(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsClosed());
       } else {
         emit(CloseDocumentsError(
             message:
