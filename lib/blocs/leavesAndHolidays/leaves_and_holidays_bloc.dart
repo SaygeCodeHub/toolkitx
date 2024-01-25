@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +19,8 @@ import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
+import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
+import '../../screens/leavesAndHolidays/widgtes/leaves_and_holidays_list_body.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -41,11 +44,13 @@ class LeavesAndHolidaysBloc
     on<SaveTimeSheet>(_saveTimeSheet);
     on<SubmitTimeSheet>(_submitTimeSheet);
     on<SelectCheckBox>(_selectCheckBox);
+    on<SelectAllCheckBox>(_selectAllCheckBox);
   }
 
   String year = "";
   String month = "";
   List timeSheetIdList = [];
+  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -299,5 +304,18 @@ class LeavesAndHolidaysBloc
   FutureOr<void> _selectCheckBox(
       SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
     emit(CheckBoxSelected(isChecked: event.isChecked));
+    isChecked = event.isChecked;
+  }
+
+  FutureOr<void> _selectAllCheckBox(
+      SelectAllCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    for (int i = 0;
+        i <= LeavesAndHolidaysListBody.leavesAndHolidaysIdList.length;
+        i++) {
+      TimeSheetCheckbox.idsList
+          .add(LeavesAndHolidaysListBody.leavesAndHolidaysIdList[i]);
+      add(SelectCheckBox(isChecked: isChecked));
+      log('ischecked=============>$isChecked');
+    }
   }
 }

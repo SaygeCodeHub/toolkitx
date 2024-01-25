@@ -73,3 +73,7 @@ class SelectCheckBox extends LeavesAndHolidaysEvent {
 
   SelectCheckBox({required this.isChecked});
 }
+
+class SelectAllCheckBox extends LeavesAndHolidaysEvent {
+  SelectAllCheckBox();
+}

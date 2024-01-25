@@ -1,12 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
-import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
-import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
 import '../../../configs/app_color.dart';
@@ -14,6 +13,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
 import '../leaves_and_holidays_checkbox.dart';
+import '../timesheet_checkin_screen.dart';
 
 class LeavesAndHolidaysListBody extends StatelessWidget {
   const LeavesAndHolidaysListBody({
@@ -25,13 +25,15 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
   final TimesheetData data;
   final bool isChecked;
   static List leavesAndHolidaysIdList = [];
-  static int index = 1;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (context, index) {
+          addIds(data.dates[index].hours, data.dates[index].id,
+              data.dates[index].status, leavesAndHolidaysIdList);
+          log("leavesAndHolidaysIdList================>$leavesAndHolidaysIdList");
           return CustomCard(
             elevation: xxTiniestSpacing,
             child: Padding(
@@ -121,8 +123,10 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                         : const Text(StringConstants.kNotSubmitted,
                             style: TextStyle(color: AppColor.deepBlue)),
                     Expanded(
-                      child: (data.dates[index].id != '' &&
-                              data.dates[index].hours != '-')
+                      child: ((data.dates[index].id != '' &&
+                              (data.dates[index].hours != '-' ||
+                                  data.dates[index].hours == '-') &&
+                              data.dates[index].status == 0))
                           ? TimeSheetCheckbox(
                               selectedCreatedForIdList: leavesAndHolidaysIdList,
                               id: data.dates[index].id,
@@ -151,5 +155,15 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
           return const SizedBox(height: tinierSpacing);
         },
         itemCount: data.dates.length);
+  }
+}
+
+addIds(String hours, String id, int status, List leavesAndHolidaysIdList) {
+  if (id != '' && (hours != '-' || hours == '-') && status == 0) {
+    if (leavesAndHolidaysIdList
+            .indexWhere((element) => element.toString().trim() == id.trim()) ==
+        -1) {
+      leavesAndHolidaysIdList.add(id);
+    }
   }
 }
