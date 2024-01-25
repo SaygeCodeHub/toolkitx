@@ -13,6 +13,8 @@ import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
 import 'widgtes/timesheet_checkin_body.dart';
+import 'widgtes/working_at_number_timesheet_tile.dart';
+import 'widgtes/working_at_timesheet_tile.dart';
 
 class TimeSheetCheckInScreen extends StatelessWidget {
   static const routeName = 'TimesheetCheckInScreen';
@@ -53,7 +55,6 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                 currentState is CheckInTimeSheetFetched ||
                 currentState is CheckInTimeSheetNotFetched,
             builder: (context, state) {
-
               if (state is CheckInTimeSheetFetching) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is CheckInTimeSheetFetched) {
@@ -118,6 +119,13 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                         child: PrimaryButton(
                             onPressed: () {
                               AddAndEditTimeSheetScreen.isFromEdit = false;
+                              TimSheetWorkingAtNumberListTile.workingAtNumberMap
+                                  .clear();
+                              context
+                                  .read<LeavesAndHolidaysBloc>()
+                                  .timeSheetWorkingAtMap
+                                  .clear();
+                              WorkingAtTimeSheetTile.workingAt = '';
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];

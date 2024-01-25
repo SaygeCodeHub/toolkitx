@@ -144,7 +144,7 @@ class LeavesAndHolidaysBloc
         TimSheetWorkingAtNumberListTile.workingAtNumberMap = {
           "working_at_number_id":
               timeSheetWorkingAtNumberMap.values.elementAt(j),
-          "working_at_number": timeSheetWorkingAtNumberMap.values.elementAt(0)
+          "working_at_number": timeSheetWorkingAtMap.values.elementAt(0)
         };
         AddAndEditTimeSheetScreen.saveTimeSheetMap['workingatnumber'] =
             TimSheetWorkingAtNumberListTile
@@ -376,8 +376,8 @@ class LeavesAndHolidaysBloc
     }
   }
 
-  FutureOr _fetchTimeSheetDetails(
-      FetchTimeSheetDetails event, Emitter<LeavesAndHolidaysStates> emit) async {
+  FutureOr _fetchTimeSheetDetails(FetchTimeSheetDetails event,
+      Emitter<LeavesAndHolidaysStates> emit) async {
     try {
       emit(FetchingTimeSheetDetails());
       final String? hashCode =
@@ -398,42 +398,41 @@ class LeavesAndHolidaysBloc
           fetchTimeSheetDetailsModel: fetchTimeSheetDetailsModel));
       if (fetchTimeSheetDetailsModel.data.toJson().isNotEmpty) {
         for (int i = 0;
-        i < fetchTimeSheetDetailsModel.data.toJson().keys.length;
-        i++) {
-          switch (
-          fetchTimeSheetDetailsModel.data.toJson().keys.elementAt(i)) {
+            i < fetchTimeSheetDetailsModel.data.toJson().keys.length;
+            i++) {
+          switch (fetchTimeSheetDetailsModel.data.toJson().keys.elementAt(i)) {
             case "woid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(i) !=
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
                   '') {
                 timeSheetWorkingAtMap['Workorder'] = "wo";
               }
               break;
             case "wbsid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(i) !=
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
                   '') {
                 timeSheetWorkingAtMap['WBS'] = "wbs";
               }
               break;
             case "projectid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(i) !=
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
                   '') {
                 timeSheetWorkingAtMap['Project'] = "project";
               }
               break;
             case "generalwbsid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(i) !=
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
                   '') {
                 timeSheetWorkingAtMap['General WBS'] = "generalwbs";
               }
@@ -442,15 +441,14 @@ class LeavesAndHolidaysBloc
         }
 
         for (int j = 0;
-        j < fetchTimeSheetDetailsModel.data.toJson().keys.length;
-        j++) {
-          switch (
-          fetchTimeSheetDetailsModel.data.toJson().keys.elementAt(j)) {
+            j < fetchTimeSheetDetailsModel.data.toJson().keys.length;
+            j++) {
+          switch (fetchTimeSheetDetailsModel.data.toJson().keys.elementAt(j)) {
             case "woid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(j) !=
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
                   '') {
                 timeSheetWorkingAtNumberMap['wo'] = fetchTimeSheetDetailsModel
                     .data
@@ -461,9 +459,9 @@ class LeavesAndHolidaysBloc
               break;
             case "wbsid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(j) !=
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
                   '') {
                 timeSheetWorkingAtNumberMap['wbs'] = fetchTimeSheetDetailsModel
                     .data
@@ -475,9 +473,9 @@ class LeavesAndHolidaysBloc
               break;
             case "projectid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(j) !=
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
                   '') {
                 timeSheetWorkingAtNumberMap['project'] =
                     fetchTimeSheetDetailsModel.data
@@ -489,9 +487,9 @@ class LeavesAndHolidaysBloc
               break;
             case "generalwbsid":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(j) !=
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
                   '') {
                 timeSheetWorkingAtNumberMap['general_wbs'] =
                     fetchTimeSheetDetailsModel.data
@@ -503,24 +501,24 @@ class LeavesAndHolidaysBloc
               break;
             case "workingat":
               if (fetchTimeSheetDetailsModel.data
-                  .toJson()
-                  .values
-                  .elementAt(j) !=
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
                   '') {
                 timeSheetWorkingAtNumberMap['working_at'] =
-                timeSheetWorkingAtNumberMap['general_wbs'] =
-                    fetchTimeSheetDetailsModel.data
-                        .toJson()
-                        .values
-                        .elementAt(j);
+                    timeSheetWorkingAtNumberMap['general_wbs'] =
+                        fetchTimeSheetDetailsModel.data
+                            .toJson()
+                            .values
+                            .elementAt(j);
               }
           }
         }
         emit(TimeSheetDetailsFetched(
             fetchTimeSheetDetailsModel: fetchTimeSheetDetailsModel));
-        } else {
+      } else {
         emit(TimeSheetDetailsNotFetched(
-             errorMessage: fetchTimeSheetDetailsModel.message));
+            errorMessage: fetchTimeSheetDetailsModel.message));
       }
     } catch (e) {
       emit(TimeSheetDetailsNotFetched(errorMessage: e.toString()));
