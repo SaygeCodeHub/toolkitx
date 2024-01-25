@@ -83,8 +83,8 @@ class DocumentsApproveAndRejectScreen extends StatelessWidget {
               onPressed: () {
                 isFromReject == true
                     ? context
-                    .read<DocumentsBloc>()
-                    .add(RejectDocument(comment: comment))
+                        .read<DocumentsBloc>()
+                        .add(RejectDocument(comment: comment))
                     : context
                         .read<DocumentsBloc>()
                         .add(ApproveDocument(comment: comment));
