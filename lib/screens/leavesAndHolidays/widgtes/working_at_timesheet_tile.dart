@@ -18,9 +18,8 @@ class WorkingAtTimeSheetTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LeavesAndHolidaysBloc>()
-        .add(SelectTimeSheetWorkingAtOption(workingAt: workingAt, workingAtValue: workingAtValue));
+    context.read<LeavesAndHolidaysBloc>().add(SelectTimeSheetWorkingAtOption(
+        workingAt: workingAt, workingAtValue: workingAtValue));
     return BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
       buildWhen: (previousState, currentState) =>
           currentState is TimeSheetWorkingAtOptionSelected,
@@ -63,6 +62,10 @@ class WorkingAtTimeSheetTile extends StatelessWidget {
                                   .value,
                               groupValue: workingAt,
                               onChanged: (value) {
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .timeSheetWorkingAtMap
+                                    .clear();
                                 workingAt = TimeSheetWorkingAtEnum.values
                                     .elementAt(index)
                                     .value;

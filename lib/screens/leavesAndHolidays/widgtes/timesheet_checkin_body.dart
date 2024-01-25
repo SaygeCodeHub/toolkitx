@@ -50,8 +50,7 @@ class TimeSheetCheckInBody extends StatelessWidget {
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];
-                              AddAndEditTimeSheetScreen
-                                      .saveTimeSheetMap['id'] =
+                              AddAndEditTimeSheetScreen.saveTimeSheetMap['id'] =
                                   checkInList[index].id;
                               Navigator.pushNamed(
                                   context, AddAndEditTimeSheetScreen.routeName);
