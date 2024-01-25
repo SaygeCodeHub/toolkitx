@@ -63,8 +63,48 @@ class AttachDocuments extends DocumentsEvents {
   AttachDocuments({required this.attachDocumentsMap});
 }
 
+class UploadDocumentFileVersion extends DocumentsEvents {
+  final Map uploadFileVersionMap;
+
+  UploadDocumentFileVersion({required this.uploadFileVersionMap});
+}
+
 class DeleteDocuments extends DocumentsEvents {
   final String fileId;
 
   DeleteDocuments({required this.fileId});
+}
+
+class OpenDocumentsForInformation extends DocumentsEvents {}
+
+class OpenDocumentsForReview extends DocumentsEvents {
+  final String dueDate;
+
+  OpenDocumentsForReview({required this.dueDate});
+}
+
+class ApproveDocument extends DocumentsEvents {
+  final String comment;
+
+  ApproveDocument({required this.comment});
+}
+
+class RejectDocument extends DocumentsEvents {
+  final String comment;
+
+  RejectDocument({required this.comment});
+}
+
+class WithdrawDocument extends DocumentsEvents {}
+
+class CloseDocument extends DocumentsEvents {
+  final String documentId;
+
+  CloseDocument({required this.documentId});
+}
+
+class SaveDocumentComments extends DocumentsEvents {
+  final Map saveDocumentsCommentsMap;
+
+  SaveDocumentComments({required this.saveDocumentsCommentsMap});
 }

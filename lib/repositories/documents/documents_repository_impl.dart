@@ -1,9 +1,12 @@
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
+
 import '../../data/models/documents/document_master_model.dart';
 import '../../data/models/documents/document_roles_model.dart';
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
 import '../../data/models/documents/documents_to_link_model.dart';
 import '../../data/models/documents/post_document_model.dart';
+import '../../data/models/documents/save_document_comments_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 import 'documents_repository.dart';
@@ -66,10 +69,75 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   }
 
   @override
+  Future<DocumentUploadFileVersionModel> documentUploadFileVersion(
+      Map uploadFileVersionMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/uploadfileversion",
+        uploadFileVersionMap);
+    return DocumentUploadFileVersionModel.fromJson(response);
+  }
+
+  @override
   Future<PostDocumentsModel> deleteDocuments(Map deleteDocumentsMap) async {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}document/deletedocumentfile",
         deleteDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> approveDocuments(Map approveDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/approvedocument", approveDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> closeDocuments(Map closeDocumentsMsp) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/closedocument", closeDocumentsMsp);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> openDocumentFopInformation(
+      Map openDocumentFopInformationMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/opendocumentforinformation",
+        openDocumentFopInformationMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> openDocumentFopReview(
+      Map openDocumentFopReviewMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/opendocumentforreview",
+        openDocumentFopReviewMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> rejectDocuments(Map rejectDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/rejectdocument", rejectDocumentsMap);
+    return PostDocumentsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveDocumentCommentsModel> saveDocumentComments(
+      Map saveDocumentCommentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/savecomments",
+        saveDocumentCommentsMap);
+    return SaveDocumentCommentsModel.fromJson(response);
+  }
+
+  @override
+  Future<PostDocumentsModel> withdrawDocuments(Map withdrawDocumentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}document/withdrawdocument",
+        withdrawDocumentsMap);
     return PostDocumentsModel.fromJson(response);
   }
 }

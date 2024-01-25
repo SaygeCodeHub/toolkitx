@@ -23,6 +23,7 @@ abstract class StringConstants {
   static const String kParts = 'Parts'; //
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
+  static const String kEditItem = 'Edit Item'; //
   static const String kExpenseWorkingAtNumber =
       'Working at Number cannot be empty!    '; //
   static const String kGoBack = 'Go Back'; //
@@ -506,4 +507,5 @@ abstract class StringConstants {
   static const String kWorkorder = "Workorder";
   static const String kAreYouSureToReject = "Are you sure to reject?";
   static const String kRequestRejected = "Request Rejected";
+  static const String kFetchedCode = "Fetched Code :";
 }

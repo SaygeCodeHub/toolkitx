@@ -5,6 +5,7 @@ import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
 import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
+import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
@@ -44,4 +45,7 @@ abstract class ExpenseRepository {
 
   Future<ExpenseItemCustomFieldsModel> fetchExpenseItemCustomFields(
       Map customFieldsMap);
+
+  Future<FetchExpenseItemDetailsModel> fetchExpenseItemDetails(
+      Map itemDetailsMap);
 }

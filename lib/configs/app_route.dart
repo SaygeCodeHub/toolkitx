@@ -10,6 +10,7 @@ import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart'
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
+import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -45,13 +46,16 @@ import '../screens/checklist/systemUser/sys_user_change_role_screen.dart';
 import '../screens/checklist/systemUser/sys_user_schedule_dates_screen.dart';
 import '../screens/checklist/systemUser/sys_user_filters_screen.dart';
 import '../screens/checklist/workforce/workforce_reject_reason_screen.dart';
+import '../screens/documents/add_document_comments_screen.dart';
 import '../screens/documents/attach_document_screen.dart';
 import '../screens/documents/change_role_documents.dart';
 import '../screens/documents/document_filter_screen.dart';
+import '../screens/documents/documents_approve_and_reject_screen.dart';
 import '../screens/documents/documents_details_screen.dart';
 import '../screens/documents/documents_list_screen.dart';
 import '../screens/documents/link_document_screen.dart';
 import '../screens/documents/link_documents_filter_screen.dart';
+import '../screens/documents/open_document_for_review_screen.dart';
 import '../screens/documents/widgets/document_location_filter_list.dart';
 import '../screens/equipmentTraceability/approve_equipment_request_screen.dart';
 import '../screens/equipmentTraceability/enter_equipment_code_screen.dart';
@@ -65,6 +69,9 @@ import '../screens/expense/expense_filter_screen.dart';
 import '../screens/expense/expense_details_screen.dart';
 import '../screens/expense/expense_list_screen.dart';
 import '../screens/expense/manage_expense_form_screen.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_form_three.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
+import '../screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
 import '../screens/incident/add_injured_person_screen.dart';
 import '../screens/incident/category_screen.dart';
 import '../screens/incident/change_role_screen.dart';
@@ -488,9 +495,7 @@ class AppRoutes {
           isFromHome: settings.arguments as bool,
         ));
       case SearchEquipmentDetailsScreen.routeName:
-        return _createRoute(SearchEquipmentDetailsScreen(
-          searchEquipmentDetailsMap: settings.arguments as Map,
-        ));
+        return _createRoute(const SearchEquipmentDetailsScreen());
 
       case SearchEquipmentFilterScreen.routeName:
         return _createRoute(const SearchEquipmentFilterScreen());
@@ -500,7 +505,14 @@ class AppRoutes {
         ));
       case TransferEquipmentScreen.routeName:
         return _createRoute(const TransferEquipmentScreen());
-
+      case ExpenseEditItemsScreen.routeName:
+        return _createRoute(ExpenseEditItemsScreen(
+            expenseItemId: settings.arguments.toString()));
+      case ExpenseEditFormTwo.routeName:
+        return _createRoute(ExpenseEditFormTwo(
+            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+      case ExpenseEditFormThree.routeName:
+        return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:
         return _createRoute(EquipmentSaveImages());
       case EnterEquipmentCodeScreen.routeName:
@@ -517,6 +529,12 @@ class AppRoutes {
       case ApproveEquipmentRequestScreen.routeName:
         return _createRoute(ApproveEquipmentRequestScreen(
             requestId: settings.arguments.toString()));
+      case DocumentsApproveAndRejectScreen.routeName:
+        return _createRoute(const DocumentsApproveAndRejectScreen());
+      case AddDocumentCommentsScreen.routeName:
+        return _createRoute(const AddDocumentCommentsScreen());
+      case OpenDocumentForReviewScreen.routeName:
+        return _createRoute(const OpenDocumentForReviewScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
