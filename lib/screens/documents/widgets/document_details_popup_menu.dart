@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../../../configs/app_dimensions.dart';
@@ -72,9 +73,8 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => AndroidPopUp(
-                titleValue: 'Document Management',
-                contentValue:
-                    'Are you sure you want to close this document management ? ',
+                titleValue: StringConstants.kDocumentManagement,
+                contentValue: StringConstants.kAreYouSureToCloseDocument,
                 onPrimaryButton: () {
                   context.read<DocumentsBloc>().add(CloseDocument());
                 },
