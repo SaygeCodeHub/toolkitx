@@ -227,11 +227,7 @@ class ApprovingDocuments extends DocumentsStates {
   const ApprovingDocuments();
 }
 
-class DocumentsApproved extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsApproved({required this.postDocumentsModel});
-}
+class DocumentsApproved extends DocumentsStates {}
 
 class ApproveDocumentsError extends DocumentsStates {
   final String message;
