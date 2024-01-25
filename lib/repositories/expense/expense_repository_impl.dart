@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/expense/close_expense_model.dart';
 import 'package:toolkit/data/models/expense/delete_expense_item_model.dart';
 import 'package:toolkit/data/models/expense/expense_item_custom_field_model.dart';
 import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
+import 'package:toolkit/data/models/expense/expense_working_at_number_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
 
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
@@ -11,6 +12,7 @@ import 'package:toolkit/data/models/expense/save_expense_item_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_model.dart';
 import 'package:toolkit/data/models/expense/update_expense_model.dart';
 
+import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -106,5 +108,21 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/getitemcustomfields?expenseitemid=${customFieldsMap['expenseitemid']}&itemid=${customFieldsMap['itemid']}&hashcode=${customFieldsMap['hashcode']}");
     return ExpenseItemCustomFieldsModel.fromJson(response);
+  }
+
+  @override
+  Future<ExpenseWorkingAtNumberDataModel> fetchWorkingAtNumberData(
+      Map fetchWorkingAtNumberMap) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}timesheet/getemployeeworkingat?groupby=${fetchWorkingAtNumberMap['groupby']}&userid=${fetchWorkingAtNumberMap['userid']}&hashcode=${fetchWorkingAtNumberMap['hashcode']}");
+    return ExpenseWorkingAtNumberDataModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchExpenseItemDetailsModel> fetchExpenseItemDetails(
+      Map itemDetailsMap) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}expense/GetExpenseItem?itemid=${itemDetailsMap['item_id']}&hashcode=${itemDetailsMap['hash_code']}");
+    return FetchExpenseItemDetailsModel.fromJson(response);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/equipmentTraceability/send_transfer_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -61,15 +62,17 @@ class TransferEquipmentScreen extends StatelessWidget {
                         child: ListTile(
                       title: Text(
                           context
-                              .read<EquipmentTraceabilityBloc>()
-                              .equipmentList[index]["equipmentname"],
+                                  .read<EquipmentTraceabilityBloc>()
+                                  .equipmentList[index]["equipmentname"] ??
+                              '',
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.w500,
                               color: AppColor.black)),
                       subtitle: Text(
                           context
-                              .read<EquipmentTraceabilityBloc>()
-                              .equipmentList[index]["equipmentcode"],
+                                  .read<EquipmentTraceabilityBloc>()
+                                  .equipmentList[index]["equipmentcode"] ??
+                              '',
                           style: Theme.of(context).textTheme.xSmall.copyWith(
                               fontWeight: FontWeight.w500,
                               color: AppColor.grey)),
@@ -103,12 +106,17 @@ class TransferEquipmentScreen extends StatelessWidget {
           )),
       bottomNavigationBar:
           BlocBuilder<EquipmentTraceabilityBloc, EquipmentTraceabilityState>(
+        buildWhen: (previousState, currentState) =>
+            currentState is EquipmentByCodeFetched,
         builder: (context, state) {
           if (state is EquipmentByCodeFetched) {
             return Padding(
               padding: const EdgeInsets.all(xxTinierSpacing),
               child: PrimaryButton(
-                  onPressed: () {}, textValue: StringConstants.kTransfer),
+                  onPressed: () {
+                    Navigator.pushNamed(context, SendTransferScreen.routeName);
+                  },
+                  textValue: StringConstants.kTransfer),
             );
           } else {
             return const SizedBox.shrink();

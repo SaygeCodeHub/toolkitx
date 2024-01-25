@@ -112,10 +112,14 @@ class ExpenseDetailsData {
           canClose: json["can_close"] ?? '',
           ref: json["ref"] ?? '',
           schedule: json["schedule"] ?? '',
-          itemlist: List<Itemlist>.from(
-              json["itemlist"].map((x) => Itemlist.fromJson(x))),
+          itemlist: json["itemlist"] == null
+              ? []
+              : List<Itemlist>.from(
+                  json["itemlist"].map((x) => Itemlist.fromJson(x))),
           total: json["total"] ?? '',
-          logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))));
+          logs: json["logs"] == null
+              ? []
+              : List<Log>.from(json["logs"].map((x) => Log.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "id": id,

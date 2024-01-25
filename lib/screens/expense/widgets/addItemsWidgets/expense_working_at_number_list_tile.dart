@@ -17,9 +17,8 @@ class ExpenseWorkingAtNumberListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ExpenseBloc>()
-        .add(SelectExpenseWorkingAtNumber(workingAtNumberMap: {}));
+    context.read<ExpenseBloc>().add(
+        SelectExpenseWorkingAtNumber(workingAtNumberMap: workingAtNumberMap));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is ExpenseWorkingAtNumberSelected,

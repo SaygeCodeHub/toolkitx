@@ -1,16 +1,24 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/leavesAndHolidays/apply_for_leave_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_get_checkin_time_sheet_model.dart';
+import '../../data/models/leavesAndHolidays/delete_timesheet_model.dart';
+import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_and_holidays_master_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_details_model.dart';
 import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
+import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
+import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
+import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -28,7 +36,19 @@ class LeavesAndHolidaysBloc
     on<FetchLeavesAndHolidaysMaster>(_fetchMaster);
     on<SelectLeaveType>(_selectLeaveType);
     on<ApplyForLeave>(_applyForLeave);
+    on<GetTimeSheet>(_getTimeSheet);
+    on<FetchCheckInTimeSheet>(_fetchCheckInTimeSheet);
+    on<DeleteTimeSheet>(_deleteTimeSheet);
+    on<SaveTimeSheet>(_saveTimeSheet);
+    on<SubmitTimeSheet>(_submitTimeSheet);
+    on<SelectCheckBox>(_selectCheckBox);
+    on<SelectAllCheckBox>(_selectAllCheckBox);
   }
+
+  String year = "";
+  String month = "";
+  List timeSheetIdList = [];
+  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -145,6 +165,152 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(CouldNotApplyForLeave(couldNotApplyForLeave: e.toString()));
+    }
+  }
+
+  FutureOr<void> _getTimeSheet(
+      GetTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(GetTimeSheetFetching());
+    try {
+      year = event.year;
+      month = event.month;
+
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      FetchTimeSheetModel fetchTimeSheetModel =
+          await _leavesAndHolidaysRepository.fetchTimeSheet(
+              event.year, event.month, userId!, hashCode!);
+
+      if (fetchTimeSheetModel.status == 200) {
+        emit(GetTimeSheetFetched(fetchTimeSheetModel: fetchTimeSheetModel));
+      } else {
+        emit(GetTimeSheetNotFetched(errorMessage: fetchTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(GetTimeSheetNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchCheckInTimeSheet(FetchCheckInTimeSheet event,
+      Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(CheckInTimeSheetFetching());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
+          await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
+              event.date, userId!, hashCode!);
+      timeSheetIdList.clear();
+      timeSheetIdList.add({'id': fetchCheckInTimeSheetModel.data.timesheetid});
+      if (fetchCheckInTimeSheetModel.status == 200) {
+        emit(CheckInTimeSheetFetched(
+            fetchCheckInTimeSheetModel: fetchCheckInTimeSheetModel));
+      } else {
+        emit(CheckInTimeSheetNotFetched(
+            errorMessage: fetchCheckInTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(CheckInTimeSheetNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _deleteTimeSheet(
+      DeleteTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetDeleting());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+
+      Map deleteTimeSheetMap = {
+        "idm": "",
+        "id": event.timeId,
+        "hashcode": hashCode
+      };
+      DeleteTimeSheetModel deleteTimeSheetModel =
+          await _leavesAndHolidaysRepository
+              .deleteTimeSheetRepo(deleteTimeSheetMap);
+      if (deleteTimeSheetModel.status == 200) {
+        emit(TimeSheetDeleted());
+      } else {
+        emit(TimeSheetNotDeleted(errorMessage: deleteTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _saveTimeSheet(
+      SaveTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSaving());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+
+      Map saveTimeSheetMap = {
+        "idm": "",
+        "workingatid": event.saveTimeSheetMap['workingatid'],
+        "workingatnumber": event.saveTimeSheetMap['working_at_number_id'],
+        "reportdate": event.saveTimeSheetMap['date'],
+        "starttime": event.saveTimeSheetMap['starttime'],
+        "endtime": event.saveTimeSheetMap['endtime'],
+        "breakmins": event.saveTimeSheetMap['breakmins'],
+        "description": event.saveTimeSheetMap['description'],
+        "userid": userId,
+        "id": "",
+        "hashcode": hashCode
+      };
+      SaveTimeSheetModel saveTimeSheetModel =
+          await _leavesAndHolidaysRepository.saveTimeSheet(saveTimeSheetMap);
+
+      if (saveTimeSheetModel.status == 200) {
+        emit(TimeSheetSaved(saveTimeSheetModel: saveTimeSheetModel));
+      } else {
+        emit(TimeSheetNotSaved(errorMessage: saveTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _submitTimeSheet(
+      SubmitTimeSheet event, Emitter<LeavesAndHolidaysStates> emit) async {
+    emit(TimeSheetSubmitting());
+    try {
+      final String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map submitTimeSheetMap = {
+        "idm": timeSheetIdList,
+        "timesheetids": timeSheetIdList,
+        "hashcode": hashCode
+      };
+      SubmitTimeSheetModel submitTimeSheetModel =
+          await _leavesAndHolidaysRepository
+              .submitTimeSheetRepo(submitTimeSheetMap);
+      if (submitTimeSheetModel.status == 200) {
+        emit(TimeSheetSubmitted());
+      } else {
+        emit(TimeSheetNotSubmitted(errorMessage: submitTimeSheetModel.message));
+      }
+    } catch (e) {
+      emit(TimeSheetNotSubmitted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectCheckBox(
+      SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    emit(CheckBoxSelected(isChecked: event.isChecked));
+    isChecked = event.isChecked;
+  }
+
+  FutureOr<void> _selectAllCheckBox(
+      SelectAllCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    for (int i = 0; i <= event.dates.length - 1; i++) {
+      TimeSheetCheckbox.idsList.add(event.dates[i].id);
+      add(SelectCheckBox(isChecked: isChecked));
     }
   }
 }

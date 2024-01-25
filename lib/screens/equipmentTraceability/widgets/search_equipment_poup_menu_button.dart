@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
+import 'package:toolkit/screens/equipmentTraceability/transfer_equipment_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../equipment_set_parameter_screen.dart';
@@ -27,6 +28,9 @@ class SearchEquipmentPopupMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
         onSelected: (value) {
+          if (value == StringConstants.kTransfer) {
+            Navigator.pushNamed(context, TransferEquipmentScreen.routeName);
+          }
           if (value == StringConstants.kSetParameter) {
             Navigator.pushNamed(context, EquipmentSetParameterScreen.routeName,
                 arguments: searchEquipmentDetailsMap);
