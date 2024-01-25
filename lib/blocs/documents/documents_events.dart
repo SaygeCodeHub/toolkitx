@@ -97,11 +97,7 @@ class RejectDocument extends DocumentsEvents {
 
 class WithdrawDocument extends DocumentsEvents {}
 
-class CloseDocument extends DocumentsEvents {
-  final String documentId;
-
-  CloseDocument({required this.documentId});
-}
+class CloseDocument extends DocumentsEvents {}
 
 class SaveDocumentComments extends DocumentsEvents {
   final Map saveDocumentsCommentsMap;
