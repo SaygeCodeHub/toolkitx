@@ -24,8 +24,6 @@ class TimSheetWorkingAtNumberListTile extends StatelessWidget {
           currentState is TimeSheetWorkingAtNumberSelected,
       builder: (context, state) {
         if (state is TimeSheetWorkingAtNumberSelected) {
-          AddAndEditTimeSheetScreen.saveTimeSheetMap['working_at_number_id'] =
-              state.timeSheetWorkingAtNumberMap['new_working_at_number'] ?? '';
           return ListTile(
               contentPadding: EdgeInsets.zero,
               onTap: () async {

@@ -125,7 +125,12 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                                   .read<LeavesAndHolidaysBloc>()
                                   .timeSheetWorkingAtMap
                                   .clear();
+                              context
+                                  .read<LeavesAndHolidaysBloc>()
+                                  .timeSheetWorkingAtNumberMap
+                                  .clear();
                               WorkingAtTimeSheetTile.workingAt = '';
+                              WorkingAtTimeSheetTile.workingAtValue = '';
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];

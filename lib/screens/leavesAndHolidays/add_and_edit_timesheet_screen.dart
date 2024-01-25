@@ -154,11 +154,7 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(StringConstants.kWorkingAt,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
@@ -167,19 +163,15 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         const TimSheetWorkingAtNumberListTile(),
                         const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kStartTime,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TimePickerTextField(
                           editTime: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                              .saveTimeSheetMap["starttime"] ??
-                              ''
+                                      .saveTimeSheetMap["starttime"] ??
+                                  ''
                               : "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['starttime'] = time;
@@ -187,19 +179,15 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kEndTime,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TimePickerTextField(
                           editTime: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                              .saveTimeSheetMap["endtime"] ??
-                              ''
+                                      .saveTimeSheetMap["endtime"] ??
+                                  ''
                               : "",
                           onTimeChanged: (String time) {
                             saveTimeSheetMap['endtime'] = time;
@@ -207,11 +195,7 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kMinsBreak,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
@@ -219,8 +203,8 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                           textInputType: TextInputType.number,
                           value: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                              .saveTimeSheetMap["breakmins"] ??
-                              ''
+                                      .saveTimeSheetMap["breakmins"] ??
+                                  ''
                               : "",
                           onTextFieldChanged: (textField) {
                             saveTimeSheetMap['breakmins'] = textField;
@@ -228,19 +212,15 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kDescription,
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: xxTinierSpacing),
                         TextFieldWidget(
                           value: AddAndEditTimeSheetScreen.isFromEdit == true
                               ? AddAndEditTimeSheetScreen
-                              .saveTimeSheetMap["description"] ??
-                              ''
+                                      .saveTimeSheetMap["description"] ??
+                                  ''
                               : "",
                           maxLines: 3,
                           textInputAction: TextInputAction.done,

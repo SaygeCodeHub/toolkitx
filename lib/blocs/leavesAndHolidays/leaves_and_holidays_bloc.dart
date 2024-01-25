@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -382,7 +381,6 @@ class LeavesAndHolidaysBloc
       emit(FetchingTimeSheetDetails());
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
-      log('hashcode===========>$hashCode');
       FetchTimeSheetDetailsModel fetchTimeSheetDetailsModel =
           await _leavesAndHolidaysRepository.fetchTimeSheetDetails(
               hashCode!, event.timeSheetDetailsId);
