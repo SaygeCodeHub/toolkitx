@@ -75,38 +75,27 @@ class DeleteDocuments extends DocumentsEvents {
   DeleteDocuments({required this.fileId});
 }
 
-class OpenDocumentsForInformation extends DocumentsEvents {
-  final String documentId;
-
-  OpenDocumentsForInformation({required this.documentId});
-}
+class OpenDocumentsForInformation extends DocumentsEvents {}
 
 class OpenDocumentsForReview extends DocumentsEvents {
-  final String documentId;
   final String dueDate;
 
-  OpenDocumentsForReview({required this.documentId, required this.dueDate});
+  OpenDocumentsForReview({required this.dueDate});
 }
 
 class ApproveDocument extends DocumentsEvents {
-  final String documentId;
   final String comment;
 
-  ApproveDocument({required this.documentId, required this.comment});
+  ApproveDocument({required this.comment});
 }
 
 class RejectDocument extends DocumentsEvents {
-  final String documentId;
   final String comment;
 
-  RejectDocument({required this.documentId, required this.comment});
+  RejectDocument({required this.comment});
 }
 
-class WithdrawDocument extends DocumentsEvents {
-  final String documentId;
-
-  WithdrawDocument({required this.documentId});
-}
+class WithdrawDocument extends DocumentsEvents {}
 
 class CloseDocument extends DocumentsEvents {
   final String documentId;

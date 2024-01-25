@@ -182,15 +182,13 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_closedocument'));
       }
       if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('Open'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforreview'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforinformation'));
       }
       if (documentDetailsModel.data.canreject == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
       }
       if (documentDetailsModel.data.canwithdraw == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
-      }
-      if (documentDetailsModel.data.canopen == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('withdraw'));
       }
       emit(DocumentsDetailsFetched(
@@ -348,7 +346,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map openDocumentForInfoMap = {
         "hashcode": hashCode,
-        "documentid": event.documentId,
+        "documentid": documentId,
         "userid": userId
       };
       PostDocumentsModel postDocumentsModel = await _documentsRepository
@@ -372,16 +370,17 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openDocumentFopInformationMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "duedate": "2023-08-14",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA=="
+        "documentid": documentId,
+        "duedate": event.dueDate,
+        "userid": userId
       };
-      PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.openDocumentFopReview(deleteDocumentsMap);
+      PostDocumentsModel postDocumentsModel = await _documentsRepository
+          .openDocumentFopReview(openDocumentFopInformationMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentOpenedForReview(postDocumentsModel: postDocumentsModel));
+        emit(DocumentOpenedForReview());
       } else {
         emit(OpenDocumentsForReviewError(
             message:
@@ -398,17 +397,18 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map approveDocumentsMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "comments": "Approved",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.approveDocuments(deleteDocumentsMap);
+          await _documentsRepository.approveDocuments(approveDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsApproved(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsApproved());
       } else {
         emit(ApproveDocumentsError(
             message:
@@ -421,21 +421,22 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   Future<FutureOr<void>> _rejectDocument(
       RejectDocument event, Emitter<DocumentsStates> emit) async {
-    emit(const RejectingDocuments());
+    emit(RejectingDocuments());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectDocumentsMap = {
         "hashcode": hashCode,
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "comments": "Rejecteed",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.rejectDocuments(deleteDocumentsMap);
+          await _documentsRepository.rejectDocuments(rejectDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsRejected(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsRejected());
       } else {
         emit(RejectDocumentsError(
             message:
@@ -452,16 +453,17 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      Map deleteDocumentsMap = {
-        "documentid": "k3YypYo0qq9glAb9lxQqug==",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map withdrawDocumentsMap = {
+        "documentid": hashCode,
+        "userid": userId,
         "hashcode": hashCode,
-        "role": "fGLj9XEzYUQ+1lz4/JymXw=="
+        "role": roleId
       };
       PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.withdrawDocuments(deleteDocumentsMap);
+          await _documentsRepository.withdrawDocuments(withdrawDocumentsMap);
       if (postDocumentsModel.message == '1') {
-        emit(DocumentsWithdrawn(postDocumentsModel: postDocumentsModel));
+        emit(DocumentsWithdrawn());
       } else {
         emit(WithdrawDocumentsError(
             message:

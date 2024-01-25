@@ -12,6 +12,7 @@ import '../add_document_comments_screen.dart';
 import '../attach_document_screen.dart';
 import '../documents_approve_and_reject_screen.dart';
 import '../link_document_screen.dart';
+import '../open_document_for_review_screen.dart';
 
 class DocumentsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -61,18 +62,34 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
               DatabaseUtil.getText('dms_approvedocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = false;
             Navigator.pushNamed(
-                context, DocumentsApproveAndRejectScreen.routeName);
+                    context, DocumentsApproveAndRejectScreen.routeName)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = true;
             Navigator.pushNamed(
-                context, DocumentsApproveAndRejectScreen.routeName);
+                    context, DocumentsApproveAndRejectScreen.routeName)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {
+            context.read<DocumentsBloc>().add(WithdrawDocument());
           } else if (popUpMenuItems[value] ==
-              DatabaseUtil.getText('dms_openforinformation')) {}
+              DatabaseUtil.getText('dms_openforinformation')) {
+            context.read<DocumentsBloc>().add(OpenDocumentsForInformation());
+          } else if (popUpMenuItems[value] ==
+              DatabaseUtil.getText('dms_openforreview')) {
+            Navigator.pushNamed(context, OpenDocumentForReviewScreen.routeName,
+                    arguments: documentDetailsModel)
+                .then((_) => context
+                    .read<DocumentsBloc>()
+                    .add(const GetDocumentsDetails()));
+          }
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [

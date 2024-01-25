@@ -215,11 +215,7 @@ class OpeningDocumentsForReview extends DocumentsStates {
   const OpeningDocumentsForReview();
 }
 
-class DocumentOpenedForReview extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentOpenedForReview({required this.postDocumentsModel});
-}
+class DocumentOpenedForReview extends DocumentsStates {}
 
 class OpenDocumentsForReviewError extends DocumentsStates {
   final String message;
@@ -231,11 +227,7 @@ class ApprovingDocuments extends DocumentsStates {
   const ApprovingDocuments();
 }
 
-class DocumentsApproved extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsApproved({required this.postDocumentsModel});
-}
+class DocumentsApproved extends DocumentsStates {}
 
 class ApproveDocumentsError extends DocumentsStates {
   final String message;
@@ -243,15 +235,9 @@ class ApproveDocumentsError extends DocumentsStates {
   const ApproveDocumentsError({required this.message});
 }
 
-class RejectingDocuments extends DocumentsStates {
-  const RejectingDocuments();
-}
+class RejectingDocuments extends DocumentsStates {}
 
-class DocumentsRejected extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsRejected({required this.postDocumentsModel});
-}
+class DocumentsRejected extends DocumentsStates {}
 
 class RejectDocumentsError extends DocumentsStates {
   final String message;
@@ -263,11 +249,7 @@ class WithdrawingDocuments extends DocumentsStates {
   const WithdrawingDocuments();
 }
 
-class DocumentsWithdrawn extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsWithdrawn({required this.postDocumentsModel});
-}
+class DocumentsWithdrawn extends DocumentsStates {}
 
 class WithdrawDocumentsError extends DocumentsStates {
   final String message;
