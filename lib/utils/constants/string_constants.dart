@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
   static const String kNoItems = 'No items!'; //

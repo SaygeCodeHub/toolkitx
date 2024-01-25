@@ -1,3 +1,5 @@
+import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
+
 abstract class LeavesAndHolidaysEvent {}
 
 class FetchLeavesSummary extends LeavesAndHolidaysEvent {}
@@ -25,11 +27,13 @@ class ApplyForLeave extends LeavesAndHolidaysEvent {
 class GetTimeSheet extends LeavesAndHolidaysEvent {
   final String year;
   final String month;
+
   GetTimeSheet({required this.year, required this.month});
 }
 
 class FetchCheckInTimeSheet extends LeavesAndHolidaysEvent {
   final String date;
+
   FetchCheckInTimeSheet({required this.date});
 }
 
@@ -66,4 +70,16 @@ class SubmitTimeSheet extends LeavesAndHolidaysEvent {
   final Map submitTimeSheetMap;
 
   SubmitTimeSheet({required this.submitTimeSheetMap});
+}
+
+class SelectCheckBox extends LeavesAndHolidaysEvent {
+  final bool isChecked;
+
+  SelectCheckBox({required this.isChecked});
+}
+
+class SelectAllCheckBox extends LeavesAndHolidaysEvent {
+  final List<Date> dates;
+
+  SelectAllCheckBox({required this.dates});
 }

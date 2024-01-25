@@ -18,6 +18,7 @@ import '../../data/models/leavesAndHolidays/fetch_leaves_summary_model.dart';
 import '../../data/models/leavesAndHolidays/save_timesheet_model.dart';
 import '../../data/models/leavesAndHolidays/submit_time_sheet_model.dart';
 import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
+import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -40,11 +41,14 @@ class LeavesAndHolidaysBloc
     on<DeleteTimeSheet>(_deleteTimeSheet);
     on<SaveTimeSheet>(_saveTimeSheet);
     on<SubmitTimeSheet>(_submitTimeSheet);
+    on<SelectCheckBox>(_selectCheckBox);
+    on<SelectAllCheckBox>(_selectAllCheckBox);
   }
 
   String year = "";
   String month = "";
   List timeSheetIdList = [];
+  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -219,6 +223,7 @@ class LeavesAndHolidaysBloc
     try {
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
+
       Map deleteTimeSheetMap = {
         "idm": "",
         "id": event.timeId,
@@ -292,6 +297,20 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetNotSubmitted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectCheckBox(
+      SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    emit(CheckBoxSelected(isChecked: event.isChecked));
+    isChecked = event.isChecked;
+  }
+
+  FutureOr<void> _selectAllCheckBox(
+      SelectAllCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    for (int i = 0; i <= event.dates.length - 1; i++) {
+      TimeSheetCheckbox.idsList.add(event.dates[i].id);
+      add(SelectCheckBox(isChecked: isChecked));
     }
   }
 }
