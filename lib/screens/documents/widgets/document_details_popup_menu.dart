@@ -41,9 +41,7 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
-          if (popUpMenuItems[value] == DatabaseUtil.getText('Edit')) {
-          } else if (popUpMenuItems[value] == DatabaseUtil.getText('Open')) {
-          } else if (popUpMenuItems[value] ==
+          if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_linkotherdocument')) {
             Navigator.pushNamed(context, LinkDocumentScreen.routeName);
           } else if (popUpMenuItems[value] ==
