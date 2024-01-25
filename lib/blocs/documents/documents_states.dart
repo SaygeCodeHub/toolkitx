@@ -235,15 +235,9 @@ class ApproveDocumentsError extends DocumentsStates {
   const ApproveDocumentsError({required this.message});
 }
 
-class RejectingDocuments extends DocumentsStates {
-  const RejectingDocuments();
-}
+class RejectingDocuments extends DocumentsStates {}
 
-class DocumentsRejected extends DocumentsStates {
-  final PostDocumentsModel postDocumentsModel;
-
-  const DocumentsRejected({required this.postDocumentsModel});
-}
+class DocumentsRejected extends DocumentsStates {}
 
 class RejectDocumentsError extends DocumentsStates {
   final String message;

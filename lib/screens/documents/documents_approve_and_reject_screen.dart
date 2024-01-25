@@ -66,11 +66,25 @@ class DocumentsApproveAndRejectScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.message, '');
             }
+
+            if (state is RejectingDocuments) {
+              ProgressBar.show(context);
+            }
+            if (state is DocumentsRejected) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+            }
+            if (state is RejectDocumentsError) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.message, '');
+            }
           },
           child: PrimaryButton(
               onPressed: () {
                 isFromReject == true
-                    ? null
+                    ? context
+                        .read<DocumentsBloc>()
+                        .add(RejectDocument(comment: comment))
                     : context
                         .read<DocumentsBloc>()
                         .add(ApproveDocument(comment: comment));

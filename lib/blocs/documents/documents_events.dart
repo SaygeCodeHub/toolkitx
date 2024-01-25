@@ -90,10 +90,9 @@ class ApproveDocument extends DocumentsEvents {
 }
 
 class RejectDocument extends DocumentsEvents {
-  final String documentId;
   final String comment;
 
-  RejectDocument({required this.documentId, required this.comment});
+  RejectDocument({required this.comment});
 }
 
 class WithdrawDocument extends DocumentsEvents {}
