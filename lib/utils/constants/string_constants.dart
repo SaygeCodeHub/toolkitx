@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
   static const String kNoItems = 'No items!'; //
@@ -507,4 +508,7 @@ abstract class StringConstants {
   static const String kAreYouSureToReject = "Are you sure to reject?";
   static const String kRequestRejected = "Request Rejected";
   static const String kFetchedCode = "Fetched Code :";
+  static const String kAreYouSureToCloseDocument =
+      'Are you sure you want to close this document management ? ';
+  static const String kDocumentManagement = 'Document Management';
 }

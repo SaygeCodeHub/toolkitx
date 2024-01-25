@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
-import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
@@ -11,6 +10,8 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
+import '../leaves_and_holidays_checkbox.dart';
+import '../timesheet_checkin_screen.dart';
 
 class LeavesAndHolidaysListBody extends StatelessWidget {
   const LeavesAndHolidaysListBody({
@@ -21,6 +22,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
 
   final TimesheetData data;
   final bool isChecked;
+  static List leavesAndHolidaysIdList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -117,17 +119,25 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                         : const Text(StringConstants.kNotSubmitted,
                             style: TextStyle(color: AppColor.deepBlue)),
                     Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: xxxSmallestSpacing,
-                              bottom: xxxSmallestSpacing),
-                          child: (data.dates[index].id != '' &&
-                                  data.dates[index].hours != '-')
-                              ? Checkbox(
-                                  activeColor: AppColor.blueGrey,
-                                  value: isChecked,
-                                  onChanged: ((value) {}))
-                              : const SizedBox.shrink()),
+                      child: ((data.dates[index].id != '' &&
+                              (data.dates[index].hours != '-' ||
+                                  data.dates[index].hours == '-') &&
+                              data.dates[index].status == 0))
+                          ? TimeSheetCheckbox(
+                              id: data.dates[index].id,
+                              onCreatedForChanged: (List<dynamic> idList) {
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .timeSheetIdList
+                                    .add({
+                                  "id": idList
+                                      .toString()
+                                      .replaceAll('[', "")
+                                      .replaceAll(']', "")
+                                      .replaceAll(',', ",")
+                                });
+                              })
+                          : const SizedBox.shrink(),
                     )
                   ],
                 ),

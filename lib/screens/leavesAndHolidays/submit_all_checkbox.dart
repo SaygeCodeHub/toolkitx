@@ -7,23 +7,25 @@ import '../../configs/app_color.dart';
 
 typedef CreatedForListCallBack = Function(List idList);
 
-class TimeSheetCheckbox extends StatelessWidget {
-  const TimeSheetCheckbox({
+class TimeSheetSubmitAllCheckbox extends StatelessWidget {
+  const TimeSheetSubmitAllCheckbox({
     super.key,
+    required this.selectedCreatedForIdList,
     required this.id,
     required this.onCreatedForChanged,
   });
 
   final String id;
+  final List selectedCreatedForIdList;
   final CreatedForListCallBack onCreatedForChanged;
-  static List idsList = [];
+
   void _checkboxChange(isSelected, id) {
     if (isSelected) {
-      idsList.add(id);
-      onCreatedForChanged(idsList);
+      selectedCreatedForIdList.add(id);
+      onCreatedForChanged(selectedCreatedForIdList);
     } else {
-      idsList.remove(id);
-      onCreatedForChanged(idsList);
+      selectedCreatedForIdList.remove(id);
+      onCreatedForChanged(selectedCreatedForIdList);
     }
   }
 
@@ -40,7 +42,7 @@ class TimeSheetCheckbox extends StatelessWidget {
         if (state is CheckBoxSelected) {
           return Checkbox(
             activeColor: AppColor.deepBlue,
-            value: idsList.contains(id),
+            value: selectedCreatedForIdList.contains(id),
             onChanged: (isChecked) {
               _checkboxChange(isChecked, id);
               context

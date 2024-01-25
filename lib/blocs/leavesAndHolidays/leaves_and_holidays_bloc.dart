@@ -22,6 +22,7 @@ import '../../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart
 import '../../screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import '../../screens/leavesAndHolidays/widgtes/working_at_number_timesheet_tile.dart';
 import '../../screens/leavesAndHolidays/widgtes/working_at_timesheet_tile.dart';
+import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -49,6 +50,8 @@ class LeavesAndHolidaysBloc
     on<SubmitTimeSheet>(_submitTimeSheet);
     on<FetchTimeSheetWorkingAtNumberData>(_fetchTimeSheetWorkingAtNumberData);
     on<FetchTimeSheetDetails>(_fetchTimeSheetDetails);
+    on<SelectCheckBox>(_selectCheckBox);
+    on<SelectAllCheckBox>(_selectAllCheckBox);
   }
 
   String year = "";
@@ -56,6 +59,7 @@ class LeavesAndHolidaysBloc
   List timeSheetIdList = [];
   Map timeSheetWorkingAtMap = {};
   Map timeSheetWorkingAtNumberMap = {};
+  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -275,6 +279,7 @@ class LeavesAndHolidaysBloc
     try {
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
+
       Map deleteTimeSheetMap = {
         "idm": "",
         "id": event.timeId,
@@ -520,6 +525,20 @@ class LeavesAndHolidaysBloc
       }
     } catch (e) {
       emit(TimeSheetDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectCheckBox(
+      SelectCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    emit(CheckBoxSelected(isChecked: event.isChecked));
+    isChecked = event.isChecked;
+  }
+
+  FutureOr<void> _selectAllCheckBox(
+      SelectAllCheckBox event, Emitter<LeavesAndHolidaysStates> emit) {
+    for (int i = 0; i <= event.dates.length - 1; i++) {
+      TimeSheetCheckbox.idsList.add(event.dates[i].id);
+      add(SelectCheckBox(isChecked: isChecked));
     }
   }
 }

@@ -186,3 +186,9 @@ class TimeSheetDetailsNotFetched extends LeavesAndHolidaysStates {
 
   TimeSheetDetailsNotFetched({required this.errorMessage});
 }
+
+class CheckBoxSelected extends LeavesAndHolidaysStates {
+  final bool isChecked;
+
+  CheckBoxSelected({required this.isChecked});
+}
