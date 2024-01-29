@@ -55,7 +55,7 @@ class WorkForceListScreen extends StatelessWidget {
                                           .copyWith(
                                               fontWeight: FontWeight.w500,
                                               color: AppColor.black)),
-                                  const SizedBox(height: tinierSpacing),
+                                  const SizedBox(width: tiniestSpacing),
                                   Visibility(
                                       visible: state.workforceGetCheckListModel
                                               .data![index].isdraft ==
