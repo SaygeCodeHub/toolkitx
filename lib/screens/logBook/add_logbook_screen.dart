@@ -6,11 +6,11 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/generic_no_records_text.dart';
 import '../../blocs/LogBook/logbook_events.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_card.dart';
-import '../../widgets/error_section.dart';
 import 'report_new_logbook_screen.dart';
 
 class AddLogBookScreen extends StatelessWidget {
@@ -40,7 +40,7 @@ class AddLogBookScreen extends StatelessWidget {
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: state.logBookFetchMasterModel.data.length,
+                    itemCount: state.logBookFetchMasterModel.data[0].length,
                     itemBuilder: (context, index) {
                       return CustomCard(
                           child: ListTile(
@@ -74,11 +74,9 @@ class AddLogBookScreen extends StatelessWidget {
                     },
                   ));
             } else if (state is LogBookMasterNotFetched) {
-              return GenericReloadButton(
-                  onPressed: () {
-                    context.read<LogbookBloc>().add(FetchLogBookMaster());
-                  },
-                  textValue: StringConstants.kReload);
+              return const Center(
+                child: NoRecordsText(text: StringConstants.kNoRecordsFound),
+              );
             } else {
               return const SizedBox.shrink();
             }
