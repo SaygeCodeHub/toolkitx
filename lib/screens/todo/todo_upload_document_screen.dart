@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -29,6 +30,8 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    todoMap['name'] = '';
+    todoMap['files'] = '';
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: GenericAppBar(

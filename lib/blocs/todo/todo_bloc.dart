@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/todo/todo_states.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -345,6 +346,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
           "createdfor": todoMap['createdfor'],
           "hashcode": hashCode
         };
+        log('addToDoMap=========>$addToDoMap');
         AddToDoModel addToDoModel = await _toDoRepository.addToDo(addToDoMap);
         if (addToDoModel.status == 200) {
           todoMap['todoId'] = addToDoModel.message;
@@ -367,6 +369,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
         "userid": userId,
         "hashcode": hashCode
       };
+      log('submitToDoMap=========>$submitToDoMap');
       SubmitToDoModel submitToDoModel =
           await _toDoRepository.submitToDo(submitToDoMap);
       emit(ToDoSubmitted(submitToDoModel: submitToDoModel));
@@ -479,6 +482,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
           "documents": todoMap['documents'].toString().replaceAll(' ', ''),
           "userid": userId
         };
+
         SaveToDoDocumentsModel saveToDoDocumentsModel =
             await _toDoRepository.saveToDoDocuments(saveDocumentsMap);
         if (saveToDoDocumentsModel.status == 200) {
