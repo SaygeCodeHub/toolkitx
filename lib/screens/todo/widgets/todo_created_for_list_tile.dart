@@ -40,7 +40,8 @@ class _ToDoCreatedForListTileState extends State<ToDoCreatedForListTile> {
                           widget.todoMap['createdfor'] = createdForIdList
                               .toString()
                               .replaceAll("[", "")
-                              .replaceAll("]", "");
+                              .replaceAll("]", "")
+                              .replaceAll(' ','');
                         },
                       )));
           if (selectedCreatedForList.isNotEmpty) {
