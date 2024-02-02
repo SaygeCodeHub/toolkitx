@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/enums/incident_and_qm_filter_status_enum.dart';
 import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_states.dart';
@@ -27,6 +30,8 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('nextStatus===============>${incidentDetailsModel.data!.nextStatus}');
+    log('Status===============>${incidentDetailsModel.data!.status}');
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kResolve),
       body: Padding(
@@ -75,6 +80,7 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
                       onPressed: () {
                         incidentCommentsMap['incidentId'] =
                             incidentListDatum.id;
+                        incidentCommentsMap['status'] = IncidentAndQualityManagementStatusEnum.resolved.value;
                         context.read<IncidentDetailsBloc>().add(
                             SaveIncidentComments(
                                 saveCommentsMap: incidentCommentsMap));

@@ -182,7 +182,9 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
                                             Navigator.pushNamed(context,
                                                 IncidentDetailsScreen.routeName,
                                                 arguments:
-                                                    incidentListData[index]);
+                                                    incidentListData[index]).then((_) => context
+                                                .read<IncidentLisAndFilterBloc>()
+                                                .add(FetchIncidentListEvent(isFromHome: widget.isFromHome, page: 1)));
                                           }));
                                 },
                                 separatorBuilder: (context, index) {
