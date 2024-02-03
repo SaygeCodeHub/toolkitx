@@ -93,11 +93,11 @@ class CheckListScheduleDatesResponseBloc extends Bloc<
       StringConstants.kThirdParty,
       StringConstants.kEditHeader
     ];
-    // if (event.popUpMenuBuilder == false) {
-    //   popUpMenuItems.removeAt(2);
-    //   popUpMenuItems.removeAt(1);
-    //   popUpMenuItems.removeAt(0);
-    // }
+    if (event.popUpMenuBuilder == false) {
+      popUpMenuItems.removeAt(2);
+      popUpMenuItems.removeAt(1);
+      popUpMenuItems.removeAt(0);
+    }
     emit(CheckListPopUpMenuItemsFetched(popUpMenuItems: popUpMenuItems));
   }
 }
