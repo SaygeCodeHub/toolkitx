@@ -7,6 +7,7 @@ import 'package:toolkit/screens/checklist/workforce/workforce_pop_up_menu_screen
 import '../../../blocs/checklist/workforce/getQuestionsList/workforce_cheklist_get_questions_list_states.dart';
 import '../../../blocs/checklist/workforce/getQuestionsList/workforce_checklist_get_questions_list_bloc.dart';
 import '../../../blocs/checklist/workforce/getQuestionsList/workforce_checklist_get_questions_list_events.dart';
+import '../../../blocs/checklist/workforce/workforceList/workforce_list_bloc.dart';
 
 class WorkForceQuestionsScreen extends StatelessWidget {
   static const routeName = 'WorkForceQuestionsScreen';
@@ -37,8 +38,14 @@ class WorkForceQuestionsScreen extends StatelessWidget {
                   WorkForceCheckListQuestionsStates>(builder: (context, state) {
                 if (state is QuestionsListFetched) {
                   return Visibility(
-                      visible: state.allChecklistDataMap["isRejected"] == "0" &&
-                          checklistDataMap["isDraft"] != 0,
+                      visible: context
+                                  .read<WorkForceListBloc>()
+                                  .checkListMap["isRejected"] ==
+                              "0" &&
+                          context
+                                  .read<WorkForceListBloc>()
+                                  .checkListMap["isDraft"] !=
+                              0,
                       child: WorkForcePopUpMenu(
                           checklistDataMap: checklistDataMap));
                 } else {
