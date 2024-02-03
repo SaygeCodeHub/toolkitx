@@ -39,12 +39,7 @@ class SubmitAnswerBloc extends Bloc<SubmitAnswers, SubmitAnswerStates> {
         submitList.add({"questionid": id, "answer": answer});
         validateSubmitList.add({"ismandatory": isMandatory, "answer": answer});
       }
-      if (validateSubmitList
-          .map((e) => e["answer"] == "" && e["ismandatory"] == "1")
-          .contains(true)) {
-        emit(AnswerNotSubmitted(
-            message: DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
-      } else {
+      if (event.isDraft == true) {
         Map submitQuestionMap = {
           "checklistid": event.allChecklistDataMap["checklistId"],
           "workforceid": userId,
@@ -56,6 +51,26 @@ class SubmitAnswerBloc extends Bloc<SubmitAnswers, SubmitAnswerStates> {
         SubmitQuestionModel submitQuestionModel =
             await _workForceRepository.submitAnswer(submitQuestionMap);
         emit(AnswerSubmitted(submitQuestionModel: submitQuestionModel));
+      } else {
+        if (validateSubmitList
+            .map((e) => e["answer"] == "" && e["ismandatory"] == "1")
+            .contains(true)) {
+          emit(AnswerNotSubmitted(
+              message:
+                  DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
+        } else {
+          Map submitQuestionMap = {
+            "checklistid": event.allChecklistDataMap["checklistId"],
+            "workforceid": userId,
+            "isdraft": (event.isDraft == true) ? "1" : "0",
+            "questions": submitList,
+            "scheduleid": event.allChecklistDataMap["scheduleId"],
+            "hashcode": hashCode
+          };
+          SubmitQuestionModel submitQuestionModel =
+              await _workForceRepository.submitAnswer(submitQuestionMap);
+          emit(AnswerSubmitted(submitQuestionModel: submitQuestionModel));
+        }
       }
     } catch (e) {
       emit(AnswerNotSubmitted(message: e.toString()));
