@@ -30,7 +30,10 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List dateTimeList = addAndEditIncidentMap['eventdatetime'].toString().replaceAll(' ', ',').split(',');
+    List dateTimeList = addAndEditIncidentMap['eventdatetime']
+        .toString()
+        .replaceAll(' ', ',')
+        .split(',');
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
@@ -65,10 +68,10 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       Visibility(
                         visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement:
-                        Text((addAndEditIncidentMap['eventdatetime'] == null)
-                            ? ""
-                            : dateTimeList[0]),
+                        replacement: Text(
+                            (addAndEditIncidentMap['eventdatetime'] == null)
+                                ? ""
+                                : dateTimeList[0]),
                         child: DatePickerTextField(
                           hintText: StringConstants.kSelectDate,
                           onDateChanged: (String date) {
@@ -86,9 +89,10 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       Visibility(
                         visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement: Text((addAndEditIncidentMap['eventdatetime'] == null)
-                            ? ""
-                            : dateTimeList[1]),
+                        replacement: Text(
+                            (addAndEditIncidentMap['eventdatetime'] == null)
+                                ? ""
+                                : dateTimeList[1]),
                         child: TimePickerTextField(
                           hintText: StringConstants.kSelectTime,
                           onTimeChanged: (String time) {

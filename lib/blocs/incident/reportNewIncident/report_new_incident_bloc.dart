@@ -189,7 +189,8 @@ class ReportNewIncidentBloc
         reportNewIncidentMap['description'] == null ||
         reportNewIncidentMap['companyid'] == '') {
       emit(ReportNewIncidentDateTimeDescValidated(
-          dateTimeDescValidationMessage: StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
+          dateTimeDescValidationMessage:
+              StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewIncidentDateTimeDescValidationComplete());
     }
