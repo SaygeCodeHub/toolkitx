@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
@@ -16,13 +17,14 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
   final QMDetailsData data;
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
   final Map editQMDetailsMap;
+  final String qmId;
 
   const QualityManagementPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuItems,
       required this.data,
       required this.fetchQualityManagementDetailsModel,
-      required this.editQMDetailsMap})
+      required this.editQMDetailsMap, required this.qmId})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -43,7 +45,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
           if (value == DatabaseUtil.getText('AddComments')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Edit')) {
             ReportNewQA.isFromEdit = true;
@@ -51,37 +54,44 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
             QualityManagementContractorListTile.contractorName =
                 (data.companyname != 'null') ? data.companyname : '';
             Navigator.pushNamed(context, ReportNewQA.routeName,
-                arguments: editQMDetailsMap);
+                arguments: editQMDetailsMap).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Report')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Acknowledge')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('DefineMitigation')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ApproveMitigation')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ImplementMitigation')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Markasresolved')) {
             Navigator.pushNamed(
                 context, QualityManagementAddCommentsScreen.routeName,
-                arguments: fetchQualityManagementDetailsModel);
+                arguments: fetchQualityManagementDetailsModel).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('GenerateReport')) {
             context

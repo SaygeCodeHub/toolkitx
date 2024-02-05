@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
@@ -130,6 +131,7 @@ class QualityManagementBloc
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
               event.qmId, hashCode!, userId!, roleId);
+      log('details===============>${event.qmId} , $hashCode , $userId , $roleId');
       encryptQmId = EncryptData.encryptAESPrivateKey(
           fetchQualityManagementDetailsModel.data.id, privateKey);
       List customFields = [];
@@ -425,8 +427,9 @@ class QualityManagementBloc
       ReportNewQualityManagementDateTimeDescriptionValidation event,
       Emitter<QualityManagementStates> emit) {
     reportNewQAMap = event.reportNewQAMap;
-    if (reportNewQAMap['eventdatetime'] == null &&
-        reportNewQAMap['description'] == null) {
+    if (reportNewQAMap['eventdatetime'] == null ||
+        reportNewQAMap['description'] == null||
+        reportNewQAMap['companyid'] == null) {
       emit(ReportNewQualityManagementDateTimeDescValidated(
           dateTimeDescValidationMessage:
               DatabaseUtil.getText('ReportDateTimeCompulsary')));

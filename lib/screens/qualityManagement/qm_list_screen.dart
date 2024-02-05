@@ -181,7 +181,8 @@ class _QualityManagementListScreenState
                                                 context,
                                                 QualityManagementDetailsScreen
                                                     .routeName,
-                                                arguments: qmListMap);
+                                                arguments: qmListMap).then((_) => context.read<QualityManagementBloc>().add(
+                                                FetchQualityManagementList(pageNo: 1, isFromHome: widget.isFromHome)));
                                           }));
                                 },
                                 separatorBuilder: (context, index) {

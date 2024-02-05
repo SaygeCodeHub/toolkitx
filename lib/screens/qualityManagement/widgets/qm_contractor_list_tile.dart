@@ -39,19 +39,21 @@ class QualityManagementContractorListTile extends StatelessWidget {
               visible: ReportNewQA.isFromEdit != true,
               replacement: ListTile(
                   contentPadding: EdgeInsets.zero,
-                  onTap: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                QualityManagementContractorList(
-                                    fetchQualityManagementMasterModel:
-                                        state.fetchQualityManagementMasterModel,
-                                    selectContractorId:
-                                        state.selectContractorId,
-                                    selectContractorName:
-                                        state.selectContractorName)));
-                  },
+                  onTap: ReportNewQA.isFromEdit == true
+                      ? null
+                      : () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      QualityManagementContractorList(
+                                          fetchQualityManagementMasterModel: state
+                                              .fetchQualityManagementMasterModel,
+                                          selectContractorId:
+                                              state.selectContractorId,
+                                          selectContractorName:
+                                              state.selectContractorName)));
+                        },
                   title: Text(DatabaseUtil.getText('contractor'),
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           color: AppColor.black, fontWeight: FontWeight.w600)),
@@ -67,8 +69,10 @@ class QualityManagementContractorListTile extends StatelessWidget {
                             .xSmall
                             .copyWith(color: AppColor.black)),
                   ),
-                  trailing:
-                      const Icon(Icons.navigate_next_rounded, size: kIconSize)),
+                  trailing: Visibility(
+                      visible: ReportNewQA.isFromEdit != true,
+                      child: const Icon(Icons.navigate_next_rounded,
+                          size: kIconSize))),
               child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   onTap: () async {

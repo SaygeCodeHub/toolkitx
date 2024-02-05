@@ -49,7 +49,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                         data: state.fetchQualityManagementDetailsModel.data,
                         fetchQualityManagementDetailsModel:
                             state.fetchQualityManagementDetailsModel,
-                        editQMDetailsMap: state.editQMDetailsMap);
+                        editQMDetailsMap: state.editQMDetailsMap, qmId: qmListMap['id'],);
                   } else {
                     return const SizedBox.shrink();
                   }
