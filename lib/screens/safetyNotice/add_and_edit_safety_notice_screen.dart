@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
+import '../../blocs/imagePickerBloc/image_picker_state.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
@@ -26,8 +29,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
     (isFromEditOption == false)
         ? manageSafetyNoticeMap.clear()
         : manageSafetyNoticeMap;
-    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<PickAndUploadImageBloc>().add(UploadInitial());
+    context.read<ImagePickerBloc>().pickedImagesList.clear();
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('NewSafetyNotice')),
       bottomNavigationBar: SafetyNoticeAddAndEditBottomAppBar(
@@ -73,20 +75,20 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
               const SizedBox(height: xxTinySpacing),
               const ViewEditSafetyNoticeImages(),
               const SizedBox(height: xxTinySpacing),
-              SafetyNoticeImageCount(
-                  imageLength: ViewImageUtil.viewImageList(
-                          manageSafetyNoticeMap['file_name'] ?? '')
-                      .length),
-              const SizedBox(height: xxTinierSpacing),
+              // SafetyNoticeImageCount(
+              //     imageLength: ViewImageUtil.viewImageList(
+              //             manageSafetyNoticeMap['file_name'] ?? '')
+              //         .length),
+              // const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
                 editedImageList:
                     manageSafetyNoticeMap['file_name'].toString().split(','),
-                isUpload: true,
+                isUpload: false,
                 onUploadImageResponse: (List uploadImageList) {
-                  manageSafetyNoticeMap['file_name'] = uploadImageList
-                      .toString()
-                      .replaceAll('[', '')
-                      .replaceAll(']', '');
+                  // manageSafetyNoticeMap['file_name'] = uploadImageList
+                  //     .toString()
+                  //     .replaceAll('[', '')
+                  //     .replaceAll(']', '');
                 },
               ),
             ],

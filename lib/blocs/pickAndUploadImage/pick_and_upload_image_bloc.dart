@@ -165,12 +165,12 @@ class PickAndUploadImageBloc
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.imageFile), hashCode);
       if (uploadPictureModel.status == 200) {
-        emit(ImagePickerLoaded(
-            isImageAttached: event.isImageAttached,
-            imagePathsList: event.imagesList,
-            imagePath: event.imageFile,
-            uploadPictureModel: uploadPictureModel,
-            incrementNumber: imageIndex));
+        // emit(ImagePickerLoaded(
+        //     isImageAttached: event.isImageAttached,
+        //     imagePathsList: event.imagesList,
+        //     imagePath: event.imageFile,
+        //     uploadPictureModel: uploadPictureModel,
+        //     incrementNumber: imageIndex));
       } else {
         emit(ImageNotUploaded(
             imageNotUploaded: StringConstants.kErrorImageUpload));
@@ -188,12 +188,12 @@ class PickAndUploadImageBloc
       images.removeAt(event.index);
       imageIndex--;
       images.isEmpty ? isImageAttached = false : isImageAttached = true;
-      emit(ImagePickerLoaded(
-          isImageAttached: isImageAttached,
-          imagePathsList: images,
-          imagePath: '',
-          uploadPictureModel: event.uploadPictureModel,
-          incrementNumber: imageIndex));
+      // emit(ImagePickerLoaded(
+      //     isImageAttached: isImageAttached,
+      //     imagePathsList: images,
+      //     imagePath: '',
+      //     uploadPictureModel: event.uploadPictureModel,
+      //     incrementNumber: imageIndex));
     }
   }
 

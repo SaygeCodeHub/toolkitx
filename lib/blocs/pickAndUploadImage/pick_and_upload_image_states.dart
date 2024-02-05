@@ -15,7 +15,6 @@ class PickImageLoading extends PickAndUploadImageStates {
 }
 
 class ImagePickerLoaded extends PickAndUploadImageStates {
-  final UploadPictureModel uploadPictureModel;
   final bool isImageAttached;
   final List imagePathsList;
   final String imagePath;
@@ -23,7 +22,6 @@ class ImagePickerLoaded extends PickAndUploadImageStates {
 
   ImagePickerLoaded(
       {required this.incrementNumber,
-      required this.uploadPictureModel,
       required this.imagePath,
       required this.imagePathsList,
       required this.isImageAttached});
