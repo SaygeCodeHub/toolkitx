@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -30,7 +31,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    addAndEditIncidentMap.clear();
+    List dateTimeList = addAndEditIncidentMap['eventdatetime'].toString().replaceAll(' ', ',').split(',');
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
@@ -63,17 +64,12 @@ class ReportNewIncidentScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       Visibility(
-                        visible: CategoryScreen.isFromEdit != true &&
+                        visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement: TextFieldWidget(
-                            value:
-                                (addAndEditIncidentMap['eventdatetime'] == null)
-                                    ? ""
-                                    : addAndEditIncidentMap['eventdatetime']
-                                        .toString()
-                                        .substring(0, 10),
-                            readOnly: true,
-                            onTextFieldChanged: (String textField) {}),
+                        replacement:
+                        Text((addAndEditIncidentMap['eventdatetime'] == null)
+                            ? ""
+                            : dateTimeList[0]),
                         child: DatePickerTextField(
                           hintText: StringConstants.kSelectDate,
                           onDateChanged: (String date) {
@@ -89,17 +85,11 @@ class ReportNewIncidentScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       Visibility(
-                        visible: CategoryScreen.isFromEdit != true &&
+                        visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement: TextFieldWidget(
-                            value:
-                                (addAndEditIncidentMap['eventdatetime'] == null)
-                                    ? ""
-                                    : addAndEditIncidentMap['eventdatetime']
-                                        .toString()
-                                        .substring(12, 19),
-                            readOnly: true,
-                            onTextFieldChanged: (String textField) {}),
+                        replacement: Text((addAndEditIncidentMap['eventdatetime'] == null)
+                            ? ""
+                            : dateTimeList[1]),
                         child: TimePickerTextField(
                           hintText: StringConstants.kSelectTime,
                           onTimeChanged: (String time) {

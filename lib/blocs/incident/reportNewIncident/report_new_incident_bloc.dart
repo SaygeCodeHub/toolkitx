@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -188,8 +189,7 @@ class ReportNewIncidentBloc
         reportNewIncidentMap['description'] == null ||
         reportNewIncidentMap['companyid'] == '') {
       emit(ReportNewIncidentDateTimeDescValidated(
-          dateTimeDescValidationMessage:
-              DatabaseUtil.getText('DateTimeNoEmpty')));
+          dateTimeDescValidationMessage: StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewIncidentDateTimeDescValidationComplete());
     }
