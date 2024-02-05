@@ -179,12 +179,19 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
                                               incidentListDatum:
                                                   incidentListData[index]),
                                           onTap: () {
-                                            Navigator.pushNamed(context,
-                                                IncidentDetailsScreen.routeName,
-                                                arguments:
-                                                    incidentListData[index]).then((_) => context
-                                                .read<IncidentLisAndFilterBloc>()
-                                                .add(FetchIncidentListEvent(isFromHome: widget.isFromHome, page: 1)));
+                                            Navigator.pushNamed(
+                                                    context,
+                                                    IncidentDetailsScreen
+                                                        .routeName,
+                                                    arguments:
+                                                        incidentListData[index])
+                                                .then((_) => context
+                                                    .read<
+                                                        IncidentLisAndFilterBloc>()
+                                                    .add(FetchIncidentListEvent(
+                                                        isFromHome:
+                                                            widget.isFromHome,
+                                                        page: 1)));
                                           }));
                                 },
                                 separatorBuilder: (context, index) {

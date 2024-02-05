@@ -184,8 +184,9 @@ class ReportNewIncidentBloc
   _dateTimeDescValidation(ReportNewIncidentDateTimeDescriptionValidation event,
       Emitter<ReportNewIncidentStates> emit) {
     reportNewIncidentMap = event.reportNewIncidentMap;
-    if (reportNewIncidentMap['eventdatetime'] == null &&
-        reportNewIncidentMap['description'] == null) {
+    if (reportNewIncidentMap['eventdatetime'] == null ||
+        reportNewIncidentMap['description'] == null ||
+        reportNewIncidentMap['companyid'] == '') {
       emit(ReportNewIncidentDateTimeDescValidated(
           dateTimeDescValidationMessage:
               DatabaseUtil.getText('DateTimeNoEmpty')));
