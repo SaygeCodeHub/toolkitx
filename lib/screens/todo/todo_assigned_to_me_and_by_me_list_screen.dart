@@ -50,7 +50,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
                       if (state is ToDoSettingsShowedByUserType) {
                         return CustomIconButtonRow(
                             clearVisible: true,
-                            textValue: StringConstants.kViewAll,
+                            textValue: StringConstants.kViewHistory,
                             secondaryVisible: state.userType == '1',
                             primaryVisible: false,
                             isEnabled: true,
