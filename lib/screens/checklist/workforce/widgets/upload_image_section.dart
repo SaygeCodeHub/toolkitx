@@ -44,115 +44,131 @@ class UploadImageMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      BlocBuilder<ImagePickerBloc, ImagePickerState>(builder: (context, state) {
-        if (state is PickingImage) {
-          return const Padding(
-            padding: EdgeInsets.all(xxTinierSpacing),
-            child: SizedBox(
-                width: kProgressIndicatorTogether,
-                height: kProgressIndicatorTogether,
-                child: CircularProgressIndicator()),
-          );
-        } else if (state is ImagePicked) {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      BlocBuilder<ImagePickerBloc, ImagePickerState>(
+          buildWhen: (previousState, currentState) =>
+              currentState is PickingImage ||
+              currentState is ImagePicked ||
+              currentState is FailedToPickImage,
+          builder: (context, state) {
+            if (state is PickingImage) {
+              return const Padding(
+                padding: EdgeInsets.all(xxTinierSpacing),
+                child: SizedBox(
+                    width: kProgressIndicatorTogether,
+                    height: kProgressIndicatorTogether,
+                    child: CircularProgressIndicator()),
+              );
+            } else if (state is ImagePicked) {
+              return Column(
                 children: [
-                  Text(StringConstants.kPhoto,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xSmall
-                          .copyWith(fontWeight: FontWeight.w600)),
-                  Text('${state.imageCount.toString()}/6',
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          color: AppColor.black, fontWeight: FontWeight.w500)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(StringConstants.kPhoto,
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      Text('${state.imageCount.toString()}/6',
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                  UploadPictureContainer(
+                      imagePathsList: state.pickedImagesList),
+                  SecondaryButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return UploadAlertDialog(
+                                isSignature: isSignature,
+                                onCamera: () {
+                                  // if (removeSignPad != null) {
+                                  //   removeSignPad!();
+                                  // }
+                                  context
+                                      .read<ImagePickerBloc>()
+                                      .add(PickImage());
+                                  Navigator.pop(context);
+                                },
+                                onDevice: () {
+                                  // if (removeSignPad != null) {
+                                  //   removeSignPad!();
+                                  // }
+                                  context
+                                      .read<ImagePickerBloc>()
+                                      .add(PickImage());
+                                  Navigator.pop(context);
+                                },
+                                onSign: onSign,
+                              );
+                            });
+                      },
+                      textValue: (isSignature == false)
+                          ? StringConstants.kUpload
+                          : StringConstants.kEditSignature),
                 ],
-              ),
-              UploadPictureContainer(imagePathsList: state.pickedImagesList),
-              SecondaryButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return UploadAlertDialog(
-                            isSignature: isSignature,
-                            onCamera: () {
-                              // if (removeSignPad != null) {
-                              //   removeSignPad!();
-                              // }
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onDevice: () {
-                              // if (removeSignPad != null) {
-                              //   removeSignPad!();
-                              // }
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onSign: onSign,
-                          );
-                        });
-                  },
-                  textValue: (isSignature == false)
-                      ? StringConstants.kUpload
-                      : StringConstants.kEditSignature),
-            ],
-          );
-        } else if (state is FailedToPickImage) {
-          return Text(
-            state.errText,
-            style: const TextStyle(color: AppColor.errorRed),
-          );
-        } else {
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              );
+            } else if (state is FailedToPickImage) {
+              return Text(
+                state.errText,
+                style: const TextStyle(color: AppColor.errorRed),
+              );
+            } else {
+              return Column(
                 children: [
-                  Text(StringConstants.kPhoto,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xSmall
-                          .copyWith(fontWeight: FontWeight.w600)),
-                  Text('0/6',
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          color: AppColor.black, fontWeight: FontWeight.w500)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(StringConstants.kPhoto,
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      Text('0/6',
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w500)),
+                    ],
+                  ),
+                  SecondaryButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return UploadAlertDialog(
+                                isSignature: isSignature,
+                                onCamera: () {
+                                  // if (removeSignPad != null) {
+                                  //   removeSignPad!();
+                                  // }
+                                  context
+                                      .read<ImagePickerBloc>()
+                                      .add(PickImage());
+                                  Navigator.pop(context);
+                                },
+                                onDevice: () {
+                                  // if (removeSignPad != null) {
+                                  //   removeSignPad!();
+                                  // }
+                                  context
+                                      .read<ImagePickerBloc>()
+                                      .add(PickImage());
+                                  Navigator.pop(context);
+                                },
+                                onSign: onSign,
+                              );
+                            });
+                      },
+                      textValue: (isSignature == false)
+                          ? StringConstants.kUpload
+                          : StringConstants.kEditSignature),
                 ],
-              ),
-              SecondaryButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return UploadAlertDialog(
-                            isSignature: isSignature,
-                            onCamera: () {
-                              // if (removeSignPad != null) {
-                              //   removeSignPad!();
-                              // }
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onDevice: () {
-                              // if (removeSignPad != null) {
-                              //   removeSignPad!();
-                              // }
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onSign: onSign,
-                          );
-                        });
-                  },
-                  textValue: (isSignature == false)
-                      ? StringConstants.kUpload
-                      : StringConstants.kEditSignature),
-            ],
-          );
-        }
-      }),
+              );
+            }
+          }),
     ]);
   }
 }
