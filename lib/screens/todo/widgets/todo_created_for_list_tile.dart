@@ -41,7 +41,7 @@ class _ToDoCreatedForListTileState extends State<ToDoCreatedForListTile> {
                               .toString()
                               .replaceAll("[", "")
                               .replaceAll("]", "")
-                              .replaceAll(' ','');
+                              .replaceAll(' ', '');
                         },
                       )));
           if (selectedCreatedForList.isNotEmpty) {
