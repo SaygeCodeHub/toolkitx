@@ -77,8 +77,10 @@ class SelectExpenseItem extends ExpenseEvent {
 
 class SelectExpenseWorkingAtOption extends ExpenseEvent {
   final String workingAt;
+  final String workingAtValue;
 
-  SelectExpenseWorkingAtOption({required this.workingAt});
+  SelectExpenseWorkingAtOption(
+      {required this.workingAtValue, required this.workingAt});
 }
 
 class SelectExpenseWorkingAtNumber extends ExpenseEvent {
@@ -96,3 +98,33 @@ class SelectExpenseAddItemsCurrency extends ExpenseEvent {
 class ApproveExpense extends ExpenseEvent {}
 
 class CloseExpense extends ExpenseEvent {}
+
+class DeleteExpenseItem extends ExpenseEvent {
+  final String itemId;
+
+  DeleteExpenseItem({required this.itemId});
+}
+
+class SaveExpenseItem extends ExpenseEvent {
+  final Map expenseItemMap;
+
+  SaveExpenseItem({required this.expenseItemMap});
+}
+
+class FetchExpenseItemCustomFields extends ExpenseEvent {
+  final Map customFieldsMap;
+
+  FetchExpenseItemCustomFields({required this.customFieldsMap});
+}
+
+class FetchWorkingAtNumberData extends ExpenseEvent {
+  final String groupBy;
+
+  FetchWorkingAtNumberData({required this.groupBy});
+}
+
+class FetchExpenseItemDetails extends ExpenseEvent {
+  final String expenseItemId;
+
+  FetchExpenseItemDetails({required this.expenseItemId});
+}

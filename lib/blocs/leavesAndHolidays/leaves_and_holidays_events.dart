@@ -1,3 +1,5 @@
+import '../../data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
+
 abstract class LeavesAndHolidaysEvent {}
 
 class FetchLeavesSummary extends LeavesAndHolidaysEvent {}
@@ -20,4 +22,73 @@ class ApplyForLeave extends LeavesAndHolidaysEvent {
   final Map applyForLeaveMap;
 
   ApplyForLeave({required this.applyForLeaveMap});
+}
+
+class GetTimeSheet extends LeavesAndHolidaysEvent {
+  final String year;
+  final String month;
+
+  GetTimeSheet({required this.year, required this.month});
+}
+
+class FetchCheckInTimeSheet extends LeavesAndHolidaysEvent {
+  final String date;
+
+  FetchCheckInTimeSheet({required this.date});
+}
+
+class DeleteTimeSheet extends LeavesAndHolidaysEvent {
+  final String timeId;
+
+  DeleteTimeSheet({required this.timeId});
+}
+
+class SelectTimeSheetWorkingAtOption extends LeavesAndHolidaysEvent {
+  final String workingAt;
+  final String workingAtValue;
+
+  SelectTimeSheetWorkingAtOption(
+      {required this.workingAtValue, required this.workingAt});
+}
+
+class SelectTimeSheetWorkingAtNumber extends LeavesAndHolidaysEvent {
+  final Map timeSheetWorkingAtNumberMap;
+
+  SelectTimeSheetWorkingAtNumber({required this.timeSheetWorkingAtNumberMap});
+}
+
+class FetchTimeSheetWorkingAtNumberData extends LeavesAndHolidaysEvent {
+  final String groupBy;
+
+  FetchTimeSheetWorkingAtNumberData({required this.groupBy});
+}
+
+class SaveTimeSheet extends LeavesAndHolidaysEvent {
+  final Map saveTimeSheetMap;
+
+  SaveTimeSheet({required this.saveTimeSheetMap});
+}
+
+class SubmitTimeSheet extends LeavesAndHolidaysEvent {
+  final Map submitTimeSheetMap;
+
+  SubmitTimeSheet({required this.submitTimeSheetMap});
+}
+
+class FetchTimeSheetDetails extends LeavesAndHolidaysEvent {
+  final String timeSheetDetailsId;
+
+  FetchTimeSheetDetails({required this.timeSheetDetailsId});
+}
+
+class SelectCheckBox extends LeavesAndHolidaysEvent {
+  final bool isChecked;
+
+  SelectCheckBox({required this.isChecked});
+}
+
+class SelectAllCheckBox extends LeavesAndHolidaysEvent {
+  final List<Date> dates;
+
+  SelectAllCheckBox({required this.dates});
 }

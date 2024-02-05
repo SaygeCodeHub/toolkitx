@@ -45,7 +45,7 @@ class _SignaturePadState extends State<SignaturePad> {
 
   @override
   void initState() {
-    if (widget.map[widget.mapKey] == '') {
+    if (widget.map[widget.mapKey] == '' || widget.map[widget.mapKey] == null) {
       showSignPad = true;
       newSign = true;
     }

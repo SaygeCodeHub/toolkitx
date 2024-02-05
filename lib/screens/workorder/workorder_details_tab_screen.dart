@@ -168,7 +168,10 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                                               .medium),
                                       StatusTag(tags: [
                                         StatusTagModel(
-                                            title: workOrderMap['status'],
+                                            title: state
+                                                .fetchWorkOrderDetailsModel
+                                                .data
+                                                .status,
                                             bgColor: AppColor.deepBlue)
                                       ])
                                     ])))),

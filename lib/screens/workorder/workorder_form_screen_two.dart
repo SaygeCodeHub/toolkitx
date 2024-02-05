@@ -46,7 +46,7 @@ class WorkOrderFormScreenTwo extends StatelessWidget {
                           data: WorkOrderFormScreenOne.workOrderMasterData,
                           workOrderDetailsMap: workOrderDetailsMap),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('type'),
+                      Text(DatabaseUtil.getText('Priority'),
                           style: Theme.of(context)
                               .textTheme
                               .xSmall

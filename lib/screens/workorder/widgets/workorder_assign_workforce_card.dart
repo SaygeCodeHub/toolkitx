@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/workorder/fetch_assign_workforce_model.dart'
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_text_field.dart';
+import 'assign_workforce_body.dart';
 import 'assign_workforce_status_tags.dart';
 
 class WorkOrderAssignWorkforceCard extends StatelessWidget {
@@ -29,7 +30,9 @@ class WorkOrderAssignWorkforceCard extends StatelessWidget {
               const SizedBox(height: xxTinierSpacing),
               TextFieldWidget(
                   hintText: DatabaseUtil.getText('PlannedWorkingHours'),
-                  onTextFieldChanged: (String textField) {}),
+                  onTextFieldChanged: (String textField) {
+                    AssignWorkForceBody.assignWorkForceMap['hrs'] = textField;
+                  }),
               const SizedBox(height: xxTinierSpacing),
               AssignWorkForceStatusTags(
                   assignWorkForceDatum: assignWorkForceDatum, index: index)

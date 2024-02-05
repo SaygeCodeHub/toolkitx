@@ -63,7 +63,13 @@ class QuestionsListSection extends StatelessWidget {
                                     .questionlist![index].moreinfo !=
                                 null,
                             child: Text(
-                                '${StringConstants.kHint}: ${state.getQuestionListModel.data!.questionlist![index].moreinfo}'),
+                                '${state.getQuestionListModel.data!.questionlist![index].moreinfo}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xSmall
+                                    .copyWith(
+                                        color: AppColor.grey,
+                                        fontWeight: FontWeight.w500)),
                           )
                         ],
                       ),
