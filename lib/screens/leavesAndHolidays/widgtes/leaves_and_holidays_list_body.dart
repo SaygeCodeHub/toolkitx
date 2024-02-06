@@ -37,7 +37,8 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                 onTap: () {
                   Map timeSheetMap = {
                     'date': data.dates[index].fulldate,
-                    'status': data.dates[index].status
+                    'status': data.dates[index].status,
+                    'id': data.dates[index].id
                   };
                   Navigator.pushNamed(context, TimeSheetCheckInScreen.routeName,
                           arguments: timeSheetMap)

@@ -8,6 +8,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
+import '../add_and_edit_timesheet_screen.dart';
 
 class TimeSheetCheckInBody extends StatelessWidget {
   const TimeSheetCheckInBody(
@@ -43,7 +44,17 @@ class TimeSheetCheckInBody extends StatelessWidget {
                     Visibility(
                         visible: timeSheetMap['status'] == 0,
                         child: CustomIconButton(
-                            icon: Icons.edit, onPressed: () {})),
+                            icon: Icons.edit,
+                            onPressed: () {
+                              AddAndEditTimeSheetScreen.isFromEdit = true;
+                              AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap['date'] =
+                                  timeSheetMap['date'];
+                              AddAndEditTimeSheetScreen.saveTimeSheetMap['id'] =
+                                  checkInList[index].id;
+                              Navigator.pushNamed(
+                                  context, AddAndEditTimeSheetScreen.routeName);
+                            })),
                   ],
                 ),
               ),

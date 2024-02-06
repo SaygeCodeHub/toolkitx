@@ -29,6 +29,8 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    todoMap['name'] = '';
+    todoMap['files'] = '';
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: GenericAppBar(

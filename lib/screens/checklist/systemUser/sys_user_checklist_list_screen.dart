@@ -46,7 +46,7 @@ class _SystemUserCheckListScreenState extends State<SystemUserCheckListScreen> {
   Widget build(BuildContext context) {
     context
         .read<SysUserCheckListBloc>()
-        .add(FetchCheckList(isFromHome: widget.isFromHome, page: page));
+        .add(FetchCheckList(isFromHome: widget.isFromHome, page: 1));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kChecklist),
         body: Padding(
