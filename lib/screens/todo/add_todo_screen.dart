@@ -79,64 +79,67 @@ class AddToDoScreen extends StatelessWidget {
             if (state is ToDoFetchingMaster) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ToDoMasterFetched) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                    left: leftRightMargin,
-                    right: leftRightMargin,
-                    top: xxTinierSpacing),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ToDoCreatedForListTile(
-                        todoMap: todoMap,
-                        data: state
-                            .fetchToDoMasterModel.todoFetchMasterDatum![0]),
-                    const SizedBox(height: xxTinySpacing),
-                    Text(DatabaseUtil.getText('Category'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: xxxTinierSpacing),
-                    ToDoCategoryExpansionTile(
-                        todoMap: todoMap,
-                        data: state
-                            .fetchToDoMasterModel.todoFetchMasterDatum![1]),
-                    const SizedBox(height: xxTinySpacing),
-                    Text(DatabaseUtil.getText('Duedate'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: xxxTinierSpacing),
-                    DatePickerTextField(onDateChanged: (String date) {
-                      todoMap['duedate'] = date;
-                    }),
-                    const SizedBox(height: xxTinySpacing),
-                    Text(DatabaseUtil.getText('Heading'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(
-                        maxLength: 70,
-                        onTextFieldChanged: (String textValue) {
-                          todoMap['heading'] = textValue;
-                        }),
-                    const SizedBox(height: xxTinySpacing),
-                    Text('Description',
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(
-                        maxLength: 250,
-                        onTextFieldChanged: (String textValue) {
-                          todoMap['description'] = textValue;
-                        }),
-                  ],
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: leftRightMargin,
+                      right: leftRightMargin,
+                      top: xxTinierSpacing),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ToDoCreatedForListTile(
+                          todoMap: todoMap,
+                          data: state
+                              .fetchToDoMasterModel.todoFetchMasterDatum![0]),
+                      const SizedBox(height: xxTinySpacing),
+                      Text(DatabaseUtil.getText('Category'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      ToDoCategoryExpansionTile(
+                          todoMap: todoMap,
+                          data: state
+                              .fetchToDoMasterModel.todoFetchMasterDatum![1]),
+                      const SizedBox(height: xxTinySpacing),
+                      Text(DatabaseUtil.getText('Duedate'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      DatePickerTextField(onDateChanged: (String date) {
+                        todoMap['duedate'] = date;
+                      }),
+                      const SizedBox(height: xxTinySpacing),
+                      Text(DatabaseUtil.getText('Heading'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      TextFieldWidget(
+                          maxLength: 70,
+                          onTextFieldChanged: (String textValue) {
+                            todoMap['heading'] = textValue;
+                          }),
+                      const SizedBox(height: xxTinySpacing),
+                      Text('Description',
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: xxxTinierSpacing),
+                      TextFieldWidget(
+                          maxLength: 250,
+                          onTextFieldChanged: (String textValue) {
+                            todoMap['description'] = textValue;
+                          }),
+                    ],
+                  ),
                 ),
               );
             } else if (state is ToDoMasterNotFetched) {

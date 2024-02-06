@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../blocs/checklist/workforce/getQuestionsList/workforce_checklist_get_questions_list_bloc.dart';
+import '../../../../blocs/checklist/workforce/getQuestionsList/workforce_checklist_get_questions_list_events.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_bloc.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_event.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_states.dart';
@@ -32,6 +34,9 @@ class SubmitEditAnswerButton extends StatelessWidget {
             Navigator.pushReplacementNamed(
                 context, WorkForceQuestionsScreen.routeName,
                 arguments: checklistDataMap);
+            context.read<WorkForceQuestionsListBloc>().add(
+                WorkForceCheckListFetchQuestions(
+                    checklistData: checklistDataMap));
           } else if (state is AnswerNotSubmitted) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.message, '');

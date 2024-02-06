@@ -43,7 +43,7 @@ class IncidentCommonCommentsSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.small.copyWith(
                     color: AppColor.black, fontWeight: FontWeight.w500)),
           ),
-          (incidentDetailsModel!.data!.nextStatus != '1')
+          (incidentDetailsModel!.data!.nextStatus == '1')
               ? const SizedBox.shrink()
               : const SizedBox(height: xxTinierSpacing),
           Visibility(
