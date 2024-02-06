@@ -6,6 +6,7 @@ import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
@@ -429,10 +430,9 @@ class QualityManagementBloc
     reportNewQAMap = event.reportNewQAMap;
     if (reportNewQAMap['eventdatetime'] == null ||
         reportNewQAMap['description'] == null||
-        reportNewQAMap['companyid'] == null) {
+        reportNewQAMap['companyid'] == '') {
       emit(ReportNewQualityManagementDateTimeDescValidated(
-          dateTimeDescValidationMessage:
-              DatabaseUtil.getText('ReportDateTimeCompulsary')));
+          dateTimeDescValidationMessage: StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewQualityManagementDateTimeDescValidationComplete());
     }
