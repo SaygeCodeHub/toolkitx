@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
@@ -132,7 +131,6 @@ class QualityManagementBloc
       FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel =
           await _qualityManagementRepository.fetchQualityManagementDetails(
               event.qmId, hashCode!, userId!, roleId);
-      log('details===============>${event.qmId} , $hashCode , $userId , $roleId');
       encryptQmId = EncryptData.encryptAESPrivateKey(
           fetchQualityManagementDetailsModel.data.id, privateKey);
       List customFields = [];
@@ -250,7 +248,7 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
-      saveCommentMap['status'] = nextStatus;
+      // saveCommentMap['status'] = nextStatus;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
         emit(QualityManagementCommentsNotSaved(
@@ -260,10 +258,7 @@ class QualityManagementBloc
           "userid": userid,
           "incidentid": encryptQmId,
           "hashcode": hashCode,
-          "status": (saveCommentMap['status'] == null ||
-                  saveCommentMap['status'].isEmpty)
-              ? ''
-              : saveCommentMap['status'],
+          "status": saveCommentMap['status'] ?? '',
           "comments": saveCommentMap['comments'],
           "classification": saveCommentMap['classification'] ?? ''
         };
@@ -384,7 +379,7 @@ class QualityManagementBloc
 
   _selectClassification(SelectQualityManagementClassification event,
       Emitter<QualityManagementStates> emit) {
-    emit(QualityManagementClassificationValueFetched(
+    emit(QualityManagementClassificationSelected(
         fetchQualityManagementClassificationModel:
             event.fetchQualityManagementClassificationModel,
         classificationId: event.classificationId));
@@ -429,10 +424,11 @@ class QualityManagementBloc
       Emitter<QualityManagementStates> emit) {
     reportNewQAMap = event.reportNewQAMap;
     if (reportNewQAMap['eventdatetime'] == null ||
-        reportNewQAMap['description'] == null||
+        reportNewQAMap['description'] == null ||
         reportNewQAMap['companyid'] == '') {
       emit(ReportNewQualityManagementDateTimeDescValidated(
-          dateTimeDescValidationMessage: StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
+          dateTimeDescValidationMessage:
+              StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewQualityManagementDateTimeDescValidationComplete());
     }

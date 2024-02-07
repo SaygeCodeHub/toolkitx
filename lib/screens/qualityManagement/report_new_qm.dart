@@ -78,13 +78,13 @@ class ReportNewQA extends StatelessWidget {
                               Visibility(
                                 visible: ReportNewQA.isFromEdit != true &&
                                     reportAndEditQMMap['eventdatetime'] == null,
-                                replacement: Text((reportAndEditQMMap[
-                                'eventdatetime'] ==
-                                    null)
-                                    ? ""
-                                    : reportAndEditQMMap['eventdatetime']
-                                    .toString()
-                                    .substring(0, 10)),
+                                replacement: Text(
+                                    (reportAndEditQMMap['eventdatetime'] ==
+                                            null)
+                                        ? ""
+                                        : reportAndEditQMMap['eventdatetime']
+                                            .toString()
+                                            .substring(0, 10)),
                                 child: DatePickerTextField(
                                   hintText: StringConstants.kSelectDate,
                                   onDateChanged: (String date) {
@@ -102,13 +102,13 @@ class ReportNewQA extends StatelessWidget {
                               Visibility(
                                 visible: ReportNewQA.isFromEdit != true &&
                                     reportAndEditQMMap['eventdatetime'] == null,
-                                replacement: Text((reportAndEditQMMap[
-                                'eventdatetime'] ==
-                                    null)
-                                    ? ""
-                                    : reportAndEditQMMap['eventdatetime']
-                                    .toString()
-                                    .substring(12, 19)),
+                                replacement: Text(
+                                    (reportAndEditQMMap['eventdatetime'] ==
+                                            null)
+                                        ? ""
+                                        : reportAndEditQMMap['eventdatetime']
+                                            .toString()
+                                            .substring(12, 19)),
                                 child: TimePickerTextField(
                                   hintText: StringConstants.kSelectTime,
                                   onTimeChanged: (String time) {
