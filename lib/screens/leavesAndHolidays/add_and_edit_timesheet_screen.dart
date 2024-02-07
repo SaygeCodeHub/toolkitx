@@ -15,11 +15,13 @@ import '../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_snackbar.dart';
+import '../../widgets/error_section.dart';
 import '../../widgets/progress_bar.dart';
 
 class AddAndEditTimeSheetScreen extends StatelessWidget {
   static Map saveTimeSheetMap = {};
   static const routeName = 'TimeSheetWorkingAtScreen';
+  static bool isFromEdit = false;
 
   const AddAndEditTimeSheetScreen({
     super.key,
@@ -27,9 +29,11 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LeavesAndHolidaysBloc>()
-        .add(FetchCheckInTimeSheet(date: saveTimeSheetMap['date']));
+    (isFromEdit == true)
+        ? context.read<LeavesAndHolidaysBloc>().add(FetchTimeSheetDetails(
+            timeSheetDetailsId:
+                AddAndEditTimeSheetScreen.saveTimeSheetMap['id']))
+        : null;
     return Scaffold(
       appBar: GenericAppBar(title: saveTimeSheetMap['date']),
       body: Padding(
@@ -38,60 +42,197 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
               right: leftRightMargin,
               top: xxTinierSpacing),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(StringConstants.kWorkingAt,
-                    style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                const SizedBox(height: xxTinierSpacing),
-                const WorkingAtTimeSheetTile(),
-                const SizedBox(height: xxTinierSpacing),
-                const TimSheetWorkingAtNumberListTile(),
-                const SizedBox(height: xxTinierSpacing),
-                Text(StringConstants.kStartTime,
-                    style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                const SizedBox(height: xxTinierSpacing),
-                TimePickerTextField(
-                  onTimeChanged: (String time) {
-                    saveTimeSheetMap['starttime'] = time;
-                  },
-                ),
-                const SizedBox(height: xxTinierSpacing),
-                Text(StringConstants.kEndTime,
-                    style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                const SizedBox(height: xxTinierSpacing),
-                TimePickerTextField(
-                  onTimeChanged: (String time) {
-                    saveTimeSheetMap['endtime'] = time;
-                  },
-                ),
-                const SizedBox(height: xxTinierSpacing),
-                Text(StringConstants.kMinsBreak,
-                    style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                const SizedBox(height: xxTinierSpacing),
-                TextFieldWidget(
-                  textInputType: TextInputType.number,
-                  onTextFieldChanged: (textField) {
-                    saveTimeSheetMap['breakmins'] = textField;
-                  },
-                ),
-                const SizedBox(height: xxTinierSpacing),
-                Text(StringConstants.kDescription,
-                    style: Theme.of(context).textTheme.xSmall.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                const SizedBox(height: xxTinierSpacing),
-                TextFieldWidget(
-                  maxLines: 3,
-                  textInputAction: TextInputAction.done,
-                  onTextFieldChanged: (textField) {
-                    saveTimeSheetMap['description'] = textField;
-                  },
-                )
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: leftRightMargin,
+                  right: leftRightMargin,
+                  top: xxTinierSpacing,
+                  bottom: leftRightMargin),
+              child:
+                  BlocBuilder<LeavesAndHolidaysBloc, LeavesAndHolidaysStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is FetchingTimeSheetDetails ||
+                    currentState is TimeSheetDetailsFetched ||
+                    currentState is TimeSheetDetailsNotFetched,
+                builder: (context, state) {
+                  if (state is FetchingTimeSheetDetails) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.35),
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  } else if (state is TimeSheetDetailsFetched) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(StringConstants.kWorkingAt,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        const WorkingAtTimeSheetTile(),
+                        const SizedBox(height: xxTinierSpacing),
+                        const TimSheetWorkingAtNumberListTile(),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kStartTime,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TimePickerTextField(
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["starttime"]
+                              : "",
+                          onTimeChanged: (String time) {
+                            saveTimeSheetMap['starttime'] = time;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kEndTime,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TimePickerTextField(
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["endtime"]
+                              : "",
+                          onTimeChanged: (String time) {
+                            saveTimeSheetMap['endtime'] = time;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kMinsBreak,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TextFieldWidget(
+                          textInputType: TextInputType.number,
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["breakmins"]
+                              : "",
+                          onTextFieldChanged: (textField) {
+                            saveTimeSheetMap['breakmins'] = textField;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kDescription,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TextFieldWidget(
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                  .saveTimeSheetMap["description"]
+                              : "",
+                          maxLines: 3,
+                          textInputAction: TextInputAction.done,
+                          onTextFieldChanged: (textField) {
+                            saveTimeSheetMap['description'] = textField;
+                          },
+                        )
+                      ],
+                    );
+                  } else if (state is TimeSheetDetailsNotFetched) {
+                    return Center(
+                      child: GenericReloadButton(
+                          onPressed: () {
+                            context.read<LeavesAndHolidaysBloc>().add(
+                                FetchTimeSheetDetails(
+                                    timeSheetDetailsId: saveTimeSheetMap[
+                                        'timeSheetDetailsId']));
+                          },
+                          textValue: StringConstants.kReload),
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(StringConstants.kWorkingAt,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        const WorkingAtTimeSheetTile(),
+                        const SizedBox(height: xxTinierSpacing),
+                        const TimSheetWorkingAtNumberListTile(),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kStartTime,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TimePickerTextField(
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap["starttime"] ??
+                                  ''
+                              : "",
+                          onTimeChanged: (String time) {
+                            saveTimeSheetMap['starttime'] = time;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kEndTime,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TimePickerTextField(
+                          editTime: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap["endtime"] ??
+                                  ''
+                              : "",
+                          onTimeChanged: (String time) {
+                            saveTimeSheetMap['endtime'] = time;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kMinsBreak,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TextFieldWidget(
+                          textInputType: TextInputType.number,
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap["breakmins"] ??
+                                  ''
+                              : "",
+                          onTextFieldChanged: (textField) {
+                            saveTimeSheetMap['breakmins'] = textField;
+                          },
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
+                        Text(StringConstants.kDescription,
+                            style: Theme.of(context).textTheme.xSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                        const SizedBox(height: xxTinierSpacing),
+                        TextFieldWidget(
+                          value: AddAndEditTimeSheetScreen.isFromEdit == true
+                              ? AddAndEditTimeSheetScreen
+                                      .saveTimeSheetMap["description"] ??
+                                  ''
+                              : "",
+                          maxLines: 3,
+                          textInputAction: TextInputAction.done,
+                          onTextFieldChanged: (textField) {
+                            saveTimeSheetMap['description'] = textField;
+                          },
+                        )
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
           )),
       bottomNavigationBar: BottomAppBar(

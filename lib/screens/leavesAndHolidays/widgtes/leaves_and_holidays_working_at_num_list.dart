@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../../../blocs/expense/expense_bloc.dart';
-import '../../../../blocs/expense/expense_event.dart';
-import '../../../../blocs/expense/expense_state.dart';
-import '../../../../configs/app_color.dart';
-import '../../../../configs/app_spacing.dart';
-import '../../../../widgets/generic_app_bar.dart';
-import '../expense_details_tab_one.dart';
-import 'expense_edit_items_screen.dart';
-import 'expense_working_at_expansion_tile.dart';
+import '../../../blocs/expense/expense_bloc.dart';
+import '../../../blocs/expense/expense_event.dart';
+import '../../../blocs/expense/expense_state.dart';
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
+import '../../../configs/app_color.dart';
+import '../../../configs/app_spacing.dart';
+import '../../../utils/constants/string_constants.dart';
+import '../../../widgets/generic_app_bar.dart';
+import 'working_at_timesheet_tile.dart';
 
-class ExpenseWorkingAtNumberList extends StatelessWidget {
+class LeavesAndHolidaysWorkingAtNumList extends StatelessWidget {
   final Map workingAtNumberMap;
 
-  const ExpenseWorkingAtNumberList({Key? key, required this.workingAtNumberMap})
-      : super(key: key);
+  const LeavesAndHolidaysWorkingAtNumList(
+      {super.key, required this.workingAtNumberMap});
 
   @override
   Widget build(BuildContext context) {
-    context.read<ExpenseBloc>().add(FetchWorkingAtNumberData(
-        groupBy: ExpenseWorkingAtExpansionTile.workingAt));
+    context.read<ExpenseBloc>().add(
+        FetchWorkingAtNumberData(groupBy: WorkingAtTimeSheetTile.workingAt));
     return Scaffold(
         appBar:
             const GenericAppBar(title: StringConstants.kSelectWorkingAtNumber),
@@ -83,10 +82,6 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                           '',
                                       onChanged: (value) {
                                         context
-                                            .read<ExpenseBloc>()
-                                            .expenseWorkingAtNumberMap
-                                            .clear();
-                                        context
                                             .read<LeavesAndHolidaysBloc>()
                                             .timeSheetWorkingAtNumberMap
                                             .clear();
@@ -102,21 +97,10 @@ class ExpenseWorkingAtNumberList extends StatelessWidget {
                                                 .expenseWorkingAtNumberDataModel
                                                 .data[index]
                                                 .name;
-                                        ExpenseDetailsTabOne.manageItemsMap[
-                                                'workingatnumber'] =
-                                            state
-                                                .expenseWorkingAtNumberDataModel
-                                                .data[index]
-                                                .id;
-                                        ExpenseEditItemsScreen.editExpenseMap[
-                                                'workingatnumber'] =
-                                            state
-                                                .expenseWorkingAtNumberDataModel
-                                                .data[index]
-                                                .id;
-                                        context.read<ExpenseBloc>().add(
-                                            SelectExpenseWorkingAtNumber(
-                                                workingAtNumberMap:
+                                        context
+                                            .read<LeavesAndHolidaysBloc>()
+                                            .add(SelectTimeSheetWorkingAtNumber(
+                                                timeSheetWorkingAtNumberMap:
                                                     workingAtNumberMap));
                                         Navigator.pop(context);
                                       });
