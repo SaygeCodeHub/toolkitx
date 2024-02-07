@@ -62,7 +62,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextButton> {
                     SizedBox(
                         height: kDateTimePickerHeight,
                         child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.monthYear,
+                            mode: CupertinoDatePickerMode.date,
                             initialDateTime: (isFirstTime != false)
                                 ? widget.initialDate
                                 : DateFormat('MMMM yyyy').parse(dateInput),
