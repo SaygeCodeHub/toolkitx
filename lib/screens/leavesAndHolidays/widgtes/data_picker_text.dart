@@ -20,6 +20,7 @@ class DatePickerTextButton extends StatefulWidget {
   final String? text;
   final DateTime? minimumDate;
   static List<String> dateList = [];
+
   static dynamic indexOf = 1;
 
   const DatePickerTextButton({
@@ -61,7 +62,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextButton> {
                     SizedBox(
                         height: kDateTimePickerHeight,
                         child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.date,
+                            mode: CupertinoDatePickerMode.monthYear,
                             initialDateTime: (isFirstTime != false)
                                 ? widget.initialDate
                                 : DateFormat('MMMM yyyy').parse(dateInput),

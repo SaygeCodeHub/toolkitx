@@ -25,7 +25,6 @@ import '../../screens/leavesAndHolidays/add_and_edit_timesheet_screen.dart';
 import '../../screens/leavesAndHolidays/widgtes/working_at_number_timesheet_tile.dart';
 import '../../screens/leavesAndHolidays/widgtes/working_at_timesheet_tile.dart';
 import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
-import '../../screens/leavesAndHolidays/leaves_and_holidays_checkbox.dart';
 import 'leaves_and_holidays_events.dart';
 import 'leaves_and_holidays_states.dart';
 
@@ -63,7 +62,6 @@ class LeavesAndHolidaysBloc
   bool isChecked = true;
   Map timeSheetWorkingAtMap = {};
   Map timeSheetWorkingAtNumberMap = {};
-  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -263,6 +261,7 @@ class LeavesAndHolidaysBloc
       FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
           await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
               event.date, userId!, hashCode!);
+
       timeSheetIdList.clear();
       timeSheetIdList.add({'id': fetchCheckInTimeSheetModel.data.timesheetid});
       if (fetchCheckInTimeSheetModel.status == 200) {
