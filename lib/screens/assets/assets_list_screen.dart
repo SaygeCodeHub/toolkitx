@@ -36,7 +36,8 @@ class AssetsListScreen extends StatelessWidget {
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 BlocBuilder<AssetsBloc, AssetsState>(
                     buildWhen: (previousState, currentState) {
-                  if (currentState is AssetsListFetching && pageNo == 1 &&
+                  if (currentState is AssetsListFetching &&
+                      pageNo == 1 &&
                       isFromHome == true) {
                     return true;
                   } else if (currentState is AssetsListFetched) {
