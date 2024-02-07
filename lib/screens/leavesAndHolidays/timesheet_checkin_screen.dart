@@ -111,7 +111,6 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                 currentState is CheckInTimeSheetFetching ||
                 currentState is CheckInTimeSheetFetched,
             builder: (context, state) {
-              log("$state");
               if (state is CheckInTimeSheetFetching) {
                 return const SizedBox.shrink();
               } else if (state is CheckInTimeSheetFetched) {
