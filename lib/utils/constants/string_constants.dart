@@ -511,4 +511,6 @@ abstract class StringConstants {
   static const String kAreYouSureToCloseDocument =
       'Are you sure you want to close this document management ? ';
   static const String kDocumentManagement = 'Document Management';
+  static const String kDateTimeDescriptionContractorIsNotEmpty =
+      'Incident date, time, description, contractor cannot be empty.';
 }
