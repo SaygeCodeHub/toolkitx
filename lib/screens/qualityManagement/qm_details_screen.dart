@@ -76,7 +76,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 launchUrlString(
                     '${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
-                    mode: LaunchMode.inAppBrowserView);
+                    mode: LaunchMode.externalApplication);
               } else if (state is QualityManagementPDFGenerationFailed) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.pdfNoteGenerated, '');
