@@ -20,7 +20,6 @@ class DatePickerTextButton extends StatefulWidget {
   final String? text;
   final DateTime? minimumDate;
   static List<String> dateList = [];
-
   static dynamic indexOf = 1;
 
   const DatePickerTextButton({

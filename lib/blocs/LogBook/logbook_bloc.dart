@@ -91,9 +91,14 @@ class LogbookBloc extends Bloc<LogbookEvents, LogbookStates> {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       LogBookFetchMasterModel logBookFetchMasterModel =
           await _logbookRepository.fetchLogBookMaster(hashCode!);
-      emit(LogBookMasterFetched(
-          logBookFetchMasterModel: logBookFetchMasterModel,
-          filterMap: filters));
+      if (logBookFetchMasterModel.data.isNotEmpty) {
+        emit(LogBookMasterFetched(
+            logBookFetchMasterModel: logBookFetchMasterModel,
+            filterMap: filters));
+      } else {
+        emit(LogBookMasterNotFetched(
+            masterNotFetched: logBookFetchMasterModel.message));
+      }
     } catch (e) {
       emit(LogBookMasterNotFetched(masterNotFetched: e.toString()));
     }

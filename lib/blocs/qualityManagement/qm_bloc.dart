@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
@@ -247,7 +248,6 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
-      saveCommentMap['status'] = nextStatus;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
         emit(QualityManagementCommentsNotSaved(
@@ -257,10 +257,7 @@ class QualityManagementBloc
           "userid": userid,
           "incidentid": encryptQmId,
           "hashcode": hashCode,
-          "status": (saveCommentMap['status'] == null ||
-                  saveCommentMap['status'].isEmpty)
-              ? ''
-              : saveCommentMap['status'],
+          "status": saveCommentMap['status'] ?? '',
           "comments": saveCommentMap['comments'],
           "classification": saveCommentMap['classification'] ?? ''
         };
@@ -381,7 +378,7 @@ class QualityManagementBloc
 
   _selectClassification(SelectQualityManagementClassification event,
       Emitter<QualityManagementStates> emit) {
-    emit(QualityManagementClassificationValueFetched(
+    emit(QualityManagementClassificationSelected(
         fetchQualityManagementClassificationModel:
             event.fetchQualityManagementClassificationModel,
         classificationId: event.classificationId));
@@ -425,11 +422,12 @@ class QualityManagementBloc
       ReportNewQualityManagementDateTimeDescriptionValidation event,
       Emitter<QualityManagementStates> emit) {
     reportNewQAMap = event.reportNewQAMap;
-    if (reportNewQAMap['eventdatetime'] == null &&
-        reportNewQAMap['description'] == null) {
+    if (reportNewQAMap['eventdatetime'] == null ||
+        reportNewQAMap['description'] == null ||
+        reportNewQAMap['companyid'] == '') {
       emit(ReportNewQualityManagementDateTimeDescValidated(
           dateTimeDescValidationMessage:
-              DatabaseUtil.getText('ReportDateTimeCompulsary')));
+              StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewQualityManagementDateTimeDescValidationComplete());
     }
