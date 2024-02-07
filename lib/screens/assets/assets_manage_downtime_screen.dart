@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +75,6 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                         pageNo == 1) ||
                     currentState is AssetsGetDownTimeFetched,
                 builder: (context, state) {
-                  log('State==============>$state');
                   if (state is AssetsGetDownTimeFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is AssetsGetDownTimeFetched) {

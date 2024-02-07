@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/assets/add_manage_document_model.dart';
 import 'package:toolkit/data/models/assets/assets_add_comments_model.dart';
@@ -87,7 +86,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     emit(AssetsListFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.isFromHome == false) {
+      if (event.isFromHome == true) {
         FetchAssetsListModel fetchAssetsListModel = await _assetsRepository
             .fetchAssetsListRepo(event.pageNo, hashCode!, "");
         assetsDatum.addAll(fetchAssetsListModel.data);
@@ -403,7 +402,6 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "isrollover": event.assetsMeterReadingMap["isrollover"],
         "assetid": assetId
       };
-      log('mapp===============>$assetsMeterReadingMap');
       SaveAssetsMeterReadingModel saveAssetsMeterReadingModel =
           await _assetsRepository
               .saveAssetsMeterReadingRepo(assetsMeterReadingMap);
