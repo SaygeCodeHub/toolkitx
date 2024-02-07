@@ -248,7 +248,6 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
-      // saveCommentMap['status'] = nextStatus;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
         emit(QualityManagementCommentsNotSaved(
