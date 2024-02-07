@@ -77,8 +77,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextButton> {
                                 isFirstTime = false;
                               });
                             },
-                            maximumDate:
-                                DateTime(DateTime.now().year, 12 ~/ 12, 31))),
+                            maximumDate: widget.maxDate)),
                     CustomTextButton(
                         onPressed: () {
                           if (isFirstTime != false) {

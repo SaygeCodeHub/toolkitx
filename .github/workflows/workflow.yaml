@@ -20,7 +20,7 @@ jobs:
       - name: Setup Flutter environment
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.5'
+          flutter-version: '3.7.7'
           channel: 'stable'
 
       - name: Run Flutter doctor

@@ -35,139 +35,131 @@ class QualityManagementDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<QualityManagementBloc>().add(
         FetchQualityManagementDetails(qmId: qmListMap['id'], initialIndex: 0));
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (didPop) {
-        context
-            .read<QualityManagementBloc>()
-            .add(FetchQualityManagementList(pageNo: 1, isFromHome: false));
-      },
-      child: Scaffold(
-        appBar: GenericAppBar(
-          actions: [
-            BlocBuilder<QualityManagementBloc, QualityManagementStates>(
-                buildWhen: (previousState, currentState) =>
-                    currentState is QualityManagementDetailsFetched,
-                builder: (context, state) {
-                  if (state is QualityManagementDetailsFetched) {
-                    if (state.showPopUpMenu == true) {
-                      return QualityManagementPopUpMenuScreen(
-                        popUpMenuItems: state.qmPopUpMenu,
-                        data: state.fetchQualityManagementDetailsModel.data,
-                        fetchQualityManagementDetailsModel:
-                            state.fetchQualityManagementDetailsModel,
-                        editQMDetailsMap: state.editQMDetailsMap,
-                        qmId: qmListMap['id'],
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
+    return Scaffold(
+      appBar: GenericAppBar(
+        actions: [
+          BlocBuilder<QualityManagementBloc, QualityManagementStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is QualityManagementDetailsFetched,
+              builder: (context, state) {
+                if (state is QualityManagementDetailsFetched) {
+                  if (state.showPopUpMenu == true) {
+                    return QualityManagementPopUpMenuScreen(
+                      popUpMenuItems: state.qmPopUpMenu,
+                      data: state.fetchQualityManagementDetailsModel.data,
+                      fetchQualityManagementDetailsModel:
+                          state.fetchQualityManagementDetailsModel,
+                      editQMDetailsMap: state.editQMDetailsMap,
+                      qmId: qmListMap['id'],
+                    );
                   } else {
                     return const SizedBox.shrink();
                   }
-                })
-          ],
-        ),
-        body: BlocConsumer<QualityManagementBloc, QualityManagementStates>(
-            listener: (context, state) {
-              if (state is GeneratingQualityManagementPDF) {
-                ProgressBar.show(context);
-              } else if (state is QualityManagementPDFGenerated) {
-                ProgressBar.dismiss(context);
-                launchUrlString(
-                    '${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
-                    mode: LaunchMode.externalApplication);
-              } else if (state is QualityManagementPDFGenerationFailed) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(context, state.pdfNoteGenerated, '');
-              }
-            },
-            buildWhen: (previousState, currentState) =>
-                currentState is FetchingQualityManagementDetails ||
-                currentState is QualityManagementDetailsFetched ||
-                currentState is QualityManagementDetailsNotFetched,
-            builder: (context, state) {
-              if (state is FetchingQualityManagementDetails) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is QualityManagementDetailsFetched) {
-                return Padding(
-                    padding: const EdgeInsets.only(
-                        left: leftRightMargin,
-                        right: leftRightMargin,
-                        top: xxTinierSpacing),
-                    child: Column(children: [
-                      Card(
-                          color: AppColor.white,
-                          elevation: kCardElevation,
-                          child: ListTile(
-                              title: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: xxTinierSpacing),
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(qmListMap['refNo'],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .medium),
-                                        StatusTag(tags: [
-                                          StatusTagModel(
-                                              title: state
-                                                  .fetchQualityManagementDetailsModel
-                                                  .data
-                                                  .statusText,
-                                              bgColor: AppColor.deepBlue)
-                                        ])
-                                      ])))),
-                      const SizedBox(height: xxTinierSpacing),
-                      const Divider(
-                          height: kDividerHeight, thickness: kDividerWidth),
-                      CustomTabBarView(
-                          lengthOfTabs: 4,
-                          tabBarViewIcons:
-                              QualityManagementUtil().tabBarViewIcons,
-                          initialIndex:
-                              context.read<QualityManagementBloc>().qmTabIndex,
-                          tabBarViewWidgets: [
-                            QualityManagementDetails(
-                                data: state
-                                    .fetchQualityManagementDetailsModel.data,
-                                initialIndex: 0,
-                                clientId: state.clientId),
-                            QualityManagementCustomFields(
-                              data:
-                                  state.fetchQualityManagementDetailsModel.data,
-                              initialIndex: 1,
-                            ),
-                            QualityManagementComment(
-                                data: state
-                                    .fetchQualityManagementDetailsModel.data,
-                                initialIndex: 2,
-                                clientId: state.clientId),
-                            QualityManagementCustomTimeline(
-                                data: state
-                                    .fetchQualityManagementDetailsModel.data,
-                                initialIndex: 3)
-                          ])
-                    ]));
-              } else if (state is QualityManagementDetailsNotFetched) {
-                return Center(
-                  child: GenericReloadButton(
-                      onPressed: () {
-                        context.read<QualityManagementBloc>().add(
-                            FetchQualityManagementDetails(
-                                qmId: qmListMap['id'], initialIndex: 0));
-                      },
-                      textValue: StringConstants.kReload),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
+                } else {
+                  return const SizedBox.shrink();
+                }
+              })
+        ],
       ),
+      body: BlocConsumer<QualityManagementBloc, QualityManagementStates>(
+          listener: (context, state) {
+            if (state is GeneratingQualityManagementPDF) {
+              ProgressBar.show(context);
+            } else if (state is QualityManagementPDFGenerated) {
+              ProgressBar.dismiss(context);
+              launchUrlString(
+                  '${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
+                  mode: LaunchMode.externalApplication);
+            } else if (state is QualityManagementPDFGenerationFailed) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.pdfNoteGenerated, '');
+            }
+          },
+          buildWhen: (previousState, currentState) =>
+              currentState is FetchingQualityManagementDetails ||
+              currentState is QualityManagementDetailsFetched ||
+              currentState is QualityManagementDetailsNotFetched,
+          builder: (context, state) {
+            if (state is FetchingQualityManagementDetails) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is QualityManagementDetailsFetched) {
+              return Padding(
+                  padding: const EdgeInsets.only(
+                      left: leftRightMargin,
+                      right: leftRightMargin,
+                      top: xxTinierSpacing),
+                  child: Column(children: [
+                    Card(
+                        color: AppColor.white,
+                        elevation: kCardElevation,
+                        child: ListTile(
+                            title: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: xxTinierSpacing),
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(qmListMap['refNo'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .medium),
+                                      StatusTag(tags: [
+                                        StatusTagModel(
+                                            title: state
+                                                .fetchQualityManagementDetailsModel
+                                                .data
+                                                .statusText,
+                                            bgColor: AppColor.deepBlue)
+                                      ])
+                                    ])))),
+                    const SizedBox(height: xxTinierSpacing),
+                    const Divider(
+                        height: kDividerHeight, thickness: kDividerWidth),
+                    CustomTabBarView(
+                        lengthOfTabs: 4,
+                        tabBarViewIcons:
+                            QualityManagementUtil().tabBarViewIcons,
+                        initialIndex:
+                            context.read<QualityManagementBloc>().qmTabIndex,
+                        tabBarViewWidgets: [
+                          QualityManagementDetails(
+                              data: state
+                                  .fetchQualityManagementDetailsModel.data,
+                              initialIndex: 0,
+                              clientId: state.clientId),
+                          QualityManagementCustomFields(
+                            data:
+                                state.fetchQualityManagementDetailsModel.data,
+                            initialIndex: 1,
+                          ),
+                          QualityManagementComment(
+                              data: state
+                                  .fetchQualityManagementDetailsModel.data,
+                              initialIndex: 2,
+                              clientId: state.clientId),
+                          QualityManagementCustomTimeline(
+                              data: state
+                                  .fetchQualityManagementDetailsModel.data,
+                              initialIndex: 3)
+                        ])
+                  ]));
+            } else if (state is QualityManagementDetailsNotFetched) {
+              return Center(
+                child: GenericReloadButton(
+                    onPressed: () {
+                      context.read<QualityManagementBloc>().add(
+                          FetchQualityManagementDetails(
+                              qmId: qmListMap['id'], initialIndex: 0));
+                    },
+                    textValue: StringConstants.kReload),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
     );
   }
 }
