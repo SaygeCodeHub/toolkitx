@@ -67,8 +67,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
               ProgressBar.show(context);
             } else if (state is QualityManagementPDFGenerated) {
               ProgressBar.dismiss(context);
-              launchUrlString(
-                  '${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
+              launchUrlString('${ApiConstants.baseDocUrl}${state.pdfLink}.pdf',
                   mode: LaunchMode.externalApplication);
             } else if (state is QualityManagementPDFGenerationFailed) {
               ProgressBar.dismiss(context);
@@ -94,8 +93,8 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                         elevation: kCardElevation,
                         child: ListTile(
                             title: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: xxTinierSpacing),
+                                padding:
+                                    const EdgeInsets.only(top: xxTinierSpacing),
                                 child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -126,23 +125,22 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                             context.read<QualityManagementBloc>().qmTabIndex,
                         tabBarViewWidgets: [
                           QualityManagementDetails(
-                              data: state
-                                  .fetchQualityManagementDetailsModel.data,
+                              data:
+                                  state.fetchQualityManagementDetailsModel.data,
                               initialIndex: 0,
                               clientId: state.clientId),
                           QualityManagementCustomFields(
-                            data:
-                                state.fetchQualityManagementDetailsModel.data,
+                            data: state.fetchQualityManagementDetailsModel.data,
                             initialIndex: 1,
                           ),
                           QualityManagementComment(
-                              data: state
-                                  .fetchQualityManagementDetailsModel.data,
+                              data:
+                                  state.fetchQualityManagementDetailsModel.data,
                               initialIndex: 2,
                               clientId: state.clientId),
                           QualityManagementCustomTimeline(
-                              data: state
-                                  .fetchQualityManagementDetailsModel.data,
+                              data:
+                                  state.fetchQualityManagementDetailsModel.data,
                               initialIndex: 3)
                         ])
                   ]));
