@@ -97,9 +97,12 @@ class AssetsManageCommentsScreen extends StatelessWidget {
                                                               AppColor.grey)),
                                             ]),
                                         const SizedBox(height: tinierSpacing),
-                                        CustomGridImages(
-                                            files: data[index].files,
-                                            clientId: state.clientId),
+                                        Visibility(
+                                          visible: data[index].files.isNotEmpty,
+                                          child: CustomGridImages(
+                                              files: data[index].files,
+                                              clientId: state.clientId),
+                                        ),
                                       ]))));
                         },
                         separatorBuilder: (context, index) {

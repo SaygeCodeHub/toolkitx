@@ -178,10 +178,18 @@ class _QualityManagementListScreenState
                                               'status': qmListData[index].status
                                             };
                                             Navigator.pushNamed(
-                                                context,
-                                                QualityManagementDetailsScreen
-                                                    .routeName,
-                                                arguments: qmListMap);
+                                                    context,
+                                                    QualityManagementDetailsScreen
+                                                        .routeName,
+                                                    arguments: qmListMap)
+                                                .then((_) => context
+                                                    .read<
+                                                        QualityManagementBloc>()
+                                                    .add(
+                                                        FetchQualityManagementList(
+                                                            pageNo: 1,
+                                                            isFromHome:
+                                                                false)));
                                           }));
                                 },
                                 separatorBuilder: (context, index) {

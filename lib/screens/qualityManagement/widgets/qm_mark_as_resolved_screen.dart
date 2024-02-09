@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
-import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
-import '../../blocs/qualityManagement/qm_events.dart';
-import '../../configs/app_spacing.dart';
-import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
-import '../../utils/constants/string_constants.dart';
-import '../../utils/database_utils.dart';
-import '../../widgets/custom_snackbar.dart';
-import '../../widgets/generic_app_bar.dart';
-import '../../widgets/primary_button.dart';
-import '../../widgets/progress_bar.dart';
-import 'widgets/qm_common_comments_section.dart';
+import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/qualityManagement/widgets/qm_common_comments_section.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/generic_app_bar.dart';
 
-class QualityManagementAddCommentsScreen extends StatelessWidget {
-  static const routeName = 'QualityManagementAddCommentsScreen';
+import '../../../blocs/qualityManagement/qm_bloc.dart';
+import '../../../blocs/qualityManagement/qm_events.dart';
+import '../../../blocs/qualityManagement/qm_states.dart';
+import '../../../data/enums/qm_status_enum.dart';
+import '../../../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../../../widgets/custom_snackbar.dart';
+import '../../../widgets/primary_button.dart';
+import '../../../widgets/progress_bar.dart';
+
+class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
 
-  QualityManagementAddCommentsScreen(
+  QualityManagementMarkAsResolvedScreen(
       {Key? key, required this.fetchQualityManagementDetailsModel})
       : super(key: key);
   final Map qmCommentsMap = {};
@@ -27,10 +25,8 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('Comments')),
+      appBar: const GenericAppBar(title: StringConstants.kResolve),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -72,7 +68,7 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   child: PrimaryButton(
                       onPressed: () {
                         qmCommentsMap['status'] =
-                            fetchQualityManagementDetailsModel.data.nextStatus;
+                            QualityManagementStatusEnum.resolved.value;
                         context.read<QualityManagementBloc>().add(
                             SaveQualityManagementComments(
                                 saveCommentsMap: qmCommentsMap));

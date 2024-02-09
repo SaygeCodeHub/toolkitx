@@ -8,6 +8,7 @@ import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../blocs/assets/assets_bloc.dart';
 import '../../../configs/app_spacing.dart';
+import '../assets_manage_downtime_screen.dart';
 import 'assets_add_and_edit_downtime_body.dart';
 
 class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
@@ -40,6 +41,8 @@ class AssetsAddAndEditDowntimeScreen extends StatelessWidget {
                   showCustomSnackBar(
                       context, StringConstants.kDowntimeSaved, "");
                   Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, AssetsManageDownTimeScreen.routeName);
                 } else if (state is AssetsDownTimeNotSaved) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, "");

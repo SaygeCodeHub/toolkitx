@@ -25,9 +25,7 @@ class AssetsReportFailureScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<AssetsBloc>().add(FetchAssetsMaster());
     return Scaffold(
-        appBar: const GenericAppBar(
-          title: StringConstants.kReportFailure,
-        ),
+        appBar: const GenericAppBar(title: StringConstants.kReportFailure),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -43,6 +41,7 @@ class AssetsReportFailureScreen extends StatelessWidget {
                         state.saveAssetsReportFailureModel.message, "");
                     Navigator.pop(context);
                   } else if (state is AssetsReportFailureNotSaved) {
+                    ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.errorMessage, "");
                   }
                 },

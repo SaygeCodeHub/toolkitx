@@ -1,10 +1,12 @@
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_time_sheet_details_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../data/models/expense/expense_working_at_number_model.dart';
@@ -57,9 +59,9 @@ class LeavesAndHolidaysBloc
   String year = "";
   String month = "";
   List timeSheetIdList = [];
+  bool isChecked = true;
   Map timeSheetWorkingAtMap = {};
   Map timeSheetWorkingAtNumberMap = {};
-  bool isChecked = true;
 
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
@@ -259,6 +261,7 @@ class LeavesAndHolidaysBloc
       FetchCheckInTimeSheetModel fetchCheckInTimeSheetModel =
           await _leavesAndHolidaysRepository.fetchCheckInTimeSheet(
               event.date, userId!, hashCode!);
+
       timeSheetIdList.clear();
       timeSheetIdList.add({'id': fetchCheckInTimeSheetModel.data.timesheetid});
       if (fetchCheckInTimeSheetModel.status == 200) {
@@ -279,7 +282,6 @@ class LeavesAndHolidaysBloc
     try {
       final String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode);
-
       Map deleteTimeSheetMap = {
         "idm": "",
         "id": event.timeId,

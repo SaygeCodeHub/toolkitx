@@ -37,55 +37,51 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
             top: xxTinierSpacing),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              IncidentCommonCommentsSection(
-                onPhotosUploaded: (List uploadList) {
-                  incidentCommentsMap['filenames'] = uploadList
-                      .toString()
-                      .replaceAll("[", '')
-                      .replaceAll(']', '');
+          child: Column(children: [
+            IncidentCommonCommentsSection(
+              onPhotosUploaded: (List uploadList) {
+                incidentCommentsMap['filenames'] = uploadList
+                    .toString()
+                    .replaceAll("[", '')
+                    .replaceAll(']', '');
+              },
+              onTextFieldValue: (String textValue) {
+                incidentCommentsMap['comments'] = textValue;
+              },
+              incidentCommentsMap: incidentCommentsMap,
+              incidentDetailsModel: incidentDetailsModel,
+            ),
+            BlocListener<IncidentDetailsBloc, IncidentDetailsStates>(
+                listener: (context, state) {
+                  if (state is SavingIncidentComments) {
+                    ProgressBar.show(context);
+                  } else if (state is IncidentCommentsSaved ||
+                      state is IncidentCommentsFilesSaved) {
+                    ProgressBar.dismiss(context);
+                    Navigator.pop(context);
+                    context.read<IncidentDetailsBloc>().add(
+                        FetchIncidentDetailsEvent(
+                            initialIndex: 0,
+                            incidentId: incidentListDatum.id,
+                            role: context
+                                .read<IncidentLisAndFilterBloc>()
+                                .roleId));
+                  } else if (state is IncidentCommentsNotSaved) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(context, state.commentsNotSaved, '');
+                  }
                 },
-                onTextFieldValue: (String textValue) {
-                  incidentCommentsMap['comments'] = textValue;
-                },
-                incidentCommentsMap: incidentCommentsMap,
-                incidentDetailsModel: incidentDetailsModel,
-              ),
-              BlocListener<IncidentDetailsBloc, IncidentDetailsStates>(
-                  listener: (context, state) {
-                    if (state is SavingIncidentComments) {
-                      ProgressBar.show(context);
-                    } else if (state is IncidentCommentsSaved ||
-                        state is IncidentCommentsFilesSaved) {
-                      ProgressBar.dismiss(context);
-                      Navigator.pop(context);
+                child: PrimaryButton(
+                    onPressed: () {
+                      incidentCommentsMap['incidentId'] = incidentListDatum.id;
+                      incidentCommentsMap['status'] =
+                          IncidentAndQualityManagementStatusEnum.resolved.value;
                       context.read<IncidentDetailsBloc>().add(
-                          FetchIncidentDetailsEvent(
-                              initialIndex: 0,
-                              incidentId: incidentListDatum.id,
-                              role: context
-                                  .read<IncidentLisAndFilterBloc>()
-                                  .roleId));
-                    } else if (state is IncidentCommentsNotSaved) {
-                      ProgressBar.dismiss(context);
-                      showCustomSnackBar(context, state.commentsNotSaved, '');
-                    }
-                  },
-                  child: PrimaryButton(
-                      onPressed: () {
-                        incidentCommentsMap['incidentId'] =
-                            incidentListDatum.id;
-                        incidentCommentsMap['status'] =
-                            IncidentAndQualityManagementStatusEnum
-                                .resolved.value;
-                        context.read<IncidentDetailsBloc>().add(
-                            SaveIncidentComments(
-                                saveCommentsMap: incidentCommentsMap));
-                      },
-                      textValue: StringConstants.kSave)),
-            ],
-          ),
+                          SaveIncidentComments(
+                              saveCommentsMap: incidentCommentsMap));
+                    },
+                    textValue: StringConstants.kSave)),
+          ]),
         ),
       ),
     );

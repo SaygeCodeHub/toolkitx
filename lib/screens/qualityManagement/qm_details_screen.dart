@@ -45,11 +45,13 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                 if (state is QualityManagementDetailsFetched) {
                   if (state.showPopUpMenu == true) {
                     return QualityManagementPopUpMenuScreen(
-                        popUpMenuItems: state.qmPopUpMenu,
-                        data: state.fetchQualityManagementDetailsModel.data,
-                        fetchQualityManagementDetailsModel:
-                            state.fetchQualityManagementDetailsModel,
-                        editQMDetailsMap: state.editQMDetailsMap);
+                      popUpMenuItems: state.qmPopUpMenu,
+                      data: state.fetchQualityManagementDetailsModel.data,
+                      fetchQualityManagementDetailsModel:
+                          state.fetchQualityManagementDetailsModel,
+                      editQMDetailsMap: state.editQMDetailsMap,
+                      qmId: qmListMap['id'],
+                    );
                   } else {
                     return const SizedBox.shrink();
                   }
@@ -105,7 +107,10 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                                               .medium),
                                       StatusTag(tags: [
                                         StatusTagModel(
-                                            title: qmListMap['status'],
+                                            title: state
+                                                .fetchQualityManagementDetailsModel
+                                                .data
+                                                .statusText,
                                             bgColor: AppColor.deepBlue)
                                       ])
                                     ])))),
