@@ -86,7 +86,7 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
     emit(AssetsListFetching());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (event.isFromHome == false) {
+      if (event.isFromHome == true) {
         FetchAssetsListModel fetchAssetsListModel = await _assetsRepository
             .fetchAssetsListRepo(event.pageNo, hashCode!, "");
         assetsDatum.addAll(fetchAssetsListModel.data);

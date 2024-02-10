@@ -19,8 +19,9 @@ class LogBookHandoverExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LogbookBloc>().add(
-        SelectLogBookHandoverLog(handoverValue: DatabaseUtil.getText('No')));
+    context
+        .read<LogbookBloc>()
+        .add(SelectLogBookHandoverLog(handoverValue: ''));
     return BlocBuilder<LogbookBloc, LogbookStates>(
         buildWhen: (previousState, currentState) =>
             currentState is LogBookHandoverSelected,
