@@ -57,7 +57,6 @@ class _CustomQRCodeScannerState extends State<CustomQRCodeScanner> {
             flex: 1,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('${StringConstants.kFetchedCode} $result'),
               const SizedBox(height: xxTinierSpacing),
               Center(
                   child: Padding(
