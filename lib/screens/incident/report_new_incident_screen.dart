@@ -14,7 +14,6 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'category_screen.dart';
-import 'widgets/incident_edit_view_image.dart';
 import 'widgets/incident_show_image_number.dart';
 import 'widgets/report_new_incident_bottom_bar.dart';
 
@@ -120,10 +119,6 @@ class ReportNewIncidentScreen extends StatelessWidget {
                           onTextFieldChanged: (String textField) {
                             addAndEditIncidentMap['description'] = textField;
                           }),
-                      const SizedBox(height: xxTinySpacing),
-                      IncidentEditViewImage(
-                          addAndEditIncidentMap: addAndEditIncidentMap,
-                          clientId: ''),
                       const SizedBox(height: xxTinySpacing),
                       IncidentShowImageNumber(numberIndex: imageIndex),
                       const SizedBox(height: xxxTinierSpacing),

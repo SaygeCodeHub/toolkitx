@@ -88,14 +88,14 @@ class AssetsSiteSelected extends AssetsState {
 class AssetsGetDownTimeFetching extends AssetsState {}
 
 class AssetsGetDownTimeFetched extends AssetsState {
-  final List assetDowntimeDatum;
+  final FetchAssetsDowntimeModel fetchAssetsDowntimeModel;
   final List assetsPopUpMenu;
   final bool showPopUpMenu;
 
   AssetsGetDownTimeFetched({
     required this.assetsPopUpMenu,
     required this.showPopUpMenu,
-    required this.assetDowntimeDatum,
+    required this.fetchAssetsDowntimeModel,
   });
 }
 
