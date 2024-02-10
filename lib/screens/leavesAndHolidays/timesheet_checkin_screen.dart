@@ -134,6 +134,9 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];
+                              AddAndEditTimeSheetScreen.saveTimeSheetMap['id'] =
+                                  state.fetchCheckInTimeSheetModel.data
+                                      .timesheetid;
                               Navigator.pushNamed(
                                   context, AddAndEditTimeSheetScreen.routeName);
                             },

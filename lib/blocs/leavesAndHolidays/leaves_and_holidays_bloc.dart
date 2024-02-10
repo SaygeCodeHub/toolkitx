@@ -318,7 +318,9 @@ class LeavesAndHolidaysBloc
         "breakmins": event.saveTimeSheetMap['breakmins'],
         "description": event.saveTimeSheetMap['description'],
         "userid": userId,
-        "id": "",
+        "id": (AddAndEditTimeSheetScreen.isFromEdit == true)
+            ? event.saveTimeSheetMap['id'] ?? ''
+            : '',
         "hashcode": hashCode
       };
       SaveTimeSheetModel saveTimeSheetModel =

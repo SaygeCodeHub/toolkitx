@@ -28,7 +28,7 @@ class LeavesAndHolidaysWorkingAtNumList extends StatelessWidget {
             const GenericAppBar(title: StringConstants.kSelectWorkingAtNumber),
         body: BlocBuilder<ExpenseBloc, ExpenseStates>(
           buildWhen: (previousState, currentState) =>
-          currentState is TimeSheetWorkingAtOptionSelected ||
+              currentState is TimeSheetWorkingAtOptionSelected ||
               currentState is FetchingWorkingAtNumberData ||
               currentState is WorkingAtNumberDataFetched ||
               currentState is WorkingAtNumberDataNotFetched,
