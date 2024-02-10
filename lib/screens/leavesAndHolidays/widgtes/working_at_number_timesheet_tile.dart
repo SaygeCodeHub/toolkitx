@@ -32,7 +32,7 @@ class TimSheetWorkingAtNumberListTile extends StatelessWidget {
                         workingAtNumberMap: workingAtNumberMap)));
                 AddAndEditTimeSheetScreen
                         .saveTimeSheetMap['working_at_number_id'] =
-                    workingAtNumberMap['working_at_number_id'];
+                    workingAtNumberMap['working_at_number_id'] ?? '';
               },
               title: Text(
                 StringConstants.kWorkingAtNumber,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../blocs/expense/expense_state.dart';
@@ -76,11 +75,16 @@ class LeavesAndHolidaysWorkingAtNumList extends StatelessWidget {
                                       value: state
                                           .expenseWorkingAtNumberDataModel
                                           .data[index]
-                                          .id,
+                                          .id
+                                          .toString(),
                                       groupValue: workingAtNumberMap[
                                               'working_at_number_id'] ??
                                           '',
                                       onChanged: (value) {
+                                        context
+                                            .read<LeavesAndHolidaysBloc>()
+                                            .timeSheetWorkingAtNumberMap
+                                            .clear();
                                         context
                                             .read<LeavesAndHolidaysBloc>()
                                             .timeSheetWorkingAtNumberMap
