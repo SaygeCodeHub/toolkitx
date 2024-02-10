@@ -78,7 +78,6 @@ class SubmitAnswerSignaturePadSection extends StatelessWidget {
                                         textValue: StringConstants.kYes)
                                   ]);
                             });
-                        // Navigator.pop(context);
                       });
                 });
           },
