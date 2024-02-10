@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_bloc.dart';
-import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_events.dart';
-import '../../../../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../widgets/expansion_tile_border.dart';
 
 typedef DropDownCallBack = Function(String dropDownId, String dropDownString);
 
-class DropDownExpansionTile extends StatelessWidget {
+class DropDownExpansionTile extends StatefulWidget {
   final String value;
   final DropDownCallBack onValueChanged;
   final List<Questionlist> answerModelList;
@@ -26,68 +22,59 @@ class DropDownExpansionTile extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<DropDownExpansionTile> createState() => _DropDownExpansionTileState();
+}
+
+class _DropDownExpansionTileState extends State<DropDownExpansionTile> {
+  String dropDown = '';
+  String dropDownId = '';
+
+  @override
+  void initState() {
+    dropDown = widget.value;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String dropDown = value;
-    String dropDownId = '';
-    return BlocBuilder<WorkForceCheckListEditAnswerBloc,
-            WorkForceCheckListEditAnswerStates>(
-        buildWhen: (previousState, currentState) =>
-            currentState is CheckListAnswersEdited,
-        builder: (context, state) {
-          if (state is CheckListAnswersEdited) {
-            return Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: AppColor.transparent),
-                child: ExpansionTile(
-                    collapsedShape:
-                        ExpansionTileBorder().buildOutlineInputBorder(),
-                    collapsedBackgroundColor: AppColor.white,
-                    backgroundColor: AppColor.white,
-                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
-                    key: GlobalKey(),
-                    title: Text((dropDown == "")
-                        ? DatabaseUtil.getText('select_item')
-                        : dropDown),
-                    children: [
-                      MediaQuery(
-                          data: MediaQuery.of(context)
-                              .removePadding(removeTop: true),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount:
-                                  answerModelList[index].queoptions!.length,
-                              itemBuilder: (context, listIndex) {
-                                return ListTile(
-                                    contentPadding: const EdgeInsets.only(
-                                        left: tiniestSpacing),
-                                    title: Text(answerModelList[index]
-                                            .queoptions![listIndex]
-                                        ["queoptiontext"]),
-                                    onTap: () {
-                                      dropDown = answerModelList[index]
-                                          .queoptions![listIndex]
-                                              ["queoptiontext"]
-                                          .toString();
-                                      dropDownId = answerModelList[index]
-                                          .queoptions![listIndex]["queoptionid"]
-                                          .toString();
-                                      onValueChanged(
-                                          dropDownId.toString(), dropDown);
-                                      context
-                                          .read<
-                                              WorkForceCheckListEditAnswerBloc>()
-                                          .add(CheckListEditAnswerEvent(
-                                              dropDownValue: dropDown,
-                                              multiSelectIdList: [],
-                                              multiSelectItem: '',
-                                              multiSelectName: '',
-                                              multiSelectNameList: []));
-                                    });
-                              }))
-                    ]));
-          } else {
-            return const SizedBox();
-          }
-        });
+    return Theme(
+        data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
+        child: ExpansionTile(
+            collapsedShape: ExpansionTileBorder().buildOutlineInputBorder(),
+            collapsedBackgroundColor: AppColor.white,
+            backgroundColor: AppColor.white,
+            shape: ExpansionTileBorder().buildOutlineInputBorder(),
+            key: GlobalKey(),
+            title: Text((dropDown == "")
+                ? DatabaseUtil.getText('select_item')
+                : dropDown),
+            children: [
+              MediaQuery(
+                  data: MediaQuery.of(context).removePadding(removeTop: true),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: widget
+                          .answerModelList[widget.index].queoptions!.length,
+                      itemBuilder: (context, listIndex) {
+                        return ListTile(
+                            contentPadding:
+                                const EdgeInsets.only(left: tiniestSpacing),
+                            title: Text(widget.answerModelList[widget.index]
+                                .queoptions![listIndex]["queoptiontext"]),
+                            onTap: () {
+                              setState(() {
+                                dropDown = widget.answerModelList[widget.index]
+                                    .queoptions![listIndex]["queoptiontext"]
+                                    .toString();
+                                dropDownId = widget
+                                    .answerModelList[widget.index]
+                                    .queoptions![listIndex]["queoptionid"]
+                                    .toString();
+                                widget.onValueChanged(
+                                    dropDownId.toString(), dropDown);
+                              });
+                            });
+                      }))
+            ]));
   }
 }

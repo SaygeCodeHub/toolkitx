@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../data/cache/cache_keys.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
@@ -34,36 +35,47 @@ class WorkForceQuestionsListBloc extends Bloc<WorkForceCheckListFetchQuestions,
               event.checklistData["scheduleId"], userId, hashCode);
       if (getQuestionListModel.status == 200) {
         questionList = getQuestionListModel.data!.questionlist;
-        for (int i = 0;
-            i < getQuestionListModel.data!.questionlist!.length;
-            i++) {
-          if (getQuestionListModel.data!.questionlist![i].optioncomment !=
-                  null &&
-              getQuestionListModel.data!.questionlist![i].optioncomment.length >
-                  0) {
-            answerText = getQuestionListModel
-                .data!.questionlist![i].optioncomment
-                .toString();
-          } else if (getQuestionListModel.data!.questionlist![i].optionid !=
-              null) {
-            answerText = getQuestionListModel.data!.questionlist![i].optiontext
-                .toString();
+        if (questionList!.isNotEmpty) {
+          for (int i = 0;
+              i < getQuestionListModel.data!.questionlist!.length;
+              i++) {
+            if (getQuestionListModel.data!.questionlist![i].optioncomment !=
+                    null &&
+                getQuestionListModel
+                        .data!.questionlist![i].optioncomment.length >
+                    0) {
+              answerText = getQuestionListModel
+                  .data!.questionlist![i].optioncomment
+                  .toString();
+            } else if (getQuestionListModel.data!.questionlist![i].optionid !=
+                null) {
+              answerText = getQuestionListModel
+                  .data!.questionlist![i].optiontext
+                  .toString();
+            } else {
+              answerText = '';
+            }
+            answerList.add({
+              "questionid": getQuestionListModel.data!.questionlist![i].id,
+              "answer": answerText,
+              "ismandatory":
+                  getQuestionListModel.data!.questionlist![i].ismandatory,
+            });
           }
-          answerList.add({
-            "questionid": getQuestionListModel.data!.questionlist![i].id,
-            "answer": answerText,
-            "ismandatory":
-                getQuestionListModel.data!.questionlist![i].ismandatory,
-          });
+          emit(QuestionsListFetched(
+              getQuestionListModel: getQuestionListModel,
+              answerList: answerList,
+              allChecklistDataMap: allDataForChecklistMap));
+        } else {
+          emit(CheckListQuestionsListNotFetched(
+              allChecklistDataMap: {},
+              errorMessage: StringConstants.kNoRecordsFound));
         }
-        emit(QuestionsListFetched(
-            getQuestionListModel: getQuestionListModel,
-            answerList: answerList,
-            allChecklistDataMap: allDataForChecklistMap));
       }
     } catch (e) {
       emit(CheckListQuestionsListNotFetched(
-          allChecklistDataMap: allDataForChecklistMap));
+          allChecklistDataMap: allDataForChecklistMap,
+          errorMessage: e.toString()));
     }
   }
 }
