@@ -80,9 +80,8 @@ class EditAnswerListScreen extends StatelessWidget {
                                             children: [
                                               RichText(
                                                 text: TextSpan(
-                                                    text: state
-                                                        .answerModelList[index]
-                                                        .title,
+                                                    text:
+                                                        '${index + 1}] ${state.answerModelList[index].title}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .medium,
@@ -94,35 +93,68 @@ class EditAnswerListScreen extends StatelessWidget {
                                                               1)
                                                           ? TextSpan(
                                                               text: ' *',
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .medium)
+                                                          style: Theme
+                                                              .of(
+                                                              context)
+                                                              .textTheme
+                                                              .medium)
                                                           : const TextSpan()
                                                     ]),
                                               ),
                                               const SizedBox(
                                                   height: tiniestSpacing),
-                                              EditAnswerUtil()
-                                                  .fetchSwitchCaseWidget(
-                                                      state
-                                                          .answerModelList[
-                                                              index]
-                                                          .type,
-                                                      index,
-                                                      state.answerModelList,
-                                                      state.answersList,
-                                                      context),
-                                              const SizedBox(
-                                                  height: xxTinierSpacing),
                                               Visibility(
                                                 visible: state
+                                                    .answerModelList[index]
+                                                    .moreinfo !=
+                                                    null,
+                                                child: Text(
+                                                    '${state
                                                         .answerModelList[index]
-                                                        .title ==
+                                                        .moreinfo}',
+                                                    style: Theme
+                                                        .of(context)
+                                                        .textTheme
+                                                        .xSmall
+                                                        .copyWith(
+                                                        overflow:
+                                                        TextOverflow
+                                                            .ellipsis,
+                                                        color:
+                                                        AppColor.grey,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w500)),
+                                              ),
+                                              const SizedBox(
+                                                  height: xxTinierSpacing),
+                                              EditAnswerUtil()
+                                                  .fetchSwitchCaseWidget(
+                                                  state
+                                                      .answerModelList[
+                                                  index]
+                                                      .type,
+                                                  index,
+                                                  state.answerModelList,
+                                                  state.answersList,
+                                                  context),
+                                              const SizedBox(
+                                                  height: tiniestSpacing),
+                                              Visibility(
+                                                visible: state
+                                                    .answerModelList[index]
+                                                    .title ==
                                                     "Abdampftemperatur",
                                                 child: Text(
-                                                    '${DatabaseUtil.getText('RangeMessage')} ${state.answerModelList[index].minval} ${DatabaseUtil.getText('to')} ${state.answerModelList[index].maxval}',
-                                                    style: Theme.of(context)
+                                                    '${DatabaseUtil.getText(
+                                                        'RangeMessage')} ${state
+                                                        .answerModelList[index]
+                                                        .minval} ${DatabaseUtil
+                                                        .getText('to')} ${state
+                                                        .answerModelList[index]
+                                                        .maxval}',
+                                                    style: Theme
+                                                        .of(context)
                                                         .textTheme
                                                         .xSmall
                                                         .copyWith(
@@ -174,7 +206,8 @@ class EditAnswerListScreen extends StatelessWidget {
                           const SizedBox(height: xxxSmallerSpacing),
                           SubmitEditAnswerButton(
                               answerList: state.answersList,
-                              checklistDataMap: checklistDataMap)
+                              checklistDataMap: checklistDataMap),
+                          const SizedBox(height: xxTiniestSpacing)
                         ])));
               } else {
                 return const SizedBox();

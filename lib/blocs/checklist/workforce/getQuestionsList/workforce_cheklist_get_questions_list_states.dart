@@ -22,6 +22,8 @@ class QuestionsListFetched extends WorkForceCheckListQuestionsStates {
 class CheckListQuestionsListNotFetched
     extends WorkForceCheckListQuestionsStates {
   final Map allChecklistDataMap;
+  final String errorMessage;
 
-  CheckListQuestionsListNotFetched({required this.allChecklistDataMap});
+  CheckListQuestionsListNotFetched(
+      {required this.errorMessage, required this.allChecklistDataMap});
 }
