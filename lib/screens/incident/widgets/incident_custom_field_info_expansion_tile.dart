@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
@@ -34,9 +33,10 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                     ? '[]'
                     : addAndEditIncidentMap['optionIds'][index]['optionId']
                         .toString()));
-      String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
-            addAndEditIncidentMap['customfields'].isEmpty)|| (addAndEditIncidentMap['customfields'][index]['value'] == null ||
-          addAndEditIncidentMap['customfields'].isEmpty)
+    String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
+                addAndEditIncidentMap['customfields'].isEmpty) ||
+            (addAndEditIncidentMap['customfields'][index]['value'] == null ||
+                addAndEditIncidentMap['customfields'].isEmpty)
         ? ""
         : addAndEditIncidentMap['customfields'][index]['value'];
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(

@@ -34,8 +34,10 @@ class ReportNewIncidentHealthAndSafetyUtil {
       case 2:
         return TextFieldWidget(
             value: (addAndEditIncidentMap['customfields'] == null ||
-                    addAndEditIncidentMap['customfields'].isEmpty) || (addAndEditIncidentMap['customfields'][index]['value'] == null ||
-                addAndEditIncidentMap['customfields'].isEmpty)
+                        addAndEditIncidentMap['customfields'].isEmpty) ||
+                    (addAndEditIncidentMap['customfields'][index]['value'] ==
+                            null ||
+                        addAndEditIncidentMap['customfields'].isEmpty)
                 ? ""
                 : addAndEditIncidentMap['customfields'][index]['value'],
             maxLength: 250,
