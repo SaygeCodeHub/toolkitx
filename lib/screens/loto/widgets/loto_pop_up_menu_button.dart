@@ -42,7 +42,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                     arguments: fetchLotoDetailsModel.data.id)
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotTabIndex:
+                          lotoTabIndex:
                               context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
@@ -50,7 +50,7 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotTabIndex:
+                          lotoTabIndex:
                               context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
@@ -59,7 +59,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                 (_) => {
                       context
                           .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
+                          .add(FetchLotoDetails(lotoTabIndex: 0))
                     });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
@@ -67,14 +67,14 @@ class LotoPopupMenuButton extends StatelessWidget {
                 (_) => {
                       context
                           .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
+                          .add(FetchLotoDetails(lotoTabIndex: 0))
                     });
           }
           if (value == DatabaseUtil.getText('assign_team')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotTabIndex:
+                          lotoTabIndex:
                               context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
@@ -84,7 +84,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                 {
                   context
                       .read<LotoDetailsBloc>()
-                      .add(FetchLotoDetails(lotTabIndex: 0))
+                      .add(FetchLotoDetails(lotoTabIndex: 0))
                 });
           }
           if (value == DatabaseUtil.getText('StartRemoveLotoButton')) {
@@ -93,7 +93,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                 {
                   context
                       .read<LotoDetailsBloc>()
-                      .add(FetchLotoDetails(lotTabIndex: 0))
+                      .add(FetchLotoDetails(lotoTabIndex: 0))
                 });
           }
           if (value ==
@@ -102,7 +102,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                 .then((_) => {
                       context
                           .read<LotoDetailsBloc>()
-                          .add(FetchLotoDetails(lotTabIndex: 0))
+                          .add(FetchLotoDetails(lotoTabIndex: 0))
                     });
           }
 
@@ -110,7 +110,7 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotTabIndex:
+                          lotoTabIndex:
                               context.read<LotoDetailsBloc>().lotoTabIndex))
                     });
           }
@@ -139,7 +139,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                         onPrimaryButton: () {
                           context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
                           context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                              lotTabIndex: context
+                              lotoTabIndex: context
                                   .read<LotoDetailsBloc>()
                                   .lotoTabIndex));
                         })));
@@ -173,7 +173,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                                   .add(AcceptLotoEvent());
                               context.read<LotoDetailsBloc>().add(
                                   FetchLotoDetails(
-                                      lotTabIndex: context
+                                      lotoTabIndex: context
                                           .read<LotoDetailsBloc>()
                                           .lotoTabIndex));
                             })));
@@ -207,7 +207,7 @@ class LotoPopupMenuButton extends StatelessWidget {
                                   .add(RemoveLotoEvent());
                               context.read<LotoDetailsBloc>().add(
                                   FetchLotoDetails(
-                                      lotTabIndex: context
+                                      lotoTabIndex: context
                                           .read<LotoDetailsBloc>()
                                           .lotoTabIndex));
                             })));

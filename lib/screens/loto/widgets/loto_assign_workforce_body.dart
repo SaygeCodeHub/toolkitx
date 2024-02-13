@@ -18,9 +18,12 @@ class LotoAssignWorkforceBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LotoDetailsBloc, LotoDetailsState>(
       buildWhen: (previousState, currentState) =>
-          (currentState is LotoAssignWorkforceFetching &&
-              LotoAssignWorkforceScreen.pageNo == 1 &&
-              context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) ||
+      (currentState is LotoAssignWorkforceFetching &&
+          LotoAssignWorkforceScreen.pageNo == 1 &&
+          context
+              .read<LotoDetailsBloc>()
+              .assignWorkforceDatum
+              .isEmpty) ||
           currentState is LotoAssignWorkforceFetched ||
           currentState is LotoAssignWorkforceError,
       listener: (context, state) {
@@ -29,7 +32,9 @@ class LotoAssignWorkforceBody extends StatelessWidget {
         } else if (state is LotoAssignWorkforceSaved) {
           ProgressBar.dismiss(context);
           LotoAssignWorkforceScreen.pageNo = 1;
-          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
+          context
+              .read<LotoDetailsBloc>()
+              .assignWorkforceDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
               pageNo: 1,
               isRemove: LotoAssignWorkforceScreen.isRemove,
@@ -42,10 +47,14 @@ class LotoAssignWorkforceBody extends StatelessWidget {
 
         if (state is AssignWorkforceRemoved) {
           LotoAssignWorkforceScreen.pageNo = 1;
-          context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
+          context
+              .read<LotoDetailsBloc>()
+              .assignWorkforceDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
               pageNo: 1,
-              isRemove: context.read<LotoDetailsBloc>().isRemove,
+              isRemove: context
+                  .read<LotoDetailsBloc>()
+                  .isRemove,
               workforceName: ''));
           showCustomSnackBar(context, StringConstants.kWorkforceRemoved, '');
         } else if (state is LotoAssignWorkforceNotSaved) {
@@ -54,7 +63,10 @@ class LotoAssignWorkforceBody extends StatelessWidget {
         }
         if (state is LotoAssignWorkforceFetched) {
           if (state.fetchLotoAssignWorkforceModel.status == 204 &&
-              context.read<LotoDetailsBloc>().assignWorkforceDatum.isNotEmpty) {
+              context
+                  .read<LotoDetailsBloc>()
+                  .assignWorkforceDatum
+                  .isNotEmpty) {
             showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
           }
         }
@@ -64,22 +76,25 @@ class LotoAssignWorkforceBody extends StatelessWidget {
           return const Expanded(
               child: Center(child: CircularProgressIndicator()));
         } else if (state is LotoAssignWorkforceFetched) {
-          if (context.read<LotoDetailsBloc>().assignWorkforceDatum.isNotEmpty) {
+          if (context
+              .read<LotoDetailsBloc>()
+              .assignWorkforceDatum
+              .isNotEmpty) {
             return Expanded(
                 child: ListView.separated(
                     itemCount: context
-                                .read<LotoDetailsBloc>()
-                                .lotoWorkforceReachedMax ==
-                            true
+                        .read<LotoDetailsBloc>()
+                        .lotoWorkforceReachedMax ==
+                        true
                         ? context
-                            .read<LotoDetailsBloc>()
-                            .assignWorkforceDatum
-                            .length
+                        .read<LotoDetailsBloc>()
+                        .assignWorkforceDatum
+                        .length
                         : context
-                                .read<LotoDetailsBloc>()
-                                .assignWorkforceDatum
-                                .length +
-                            1,
+                        .read<LotoDetailsBloc>()
+                        .assignWorkforceDatum
+                        .length +
+                        1,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       if (index <
@@ -115,7 +130,10 @@ class LotoAssignWorkforceBody extends StatelessWidget {
                       return const SizedBox(height: tiniestSpacing);
                     }));
           } else if (state.fetchLotoAssignWorkforceModel.status == 204 &&
-              context.read<LotoDetailsBloc>().assignWorkforceDatum.isEmpty) {
+              context
+                  .read<LotoDetailsBloc>()
+                  .assignWorkforceDatum
+                  .isEmpty) {
             return NoRecordsText(
                 text: DatabaseUtil.getText('no_records_found'));
           } else {

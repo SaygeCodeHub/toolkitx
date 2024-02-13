@@ -15,7 +15,7 @@ class LotoSelectMultiChecklistAnswer extends StatelessWidget {
       required this.onCreatedForChanged});
 
   final List selectedAnswerList;
-  final QueOption queoptions;
+  final List<QueOption> queoptions;
   final CreatedForListCallBack onCreatedForChanged;
 
   void _checkboxChange(isSelected, answerId) {
@@ -39,20 +39,29 @@ class LotoSelectMultiChecklistAnswer extends StatelessWidget {
           currentState is LotoMultiCheckListAnswerSelected,
       builder: (context, state) {
         if (state is LotoMultiCheckListAnswerSelected) {
-          return CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              activeColor: AppColor.deepBlue,
-              controlAffinity: ListTileControlAffinity.trailing,
-              title: Text(queoptions.queoptiontext,
-                  style: Theme.of(context).textTheme.small.copyWith(
-                      fontWeight: FontWeight.w400, color: AppColor.black)),
-              value: selectedAnswerList.contains(queoptions.queoptionid),
-              onChanged: (isChecked) {
-                _checkboxChange(isChecked, queoptions.queoptionid);
-                context
-                    .read<LotoDetailsBloc>()
-                    .add(SelectLotoChecklistMultiAnswer(isChecked: isChecked!));
-              });
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 4,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: queoptions.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: AppColor.deepBlue,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    title: Text(queoptions[index].queoptiontext,
+                        style: Theme.of(context).textTheme.small.copyWith(
+                            fontWeight: FontWeight.w400, color: AppColor.black)),
+                    value: selectedAnswerList.contains(queoptions[index].queoptionid),
+                    onChanged: (isChecked) {
+                      _checkboxChange(isChecked, queoptions[index].queoptionid);
+                      context
+                          .read<LotoDetailsBloc>()
+                          .add(SelectLotoChecklistMultiAnswer(isChecked: isChecked!));
+                    });
+              },
+            ),
+          );
         } else {
           return const SizedBox.shrink();
         }
