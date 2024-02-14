@@ -65,7 +65,8 @@ class SubmitAnswerBloc extends Bloc<SubmitAnswers, SubmitAnswerStates> {
             "isdraft": (event.isDraft == true) ? "1" : "0",
             "questions": submitList,
             "scheduleid": event.allChecklistDataMap["scheduleId"],
-            "hashcode": hashCode
+            "hashcode": hashCode,
+            "sign_text": event.allChecklistDataMap["sign_text"]
           };
           SubmitQuestionModel submitQuestionModel =
               await _workForceRepository.submitAnswer(submitQuestionMap);

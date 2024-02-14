@@ -92,7 +92,6 @@ class GetTimeSheetFetched extends LeavesAndHolidaysStates {
 
 class GetTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
-
   GetTimeSheetNotFetched({required this.errorMessage});
 }
 
@@ -106,7 +105,6 @@ class CheckInTimeSheetFetched extends LeavesAndHolidaysStates {
 
 class CheckInTimeSheetNotFetched extends LeavesAndHolidaysStates {
   final String errorMessage;
-
   CheckInTimeSheetNotFetched({required this.errorMessage});
 }
 

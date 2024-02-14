@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../blocs/expense/expense_state.dart';
 import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
@@ -28,7 +28,7 @@ class LeavesAndHolidaysWorkingAtNumList extends StatelessWidget {
             const GenericAppBar(title: StringConstants.kSelectWorkingAtNumber),
         body: BlocBuilder<ExpenseBloc, ExpenseStates>(
           buildWhen: (previousState, currentState) =>
-              currentState is ExpenseWorkingAtOptionSelected ||
+              currentState is TimeSheetWorkingAtOptionSelected ||
               currentState is FetchingWorkingAtNumberData ||
               currentState is WorkingAtNumberDataFetched ||
               currentState is WorkingAtNumberDataNotFetched,
@@ -76,7 +76,8 @@ class LeavesAndHolidaysWorkingAtNumList extends StatelessWidget {
                                       value: state
                                           .expenseWorkingAtNumberDataModel
                                           .data[index]
-                                          .id,
+                                          .id
+                                          .toString(),
                                       groupValue: workingAtNumberMap[
                                               'working_at_number_id'] ??
                                           '',
