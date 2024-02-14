@@ -42,7 +42,6 @@ class WorkForceCheckListEditAnswerBloc extends Bloc<
     emit(CheckListAnswersEdited(
         dropDownValue: event.dropDownValue,
         multiSelectId: multiSelectList,
-        radioValue: event.radioValue,
         multiSelectNames: multiSelectNames));
   }
 }

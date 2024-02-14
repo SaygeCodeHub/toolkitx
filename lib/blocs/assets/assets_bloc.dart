@@ -68,11 +68,9 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
   int assetTabIndex = 0;
   List<AssetsListDatum> assetsDatum = [];
   List<AddDocumentDatum> addDocumentDatum = [];
-  List<AssetsDowntimeDatum> assetsDowntimeDatum = [];
   List<ManageDocumentDatum> manageDocumentDatum = [];
   bool hasReachedMax = false;
   bool hasDocumentReachedMax = false;
-  bool hasDowntimeReachedMax = false;
   bool isFromAdd = true;
   Map filters = {};
   Map documentFilters = {};
@@ -188,22 +186,23 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
       FetchAssetsGetDownTime event, Emitter<AssetsState> emit) async {
     emit(AssetsGetDownTimeFetching());
     try {
-      if (!hasDowntimeReachedMax) {
-        List popUpMenuItems = [
-          DatabaseUtil.getText("Edit"),
-          DatabaseUtil.getText("Delete"),
-          DatabaseUtil.getText("Cancel"),
-        ];
-        String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-        FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
-            await _assetsRepository.fetchAssetsDowntimeRepo(
-                event.pageNo, hashCode!, event.assetId);
-        hasDowntimeReachedMax = fetchAssetsDowntimeModel.data.isEmpty;
-        assetsDowntimeDatum.addAll(fetchAssetsDowntimeModel.data);
+      List popUpMenuItems = [
+        DatabaseUtil.getText("Edit"),
+        DatabaseUtil.getText("Delete"),
+        DatabaseUtil.getText("Cancel"),
+      ];
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchAssetsDowntimeModel fetchAssetsDowntimeModel =
+          await _assetsRepository.fetchAssetsDowntimeRepo(
+              event.pageNo, hashCode!, event.assetId);
+      if (fetchAssetsDowntimeModel.status == 200) {
         emit(AssetsGetDownTimeFetched(
             assetsPopUpMenu: popUpMenuItems,
             showPopUpMenu: true,
-            assetDowntimeDatum: assetsDowntimeDatum));
+            fetchAssetsDowntimeModel: fetchAssetsDowntimeModel));
+      } else {
+        emit(AssetsGetDownTimeError(
+            errorMessage: fetchAssetsDowntimeModel.message));
       }
     } catch (e) {
       emit(AssetsGetDownTimeError(errorMessage: e.toString()));
