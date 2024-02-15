@@ -51,13 +51,15 @@ class LotoSelectMultiChecklistAnswer extends StatelessWidget {
                     controlAffinity: ListTileControlAffinity.trailing,
                     title: Text(queoptions[index].queoptiontext,
                         style: Theme.of(context).textTheme.small.copyWith(
-                            fontWeight: FontWeight.w400, color: AppColor.black)),
-                    value: selectedAnswerList.contains(queoptions[index].queoptionid),
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.black)),
+                    value: selectedAnswerList
+                        .contains(queoptions[index].queoptionid),
                     onChanged: (isChecked) {
                       _checkboxChange(isChecked, queoptions[index].queoptionid);
-                      context
-                          .read<LotoDetailsBloc>()
-                          .add(SelectLotoChecklistMultiAnswer(isChecked: isChecked!));
+                      context.read<LotoDetailsBloc>().add(
+                          SelectLotoChecklistMultiAnswer(
+                              isChecked: isChecked!));
                     });
               },
             ),

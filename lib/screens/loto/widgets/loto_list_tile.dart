@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -31,7 +29,6 @@ class LotoListTile extends StatelessWidget {
               onTap: () {
                 context.read<LotoDetailsBloc>().lotoId =
                     context.read<LotoListBloc>().data[index].id;
-                log('id=================>${context.read<LotoListBloc>().data[index].id}');
                 Navigator.pushNamed(context, LotoDetailsScreen.routeName)
                     .then((_) => {
                           LotoListScreen.pageNo = 1,

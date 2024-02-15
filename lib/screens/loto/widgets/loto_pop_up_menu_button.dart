@@ -127,6 +127,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                         showCustomSnackBar(
                             context, StringConstants.kLotoApplied, '');
                         Navigator.pop(context);
+                        context
+                            .read<LotoDetailsBloc>()
+                            .add(FetchLotoDetails(lotoTabIndex: 0));
                       } else if (state is LotoNotApplied) {
                         ProgressBar.dismiss(context);
                         showCustomSnackBar(context, state.getError, '');
@@ -157,6 +160,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                             showCustomSnackBar(
                                 context, StringConstants.kLotoAccepted, '');
                             Navigator.pop(context);
+                            context
+                                .read<LotoDetailsBloc>()
+                                .add(FetchLotoDetails(lotoTabIndex: 0));
                           } else if (state is LotoNotAccepted) {
                             ProgressBar.dismiss(context);
                             showCustomSnackBar(context, state.getError, '');
@@ -191,6 +197,9 @@ class LotoPopupMenuButton extends StatelessWidget {
                             showCustomSnackBar(
                                 context, StringConstants.kLotoRemoved, '');
                             Navigator.pop(context);
+                            context
+                                .read<LotoDetailsBloc>()
+                                .add(FetchLotoDetails(lotoTabIndex: 0));
                           } else if (state is LotoNotRemoved) {
                             ProgressBar.dismiss(context);
                             showCustomSnackBar(context, state.getError, '');
