@@ -3,9 +3,9 @@ part of 'loto_details_bloc.dart';
 abstract class LotoDetailsEvent {}
 
 class FetchLotoDetails extends LotoDetailsEvent {
-  final int lotTabIndex;
+  final int lotoTabIndex;
 
-  FetchLotoDetails({required this.lotTabIndex});
+  FetchLotoDetails({required this.lotoTabIndex});
 }
 
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
