@@ -330,7 +330,7 @@ class QualityManagementBloc
           await _qualityManagementRepository.generatePdf(
               encryptQmId, hashCode!);
       String pdfLink =
-          EncryptData.encryptAESPrivateKey(pdfGenerationModel.message, aipKey);
+          EncryptData.decryptAESPrivateKey(pdfGenerationModel.message, aipKey);
       if (pdfGenerationModel.status == 200) {
         emit(QualityManagementPDFGenerated(
             pdfGenerationModel: pdfGenerationModel, pdfLink: pdfLink));
