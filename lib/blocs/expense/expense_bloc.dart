@@ -124,6 +124,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       if (fetchExpenseDetailsModel.data.canClose == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Close'));
       }
+      popUpMenuList.add(DatabaseUtil.getText('Cancel'));
       Map manageExpensesMap = {
         'startdate': fetchExpenseDetailsModel.data.startdate,
         'enddate': fetchExpenseDetailsModel.data.enddate,
@@ -242,9 +243,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.manageExpenseMap['startdate'] == null &&
-              event.manageExpenseMap['enddate'] == null &&
-              event.manageExpenseMap['currency'] == null ||
-          event.manageExpenseMap['currency'].isEmpty) {
+          event.manageExpenseMap['enddate'] == null &&
+          event.manageExpenseMap['currency_id'] == '') {
         emit(AddExpenseNotSaved(
             expenseNotSaved:
                 DatabaseUtil.getText('DateAndCurrencyCompulsary')));
@@ -274,7 +274,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "userid": userId,
           "hashcode": hashCode
         };
-
         UpdateExpenseModel updateExpenseModel =
             await _expenseRepository.updateExpense(updateExpenseMap);
         if (updateExpenseModel.message == 'Modifyingexpensereport') {
@@ -284,8 +283,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           event.manageExpenseMap['currency_id'] =
               event.manageExpenseMap['new_currency_id'];
         } else if (updateExpenseModel.message == '1') {
-          emit(ExpenseUpdated(
-              updateExpenseModel: updateExpenseModel, expenseId: expenseId));
+          // emit(ExpenseUpdated(
+          //     updateExpenseModel: updateExpenseModel, expenseId: expenseId));
         } else {
           emit(ExpenseCouldNotUpdate(
               expenseNotUpdated: DatabaseUtil.getText('UnknownErrorMessage')));
