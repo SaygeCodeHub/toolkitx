@@ -75,17 +75,13 @@ class LotoChecklistQuestionTypeUtil {
                 textInputType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 onTextFieldChanged: (String textValue) {
-                  answerList.add({"questionid": questionId, "answer": textValue});
-                }
-                ),
+                  answerList
+                      .add({"questionid": questionId, "answer": textValue});
+                }),
             const SizedBox(height: tiniestSpacing),
             Text(StringConstants.kPleaseEnterYourAnswer50Bis200,
-                style: Theme.of(context)
-                    .textTheme
-                    .xxSmall
-                    .copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.errorRed)),
+                style: Theme.of(context).textTheme.xxSmall.copyWith(
+                    fontWeight: FontWeight.w400, color: AppColor.errorRed)),
           ],
         );
       case 8:
