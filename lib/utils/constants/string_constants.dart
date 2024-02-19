@@ -71,6 +71,7 @@ abstract class StringConstants {
   static const String kNotAccepted = 'Not Accepted';
   static const String kOverdue = 'Overdue';
   static const String kSubmitted = 'Submitted';
+  static const String kApproved = 'Approved';
   static const String kUploadPhoto = 'Upload Photo';
   static const String kAddCommentImage = 'Add Comment/Image';
   static const String kHint = 'Hint';
