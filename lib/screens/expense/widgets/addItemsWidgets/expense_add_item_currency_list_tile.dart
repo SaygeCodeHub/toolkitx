@@ -25,13 +25,13 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ExpenseEditItemsScreen.editExpenseMap['currency'] =
-        ExpenseEditItemsScreen.editExpenseMap['item_details_model'].currency ??
+        ExpenseEditItemsScreen.editExpenseMap['item_details_model']?.currency ??
             '';
     context
         .read<ExpenseBloc>()
         .add(SelectExpenseAddItemsCurrency(currencyDetailsMap: {
           'currency_id': ExpenseEditItemsScreen
-                  .editExpenseMap['item_details_model'].currency ??
+                  .editExpenseMap['item_details_model']?.currency ??
               '',
           'currency_name': expenseDetailsData.currencyname
         }));
@@ -85,7 +85,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                   child: TextFieldWidget(
                       value: ExpenseEditItemsScreen
                               .editExpenseMap['item_details_model']
-                              .exchangerate ??
+                              ?.exchangerate ??
                           '',
                       maxLength: 20,
                       textInputAction: TextInputAction.next,

@@ -56,26 +56,26 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('approve')) {
+        if (value == DatabaseUtil.getText('ApproveReport')) {
           showDialog(
               context: context,
               builder: (context) {
                 return AndroidPopUp(
-                    titleValue: DatabaseUtil.getText('ApproveExpenseReport'),
-                    contentValue: '',
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue: DatabaseUtil.getText('ApproveExpenseReport'),
                     onPrimaryButton: () {
                       context.read<ExpenseBloc>().add(ApproveExpense());
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Close')) {
+        if (value == DatabaseUtil.getText('CloseReport')) {
           showDialog(
               context: context,
               builder: (context) {
                 return AndroidPopUp(
-                    titleValue:
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue:
                         DatabaseUtil.getText('CloseExpenseReportMessage'),
-                    contentValue: '',
                     onPrimaryButton: () {
                       context.read<ExpenseBloc>().add(CloseExpense());
                     });

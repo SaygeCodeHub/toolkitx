@@ -121,14 +121,15 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         popUpMenuList.add(DatabaseUtil.getText('SubmitForApproval'));
       }
       if (fetchExpenseDetailsModel.data.canApprove == '1') {
-        popUpMenuList.add(DatabaseUtil.getText('approve'));
+        popUpMenuList.add(DatabaseUtil.getText('ApproveReport'));
       }
       if (fetchExpenseDetailsModel.data.canApprove == '1') {
         popUpMenuList.add(DatabaseUtil.getText('RejectReport'));
       }
       if (fetchExpenseDetailsModel.data.canClose == '1') {
-        popUpMenuList.add(DatabaseUtil.getText('Close'));
+        popUpMenuList.add(DatabaseUtil.getText('CloseReport'));
       }
+      popUpMenuList.add(DatabaseUtil.getText('Cancel'));
       Map manageExpensesMap = {
         'startdate': fetchExpenseDetailsModel.data.startdate,
         'enddate': fetchExpenseDetailsModel.data.enddate,
@@ -247,9 +248,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.manageExpenseMap['startdate'] == null &&
-              event.manageExpenseMap['enddate'] == null &&
-              event.manageExpenseMap['currency'] == null ||
-          event.manageExpenseMap['currency'].isEmpty) {
+          event.manageExpenseMap['enddate'] == null &&
+          event.manageExpenseMap['currency_id'] == '') {
         emit(AddExpenseNotSaved(
             expenseNotSaved:
                 DatabaseUtil.getText('DateAndCurrencyCompulsary')));
@@ -279,7 +279,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "userid": userId,
           "hashcode": hashCode
         };
-
         UpdateExpenseModel updateExpenseModel =
             await _expenseRepository.updateExpense(updateExpenseMap);
         if (updateExpenseModel.message == 'Modifyingexpensereport') {
@@ -410,13 +409,17 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   FutureOr<void> _approveExpense(
       ApproveExpense event, Emitter<ExpenseStates> emit) async {
     emit(ApprovingExpense());
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    Map approveExpenseMap = {
+      "reportid": expenseId,
+      "userid": userId,
+      "hashcode": hashCode
+    };
     try {
       ApproveExpenseModel approveExpenseModel =
-          await _expenseRepository.approveExpense({
-        "reportid": expenseId,
-        "userid": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
-        "hashcode": await _customerCache.getUserId(CacheKeys.userId) ?? ''
-      });
+          await _expenseRepository.approveExpense(approveExpenseMap);
       if (approveExpenseModel.message == StringConstants.kSuccessCode) {
         emit(ExpenseApproved());
       } else {
@@ -433,12 +436,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       CloseExpense event, Emitter<ExpenseStates> emit) async {
     emit(ClosingExpense());
     try {
-      CloseExpenseModel closeExpenseModel =
-          await _expenseRepository.closeExpense({
+      Map closeExpenseMap = {
         "reportid": expenseId,
         "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
-        "hashcode": await _customerCache.getUserId(CacheKeys.hashcode) ?? ''
-      });
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? ''
+      };
+      CloseExpenseModel closeExpenseModel =
+          await _expenseRepository.closeExpense(closeExpenseMap);
       if (closeExpenseModel.message == StringConstants.kSuccessCode) {
         emit(ExpenseClosed());
       } else {

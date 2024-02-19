@@ -76,14 +76,14 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   @override
   Future<ApproveExpenseModel> approveExpense(Map approveExpenseMap) async {
     final response = await DioClient()
-        .post("${ApiConstants.baseUrl}api/expense/Approve", approveExpenseMap);
+        .post("${ApiConstants.baseUrl}expense/Approve", approveExpenseMap);
     return ApproveExpenseModel.fromJson(response);
   }
 
   @override
   Future<CloseExpenseModel> closeExpense(Map closeExpenseMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}api/expense/CloseReport", closeExpenseMap);
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}expense/CloseReport", closeExpenseMap);
     return CloseExpenseModel.fromJson(response);
   }
 
