@@ -61,8 +61,8 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AndroidPopUp(
-                    titleValue: DatabaseUtil.getText('ApproveExpenseReport'),
-                    contentValue: '',
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue: DatabaseUtil.getText('ApproveExpenseReport'),
                     onPrimaryButton: () {
                       context.read<ExpenseBloc>().add(ApproveExpense());
                     });
@@ -73,9 +73,9 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AndroidPopUp(
-                    titleValue:
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue:
                         DatabaseUtil.getText('CloseExpenseReportMessage'),
-                    contentValue: '',
                     onPrimaryButton: () {
                       context.read<ExpenseBloc>().add(CloseExpense());
                     });

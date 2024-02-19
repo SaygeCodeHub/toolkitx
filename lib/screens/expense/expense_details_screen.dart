@@ -84,7 +84,7 @@ class ExpenseDetailsScreen extends StatelessWidget {
             }
             if (state is ClosingExpense) {
               ProgressBar.show(context);
-            } else if (State is ExpenseClosed) {
+            } else if (state is ExpenseClosed) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               Navigator.pop(context);

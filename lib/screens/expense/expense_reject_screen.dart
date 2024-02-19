@@ -64,7 +64,7 @@ class ExpenseRejectScreen extends StatelessWidget {
                       builder: (context) => AndroidPopUp(
                         titleValue: DatabaseUtil.getText('ExpenseReport'),
                         contentValue:
-                            DatabaseUtil.getText('CloseExpenseReportMessage'),
+                            DatabaseUtil.getText('RejectExpenseReport'),
                         onPrimaryButton: () {
                           context
                               .read<ExpenseBloc>()
