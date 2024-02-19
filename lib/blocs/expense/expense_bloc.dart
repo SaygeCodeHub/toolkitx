@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/expense/reject_expense_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -59,6 +60,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<FetchExpenseItemCustomFields>(_fetchItemCustomFields);
     on<FetchWorkingAtNumberData>(_fetchWorkingAtNumberData);
     on<FetchExpenseItemDetails>(_fetchItemDetails);
+    on<RejectExpense>(_rejectExpense);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -120,6 +122,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
       if (fetchExpenseDetailsModel.data.canApprove == '1') {
         popUpMenuList.add(DatabaseUtil.getText('approve'));
+      }
+      if (fetchExpenseDetailsModel.data.canApprove == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('RejectReport'));
       }
       if (fetchExpenseDetailsModel.data.canClose == '1') {
         popUpMenuList.add(DatabaseUtil.getText('Close'));
@@ -698,6 +703,36 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseItemDetailsNotFetched(itemDetailsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _rejectExpense(
+      RejectExpense event, Emitter<ExpenseStates> emit) async {
+    emit(RejectingExpense());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectReportMap = {
+        "reportid": expenseId,
+        "userid": userId,
+        "comments": event.comments,
+        "hashcode": hashCode
+      };
+      if (event.comments == '' || event.comments.isEmpty) {
+        emit(ExpenseNotRejected(
+            errorMessage: StringConstants.kExpenseReportComments));
+      } else {
+        ExpenseRejectModel expenseRejectModel =
+            await _expenseRepository.rejectExpense(rejectReportMap);
+        if (expenseRejectModel.message == StringConstants.kSuccessCode) {
+          emit(ExpenseRejected());
+        } else {
+          emit(ExpenseNotRejected(errorMessage: expenseRejectModel.message));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseNotRejected(errorMessage: e.toString()));
     }
   }
 }

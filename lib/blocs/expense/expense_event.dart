@@ -128,3 +128,9 @@ class FetchExpenseItemDetails extends ExpenseEvent {
 
   FetchExpenseItemDetails({required this.expenseItemId});
 }
+
+class RejectExpense extends ExpenseEvent {
+  final String comments;
+
+  RejectExpense({required this.comments});
+}
