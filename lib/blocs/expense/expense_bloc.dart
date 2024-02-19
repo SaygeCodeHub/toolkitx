@@ -288,8 +288,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           event.manageExpenseMap['currency_id'] =
               event.manageExpenseMap['new_currency_id'];
         } else if (updateExpenseModel.message == '1') {
-          // emit(ExpenseUpdated(
-          //     updateExpenseModel: updateExpenseModel, expenseId: expenseId));
+          emit(ExpenseUpdated(
+              updateExpenseModel: updateExpenseModel, expenseId: expenseId));
         } else {
           emit(ExpenseCouldNotUpdate(
               expenseNotUpdated: DatabaseUtil.getText('UnknownErrorMessage')));
