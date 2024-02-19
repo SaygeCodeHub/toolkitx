@@ -24,7 +24,6 @@ import '../../../data/models/loto/save_assign_workforce_model.dart';
 import '../../../data/models/loto/save_loto_assign_team_model.dart';
 import '../../../di/app_module.dart';
 import '../../../screens/loto/loto_assign_workfoce_screen.dart';
-import '../../../screens/loto/loto_assign_team_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
@@ -35,6 +34,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
+  List<LotoAssignTeamDatum> lotoAssignTeamDatum = [];
   List<LotoData> lotoData = [];
   String lotoId = '';
   String lotoWorkforceName = '';
@@ -44,6 +44,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   List checklistArrayIdList = [];
   int lotoTabIndex = 0;
   bool lotoWorkforceReachedMax = false;
+  bool lotoTeamReachedMax = false;
   bool isFromFirst = true;
   static List popUpMenuItemsList = [];
   int index = 0;
@@ -221,9 +222,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
               hashCode!, lotoId, event.pageNo, event.name, event.isRemove);
       if (fetchLotoAssignTeamModel.status == 200 ||
           fetchLotoAssignTeamModel.status == 204) {
-        LotoAssignTeamScreen.hasReachedMax =
-            fetchLotoAssignTeamModel.data.isEmpty;
-        LotoAssignTeamScreen.data.addAll(fetchLotoAssignTeamModel.data);
+        lotoTeamReachedMax = fetchLotoAssignTeamModel.data.isEmpty;
+        lotoAssignTeamDatum.addAll(fetchLotoAssignTeamModel.data);
         emit(LotoAssignTeamFetched(
             fetchLotoAssignTeamModel: fetchLotoAssignTeamModel));
       }

@@ -33,7 +33,7 @@ class SaveLotoAssignTeam extends LotoDetailsEvent {
 
 class FetchLotoAssignTeam extends LotoDetailsEvent {
   final int pageNo;
-  final int isRemove;
+  final String isRemove;
   final String name;
 
   FetchLotoAssignTeam(
