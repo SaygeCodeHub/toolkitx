@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../../blocs/expense/expense_event.dart';
@@ -79,6 +80,9 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                       context.read<ExpenseBloc>().add(CloseExpense());
                     });
               });
+        }
+        if (value == DatabaseUtil.getText('RejectReport')) {
+          Navigator.pushNamed(context, ExpenseRejectScreen.routeName);
         }
       },
       position: PopupMenuPosition.under,

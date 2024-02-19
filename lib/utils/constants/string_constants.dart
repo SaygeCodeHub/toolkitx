@@ -513,4 +513,5 @@ abstract class StringConstants {
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kExpenseReportRejected = "Expense Report Rejected";
 }

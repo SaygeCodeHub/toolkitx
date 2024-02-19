@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/expense/reject_expense_model.dart';
+
 import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/close_expense_model.dart';
 import '../../data/models/expense/delete_expense_item_model.dart';
@@ -48,4 +50,6 @@ abstract class ExpenseRepository {
 
   Future<FetchExpenseItemDetailsModel> fetchExpenseItemDetails(
       Map itemDetailsMap);
+
+  Future<ExpenseRejectModel> rejectExpense(Map rejectExpenseMap);
 }
