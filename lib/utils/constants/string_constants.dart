@@ -291,6 +291,7 @@ abstract class StringConstants {
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
+  static const String kTeamAssigned = 'Team Assigned';
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
@@ -507,10 +508,13 @@ abstract class StringConstants {
   static const String kWorkorder = "Workorder";
   static const String kAreYouSureToReject = "Are you sure to reject?";
   static const String kRequestRejected = "Request Rejected";
-  static const String kFetchedCode = "Fetched Code :";
+  static const String kPleaseEnterYourAnswer50Bis200 =
+      'Please enter your answer between 50 bis 200';
   static const String kAreYouSureToCloseDocument =
       'Are you sure you want to close this document management ? ';
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kExpenseReportRejected = "Expense Report Rejected";
+  static const String kExpenseReportComments = 'Please add comment first';
 }

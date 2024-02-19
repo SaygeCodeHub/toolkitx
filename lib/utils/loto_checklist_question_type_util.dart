@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/widgets/loto_select_multi_checklist_answer.dart';
+import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
 import '../screens/checklist/workforce/widgets/upload_image_section.dart';
@@ -67,12 +68,22 @@ class LotoChecklistQuestionTypeUtil {
           },
         );
       case 7:
-        return TextFieldWidget(
-            textInputType: TextInputType.number,
-            textInputAction: TextInputAction.done,
-            onTextFieldChanged: (String textValue) {
-              answerList.add({"questionid": questionId, "answer": textValue});
-            });
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFieldWidget(
+                textInputType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                onTextFieldChanged: (String textValue) {
+                  answerList
+                      .add({"questionid": questionId, "answer": textValue});
+                }),
+            const SizedBox(height: tiniestSpacing),
+            Text(StringConstants.kPleaseEnterYourAnswer50Bis200,
+                style: Theme.of(context).textTheme.xxSmall.copyWith(
+                    fontWeight: FontWeight.w400, color: AppColor.errorRed)),
+          ],
+        );
       case 8:
         return const SizedBox.shrink();
       case 9:

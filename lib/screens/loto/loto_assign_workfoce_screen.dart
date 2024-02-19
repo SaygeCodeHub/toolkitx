@@ -26,6 +26,7 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
     context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
         pageNo: pageNo, isRemove: isRemove, workforceName: ''));
     context.read<LotoDetailsBloc>().lotoWorkforceReachedMax = false;
+    context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
     context.read<LotoDetailsBloc>().add(
         SearchLotoAssignWorkForce(isWorkforceSearched: isWorkforceSearched));
     return Scaffold(
