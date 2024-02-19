@@ -720,18 +720,19 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "hashcode": hashCode
       };
       if (event.comments == '' || event.comments.isEmpty) {
-        emit(ExpenseNotReject(errorMessage: 'Please add comment first'));
+        emit(ExpenseNotRejected(
+            errorMessage: StringConstants.kExpenseReportComments));
       } else {
         ExpenseRejectModel expenseRejectModel =
             await _expenseRepository.rejectExpense(rejectReportMap);
         if (expenseRejectModel.message == StringConstants.kSuccessCode) {
-          emit(ExpenseReject());
+          emit(ExpenseRejected());
         } else {
-          emit(ExpenseNotReject(errorMessage: expenseRejectModel.message));
+          emit(ExpenseNotRejected(errorMessage: expenseRejectModel.message));
         }
       }
     } catch (e) {
-      emit(ExpenseNotReject(errorMessage: e.toString()));
+      emit(ExpenseNotRejected(errorMessage: e.toString()));
     }
   }
 }

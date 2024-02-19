@@ -258,10 +258,10 @@ class ExpenseItemDetailsNotFetched extends ExpenseStates {
 
 class RejectingExpense extends ExpenseStates {}
 
-class ExpenseReject extends ExpenseStates {}
+class ExpenseRejected extends ExpenseStates {}
 
-class ExpenseNotReject extends ExpenseStates {
+class ExpenseNotRejected extends ExpenseStates {
   final String errorMessage;
 
-  ExpenseNotReject({required this.errorMessage});
+  ExpenseNotRejected({required this.errorMessage});
 }

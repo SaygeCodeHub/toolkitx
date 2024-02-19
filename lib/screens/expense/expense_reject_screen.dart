@@ -43,7 +43,7 @@ class ExpenseRejectScreen extends StatelessWidget {
               listener: (context, state) {
                 if (state is RejectingExpense) {
                   ProgressBar.show(context);
-                } else if (state is ExpenseReject) {
+                } else if (state is ExpenseRejected) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(
                       context, StringConstants.kExpenseReportRejected, '');
@@ -52,7 +52,7 @@ class ExpenseRejectScreen extends StatelessWidget {
                   Navigator.pushReplacementNamed(
                       context, ExpenseListScreen.routeName,
                       arguments: false);
-                } else if (state is ExpenseNotReject) {
+                } else if (state is ExpenseNotRejected) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
                 }
