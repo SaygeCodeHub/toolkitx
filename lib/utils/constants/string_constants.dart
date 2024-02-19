@@ -508,7 +508,7 @@ abstract class StringConstants {
   static const String kWorkorder = "Workorder";
   static const String kAreYouSureToReject = "Are you sure to reject?";
   static const String kRequestRejected = "Request Rejected";
-  static const String kFetchedCode = "Fetched Code :";
+  static const String kPleaseEnterYourAnswer50Bis200 = 'Please enter your answer between 50 bis 200';
   static const String kAreYouSureToCloseDocument =
       'Are you sure you want to close this document management ? ';
   static const String kDocumentManagement = 'Document Management';
