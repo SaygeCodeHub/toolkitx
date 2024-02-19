@@ -145,7 +145,7 @@ class LeavesAndHolidaysBloc
       SelectTimeSheetWorkingAtNumber event,
       Emitter<LeavesAndHolidaysStates> emit) {
     if (timeSheetWorkingAtNumberMap.isNotEmpty) {
-      for (int j = 0; j < timeSheetWorkingAtNumberMap.values.length; j++) {
+      for (int j = 0; j < timeSheetWorkingAtNumberMap.values.length - 1; j++) {
         TimSheetWorkingAtNumberListTile.workingAtNumberMap = {
           "working_at_number_id":
               timeSheetWorkingAtNumberMap.values.elementAt(j),
@@ -318,7 +318,9 @@ class LeavesAndHolidaysBloc
         "breakmins": event.saveTimeSheetMap['breakmins'],
         "description": event.saveTimeSheetMap['description'],
         "userid": userId,
-        "id": "",
+        "id": (AddAndEditTimeSheetScreen.isFromEdit == true)
+            ? event.saveTimeSheetMap['id'] ?? ''
+            : '',
         "hashcode": hashCode
       };
       SaveTimeSheetModel saveTimeSheetModel =

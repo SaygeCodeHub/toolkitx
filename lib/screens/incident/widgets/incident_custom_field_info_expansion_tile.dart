@@ -34,7 +34,9 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                     : addAndEditIncidentMap['optionIds'][index]['optionId']
                         .toString()));
     String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
-            addAndEditIncidentMap['customfields'].isEmpty)
+                addAndEditIncidentMap['customfields'].isEmpty) ||
+            (addAndEditIncidentMap['customfields'][index]['value'] == null ||
+                addAndEditIncidentMap['customfields'].isEmpty)
         ? ""
         : addAndEditIncidentMap['customfields'][index]['value'];
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(

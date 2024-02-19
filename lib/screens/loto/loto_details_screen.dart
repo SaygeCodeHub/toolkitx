@@ -27,7 +27,7 @@ class LotoDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoDetailsBloc>().add(FetchLotoDetails(lotTabIndex: 0));
+    context.read<LotoDetailsBloc>().add(FetchLotoDetails(lotoTabIndex: 0));
     return Scaffold(
         appBar: GenericAppBar(actions: [
           BlocBuilder<LotoDetailsBloc, LotoDetailsState>(

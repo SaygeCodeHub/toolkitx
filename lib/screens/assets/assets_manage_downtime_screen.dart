@@ -9,7 +9,6 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
 import '../../utils/database_utils.dart';
-import '../../widgets/generic_no_records_text.dart';
 import 'widgets/assets_manage_downtime_body.dart';
 
 class AssetsManageDownTimeScreen extends StatelessWidget {
@@ -20,9 +19,6 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pageNo = 1;
-    context.read<AssetsBloc>().hasDowntimeReachedMax = false;
-    context.read<AssetsBloc>().assetsDowntimeDatum = [];
     context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
         assetId: context.read<AssetsBloc>().assetId, pageNo: pageNo));
     return Scaffold(
@@ -50,11 +46,6 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                 bottom: leftRightMargin),
             child: BlocConsumer<AssetsBloc, AssetsState>(
                 listener: (context, state) {
-                  if (state is AssetsGetDownTimeFetched &&
-                      context.read<AssetsBloc>().hasDowntimeReachedMax) {
-                    showCustomSnackBar(
-                        context, StringConstants.kAllDataLoaded, '');
-                  }
                   if (state is AssetsDownTimeDeleting) {
                     ProgressBar.show(context);
                   } else if (state is AssetsDownTimeDeleted) {
@@ -70,25 +61,23 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                   }
                 },
                 buildWhen: (previousState, currentState) =>
-                    (currentState is AssetsGetDownTimeFetching &&
-                        pageNo == 1) ||
-                    currentState is AssetsGetDownTimeFetched,
+                    currentState is AssetsGetDownTimeFetching ||
+                    currentState is AssetsGetDownTimeFetched ||
+                    currentState is AssetsGetDownTimeError,
                 builder: (context, state) {
                   if (state is AssetsGetDownTimeFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is AssetsGetDownTimeFetched) {
-                    if (state.assetDowntimeDatum.isNotEmpty) {
-                      return AssetsManageDowntimeBody(
-                        assetDowntimeDatum: state.assetDowntimeDatum,
-                        assetsPopUpMenu: state.assetsPopUpMenu,
-                      );
-                    } else {
-                      return NoRecordsText(
-                          text: DatabaseUtil.getText('no_records_found'));
-                    }
-                  } else {
-                    return const SizedBox.shrink();
+                    return AssetsManageDowntimeBody(
+                      assetDowntimeDatum: state.fetchAssetsDowntimeModel.data,
+                      assetsPopUpMenu: state.assetsPopUpMenu,
+                    );
+                  } else if (state is AssetsGetDownTimeError) {
+                    return Center(
+                      child: Text(DatabaseUtil.getText('No records found')),
+                    );
                   }
+                  return const SizedBox.shrink();
                 })));
   }
 }
