@@ -27,56 +27,56 @@ class ExpenseRejectScreen extends StatelessWidget {
     return Scaffold(
         appBar: const GenericAppBar(),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(leftRightMargin),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: DatabaseUtil.getText("Cancel")),
-            ),
-            const SizedBox(width: xxTinierSpacing),
-            Expanded(
-                child: BlocListener<ExpenseBloc, ExpenseStates>(
-              listener: (context, state) {
-                if (state is RejectingExpense) {
-                  ProgressBar.show(context);
-                } else if (state is ExpenseRejected) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(
-                      context, StringConstants.kExpenseReportRejected, '');
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pushReplacementNamed(
-                      context, ExpenseListScreen.routeName,
-                      arguments: false);
-                } else if (state is ExpenseNotRejected) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, state.errorMessage, '');
-                }
-              },
-              child: PrimaryButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AndroidPopUp(
-                        titleValue: DatabaseUtil.getText('ExpenseReport'),
-                        contentValue:
-                            DatabaseUtil.getText('RejectExpenseReport'),
-                        onPrimaryButton: () {
-                          context
-                              .read<ExpenseBloc>()
-                              .add(RejectExpense(comments: comment));
+            padding: const EdgeInsets.all(leftRightMargin),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                      ),
-                    );
-                  },
-                  textValue: DatabaseUtil.getText("Reject")),
-            )),
-          ]),
-        ),
+                        textValue: DatabaseUtil.getText("Cancel")),
+                  ),
+                  const SizedBox(width: xxTinierSpacing),
+                  Expanded(
+                      child: BlocListener<ExpenseBloc, ExpenseStates>(
+                    listener: (context, state) {
+                      if (state is RejectingExpense) {
+                        ProgressBar.show(context);
+                      } else if (state is ExpenseRejected) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context,
+                            StringConstants.kExpenseReportRejected, '');
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, ExpenseListScreen.routeName,
+                            arguments: false);
+                      } else if (state is ExpenseNotRejected) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context, state.errorMessage, '');
+                      }
+                    },
+                    child: PrimaryButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AndroidPopUp(
+                              titleValue: DatabaseUtil.getText('ExpenseReport'),
+                              contentValue:
+                                  DatabaseUtil.getText('RejectExpenseReport'),
+                              onPrimaryButton: () {
+                                context
+                                    .read<ExpenseBloc>()
+                                    .add(RejectExpense(comments: comment));
+                              },
+                            ),
+                          );
+                        },
+                        textValue: DatabaseUtil.getText("Reject")),
+                  )),
+                ])),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
