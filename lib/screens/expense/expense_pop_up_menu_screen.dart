@@ -55,7 +55,7 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('approve')) {
+        if (value == DatabaseUtil.getText('ApproveReport')) {
           showDialog(
               context: context,
               builder: (context) {
@@ -67,7 +67,7 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('Close')) {
+        if (value == DatabaseUtil.getText('CloseReport')) {
           showDialog(
               context: context,
               builder: (context) {
