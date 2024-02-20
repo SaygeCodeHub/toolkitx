@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
 
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
@@ -163,6 +164,21 @@ class AttachDocumentsError extends DocumentsStates {
   const AttachDocumentsError({required this.message});
 }
 
+class DocumentFileVersionUploading extends DocumentsStates {}
+
+class DocumentFileVersionUploaded extends DocumentsStates {
+  final DocumentUploadFileVersionModel documentUploadFileVersionModel;
+
+  const DocumentFileVersionUploaded(
+      {required this.documentUploadFileVersionModel});
+}
+
+class DocumentFileVersionNotUploaded extends DocumentsStates {
+  final String errorMessage;
+
+  const DocumentFileVersionNotUploaded({required this.errorMessage});
+}
+
 class DeletingDocuments extends DocumentsStates {
   const DeletingDocuments();
 }
@@ -177,4 +193,88 @@ class DeleteDocumentsError extends DocumentsStates {
   final String message;
 
   const DeleteDocumentsError({required this.message});
+}
+
+class OpeningDocumentsForInformation extends DocumentsStates {
+  const OpeningDocumentsForInformation();
+}
+
+class DocumentOpenedForInformation extends DocumentsStates {
+  final PostDocumentsModel postDocumentsModel;
+
+  const DocumentOpenedForInformation({required this.postDocumentsModel});
+}
+
+class OpenDocumentsForInformationError extends DocumentsStates {
+  final String message;
+
+  const OpenDocumentsForInformationError({required this.message});
+}
+
+class OpeningDocumentsForReview extends DocumentsStates {
+  const OpeningDocumentsForReview();
+}
+
+class DocumentOpenedForReview extends DocumentsStates {}
+
+class OpenDocumentsForReviewError extends DocumentsStates {
+  final String message;
+
+  const OpenDocumentsForReviewError({required this.message});
+}
+
+class ApprovingDocuments extends DocumentsStates {
+  const ApprovingDocuments();
+}
+
+class DocumentsApproved extends DocumentsStates {}
+
+class ApproveDocumentsError extends DocumentsStates {
+  final String message;
+
+  const ApproveDocumentsError({required this.message});
+}
+
+class RejectingDocuments extends DocumentsStates {}
+
+class DocumentsRejected extends DocumentsStates {}
+
+class RejectDocumentsError extends DocumentsStates {
+  final String message;
+
+  const RejectDocumentsError({required this.message});
+}
+
+class WithdrawingDocuments extends DocumentsStates {
+  const WithdrawingDocuments();
+}
+
+class DocumentsWithdrawn extends DocumentsStates {}
+
+class WithdrawDocumentsError extends DocumentsStates {
+  final String message;
+
+  const WithdrawDocumentsError({required this.message});
+}
+
+class ClosingDocuments extends DocumentsStates {}
+
+class DocumentsClosed extends DocumentsStates {}
+
+class CloseDocumentsError extends DocumentsStates {
+  final String message;
+
+  const CloseDocumentsError({required this.message});
+}
+
+class SavingDocumentComments extends DocumentsStates {
+  const SavingDocumentComments();
+}
+
+class DocumentCommentsSaved extends DocumentsStates {}
+
+class SaveDocumentCommentsError extends DocumentsStates {
+  final String errorMessage;
+
+  const SaveDocumentCommentsError({required this.errorMessage});
 }

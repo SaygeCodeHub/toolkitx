@@ -55,7 +55,7 @@ class WorkForceListScreen extends StatelessWidget {
                                           .copyWith(
                                               fontWeight: FontWeight.w500,
                                               color: AppColor.black)),
-                                  const SizedBox(height: tinierSpacing),
+                                  const SizedBox(width: tiniestSpacing),
                                   Visibility(
                                       visible: state.workforceGetCheckListModel
                                               .data![index].isdraft ==
@@ -111,7 +111,7 @@ class WorkForceListScreen extends StatelessWidget {
                                   ]),
                             ),
                             onTap: () {
-                              Map checklistDataMap = {
+                              context.read<WorkForceListBloc>().checkListMap = {
                                 "scheduleId": state.workforceGetCheckListModel
                                     .data![index].scheduleid
                                     .toString(),
@@ -122,9 +122,14 @@ class WorkForceListScreen extends StatelessWidget {
                                 "isRejected": state.workforceGetCheckListModel
                                     .data![index].isrejected
                               };
-                              Navigator.pushNamed(
-                                  context, WorkForceQuestionsScreen.routeName,
-                                  arguments: checklistDataMap);
+                              Navigator.pushNamed(context,
+                                      WorkForceQuestionsScreen.routeName,
+                                      arguments: context
+                                          .read<WorkForceListBloc>()
+                                          .checkListMap)
+                                  .then((value) => context
+                                      .read<WorkForceListBloc>()
+                                      .add(FetchWorkForceList()));
                             }),
                       ));
                     },

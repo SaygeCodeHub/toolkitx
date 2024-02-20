@@ -59,11 +59,6 @@ class WorkForceListSection extends StatelessWidget {
                                             .copyWith(
                                                 fontWeight: FontWeight.w500,
                                                 color: AppColor.black)),
-                                    FetchPdfSection(
-                                        responseId: context
-                                            .read<
-                                                CheckListScheduleDatesResponseBloc>()
-                                            .responseId),
                                   ],
                                 ),
                                 subtitle: Padding(
@@ -88,7 +83,12 @@ class WorkForceListSection extends StatelessWidget {
                                                     .approvalstatus ==
                                                 1,
                                             child: Text(DatabaseUtil.getText(
-                                                'Approved')))
+                                                'Approved'))),
+                                        FetchPdfSection(
+                                            responseId: state
+                                                .checkListWorkforceListModel
+                                                .data![index]
+                                                .responseid),
                                       ]),
                                 ),
                                 trailing: Visibility(
@@ -99,7 +99,7 @@ class WorkForceListSection extends StatelessWidget {
                                             .isNotEmpty &&
                                         state.checkListWorkforceListModel
                                                 .data![index].isdeptapprove ==
-                                            "0",
+                                            "1",
                                     child: Checkbox(
                                         value: state.selectedIResponseIdList
                                             .contains(state

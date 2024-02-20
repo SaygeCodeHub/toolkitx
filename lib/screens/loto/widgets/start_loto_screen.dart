@@ -54,6 +54,7 @@ class StartLotoScreen extends StatelessWidget {
                             ProgressBar.show(context);
                           } else if (state is LotoStarted) {
                             ProgressBar.dismiss(context);
+                            Navigator.pop(context);
                             showCustomSnackBar(
                                 context, StringConstants.kLotoStarted, '');
                           } else if (state is LotoNotStarted) {
@@ -64,6 +65,7 @@ class StartLotoScreen extends StatelessWidget {
                             ProgressBar.show(context);
                           } else if (state is LotoRemoveStarted) {
                             ProgressBar.dismiss(context);
+                            Navigator.pop(context);
                             showCustomSnackBar(context,
                                 StringConstants.kLotoRemoveStarted, '');
                           } else if (state is LotoRemoveNotStarted) {
