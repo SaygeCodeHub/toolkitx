@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -22,11 +24,13 @@ import 'workorder_form_one_screen.dart';
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
   final List popUpMenuOptions;
   final Map workOrderDetailsMap;
+  final String workOrderId;
 
   const WorkOrderPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuOptions,
-      required this.workOrderDetailsMap})
+      required this.workOrderDetailsMap,
+      required this.workOrderId})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -37,6 +41,7 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('id==========>$workOrderId');
     context.read<WorkOrderBloc>().add(FetchWorkOrderMaster());
     return PopupMenuButton(
       shape: RoundedRectangleBorder(
@@ -49,13 +54,18 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderFormScreenOne.isSimilarWorkOrder = true;
           WorkOrderFormScreenOne.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-              arguments: workOrderDetailsMap);
+                  arguments: workOrderDetailsMap)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(
+                      initialTabIndex: 0, workOrderId: workOrderId)));
         }
         if (value == DatabaseUtil.getText('Edit')) {
           WorkOrderFormScreenOne.isFromEdit = true;
-
           Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-              arguments: workOrderDetailsMap);
+                  arguments: workOrderDetailsMap)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(
+                      initialTabIndex: 0, workOrderId: workOrderId)));
         }
         if (value == DatabaseUtil.getText('AddMiscCost')) {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
@@ -125,7 +135,10 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           AssignWorkForceBody.assignWorkForceMap['workorderId'] =
               workOrderDetailsMap['workorderId'] ?? '';
           context.read<WorkOrderTabDetailsBloc>().assignWorkForceDatum = [];
-          Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
+          Navigator.pushNamed(context, AssignWorkForceScreen.routeName).then(
+              (_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(
+                      initialTabIndex: 0, workOrderId: workOrderId)));
         }
         if (value == DatabaseUtil.getText('AddParts')) {
           context.read<WorkOrderTabDetailsBloc>().addPartsDatum = [];

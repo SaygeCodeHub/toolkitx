@@ -547,7 +547,7 @@ class Workforce {
   final String name;
   final String jobTitle;
   final String certificatecode;
-  final int plannedhrs;
+  final dynamic plannedhrs;
   final dynamic actualhrs;
 
   Workforce({

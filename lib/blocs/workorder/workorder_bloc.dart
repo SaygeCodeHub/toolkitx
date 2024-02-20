@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
@@ -50,6 +51,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
     emit(FetchingWorkOrders());
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      log('hashCode=====================>$hashCode');
       if (!hasReachedMax) {
         if (event.isFromHome == true) {
           add(WorkOrderClearFilter());

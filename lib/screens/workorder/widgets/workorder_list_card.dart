@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import '../../../blocs/workorder/workorder_bloc.dart';
+import '../../../blocs/workorder/workorder_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -25,9 +28,9 @@ class WorkOrderListCard extends StatelessWidget {
           };
           WorkOrderDetailsTabScreen.workOrderMap = workOrderMap;
           Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName)
-              .then((value) => Navigator.pushReplacementNamed(
-                  context, WorkOrderListScreen.routeName,
-                  arguments: false));
+              .then((value) => context
+                  .read<WorkOrderBloc>()
+                  .add(FetchWorkOrders(pageNo: 1, isFromHome: false)));
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(

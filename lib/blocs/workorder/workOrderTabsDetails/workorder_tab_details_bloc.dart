@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -124,6 +125,8 @@ class WorkOrderTabDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? getClientId =
           await _customerCache.getClientId(CacheKeys.clientId);
+      log('clientId=====================>$getClientId');
+      log('woId=====================>${event.workOrderId}');
       clientId = getClientId!;
       popUpMenuItemsList = [
         DatabaseUtil.getText('Edit'),
@@ -137,6 +140,7 @@ class WorkOrderTabDetailsBloc
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
               hashCode!, event.workOrderId);
+
       tabIndex = event.initialTabIndex;
       if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
         popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
@@ -154,7 +158,7 @@ class WorkOrderTabDetailsBloc
         popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
       }
       if (fetchWorkOrderDetailsModel.data.ishold == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Hold'));
+        popUpMenuItemsList.insert(7, DatabaseUtil.getText('Hold'));
       }
       List customFieldList = [];
       for (int i = 0;
