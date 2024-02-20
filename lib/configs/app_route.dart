@@ -143,7 +143,7 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/workorder_add_parts_screen.dart';
-import '../screens/workorder/start_workorder_screen.dart';
+import '../screens/workorder/start_and_complete_workorder_screen.dart';
 import '../screens/workorder/workorder_add_comments_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
@@ -365,8 +365,10 @@ class AppRoutes {
             getdetailsMap: settings.arguments as Map));
       case WorkOrderAddMisCostScreen.routeName:
         return _createRoute(const WorkOrderAddMisCostScreen());
-      case StartWorkOrderScreen.routeName:
-        return _createRoute(const StartWorkOrderScreen());
+      case StartAndCompleteWorkOrderScreen.routeName:
+        return _createRoute(StartAndCompleteWorkOrderScreen(
+          isFromStart: settings.arguments as bool,
+        ));
       case GetWorkforceScreen.routeName:
         return _createRoute(
             GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));

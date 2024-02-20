@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 
 import '../../data/models/workorder/assign_workforce_model.dart';
+import '../../data/models/workorder/complete_workOrder_model.dart';
 import '../../data/models/workorder/delete_document_model.dart';
 import '../../data/models/workorder/delete_item_tab_item_model.dart';
 import '../../data/models/workorder/delete_workorder_single_misc_cost_model.dart';
@@ -88,4 +89,6 @@ abstract class WorkOrderRepository {
       String hashCode, String misCostId);
 
   Future<WorkorderAssignItemModel> workorderAssignItem(Map assignPartMap);
+
+  Future<CompleteWorkOrderModel> completeWorkOrder(Map completeWorkOrderMap);
 }

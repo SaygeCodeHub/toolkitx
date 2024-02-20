@@ -476,3 +476,13 @@ class WorkOrderPartsNotAssigned extends WorkOrderTabDetailsStates {
 
   WorkOrderPartsNotAssigned({required this.errorMessage});
 }
+
+class WorkOrderCompleting extends WorkOrderTabDetailsStates {}
+
+class WorkOrderCompleted extends WorkOrderTabDetailsStates {}
+
+class WorkOrderNotCompleted extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderNotCompleted({required this.errorMessage});
+}
