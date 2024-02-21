@@ -679,12 +679,10 @@ class WorkOrderTabDetailsBloc
                 event.workOrderWorkforceName);
         pageNo = event.pageNo;
         workOrderWorkforceName = event.workOrderWorkforceName;
-        assignWorkForceDatum.clear();
         assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
         assignWorkForceListReachedMax = fetchAssignWorkForceModel.data.isEmpty;
         emit(AssignWorkOrderFetched(
-            fetchAssignWorkForceModel: fetchAssignWorkForceModel,
-            assignWorkForceDatum: assignWorkForceDatum));
+            fetchAssignWorkForceModel: fetchAssignWorkForceModel));
       }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));
@@ -701,7 +699,6 @@ class WorkOrderTabDetailsBloc
             await _workOrderRepository.fetchAssignPartsModel(
                 event.pageNo, hashCode!, event.workOrderId, event.partName);
         pageNo = event.pageNo;
-        workOrderId = event.workOrderId;
         partName = event.partName;
         addPartsDatum.addAll(fetchAssignPartsModel.data);
         docListReachedMax = fetchAssignPartsModel.data.isEmpty;

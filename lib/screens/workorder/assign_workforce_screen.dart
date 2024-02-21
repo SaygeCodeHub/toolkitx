@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -25,8 +27,9 @@ class AssignWorkForceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('inside build================>');
     context.read<WorkOrderTabDetailsBloc>().add(FetchAssignWorkForceList(
-        pageNo: 1,
+        pageNo: pageNo,
         workOrderWorkforceName: '',
         workOrderId: context.read<WorkOrderBloc>().workOrderId));
     context.read<WorkOrderTabDetailsBloc>().assignWorkForceListReachedMax =
@@ -71,6 +74,7 @@ class AssignWorkForceScreen extends StatelessWidget {
                                               '') {
                                         isWorkforceSearched =
                                             !isWorkforceSearched;
+                                        AssignWorkForceBody.isFirst = true;
                                         pageNo = 1;
                                         context
                                             .read<WorkOrderTabDetailsBloc>()
