@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
+import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
+import 'package:toolkit/screens/chatBox/fetch_employees_screen.dart';
+import 'package:toolkit/screens/chatBox/new_chat_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
@@ -531,10 +534,16 @@ class AppRoutes {
             requestId: settings.arguments.toString()));
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
+      case FetchEmployeesScreen.routeName:
+        return _createRoute(FetchEmployeesScreen());
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
         return _createRoute(const OpenDocumentForReviewScreen());
+      case NewChatScreen.routeName:
+        return _createRoute(const NewChatScreen());
+      case ChatBoxScreen.routeName:
+        return _createRoute(const ChatBoxScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

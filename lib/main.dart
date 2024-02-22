@@ -11,6 +11,7 @@ import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.
 import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
+import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
@@ -205,6 +206,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
           BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
           BlocProvider(lazy: true, create: (context) => AssetsBloc()),
+          BlocProvider(lazy: true, create: (context) => ChatBoxBloc()),
           BlocProvider(
               lazy: false, create: (context) => EquipmentTraceabilityBloc()),
         ],

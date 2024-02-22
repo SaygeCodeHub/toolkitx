@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -41,12 +43,13 @@ class _RootScreenState extends State<RootScreen> {
     HomeScreen(),
     Text('Index 1: Location'),
     Text('Index 2: Notification'),
-    Text('Index 3: Chat'),
+    ChatBoxScreen(),
     ProfileScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
+    context.read<ChatBoxBloc>().chatsList.clear();
     return Scaffold(
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar:

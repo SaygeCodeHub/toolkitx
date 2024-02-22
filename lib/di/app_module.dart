@@ -5,6 +5,8 @@ import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
+import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
+import 'package:toolkit/repositories/chatBox/chat_box_repository_impl.dart';
 import 'package:toolkit/repositories/documents/documents_repository.dart';
 import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
@@ -15,6 +17,7 @@ import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
+import 'package:toolkit/utils/chat_database_util.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
@@ -97,6 +100,9 @@ configurableDependencies() {
       () => DocumentsRepositoryImpl());
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
+  getIt
+      .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
+  getIt.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
