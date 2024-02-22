@@ -75,7 +75,7 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
                 contentValue: StringConstants.kAreYouSureToCloseDocument,
                 onPrimaryButton: () {
                   context.read<DocumentsBloc>().add(CloseDocument());
-                },
+                }
               ),
             );
           } else if (popUpMenuItems[value] ==
