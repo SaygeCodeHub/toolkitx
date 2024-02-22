@@ -1,5 +1,5 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:shimmer/shimmer.dart';
@@ -13,7 +13,7 @@ import 'generic_alphanumeric_generator_util.dart';
 
 class CertificateNotesTypeUtil {
 
-  Widget fetchSwitchCaseWidget(type, data, htmlText,link,customVideoPlayerController) {
+  Widget fetchSwitchCaseWidget(type, data, htmlText,link) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -50,7 +50,9 @@ class CertificateNotesTypeUtil {
       case '2':
         return Column(
           children: [
-            CustomVideoPlayer(customVideoPlayerController: customVideoPlayerController),
+            // Chewie(
+            //   controller: _chewieController,
+            // )
           ],
         );
       case '3':

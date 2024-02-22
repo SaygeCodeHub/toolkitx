@@ -1,12 +1,13 @@
 import 'dart:developer';
 
-import 'package:appinio_video_player/appinio_video_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/utils/certificate_notes_type_util.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../utils/constants/api_constants.dart';
 
@@ -23,7 +24,7 @@ class GetNotesCertificateBody extends StatefulWidget {
 }
 
 class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
-  late CustomVideoPlayerController customVideoPlayerController;
+  final
   Uri videoUrl = Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
 
   @override
@@ -40,12 +41,12 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
   }
 
   void initializeVideoPlayer() {
-    VideoPlayerController videoPlayerController;
-    videoPlayerController = VideoPlayerController.networkUrl(videoUrl)
-      ..initialize().then((value) {
-        // setState(() {});
-      });
-    customVideoPlayerController = CustomVideoPlayerController(context: context, videoPlayerController: videoPlayerController);
+    // VideoPlayerController videoPlayerController;
+    // videoPlayerController = VideoPlayerController.networkUrl(videoUrl)
+    //   ..initialize().then((value) {
+    //     // setState(() {});
+    //   });
+    // customVideoPlayerController = CustomVideoPlayerController(context: context, videoPlayerController: videoPlayerController);
   }
 
   @override
@@ -56,10 +57,10 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
 
   @override
   Widget build(BuildContext context) {
-    // log("${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
+    log("${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
     var link =
         '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
-    // log("link=======>${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
+    log("link=======>${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}");
     var unescape = HtmlUnescape();
     var htmlText = unescape.convert(widget.data.description);
     return Expanded(
@@ -68,9 +69,9 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // CertificateNotesTypeUtil().fetchSwitchCaseWidget(widget.data.type,
-          //     widget.data, htmlText, link, customVideoPlayerController)
-          CustomVideoPlayer(customVideoPlayerController: customVideoPlayerController),
+          CertificateNotesTypeUtil().fetchSwitchCaseWidget(widget.data.type,
+              widget.data, htmlText, link)
+          // CustomVideoPlayer(customVideoPlayerController: customVideoPlayerController),
         ],
       ),
     );

@@ -27,63 +27,80 @@ class CertificateListCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: tinierSpacing),
             child: Column(children: [
               ListTile(
-                title: Text(data.name,
-                    style: Theme.of(context).textTheme.small.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColor.black)),
-                subtitle: const Text(StringConstants.kNotAvailable),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(data.name,
+                      style: Theme.of(context).textTheme.small.copyWith(
+                          fontWeight: FontWeight.w500, color: AppColor.black)),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(StringConstants.kNotAvailable),
+                    const SizedBox(height: xxxTinierSpacing),
+                    Visibility(
+                      visible: data.status == 1,
+                      child: Card(
+                        color: AppColor.lightGrey,
+                          child: Padding(
+                        padding: const EdgeInsets.all(tiniestSpacing),
+                        child: Text(StringConstants.kApprovalPending,
+                            style: Theme.of(context).textTheme.xxSmall.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.black)),
+                      )),
+                    )
+                  ],
+                ),
                 trailing: Image.asset('assets/icons/certificate.png',
                     height: kImageHeight, width: kImageWidth),
               ),
-              const Divider(
-                color: AppColor.lightestGrey
-              ),
+              const Divider(color: AppColor.lightestGrey),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 Expanded(
                     child: CustomTextButton(
-                        onPressed: () {
-                          Map certificateMap = {
-                            "title": data.name,
-                            "id": data.id
-                          };
-
-                          if (context
-                                  .read<CertificateListBloc>()
-                                  .fetchCertificateDetailsModel
-                                  .data
-                                  ?.status ==
-                              "1") {
-                            Navigator.pushNamed(
-                                context, GetCertificateDetailsScreen.routeName,
-                                arguments: certificateMap);
-                          } else {
-                            Navigator.pushNamed(
-                                context, UploadCertificateScreen.routeName,
-                                arguments: certificateMap);
-                          }
-                        },
-                        textValue: StringConstants.kUpload)),
+                  onPressed: () {
+                    Map certificateMap = {"title": data.name, "id": data.id};
+                    if (data.status == 1) {
+                      Navigator.pushNamed(
+                          context, GetCertificateDetailsScreen.routeName,
+                          arguments: certificateMap);
+                    } else {
+                      Navigator.pushNamed(
+                          context, UploadCertificateScreen.routeName,
+                          arguments: certificateMap);
+                    }
+                  },
+                  textValue: StringConstants.kUpload,
+                  textColor:
+                      data.status != "1" ? AppColor.deepBlue : AppColor.grey,
+                )),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed:data
-                            .expired ==
-                            "1" ? () {} : null,
-                        textValue: StringConstants.kDownload)),
+                  onPressed: data.expired == "1" ? () {} : null,
+                  textValue: StringConstants.kDownload,
+                  textColor:
+                      data.expired == "1" ? AppColor.deepBlue : AppColor.grey,
+                )),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed:
-                            data
-                            .accesscertificate !=
-                            "1" ? () {
+                  onPressed: data.accesscertificate != "1"
+                      ? () {
                           String certificateId = data.id;
                           Navigator.pushNamed(
                               context, GetCourseCertificateScreen.routeName,
                               arguments: certificateId);
-                        } : null,
-                        textValue: StringConstants.kStartCourse)),
+                        }
+                      : null,
+                  textValue: StringConstants.kStartCourse,
+                  textColor: data.accesscertificate == "1"
+                      ? AppColor.deepBlue
+                      : AppColor.grey,
+                )),
                 Expanded(
                     child: CustomTextButton(
-                        onPressed: data.accessfeedback ==
-                            "1" ? () {
+                  onPressed: data.accessfeedback == "1"
+                      ? () {
                           Map certificateMap = {
                             "title": data.name,
                             "id": data.id
@@ -91,8 +108,13 @@ class CertificateListCard extends StatelessWidget {
                           Navigator.pushNamed(
                               context, FeedbackCertificateScreen.routeName,
                               arguments: certificateMap);
-                        } : null,
-                        textValue: StringConstants.kFeedback))
+                        }
+                      : null,
+                  textValue: StringConstants.kFeedback,
+                  textColor: data.accessfeedback == "1"
+                      ? AppColor.deepBlue
+                      : AppColor.grey,
+                ))
               ])
             ])));
   }
