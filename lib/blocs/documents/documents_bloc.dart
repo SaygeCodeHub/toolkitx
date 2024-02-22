@@ -377,14 +377,18 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         "duedate": event.dueDate,
         "userid": userId
       };
-      PostDocumentsModel postDocumentsModel = await _documentsRepository
-          .openDocumentFopReview(openDocumentFopInformationMap);
-      if (postDocumentsModel.message == '1') {
-        emit(DocumentOpenedForReview());
+      if(event.dueDate.isEmpty || event.dueDate == ''){
+        emit(const OpenDocumentsForReviewError(message: 'Please select date'));
       } else {
-        emit(OpenDocumentsForReviewError(
-            message:
-                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        PostDocumentsModel postDocumentsModel = await _documentsRepository
+            .openDocumentFopReview(openDocumentFopInformationMap);
+        if (postDocumentsModel.message == '1') {
+          emit(DocumentOpenedForReview());
+        } else {
+          emit(OpenDocumentsForReviewError(
+              message:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       }
     } catch (e) {
       emit(OpenDocumentsForReviewError(message: e.toString()));

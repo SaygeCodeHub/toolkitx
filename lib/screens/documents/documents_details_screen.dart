@@ -32,145 +32,153 @@ class DocumentsDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     defaultIndex = 0;
     context.read<DocumentsBloc>().add(const GetDocumentsDetails());
-    return Scaffold(
-        appBar: GenericAppBar(actions: [
-          BlocBuilder<DocumentsBloc, DocumentsStates>(
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        context.read<DocumentsBloc>().add(
+            (GetDocumentsList(
+                page: 1, isFromHome: false)));
+      },
+      child: Scaffold(
+          appBar: GenericAppBar(actions: [
+            BlocBuilder<DocumentsBloc, DocumentsStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is DocumentsDetailsFetched,
+                builder: (context, state) {
+                  if (state is DocumentsDetailsFetched) {
+                    return DocumentsDetailsPopUpMenu(
+                        popUpMenuItems: state.documentsPopUpMenu,
+                        documentDetailsModel: state.documentDetailsModel);
+                  } else {
+                    return const SizedBox();
+                  }
+                })
+          ]),
+          body: BlocConsumer<DocumentsBloc, DocumentsStates>(
+              listener: (context, state) {
+                if (state is DeletingDocuments) {
+                  ProgressBar.show(context);
+                }
+                if (state is DocumentsDeleted) {
+                  ProgressBar.dismiss(context);
+                  context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+                }
+                if (state is DeleteDocumentsError) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.message, '');
+                }
+                if (state is OpeningDocumentsForInformation) {
+                  ProgressBar.show(context);
+                }
+                if (state is DocumentOpenedForInformation) {
+                  ProgressBar.dismiss(context);
+                  context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+                }
+                if (state is OpenDocumentsForInformationError) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.message, '');
+                }
+                if (state is WithdrawingDocuments) {
+                  ProgressBar.show(context);
+                }
+                if (state is DocumentsWithdrawn) {
+                  ProgressBar.dismiss(context);
+                  context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+                }
+                if (state is WithdrawDocumentsError) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.message, '');
+                }
+                if (state is ClosingDocuments) {
+                  ProgressBar.show(context);
+                }
+                if (state is DocumentsClosed) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  context
+                      .read<DocumentsBloc>()
+                      .add(GetDocumentsList(page: 1, isFromHome: false));
+                }
+                if (state is CloseDocumentsError) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.message, '');
+                }
+              },
               buildWhen: (previousState, currentState) =>
-                  currentState is DocumentsDetailsFetched,
+                  currentState is FetchingDocumentsDetails ||
+                  currentState is DocumentsDetailsFetched ||
+                  currentState is DocumentsDetailsError,
               builder: (context, state) {
-                if (state is DocumentsDetailsFetched) {
-                  return DocumentsDetailsPopUpMenu(
-                      popUpMenuItems: state.documentsPopUpMenu,
-                      documentDetailsModel: state.documentDetailsModel);
+                if (state is FetchingDocumentsDetails) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is DocumentsDetailsFetched) {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: leftRightMargin,
+                          right: leftRightMargin,
+                          top: xxTinierSpacing),
+                      child: Column(children: [
+                        Card(
+                            color: AppColor.white,
+                            elevation: kCardElevation,
+                            child: ListTile(
+                                title: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: xxTinierSpacing),
+                                    child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                              child: Text(state
+                                                  .documentDetailsModel
+                                                  .data
+                                                  .name)),
+                                          StatusTag(tags: [
+                                            StatusTagModel(
+                                                title: state.documentDetailsModel
+                                                    .data.statustext,
+                                                bgColor: AppColor.deepBlue)
+                                          ])
+                                        ])))),
+                        const SizedBox(height: xxTinierSpacing),
+                        const Divider(
+                            height: kDividerHeight, thickness: kDividerWidth),
+                        const SizedBox(height: xxTinierSpacing),
+                        CustomTabBarView(
+                            lengthOfTabs: 6,
+                            tabBarViewIcons: DocumentsUtil().tabBarViewIcons,
+                            initialIndex: defaultIndex,
+                            tabBarViewWidgets: [
+                              DocumentDetails(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel),
+                              DocumentDetailsFiles(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel,
+                                  clientId: state.clientId),
+                              DocumentDetailsCustomFields(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel),
+                              DocumentCustomTimeline(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel),
+                              DocumentDetailsComments(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel,
+                                  clientId: state.clientId),
+                              DocumentDetailsLinkedDocs(
+                                  documentDetailsModel:
+                                      state.documentDetailsModel)
+                            ])
+                      ]));
                 } else {
                   return const SizedBox();
                 }
-              })
-        ]),
-        body: BlocConsumer<DocumentsBloc, DocumentsStates>(
-            listener: (context, state) {
-              if (state is DeletingDocuments) {
-                ProgressBar.show(context);
-              }
-              if (state is DocumentsDeleted) {
-                ProgressBar.dismiss(context);
-                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
-              }
-              if (state is DeleteDocumentsError) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(context, state.message, '');
-              }
-              if (state is OpeningDocumentsForInformation) {
-                ProgressBar.show(context);
-              }
-              if (state is DocumentOpenedForInformation) {
-                ProgressBar.dismiss(context);
-                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
-              }
-              if (state is OpenDocumentsForInformationError) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(context, state.message, '');
-              }
-              if (state is WithdrawingDocuments) {
-                ProgressBar.show(context);
-              }
-              if (state is DocumentsWithdrawn) {
-                ProgressBar.dismiss(context);
-                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
-              }
-              if (state is WithdrawDocumentsError) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(context, state.message, '');
-              }
-              if (state is ClosingDocuments) {
-                ProgressBar.show(context);
-              }
-              if (state is DocumentsClosed) {
-                ProgressBar.dismiss(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                context
-                    .read<DocumentsBloc>()
-                    .add(GetDocumentsList(page: 1, isFromHome: false));
-              }
-              if (state is CloseDocumentsError) {
-                ProgressBar.dismiss(context);
-                showCustomSnackBar(context, state.message, '');
-              }
-            },
-            buildWhen: (previousState, currentState) =>
-                currentState is FetchingDocumentsDetails ||
-                currentState is DocumentsDetailsFetched ||
-                currentState is DocumentsDetailsError,
-            builder: (context, state) {
-              if (state is FetchingDocumentsDetails) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is DocumentsDetailsFetched) {
-                return Padding(
-                    padding: const EdgeInsets.only(
-                        left: leftRightMargin,
-                        right: leftRightMargin,
-                        top: xxTinierSpacing),
-                    child: Column(children: [
-                      Card(
-                          color: AppColor.white,
-                          elevation: kCardElevation,
-                          child: ListTile(
-                              title: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: xxTinierSpacing),
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                            child: Text(state
-                                                .documentDetailsModel
-                                                .data
-                                                .name)),
-                                        StatusTag(tags: [
-                                          StatusTagModel(
-                                              title: state.documentDetailsModel
-                                                  .data.statustext,
-                                              bgColor: AppColor.deepBlue)
-                                        ])
-                                      ])))),
-                      const SizedBox(height: xxTinierSpacing),
-                      const Divider(
-                          height: kDividerHeight, thickness: kDividerWidth),
-                      const SizedBox(height: xxTinierSpacing),
-                      CustomTabBarView(
-                          lengthOfTabs: 6,
-                          tabBarViewIcons: DocumentsUtil().tabBarViewIcons,
-                          initialIndex: defaultIndex,
-                          tabBarViewWidgets: [
-                            DocumentDetails(
-                                documentDetailsModel:
-                                    state.documentDetailsModel),
-                            DocumentDetailsFiles(
-                                documentDetailsModel:
-                                    state.documentDetailsModel,
-                                clientId: state.clientId),
-                            DocumentDetailsCustomFields(
-                                documentDetailsModel:
-                                    state.documentDetailsModel),
-                            DocumentCustomTimeline(
-                                documentDetailsModel:
-                                    state.documentDetailsModel),
-                            DocumentDetailsComments(
-                                documentDetailsModel:
-                                    state.documentDetailsModel,
-                                clientId: state.clientId),
-                            DocumentDetailsLinkedDocs(
-                                documentDetailsModel:
-                                    state.documentDetailsModel)
-                          ])
-                    ]));
-              } else {
-                return const SizedBox();
-              }
-            }));
+              })),
+    );
   }
 }

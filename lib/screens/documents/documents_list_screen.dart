@@ -23,7 +23,7 @@ class DocumentsListScreen extends StatelessWidget {
     context.read<DocumentsBloc>().docListReachedMax = false;
     context
         .read<DocumentsBloc>()
-        .add(GetDocumentsList(page: 1, isFromHome: isFromHome));
+        .add(GetDocumentsList(page: page, isFromHome: isFromHome));
     return Scaffold(
         appBar: const GenericAppBar(title: 'Documents'),
         body: Padding(
@@ -34,6 +34,10 @@ class DocumentsListScreen extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               BlocBuilder<DocumentsBloc, DocumentsStates>(
+                buildWhen: (previous, current) {
+                  return current is DocumentsListFetched ||
+                  current is FetchingDocumentsList;
+                },
                   builder: (context, state) {
                 return CustomIconButtonRow(
                     clearVisible:
@@ -47,7 +51,16 @@ class DocumentsListScreen extends StatelessWidget {
                       Navigator.pushNamed(
                           context, ChangeRoleDocumentsScreen.routeName);
                     },
-                    clearOnPress: () {});
+                    clearOnPress: () {
+                      page = 1;
+                      context.read<DocumentsBloc>().documentsListDatum.clear();
+                      context.read<DocumentsBloc>().filters.clear();
+                      context.read<DocumentsBloc>().add(ClearDocumentFilter());
+                      DocumentFilterScreen.documentFilterMap.clear();
+                      context.read<DocumentsBloc>().add(
+                          GetDocumentsList(page: page, isFromHome: isFromHome));
+
+                    });
               }),
               const SizedBox(height: xxTinierSpacing),
               const DocumentListTile()
