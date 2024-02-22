@@ -10,6 +10,8 @@ import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../data/enums/expense_working_at_enum.dart';
 import '../../../../widgets/expansion_tile_border.dart';
+import '../expense_details_tab_one.dart';
+import 'expense_edit_items_screen.dart';
 
 class ExpenseWorkingAtExpansionTile extends StatelessWidget {
   const ExpenseWorkingAtExpansionTile({Key? key}) : super(key: key);
@@ -18,9 +20,8 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ExpenseBloc>()
-        .add(SelectExpenseWorkingAtOption(workingAt: '', workingAtValue: ''));
+    context.read<ExpenseBloc>().add(SelectExpenseWorkingAtOption(
+        workingAt: workingAt, workingAtValue: workingAtValue));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is ExpenseWorkingAtOptionSelected,
@@ -63,12 +64,20 @@ class ExpenseWorkingAtExpansionTile extends StatelessWidget {
                                   .value,
                               groupValue: workingAt,
                               onChanged: (value) {
+                                context
+                                    .read<ExpenseBloc>()
+                                    .expenseWorkingAtMap
+                                    .clear();
                                 workingAt = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .value;
                                 workingAtValue = ExpenseWorkingAtEnum.values
                                     .elementAt(index)
                                     .status;
+                                ExpenseDetailsTabOne
+                                    .manageItemsMap['workingatid'] = workingAt;
+                                ExpenseEditItemsScreen
+                                    .editExpenseMap['workingatid'] = workingAt;
                                 context.read<ExpenseBloc>().add(
                                     SelectExpenseWorkingAtOption(
                                         workingAt: workingAt,

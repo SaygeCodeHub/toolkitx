@@ -12,7 +12,7 @@ import '../../utils/database_utils.dart';
 import 'widgets/assign_workforce_body.dart';
 import 'workorder_add_and_edit_down_time_screen.dart';
 import 'assign_workforce_screen.dart';
-import 'start_workorder_screen.dart';
+import 'start_and_complete_workorder_screen.dart';
 import 'workorder_add_comments_screen.dart';
 import 'workorder_assign_document_screen.dart';
 import 'workorder_add_mis_cost_screen.dart';
@@ -132,9 +132,20 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Start')) {
-          StartWorkOrderScreen.startWorkOrderMap['workorderId'] =
+          StartAndCompleteWorkOrderScreen
+                  .startAndCompleteWorkOrderMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
-          Navigator.pushNamed(context, StartWorkOrderScreen.routeName);
+          Navigator.pushNamed(
+              context, StartAndCompleteWorkOrderScreen.routeName,
+              arguments: true);
+        }
+        if (value == DatabaseUtil.getText('Complete')) {
+          StartAndCompleteWorkOrderScreen
+                  .startAndCompleteWorkOrderMap['workorderId'] =
+              workOrderDetailsMap['workorderId'];
+          Navigator.pushNamed(
+              context, StartAndCompleteWorkOrderScreen.routeName,
+              arguments: false);
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
           Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName);

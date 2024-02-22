@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_bloc.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_event.dart';
 import '../../../../blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer_states.dart';
-import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
-import '../../../../widgets/android_pop_up.dart';
 import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
-import '../workforce_questions_list_screen.dart';
+import '../workforce_list_screen.dart';
+import 'submit_answer_signature_pad_section.dart';
 
 class SubmitEditAnswerButton extends StatelessWidget {
   final List answerList;
@@ -30,36 +29,15 @@ class SubmitEditAnswerButton extends StatelessWidget {
             ProgressBar.dismiss(context);
             Navigator.pop(context);
             Navigator.pushReplacementNamed(
-                context, WorkForceQuestionsScreen.routeName,
-                arguments: checklistDataMap);
+                context, WorkForceListScreen.routeName);
           } else if (state is AnswerNotSubmitted) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.message, '');
           }
         },
         child: Row(children: [
-          Expanded(
-            child: PrimaryButton(
-                onPressed: () {
-                  showDialog(
-                      barrierColor: AppColor.transparent,
-                      context: context,
-                      builder: (context) {
-                        return AndroidPopUp(
-                            titleValue: StringConstants.kChecklist,
-                            contentValue: StringConstants.kChecklistNotEditable,
-                            onPrimaryButton: () {
-                              context.read<SubmitAnswerBloc>().add(
-                                  SubmitAnswers(
-                                      editQuestionsList: answerList,
-                                      isDraft: false,
-                                      allChecklistDataMap: checklistDataMap));
-                              Navigator.pop(context);
-                            });
-                      });
-                },
-                textValue: StringConstants.kSubmit),
-          ),
+          SubmitAnswerSignaturePadSection(
+              answerList: answerList, checklistDataMap: checklistDataMap),
           const SizedBox(width: xxTinySpacing),
           Expanded(
               child: PrimaryButton(

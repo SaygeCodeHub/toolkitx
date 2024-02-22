@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/models/workorder/complete_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
@@ -102,6 +103,7 @@ class WorkOrderTabDetailsBloc
     on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
     on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
     on<AssignWorkOrderParts>(_assignWorkOrderParts);
+    on<CompleteWorkOrder>(_completeWorkOrder);
   }
 
   int tabIndex = 0;
@@ -137,6 +139,7 @@ class WorkOrderTabDetailsBloc
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
               hashCode!, event.workOrderId);
+      workOrderId = event.workOrderId;
       tabIndex = event.initialTabIndex;
       if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
         popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
@@ -154,7 +157,10 @@ class WorkOrderTabDetailsBloc
         popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
       }
       if (fetchWorkOrderDetailsModel.data.ishold == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Hold'));
+        popUpMenuItemsList.insert(5, DatabaseUtil.getText('Hold'));
+      }
+      if (fetchWorkOrderDetailsModel.data.iscomplete == '1') {
+        popUpMenuItemsList.insert(6, DatabaseUtil.getText('Complete'));
       }
       List customFieldList = [];
       for (int i = 0;
@@ -697,7 +703,6 @@ class WorkOrderTabDetailsBloc
             await _workOrderRepository.fetchAssignPartsModel(
                 event.pageNo, hashCode!, event.workOrderId, event.partName);
         pageNo = event.pageNo;
-        workOrderId = event.workOrderId;
         partName = event.partName;
         addPartsDatum.addAll(fetchAssignPartsModel.data);
         docListReachedMax = fetchAssignPartsModel.data.isEmpty;
@@ -1112,6 +1117,33 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderPartsNotAssigned(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _completeWorkOrder(
+      CompleteWorkOrder event, Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(WorkOrderCompleting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map completeWorkOrderMap = {
+        "woid": workOrderId,
+        "userid": userId,
+        "date": event.completeWorkOrderMap['date'],
+        "time": event.completeWorkOrderMap['time'],
+        "comments": event.completeWorkOrderMap['comments'],
+        "hashcode": hashCode
+      };
+      CompleteWorkOrderModel completeWorkOrderModel =
+          await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
+      if (completeWorkOrderModel.message == '1') {
+        emit(WorkOrderCompleted());
+      } else {
+        emit(WorkOrderNotCompleted(
+            errorMessage: completeWorkOrderModel.message));
+      }
+    } catch (e) {
+      emit(WorkOrderNotCompleted(errorMessage: e.toString()));
     }
   }
 }

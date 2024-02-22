@@ -12,8 +12,9 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_floating_action_button.dart';
 import 'addItemsWidgets/expense_add_item_form_one.dart';
 import 'addItemsWidgets/expense_add_item_form_two.dart';
-import 'addItemsWidgets/expense_add_item_hotel_layout.dart';
-import 'addItemsWidgets/expense_item_meal_layout.dart';
+import 'addItemsWidgets/expense_hotel_and_meal_layout.dart';
+import 'addItemsWidgets/expense_working_at_expansion_tile.dart';
+import 'addItemsWidgets/expense_working_at_number_list_tile.dart';
 import 'expense_add_item_bottom_bar.dart';
 import 'expense_details_tab_one_body.dart';
 
@@ -29,7 +30,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
       required this.expenseDetailsData,
       required this.expenseId})
       : super(key: key);
-  static Map addItemMap = {};
+  static Map manageItemsMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +50,16 @@ class ExpenseDetailsTabOne extends StatelessWidget {
           } else if (state is ExpenseItemMasterFetched) {
             return const SizedBox.shrink();
           } else {
-            return CustomFloatingActionButton(
-                onPressed: () {
-                  context
-                      .read<ExpenseBloc>()
-                      .add(FetchExpenseItemMaster(isScreenChange: false));
-                },
-                textValue: DatabaseUtil.getText('AddItems'));
+            return Visibility(
+              visible: expenseDetailsData.canAdditems == '1',
+              child: CustomFloatingActionButton(
+                  onPressed: () {
+                    context
+                        .read<ExpenseBloc>()
+                        .add(FetchExpenseItemMaster(isScreenChange: false));
+                  },
+                  textValue: DatabaseUtil.getText('AddItems')),
+            );
           }
         },
       ),
@@ -63,17 +67,25 @@ class ExpenseDetailsTabOne extends StatelessWidget {
         buildWhen: (previousState, currentState) =>
             currentState is FetchingExpenseItemMaster ||
             currentState is ExpenseItemMasterFetched ||
+            currentState is ExpenseDetailsFetched ||
             currentState is ExpenseItemMasterCouldNotFetch,
         builder: (context, state) {
           if (state is ExpenseItemMasterFetched) {
             itemMasterList.addAll(state.fetchItemMasterModel.data);
             if (state.isScreenChange == false) {
+              context.read<ExpenseBloc>().expenseWorkingAtMap.clear();
+              ExpenseWorkingAtExpansionTile.workingAt = '';
+              ExpenseWorkingAtExpansionTile.workingAtValue = '';
+              context.read<ExpenseBloc>().expenseWorkingAtNumberMap.clear();
+              ExpenseWorkingAtNumberListTile.workingAtNumberMap.clear();
               return const ExpenseAddItemFormOne();
             } else if (state.isScreenChange == true) {
-              if (ExpenseDetailsTabOne.addItemMap['itemid'] == '6') {
-                return const ExpenseAddItemHotelLayout();
-              } else if (ExpenseDetailsTabOne.addItemMap['itemid'] == '3') {
-                return ExpenseItemMealLayout(
+              if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6') {
+                return ExpenseHotelAndMealLayout(
+                  expenseDetailsData: expenseDetailsData,
+                );
+              } else if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '3') {
+                return ExpenseHotelAndMealLayout(
                     expenseDetailsData: expenseDetailsData);
               } else {
                 return ExpenseAddItemFormTwo(

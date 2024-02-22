@@ -71,7 +71,7 @@ class LotoRepositoryImpl extends LotoRepository {
 
   @override
   Future<FetchLotoAssignTeamModel> fetchLotoAssignTeam(String hashCode,
-      String lotoId, int pageNo, String name, int isRemove) async {
+      String lotoId, int pageNo, String name, String isRemove) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}loto/getteamforassign?pageno=$pageNo&hashcode=$hashCode&lotoid=$lotoId&name=$name&isremove=$isRemove");
     return FetchLotoAssignTeamModel.fromJson(response);

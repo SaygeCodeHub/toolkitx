@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/leavesAndHolidays/fetch_get_time_sheet_model.dart';
 
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
+import '../../../blocs/leavesAndHolidays/leaves_and_holidays_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
+import '../leaves_and_holidays_checkbox.dart';
+import '../timesheet_checkin_screen.dart';
 
 class LeavesAndHolidaysListBody extends StatelessWidget {
   const LeavesAndHolidaysListBody({
@@ -16,6 +22,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
 
   final TimesheetData data;
   final bool isChecked;
+  static List leavesAndHolidaysIdList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,31 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(xxTinierSpacing),
               child: ListTile(
+                onTap: () {
+                  Map timeSheetMap = {
+                    'date': data.dates[index].fulldate,
+                    'status': data.dates[index].status,
+                    'id': data.dates[index].id
+                  };
+                  Navigator.pushNamed(context, TimeSheetCheckInScreen.routeName,
+                          arguments: timeSheetMap)
+                      .then((_) => context.read<LeavesAndHolidaysBloc>().add(
+                          GetTimeSheet(
+                              month: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .month ==
+                                      ''
+                                  ? DateFormat('M').format(DateTime.now())
+                                  : context.read<LeavesAndHolidaysBloc>().month,
+                              year: context
+                                          .read<LeavesAndHolidaysBloc>()
+                                          .year ==
+                                      ''
+                                  ? DateFormat('yyyy').format(DateTime.now())
+                                  : context
+                                      .read<LeavesAndHolidaysBloc>()
+                                      .year)));
+                },
                 title: Row(
                   children: [
                     Text("${data.dates[index].day} ${data.dates[index].date}",
@@ -37,7 +69,11 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                 : AppColor.errorRed)),
                     const SizedBox(width: tinierSpacing),
                     (data.dates[index].id != '' &&
-                            data.dates[index].hours != '-')
+                            data.dates[index].hours != '-' &&
+                            data.dates[index].status != 1 &&
+                            (data.dates[index].id != '' &&
+                                data.dates[index].hours != '-' &&
+                                data.dates[index].status != 2))
                         ? Text('[${StringConstants.kDraft}]',
                             style: Theme.of(context).textTheme.small.copyWith(
                                 fontWeight: FontWeight.w500,
@@ -73,7 +109,7 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                 style: TextStyle(color: AppColor.white),
                               ),
                             ))
-                        : const Text('')
+                        : const SizedBox.shrink()
                   ],
                 ),
                 trailing: Column(
@@ -87,17 +123,25 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                         : const Text(StringConstants.kNotSubmitted,
                             style: TextStyle(color: AppColor.deepBlue)),
                     Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: xxxSmallestSpacing,
-                              bottom: xxxSmallestSpacing),
-                          child: (data.dates[index].id != '' &&
-                                  data.dates[index].hours != '-')
-                              ? Checkbox(
-                                  activeColor: AppColor.blueGrey,
-                                  value: isChecked,
-                                  onChanged: ((value) {}))
-                              : const SizedBox.shrink()),
+                      child: ((data.dates[index].id != '' &&
+                              (data.dates[index].hours != '-' ||
+                                  data.dates[index].hours == '-') &&
+                              data.dates[index].status == 0))
+                          ? TimeSheetCheckbox(
+                              id: data.dates[index].id,
+                              onCreatedForChanged: (List<dynamic> idList) {
+                                context
+                                    .read<LeavesAndHolidaysBloc>()
+                                    .timeSheetIdList
+                                    .add({
+                                  "id": idList
+                                      .toString()
+                                      .replaceAll('[', "")
+                                      .replaceAll(']', "")
+                                      .replaceAll(',', ",")
+                                });
+                              })
+                          : const SizedBox.shrink(),
                     )
                   ],
                 ),

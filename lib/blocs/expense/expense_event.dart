@@ -122,3 +122,15 @@ class FetchWorkingAtNumberData extends ExpenseEvent {
 
   FetchWorkingAtNumberData({required this.groupBy});
 }
+
+class FetchExpenseItemDetails extends ExpenseEvent {
+  final String expenseItemId;
+
+  FetchExpenseItemDetails({required this.expenseItemId});
+}
+
+class RejectExpense extends ExpenseEvent {
+  final String comments;
+
+  RejectExpense({required this.comments});
+}

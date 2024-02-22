@@ -58,58 +58,64 @@ class ClientListScreen extends StatelessWidget {
                     child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: Column(children: [
-                          ListView.separated(
-                              physics: const BouncingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: state.clientListModel.data!.length,
-                              itemBuilder: (context, index) {
-                                return CustomCard(
-                                    child: InkWell(
-                                        onTap: () {
-                                          context.read<ClientBloc>().add(
-                                              SelectClient(
-                                                  hashKey: state.clientListModel
-                                                      .data![index].hashkey
-                                                      .toString(),
-                                                  apiKey: state.clientListModel
-                                                      .data![index].apikey,
-                                                  image: state.clientListModel
-                                                      .data![index].hashimg));
-                                          Navigator.pushNamed(
-                                              context, RootScreen.routeName,
-                                              arguments: true);
-                                        },
-                                        child: CachedNetworkImage(
-                                            fit: BoxFit.fitHeight,
-                                            imageUrl: state.clientListModel
-                                                .data![index].hashimg,
-                                            placeholder: (context, url) =>
-                                                Shimmer.fromColors(
-                                                    baseColor:
-                                                        AppColor.paleGrey,
-                                                    highlightColor:
-                                                        AppColor.white,
-                                                    child: Container(
-                                                        height:
-                                                            kClientListShimmerHeight,
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                AppColor.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        kCardRadius)))),
-                                            errorWidget: (context, url, error) =>
-                                                const Icon(
-                                                    Icons.error_outline_sharp,
-                                                    size: kIconSize))));
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const SizedBox(
-                                    height: xxxSmallerSpacing);
-                              }),
+                          GridView.builder(
+                            primary: false,
+                            itemCount: state.clientListModel.data!.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: 1 / 1.08,
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: xxTinierSpacing,
+                                    mainAxisSpacing: xxTinierSpacing),
+                            itemBuilder: (context, index) {
+                              return CustomCard(
+                                  child: InkWell(
+                                      onTap: () {
+                                        context
+                                            .read<ClientBloc>()
+                                            .add(
+                                                SelectClient(
+                                                    hashKey: state
+                                                        .clientListModel
+                                                        .data![index]
+                                                        .hashkey
+                                                        .toString(),
+                                                    apiKey: state
+                                                        .clientListModel
+                                                        .data![index]
+                                                        .apikey,
+                                                    image: state.clientListModel
+                                                        .data![index].hashimg));
+                                        Navigator.pushNamed(
+                                            context, RootScreen.routeName,
+                                            arguments: true);
+                                      },
+                                      child: CachedNetworkImage(
+                                          fit: BoxFit.contain,
+                                          imageUrl: state.clientListModel
+                                              .data![index].hashimg,
+                                          placeholder: (context, url) =>
+                                              Shimmer.fromColors(
+                                                  baseColor: AppColor.paleGrey,
+                                                  highlightColor:
+                                                      AppColor.white,
+                                                  child: Container(
+                                                      height:
+                                                          kClientListShimmerHeight,
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.white,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  kCardRadius)))),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(
+                                                  Icons.error_outline_sharp,
+                                                  size: kIconSize))));
+                            },
+                          ),
                           const SizedBox(height: topBottomPadding)
                         ])));
               } else if (state is FetchClientListError) {

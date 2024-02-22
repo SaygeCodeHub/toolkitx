@@ -71,6 +71,8 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   },
                   child: PrimaryButton(
                       onPressed: () {
+                        qmCommentsMap['status'] =
+                            fetchQualityManagementDetailsModel.data.nextStatus;
                         context.read<QualityManagementBloc>().add(
                             SaveQualityManagementComments(
                                 saveCommentsMap: qmCommentsMap));
