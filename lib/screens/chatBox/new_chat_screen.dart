@@ -45,11 +45,10 @@ class NewChatScreen extends StatelessWidget {
                 ),
                 const Divider(height: kChatScreenDividerHeight),
                 Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                  ),
-                  child: _buildTextComposer(context),
-                )
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: _buildTextComposer(context))
               ]);
             } else {
               return const SizedBox.shrink();
@@ -93,6 +92,13 @@ class ChatMessage extends StatelessWidget {
 
   const ChatMessage({super.key, required this.message});
 
+  String getCurrentTime() {
+    int hour = DateTime.now().hour;
+    int minute = DateTime.now().minute;
+    String currentTime = '$hour:$minute';
+    return currentTime;
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> fullName =
@@ -129,11 +135,11 @@ class ChatMessage extends StatelessWidget {
                                 Text(message, maxLines: 2),
                                 Align(
                                     alignment: Alignment.centerRight,
-                                    child: Text('dfh',
+                                    child: Text(getCurrentTime(),
                                         textAlign: TextAlign.end,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .xxSmall))
+                                            .smallTextBlack))
                               ]))))
             ]));
   }
