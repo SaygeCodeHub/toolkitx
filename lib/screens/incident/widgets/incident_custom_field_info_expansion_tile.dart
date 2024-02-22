@@ -7,6 +7,7 @@ import '../../../blocs/incident/reportNewIncident/report_new_incident_events.dar
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 typedef CustomFieldCallBack = Function(String customFieldOptionId);
 
@@ -33,7 +34,9 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                     : addAndEditIncidentMap['optionIds'][index]['optionId']
                         .toString()));
     String customFieldName = (addAndEditIncidentMap['customfields'] == null ||
-            addAndEditIncidentMap['customfields'].isEmpty)
+                addAndEditIncidentMap['customfields'].isEmpty) ||
+            (addAndEditIncidentMap['customfields'][index]['value'] == null ||
+                addAndEditIncidentMap['customfields'].isEmpty)
         ? ""
         : addAndEditIncidentMap['customfields'][index]['value'];
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
@@ -45,6 +48,11 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

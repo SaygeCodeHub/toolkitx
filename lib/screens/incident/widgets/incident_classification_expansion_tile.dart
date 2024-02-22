@@ -9,6 +9,7 @@ import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../widgets/expansion_tile_border.dart';
 
 class IncidentClassificationExpansionTile extends StatelessWidget {
   final Map incidentCommentsMap;
@@ -33,6 +34,11 @@ class IncidentClassificationExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
+                    collapsedShape:
+                        ExpansionTileBorder().buildOutlineInputBorder(),
+                    collapsedBackgroundColor: AppColor.white,
+                    backgroundColor: AppColor.white,
+                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
                     maintainState: true,
                     key: GlobalKey(),
                     title: Text(

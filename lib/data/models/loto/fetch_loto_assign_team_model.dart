@@ -9,7 +9,7 @@ String fetchLotoAssignTeamModelToJson(FetchLotoAssignTeamModel data) =>
 class FetchLotoAssignTeamModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<LotoAssignTeamDatum> data;
 
   FetchLotoAssignTeamModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchLotoAssignTeamModel {
       FetchLotoAssignTeamModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<LotoAssignTeamDatum>.from(
+            json["Data"].map((x) => LotoAssignTeamDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,18 +32,19 @@ class FetchLotoAssignTeamModel {
       };
 }
 
-class Datum {
+class LotoAssignTeamDatum {
   final String id;
   final String name;
   final String membersCount;
 
-  Datum({
+  LotoAssignTeamDatum({
     required this.id,
     required this.name,
     required this.membersCount,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory LotoAssignTeamDatum.fromJson(Map<String, dynamic> json) =>
+      LotoAssignTeamDatum(
         id: json["id"],
         name: json["name"],
         membersCount: json["members_count"],

@@ -25,6 +25,7 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    customInfoFieldList.clear();
     context
         .read<QualityManagementBloc>()
         .add(ReportNewQualityManagementFetchCustomInfoField());

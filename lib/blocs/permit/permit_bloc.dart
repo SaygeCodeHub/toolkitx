@@ -26,8 +26,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   String roleId = '';
   PermitMasterDatum? selectedDatum;
-  static Map filters = {};
+  Map filters = {};
   List location = [];
+  List<AllPermitDatum> permitListData = [];
+  bool listReachedMax = false;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -57,7 +59,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           permitRolesModel: permitRolesModel, roleId: roleId));
     } catch (e) {
       emit(const CouldNotFetchPermitRoles());
-      rethrow;
     }
   }
 
@@ -89,7 +90,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitMasterFetched(permitGetMasterModel, filters, location));
     } catch (e) {
       emit(const CouldNotFetchPermitMaster());
-      rethrow;
     }
   }
 
@@ -117,7 +117,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
     } catch (e) {
       emit(const OpenPermitDetailsError());
-      rethrow;
     }
   }
 
@@ -131,35 +130,44 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(ClosePermitDetailsFetched(closePermitDetailsModel));
     } catch (e) {
       emit(const ClosePermitDetailsError());
-      rethrow;
     }
   }
 
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
+    emit(const FetchingAllPermits());
     try {
-      emit(FetchingAllPermits(filters: filters));
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      if (roleId == '' || event.isFromHome) {
-        add(const ClearPermitFilters());
-        PermitRolesModel permitRolesModel =
-            await _permitRepository.fetchPermitRoles(hashCode, userId);
-        if (permitRolesModel.status == 200) {
-          roleId = permitRolesModel.data![0].groupId!;
+      if (!listReachedMax) {
+        if (roleId == '' || event.isFromHome) {
+          add(const ClearPermitFilters());
+          PermitRolesModel permitRolesModel =
+              await _permitRepository.fetchPermitRoles(hashCode, userId);
+          if (permitRolesModel.status == 200) {
+            roleId = permitRolesModel.data![0].groupId!;
+            AllPermitModel allPermitModel = await _permitRepository
+                .getAllPermits(hashCode, '', roleId, event.page);
+            permitListData.addAll(allPermitModel.data);
+            listReachedMax = allPermitModel.data.isEmpty;
+            emit(AllPermitsFetched(
+                allPermitModel: allPermitModel,
+                filters: {},
+                permitListData: permitListData));
+          }
+        } else {
           AllPermitModel allPermitModel = await _permitRepository.getAllPermits(
-              hashCode, '', roleId, event.page);
-          emit(AllPermitsFetched(allPermitModel: allPermitModel, filters: {}));
+              hashCode, jsonEncode(filters), roleId, event.page);
+          permitListData.addAll(allPermitModel.data);
+          listReachedMax = allPermitModel.data.isEmpty;
+          emit(AllPermitsFetched(
+              allPermitModel: allPermitModel,
+              filters: filters,
+              permitListData: permitListData));
         }
-      } else {
-        AllPermitModel allPermitModel = await _permitRepository.getAllPermits(
-            hashCode, jsonEncode(filters), roleId, event.page);
-        emit(AllPermitsFetched(
-            allPermitModel: allPermitModel, filters: filters));
       }
     } catch (e) {
       emit(const CouldNotFetchPermits());
-      rethrow;
     }
   }
 
@@ -186,7 +194,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           permitPopUpMenu: permitPopUpMenu));
     } catch (e) {
       emit(const CouldNotFetchPermitDetails());
-      rethrow;
     }
   }
 
@@ -204,7 +211,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           pdfGenerationModel: pdfGenerationModel, pdfLink: pdfLink));
     } catch (e) {
       emit(const PDFGenerationFailed());
-      rethrow;
     }
   }
 
@@ -230,7 +236,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitOpened(openClosePermitModel));
     } catch (e) {
       emit(OpenPermitError(e.toString()));
-      rethrow;
     }
   }
 
@@ -250,7 +255,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitRequested(openClosePermitModel));
     } catch (e) {
       emit(RequestPermitError(e.toString()));
-      rethrow;
     }
   }
 
@@ -264,6 +268,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.closePermitMap['controlPerson'] == null) {
         emit(ClosePermitError(
             DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
+      } else if (event.closePermitMap['time'] == null) {
+        emit(const ClosePermitError(
+            StringConstants.kPleaseEnterTimeToClosePermit));
       } else {
         Map closePermitMap = {
           "hashcode": hashCode,
@@ -287,7 +294,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(ClosePermitError(e.toString()));
-      rethrow;
     }
   }
 }

@@ -44,6 +44,7 @@ class LocationDetailsLoToTab extends StatelessWidget {
                 clearVisible: state.loToFilterMap.isNotEmpty,
                 primaryOnPress: () {
                   LotoFilterScreen.isFromLocation = true;
+                  LotoFilterScreen.lotoFilterMap = state.loToFilterMap;
                   LotoFilterScreen.expenseId = expenseId;
                   Navigator.pushNamed(context, LotoFilterScreen.routeName);
                 },

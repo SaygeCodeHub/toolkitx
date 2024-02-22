@@ -74,13 +74,17 @@ class PermitDetailsScreen extends StatelessWidget {
               if (state is PermitRequested) {
                 ProgressBar.dismiss(context);
                 Navigator.pop(context);
-                context
-                    .read<PermitBloc>()
-                    .add(const GetAllPermits(isFromHome: false, page: 1));
+                Navigator.pushNamed(context, PermitDetailsScreen.routeName,
+                    arguments: permitId);
               }
               if (state is RequestPermitError) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.errorMessage, '');
+              }
+              if (state is CouldNotFetchPermitDetails) {
+                Navigator.pop(context);
+                showCustomSnackBar(
+                    context, DatabaseUtil.getText('something_went_wrong'), '');
               }
             },
             buildWhen: (previousState, currentState) =>

@@ -80,9 +80,8 @@ class EditAnswerListScreen extends StatelessWidget {
                                             children: [
                                               RichText(
                                                 text: TextSpan(
-                                                    text: state
-                                                        .answerModelList[index]
-                                                        .title,
+                                                    text:
+                                                        '${index + 1}] ${state.answerModelList[index].title}',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .medium,
@@ -103,6 +102,28 @@ class EditAnswerListScreen extends StatelessWidget {
                                               ),
                                               const SizedBox(
                                                   height: tiniestSpacing),
+                                              Visibility(
+                                                visible: state
+                                                        .answerModelList[index]
+                                                        .moreinfo !=
+                                                    null,
+                                                child: Text(
+                                                    '${state.answerModelList[index].moreinfo}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .xSmall
+                                                        .copyWith(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            color:
+                                                                AppColor.grey,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500)),
+                                              ),
+                                              const SizedBox(
+                                                  height: xxTinierSpacing),
                                               EditAnswerUtil()
                                                   .fetchSwitchCaseWidget(
                                                       state
@@ -114,7 +135,7 @@ class EditAnswerListScreen extends StatelessWidget {
                                                       state.answersList,
                                                       context),
                                               const SizedBox(
-                                                  height: xxTinierSpacing),
+                                                  height: tiniestSpacing),
                                               Visibility(
                                                 visible: state
                                                         .answerModelList[index]
@@ -174,7 +195,8 @@ class EditAnswerListScreen extends StatelessWidget {
                           const SizedBox(height: xxxSmallerSpacing),
                           SubmitEditAnswerButton(
                               answerList: state.answersList,
-                              checklistDataMap: checklistDataMap)
+                              checklistDataMap: checklistDataMap),
+                          const SizedBox(height: xxTiniestSpacing)
                         ])));
               } else {
                 return const SizedBox();

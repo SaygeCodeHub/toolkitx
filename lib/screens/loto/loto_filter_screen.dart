@@ -5,6 +5,8 @@ import 'package:toolkit/screens/loto/loto_list_screen.dart';
 import 'package:toolkit/screens/loto/widgets/loto_location_filter.dart';
 import 'package:toolkit/screens/loto/widgets/loto_status_filter.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import '../../blocs/location/location_bloc.dart';
+import '../../blocs/location/location_event.dart';
 import '../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
@@ -17,7 +19,8 @@ class LotoFilterScreen extends StatelessWidget {
   static const routeName = 'LotoFilterScreen';
 
   LotoFilterScreen({super.key});
-  final Map lotoFilterMap = {};
+
+  static Map lotoFilterMap = {};
   final List location = [];
   final String selectLocationName = '';
   static bool isFromLocation = false;
@@ -27,7 +30,7 @@ class LotoFilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<LotoListBloc>().add(FetchLotoMaster());
     return Scaffold(
-      appBar: const GenericAppBar(title: StringConstants.kFilter),
+      appBar: GenericAppBar(title: DatabaseUtil.getText('Filters')),
       body: BlocConsumer<LotoListBloc, LotoListState>(
         listener: (context, state) {
           if (state is LotoMasterFetchError) {
@@ -69,7 +72,7 @@ class LotoFilterScreen extends StatelessWidget {
                         children: [
                           Expanded(
                               child: DatePickerTextField(
-                                  editDate: '',
+                                  editDate: lotoFilterMap["st"] ?? '',
                                   hintText: StringConstants.kSelectDate,
                                   onDateChanged: (String date) {
                                     lotoFilterMap["st"] = date;
@@ -79,7 +82,7 @@ class LotoFilterScreen extends StatelessWidget {
                           const SizedBox(width: xxTinierSpacing),
                           Expanded(
                               child: DatePickerTextField(
-                                  editDate: '',
+                                  editDate: lotoFilterMap["et"] ?? '',
                                   hintText: StringConstants.kSelectDate,
                                   onDateChanged: (String date) {
                                     lotoFilterMap["et"] = date;
@@ -102,13 +105,22 @@ class LotoFilterScreen extends StatelessWidget {
                     const SizedBox(height: xxxSmallerSpacing),
                     PrimaryButton(
                         onPressed: () {
-                          context.read<LotoListBloc>().data.clear();
-                          context.read<LotoListBloc>().add(
-                              ApplyLotoListFilter(filterMap: lotoFilterMap));
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, LotoListScreen.routeName,
-                              arguments: false);
+                          if (isFromLocation == true) {
+                            context.read<LocationBloc>().add(
+                                ApplyLoToListFilter(filterMap: lotoFilterMap));
+                            Navigator.pop(context);
+                            context
+                                .read<LocationBloc>()
+                                .add(FetchLocationLoTo(pageNo: 1));
+                          } else {
+                            context.read<LotoListBloc>().data.clear();
+                            context.read<LotoListBloc>().add(
+                                ApplyLotoListFilter(filterMap: lotoFilterMap));
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, LotoListScreen.routeName,
+                                arguments: false);
+                          }
                         },
                         textValue: DatabaseUtil.getText('Apply'))
                   ],

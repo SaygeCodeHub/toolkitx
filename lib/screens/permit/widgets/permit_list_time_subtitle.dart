@@ -32,16 +32,10 @@ class PermitListTimeSubtitle extends StatelessWidget {
                 Flexible(child: Text(allPermitDatum.location!, maxLines: 3))
               ]),
               const SizedBox(height: tinierSpacing),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconAndTextRow(
-                        title: allPermitDatum.pname!,
-                        icon: 'human_avatar_three'),
-                    IconAndTextRow(
-                        title: allPermitDatum.pcompany!, icon: 'office')
-                  ]),
+              IconAndTextRow(
+                  title: allPermitDatum.pname!, icon: 'human_avatar_three'),
+              const SizedBox(height: tinierSpacing),
+              IconAndTextRow(title: allPermitDatum.pcompany!, icon: 'office'),
               const SizedBox(height: tinierSpacing),
               DateTimeRow(allPermitDatum: allPermitDatum),
               const SizedBox(height: tinierSpacing),

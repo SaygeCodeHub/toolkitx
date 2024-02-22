@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../../blocs/expense/expense_event.dart';
@@ -40,8 +41,6 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
           ManageExpenseFormScreen.isFromEditOption = true;
           Navigator.pushNamed(context, ManageExpenseFormScreen.routeName);
         }
-        if (value == DatabaseUtil.getText('SubmitForApproval')) {}
-        if (value == DatabaseUtil.getText('Edit')) {}
         if (value == DatabaseUtil.getText('SubmitForApproval')) {
           showDialog(
               context: context,
@@ -57,8 +56,34 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
                     });
               });
         }
-        if (value == DatabaseUtil.getText('approve')) {}
-        if (value == DatabaseUtil.getText('Close')) {}
+        if (value == DatabaseUtil.getText('ApproveReport')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue: DatabaseUtil.getText('ApproveExpenseReport'),
+                    onPrimaryButton: () {
+                      context.read<ExpenseBloc>().add(ApproveExpense());
+                    });
+              });
+        }
+        if (value == DatabaseUtil.getText('CloseReport')) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AndroidPopUp(
+                    titleValue: DatabaseUtil.getText('ExpenseReport'),
+                    contentValue:
+                        DatabaseUtil.getText('CloseExpenseReportMessage'),
+                    onPrimaryButton: () {
+                      context.read<ExpenseBloc>().add(CloseExpense());
+                    });
+              });
+        }
+        if (value == DatabaseUtil.getText('RejectReport')) {
+          Navigator.pushNamed(context, ExpenseRejectScreen.routeName);
+        }
       },
       position: PopupMenuPosition.under,
       itemBuilder: (BuildContext context) => [

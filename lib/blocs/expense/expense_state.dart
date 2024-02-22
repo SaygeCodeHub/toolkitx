@@ -1,8 +1,12 @@
+import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
+import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
 
+import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -120,9 +124,12 @@ class FetchingExpenseItemMaster extends ExpenseStates {}
 class ExpenseItemMasterFetched extends ExpenseStates {
   final FetchItemMasterModel fetchItemMasterModel;
   final bool isScreenChange;
+  final String apiKey;
 
   ExpenseItemMasterFetched(
-      {required this.isScreenChange, required this.fetchItemMasterModel});
+      {required this.apiKey,
+      required this.isScreenChange,
+      required this.fetchItemMasterModel});
 }
 
 class ExpenseItemMasterCouldNotFetch extends ExpenseStates {
@@ -145,8 +152,10 @@ class ExpenseItemSelected extends ExpenseStates {
 
 class ExpenseWorkingAtOptionSelected extends ExpenseStates {
   final String workingAt;
+  final String workingAtValue;
 
-  ExpenseWorkingAtOptionSelected({required this.workingAt});
+  ExpenseWorkingAtOptionSelected(
+      {required this.workingAtValue, required this.workingAt});
 }
 
 class ExpenseWorkingAtNumberSelected extends ExpenseStates {
@@ -159,4 +168,100 @@ class ExpenseAddItemsCurrencySelected extends ExpenseStates {
   final Map currencyDetailsMap;
 
   ExpenseAddItemsCurrencySelected({required this.currencyDetailsMap});
+}
+
+class ApprovingExpense extends ExpenseStates {}
+
+class ExpenseApproved extends ExpenseStates {}
+
+class ExpenseNotApproved extends ExpenseStates {
+  final String notApproved;
+
+  ExpenseNotApproved({required this.notApproved});
+}
+
+class ClosingExpense extends ExpenseStates {}
+
+class ExpenseClosed extends ExpenseStates {}
+
+class ExpenseNotClosed extends ExpenseStates {
+  final String notClosed;
+
+  ExpenseNotClosed({required this.notClosed});
+}
+
+class DeletingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemDeleted extends ExpenseStates {}
+
+class ExpenseItemNotDeleted extends ExpenseStates {
+  final String itemNotDeleted;
+
+  ExpenseItemNotDeleted({required this.itemNotDeleted});
+}
+
+class SavingExpenseItem extends ExpenseStates {}
+
+class ExpenseItemSaved extends ExpenseStates {
+  final SaveExpenseItemModel saveExpenseItemModel;
+
+  ExpenseItemSaved({required this.saveExpenseItemModel});
+}
+
+class ExpenseItemCouldNotSave extends ExpenseStates {
+  final String itemNotSaved;
+
+  ExpenseItemCouldNotSave({required this.itemNotSaved});
+}
+
+class FetchingExpenseCustomFields extends ExpenseStates {}
+
+class ExpenseCustomFieldsFetched extends ExpenseStates {
+  final ExpenseItemCustomFieldsModel expenseItemCustomFieldsModel;
+
+  ExpenseCustomFieldsFetched({required this.expenseItemCustomFieldsModel});
+}
+
+class ExpenseCustomFieldsNotFetched extends ExpenseStates {
+  final String fieldsNotFetched;
+
+  ExpenseCustomFieldsNotFetched({required this.fieldsNotFetched});
+}
+
+class FetchingWorkingAtNumberData extends ExpenseStates {}
+
+class WorkingAtNumberDataFetched extends ExpenseStates {
+  final ExpenseWorkingAtNumberDataModel expenseWorkingAtNumberDataModel;
+
+  WorkingAtNumberDataFetched({required this.expenseWorkingAtNumberDataModel});
+}
+
+class WorkingAtNumberDataNotFetched extends ExpenseStates {
+  final String dataNotFetched;
+
+  WorkingAtNumberDataNotFetched({required this.dataNotFetched});
+}
+
+class FetchingExpenseItemDetails extends ExpenseStates {}
+
+class ExpenseItemDetailsFetched extends ExpenseStates {
+  final FetchExpenseItemDetailsModel fetchExpenseItemDetailsModel;
+
+  ExpenseItemDetailsFetched({required this.fetchExpenseItemDetailsModel});
+}
+
+class ExpenseItemDetailsNotFetched extends ExpenseStates {
+  final String itemDetailsNotFetched;
+
+  ExpenseItemDetailsNotFetched({required this.itemDetailsNotFetched});
+}
+
+class RejectingExpense extends ExpenseStates {}
+
+class ExpenseRejected extends ExpenseStates {}
+
+class ExpenseNotRejected extends ExpenseStates {
+  final String errorMessage;
+
+  ExpenseNotRejected({required this.errorMessage});
 }
