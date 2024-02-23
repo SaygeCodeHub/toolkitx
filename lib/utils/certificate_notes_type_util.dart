@@ -48,8 +48,7 @@ class CertificateNotesTypeUtil {
         );
       case '2':
         return Column(
-          children: [PodVideoPlayer(controller: podPlayerController)],
-        );
+            children: [PodVideoPlayer(controller: podPlayerController)]);
       case '3':
         return Container(
           height: kContainerHeight,
