@@ -122,7 +122,7 @@ class WorkOrderTabDetailsBloc
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderTabDetails());
-    try {
+    // try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? getClientId =
           await _customerCache.getClientId(CacheKeys.clientId);
@@ -211,9 +211,9 @@ class WorkOrderTabDetailsBloc
           fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
           tabInitialIndex: tabIndex,
           toggleIndex: 0));
-    } catch (e) {
-      emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
+    // }
   }
 
   _toggleSwitchIndexChanged(WorkOrderToggleSwitchIndex event,
@@ -681,12 +681,10 @@ class WorkOrderTabDetailsBloc
                 event.workOrderWorkforceName);
         pageNo = event.pageNo;
         workOrderWorkforceName = event.workOrderWorkforceName;
-        assignWorkForceDatum.clear();
         assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
         assignWorkForceListReachedMax = fetchAssignWorkForceModel.data.isEmpty;
         emit(AssignWorkOrderFetched(
-            fetchAssignWorkForceModel: fetchAssignWorkForceModel,
-            assignWorkForceDatum: assignWorkForceDatum));
+            fetchAssignWorkForceModel: fetchAssignWorkForceModel));
       }
     } catch (e) {
       emit(AssignWorkOrderNotFetched(workOrderNotAssigned: e.toString()));

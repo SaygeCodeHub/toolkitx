@@ -462,8 +462,8 @@ class Item {
   final String item;
   final String type;
   final String code;
-  final int plannedquan;
-  final int? actualquan;
+  final dynamic plannedquan;
+  final dynamic actualquan;
 
   Item({
     required this.id,
