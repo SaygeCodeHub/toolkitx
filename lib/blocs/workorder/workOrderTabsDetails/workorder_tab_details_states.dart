@@ -258,9 +258,7 @@ class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
 
 class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
   final FetchAssignWorkForceModel fetchAssignWorkForceModel;
-  AssignWorkOrderFetched(
-      {
-      required this.fetchAssignWorkForceModel});
+  AssignWorkOrderFetched({required this.fetchAssignWorkForceModel});
 }
 
 class AssignWorkOrderNotFetched extends WorkOrderTabDetailsStates {

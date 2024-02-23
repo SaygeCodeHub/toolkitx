@@ -547,7 +547,7 @@ class Workforce {
   final String name;
   final String jobTitle;
   final String certificatecode;
-  final int plannedhrs;
+  final dynamic plannedhrs;
   final dynamic actualhrs;
 
   Workforce({
@@ -566,7 +566,7 @@ class Workforce {
         name: json["name"] ?? '',
         jobTitle: json["job_title"] ?? '',
         certificatecode: json["certificatecode"] ?? '',
-        plannedhrs: json["plannedhrs"],
+        plannedhrs: json["plannedhrs"] ?? '',
         actualhrs: json["actualhrs"],
       );
 
