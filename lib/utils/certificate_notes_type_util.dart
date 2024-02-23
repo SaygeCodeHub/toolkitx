@@ -61,7 +61,7 @@ class CertificateNotesTypeUtil {
             onTap: () {
               launchUrlString(
                   '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                  mode: LaunchMode.inAppBrowserView);
+                  mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,

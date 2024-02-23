@@ -26,7 +26,7 @@ class CertificateListCard extends StatelessWidget {
             child: Column(children: [
               ListTile(
                 title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
                   child: Text(data.name,
                       style: Theme.of(context).textTheme.small.copyWith(
                           fontWeight: FontWeight.w500, color: AppColor.black)),
