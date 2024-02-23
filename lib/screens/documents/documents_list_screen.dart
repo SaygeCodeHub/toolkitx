@@ -34,11 +34,10 @@ class DocumentsListScreen extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               BlocBuilder<DocumentsBloc, DocumentsStates>(
-                buildWhen: (previous, current) {
-                  return current is DocumentsListFetched ||
-                  current is FetchingDocumentsList;
-                },
-                  builder: (context, state) {
+                  buildWhen: (previous, current) {
+                return current is DocumentsListFetched ||
+                    current is FetchingDocumentsList;
+              }, builder: (context, state) {
                 return CustomIconButtonRow(
                     clearVisible:
                         context.read<DocumentsBloc>().filters.isNotEmpty,
@@ -59,7 +58,6 @@ class DocumentsListScreen extends StatelessWidget {
                       DocumentFilterScreen.documentFilterMap.clear();
                       context.read<DocumentsBloc>().add(
                           GetDocumentsList(page: page, isFromHome: isFromHome));
-
                     });
               }),
               const SizedBox(height: xxTinierSpacing),

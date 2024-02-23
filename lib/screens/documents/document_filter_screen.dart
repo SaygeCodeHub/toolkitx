@@ -65,7 +65,7 @@ class DocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
-                      value: documentFilterMap["documentName"] ?? '',
+                        value: documentFilterMap["documentName"] ?? '',
                         onTextFieldChanged: (textField) {
                           documentFilterMap["documentName"] = textField;
                         },

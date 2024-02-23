@@ -31,7 +31,7 @@ class DocumentsUtil {
     if (fileListData.canaddcomments == '1') {
       fileMenuOptionsList.add(DatabaseUtil.getText('AddComments'));
     }
-   fileMenuOptionsList.add(DatabaseUtil.getText('Cancel'));
+    fileMenuOptionsList.add(DatabaseUtil.getText('Cancel'));
 
     return fileMenuOptionsList;
   }
