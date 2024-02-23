@@ -1,19 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
-import '../data/cache/cache_keys.dart';
 import 'constants/api_constants.dart';
 import 'generic_alphanumeric_generator_util.dart';
 
 class CertificateNotesTypeUtil {
-
-  Widget fetchSwitchCaseWidget(type, data, htmlText,link) {
+  Widget fetchSwitchCaseWidget(
+      type, data, htmlText, link, podPlayerController, clientId) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -27,12 +26,13 @@ class CertificateNotesTypeUtil {
             highlightColor: AppColor.transparent,
             onTap: () {
               launchUrlString(
-                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}',
+                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,
-                imageUrl: link,
+                imageUrl:
+                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                 placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColor.paleGrey,
                     highlightColor: AppColor.white,
@@ -41,26 +41,45 @@ class CertificateNotesTypeUtil {
                         width: kNetworkImageContainerTogether,
                         decoration: BoxDecoration(
                             color: AppColor.white,
-                            borderRadius:
-                                BorderRadius.circular(kCardRadius)))),
+                            borderRadius: BorderRadius.circular(kCardRadius)))),
                 errorWidget: (context, url, error) =>
                     const Icon(Icons.error_outline_sharp, size: kIconSize)),
           ),
         );
       case '2':
         return Column(
-          children: [
-            // Chewie(
-            //   controller: _chewieController,
-            // )
-          ],
+          children: [PodVideoPlayer(controller: podPlayerController)],
         );
       case '3':
         return Container(
-            height: kContainerHeight,
-            width: kContainerWidth,
-            color: AppColor.blueGrey,
-            child: const Text(''));
+          height: kContainerHeight,
+          width: kContainerWidth,
+          color: AppColor.blueGrey,
+          child: InkWell(
+            splashColor: AppColor.transparent,
+            highlightColor: AppColor.transparent,
+            onTap: () {
+              launchUrlString(
+                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                  mode: LaunchMode.inAppBrowserView);
+            },
+            child: CachedNetworkImage(
+                height: kContainerHeight,
+                imageUrl:
+                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: AppColor.paleGrey,
+                    highlightColor: AppColor.white,
+                    child: Container(
+                        height: kNetworkImageContainerTogether,
+                        width: kNetworkImageContainerTogether,
+                        decoration: BoxDecoration(
+                            color: AppColor.white,
+                            borderRadius: BorderRadius.circular(kCardRadius)))),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error_outline_sharp, size: kIconSize)),
+          ),
+        );
       default:
         return Container();
     }

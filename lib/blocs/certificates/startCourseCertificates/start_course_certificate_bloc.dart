@@ -83,12 +83,13 @@ class StartCourseCertificateBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchGetNotesModel fetchGetNotesModel =
           await _certificateRepository.getNotesCertificates(
               hashCode!, userId!, event.topicId, event.pageNo);
       if (fetchGetNotesModel.status == 200) {
-        emit(
-            GetNotesCertificateFetched(fetchGetNotesModel: fetchGetNotesModel));
+        emit(GetNotesCertificateFetched(
+            fetchGetNotesModel: fetchGetNotesModel, clientId: clientId!));
       }
     } catch (e) {
       emit(GetNotesCertificateError(getNotesError: e.toString()));

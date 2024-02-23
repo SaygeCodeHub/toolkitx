@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import '../../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -41,14 +39,17 @@ class CertificateListCard extends StatelessWidget {
                     Visibility(
                       visible: data.status == 1,
                       child: Card(
-                        color: AppColor.lightGrey,
+                          color: AppColor.lightGrey,
                           child: Padding(
-                        padding: const EdgeInsets.all(tiniestSpacing),
-                        child: Text(StringConstants.kApprovalPending,
-                            style: Theme.of(context).textTheme.xxSmall.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.black)),
-                      )),
+                            padding: const EdgeInsets.all(tiniestSpacing),
+                            child: Text(StringConstants.kApprovalPending,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xxSmall
+                                    .copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColor.black)),
+                          )),
                     )
                   ],
                 ),
@@ -84,7 +85,7 @@ class CertificateListCard extends StatelessWidget {
                 )),
                 Expanded(
                     child: CustomTextButton(
-                  onPressed: data.accesscertificate != "1"
+                  onPressed: data.accesscertificate == "1"
                       ? () {
                           String certificateId = data.id;
                           Navigator.pushNamed(

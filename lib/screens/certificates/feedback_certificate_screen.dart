@@ -8,11 +8,14 @@ import '../../blocs/certificates/feedbackCertificates/feedback_certificate_bloc.
 import '../../blocs/certificates/feedbackCertificates/feedback_certificate_state.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import '../../utils/certificate_util.dart';
 import '../../widgets/custom_card.dart';
 
 class FeedbackCertificateScreen extends StatelessWidget {
   static const routeName = 'FeedbackCertificateScreen';
+
   const FeedbackCertificateScreen({super.key, required this.getdetailsMap});
+
   final Map getdetailsMap;
 
   @override
@@ -49,8 +52,7 @@ class FeedbackCertificateScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500, color: AppColor.black),
                     ),
                     subtitle: Text(
-                      state.feedbackCertificateModel.data.questions[index]
-                          .answer,
+                      CertificateUtil().answerList[index],
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w500, color: AppColor.grey),
                     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:html_unescape/html_unescape.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_body.dart';
@@ -38,8 +37,6 @@ class GetNotesCertificateScreen extends StatelessWidget {
           if (state is FetchingGetNotesCertificate) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is GetNotesCertificateFetched) {
-            var unescape = HtmlUnescape();
-            var text = unescape.convert(state.fetchGetNotesModel.data.notes);
             return Padding(
               padding: const EdgeInsets.only(
                   left: leftRightMargin,
@@ -59,7 +56,10 @@ class GetNotesCertificateScreen extends StatelessWidget {
                           color: AppColor.mediumBlack)),
                   const SizedBox(height: tinySpacing),
                   GetNotesCertificateBody(
-                      data: state.fetchGetNotesModel.data, pageNo: pageNo),
+                    data: state.fetchGetNotesModel.data,
+                    pageNo: pageNo,
+                    clientId: state.clientId,
+                  ),
                   const SizedBox(height: tinierSpacing),
                 ],
               ),
@@ -74,7 +74,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
         child: BlocBuilder<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           buildWhen: (previousState, currentState) =>
-          currentState is FetchingGetNotesCertificate ||
+              currentState is FetchingGetNotesCertificate ||
               currentState is GetNotesCertificateFetched ||
               currentState is GetNotesCertificateError,
           builder: (context, state) {
