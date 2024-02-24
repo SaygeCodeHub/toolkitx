@@ -69,7 +69,6 @@ class AttachDocumentScreen extends StatelessWidget {
                               },
                             ));
                   }
-
                   if (state is DocumentFileVersionUploading) {
                     ProgressBar.show(context);
                   }
