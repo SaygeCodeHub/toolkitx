@@ -930,7 +930,7 @@ class WorkOrderTabDetailsBloc
   FutureOr _fetchSingleMiscCost(FetchWorkOrderSingleMiscCost event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderSingleMiscCost());
-    // try {
+    try {
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
         await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
@@ -945,9 +945,9 @@ class WorkOrderTabDetailsBloc
         fetchWorkOrderSingleMiscCostModel.data.quan;
     emit(SingleWorkOrderMiscCostFetched(
         fetchWorkOrderSingleMiscCostModel: fetchWorkOrderSingleMiscCostModel));
-    // } catch (e) {
-    //   emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
-    // }
+    } catch (e) {
+      emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
+    }
   }
 
   FutureOr<void> _saveDocuments(SaveWorkOrderComments event,
