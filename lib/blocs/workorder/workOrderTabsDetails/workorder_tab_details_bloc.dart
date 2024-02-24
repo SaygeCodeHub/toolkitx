@@ -931,20 +931,21 @@ class WorkOrderTabDetailsBloc
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderSingleMiscCost());
     try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
-        await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
-            WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
-    WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
-        fetchWorkOrderSingleMiscCostModel.data.id;
-    WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
-        fetchWorkOrderSingleMiscCostModel.data.service;
-    WorkOrderAddMisCostScreen.workOrderDetailsMap['amount'] =
-        fetchWorkOrderSingleMiscCostModel.data.amount;
-    WorkOrderAddMisCostScreen.workOrderDetailsMap['quan'] =
-        fetchWorkOrderSingleMiscCostModel.data.quan;
-    emit(SingleWorkOrderMiscCostFetched(
-        fetchWorkOrderSingleMiscCostModel: fetchWorkOrderSingleMiscCostModel));
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchWorkOrderSingleMiscCostModel fetchWorkOrderSingleMiscCostModel =
+          await _workOrderRepository.fetchWorkOrderSingleMiscCost(hashCode!,
+              WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId']);
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['misCostId'] =
+          fetchWorkOrderSingleMiscCostModel.data.id;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['service'] =
+          fetchWorkOrderSingleMiscCostModel.data.service;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['amount'] =
+          fetchWorkOrderSingleMiscCostModel.data.amount;
+      WorkOrderAddMisCostScreen.workOrderDetailsMap['quan'] =
+          fetchWorkOrderSingleMiscCostModel.data.quan;
+      emit(SingleWorkOrderMiscCostFetched(
+          fetchWorkOrderSingleMiscCostModel:
+              fetchWorkOrderSingleMiscCostModel));
     } catch (e) {
       emit(SingleWorkOrderMiscCostNotFetched(miscCostNotFetched: e.toString()));
     }
