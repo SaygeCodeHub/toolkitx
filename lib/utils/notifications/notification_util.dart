@@ -11,6 +11,11 @@ class NotificationUtil {
 
   Future<void> initNotifications() async {
     await pushNotifications.requestPermission();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Notification title ${message.notification!.title}');
+      log('Notification body ${message.notification!.body}');
+    });
   }
 
   ifTokenExists<bool>() async {

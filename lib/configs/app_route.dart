@@ -541,7 +541,7 @@ class AppRoutes {
       case OpenDocumentForReviewScreen.routeName:
         return _createRoute(const OpenDocumentForReviewScreen());
       case NewChatScreen.routeName:
-        return _createRoute(const NewChatScreen());
+        return _createRoute(NewChatScreen());
       case ChatBoxScreen.routeName:
         return _createRoute(const ChatBoxScreen());
       default:

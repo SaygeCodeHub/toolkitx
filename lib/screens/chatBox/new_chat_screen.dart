@@ -87,10 +87,40 @@ class NewChatScreen extends StatelessWidget {
   }
 }
 
+class TrianglePainter extends CustomPainter {
+  final bool isMe;
+
+  TrianglePainter({required this.isMe});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = AppColor.offWhite; // Light blue color
+    Path path = Path();
+    if (isMe) {
+      path.moveTo(size.width, size.height);
+      path.lineTo(size.width - 15, size.height);
+      path.lineTo(size.width, size.height + 15);
+      path.close();
+    } else {
+      path.moveTo(0, size.height);
+      path.lineTo(15, size.height);
+      path.lineTo(0, size.height + 15);
+      path.close();
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
 class ChatMessage extends StatelessWidget {
   final String message;
+  final bool isMe;
 
-  const ChatMessage({super.key, required this.message});
+  const ChatMessage({super.key, required this.message, this.isMe = true});
 
   String getCurrentTime() {
     int hour = DateTime.now().hour;
@@ -101,46 +131,43 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> fullName =
-        NewChatScreen.employeeDetailsMap['employee_name']?.split(' ') ?? '';
-    String firstName = fullName[0][0].toUpperCase();
-    String lastName = fullName[1][0].toUpperCase();
     return Container(
-        margin: const EdgeInsets.symmetric(
-            vertical: xxTinierSpacing, horizontal: xxTinySpacing),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.only(right: xxTinySpacing),
-                  child: CircleAvatar(child: Text('$firstName$lastName'))),
-              Expanded(
-                  child: CustomCard(
-                      color: AppColor.lightestBlue,
-                      child: Padding(
-                          padding: const EdgeInsets.all(xxTinierSpacing),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  NewChatScreen.employeeDetailsMap[
-                                          'employee_name'] ??
-                                      '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .small
-                                      .copyWith(color: AppColor.black),
-                                ),
-                                const SizedBox(height: tiniestSpacing),
-                                Text(message, maxLines: 2),
-                                Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(getCurrentTime(),
-                                        textAlign: TextAlign.end,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .smallTextBlack))
-                              ]))))
-            ]));
+        margin: const EdgeInsets.symmetric(horizontal: xxxSmallestSpacing),
+        child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+          Padding(
+              padding: const EdgeInsets.all(xxTinierSpacing),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(xxxTinySpacing),
+                      decoration: BoxDecoration(
+                        color: AppColor.lightBlueGrey,
+                        borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(tinierSpacing),
+                            topRight: const Radius.circular(tinierSpacing),
+                            bottomLeft: isMe
+                                ? const Radius.circular(tinierSpacing)
+                                : const Radius.circular(0),
+                            bottomRight: isMe
+                                ? const Radius.circular(0)
+                                : const Radius.circular(tinierSpacing)),
+                      ),
+                      child: Text(message,
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w500),
+                          maxLines: 2),
+                    ),
+                    if (!isMe)
+                      CustomPaint(
+                        painter: TrianglePainter(isMe: isMe),
+                      ),
+                    const SizedBox(height: xxxTinierSpacing),
+                    Text(getCurrentTime(),
+                        style: Theme.of(context).textTheme.smallTextBlack)
+                  ]))
+        ]));
   }
 }
