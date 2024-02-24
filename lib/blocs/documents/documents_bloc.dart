@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/documents/document_upload_file_version_model
 import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
 import 'package:toolkit/data/models/documents/post_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/documents/documents_details_models.dart';
@@ -83,7 +84,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsListDatum.addAll(documentsListModel.data);
         docListReachedMax = documentsListModel.data.isEmpty;
         emit(DocumentsListFetched(documentsListModel: documentsListModel));
-      }
+      } else {}
     } catch (e) {
       emit(DocumentsListError(message: e.toString()));
     }
@@ -377,14 +378,18 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         "duedate": event.dueDate,
         "userid": userId
       };
-      PostDocumentsModel postDocumentsModel = await _documentsRepository
-          .openDocumentFopReview(openDocumentFopInformationMap);
-      if (postDocumentsModel.message == '1') {
-        emit(DocumentOpenedForReview());
+      if (event.dueDate.isEmpty || event.dueDate == '') {
+        emit(const OpenDocumentsForReviewError(message: 'Please select date'));
       } else {
-        emit(OpenDocumentsForReviewError(
-            message:
-                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        PostDocumentsModel postDocumentsModel = await _documentsRepository
+            .openDocumentFopReview(openDocumentFopInformationMap);
+        if (postDocumentsModel.message == '1') {
+          emit(DocumentOpenedForReview());
+        } else {
+          emit(OpenDocumentsForReviewError(
+              message:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       }
     } catch (e) {
       emit(OpenDocumentsForReviewError(message: e.toString()));
