@@ -35,57 +35,56 @@ class GetTopicCertificateBody extends StatelessWidget {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return Card(
-                child: ListTile(
-                    onTap: () {
-                      Map getNotesMap = {
-                        "coursename": data.coursename,
-                        "certificatename": data.certificatename,
-                        "name": data.topiclist[index].name,
-                        "id": data.topiclist[index].id
-                      };
-                      Navigator.pushNamed(
-                          context, GetNotesCertificateScreen.routeName,
-                          arguments: getNotesMap);
-                    },
-                    contentPadding: const EdgeInsets.all(kCardPadding),
-                    leading: Container(
-                        width: kModuleIconSize,
-                        height: kModuleIconSize,
-                        decoration: const BoxDecoration(
-                            color: AppColor.blueGrey,
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(kSmallBorderRadius))),
-                        child: const Center(child: Text(StringConstants.k1))),
-                    title: Text(data.topiclist[index].name,
-                        style: Theme.of(context).textTheme.small.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.mediumBlack)),
-                    subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: xxxTinierSpacing),
-                          Text(
-                              "${data.topiclist[index].notescount} ${StringConstants.kPagesInside}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(
-                                      fontWeight: FontWeight.w400,
-                                      color: AppColor.grey))
-                        ]),
-                    trailing: Container(
-                        width: kDotContianerSize,
-                        height: kDotContianerSize,
-                        decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(kImageHeight)),
-                            color: data.topiclist[index].completedcount ==
-                                    data.topiclist[index].notescount
-                                ? AppColor.green
-                                : data.topiclist[index].completedcount == 0
-                                    ? null
-                                    : AppColor.orange))),
-              );
+                  child: ListTile(
+                      onTap: () {
+                        Map getNotesMap = {
+                          "coursename": data.coursename,
+                          "certificatename": data.certificatename,
+                          "name": data.topiclist[index].name,
+                          "id": data.topiclist[index].id
+                        };
+                        Navigator.pushNamed(
+                            context, GetNotesCertificateScreen.routeName,
+                            arguments: getNotesMap);
+                      },
+                      contentPadding: const EdgeInsets.all(kCardPadding),
+                      leading: Container(
+                          width: kModuleIconSize,
+                          height: kModuleIconSize,
+                          decoration: const BoxDecoration(
+                              color: AppColor.blueGrey,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(kSmallBorderRadius))),
+                          child: const Center(child: Text(StringConstants.k1))),
+                      title: Text(data.topiclist[index].name,
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColor.mediumBlack)),
+                      subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: xxxTinierSpacing),
+                            Text(
+                                "${data.topiclist[index].notescount} ${StringConstants.kPagesInside}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xSmall
+                                    .copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColor.grey))
+                          ]),
+                      trailing: Container(
+                          width: kDotContianerSize,
+                          height: kDotContianerSize,
+                          decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(kImageHeight)),
+                              color: data.topiclist[index].completedcount ==
+                                      data.topiclist[index].notescount
+                                  ? AppColor.green
+                                  : data.topiclist[index].completedcount == 0
+                                      ? null
+                                      : AppColor.orange))));
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: xxTinierSpacing);

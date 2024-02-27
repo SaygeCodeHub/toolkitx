@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
@@ -46,6 +48,7 @@ class CertificateRepositoryImpl extends CertificateRepository {
       String hashCode, String certificateId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetCourses?hashcode=$hashCode&certificateid=$certificateId");
+    log("${ApiConstants.baseUrl}certificate/GetCourses?hashcode=$hashCode&certificateid=$certificateId");
     return GetCourseCertificateModel.fromJson(response);
   }
 

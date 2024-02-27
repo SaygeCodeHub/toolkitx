@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
@@ -68,6 +69,7 @@ class StartCourseCertificateBloc
       GetTopicCertificateModel getTopicCertificateModel =
           await _certificateRepository.getTopicCertificates(
               hashCode!, userId!, event.courseId);
+      log('hashCode , userId , CourseId===============>$hashCode , $userId , ${event.courseId}');
       if (getTopicCertificateModel.status == 200) {
         emit(GetTopicCertificateFetched(
             getTopicCertificateModel: getTopicCertificateModel));

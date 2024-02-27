@@ -85,7 +85,7 @@ class CertificateListCard extends StatelessWidget {
                 )),
                 Expanded(
                     child: CustomTextButton(
-                  onPressed: data.accesscertificate == "1"
+                  onPressed: data.accesscertificate != "1"
                       ? () {
                           String certificateId = data.id;
                           Navigator.pushNamed(
