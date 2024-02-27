@@ -35,7 +35,6 @@ class QualityManagementMapLinksList extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 softWrap: true,
                 maxLines: 2,
-                textScaleFactor: 1,
                 text: TextSpan(
                   text: "${data.maplinks[index].name} : ",
                   style: DefaultTextStyle.of(context).style,
@@ -47,6 +46,7 @@ class QualityManagementMapLinksList extends StatelessWidget {
                             )),
                   ],
                 ),
+                textScaler: const TextScaler.linear(1),
               ));
         });
   }
