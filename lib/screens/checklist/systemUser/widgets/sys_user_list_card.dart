@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
+import '../../../../blocs/checklist/systemUser/checkList/sys_user_checklist_event.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../configs/app_spacing.dart';
@@ -52,8 +55,11 @@ class SystemUserListCard extends StatelessWidget {
                     ])),
             onTap: () {
               Navigator.pushNamed(
-                  context, SystemUserScheduleDatesScreen.routeName,
-                  arguments: checkListDatum.id);
+                      context, SystemUserScheduleDatesScreen.routeName,
+                      arguments: checkListDatum.id)
+                  .then((value) => context
+                      .read<SysUserCheckListBloc>()
+                      .add(FetchCheckList(isFromHome: false, page: 1)));
             }));
   }
 }

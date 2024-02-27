@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/workorder/widgets/workorder_assign_workforce_card.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
@@ -13,6 +14,7 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/error_section.dart';
 import '../../../widgets/generic_no_records_text.dart';
 import '../assign_workforce_screen.dart';
+import 'assign_workforce_alert_dialog.dart';
 
 class AssignWorkForceBody extends StatelessWidget {
   const AssignWorkForceBody({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class AssignWorkForceBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AssignWorkForceBody.assignWorkForceMap['hrs'] = null;
     return BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             (currentState is FetchingAssignWorkOrder &&
@@ -40,6 +43,26 @@ class AssignWorkForceBody extends StatelessWidget {
                     .isNotEmpty) {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
+          }
+          if (state is AssigningWorkForce) {
+            ProgressBar.show(context);
+          } else if (state is WorkForceAssigned) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, "Workforce Assigned", '');
+            Navigator.pop(context);
+            context
+                .read<WorkOrderTabDetailsBloc>()
+                .add(SearchWorkOrderWorkforce(isWorkforceSearched: false));
+          } else if (state is WorkForceNotAssigned) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, state.workForceNotFetched, '');
+          } else if (state is WorkforceAssignDialog) {
+            ProgressBar.dismiss(context);
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  AssignWorkForceAlertDialog(warningMessage: state.dialogText),
+            );
           }
         },
         builder: (context, state) {

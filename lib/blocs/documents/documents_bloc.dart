@@ -4,13 +4,16 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/documents/document_master_model.dart';
 import 'package:toolkit/data/models/documents/document_roles_model.dart';
+import 'package:toolkit/data/models/documents/document_upload_file_version_model.dart';
 import 'package:toolkit/data/models/documents/documents_to_link_model.dart';
 import 'package:toolkit/data/models/documents/post_document_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/documents/documents_details_models.dart';
 import '../../data/models/documents/documents_list_model.dart';
+import '../../data/models/documents/save_document_comments_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/documents/documents_repository.dart';
 import 'documents_events.dart';
@@ -47,7 +50,15 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
     on<GetDocumentsToLink>(_fetchDocumentsToLink);
     on<SaveLinkedDocuments>(_saveLinkedDocuments);
     on<AttachDocuments>(_attachDocuments);
+    on<UploadDocumentFileVersion>(_uploadDocumentFileVersion);
     on<DeleteDocuments>(_deleteDocuments);
+    on<OpenDocumentsForInformation>(_openDocumentsForInformation);
+    on<OpenDocumentsForReview>(_openDocumentsForReview);
+    on<ApproveDocument>(_approveDocuments);
+    on<RejectDocument>(_rejectDocument);
+    on<WithdrawDocument>(_withdrawDocument);
+    on<CloseDocument>(_closeDocument);
+    on<SaveDocumentComments>(_saveDocumentComments);
   }
 
   Future<void> _getDocumentsList(
@@ -73,7 +84,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
         documentsListDatum.addAll(documentsListModel.data);
         docListReachedMax = documentsListModel.data.isEmpty;
         emit(DocumentsListFetched(documentsListModel: documentsListModel));
-      }
+      } else {}
     } catch (e) {
       emit(DocumentsListError(message: e.toString()));
     }
@@ -171,11 +182,9 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       if (documentDetailsModel.data.canclose == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_closedocument'));
       }
-      if (documentDetailsModel.data.canedit == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('Edit'));
-      }
       if (documentDetailsModel.data.canopen == '1') {
-        documentsPopUpMenu.add(DatabaseUtil.getText('Open'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforreview'));
+        documentsPopUpMenu.add(DatabaseUtil.getText('dms_openforinformation'));
       }
       if (documentDetailsModel.data.canreject == '1') {
         documentsPopUpMenu.add(DatabaseUtil.getText('dms_rejectdocument'));
@@ -248,24 +257,63 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      Map attachDocumentsMap = {
-        "documentid": documentId,
-        "files": event.attachDocumentsMap['files'],
-        "userid": userId,
-        "notes": event.attachDocumentsMap['notes'],
-        "hashcode": hashCode
-      };
-      PostDocumentsModel postDocumentsModel =
-          await _documentsRepository.attachDocuments(attachDocumentsMap);
-      if (postDocumentsModel.message == '1') {
-        emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+      if (event.attachDocumentsMap['files'] != null) {
+        Map attachDocumentsMap = {
+          "documentid": documentId,
+          "files": event.attachDocumentsMap['files'],
+          "userid": userId,
+          "notes": event.attachDocumentsMap['notes'],
+          "hashcode": hashCode
+        };
+        PostDocumentsModel postDocumentsModel =
+            await _documentsRepository.attachDocuments(attachDocumentsMap);
+        if (postDocumentsModel.message == '1') {
+          emit(DocumentsAttached(postDocumentsModel: postDocumentsModel));
+        } else {
+          emit(AttachDocumentsError(
+              message:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       } else {
         emit(AttachDocumentsError(
-            message:
-                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+            message: DatabaseUtil.getText('PleaseSelectAnyDocOrImage')));
       }
     } catch (e) {
       emit(AttachDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _uploadDocumentFileVersion(
+      UploadDocumentFileVersion event, Emitter<DocumentsStates> emit) async {
+    emit(DocumentFileVersionUploading());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.uploadFileVersionMap['filename'] != null) {
+        Map uploadFileVersionMap = {
+          "fileid": event.uploadFileVersionMap['fileid'],
+          "filename": event.uploadFileVersionMap['filename'],
+          "userid": userId,
+          "notes": event.uploadFileVersionMap['notes'],
+          "hashcode": hashCode
+        };
+        DocumentUploadFileVersionModel documentUploadFileVersionModel =
+            await _documentsRepository
+                .documentUploadFileVersion(uploadFileVersionMap);
+        if (documentUploadFileVersionModel.message == '1') {
+          emit(DocumentFileVersionUploaded(
+              documentUploadFileVersionModel: documentUploadFileVersionModel));
+        } else {
+          emit(DocumentFileVersionNotUploaded(
+              errorMessage: documentUploadFileVersionModel.message));
+        }
+      } else {
+        emit(DocumentFileVersionNotUploaded(
+            errorMessage: DatabaseUtil.getText('PleaseSelectAnyDocOrImage')));
+      }
+    } catch (e) {
+      emit(DocumentFileVersionNotUploaded(errorMessage: e.toString()));
     }
   }
 
@@ -287,6 +335,207 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       }
     } catch (e) {
       emit(DeleteDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _openDocumentsForInformation(
+      OpenDocumentsForInformation event, Emitter<DocumentsStates> emit) async {
+    emit(const OpeningDocumentsForInformation());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openDocumentForInfoMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "userid": userId
+      };
+      PostDocumentsModel postDocumentsModel = await _documentsRepository
+          .openDocumentFopInformation(openDocumentForInfoMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentOpenedForInformation(
+            postDocumentsModel: postDocumentsModel));
+      } else {
+        emit(OpenDocumentsForInformationError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(OpenDocumentsForInformationError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _openDocumentsForReview(
+      OpenDocumentsForReview event, Emitter<DocumentsStates> emit) async {
+    emit(const OpeningDocumentsForReview());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openDocumentFopInformationMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "duedate": event.dueDate,
+        "userid": userId
+      };
+      if (event.dueDate.isEmpty || event.dueDate == '') {
+        emit(const OpenDocumentsForReviewError(message: 'Please select date'));
+      } else {
+        PostDocumentsModel postDocumentsModel = await _documentsRepository
+            .openDocumentFopReview(openDocumentFopInformationMap);
+        if (postDocumentsModel.message == '1') {
+          emit(DocumentOpenedForReview());
+        } else {
+          emit(OpenDocumentsForReviewError(
+              message:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
+      }
+    } catch (e) {
+      emit(OpenDocumentsForReviewError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _approveDocuments(
+      ApproveDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const ApprovingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map approveDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.approveDocuments(approveDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsApproved());
+      } else {
+        emit(ApproveDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(ApproveDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _rejectDocument(
+      RejectDocument event, Emitter<DocumentsStates> emit) async {
+    emit(RejectingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectDocumentsMap = {
+        "hashcode": hashCode,
+        "documentid": documentId,
+        "comments": event.comment,
+        "userid": userId,
+        "role": roleId
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.rejectDocuments(rejectDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsRejected());
+      } else {
+        emit(RejectDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(RejectDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _withdrawDocument(
+      WithdrawDocument event, Emitter<DocumentsStates> emit) async {
+    emit(const WithdrawingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map withdrawDocumentsMap = {
+        "documentid": hashCode,
+        "userid": userId,
+        "hashcode": hashCode,
+        "role": roleId
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.withdrawDocuments(withdrawDocumentsMap);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsWithdrawn());
+      } else {
+        emit(WithdrawDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(WithdrawDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _closeDocument(
+      CloseDocument event, Emitter<DocumentsStates> emit) async {
+    emit(ClosingDocuments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map closeDocumentsMsp = {
+        "documentid": documentId,
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      PostDocumentsModel postDocumentsModel =
+          await _documentsRepository.closeDocuments(closeDocumentsMsp);
+      if (postDocumentsModel.message == '1') {
+        emit(DocumentsClosed());
+      } else {
+        emit(CloseDocumentsError(
+            message:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
+    } catch (e) {
+      emit(CloseDocumentsError(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveDocumentComments(
+      SaveDocumentComments event, Emitter<DocumentsStates> emit) async {
+    emit(const SavingDocumentComments());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.saveDocumentsCommentsMap['comments'] != null) {
+        Map saveDocumentCommentsMap = {
+          "userid": userId,
+          "documentid": documentId,
+          "comments": event.saveDocumentsCommentsMap['comments'],
+          "files": event.saveDocumentsCommentsMap['files'],
+          "refno": event.saveDocumentsCommentsMap['refno'],
+          "hashcode": hashCode
+        };
+        SaveDocumentCommentsModel saveDocumentCommentsModel =
+            await _documentsRepository
+                .saveDocumentComments(saveDocumentCommentsMap);
+        if (saveDocumentCommentsModel.message == '1') {
+          emit(DocumentCommentsSaved());
+        } else {
+          emit(SaveDocumentCommentsError(
+              errorMessage: saveDocumentCommentsModel.message));
+        }
+      } else {
+        emit(SaveDocumentCommentsError(
+            errorMessage: DatabaseUtil.getText('ValidComments')));
+      }
+    } catch (e) {
+      emit(SaveDocumentCommentsError(errorMessage: e.toString()));
     }
   }
 }

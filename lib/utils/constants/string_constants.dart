@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
+  static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
   static const String kNoItems = 'No items!'; //
@@ -20,6 +21,12 @@ abstract class StringConstants {
   static const String kNoParts = 'No items/parts!'; //
   static const String kDeleteItem = 'Do you want to delete this item'; //
   static const String kParts = 'Parts'; //
+  static const String kTypeOfRoom = 'Type of Room '; //
+  static const String kNameOfHotel = 'Name of hotel :'; //
+  static const String kEditItem = 'Edit Item'; //
+  static const String kExpenseWorkingAtNumber =
+      'Working at Number cannot be empty!    '; //
+  static const String kGoBack = 'Go Back'; //
   static const String kNoMisCost = 'No Misc.Cost!'; //
   static const String kNoDowntown = 'No downtime!'; //
   static const String kSelectType = 'Select type'; //
@@ -64,6 +71,7 @@ abstract class StringConstants {
   static const String kNotAccepted = 'Not Accepted';
   static const String kOverdue = 'Overdue';
   static const String kSubmitted = 'Submitted';
+  static const String kApproved = 'Approved';
   static const String kUploadPhoto = 'Upload Photo';
   static const String kAddCommentImage = 'Add Comment/Image';
   static const String kHint = 'Hint';
@@ -127,6 +135,10 @@ abstract class StringConstants {
   static const String kWorkingAt = 'Working at'; //
   static const String kSelectItem = 'Select Item'; //
   static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
+  static const String kExpenseAddItemAmountAndCurrencyValidation =
+      'Amount and Currency are compulsory.'; //
+  static const String kExpenseAddItemDateAndItemValidation =
+      'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
@@ -280,6 +292,7 @@ abstract class StringConstants {
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
+  static const String kTeamAssigned = 'Team Assigned';
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
@@ -442,7 +455,7 @@ abstract class StringConstants {
   static const String kTransferEquipment = 'Transfer Equipment';
   static const String kTransfer = 'Transfer';
   static const String kSearchEquipment = 'Search Equipment';
-  static const String kViewMyEquipment = 'View my Equipment';
+  static const String kViewMyRequest = 'View my request';
   static const String kTrace = 'Trace';
   static const String kScan = 'Scan';
   static const String kEnter = 'Enter';
@@ -465,8 +478,44 @@ abstract class StringConstants {
   static const String kPartAssigned = 'Part Assigned';
   static const String kPleaseInsertValidQuantity =
       'Please insert valid planned quantity';
+  static String kMethodOfReporting = "Method of reporting";
+  static String kRegularReporting = "Regular Reporting";
+  static const String kSubmitAll = "Submit all :";
+  static const String kSubmissionDate = "Submission Date :";
+  static const String kNotSubmitted = "Not Submitted";
+  static const String kDataNotCorrect = "Date is not correct";
+  static String kSubmissionPeriod = "Submission Period";
+  static String kMonthly = "Monthly";
   static const String kSavedSuccessfully = "Saved Successfully";
   static const String kUploadImages = "Upload images";
   static const String kLocationSavedSuccessfully =
       "Location saved successfully";
+  static const String kPleaseSearchOrScanTheEquipment =
+      'Please Search OR Scan the equipment from top menu bar';
+  static const String kClose = 'Close';
+  static const String kAddTimeSheet = 'Add TimeSheet';
+  static const String kSubmitTimeSheet = 'Submit TimeSheet';
+  static const String kMinsBreak = 'mins break';
+  static const String kTimeSheetSubmittedSuccessfully =
+      'TimeSheet Submitted Successfully';
+  static const String kDoYouWantToDeleteThisEntry =
+      'Do you want to delete this entry ?';
+  static const String kWarehouse = "Warehouse";
+  static const String kEmployee = "Employee";
+  static const String kPositions = "Positions";
+  static const String kSelectPositions = "Select Positions";
+  static const String kSelectWarehouse = "Select Warehouse";
+  static const String kSelectEmployee = "Select Employee";
+  static const String kWorkorder = "Workorder";
+  static const String kAreYouSureToReject = "Are you sure to reject?";
+  static const String kRequestRejected = "Request Rejected";
+  static const String kPleaseEnterYourAnswer50Bis200 =
+      'Please enter your answer between 50 bis 200';
+  static const String kAreYouSureToCloseDocument =
+      'Are you sure you want to close this document management ? ';
+  static const String kDocumentManagement = 'Document Management';
+  static const String kDateTimeDescriptionContractorIsNotEmpty =
+      'Incident date, time, description, contractor cannot be empty.';
+  static const String kExpenseReportRejected = "Expense Report Rejected";
+  static const String kExpenseReportComments = 'Please add comment first';
 }

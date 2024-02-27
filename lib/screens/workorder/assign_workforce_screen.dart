@@ -25,16 +25,14 @@ class AssignWorkForceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pageNo = 1;
     context.read<WorkOrderTabDetailsBloc>().add(FetchAssignWorkForceList(
-        pageNo: pageNo,
+        pageNo: 1,
         workOrderWorkforceName: '',
         workOrderId: context.read<WorkOrderBloc>().workOrderId));
     context.read<WorkOrderTabDetailsBloc>().assignWorkForceListReachedMax =
         false;
     context.read<WorkOrderTabDetailsBloc>().add(
         SearchWorkOrderWorkforce(isWorkforceSearched: isWorkforceSearched));
-
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('assign_workforce')),
         body: Padding(

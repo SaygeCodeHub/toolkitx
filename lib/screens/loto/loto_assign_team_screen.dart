@@ -19,17 +19,15 @@ class LotoAssignTeamScreen extends StatelessWidget {
   const LotoAssignTeamScreen({super.key});
 
   static String name = '';
-  static int isRemove = 0;
+  static String isRemove = '0';
   static int pageNo = 1;
-  static bool hasReachedMax = false;
-  static List data = [];
   static bool isSearched = false;
 
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
-    data.clear();
-    hasReachedMax = false;
+    context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
+    context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
     context
         .read<LotoDetailsBloc>()
         .add(FetchLotoAssignTeam(pageNo: pageNo, isRemove: isRemove, name: ''));
@@ -46,14 +44,14 @@ class LotoAssignTeamScreen extends StatelessWidget {
               name = value;
             }, onSearch: () {
               pageNo = 1;
-              data.clear();
-              hasReachedMax = false;
+              context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
+              context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
               context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
                   pageNo: pageNo, isRemove: isRemove, name: name));
             }, onClear: () {
               pageNo = 1;
-              data.clear();
-              hasReachedMax = false;
+              context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
+              context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
               name = '';
               context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
                   pageNo: pageNo, isRemove: isRemove, name: name));

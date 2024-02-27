@@ -34,6 +34,12 @@ class DocumentDetailsFiles extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
+              Map documentMap = {
+                'name': documentDetailsModel.data.fileList[index].filename,
+                'version': documentDetailsModel.data.fileList[index].version,
+                'fileid': documentDetailsModel.data.fileList[index].fileid,
+              };
+              DocumentsFilesMenu.documentFileMap = documentMap;
               return CustomCard(
                   child: Padding(
                       padding:
@@ -41,7 +47,7 @@ class DocumentDetailsFiles extends StatelessWidget {
                       child: ListTile(
                           onTap: () {
                             launchUrlString(
-                                '${ApiConstants.viewDocBaseUrl}${documentDetailsModel.data.fileList[index].filename[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                                '${ApiConstants.viewDocBaseUrl}${documentDetailsModel.data.fileList[index].filename}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                                 mode: LaunchMode.externalApplication);
                           },
                           title: Column(
@@ -72,11 +78,21 @@ class DocumentDetailsFiles extends StatelessWidget {
                                               .xSmall)
                                     ])
                               ]),
-                          trailing: DocumentsFilesMenu(
+                          trailing: Visibility(
+                            visible: documentDetailsModel
+                                        .data.fileList[index].candelete ==
+                                    '1' ||
+                                documentDetailsModel.data.fileList[index]
+                                        .canuploadnewversion ==
+                                    '1',
+                            child: DocumentsFilesMenu(
                               popUpMenuItems: DocumentsUtil.fileMenuOptions(
                                   documentDetailsModel.data.fileList[index]),
                               fileData:
-                                  documentDetailsModel.data.fileList[index]))));
+                                  documentDetailsModel.data.fileList[index],
+                              documentDetailsModel: documentDetailsModel,
+                            ),
+                          ))));
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: tinierSpacing);

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/expense/reject_expense_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -11,15 +12,23 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/models/expense/approve_expnse_model.dart';
 import '../../data/models/expense/close_expense_model.dart';
 import '../../data/models/expense/delete_expense_item_model.dart';
+import '../../data/models/expense/expense_item_custom_field_model.dart';
 import '../../data/models/expense/expense_submit_for_approval_model.dart';
+import '../../data/models/expense/expense_working_at_number_model.dart';
 import '../../data/models/expense/fetch_expense_details_model.dart';
+import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_list_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
+import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/expense/expense_repository.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_hotel_and_meal_layout.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_working_at_expansion_tile.dart';
+import '../../screens/expense/widgets/addItemsWidgets/expense_working_at_number_list_tile.dart';
 import 'expense_event.dart';
 import 'expense_state.dart';
 
@@ -47,6 +56,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     on<ApproveExpense>(_approveExpense);
     on<CloseExpense>(_closeExpense);
     on<DeleteExpenseItem>(_deleteExpenseItem);
+    on<SaveExpenseItem>(_saveItem);
+    on<FetchExpenseItemCustomFields>(_fetchItemCustomFields);
+    on<FetchWorkingAtNumberData>(_fetchWorkingAtNumberData);
+    on<FetchExpenseItemDetails>(_fetchItemDetails);
+    on<RejectExpense>(_rejectExpense);
   }
 
   List<ExpenseListDatum> expenseListData = [];
@@ -54,6 +68,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   int tabIndex = 0;
   Map filters = {};
   String expenseId = '';
+  bool isScreenChange = false;
+  List<List<ItemMasterDatum>> fetchItemMaster = [];
+  Map expenseWorkingAtMap = {};
+  Map expenseWorkingAtNumberMap = {};
 
   Future<void> _fetchExpenseList(
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
@@ -103,11 +121,15 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         popUpMenuList.add(DatabaseUtil.getText('SubmitForApproval'));
       }
       if (fetchExpenseDetailsModel.data.canApprove == '1') {
-        popUpMenuList.add(DatabaseUtil.getText('approve'));
+        popUpMenuList.add(DatabaseUtil.getText('ApproveReport'));
+      }
+      if (fetchExpenseDetailsModel.data.canApprove == '1') {
+        popUpMenuList.add(DatabaseUtil.getText('RejectReport'));
       }
       if (fetchExpenseDetailsModel.data.canClose == '1') {
-        popUpMenuList.add(DatabaseUtil.getText('Close'));
+        popUpMenuList.add(DatabaseUtil.getText('CloseReport'));
       }
+      popUpMenuList.add(DatabaseUtil.getText('Cancel'));
       Map manageExpensesMap = {
         'startdate': fetchExpenseDetailsModel.data.startdate,
         'enddate': fetchExpenseDetailsModel.data.enddate,
@@ -226,9 +248,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       if (event.manageExpenseMap['startdate'] == null &&
-              event.manageExpenseMap['enddate'] == null &&
-              event.manageExpenseMap['currency'] == null ||
-          event.manageExpenseMap['currency'].isEmpty) {
+          event.manageExpenseMap['enddate'] == null &&
+          event.manageExpenseMap['currency_id'] == '') {
         emit(AddExpenseNotSaved(
             expenseNotSaved:
                 DatabaseUtil.getText('DateAndCurrencyCompulsary')));
@@ -258,7 +279,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "userid": userId,
           "hashcode": hashCode
         };
-
         UpdateExpenseModel updateExpenseModel =
             await _expenseRepository.updateExpense(updateExpenseMap);
         if (updateExpenseModel.message == 'Modifyingexpensereport') {
@@ -313,13 +333,17 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       FetchExpenseItemMaster event, Emitter<ExpenseStates> emit) async {
     try {
       emit(FetchingExpenseItemMaster());
+      isScreenChange = event.isScreenChange;
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
       FetchItemMasterModel fetchItemMasterModel =
           await _expenseRepository.fetchExpenseItemMaster(hashCode, expenseId);
+      fetchItemMaster = fetchItemMasterModel.data;
       emit(ExpenseItemMasterFetched(
           fetchItemMasterModel: fetchItemMasterModel,
-          isScreenChange: event.isScreenChange));
+          isScreenChange: isScreenChange,
+          apiKey: apiKey));
       add(SelectExpenseDate(date: ''));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
@@ -336,13 +360,44 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   _selectWorkingAtOption(
       SelectExpenseWorkingAtOption event, Emitter<ExpenseStates> emit) {
-    emit(ExpenseWorkingAtOptionSelected(workingAt: event.workingAt));
+    if (expenseWorkingAtMap.isNotEmpty) {
+      for (int i = 0; i < expenseWorkingAtMap.values.length; i++) {
+        ExpenseWorkingAtExpansionTile.workingAt =
+            expenseWorkingAtMap.values.elementAt(i);
+        ExpenseWorkingAtExpansionTile.workingAtValue =
+            expenseWorkingAtMap.keys.elementAt(i);
+        ExpenseEditItemsScreen.editExpenseMap['workingatid'] =
+            ExpenseWorkingAtExpansionTile.workingAt;
+      }
+    } else {
+      ExpenseWorkingAtExpansionTile.workingAt = event.workingAt;
+      ExpenseWorkingAtExpansionTile.workingAtValue = event.workingAtValue;
+    }
+    emit(ExpenseWorkingAtOptionSelected(
+        workingAt: ExpenseWorkingAtExpansionTile.workingAt,
+        workingAtValue: ExpenseWorkingAtExpansionTile.workingAtValue));
+    add(FetchWorkingAtNumberData(
+        groupBy: ExpenseWorkingAtExpansionTile.workingAt));
   }
 
   _selectWorkingAtNumber(
       SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
+    if (expenseWorkingAtNumberMap.isNotEmpty) {
+      for (int j = 0; j < expenseWorkingAtNumberMap.values.length; j++) {
+        ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
+          "working_at_number_id": expenseWorkingAtNumberMap.values.elementAt(j),
+          "working_at_number": expenseWorkingAtNumberMap.values.elementAt(1)
+        };
+        ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
+            ExpenseWorkingAtNumberListTile
+                .workingAtNumberMap['working_at_number_id'];
+      }
+    } else {
+      ExpenseWorkingAtNumberListTile.workingAtNumberMap =
+          event.workingAtNumberMap;
+    }
     emit(ExpenseWorkingAtNumberSelected(
-        workingAtNumberMap: event.workingAtNumberMap));
+        workingAtNumberMap: ExpenseWorkingAtNumberListTile.workingAtNumberMap));
   }
 
   _selectAddItemCurrency(
@@ -354,13 +409,17 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   FutureOr<void> _approveExpense(
       ApproveExpense event, Emitter<ExpenseStates> emit) async {
     emit(ApprovingExpense());
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    Map approveExpenseMap = {
+      "reportid": expenseId,
+      "userid": userId,
+      "hashcode": hashCode
+    };
     try {
       ApproveExpenseModel approveExpenseModel =
-          await _expenseRepository.approveExpense({
-        "reportid": expenseId,
-        "userid": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
-        "hashcode": await _customerCache.getUserId(CacheKeys.userId) ?? ''
-      });
+          await _expenseRepository.approveExpense(approveExpenseMap);
       if (approveExpenseModel.message == StringConstants.kSuccessCode) {
         emit(ExpenseApproved());
       } else {
@@ -377,12 +436,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       CloseExpense event, Emitter<ExpenseStates> emit) async {
     emit(ClosingExpense());
     try {
-      CloseExpenseModel closeExpenseModel =
-          await _expenseRepository.closeExpense({
+      Map closeExpenseMap = {
         "reportid": expenseId,
         "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
-        "hashcode": await _customerCache.getUserId(CacheKeys.hashcode) ?? ''
-      });
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? ''
+      };
+      CloseExpenseModel closeExpenseModel =
+          await _expenseRepository.closeExpense(closeExpenseMap);
       if (closeExpenseModel.message == StringConstants.kSuccessCode) {
         emit(ExpenseClosed());
       } else {
@@ -413,6 +473,270 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       }
     } catch (e) {
       emit(ExpenseItemNotDeleted(itemNotDeleted: e.toString()));
+    }
+  }
+
+  Future<void> _saveItem(
+      SaveExpenseItem event, Emitter<ExpenseStates> emit) async {
+    emit(SavingExpenseItem());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.expenseItemMap['amount'] == null &&
+          event.expenseItemMap['reportcurrency'] == null) {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved:
+                StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
+      } else {
+        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
+            .expenseCustomFieldsList
+            .where((map) => map.isNotEmpty)
+            .toList();
+        Map saveItemMap = {
+          "id": event.expenseItemMap['id'] ?? '',
+          "expenseid": expenseId,
+          "date": event.expenseItemMap['date'] ?? '',
+          "itemid": event.expenseItemMap['itemid'] ?? '',
+          "amount": event.expenseItemMap['amount'] ?? '',
+          "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
+          "description": event.expenseItemMap['description'] ?? '',
+          "currency": event.expenseItemMap['currency'] ?? '',
+          "filenames": event.expenseItemMap['filenames'] ?? '',
+          "reportcurrency": event.expenseItemMap['reportcurrency'] ??
+              event.expenseItemMap['currency'],
+          "workingatid": event.expenseItemMap['workingatid'] ?? '',
+          "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
+          "userid": userId,
+          "hashcode": hashCode,
+          "questions": filteredList
+        };
+        SaveExpenseItemModel saveExpenseItemModel =
+            await _expenseRepository.saveExpenseItem(saveItemMap);
+        if (saveExpenseItemModel.message == '1') {
+          emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
+        } else {
+          emit(ExpenseItemCouldNotSave(
+              itemNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseItemCouldNotSave(itemNotSaved: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchItemCustomFields(
+      FetchExpenseItemCustomFields event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseCustomFields());
+      event.customFieldsMap['hashcode'] =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      ExpenseItemCustomFieldsModel expenseItemCustomFieldsModel =
+          await _expenseRepository
+              .fetchExpenseItemCustomFields(event.customFieldsMap);
+      if (expenseItemCustomFieldsModel.status == 200) {
+        emit(ExpenseCustomFieldsFetched(
+            expenseItemCustomFieldsModel: expenseItemCustomFieldsModel));
+      } else {
+        emit(ExpenseCustomFieldsNotFetched(
+            fieldsNotFetched: DatabaseUtil.getText('UnknownErrorMessage')));
+      }
+    } catch (e) {
+      emit(ExpenseCustomFieldsNotFetched(fieldsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchWorkingAtNumberData(
+      FetchWorkingAtNumberData event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingWorkingAtNumberData());
+      ExpenseWorkingAtNumberDataModel expenseWorkingAtNumberDataModel =
+          await _expenseRepository.fetchWorkingAtNumberData({
+        "groupby": event.groupBy,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (expenseWorkingAtNumberDataModel.data.isNotEmpty) {
+        emit(WorkingAtNumberDataFetched(
+            expenseWorkingAtNumberDataModel: expenseWorkingAtNumberDataModel));
+      } else {
+        emit(WorkingAtNumberDataNotFetched(
+            dataNotFetched: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(WorkingAtNumberDataNotFetched(dataNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchItemDetails(
+      FetchExpenseItemDetails event, Emitter<ExpenseStates> emit) async {
+    try {
+      emit(FetchingExpenseItemDetails());
+      FetchExpenseItemDetailsModel fetchExpenseItemDetailsModel =
+          await _expenseRepository.fetchExpenseItemDetails({
+        "item_id": event.expenseItemId,
+        "hash_code": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (fetchExpenseItemDetailsModel.data.toJson().isNotEmpty) {
+        for (int i = 0;
+            i < fetchExpenseItemDetailsModel.data.toJson().keys.length;
+            i++) {
+          switch (
+              fetchExpenseItemDetailsModel.data.toJson().keys.elementAt(i)) {
+            case "woid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
+                  '') {
+                expenseWorkingAtMap['Workorder'] = "wo";
+              }
+              break;
+            case "wbsid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
+                  '') {
+                expenseWorkingAtMap['WBS'] = "wbs";
+              }
+              break;
+            case "projectid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
+                  '') {
+                expenseWorkingAtMap['Project'] = "project";
+              }
+              break;
+            case "generalwbsid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(i) !=
+                  '') {
+                expenseWorkingAtMap['General WBS'] = "generalwbs";
+              }
+              break;
+          }
+        }
+
+        for (int j = 0;
+            j < fetchExpenseItemDetailsModel.data.toJson().keys.length;
+            j++) {
+          switch (
+              fetchExpenseItemDetailsModel.data.toJson().keys.elementAt(j)) {
+            case "woid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
+                  '') {
+                expenseWorkingAtNumberMap['wo'] = fetchExpenseItemDetailsModel
+                    .data
+                    .toJson()
+                    .values
+                    .elementAt(j);
+              }
+              break;
+            case "wbsid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
+                  '') {
+                expenseWorkingAtNumberMap['wbs'] = fetchExpenseItemDetailsModel
+                    .data
+                    .toJson()
+                    .values
+                    .elementAt(j);
+              }
+
+              break;
+            case "projectid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
+                  '') {
+                expenseWorkingAtNumberMap['project'] =
+                    fetchExpenseItemDetailsModel.data
+                        .toJson()
+                        .values
+                        .elementAt(j);
+              }
+
+              break;
+            case "generalwbsid":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
+                  '') {
+                expenseWorkingAtNumberMap['general_wbs'] =
+                    fetchExpenseItemDetailsModel.data
+                        .toJson()
+                        .values
+                        .elementAt(j);
+              }
+
+              break;
+            case "workingat":
+              if (fetchExpenseItemDetailsModel.data
+                      .toJson()
+                      .values
+                      .elementAt(j) !=
+                  '') {
+                expenseWorkingAtNumberMap['working_at'] =
+                    expenseWorkingAtNumberMap['general_wbs'] =
+                        fetchExpenseItemDetailsModel.data
+                            .toJson()
+                            .values
+                            .elementAt(j);
+              }
+          }
+        }
+        emit(ExpenseItemDetailsFetched(
+            fetchExpenseItemDetailsModel: fetchExpenseItemDetailsModel));
+        add(FetchExpenseItemMaster(isScreenChange: isScreenChange));
+      } else {
+        emit(ExpenseItemDetailsNotFetched(
+            itemDetailsNotFetched:
+                DatabaseUtil.getText('UnknownErrorMessage')));
+      }
+    } catch (e) {
+      emit(ExpenseItemDetailsNotFetched(itemDetailsNotFetched: e.toString()));
+    }
+  }
+
+  FutureOr<void> _rejectExpense(
+      RejectExpense event, Emitter<ExpenseStates> emit) async {
+    emit(RejectingExpense());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map rejectReportMap = {
+        "reportid": expenseId,
+        "userid": userId,
+        "comments": event.comments,
+        "hashcode": hashCode
+      };
+      if (event.comments == '' || event.comments.isEmpty) {
+        emit(ExpenseNotRejected(
+            errorMessage: StringConstants.kExpenseReportComments));
+      } else {
+        ExpenseRejectModel expenseRejectModel =
+            await _expenseRepository.rejectExpense(rejectReportMap);
+        if (expenseRejectModel.message == StringConstants.kSuccessCode) {
+          emit(ExpenseRejected());
+        } else {
+          emit(ExpenseNotRejected(errorMessage: expenseRejectModel.message));
+        }
+      }
+    } catch (e) {
+      emit(ExpenseNotRejected(errorMessage: e.toString()));
     }
   }
 }

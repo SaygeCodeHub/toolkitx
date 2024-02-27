@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
@@ -17,10 +18,10 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 import 'widgets/workorder_details_tab_one.dart';
-import 'widgets/workorder_tab_two_details.dart';
-import 'widgets/workorder_tab_four_details.dart';
 import 'widgets/workorder_tab_five_details.dart';
+import 'widgets/workorder_tab_four_details.dart';
 import 'widgets/workorder_tab_three_details.dart';
+import 'widgets/workorder_tab_two_details.dart';
 import 'workorder_pop_up_menu_screen.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
@@ -42,8 +43,10 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
               builder: (context, state) {
                 if (state is WorkOrderTabDetailsFetched) {
                   return WorkOrderPopUpMenuScreen(
-                      popUpMenuOptions: state.popUpMenuList,
-                      workOrderDetailsMap: state.workOrderDetailsMap);
+                    popUpMenuOptions: state.popUpMenuList,
+                    workOrderDetailsMap: state.workOrderDetailsMap,
+                    woId: workOrderMap['workOrderId'],
+                  );
                 } else {
                   return const SizedBox.shrink();
                 }
@@ -168,7 +171,10 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                                               .medium),
                                       StatusTag(tags: [
                                         StatusTagModel(
-                                            title: workOrderMap['status'],
+                                            title: state
+                                                .fetchWorkOrderDetailsModel
+                                                .data
+                                                .status,
                                             bgColor: AppColor.deepBlue)
                                       ])
                                     ])))),

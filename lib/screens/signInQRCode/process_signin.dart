@@ -61,7 +61,6 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
             flex: 1,
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('Fetched Code : $result'),
               const SizedBox(height: xxTinierSpacing),
               Center(
                   child: Padding(
@@ -78,7 +77,6 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
                             showCustomSnackBar(
                                 context, StringConstants.kLoginSuccess, '');
                             Navigator.pop(context);
-
                             Navigator.pushReplacementNamed(
                                 context, SignInListScreen.routeName);
                           }

@@ -8,16 +8,12 @@ class DioClient {
 
   Future<dynamic> get(String requestUrl, [Map? body]) async {
     dynamic jsonResponse;
+
     try {
       final response = await dio.get(requestUrl, options: Options());
       jsonResponse = (response.data);
     } on DioException catch (e) {
-      if (e.response != null) {
-        e.response!.statusCode;
-        e.response!.data;
-      } else {
-        e.message.toString();
-      }
+      throw Exception(e.toString());
     }
     return jsonResponse;
   }

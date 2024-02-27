@@ -20,8 +20,6 @@ class ExpenseAddItemFormOne extends StatelessWidget {
         children: [
           const ExpenseDateExpansionTile(),
           const ExpenseItemListTile(),
-          const ExpenseWorkingAtNumberListTile(),
-          const SizedBox(height: xxTinySpacing),
           Text(StringConstants.kWorkingAt,
               style: Theme.of(context)
                   .textTheme
@@ -29,7 +27,9 @@ class ExpenseAddItemFormOne extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: xxxTinierSpacing),
           const ExpenseWorkingAtExpansionTile(),
-          const SizedBox(height: xxxTinierSpacing),
+          const ExpenseWorkingAtNumberListTile(),
+          const SizedBox(height: xxTinySpacing),
+          const SizedBox(height: xxxTinierSpacing)
         ],
       ),
     );

@@ -43,7 +43,11 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
       ProcessSignInModel processSignInModel =
           await _signInRepository.processSignIn(signInMap);
       if (processSignInModel.status == 200) {
-        emit(SignInUnauthorizedPop());
+        if (processSignInModel.message != '1') {
+          emit(SignInUnauthorizedPop());
+        } else {
+          emit(SignInProcessed(processSignInModel: processSignInModel));
+        }
       } else {
         emit(SignInProcessed(processSignInModel: processSignInModel));
       }

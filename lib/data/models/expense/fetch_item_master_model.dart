@@ -9,7 +9,7 @@ String fetchItemMasterModelToJson(FetchItemMasterModel data) =>
 class FetchItemMasterModel {
   final int status;
   final String message;
-  final List<List<Datum>> data;
+  final List<List<ItemMasterDatum>> data;
 
   FetchItemMasterModel(
       {required this.status, required this.message, required this.data});
@@ -18,8 +18,9 @@ class FetchItemMasterModel {
       FetchItemMasterModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<List<Datum>>.from(json["Data"]
-            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+        data: List<List<ItemMasterDatum>>.from(json["Data"].map((x) =>
+            List<ItemMasterDatum>.from(
+                x.map((x) => ItemMasterDatum.fromJson(x))))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -30,7 +31,7 @@ class FetchItemMasterModel {
       };
 }
 
-class Datum {
+class ItemMasterDatum {
   final dynamic id;
   final String name;
   final dynamic active;
@@ -39,7 +40,7 @@ class Datum {
   final String workingat;
   final String workingatnumber;
 
-  Datum(
+  ItemMasterDatum(
       {required this.id,
       required this.name,
       required this.active,
@@ -48,14 +49,15 @@ class Datum {
       required this.workingat,
       required this.workingatnumber});
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-      id: json["id"] ?? '',
-      name: json["name"] ?? '',
-      active: json["active"] ?? '',
-      currency: json["currency"] ?? '',
-      date: json["date"] ?? '',
-      workingat: json["workingat"] ?? '',
-      workingatnumber: json["workingatnumber"] ?? '');
+  factory ItemMasterDatum.fromJson(Map<String, dynamic> json) =>
+      ItemMasterDatum(
+          id: json["id"] ?? '',
+          name: json["name"] ?? '',
+          active: json["active"] ?? '',
+          currency: json["currency"] ?? '',
+          date: json["date"] ?? '',
+          workingat: json["workingat"] ?? '',
+          workingatnumber: json["workingatnumber"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,

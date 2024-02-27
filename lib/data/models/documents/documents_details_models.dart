@@ -306,7 +306,7 @@ class FileList {
       date: json["date"],
       version: json["version"],
       filename: json["filename"],
-      notes: json["notes"],
+      notes: json["notes"] ?? '',
       candelete: json["candelete"],
       canuploadnewversion: json["canuploadnewversion"],
       canaddcomments: json["canaddcomments"]);

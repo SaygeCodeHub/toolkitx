@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../blocs/documents/documents_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_list_model.dart';
@@ -20,7 +21,13 @@ class DocumentsListCard extends StatelessWidget {
         child: ListTile(
             onTap: () {
               context.read<DocumentsBloc>().documentId = documentsListData.id;
-              Navigator.pushNamed(context, DocumentsDetailsScreen.routeName);
+              Navigator.pushNamed(context, DocumentsDetailsScreen.routeName)
+                  .then((_) {
+                context.read<DocumentsBloc>().documentsListDatum.clear();
+                context
+                    .read<DocumentsBloc>()
+                    .add((GetDocumentsList(page: 1, isFromHome: false)));
+              });
             },
             contentPadding: const EdgeInsets.all(xxTinierSpacing),
             title: Padding(

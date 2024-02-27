@@ -47,7 +47,7 @@ class LotoTabSixScreen extends StatelessWidget {
                           onPressed: () {
                             Map deleteWorkforceMap = {
                               "lotoworkforceid": fetchLotoDetailsModel
-                                  .data.workforce[index].workforceid,
+                                  .data.workforce[index].id,
                               "type": fetchLotoDetailsModel
                                   .data.workforce[index].type,
                             };

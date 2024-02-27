@@ -19,6 +19,6 @@ List<ModulesModel> equipment = [
       equipmentModuleName: StringConstants.kSearchEquipment,
       icon: Icons.search_outlined),
   ModulesModel(
-      equipmentModuleName: StringConstants.kViewMyEquipment,
+      equipmentModuleName: StringConstants.kViewMyRequest,
       icon: Icons.visibility_outlined),
 ];

@@ -23,6 +23,7 @@ class IncidentHealthAndSafetyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    customInfoFieldList.clear();
     context
         .read<ReportNewIncidentBloc>()
         .add(ReportNewIncidentCustomInfoFieldFetch());
