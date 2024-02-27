@@ -31,8 +31,8 @@ class ProfileEditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     context.read<ProfileBloc>().add(DecryptUserProfileData());
-    return WillPopScope(
-      onWillPop: () => ProfileUtil.showExitPopup(
+    return PopScope(
+      onPopInvoked: (pop) => ProfileUtil.showExitPopup(
           context.read<ProfileBloc>().updateProfileDataMap,
           copyProfileMap,
           context),

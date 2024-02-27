@@ -22,11 +22,13 @@ import 'workorder_form_one_screen.dart';
 class WorkOrderPopUpMenuScreen extends StatelessWidget {
   final List popUpMenuOptions;
   final Map workOrderDetailsMap;
+  final String woId;
 
   const WorkOrderPopUpMenuScreen(
       {Key? key,
       required this.popUpMenuOptions,
-      required this.workOrderDetailsMap})
+      required this.workOrderDetailsMap,
+      required this.woId})
       : super(key: key);
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
@@ -49,13 +51,17 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           WorkOrderFormScreenOne.isSimilarWorkOrder = true;
           WorkOrderFormScreenOne.isFromEdit = false;
           Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-              arguments: workOrderDetailsMap);
+                  arguments: workOrderDetailsMap)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('Edit')) {
           WorkOrderFormScreenOne.isFromEdit = true;
 
           Navigator.pushNamed(context, WorkOrderFormScreenOne.routeName,
-              arguments: workOrderDetailsMap);
+                  arguments: workOrderDetailsMap)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddMiscCost')) {
           WorkOrderAddMisCostScreen.workOrderDetailsMap = workOrderDetailsMap;
@@ -72,7 +78,9 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                   .addAndEditDownTimeMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(
-              context, WorkOrderAddAndEditDownTimeScreen.routeName);
+                  context, WorkOrderAddAndEditDownTimeScreen.routeName)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('Accept')) {
           showDialog(
@@ -125,35 +133,47 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
           AssignWorkForceBody.assignWorkForceMap['workorderId'] =
               workOrderDetailsMap['workorderId'] ?? '';
           context.read<WorkOrderTabDetailsBloc>().assignWorkForceDatum = [];
-          Navigator.pushNamed(context, AssignWorkForceScreen.routeName);
+          Navigator.pushNamed(context, AssignWorkForceScreen.routeName).then(
+              (_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddParts')) {
           context.read<WorkOrderTabDetailsBloc>().addPartsDatum = [];
-          Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderAddPartsScreen.routeName).then(
+              (_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('Start')) {
           StartAndCompleteWorkOrderScreen
                   .startAndCompleteWorkOrderMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(
-              context, StartAndCompleteWorkOrderScreen.routeName,
-              arguments: true);
+                  context, StartAndCompleteWorkOrderScreen.routeName,
+                  arguments: true)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('Complete')) {
           StartAndCompleteWorkOrderScreen
                   .startAndCompleteWorkOrderMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(
-              context, StartAndCompleteWorkOrderScreen.routeName,
-              arguments: false);
+                  context, StartAndCompleteWorkOrderScreen.routeName,
+                  arguments: false)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
-          Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddComment')) {
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
-          Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName);
+          Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName)
+              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
+                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
       },
       position: PopupMenuPosition.under,
