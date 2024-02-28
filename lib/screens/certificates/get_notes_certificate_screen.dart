@@ -152,6 +152,10 @@ class GetNotesCertificateScreen extends StatelessWidget {
                               textValue: StringConstants.kNext))),
                 ],
               );
+            } else if (state is GetNotesCertificateError) {
+              return const Center(
+                child: Text(StringConstants.kNoData),
+              );
             } else {
               return const SizedBox.shrink();
             }

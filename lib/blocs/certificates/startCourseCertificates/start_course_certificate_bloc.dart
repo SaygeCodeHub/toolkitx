@@ -96,6 +96,9 @@ class StartCourseCertificateBloc
       if (fetchGetNotesModel.status == 200) {
         emit(GetNotesCertificateFetched(
             fetchGetNotesModel: fetchGetNotesModel, clientId: clientId!));
+      } else {
+        emit(GetNotesCertificateError(
+            getNotesError: fetchGetNotesModel.message));
       }
     } catch (e) {
       emit(GetNotesCertificateError(getNotesError: e.toString()));
@@ -121,6 +124,8 @@ class StartCourseCertificateBloc
           await _certificateRepository.updateUserTrackRepo(userTrackMap);
       if (updateUserTrackModel.status == 200) {
         emit(UserTrackUpdated(updateUserTrackModel: updateUserTrackModel));
+      } else {
+        emit(UserTrackUpdateError(error: updateUserTrackModel.message));
       }
     } catch (e) {
       emit(UserTrackUpdateError(error: e.toString()));
