@@ -130,7 +130,25 @@ class GetTopicCertificateBody extends StatelessWidget {
                                     .xSmall
                                     .copyWith(
                                         fontWeight: FontWeight.w400,
-                                        color: AppColor.grey))
+                                        color: AppColor.grey)),
+                            const SizedBox(height: xxxTinierSpacing),
+                            data.quizlist[index].passed == '1'
+                                ? Text("You've Passed",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColor.green))
+                                : data.quizlist[index].passed == '0'
+                                    ? Text("You've Failed",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xSmall
+                                            .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColor.errorRed))
+                                    : const SizedBox.shrink(),
                           ]),
                       trailing: Container(
                           width: kDotContianerSize,
@@ -138,8 +156,7 @@ class GetTopicCertificateBody extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: const BorderRadius.all(
                                   Radius.circular(kImageHeight)),
-                              color: data.quizlist[index].passed ==
-                                      data.quizlist[index].questionscount
+                              color: data.quizlist[index].enddate.isNotEmpty
                                   ? AppColor.green
                                   : AppColor.orange))));
             },

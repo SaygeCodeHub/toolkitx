@@ -28,7 +28,9 @@ class FinishButtonBody extends StatelessWidget {
           ProgressBar.dismiss(context);
           showCustomSnackBar(context, StringConstants.kQuizSubmitted, "");
           Navigator.pop(context);
-          Navigator.pop(context);
+          context
+              .read<StartCourseCertificateBloc>()
+              .add(GetTopicCertificate(courseId: context.read<StartCourseCertificateBloc>().courseId));
         } else if (state is CertificateQuizSubmitError) {
           ProgressBar.dismiss(context);
           showCustomSnackBar(context, StringConstants.kQuizSubmittingError, "");

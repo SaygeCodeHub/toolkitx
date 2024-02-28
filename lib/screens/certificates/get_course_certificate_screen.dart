@@ -110,7 +110,24 @@ class GetCourseCertificateScreen extends StatelessWidget {
                                                           fontWeight:
                                                               FontWeight.w400,
                                                           color: AppColor.grey))
-                                            ])));
+                                            ]),
+                                        trailing: Container(
+                                            width: kDotContianerSize,
+                                            height: kDotContianerSize,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(
+                                                            kImageHeight)),
+                                                color: data[index]
+                                                            .completedstatus ==
+                                                        '2'
+                                                    ? AppColor.green
+                                                    : data[index]
+                                                                .completedstatus ==
+                                                            '1'
+                                                        ? AppColor.orange
+                                                        : null))));
                               },
                               separatorBuilder: (context, index) {
                                 return const SizedBox(height: xxTinierSpacing);
