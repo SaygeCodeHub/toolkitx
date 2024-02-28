@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
+import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
@@ -38,6 +39,7 @@ import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/get_workforce_quiz_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
+
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
 import '../screens/checklist/workforce/workforce_questions_list_screen.dart';
@@ -359,6 +361,10 @@ class AppRoutes {
       case GetTopicCertificateScreen.routeName:
         return _createRoute(GetTopicCertificateScreen(
           courseId: settings.arguments.toString(),
+        ));
+      case GetNotesCertificateScreen.routeName:
+        return _createRoute(GetNotesCertificateScreen(
+          getNotesMap: settings.arguments as Map,
         ));
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(

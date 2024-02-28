@@ -60,17 +60,17 @@ class GetCourseDatum {
   });
 
   factory GetCourseDatum.fromJson(Map<String, dynamic> json) => GetCourseDatum(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        certificatename: json["certificatename"],
-        topiccount: json["topiccount"],
-        quizcount: json["quizcount"],
-        notescount: json["notescount"],
-        completedcount: json["completedcount"],
-        quizstartcount: json["quizstartcount"],
-        quizendcount: json["quizendcount"],
-        completedstatus: json["completedstatus"],
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
+        description: json["description"] ?? '',
+        certificatename: json["certificatename"] ?? '',
+        topiccount: json["topiccount"] ?? '',
+        quizcount: json["quizcount"] ?? '',
+        notescount: json["notescount"] ?? '',
+        completedcount: json["completedcount"] ?? '',
+        quizstartcount: json["quizstartcount"] ?? '',
+        quizendcount: json["quizendcount"] ?? '',
+        completedstatus: json["completedstatus"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

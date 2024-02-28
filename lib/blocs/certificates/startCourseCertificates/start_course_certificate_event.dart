@@ -14,6 +14,25 @@ class GetTopicCertificate extends StartCourseCertificateEvent {
   GetTopicCertificate({required this.courseId});
 }
 
+class GetNotesCertificate extends StartCourseCertificateEvent {
+  final String topicId;
+  final int pageNo;
+
+  GetNotesCertificate({
+    required this.topicId,
+    required this.pageNo,
+  });
+}
+
+class UpdateUserTrack extends StartCourseCertificateEvent {
+  final String certificateId;
+  final String noteId;
+  final String idm;
+
+  UpdateUserTrack(
+      {required this.certificateId, required this.noteId, required this.idm});
+}
+
 class GetWorkforceQuiz extends StartCourseCertificateEvent {
   final String quizId;
 

@@ -14,9 +14,7 @@ import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
-
   const GetWorkforceScreen({super.key, required this.workforceQuizMap});
-
   final Map workforceQuizMap;
 
   @override
@@ -73,13 +71,22 @@ class GetWorkforceScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w600, color: AppColor.grey)),
                   const SizedBox(height: xxxSmallestSpacing),
-                  PrimaryButton(
-                      onPressed: () {
-                        context.read<StartCourseCertificateBloc>().add(
-                            StartCertificateQuiz(
-                                quizId: workforceQuizMap["quizId"]));
-                      },
-                      textValue: StringConstants.kStartQuiz)
+                  Visibility(
+                    visible:
+                        state.getWorkforceQuizModel.data.showstartquiz == '1' ||
+                            state.getWorkforceQuizModel.data.error.isEmpty,
+                    replacement: Text(state.getWorkforceQuizModel.data.error,
+                        style: Theme.of(context).textTheme.xSmall.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.errorRed)),
+                    child: PrimaryButton(
+                        onPressed: () {
+                          context.read<StartCourseCertificateBloc>().add(
+                              StartCertificateQuiz(
+                                  quizId: workforceQuizMap["quizId"]));
+                        },
+                        textValue: StringConstants.kStartQuiz),
+                  )
                 ],
               );
             } else {

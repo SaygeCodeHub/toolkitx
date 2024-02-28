@@ -3,8 +3,10 @@ import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_certificate_details_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 import 'package:toolkit/data/models/certificates/start_quiz_model.dart';
@@ -54,6 +56,23 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetTopics?hashcode=$hashCode&courseid=$courseId&workforceid=$userId");
     return GetTopicCertificateModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchGetNotesModel> getNotesCertificates(
+      String hashCode, String userId, String topicId, int pageNo) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
+    return FetchGetNotesModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateUserTrackModel> updateUserTrackRepo(
+      Map updateUserTrackMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/UpdateUserTrack",
+        updateUserTrackMap);
+    return UpdateUserTrackModel.fromJson(response);
   }
 
   @override
