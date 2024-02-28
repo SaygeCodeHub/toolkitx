@@ -43,3 +43,8 @@ class SubmitCertificateQuiz extends StartCourseCertificateEvent {
   final Map finishQuizMap;
   SubmitCertificateQuiz({required this.finishQuizMap});
 }
+
+class StartCertificateQuiz extends StartCourseCertificateEvent {
+  final String quizId;
+  StartCertificateQuiz({required this.quizId});
+}
