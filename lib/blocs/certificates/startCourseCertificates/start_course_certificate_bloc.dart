@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/certificates/get_course_certificate_model.da
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
+import 'package:toolkit/data/models/certificates/start_quiz_model.dart';
 
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -42,6 +43,7 @@ class StartCourseCertificateBloc
     on<SelectedQuizAnswerEvent>(_selectQuizAnswer);
     on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
     on<SubmitCertificateQuiz>(_submitCertificateQuiz);
+    on<StartCertificateQuiz>(_startCertificateQuiz);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -217,6 +219,27 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(CertificateQuizSubmitError(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _startCertificateQuiz(StartCertificateQuiz event,
+      Emitter<StartCourseCertificateState> emit) async {
+    emit(CertificateQuizSubmitting());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map startQuizMap = {
+        "quizid": event.quizId,
+        "workforceid": userId,
+        "hashcode": hashCode
+      };
+      StartQuizModel startQuizModel =
+          await _certificateRepository.startQuiz(startQuizMap);
+      if (startQuizModel.status == 200) {
+        emit(CertificateQuizStarted(startQuizModel: startQuizModel));
+      }
+    } catch (e) {
+      emit(CertificateQuizNotStarted(getError: e.toString()));
     }
   }
 }

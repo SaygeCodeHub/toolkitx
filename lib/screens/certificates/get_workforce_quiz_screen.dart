@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import '../../configs/app_color.dart';
@@ -14,9 +16,7 @@ import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
-
   const GetWorkforceScreen({super.key, required this.workforceQuizMap});
-
   final Map workforceQuizMap;
 
   @override
@@ -32,8 +32,21 @@ class GetWorkforceScreen extends StatelessWidget {
           right: leftRightMargin,
           top: xxTinierSpacing,
         ),
-        child: BlocBuilder<StartCourseCertificateBloc,
+        child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
+          listener: (context, state) {
+            if (state is CertificateQuizStarting) {
+              ProgressBar.show(context);
+            } else if (state is CertificateQuizStarted) {
+              ProgressBar.dismiss(context);
+              workforceQuizMap["userquizid"] = state.startQuizModel.message;
+              Navigator.pushNamed(context, QuizQuestionsScreen.routeName,
+                  arguments: workforceQuizMap);
+            } else if (state is CertificateQuizNotStarted) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.getError, '');
+            }
+          },
           buildWhen: (previousState, currentState) =>
               currentState is WorkforceQuizFetching ||
               currentState is WorkforceQuizFetched ||
@@ -42,6 +55,8 @@ class GetWorkforceScreen extends StatelessWidget {
             if (state is WorkforceQuizFetching) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is WorkforceQuizFetched) {
+              workforceQuizMap["questioncount"] =
+                  state.getWorkforceQuizModel.data.questioncount;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,18 +83,9 @@ class GetWorkforceScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600, color: AppColor.errorRed)),
                     child: PrimaryButton(
                         onPressed: () {
-                          Map quizMap = {
-                            "userquizid":
-                                state.getWorkforceQuizModel.data.userquizid,
-                            "questioncount":
-                                state.getWorkforceQuizModel.data.questioncount,
-                            "certificateId": workforceQuizMap["certificateId"],
-                            "topicId": workforceQuizMap["topicId"],
-                            "quizId": workforceQuizMap["quizId"]
-                          };
-                          Navigator.pushNamed(
-                              context, QuizQuestionsScreen.routeName,
-                              arguments: quizMap);
+                          context.read<StartCourseCertificateBloc>().add(
+                              StartCertificateQuiz(
+                                  quizId: workforceQuizMap["quizId"]));
                         },
                         textValue: StringConstants.kStartQuiz),
                   )
