@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
+import 'package:toolkit/data/models/certificates/start_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 
@@ -94,5 +95,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/getcertificate?certificateid=$certificateId&hashcode=$hashCode&workforceid=$userId");
     return FetchCertificateDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<StartQuizModel> startQuiz(Map startQuizMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}certificate/StartQuiz", startQuizMap);
+    return StartQuizModel.fromJson(response);
   }
 }
