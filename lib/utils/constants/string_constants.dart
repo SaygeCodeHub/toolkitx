@@ -522,4 +522,6 @@ abstract class StringConstants {
       'Incident date, time, description, contractor cannot be empty.';
   static const String kExpenseReportRejected = "Expense Report Rejected";
   static const String kExpenseReportComments = 'Please add comment first';
+  static const String kYouFailed = "You've Failed";
+  static const String kYouPassed = "You've Passed";
 }

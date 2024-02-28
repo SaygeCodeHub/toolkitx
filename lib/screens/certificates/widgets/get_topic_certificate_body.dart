@@ -132,16 +132,16 @@ class GetTopicCertificateBody extends StatelessWidget {
                                         fontWeight: FontWeight.w400,
                                         color: AppColor.grey)),
                             const SizedBox(height: xxxTinierSpacing),
-                            data.quizlist[index].passed == '1'
-                                ? Text("You've Passed",
+                            data.quizlist[index].passed == 1
+                                ? Text(StringConstants.kYouPassed,
                                     style: Theme.of(context)
                                         .textTheme
                                         .xSmall
                                         .copyWith(
                                             fontWeight: FontWeight.w400,
                                             color: AppColor.green))
-                                : data.quizlist[index].passed == '0'
-                                    ? Text("You've Failed",
+                                : data.quizlist[index].passed == 0
+                                    ? Text(StringConstants.kYouFailed,
                                         style: Theme.of(context)
                                             .textTheme
                                             .xSmall

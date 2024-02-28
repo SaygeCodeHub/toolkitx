@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
@@ -68,21 +67,20 @@ class StartCourseCertificateBloc
   Future<FutureOr<void>> _getTopicCertificate(GetTopicCertificate event,
       Emitter<StartCourseCertificateState> emit) async {
     emit(FetchingGetTopicCertificate());
-    // try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    String? userId = await _customerCache.getUserId(CacheKeys.userId);
-    GetTopicCertificateModel getTopicCertificateModel =
-        await _certificateRepository.getTopicCertificates(
-            hashCode!, userId!, event.courseId);
-    courseId = event.courseId;
-    log('hashCode , userId , CourseId===============>$hashCode , $userId , ${event.courseId}');
-    if (getTopicCertificateModel.status == 200) {
-      emit(GetTopicCertificateFetched(
-          getTopicCertificateModel: getTopicCertificateModel));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      GetTopicCertificateModel getTopicCertificateModel =
+          await _certificateRepository.getTopicCertificates(
+              hashCode!, userId!, event.courseId);
+      courseId = event.courseId;
+      if (getTopicCertificateModel.status == 200) {
+        emit(GetTopicCertificateFetched(
+            getTopicCertificateModel: getTopicCertificateModel));
+      }
+    } catch (e) {
+      emit(GetTopicCertificateError(getTopicError: e.toString()));
     }
-    // } catch (e) {
-    //   emit(GetTopicCertificateError(getTopicError: e.toString()));
-    // }
   }
 
   Future<FutureOr<void>> _getNotesCertificate(GetNotesCertificate event,
@@ -138,7 +136,6 @@ class StartCourseCertificateBloc
 
       GetWorkforceQuizModel getWorkforceQuizModel = await _certificateRepository
           .getWorkforceQuiz(hashCode!, userId!, event.quizId);
-      log('qID================>${event.quizId}');
       if (getWorkforceQuizModel.status == 200) {
         emit(
             WorkforceQuizFetched(getWorkforceQuizModel: getWorkforceQuizModel));
@@ -151,8 +148,7 @@ class StartCourseCertificateBloc
   Future<FutureOr<void>> _getQuizQuestions(
       GetQuizQuestions event, Emitter<StartCourseCertificateState> emit) async {
     emit(QuizQuestionsFetching());
-    log('workforcequizId=============>${event.workforcequizId}');
-    // try {
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       GetQuizQuestionsModel getQuizQuestionsModel = await _certificateRepository
           .getQuizQuestions(hashCode!, event.pageNo, event.workforcequizId);
@@ -161,9 +157,9 @@ class StartCourseCertificateBloc
         emit(QuizQuestionsFetched(
             getQuizQuestionsModel: getQuizQuestionsModel, answerId: ''));
       }
-    // } catch (e) {
-    //   emit(QuizQuestionsError(getError: e.toString()));
-    // }
+    } catch (e) {
+      emit(QuizQuestionsError(getError: e.toString()));
+    }
   }
 
   FutureOr<void> _selectQuizAnswer(SelectedQuizAnswerEvent event,

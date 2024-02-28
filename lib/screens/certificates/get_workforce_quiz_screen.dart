@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -76,10 +75,10 @@ class GetWorkforceScreen extends StatelessWidget {
                     visible:
                         state.getWorkforceQuizModel.data.showstartquiz == '1' ||
                             state.getWorkforceQuizModel.data.error.isEmpty,
-                    replacement: Text(
-                        state.getWorkforceQuizModel.data.error,
+                    replacement: Text(state.getWorkforceQuizModel.data.error,
                         style: Theme.of(context).textTheme.xSmall.copyWith(
-                            fontWeight: FontWeight.w600, color: AppColor.errorRed)),
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.errorRed)),
                     child: PrimaryButton(
                         onPressed: () {
                           context.read<StartCourseCertificateBloc>().add(

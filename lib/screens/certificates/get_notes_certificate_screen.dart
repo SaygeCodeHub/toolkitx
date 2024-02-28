@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
@@ -84,20 +82,17 @@ class GetNotesCertificateScreen extends StatelessWidget {
             } else if (state is UserTrackUpdated) {
               ProgressBar.dismiss(context);
               if (pageNo.toString() == noteCount) {
-                log('if===============>');
                 Navigator.pop(context);
                 context.read<StartCourseCertificateBloc>().add(
                     GetTopicCertificate(
                         courseId: context
                             .read<StartCourseCertificateBloc>()
                             .courseId));
-              }else{
-                log('else===============>');
+              } else {
                 pageNo++;
                 context.read<StartCourseCertificateBloc>().add(
                     GetNotesCertificate(
-                        topicId: getNotesMap["id"],
-                        pageNo: pageNo));
+                        topicId: getNotesMap["id"], pageNo: pageNo));
               }
             } else if (state is UserTrackUpdateError) {
               ProgressBar.dismiss(context);
