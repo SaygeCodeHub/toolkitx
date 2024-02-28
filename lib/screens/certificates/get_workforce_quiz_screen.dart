@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -12,7 +14,9 @@ import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
+
   const GetWorkforceScreen({super.key, required this.workforceQuizMap});
+
   final Map workforceQuizMap;
 
   @override
@@ -54,22 +58,31 @@ class GetWorkforceScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w600, color: AppColor.grey)),
                   const SizedBox(height: xxxSmallestSpacing),
-                  PrimaryButton(
-                      onPressed: () {
-                        Map quizMap = {
-                          "userquizid":
-                              state.getWorkforceQuizModel.data.userquizid,
-                          "questioncount":
-                              state.getWorkforceQuizModel.data.questioncount,
-                          "certificateId": workforceQuizMap["certificateId"],
-                          "topicId": workforceQuizMap["topicId"],
-                          "quizId": workforceQuizMap["quizId"]
-                        };
-                        Navigator.pushNamed(
-                            context, QuizQuestionsScreen.routeName,
-                            arguments: quizMap);
-                      },
-                      textValue: StringConstants.kStartQuiz)
+                  Visibility(
+                    visible:
+                        state.getWorkforceQuizModel.data.showstartquiz == '1' ||
+                            state.getWorkforceQuizModel.data.error.isEmpty,
+                    replacement: Text(
+                        state.getWorkforceQuizModel.data.error,
+                        style: Theme.of(context).textTheme.xSmall.copyWith(
+                            fontWeight: FontWeight.w600, color: AppColor.errorRed)),
+                    child: PrimaryButton(
+                        onPressed: () {
+                          Map quizMap = {
+                            "userquizid":
+                                state.getWorkforceQuizModel.data.userquizid,
+                            "questioncount":
+                                state.getWorkforceQuizModel.data.questioncount,
+                            "certificateId": workforceQuizMap["certificateId"],
+                            "topicId": workforceQuizMap["topicId"],
+                            "quizId": workforceQuizMap["quizId"]
+                          };
+                          Navigator.pushNamed(
+                              context, QuizQuestionsScreen.routeName,
+                              arguments: quizMap);
+                        },
+                        textValue: StringConstants.kStartQuiz),
+                  )
                 ],
               );
             } else {

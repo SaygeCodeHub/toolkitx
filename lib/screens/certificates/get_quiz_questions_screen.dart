@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/certificates/widgets/finish_button_body.dart';
@@ -21,6 +23,7 @@ class QuizQuestionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('wouizId=============>${quizMap["userquizid"]}');
     pageNo = 1;
     context.read<StartCourseCertificateBloc>().add(GetQuizQuestions(
         workforcequizId: quizMap["userquizid"], pageNo: pageNo));

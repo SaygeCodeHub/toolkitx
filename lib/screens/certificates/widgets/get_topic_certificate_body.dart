@@ -55,7 +55,7 @@ class GetTopicCertificateBody extends StatelessWidget {
                               color: AppColor.blueGrey,
                               borderRadius: BorderRadius.all(
                                   Radius.circular(kSmallBorderRadius))),
-                          child: const Center(child: Text(StringConstants.k1))),
+                          child: Center(child: Text('${index + 1}'))),
                       title: Text(data.topiclist[index].name,
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.w600,
@@ -141,9 +141,7 @@ class GetTopicCertificateBody extends StatelessWidget {
                               color: data.quizlist[index].passed ==
                                       data.quizlist[index].questionscount
                                   ? AppColor.green
-                                  : data.topiclist[index].completedcount == 0
-                                      ? null
-                                      : AppColor.orange))));
+                                  : AppColor.orange))));
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: xxTinierSpacing);

@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -21,6 +25,7 @@ class GetNotesCertificateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isVisible = false;
+    String noteCount = '';
     pageNo = 1;
     context
         .read<StartCourseCertificateBloc>()
@@ -71,14 +76,41 @@ class GetNotesCertificateScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: BlocBuilder<StartCourseCertificateBloc,
+        child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
+          listener: (context, state) {
+            if (state is UserTrackUpdating) {
+              ProgressBar.show(context);
+            } else if (state is UserTrackUpdated) {
+              ProgressBar.dismiss(context);
+              if (pageNo.toString() == noteCount) {
+                log('if===============>');
+                Navigator.pop(context);
+                context.read<StartCourseCertificateBloc>().add(
+                    GetTopicCertificate(
+                        courseId: context
+                            .read<StartCourseCertificateBloc>()
+                            .courseId));
+              }else{
+                log('else===============>');
+                pageNo++;
+                context.read<StartCourseCertificateBloc>().add(
+                    GetNotesCertificate(
+                        topicId: getNotesMap["id"],
+                        pageNo: pageNo));
+              }
+            } else if (state is UserTrackUpdateError) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.error, '');
+            }
+          },
           buildWhen: (previousState, currentState) =>
               currentState is FetchingGetNotesCertificate ||
               currentState is GetNotesCertificateFetched ||
               currentState is GetNotesCertificateError,
           builder: (context, state) {
             if (state is GetNotesCertificateFetched) {
+              noteCount = state.fetchGetNotesModel.data.notescount;
               return Row(
                 children: [
                   Visibility(
@@ -108,17 +140,11 @@ class GetNotesCertificateScreen extends StatelessWidget {
                                         noteId:
                                             state.fetchGetNotesModel.data.id,
                                         idm: getNotesMap["id"]));
-                                Navigator.pop(context);
                               },
                               textValue: StringConstants.kFINISH)),
                       child: Expanded(
                           child: PrimaryButton(
                               onPressed: () {
-                                pageNo++;
-                                context.read<StartCourseCertificateBloc>().add(
-                                    GetNotesCertificate(
-                                        topicId: getNotesMap["id"],
-                                        pageNo: pageNo));
                                 context.read<StartCourseCertificateBloc>().add(
                                     UpdateUserTrack(
                                         certificateId: context

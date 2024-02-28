@@ -17,6 +17,7 @@ import '../../../di/app_module.dart';
 import '../../../repositories/certificates/certificates_repository.dart';
 
 part 'start_course_certificate_event.dart';
+
 part 'start_course_certificate_state.dart';
 
 class StartCourseCertificateBloc
@@ -25,9 +26,11 @@ class StartCourseCertificateBloc
       getIt<CertificateRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   String certificateId = '';
+
   StartCourseCertificateState get initialState =>
       StartCourseCertificateInitial();
   String answerId = '';
+  String courseId = '';
 
   StartCourseCertificateBloc() : super(StartCourseCertificateInitial()) {
     on<GetCourseCertificate>(_getCourseCertificate);
@@ -63,20 +66,21 @@ class StartCourseCertificateBloc
   Future<FutureOr<void>> _getTopicCertificate(GetTopicCertificate event,
       Emitter<StartCourseCertificateState> emit) async {
     emit(FetchingGetTopicCertificate());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      GetTopicCertificateModel getTopicCertificateModel =
-          await _certificateRepository.getTopicCertificates(
-              hashCode!, userId!, event.courseId);
-      log('hashCode , userId , CourseId===============>$hashCode , $userId , ${event.courseId}');
-      if (getTopicCertificateModel.status == 200) {
-        emit(GetTopicCertificateFetched(
-            getTopicCertificateModel: getTopicCertificateModel));
-      }
-    } catch (e) {
-      emit(GetTopicCertificateError(getTopicError: e.toString()));
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    GetTopicCertificateModel getTopicCertificateModel =
+        await _certificateRepository.getTopicCertificates(
+            hashCode!, userId!, event.courseId);
+    courseId = event.courseId;
+    log('hashCode , userId , CourseId===============>$hashCode , $userId , ${event.courseId}');
+    if (getTopicCertificateModel.status == 200) {
+      emit(GetTopicCertificateFetched(
+          getTopicCertificateModel: getTopicCertificateModel));
     }
+    // } catch (e) {
+    //   emit(GetTopicCertificateError(getTopicError: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _getNotesCertificate(GetNotesCertificate event,
@@ -132,6 +136,7 @@ class StartCourseCertificateBloc
 
       GetWorkforceQuizModel getWorkforceQuizModel = await _certificateRepository
           .getWorkforceQuiz(hashCode!, userId!, event.quizId);
+      log('qID================>${event.quizId}');
       if (getWorkforceQuizModel.status == 200) {
         emit(
             WorkforceQuizFetched(getWorkforceQuizModel: getWorkforceQuizModel));
@@ -144,17 +149,19 @@ class StartCourseCertificateBloc
   Future<FutureOr<void>> _getQuizQuestions(
       GetQuizQuestions event, Emitter<StartCourseCertificateState> emit) async {
     emit(QuizQuestionsFetching());
-    try {
+    log('workforcequizId=============>${event.workforcequizId}');
+    // try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       GetQuizQuestionsModel getQuizQuestionsModel = await _certificateRepository
           .getQuizQuestions(hashCode!, event.pageNo, event.workforcequizId);
+
       if (getQuizQuestionsModel.status == 200) {
         emit(QuizQuestionsFetched(
             getQuizQuestionsModel: getQuizQuestionsModel, answerId: ''));
       }
-    } catch (e) {
-      emit(QuizQuestionsError(getError: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(QuizQuestionsError(getError: e.toString()));
+    // }
   }
 
   FutureOr<void> _selectQuizAnswer(SelectedQuizAnswerEvent event,

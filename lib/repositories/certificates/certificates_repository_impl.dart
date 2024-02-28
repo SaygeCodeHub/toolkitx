@@ -90,6 +90,7 @@ class CertificateRepositoryImpl extends CertificateRepository {
       String hashCode, int pageNo, String workforcequizId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetQuizQuestion?hashcode=$hashCode&workforcequizid=$workforcequizId&pageno=$pageNo");
+    log("GetQuizQuestions==============>${ApiConstants.baseUrl}certificate/GetQuizQuestion?hashcode=$hashCode&workforcequizid=$workforcequizId&pageno=$pageNo");
     return GetQuizQuestionsModel.fromJson(response);
   }
 

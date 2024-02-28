@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/equipmentTraceability/approve_transfer_request_model.dart';
 import 'package:toolkit/data/models/equipmentTraceability/equipment_save_location_model.dart';
@@ -344,6 +345,7 @@ class EquipmentTraceabilityBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
           .fetchMyRequest(event.pageNo, userId, hashCode);
+      log('userId , hashcode=================>$userId , $hashCode');
       equipmentWorkOrderList = fetchMyRequestModel.data.workorders!;
       if (fetchMyRequestModel.status == 200) {
         emit(MyRequestFetched(
