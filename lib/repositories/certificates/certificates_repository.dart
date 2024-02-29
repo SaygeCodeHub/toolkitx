@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.d
 import 'package:toolkit/data/models/certificates/get_certificate_details_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
+import 'package:toolkit/data/models/certificates/reattempt_certificate_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
 import 'package:toolkit/data/models/certificates/start_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
@@ -54,4 +55,6 @@ abstract class CertificateRepository {
 
   Future<FetchQuizReportModel> fetchQuizReport(
       String hashcode, String workforceQuizId);
+
+  Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(Map reattemptQuizMap);
 }

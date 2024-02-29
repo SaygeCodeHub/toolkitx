@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_report_model.dart';
+import 'package:toolkit/data/models/certificates/reattempt_certificate_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
@@ -45,6 +46,7 @@ class StartCourseCertificateBloc
     on<SubmitCertificateQuiz>(_submitCertificateQuiz);
     on<StartCertificateQuiz>(_startCertificateQuiz);
     on<FetchCertificateQuizReport>(_fetchCertificateQuizReport);
+    on<ReattemptCertificateQuiz>(_reattemptCertificateQuiz);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -264,5 +266,29 @@ class StartCourseCertificateBloc
     } catch (e) {
       emit(QuizQuestionsError(getError: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _reattemptCertificateQuiz(
+      ReattemptCertificateQuiz event,
+      Emitter<StartCourseCertificateState> emit) async {
+    emit(CertificateQuizReattempting());
+    // try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map reattemptQuizMap = {
+        "workforcequizid": event.workforceQuizId,
+        "hashcode": hashCode
+      };
+      ReattemptCertificateQuizModel reattemptCertificateQuizModel =
+          await _certificateRepository
+              .reattemptCertificateQuiz(reattemptQuizMap);
+      if (reattemptCertificateQuizModel.message == '1') {
+        emit(CertificateQuizReattempted());
+      } else {
+        emit(CertificateQuizNotReattempted(
+            getError: reattemptCertificateQuizModel.message));
+      }
+    // } catch (e) {
+    //   emit(CertificateQuizNotReattempted(getError: e.toString()));
+    // }
   }
 }

@@ -1,3 +1,4 @@
+
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
@@ -7,6 +8,7 @@ import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dar
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_report_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/reattempt_certificate_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
@@ -130,5 +132,12 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetQuizReport?hashcode=$hashcode&workforcequizid=$workforceQuizId");
     return FetchQuizReportModel.fromJson(response);
+  }
+
+  @override
+  Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(Map reattemptQuizMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}certificate/RetakeQuiz", reattemptQuizMap);
+    return ReattemptCertificateQuizModel.fromJson(response);
   }
 }
