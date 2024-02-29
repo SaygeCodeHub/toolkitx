@@ -32,10 +32,9 @@ class QuizQuestionsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(
-          left: leftRightMargin,
-          right: leftRightMargin,
-          top: xxTinierSpacing,
-        ),
+            left: leftRightMargin,
+            right: leftRightMargin,
+            top: xxTinierSpacing),
         child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           listener: (context, state) {
@@ -71,10 +70,9 @@ class QuizQuestionsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                           child: PrimaryButton(
-                              onPressed: pageNo.toString() !=
-                                      quizMap["questioncount"]
+                              onPressed: pageNo != 1
                                   ? () {
-                                      pageNo++;
+                                      pageNo--;
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -83,7 +81,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                                   quizMap["userquizid"]));
                                     }
                                   : null,
-                              textValue: StringConstants.kNext)),
+                              textValue: StringConstants.kPREVIOUS)),
                       const SizedBox(width: tinierSpacing),
                       Expanded(
                           child: PrimaryButton(

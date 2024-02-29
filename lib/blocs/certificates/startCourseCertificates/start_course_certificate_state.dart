@@ -134,12 +134,26 @@ class CertificateQuizStarting extends StartCourseCertificateState {}
 
 class CertificateQuizStarted extends StartCourseCertificateState {
   final StartQuizModel startQuizModel;
-  CertificateQuizStarted({
-    required this.startQuizModel,
-  });
+
+  CertificateQuizStarted({required this.startQuizModel});
 }
 
 class CertificateQuizNotStarted extends StartCourseCertificateState {
   final String getError;
+
   CertificateQuizNotStarted({required this.getError});
+}
+
+class CertificateQuizReportFetching extends StartCourseCertificateState {}
+
+class CertificateQuizReportFetched extends StartCourseCertificateState {
+  final FetchQuizReportModel fetchQuizReportModel;
+
+  CertificateQuizReportFetched({required this.fetchQuizReportModel});
+}
+
+class CertificateQuizReportNotFetched extends StartCourseCertificateState {
+  final String getError;
+
+  CertificateQuizReportNotFetched({required this.getError});
 }

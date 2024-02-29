@@ -11,6 +11,7 @@ import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import '../../data/models/certificates/certificate_list_model.dart';
 import '../../data/models/certificates/get_course_certificate_model.dart';
 import '../../data/models/certificates/get_notes_certificate_model.dart';
+import '../../data/models/certificates/get_quiz_report_model.dart';
 import '../../data/models/certificates/get_topic_certificate_model.dart';
 
 abstract class CertificateRepository {
@@ -50,4 +51,7 @@ abstract class CertificateRepository {
       String hashCode, String userId, String certificateId);
 
   Future<StartQuizModel> startQuiz(Map startQuizMap);
+
+  Future<FetchQuizReportModel> fetchQuizReport(
+      String hashcode, String workforceQuizId);
 }

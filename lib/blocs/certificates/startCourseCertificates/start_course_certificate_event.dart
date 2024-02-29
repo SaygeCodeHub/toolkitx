@@ -67,3 +67,8 @@ class StartCertificateQuiz extends StartCourseCertificateEvent {
   final String quizId;
   StartCertificateQuiz({required this.quizId});
 }
+
+class FetchCertificateQuizReport extends StartCourseCertificateEvent {
+  final String workforceQuizId;
+  FetchCertificateQuizReport({required this.workforceQuizId});
+}
