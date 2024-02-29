@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_quiz_report_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
@@ -43,6 +44,7 @@ class StartCourseCertificateBloc
     on<SaveQuizQuestionAnswer>(_saveQuestionAnswer);
     on<SubmitCertificateQuiz>(_submitCertificateQuiz);
     on<StartCertificateQuiz>(_startCertificateQuiz);
+    on<FetchCertificateQuizReport>(_fetchCertificateQuizReport);
   }
 
   Future<FutureOr<void>> _getCourseCertificate(GetCourseCertificate event,
@@ -241,6 +243,26 @@ class StartCourseCertificateBloc
       }
     } catch (e) {
       emit(CertificateQuizNotStarted(getError: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchCertificateQuizReport(
+      FetchCertificateQuizReport event,
+      Emitter<StartCourseCertificateState> emit) async {
+    emit(CertificateQuizReportFetching());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      FetchQuizReportModel fetchQuizReportModel = await _certificateRepository
+          .fetchQuizReport(hashCode!, event.workforceQuizId);
+      if (fetchQuizReportModel.status == 200) {
+        emit(CertificateQuizReportFetched(
+            fetchQuizReportModel: fetchQuizReportModel));
+      } else {
+        emit(CertificateQuizReportNotFetched(
+            getError: fetchQuizReportModel.message));
+      }
+    } catch (e) {
+      emit(QuizQuestionsError(getError: e.toString()));
     }
   }
 }

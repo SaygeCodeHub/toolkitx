@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/certificates/widgets/certificate_quiz_report_widget.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -14,7 +15,9 @@ import 'get_quiz_questions_screen.dart';
 
 class GetWorkforceScreen extends StatelessWidget {
   static const routeName = 'GetWorkforceScreen';
+
   const GetWorkforceScreen({super.key, required this.workforceQuizMap});
+
   final Map workforceQuizMap;
 
   @override
@@ -26,10 +29,9 @@ class GetWorkforceScreen extends StatelessWidget {
       appBar: const GenericAppBar(),
       body: Padding(
         padding: const EdgeInsets.only(
-          left: leftRightMargin,
-          right: leftRightMargin,
-          top: xxTinierSpacing,
-        ),
+            left: leftRightMargin,
+            right: leftRightMargin,
+            top: xxTinierSpacing),
         child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           listener: (context, state) {
@@ -53,41 +55,49 @@ class GetWorkforceScreen extends StatelessWidget {
             if (state is WorkforceQuizFetching) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is WorkforceQuizFetched) {
-              workforceQuizMap["questioncount"] =
-                  state.getWorkforceQuizModel.data.questioncount;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(state.getWorkforceQuizModel.data.certificatename,
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          fontWeight: FontWeight.w600, color: AppColor.black)),
-                  const SizedBox(height: tinierSpacing),
-                  Text(state.getWorkforceQuizModel.data.quizname,
-                      style: Theme.of(context).textTheme.xSmall.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.mediumBlack)),
-                  const SizedBox(height: tinierSpacing),
-                  Text(state.getWorkforceQuizModel.data.coursename,
-                      style: Theme.of(context).textTheme.xSmall.copyWith(
-                          fontWeight: FontWeight.w600, color: AppColor.grey)),
-                  const SizedBox(height: xxxSmallestSpacing),
-                  Visibility(
-                    visible:
-                        state.getWorkforceQuizModel.data.showstartquiz == '1' ||
-                            state.getWorkforceQuizModel.data.error.isEmpty,
-                    replacement: Text(state.getWorkforceQuizModel.data.error,
+              var data = state.getWorkforceQuizModel.data;
+              workforceQuizMap["questioncount"] = data.questioncount;
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.certificatename,
+                        style: Theme.of(context).textTheme.small.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.black)),
+                    const SizedBox(height: tinierSpacing),
+                    Text("${data.quizname}  ->  ${data.coursename}",
                         style: Theme.of(context).textTheme.xSmall.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: AppColor.errorRed)),
-                    child: PrimaryButton(
-                        onPressed: () {
-                          context.read<StartCourseCertificateBloc>().add(
-                              StartCertificateQuiz(
-                                  quizId: workforceQuizMap["quizId"]));
-                        },
-                        textValue: StringConstants.kStartQuiz),
-                  )
-                ],
+                            color: AppColor.mediumBlack)),
+                    const SizedBox(height: xxxSmallestSpacing),
+                    Visibility(
+                      visible: data.error.isNotEmpty,
+                      child: Text(data.error,
+                          style: Theme.of(context).textTheme.xSmall.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColor.errorRed)),
+                    ),
+                    Visibility(
+                      visible: data.showstartquiz == '1',
+                      child: PrimaryButton(
+                          onPressed: () {
+                            context.read<StartCourseCertificateBloc>().add(
+                                StartCertificateQuiz(
+                                    quizId: workforceQuizMap["quizId"]));
+                          },
+                          textValue: StringConstants.kStartQuiz),
+                    ),
+                    Visibility(
+                      visible: data.showquizreport == '1',
+                      child: CertificateQuizReportWidget(
+                          workforceQuizData: state.getWorkforceQuizModel.data,
+                          quizId: workforceQuizMap["quizId"]),
+                    ),
+                    const SizedBox(height: xxTinySpacing),
+                  ],
+                ),
               );
             } else {
               return const SizedBox.shrink();
