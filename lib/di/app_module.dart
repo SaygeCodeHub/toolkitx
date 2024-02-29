@@ -55,6 +55,7 @@ import '../repositories/uploadImage/upload_image_repository.dart';
 import '../repositories/uploadImage/upload_image_repository_impl.dart';
 import '../repositories/workorder/workorder_reposiotry.dart';
 import '../repositories/workorder/workorder_repository_impl.dart';
+import '../screens/chatBox/widgets/chat_data_model.dart';
 
 final getIt = GetIt.instance;
 
@@ -105,6 +106,7 @@ configurableDependencies() {
   getIt.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
+  getIt.registerLazySingleton<ChatData>(() => ChatData());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
 }

@@ -9,7 +9,7 @@ String fetchEmployeeModelToJson(FetchEmployeesModel data) =>
 class FetchEmployeesModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<EmployeesDatum> data;
 
   FetchEmployeesModel(
       {required this.status, required this.message, required this.data});
@@ -18,7 +18,8 @@ class FetchEmployeesModel {
       FetchEmployeesModel(
           status: json["Status"],
           message: json["Message"],
-          data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))));
+          data: List<EmployeesDatum>.from(
+              json["Data"].map((x) => EmployeesDatum.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "Status": status,
@@ -27,14 +28,14 @@ class FetchEmployeesModel {
       };
 }
 
-class Datum {
+class EmployeesDatum {
   final String id;
   final String name;
   final String type;
 
-  Datum({required this.id, required this.name, required this.type});
+  EmployeesDatum({required this.id, required this.name, required this.type});
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory EmployeesDatum.fromJson(Map<String, dynamic> json) => EmployeesDatum(
         id: json["id"] ?? '',
         name: json["name"] ?? '',
         type: json["type"] ?? '',

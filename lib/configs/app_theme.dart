@@ -113,7 +113,7 @@ extension AppTextTheme on TextTheme {
 
   TextStyle get smallTextBlack {
     return const TextStyle(
-        fontSize: 10, fontWeight: FontWeight.w400, color: AppColor.black);
+        fontSize: 9, fontWeight: FontWeight.w400, color: AppColor.black);
   }
 
   TextStyle get smallTextGrey {

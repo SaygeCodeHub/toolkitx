@@ -5,11 +5,12 @@ import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
 import 'package:toolkit/blocs/chatBox/chat_box_state.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
+import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_details_model_class.dart';
+import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'dart:math';
@@ -18,14 +19,33 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   final ChatBoxRepository _chatBoxRepository = getIt<ChatBoxRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
+  final ChatData newGroupDetails = getIt<ChatData>();
   final List<Map<String, dynamic>> messagesList = [];
-  final List<Chat> chatsList = [];
+  List<ChatData> chatDetailsList = [];
+  final _chatScreenMessagesStreamController =
+      StreamController<List<Map<String, dynamic>>>.broadcast();
+
+  Stream<List<Map<String, dynamic>>> get messageStream =>
+      _chatScreenMessagesStreamController.stream;
+  final _allChatScreenDetailsStreamController =
+      StreamController<List<ChatData>>.broadcast();
+
+  Stream<List<ChatData>> get allChatsStream =>
+      _allChatScreenDetailsStreamController.stream;
+  int groupId = 0;
 
   ChatBoxBloc() : super(ChatBoxInitial()) {
     on<FetchEmployees>(_fetchEmployees);
     on<SendMessage>(_sendMessage);
     on<RebuildChat>(_rebuildChat);
     on<FetchChatsList>(_fetchChats);
+    on<CreateChatGroup>(_createChatGroup);
+  }
+
+  @override
+  Future<void> close() {
+    _chatScreenMessagesStreamController.close();
+    return super.close();
   }
 
   FutureOr<void> _fetchEmployees(
@@ -59,7 +79,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
         "quote_msg_id": "",
         "sid": "1",
         "stype": "1",
-        "rid": 2,
+        "rid": event.sendMessageMap['employee_id'] ?? '',
         "rtype": "3",
         "msg_type": "1",
         "msg_time": isoDateString,
@@ -95,8 +115,8 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
-    emit(ChatHasBeenRebuild(messages: messagesList));
-    chatsList.clear();
+    _chatScreenMessagesStreamController.add(messages);
+    chatDetailsList.clear();
     add(FetchChatsList());
   }
 
@@ -104,14 +124,51 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
       FetchChatsList event, Emitter<ChatBoxState> emit) async {
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getLatestMessagesForEmployees();
-    for (var message in messages) {
-      Chat chat = Chat(
-        employeeId: message['employee_id'],
-        employeeName: message['employee_name'],
-        message: message['msg'],
-      );
-      chatsList.add(chat);
+    String name = '';
+    if (groupId != 0) {
+      ChatData? data = await _databaseHelper.getGroupDetails(groupId);
+      name = data?.groupName ?? '';
+      print('data----->${data?.chatToMap()}');
+      List<Members> members = await _databaseHelper.getGroupMembers(groupId);
+      print('group details------>${members.first.toMap()}');
     }
-    emit(ChatListFetched(chatsList: chatsList));
+    print('outside----->$name');
+    for (var message in messages) {
+      ChatData chat = ChatData(
+          employeeId: message['employee_id'],
+          employeeName: message['employee_name'],
+          message: message['msg'],
+          groupName: name);
+      chatDetailsList.add(chat);
+      _allChatScreenDetailsStreamController.add(chatDetailsList);
+    }
+  }
+
+  FutureOr<void> _createChatGroup(
+      CreateChatGroup event, Emitter<ChatBoxState> emit) async {
+    try {
+      emit(CreatingChatGroup());
+      CreateChatGroupModel chatGroupModel =
+          await _chatBoxRepository.createChatGroup({
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "name": newGroupDetails.groupName,
+        "purpose": newGroupDetails.groupPurpose ?? '',
+        "members": newGroupDetails.membersToMap()
+      });
+      if (chatGroupModel.status == 200) {
+        groupId = chatGroupModel.data.groupId;
+        _databaseHelper.insertGroupDetails(ChatData(
+            groupId: groupId,
+            groupName: newGroupDetails.groupName,
+            groupPurpose: newGroupDetails.groupPurpose));
+        _databaseHelper.insertGroupMembers(groupId, newGroupDetails.members);
+        add(FetchChatsList());
+        emit(ChatGroupCreated());
+      } else {
+        emit(ChatGroupCannotCreate(errorMessage: 'Error!'));
+      }
+    } catch (e) {
+      emit(ChatGroupCannotCreate(errorMessage: e.toString()));
+    }
   }
 }

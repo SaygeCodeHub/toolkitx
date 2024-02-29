@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:toolkit/utils/chat_database_util.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
 import '../../data/cache/cache_keys.dart';
@@ -12,10 +13,22 @@ class NotificationUtil {
   Future<void> initNotifications() async {
     await pushNotifications.requestPermission();
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log('Notification title ${message.notification!.title}');
-      log('Notification body ${message.notification!.body}');
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      log('Notification title ${message.data}');
+      await _storeMessageInDatabase(message);
     });
+
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> _storeMessageInDatabase(RemoteMessage message) async {
+    Map<String, dynamic> messageData = {
+      'employee_id': message.data['rid'],
+      'msg': message.data['chatmsg'],
+      'msg_time': message.data['time']
+    };
+
+    await DatabaseHelper().insertMessage(messageData);
   }
 
   ifTokenExists<bool>() async {
@@ -29,6 +42,5 @@ class NotificationUtil {
 }
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  log('Notification title ${message.notification!.title}');
-  log('Notification body ${message.notification!.body}');
+  log('Notification background title ${message.data}');
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
+import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -25,6 +27,7 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
+  final ChatData newGroupDetails = getIt<ChatData>();
   static int _selectedIndex = 0;
 
   @override
@@ -49,18 +52,18 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ChatBoxBloc>().chatsList.clear();
+    // newGroupDetails.chatDetails.clear();
     return Scaffold(
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar:
-            BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-                builder: (context, state) {
-          if (state is NoNetwork) {
-            return _bottomNavigationBar(true);
-          } else {
-            return _bottomNavigationBar(false);
-          }
-        }));
+        BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
+            builder: (context, state) {
+              if (state is NoNetwork) {
+                return _bottomNavigationBar(true);
+              } else {
+                return _bottomNavigationBar(false);
+              }
+            }));
   }
 
   BottomNavigationBar _bottomNavigationBar(bool isDisabled) {
@@ -86,7 +89,7 @@ class _RootScreenState extends State<RootScreen> {
                       child: Icon(Icons.notifications_sharp)),
                   BlocBuilder<ClientBloc, ClientStates>(
                       buildWhen: (previousState, currentState) =>
-                          currentState is HomeScreenFetched,
+                      currentState is HomeScreenFetched,
                       builder: (context, state) {
                         if (state is HomeScreenFetched) {
                           if (state.homeScreenModel.data!.badges!.isNotEmpty) {
@@ -131,7 +134,7 @@ class _RootScreenState extends State<RootScreen> {
         currentIndex: _selectedIndex,
         selectedItemColor: AppColor.deepBlue,
         unselectedItemColor:
-            (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
+        (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
         onTap: (isDisabled) ? null : _onItemTapped);
   }
 }

@@ -214,7 +214,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => LotoDetailsBloc()),
           BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
           BlocProvider(lazy: true, create: (context) => AssetsBloc()),
-          BlocProvider(lazy: true, create: (context) => ChatBoxBloc()),
+          BlocProvider(lazy: false, create: (context) => ChatBoxBloc()),
           BlocProvider(
               lazy: false, create: (context) => EquipmentTraceabilityBloc()),
         ],

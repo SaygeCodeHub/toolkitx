@@ -1,5 +1,4 @@
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_details_model_class.dart';
 
 abstract class ChatBoxState {}
 
@@ -31,8 +30,12 @@ class ChatHasBeenRebuild extends ChatBoxState {
   ChatHasBeenRebuild({required this.messages});
 }
 
-class ChatListFetched extends ChatBoxState {
-  final List<Chat> chatsList;
+class CreatingChatGroup extends ChatBoxState {}
 
-  ChatListFetched({required this.chatsList});
+class ChatGroupCreated extends ChatBoxState {}
+
+class ChatGroupCannotCreate extends ChatBoxState {
+  final String errorMessage;
+
+  ChatGroupCannotCreate({required this.errorMessage});
 }

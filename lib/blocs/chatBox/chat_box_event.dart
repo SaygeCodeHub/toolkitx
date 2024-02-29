@@ -15,3 +15,5 @@ class RebuildChat extends ChatBoxEvent {
 }
 
 class FetchChatsList extends ChatBoxEvent {}
+
+class CreateChatGroup extends ChatBoxEvent {}

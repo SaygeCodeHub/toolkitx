@@ -535,13 +535,14 @@ class AppRoutes {
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
       case FetchEmployeesScreen.routeName:
-        return _createRoute(FetchEmployeesScreen());
+        return _createRoute(
+            FetchEmployeesScreen(isCreateNewGroup: settings.arguments as bool));
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
         return _createRoute(const OpenDocumentForReviewScreen());
       case NewChatScreen.routeName:
-        return _createRoute(NewChatScreen());
+        return _createRoute(const NewChatScreen());
       case ChatBoxScreen.routeName:
         return _createRoute(const ChatBoxScreen());
       default:

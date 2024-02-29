@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
@@ -18,5 +19,13 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}chat/sendmessage", sendMessageMap);
     return SendMessageModel.fromJson(response);
+  }
+
+  @override
+  Future<CreateChatGroupModel> createChatGroup(Map createChatGroupMap) async {
+    print('map------>$createChatGroupMap');
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}chat/creategroup", createChatGroupMap);
+    return CreateChatGroupModel.fromJson(response);
   }
 }
