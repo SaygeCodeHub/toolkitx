@@ -8,11 +8,10 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import 'constants/api_constants.dart';
-import 'generic_alphanumeric_generator_util.dart';
 
 class CertificateNotesTypeUtil {
   Widget fetchSwitchCaseWidget(
-      type, data, htmlText, link, podPlayerController, clientId) {
+      type, data, htmlText, pictureLink, podPlayerController, clientId) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -25,14 +24,12 @@ class CertificateNotesTypeUtil {
             splashColor: AppColor.transparent,
             highlightColor: AppColor.transparent,
             onTap: () {
-              launchUrlString(
-                  '${ApiConstants.baseDocUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+              launchUrlString('${ApiConstants.baseDocUrl}$pictureLink',
                   mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,
-                imageUrl:
-                    '${ApiConstants.baseDocUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                imageUrl: '${ApiConstants.baseDocUrl}$pictureLink',
                 placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColor.paleGrey,
                     highlightColor: AppColor.white,
@@ -47,38 +44,12 @@ class CertificateNotesTypeUtil {
           ),
         );
       case '2':
-        return Column(
-            children: [PodVideoPlayer(controller: podPlayerController)]);
+        return PodVideoPlayer(controller: podPlayerController);
       case '3':
-        return Container(
-          height: kContainerHeight,
-          width: kContainerWidth,
-          color: AppColor.blueGrey,
-          child: InkWell(
-            splashColor: AppColor.transparent,
-            highlightColor: AppColor.transparent,
-            onTap: () {
-              launchUrlString(
-                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                  mode: LaunchMode.inAppWebView);
-            },
-            child: CachedNetworkImage(
-                height: kContainerHeight,
-                imageUrl:
-                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: AppColor.paleGrey,
-                    highlightColor: AppColor.white,
-                    child: Container(
-                        height: kNetworkImageContainerTogether,
-                        width: kNetworkImageContainerTogether,
-                        decoration: BoxDecoration(
-                            color: AppColor.white,
-                            borderRadius: BorderRadius.circular(kCardRadius)))),
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.error_outline_sharp, size: kIconSize)),
-          ),
-        );
+        // return PowerFileViewWidget(
+        //   downloadUrl: pictureLink,
+        //   filePath: pictureLink,
+        // );
       default:
         return Container();
     }
