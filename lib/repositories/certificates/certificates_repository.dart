@@ -56,5 +56,6 @@ abstract class CertificateRepository {
   Future<FetchQuizReportModel> fetchQuizReport(
       String hashcode, String workforceQuizId);
 
-  Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(Map reattemptQuizMap);
+  Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(
+      Map reattemptQuizMap);
 }
