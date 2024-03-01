@@ -26,13 +26,13 @@ class CertificateNotesTypeUtil {
             highlightColor: AppColor.transparent,
             onTap: () {
               launchUrlString(
-                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                  '${ApiConstants.baseDocUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,
                 imageUrl:
-                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                    '${ApiConstants.baseDocUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                 placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColor.paleGrey,
                     highlightColor: AppColor.white,
