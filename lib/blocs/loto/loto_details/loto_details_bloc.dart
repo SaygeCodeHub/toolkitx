@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_team_for_remove_model.dart';
@@ -92,6 +93,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+      log('hashCode=================>$hashCode');
+      log('lotoID=================>$lotoId');
       if (fetchLotoDetailsModel.data.isstart == '1') {
         popUpMenuItemsList.insert(0, DatabaseUtil.getText('Start'));
       }

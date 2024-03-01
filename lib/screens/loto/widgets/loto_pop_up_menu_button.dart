@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/loto/loto_details/loto_details_bloc.dart';
@@ -7,6 +10,7 @@ import 'package:toolkit/screens/loto/loto_add_comment_screen.dart';
 import 'package:toolkit/screens/loto/loto_upload_photos_screen.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_qr_scanner.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../../utils/database_utils.dart';
@@ -32,6 +36,7 @@ class LotoPopupMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String code = '';
     return PopupMenuButton(
         onSelected: (value) {
           if (value == DatabaseUtil.getText('assign_workforce')) {
@@ -71,13 +76,22 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('Start')) {
-            StartLotoScreen.isFromStartRemoveLoto = false;
-            Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) =>
-                {
-                  context
-                      .read<LotoDetailsBloc>()
-                      .add(FetchLotoDetails(lotoTabIndex: 0))
-                });
+            if (fetchLotoDetailsModel.data.location2.isNotEmpty ||
+                fetchLotoDetailsModel.data.asset2.isNotEmpty) {
+              CustomQRCodeScanner(onCaptured: (qrCode) {
+                code = qrCode;
+              },);
+              log('decodeLocation==========>${base64.decode(fetchLotoDetailsModel.data.location2)}');
+              code == jsonDecode(fetchLotoDetailsModel.data.location2);
+            } else {
+              StartLotoScreen.isFromStartRemoveLoto = false;
+              Navigator.pushNamed(context, StartLotoScreen.routeName).then(
+                  (_) => {
+                        context
+                            .read<LotoDetailsBloc>()
+                            .add(FetchLotoDetails(lotoTabIndex: 0))
+                      });
+            }
           }
           if (value == DatabaseUtil.getText('StartRemoveLotoButton')) {
             StartLotoScreen.isFromStartRemoveLoto = true;
