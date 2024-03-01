@@ -10,7 +10,6 @@ import '../../../widgets/custom_card.dart';
 class CalendarListView extends StatelessWidget {
   final List calendarEvents;
   final String currentDate;
-
   const CalendarListView(
       {Key? key, required this.calendarEvents, required this.currentDate})
       : super(key: key);

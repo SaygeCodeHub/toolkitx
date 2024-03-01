@@ -33,12 +33,10 @@ class CalendarSection extends StatelessWidget {
           child: TableCalendar(
             availableGestures: AvailableGestures.horizontalSwipe,
             onPageChanged: (date) {
-              String pageChangeMonth = "${date.day}/${date.month}/${date.year}";
-              if (calendarEvents.isNotEmpty) {
-                context
-                    .read<CalendarBloc>()
-                    .add(FetchCalendarEvents(currentDate: pageChangeMonth));
-              }
+              String pageChangeMonth = "${date.month}/${date.year}";
+              context
+                  .read<CalendarBloc>()
+                  .add(FetchCalendarEvents(currentDate: pageChangeMonth));
             },
             focusedDay: selectedDate,
             firstDay: DateTime(1900),

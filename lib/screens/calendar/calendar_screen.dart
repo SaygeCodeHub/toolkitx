@@ -19,6 +19,7 @@ class CalendarScreen extends StatelessWidget {
   static const routeName = 'CalendarScreen';
 
   CalendarScreen({Key? key}) : super(key: key);
+
   final String currentDate =
       "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
 
@@ -63,10 +64,11 @@ class CalendarScreen extends StatelessWidget {
                                     calendarFormat:
                                         context.read<CalendarBloc>().format,
                                     onFormatChanged: (CalendarFormat format) {
-                                      format =
-                                          context.read<CalendarBloc>().format;
+                                      context
+                                          .read<CalendarBloc>()
+                                          .updateCalendarFormat(format);
                                     },
-                                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                                    startingDayOfWeek: StartingDayOfWeek.monday,
                                     daysOfWeekVisible: true,
                                     onDaySelected: (
                                       DateTime date,

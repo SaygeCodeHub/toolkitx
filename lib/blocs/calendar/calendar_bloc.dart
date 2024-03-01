@@ -48,13 +48,11 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
   }
 
   _selectCalendarDate(SelectCalendarDate event, Emitter<CalendarStates> emit) {
-    eventsList.clear();
     selectedDateFromCalendar = formatter.format(event.selectedDate);
-    for (var item in event.fetchCalendarEventsModel.data!) {
-      if (item.fulldate == selectedDateFromCalendar) {
-        eventsList.addAll(item.events);
-      }
-    }
+    eventsList = event.fetchCalendarEventsModel.data!
+        .where((item) => item.fulldate == selectedDateFromCalendar)
+        .expand((item) => item.events)
+        .toList();
     String currentDate =
         "${event.selectedDate.day}/${event.selectedDate.month}/${event.selectedDate.year}";
     emit(CalendarEventsFetched(
@@ -68,11 +66,14 @@ class CalendarBloc extends Bloc<CalendarEvents, CalendarStates> {
       DateTime day, FetchCalendarEventsModel fetchCalendarEventsModel) {
     List<CalendarEvent> calendarEvents = [];
     calendarEvents.clear();
-    for (int i = 0; i < fetchCalendarEventsModel.data!.length; i++) {
-      if (fetchCalendarEventsModel.data![i].fulldate == formatter.format(day)) {
-        calendarEvents.addAll(fetchCalendarEventsModel.data![i].events);
-      }
-    }
+    calendarEvents = fetchCalendarEventsModel.data!
+        .where((data) => data.fulldate == formatter.format(day))
+        .expand((data) => data.events)
+        .toList();
     return calendarEvents;
+  }
+
+  void updateCalendarFormat(CalendarFormat newFormat) {
+    format = newFormat;
   }
 }
