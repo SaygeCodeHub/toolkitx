@@ -108,7 +108,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   focusedDay: _focusedDay,
                                   firstDay: DateTime(1900),
                                   lastDay: DateTime(2100),
-                                  // Adjust the range as needed
                                   calendarFormat: format,
                                   onFormatChanged: (CalendarFormat format) {
                                     setState(() {
