@@ -21,12 +21,13 @@ class NewChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatBoxBloc = BlocProvider.of<ChatBoxBloc>(context);
-    chatBoxBloc.add(RebuildChat(employeeDetailsMap: employeeDetailsMap));
+    context
+        .read<ChatBoxBloc>()
+        .add(RebuildChat(employeeDetailsMap: employeeDetailsMap));
     return Scaffold(
         appBar: GenericAppBar(title: employeeDetailsMap['employee_name'] ?? ''),
         body: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: chatBoxBloc.messageStream,
+            stream: context.read<ChatBoxBloc>().messageStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(children: <Widget>[
@@ -35,8 +36,9 @@ class NewChatScreen extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       reverse: true,
                       itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) =>
-                          ChatMessage(message: snapshot.data?[index]['msg']),
+                      itemBuilder: (context, index) => ChatMessage(
+                          message: snapshot.data?[index]['msg'],
+                          isMe: snapshot.data?[index]['isReceiver'] ?? 0),
                     ),
                   ),
                   const Divider(height: kChatScreenDividerHeight),
@@ -83,7 +85,7 @@ class NewChatScreen extends StatelessWidget {
 }
 
 class TrianglePainter extends CustomPainter {
-  final bool isMe;
+  final int isMe;
 
   TrianglePainter({required this.isMe});
 
@@ -91,7 +93,7 @@ class TrianglePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..color = AppColor.offWhite;
     Path path = Path();
-    if (isMe) {
+    if (isMe == 0) {
       path.moveTo(size.width, size.height);
       path.lineTo(size.width - 15, size.height);
       path.lineTo(size.width, size.height + 15);
@@ -113,9 +115,9 @@ class TrianglePainter extends CustomPainter {
 
 class ChatMessage extends StatelessWidget {
   final String message;
-  final bool isMe;
+  final int isMe;
 
-  const ChatMessage({super.key, required this.message, this.isMe = true});
+  const ChatMessage({super.key, required this.message, required this.isMe});
 
   String getCurrentTime() {
     int hour = DateTime.now().hour;
@@ -128,44 +130,47 @@ class ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: xxxSmallestSpacing),
-        child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.all(xxTinierSpacing),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(xxxTinySpacing),
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.sizeOf(context).width / 2),
-                      decoration: BoxDecoration(
-                        color: AppColor.lightBlueGrey,
-                        borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(tinierSpacing),
-                            topRight: const Radius.circular(tinierSpacing),
-                            bottomLeft: isMe
-                                ? const Radius.circular(tinierSpacing)
-                                : const Radius.circular(0),
-                            bottomRight: isMe
-                                ? const Radius.circular(0)
-                                : const Radius.circular(tinierSpacing)),
-                      ),
-                      child: Text(
-                        message,
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    if (!isMe)
-                      CustomPaint(
-                        painter: TrianglePainter(isMe: isMe),
-                      ),
-                    const SizedBox(height: xxxTinierSpacing),
-                    Text(getCurrentTime(),
-                        style: Theme.of(context).textTheme.smallTextBlack)
-                  ]))
-        ]));
+        child: Row(
+            mainAxisAlignment:
+                (isMe == 0) ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.all(xxTinierSpacing),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(xxxTinySpacing),
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.sizeOf(context).width / 2),
+                          decoration: BoxDecoration(
+                            color: AppColor.lightBlueGrey,
+                            borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(tinierSpacing),
+                                topRight: const Radius.circular(tinierSpacing),
+                                bottomLeft: (isMe == 0)
+                                    ? const Radius.circular(tinierSpacing)
+                                    : const Radius.circular(0),
+                                bottomRight: (isMe == 0)
+                                    ? const Radius.circular(0)
+                                    : const Radius.circular(tinierSpacing)),
+                          ),
+                          child: Text(
+                            message,
+                            style: Theme.of(context)
+                                .textTheme
+                                .xSmall
+                                .copyWith(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        if (isMe == 0)
+                          CustomPaint(
+                            painter: TrianglePainter(isMe: isMe),
+                          ),
+                        const SizedBox(height: xxxTinierSpacing),
+                        Text(getCurrentTime(),
+                            style: Theme.of(context).textTheme.smallTextBlack)
+                      ]))
+            ]));
   }
 }

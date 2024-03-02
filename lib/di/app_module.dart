@@ -101,12 +101,12 @@ configurableDependencies() {
       () => DocumentsRepositoryImpl());
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
-  getIt
-      .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
   getIt.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
   getIt.registerLazySingleton<ChatData>(() => ChatData());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
+  getIt
+      .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
 }

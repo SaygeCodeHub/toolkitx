@@ -48,10 +48,8 @@ class ChatBoxScreen extends StatelessWidget {
                     child: ListTile(
                         onTap: () {
                           NewChatScreen.employeeDetailsMap = {
-                            "employee_name":
-                                snapshot.data![index].employeeName ?? '',
-                            'employee_id':
-                                snapshot.data![index].employeeId ?? ''
+                            "employee_name": snapshot.data![index].employeeName,
+                            'employee_id': snapshot.data![index].employeeId
                           };
                           Navigator.pushNamed(context, NewChatScreen.routeName);
                         },
@@ -62,16 +60,14 @@ class ChatBoxScreen extends StatelessWidget {
                                 color: AppColor.deepBlue),
                             child: const Icon(Icons.person,
                                 color: AppColor.ghostWhite, size: 20)),
-                        title: (snapshot.data![index].groupName.isNotEmpty)
-                            ? Text(snapshot.data![index].groupName)
-                            : Text(snapshot.data![index].employeeName ?? ''),
+                        title: Text(snapshot.data![index].employeeName),
                         titleTextStyle: Theme.of(context)
                             .textTheme
                             .small
                             .copyWith(
                                 color: AppColor.black,
                                 fontWeight: FontWeight.w500),
-                        subtitle: Text(snapshot.data![index].message ?? ''),
+                        subtitle: Text(snapshot.data![index].message),
                         subtitleTextStyle: Theme.of(context).textTheme.xSmall),
                   );
                 },

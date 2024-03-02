@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
+import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
+import 'package:toolkit/utils/chat_database_util.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -26,14 +27,21 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState();
 }
 
-class _RootScreenState extends State<RootScreen> {
-  final ChatData newGroupDetails = getIt<ChatData>();
+class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   static int _selectedIndex = 0;
+  final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
 
   @override
   void initState() {
     widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this); // Unregister the observer
   }
 
   void _onItemTapped(int index) {
@@ -50,20 +58,48 @@ class _RootScreenState extends State<RootScreen> {
     ProfileScreen()
   ];
 
+  Future<String> getEmployeeId() async {
+    final String? employeeId = await databaseHelper.getLatestEmployeeId();
+    return employeeId ?? "";
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    String? employeeId = await getEmployeeId();
+    String employeeIdString = employeeId;
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("app in resumed");
+        context.read<ChatBoxBloc>().add(
+            RebuildChat(employeeDetailsMap: {"employee_id": employeeIdString}));
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // newGroupDetails.chatDetails.clear();
     return Scaffold(
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar:
-        BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-            builder: (context, state) {
-              if (state is NoNetwork) {
-                return _bottomNavigationBar(true);
-              } else {
-                return _bottomNavigationBar(false);
-              }
-            }));
+            BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
+                builder: (context, state) {
+          if (state is NoNetwork) {
+            return _bottomNavigationBar(true);
+          } else {
+            return _bottomNavigationBar(false);
+          }
+        }));
   }
 
   BottomNavigationBar _bottomNavigationBar(bool isDisabled) {
@@ -89,7 +125,7 @@ class _RootScreenState extends State<RootScreen> {
                       child: Icon(Icons.notifications_sharp)),
                   BlocBuilder<ClientBloc, ClientStates>(
                       buildWhen: (previousState, currentState) =>
-                      currentState is HomeScreenFetched,
+                          currentState is HomeScreenFetched,
                       builder: (context, state) {
                         if (state is HomeScreenFetched) {
                           if (state.homeScreenModel.data!.badges!.isNotEmpty) {
@@ -134,7 +170,7 @@ class _RootScreenState extends State<RootScreen> {
         currentIndex: _selectedIndex,
         selectedItemColor: AppColor.deepBlue,
         unselectedItemColor:
-        (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
+            (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
         onTap: (isDisabled) ? null : _onItemTapped);
   }
 }

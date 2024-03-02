@@ -34,7 +34,8 @@ class DatabaseHelper {
             stype_2 TEXT,
             msg_status TEXT DEFAULT '0',
             employee_name TEXT,
-            employee_id TEXT
+            employee_id TEXT,
+            isReceiver INTEGER DEFAULT 0
           )
         ''');
 
@@ -87,23 +88,23 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getMessagesForEmployee(
       String employeeId) async {
     final Database db = await database;
-    return await db.query(
-      'chat_messages',
-      where: 'employee_id = ?',
-      whereArgs: [employeeId],
-    );
+    return await db.query('chat_messages',
+        where: 'employee_id = ?', whereArgs: [employeeId]);
   }
 
-  Future<List<Map<String, dynamic>>> getLatestMessagesForEmployees() async {
+  Future<List> getLatestMessagesForEmployees() async {
     final Database db = await database;
-    return await db.rawQuery('''
-    SELECT * FROM chat_messages
-    WHERE (employee_id, msg_time) IN (
-      SELECT employee_id, MAX(msg_time) AS latest_time
-      FROM chat_messages
-      GROUP BY employee_id
-    )
-  ''');
+
+    const empList = '''
+    SELECT DISTINCT employee_id
+    FROM chat_messages;
+  ''';
+
+    final employeeList = await db.rawQuery(empList);
+
+    List employees = List.from(employeeList);
+
+    return employees;
   }
 
   Future<void> insertGroupDetails(ChatData groupDetails) async {
@@ -146,5 +147,29 @@ class DatabaseHelper {
           type: maps[i]['type'],
           isOwner: maps[i]['isowner']);
     });
+  }
+
+  Future<String> getEmployeeNameFromDatabase(String employeeId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('chat_messages',
+        where: 'employee_id = ?', whereArgs: [employeeId]);
+    if (maps.isNotEmpty) {
+      return maps[0]['employee_name'] ?? 'na';
+    } else {
+      return 'no employee';
+    }
+  }
+
+  Future<String?> getLatestEmployeeId() async {
+    final Database db = await database;
+    const String query =
+        'SELECT employee_id FROM chat_messages ORDER BY id DESC LIMIT 1;';
+    final List<Map<String, dynamic>> results = await db.rawQuery(query);
+
+    if (results.isNotEmpty) {
+      return results.first['employee_id'] as String?;
+    } else {
+      return null;
+    }
   }
 }

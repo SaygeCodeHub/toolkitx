@@ -23,7 +23,6 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
 
   @override
   Future<CreateChatGroupModel> createChatGroup(Map createChatGroupMap) async {
-    print('map------>$createChatGroupMap');
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}chat/creategroup", createChatGroupMap);
     return CreateChatGroupModel.fromJson(response);

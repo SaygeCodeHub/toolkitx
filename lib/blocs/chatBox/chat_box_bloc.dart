@@ -21,7 +21,9 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   final ChatData newGroupDetails = getIt<ChatData>();
   final List<Map<String, dynamic>> messagesList = [];
+
   List<ChatData> chatDetailsList = [];
+  Map<String, dynamic> employeeDetailsMap = {};
   final _chatScreenMessagesStreamController =
       StreamController<List<Map<String, dynamic>>>.broadcast();
 
@@ -34,7 +36,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
       _allChatScreenDetailsStreamController.stream;
   int groupId = 0;
 
-  ChatBoxBloc() : super(ChatBoxInitial()) {
+  ChatBoxBloc._() : super(ChatBoxInitial()) {
     on<FetchEmployees>(_fetchEmployees);
     on<SendMessage>(_sendMessage);
     on<RebuildChat>(_rebuildChat);
@@ -42,9 +44,14 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
     on<CreateChatGroup>(_createChatGroup);
   }
 
+  static final ChatBoxBloc _instance = ChatBoxBloc._();
+
+  factory ChatBoxBloc() => _instance;
+
   @override
   Future<void> close() {
     _chatScreenMessagesStreamController.close();
+    _allChatScreenDetailsStreamController.close();
     return super.close();
   }
 
@@ -96,6 +103,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
         ...sendMessageMap,
         ...employeeDetailsMap
       };
+      chatDetailsMap['isReceiver'] = 0;
       await _databaseHelper.insertMessage(chatDetailsMap);
       add(RebuildChat(employeeDetailsMap: event.sendMessageMap));
       SendMessageModel sendMessageModel =
@@ -115,33 +123,37 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
-    _chatScreenMessagesStreamController.add(messages);
-    chatDetailsList.clear();
+    _chatScreenMessagesStreamController.add(messagesList);
     add(FetchChatsList());
   }
 
   FutureOr<void> _fetchChats(
       FetchChatsList event, Emitter<ChatBoxState> emit) async {
-    List<Map<String, dynamic>> messages =
-        await _databaseHelper.getLatestMessagesForEmployees();
-    String name = '';
-    if (groupId != 0) {
-      ChatData? data = await _databaseHelper.getGroupDetails(groupId);
-      name = data?.groupName ?? '';
-      print('data----->${data?.chatToMap()}');
-      List<Members> members = await _databaseHelper.getGroupMembers(groupId);
-      print('group details------>${members.first.toMap()}');
+    List employees = await _databaseHelper.getLatestMessagesForEmployees();
+    chatDetailsList.clear();
+    for (int i = 0; i < employees.length; i++) {
+      List<Map<String, dynamic>> message = await _databaseHelper
+          .getMessagesForEmployee(employees[i]['employee_id']);
+      List lastMessageList = [];
+      lastMessageList.addAll(message);
+      if (lastMessageList.last['employee_name'] == null) {
+        lastMessageList[i]['employee_id'] ==
+            lastMessageList.last['employee_id'];
+        String employeeName = lastMessageList[i]['employee_name'];
+        ChatData chat = ChatData(
+            employeeId: employees[i]['employee_id'],
+            employeeName: employeeName,
+            message: lastMessageList.last['msg']);
+        chatDetailsList.add(chat);
+      } else {
+        ChatData chat = ChatData(
+            employeeId: employees[i]['employee_id'],
+            employeeName: lastMessageList.last['employee_name'],
+            message: lastMessageList.last['msg']);
+        chatDetailsList.add(chat);
+      }
     }
-    print('outside----->$name');
-    for (var message in messages) {
-      ChatData chat = ChatData(
-          employeeId: message['employee_id'],
-          employeeName: message['employee_name'],
-          message: message['msg'],
-          groupName: name);
-      chatDetailsList.add(chat);
-      _allChatScreenDetailsStreamController.add(chatDetailsList);
-    }
+    _allChatScreenDetailsStreamController.add(chatDetailsList);
   }
 
   FutureOr<void> _createChatGroup(
@@ -152,7 +164,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
           await _chatBoxRepository.createChatGroup({
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "name": newGroupDetails.groupName,
-        "purpose": newGroupDetails.groupPurpose ?? '',
+        "purpose": newGroupDetails.groupPurpose,
         "members": newGroupDetails.membersToMap()
       });
       if (chatGroupModel.status == 200) {
