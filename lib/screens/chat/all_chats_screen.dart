@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/fetch_employees_screen.dart';
-import 'package:toolkit/screens/chat/new_chat_screen.dart';
-import 'package:toolkit/screens/chat/widgets/chat_box_pop_up_menu.dart';
+import 'package:toolkit/screens/chat/employees_screen.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
+import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
-class ChatBoxScreen extends StatelessWidget {
-  static const routeName = 'ChatBoxScreen';
+class AllChatsScreen extends StatelessWidget {
+  static const routeName = 'AllChatsScreen';
 
-  const ChatBoxScreen({super.key});
+  const AllChatsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class ChatBoxScreen extends StatelessWidget {
         title: const Text('Chats'),
         automaticallyImplyLeading: false,
         titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-        actions: [ChatBoxPopUpMenu()],
+        actions: [ChatPopUpMenu()],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, FetchEmployeesScreen.routeName,
+            Navigator.pushNamed(context, EmployeesScreen.routeName,
                 arguments: false);
           },
           child: const Icon(Icons.add)),
@@ -47,11 +47,12 @@ class ChatBoxScreen extends StatelessWidget {
                   return CustomCard(
                     child: ListTile(
                         onTap: () {
-                          NewChatScreen.employeeDetailsMap = {
+                          ChatMessagingScreen.employeeDetailsMap = {
                             "employee_name": snapshot.data![index].employeeName,
                             'employee_id': snapshot.data![index].employeeId
                           };
-                          Navigator.pushNamed(context, NewChatScreen.routeName);
+                          Navigator.pushNamed(
+                              context, ChatMessagingScreen.routeName);
                         },
                         leading: Container(
                             padding: const EdgeInsets.all(tiniestSpacing),

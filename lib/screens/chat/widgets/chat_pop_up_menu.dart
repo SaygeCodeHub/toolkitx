@@ -3,16 +3,16 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chat/fetch_employees_screen.dart';
+import 'package:toolkit/screens/chat/employees_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
-class ChatBoxPopUpMenu extends StatelessWidget {
-  final ChatData newGroupDetails = getIt<ChatData>();
+class ChatPopUpMenu extends StatelessWidget {
+  final ChatData chatData = getIt<ChatData>();
 
-  ChatBoxPopUpMenu({super.key});
+  ChatPopUpMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class ChatBoxPopUpMenu extends StatelessWidget {
                               height: 35,
                               child: PrimaryButton(
                                   onPressed: () {
-                                    if (newGroupDetails.groupName.isEmpty) {
+                                    if (chatData.groupName.isEmpty) {
                                       showCustomSnackBar(context,
                                           'Please enter group name!', '');
                                     } else {
-                                      Navigator.pushNamed(context,
-                                          FetchEmployeesScreen.routeName,
+                                      Navigator.pushNamed(
+                                          context, EmployeesScreen.routeName,
                                           arguments: true);
                                     }
                                   },
@@ -74,7 +74,7 @@ class ChatBoxPopUpMenu extends StatelessWidget {
                                 const SizedBox(height: xxTinierSpacing),
                                 TextFieldWidget(
                                     onTextFieldChanged: (String textValue) {
-                                  newGroupDetails.groupName = textValue;
+                                      chatData.groupName = textValue;
                                 }),
                                 const SizedBox(height: tinySpacing),
                                 Text('Purpose of the Group',
@@ -82,7 +82,7 @@ class ChatBoxPopUpMenu extends StatelessWidget {
                                 const SizedBox(height: xxTinierSpacing),
                                 TextFieldWidget(
                                     onTextFieldChanged: (String textValue) {
-                                  newGroupDetails.groupPurpose = textValue;
+                                      chatData.groupPurpose = textValue;
                                 }),
                               ],
                             ),

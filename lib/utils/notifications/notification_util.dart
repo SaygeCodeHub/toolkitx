@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
@@ -20,7 +20,7 @@ class NotificationUtil {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
-        ChatBoxBloc().add(RebuildChat(employeeDetailsMap: {
+        ChatBoxBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
           "employee_id": message.data['rid'],
           "employee_name": ''
         }));

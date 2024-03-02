@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
-class NewChatScreen extends StatelessWidget {
+class ChatMessagingScreen extends StatelessWidget {
   static const routeName = 'NewChatScreen';
   static Map<String, dynamic> employeeDetailsMap = {};
 
-  const NewChatScreen({super.key});
+  const ChatMessagingScreen({super.key});
 
   void _handleMessage(String text, BuildContext context) {
     if (text.isEmpty) return;
@@ -21,9 +21,8 @@ class NewChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ChatBoxBloc>()
-        .add(RebuildChat(employeeDetailsMap: employeeDetailsMap));
+    context.read<ChatBoxBloc>().add(
+        RebuildChatMessagingScreen(employeeDetailsMap: employeeDetailsMap));
     return Scaffold(
         appBar: GenericAppBar(title: employeeDetailsMap['employee_name'] ?? ''),
         body: StreamBuilder<List<Map<String, dynamic>>>(
@@ -76,9 +75,8 @@ class NewChatScreen extends StatelessWidget {
                   icon: const Icon(Icons.send),
                   onPressed: () {
                     _handleMessage(textEditingController.text, context);
-                    context
-                        .read<ChatBoxBloc>()
-                        .add(SendMessage(sendMessageMap: employeeDetailsMap));
+                    context.read<ChatBoxBloc>().add(
+                        SendChatMessage(sendMessageMap: employeeDetailsMap));
                   }),
             ])));
   }

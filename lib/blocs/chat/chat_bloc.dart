@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
-import 'package:toolkit/blocs/chat/chat_box_state.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
@@ -15,11 +15,11 @@ import 'package:toolkit/utils/chat_database_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'dart:math';
 
-class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
+class ChatBoxBloc extends Bloc<ChatEvent, ChatState> {
   final ChatBoxRepository _chatBoxRepository = getIt<ChatBoxRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
-  final ChatData newGroupDetails = getIt<ChatData>();
+  final ChatData chatData = getIt<ChatData>();
   final List<Map<String, dynamic>> messagesList = [];
 
   List<ChatData> chatDetailsList = [];
@@ -36,10 +36,10 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
       _allChatScreenDetailsStreamController.stream;
   int groupId = 0;
 
-  ChatBoxBloc._() : super(ChatBoxInitial()) {
+  ChatBoxBloc._() : super(ChatInitial()) {
     on<FetchEmployees>(_fetchEmployees);
-    on<SendMessage>(_sendMessage);
-    on<RebuildChat>(_rebuildChat);
+    on<SendChatMessage>(_sendMessage);
+    on<RebuildChatMessagingScreen>(_rebuildChat);
     on<FetchChatsList>(_fetchChats);
     on<CreateChatGroup>(_createChatGroup);
   }
@@ -56,7 +56,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   }
 
   FutureOr<void> _fetchEmployees(
-      FetchEmployees event, Emitter<ChatBoxState> emit) async {
+      FetchEmployees event, Emitter<ChatState> emit) async {
     try {
       emit(FetchingEmployees());
       FetchEmployeesModel fetchEmployeesModel =
@@ -74,7 +74,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   }
 
   FutureOr<void> _sendMessage(
-      SendMessage event, Emitter<ChatBoxState> emit) async {
+      SendChatMessage event, Emitter<ChatState> emit) async {
     try {
       DateTime now = DateTime.now();
       Random random = Random();
@@ -105,7 +105,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
       };
       chatDetailsMap['isReceiver'] = 0;
       await _databaseHelper.insertMessage(chatDetailsMap);
-      add(RebuildChat(employeeDetailsMap: event.sendMessageMap));
+      add(RebuildChatMessagingScreen(employeeDetailsMap: event.sendMessageMap));
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -117,7 +117,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   }
 
   FutureOr<void> _rebuildChat(
-      RebuildChat event, Emitter<ChatBoxState> emit) async {
+      RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     List<Map<String, dynamic>> messages = await _databaseHelper
         .getMessagesForEmployee(event.employeeDetailsMap['employee_id']);
     messages = List.from(messages.reversed);
@@ -128,7 +128,7 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   }
 
   FutureOr<void> _fetchChats(
-      FetchChatsList event, Emitter<ChatBoxState> emit) async {
+      FetchChatsList event, Emitter<ChatState> emit) async {
     List employees = await _databaseHelper.getLatestMessagesForEmployees();
     chatDetailsList.clear();
     for (int i = 0; i < employees.length; i++) {
@@ -157,23 +157,23 @@ class ChatBoxBloc extends Bloc<ChatBoxEvent, ChatBoxState> {
   }
 
   FutureOr<void> _createChatGroup(
-      CreateChatGroup event, Emitter<ChatBoxState> emit) async {
+      CreateChatGroup event, Emitter<ChatState> emit) async {
     try {
       emit(CreatingChatGroup());
       CreateChatGroupModel chatGroupModel =
           await _chatBoxRepository.createChatGroup({
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "name": newGroupDetails.groupName,
-        "purpose": newGroupDetails.groupPurpose,
-        "members": newGroupDetails.membersToMap()
+        "name": chatData.groupName,
+        "purpose": chatData.groupPurpose,
+        "members": chatData.membersToMap()
       });
       if (chatGroupModel.status == 200) {
         groupId = chatGroupModel.data.groupId;
         _databaseHelper.insertGroupDetails(ChatData(
             groupId: groupId,
-            groupName: newGroupDetails.groupName,
-            groupPurpose: newGroupDetails.groupPurpose));
-        _databaseHelper.insertGroupMembers(groupId, newGroupDetails.members);
+            groupName: chatData.groupName,
+            groupPurpose: chatData.groupPurpose));
+        _databaseHelper.insertGroupMembers(groupId, chatData.members);
         add(FetchChatsList());
         emit(ChatGroupCreated());
       } else {

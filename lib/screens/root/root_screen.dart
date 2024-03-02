@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chat/chat_box_screen.dart';
+import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 
 import '../../blocs/client/client_bloc.dart';
@@ -54,7 +54,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     HomeScreen(),
     Text('Index 1: Location'),
     Text('Index 2: Notification'),
-    ChatBoxScreen(),
+    AllChatsScreen(),
     ProfileScreen()
   ];
 
@@ -70,8 +70,8 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         print("app in resumed");
-        context.read<ChatBoxBloc>().add(
-            RebuildChat(employeeDetailsMap: {"employee_id": employeeIdString}));
+        context.read<ChatBoxBloc>().add(RebuildChatMessagingScreen(
+            employeeDetailsMap: {"employee_id": employeeIdString}));
         break;
       case AppLifecycleState.inactive:
         print("app in inactive");

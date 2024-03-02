@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chat/chat_box_event.dart';
-import 'package:toolkit/blocs/chat/chat_box_state.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chat/new_chat_screen.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -22,20 +22,20 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../configs/app_color.dart';
 
-class FetchEmployeesScreen extends StatefulWidget {
-  static const routeName = 'FetchEmployeesScreen';
+class EmployeesScreen extends StatefulWidget {
+  static const routeName = 'EmployeesScreen';
   final bool isCreateNewGroup;
 
-  const FetchEmployeesScreen({super.key, this.isCreateNewGroup = false});
+  const EmployeesScreen({super.key, this.isCreateNewGroup = false});
 
   @override
-  State<FetchEmployeesScreen> createState() => _FetchEmployeesScreenState();
+  State<EmployeesScreen> createState() => _EmployeesScreenState();
 }
 
-class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
+class _EmployeesScreenState extends State<EmployeesScreen> {
   final Map sendMessageMap = {};
 
-  final ChatData newGroupDetails = getIt<ChatData>();
+  final ChatData chatData = getIt<ChatData>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEmployees),
       floatingActionButton: (widget.isCreateNewGroup)
-          ? BlocListener<ChatBoxBloc, ChatBoxState>(
+          ? BlocListener<ChatBoxBloc, ChatState>(
               listener: (context, state) {
                 if (state is CreatingChatGroup) {
                   ProgressBar.show(context);
@@ -75,9 +75,9 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
                   child: const Icon(Icons.check)),
             )
           : null,
-      body: BlocBuilder<ChatBoxBloc, ChatBoxState>(
+      body: BlocBuilder<ChatBoxBloc, ChatState>(
         buildWhen: (previousState, currentState) =>
-        currentState is FetchingEmployees ||
+            currentState is FetchingEmployees ||
             currentState is EmployeesFetched ||
             currentState is EmployeesNotFetched,
         builder: (context, state) {
@@ -106,15 +106,15 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
                                 ? ShowCheckBox(employeeDetailsMap: {
                                     'employee_id': datum.id,
                                     'employee_name': datum.name
-                                  }, newGroupDetails: newGroupDetails)
+                                  }, chatData: chatData)
                                 : IconButton(
                                     onPressed: () {
-                                      NewChatScreen.employeeDetailsMap = {
+                                      ChatMessagingScreen.employeeDetailsMap = {
                                         "employee_name": datum.name,
                                         'employee_id': datum.id
                                       };
-                                      Navigator.pushNamed(
-                                          context, NewChatScreen.routeName);
+                                      Navigator.pushNamed(context,
+                                          ChatMessagingScreen.routeName);
                                     },
                                     icon: const Icon(Icons.message_outlined))),
                       ),
@@ -158,12 +158,10 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
 
 class ShowCheckBox extends StatefulWidget {
   final Map employeeDetailsMap;
-  final ChatData newGroupDetails;
+  final ChatData chatData;
 
   const ShowCheckBox(
-      {super.key,
-      required this.employeeDetailsMap,
-      required this.newGroupDetails});
+      {super.key, required this.employeeDetailsMap, required this.chatData});
 
   @override
   State<ShowCheckBox> createState() => _ShowCheckBoxState();
@@ -174,13 +172,13 @@ class _ShowCheckBoxState extends State<ShowCheckBox> {
 
   void addOrRemoveMember(bool changedValue) {
     if (changedValue) {
-      widget.newGroupDetails.members.add(Members(
+      widget.chatData.members.add(Members(
           id: int.parse(widget.employeeDetailsMap['employee_id']),
           name: widget.employeeDetailsMap['employee_name'],
           type: 2,
           isOwner: 0));
     } else {
-      widget.newGroupDetails.members.removeWhere((element) =>
+      widget.chatData.members.removeWhere((element) =>
           element.id == int.parse(widget.employeeDetailsMap['employee_id']));
     }
     setState(() {});

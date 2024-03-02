@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
-import 'package:toolkit/screens/chat/chat_box_screen.dart';
-import 'package:toolkit/screens/chat/fetch_employees_screen.dart';
-import 'package:toolkit/screens/chat/new_chat_screen.dart';
+import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/employees_screen.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
@@ -534,17 +534,17 @@ class AppRoutes {
             requestId: settings.arguments.toString()));
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
-      case FetchEmployeesScreen.routeName:
+      case EmployeesScreen.routeName:
         return _createRoute(
-            FetchEmployeesScreen(isCreateNewGroup: settings.arguments as bool));
+            EmployeesScreen(isCreateNewGroup: settings.arguments as bool));
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
         return _createRoute(const OpenDocumentForReviewScreen());
-      case NewChatScreen.routeName:
-        return _createRoute(const NewChatScreen());
-      case ChatBoxScreen.routeName:
-        return _createRoute(const ChatBoxScreen());
+      case ChatMessagingScreen.routeName:
+        return _createRoute(const ChatMessagingScreen());
+      case AllChatsScreen.routeName:
+        return _createRoute(const AllChatsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
