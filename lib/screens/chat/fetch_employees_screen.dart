@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:searchable_listview/searchable_listview.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_state.dart';
+import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_box_state.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';

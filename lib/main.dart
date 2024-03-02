@@ -12,7 +12,7 @@ import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.
 import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';

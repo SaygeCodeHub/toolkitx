@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_box_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/chat_box_screen.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_state.dart';
+import 'package:toolkit/blocs/chat/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_box_state.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';

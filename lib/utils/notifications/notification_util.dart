@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
-import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
+import 'package:toolkit/blocs/chat/chat_box_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_box_event.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
