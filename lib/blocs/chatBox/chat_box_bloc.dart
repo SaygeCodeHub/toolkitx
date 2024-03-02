@@ -10,7 +10,7 @@ import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'dart:math';

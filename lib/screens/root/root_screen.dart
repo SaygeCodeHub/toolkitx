@@ -4,7 +4,7 @@ import 'package:toolkit/blocs/chatBox/chat_box_bloc.dart';
 import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
+import 'package:toolkit/screens/chat/chat_box_screen.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 
 import '../../blocs/client/client_bloc.dart';

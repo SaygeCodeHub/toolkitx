@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 
 class DatabaseHelper {
   static Database? _database;

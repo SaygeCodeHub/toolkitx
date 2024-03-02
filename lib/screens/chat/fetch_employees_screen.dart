@@ -9,8 +9,8 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chatBox/new_chat_screen.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
+import 'package:toolkit/screens/chat/new_chat_screen.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
@@ -54,26 +54,26 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
                 } else if (state is ChatGroupCannotCreate) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
-          }
-        },
-        child: FloatingActionButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AndroidPopUp(
-                        titleValue: 'Do you want to create the group?',
-                        contentValue: '',
-                        onPrimaryButton: () {
-                          context
-                              .read<ChatBoxBloc>()
-                              .add(CreateChatGroup());
-                          Navigator.pop(context);
+                }
+              },
+              child: FloatingActionButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AndroidPopUp(
+                              titleValue: 'Do you want to create the group?',
+                              contentValue: '',
+                              onPrimaryButton: () {
+                                context
+                                    .read<ChatBoxBloc>()
+                                    .add(CreateChatGroup());
+                                Navigator.pop(context);
+                              });
                         });
-                  });
-            },
-            child: const Icon(Icons.check)),
-      )
+                  },
+                  child: const Icon(Icons.check)),
+            )
           : null,
       body: BlocBuilder<ChatBoxBloc, ChatBoxState>(
         buildWhen: (previousState, currentState) =>
@@ -125,8 +125,8 @@ class _FetchEmployeesScreenState extends State<FetchEmployeesScreen> {
                 emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
                 filter: (value) => state.fetchEmployeesModel.data
                     .where((element) => element.name
-                    .toLowerCase()
-                    .contains(value.toLowerCase().trim()))
+                        .toLowerCase()
+                        .contains(value.toLowerCase().trim()))
                     .toList(),
                 inputDecoration: InputDecoration(
                     suffix: const SizedBox(),

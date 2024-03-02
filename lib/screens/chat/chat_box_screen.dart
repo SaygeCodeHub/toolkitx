@@ -5,10 +5,10 @@ import 'package:toolkit/blocs/chatBox/chat_box_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chatBox/fetch_employees_screen.dart';
-import 'package:toolkit/screens/chatBox/new_chat_screen.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_box_pop_up_menu.dart';
-import 'package:toolkit/screens/chatBox/widgets/chat_data_model.dart';
+import 'package:toolkit/screens/chat/fetch_employees_screen.dart';
+import 'package:toolkit/screens/chat/new_chat_screen.dart';
+import 'package:toolkit/screens/chat/widgets/chat_box_pop_up_menu.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
 class ChatBoxScreen extends StatelessWidget {

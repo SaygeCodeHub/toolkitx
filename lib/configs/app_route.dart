@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
-import 'package:toolkit/screens/chatBox/chat_box_screen.dart';
-import 'package:toolkit/screens/chatBox/fetch_employees_screen.dart';
-import 'package:toolkit/screens/chatBox/new_chat_screen.dart';
+import 'package:toolkit/screens/chat/chat_box_screen.dart';
+import 'package:toolkit/screens/chat/fetch_employees_screen.dart';
+import 'package:toolkit/screens/chat/new_chat_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
