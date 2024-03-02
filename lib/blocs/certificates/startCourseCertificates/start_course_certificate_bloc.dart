@@ -272,22 +272,23 @@ class StartCourseCertificateBloc
       ReattemptCertificateQuiz event,
       Emitter<StartCourseCertificateState> emit) async {
     emit(CertificateQuizReattempting());
-    // try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    Map reattemptQuizMap = {
-      "workforcequizid": event.workforceQuizId,
-      "hashcode": hashCode
-    };
-    ReattemptCertificateQuizModel reattemptCertificateQuizModel =
-        await _certificateRepository.reattemptCertificateQuiz(reattemptQuizMap);
-    if (reattemptCertificateQuizModel.message == '1') {
-      emit(CertificateQuizReattempted());
-    } else {
-      emit(CertificateQuizNotReattempted(
-          getError: reattemptCertificateQuizModel.message));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      Map reattemptQuizMap = {
+        "workforcequizid": event.workforceQuizId,
+        "hashcode": hashCode
+      };
+      ReattemptCertificateQuizModel reattemptCertificateQuizModel =
+          await _certificateRepository
+              .reattemptCertificateQuiz(reattemptQuizMap);
+      if (reattemptCertificateQuizModel.message == '1') {
+        emit(CertificateQuizReattempted());
+      } else {
+        emit(CertificateQuizNotReattempted(
+            getError: reattemptCertificateQuizModel.message));
+      }
+    } catch (e) {
+      emit(CertificateQuizNotReattempted(getError: e.toString()));
     }
-    // } catch (e) {
-    //   emit(CertificateQuizNotReattempted(getError: e.toString()));
-    // }
   }
 }
