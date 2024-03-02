@@ -72,3 +72,8 @@ class FetchCertificateQuizReport extends StartCourseCertificateEvent {
   final String workforceQuizId;
   FetchCertificateQuizReport({required this.workforceQuizId});
 }
+
+class ReattemptCertificateQuiz extends StartCourseCertificateEvent {
+  final String workforceQuizId;
+  ReattemptCertificateQuiz({required this.workforceQuizId});
+}
