@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -60,10 +59,12 @@ class CertificateNotesTypeUtil {
               launchUrlString('${ApiConstants.baseDocUrl}$url',
                   mode: LaunchMode.inAppWebView);
             },
-            child: CustomTextButton(onPressed: () {
-              launchUrlString('${ApiConstants.baseDocUrl}$url',
-                  mode: LaunchMode.inAppBrowserView);
-            }, textValue: StringConstants.kOpenPPT),
+            child: CustomTextButton(
+                onPressed: () {
+                  launchUrlString('${ApiConstants.baseDocUrl}$url',
+                      mode: LaunchMode.inAppBrowserView);
+                },
+                textValue: StringConstants.kOpenPPT),
           ),
         );
       default:
