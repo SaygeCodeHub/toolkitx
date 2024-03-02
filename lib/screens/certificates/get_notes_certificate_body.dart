@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:pod_player/pod_player.dart';
-import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/utils/certificate_notes_type_util.dart';
-import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import '../../utils/constants/api_constants.dart';
 
 class GetNotesCertificateBody extends StatefulWidget {
@@ -31,9 +29,10 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
   void initState() {
     podPlayerController = PodPlayerController(
       playVideoFrom: PlayVideoFrom.network(
-        "${ApiConstants.baseDocUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}",
+        "${ApiConstants.baseDocUrl}${widget.data.url}",
       ),
     )..initialise();
+
     super.initState();
   }
 
@@ -45,8 +44,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
 
   @override
   Widget build(BuildContext context) {
-    var link =
-        '${ApiConstants.viewDocBaseUrl}${widget.data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(CacheKeys.clientId)}';
+    var url = widget.data.url;
     var unescape = HtmlUnescape();
     var htmlText = unescape.convert(widget.data.description);
     return Expanded(
@@ -56,7 +54,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CertificateNotesTypeUtil().fetchSwitchCaseWidget(widget.data.type,
-              widget.data, htmlText, link, podPlayerController, widget.clientId)
+              widget.data, htmlText, url, podPlayerController, widget.clientId)
         ],
       ),
     );

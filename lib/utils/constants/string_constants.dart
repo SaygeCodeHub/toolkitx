@@ -524,4 +524,5 @@ abstract class StringConstants {
   static const String kExpenseReportComments = 'Please add comment first';
   static const String kYouFailed = "You've Failed";
   static const String kYouPassed = "You've Passed";
+  static const String kOpenPPT = 'Open PPT';
 }
