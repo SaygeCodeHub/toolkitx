@@ -3,10 +3,15 @@ import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart
 import 'package:toolkit/data/models/certificates/finish_quiz_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_certificate_details_model.dart';
 import 'package:toolkit/data/models/certificates/get_course_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
+import 'package:toolkit/data/models/certificates/get_quiz_report_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
+import 'package:toolkit/data/models/certificates/reattempt_certificate_quiz_model.dart';
+import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
+import 'package:toolkit/data/models/certificates/start_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/upload_certificate_model.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 
@@ -56,6 +61,23 @@ class CertificateRepositoryImpl extends CertificateRepository {
   }
 
   @override
+  Future<FetchGetNotesModel> getNotesCertificates(
+      String hashCode, String userId, String topicId, int pageNo) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
+    return FetchGetNotesModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateUserTrackModel> updateUserTrackRepo(
+      Map updateUserTrackMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/UpdateUserTrack",
+        updateUserTrackMap);
+    return UpdateUserTrackModel.fromJson(response);
+  }
+
+  @override
   Future<GetWorkforceQuizModel> getWorkforceQuiz(
       String hashCode, String userId, String quizId) async {
     final response = await DioClient().get(
@@ -94,5 +116,28 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/getcertificate?certificateid=$certificateId&hashcode=$hashCode&workforceid=$userId");
     return FetchCertificateDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<StartQuizModel> startQuiz(Map startQuizMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}certificate/StartQuiz", startQuizMap);
+    return StartQuizModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchQuizReportModel> fetchQuizReport(
+      String hashcode, String workforceQuizId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}certificate/GetQuizReport?hashcode=$hashcode&workforcequizid=$workforceQuizId");
+    return FetchQuizReportModel.fromJson(response);
+  }
+
+  @override
+  Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(
+      Map reattemptQuizMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/RetakeQuiz", reattemptQuizMap);
+    return ReattemptCertificateQuizModel.fromJson(response);
   }
 }

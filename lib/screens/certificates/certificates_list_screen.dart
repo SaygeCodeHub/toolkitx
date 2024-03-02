@@ -7,7 +7,6 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
-
 import '../../utils/constants/string_constants.dart';
 
 class CertificatesListScreen extends StatelessWidget {

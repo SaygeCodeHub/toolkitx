@@ -9,7 +9,7 @@ String getWorkforceQuizModelToJson(GetWorkforceQuizModel data) =>
 class GetWorkforceQuizModel {
   final int status;
   final String message;
-  final Data data;
+  final WorkforceQuizData data;
 
   GetWorkforceQuizModel({
     required this.status,
@@ -21,7 +21,7 @@ class GetWorkforceQuizModel {
       GetWorkforceQuizModel(
         status: json["Status"],
         message: json["Message"],
-        data: Data.fromJson(json["Data"]),
+        data: WorkforceQuizData.fromJson(json["Data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +31,7 @@ class GetWorkforceQuizModel {
       };
 }
 
-class Data {
+class WorkforceQuizData {
   final String error;
   final String showstartquiz;
   final String showquizreport;
@@ -46,7 +46,7 @@ class Data {
   final String passed;
   final String certificatename;
 
-  Data({
+  WorkforceQuizData({
     required this.error,
     required this.showstartquiz,
     required this.showquizreport,
@@ -62,7 +62,8 @@ class Data {
     required this.certificatename,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory WorkforceQuizData.fromJson(Map<String, dynamic> json) =>
+      WorkforceQuizData(
         error: json["error"] ?? "",
         showstartquiz: json["showstartquiz"] ?? "",
         showquizreport: json["showquizreport"] ?? "",

@@ -44,6 +44,8 @@ abstract class StringConstants {
       'Do you want to reissue this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
+  static const String kPREVIOUS = 'PREVIOUS';
+  static const String kFINISH = 'FINISH';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
@@ -372,6 +374,8 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kPPTWillBriefAbout =
+      'The PPT will brief about process management tool';
   static const String kNoFiles = 'No Files found!';
   static const String kAssetName = "Asset Name";
   static const String kIsDraft = "[Draft]";
@@ -518,4 +522,7 @@ abstract class StringConstants {
       'Incident date, time, description, contractor cannot be empty.';
   static const String kExpenseReportRejected = "Expense Report Rejected";
   static const String kExpenseReportComments = 'Please add comment first';
+  static const String kYouFailed = "You've Failed";
+  static const String kYouPassed = "You've Passed";
+  static const String kOpenPPT = 'Open PPT';
 }
