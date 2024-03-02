@@ -1,8 +1,11 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/text_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../configs/app_color.dart';
@@ -11,7 +14,7 @@ import 'constants/api_constants.dart';
 
 class CertificateNotesTypeUtil {
   Widget fetchSwitchCaseWidget(
-      type, data, htmlText, pictureLink, podPlayerController, clientId) {
+      type, data, htmlText, url, podPlayerController, clientId) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -24,12 +27,12 @@ class CertificateNotesTypeUtil {
             splashColor: AppColor.transparent,
             highlightColor: AppColor.transparent,
             onTap: () {
-              launchUrlString('${ApiConstants.baseDocUrl}$pictureLink',
+              launchUrlString('${ApiConstants.baseDocUrl}$url',
                   mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,
-                imageUrl: '${ApiConstants.baseDocUrl}$pictureLink',
+                imageUrl: '${ApiConstants.baseDocUrl}$url',
                 placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColor.paleGrey,
                     highlightColor: AppColor.white,
@@ -46,10 +49,23 @@ class CertificateNotesTypeUtil {
       case '2':
         return PodVideoPlayer(controller: podPlayerController);
       case '3':
-        // return PowerFileViewWidget(
-        //   downloadUrl: pictureLink,
-        //   filePath: pictureLink,
-        // );
+        return Container(
+          height: kContainerHeight,
+          width: kContainerWidth,
+          color: AppColor.blueGrey,
+          child: InkWell(
+            splashColor: AppColor.transparent,
+            highlightColor: AppColor.transparent,
+            onTap: () {
+              launchUrlString('${ApiConstants.baseDocUrl}$url',
+                  mode: LaunchMode.inAppWebView);
+            },
+            child: CustomTextButton(onPressed: () {
+              launchUrlString('${ApiConstants.baseDocUrl}$url',
+                  mode: LaunchMode.inAppBrowserView);
+            }, textValue: StringConstants.kOpenPPT),
+          ),
+        );
       default:
         return Container();
     }

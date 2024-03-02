@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -34,8 +33,8 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         "${ApiConstants.baseDocUrl}${widget.data.url}",
       ),
     )..initialise();
+
     super.initState();
-    log('VideoUrl===================> ${ApiConstants.baseDocUrl}${widget.data.url}');
   }
 
   @override
@@ -46,7 +45,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
 
   @override
   Widget build(BuildContext context) {
-    var pictureLink = widget.data.url;
+    var url = widget.data.url;
     var unescape = HtmlUnescape();
     var htmlText = unescape.convert(widget.data.description);
     return Expanded(
@@ -56,7 +55,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CertificateNotesTypeUtil().fetchSwitchCaseWidget(widget.data.type,
-              widget.data, htmlText, pictureLink, podPlayerController, widget.clientId)
+              widget.data, htmlText, url, podPlayerController, widget.clientId)
         ],
       ),
     );

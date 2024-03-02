@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:toolkit/data/models/certificates/certificate_list_model.dart';
 import 'package:toolkit/data/models/certificates/feedback_certificate_model.dart';
@@ -66,7 +65,6 @@ class CertificateRepositoryImpl extends CertificateRepository {
       String hashCode, String userId, String topicId, int pageNo) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
-    log("${ApiConstants.baseUrl}certificate/GetNotes?hashcode=$hashCode&pageno=$pageNo&topicid=$topicId&workforceid=$userId");
     return FetchGetNotesModel.fromJson(response);
   }
 
