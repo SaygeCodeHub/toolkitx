@@ -49,7 +49,6 @@ class CalendarEventsBody extends StatelessWidget {
           itemBuilder: (context, dataIndex) {
             return CustomCard(
               color: Colors.blue.shade50,
-              elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(kCardRadius),
               ),
