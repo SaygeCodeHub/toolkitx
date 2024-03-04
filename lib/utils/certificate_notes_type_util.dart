@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/text_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import 'constants/api_constants.dart';
-import 'generic_alphanumeric_generator_util.dart';
 
 class CertificateNotesTypeUtil {
   Widget fetchSwitchCaseWidget(
-      type, data, htmlText, link, podPlayerController, clientId) {
+      type, data, htmlText, url, podPlayerController, clientId) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -25,14 +26,12 @@ class CertificateNotesTypeUtil {
             splashColor: AppColor.transparent,
             highlightColor: AppColor.transparent,
             onTap: () {
-              launchUrlString(
-                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+              launchUrlString('${ApiConstants.baseDocUrl}$url',
                   mode: LaunchMode.inAppWebView);
             },
             child: CachedNetworkImage(
                 height: kContainerHeight,
-                imageUrl:
-                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                imageUrl: '${ApiConstants.baseDocUrl}$url',
                 placeholder: (context, url) => Shimmer.fromColors(
                     baseColor: AppColor.paleGrey,
                     highlightColor: AppColor.white,
@@ -47,8 +46,7 @@ class CertificateNotesTypeUtil {
           ),
         );
       case '2':
-        return Column(
-            children: [PodVideoPlayer(controller: podPlayerController)]);
+        return PodVideoPlayer(controller: podPlayerController);
       case '3':
         return Container(
           height: kContainerHeight,
@@ -58,25 +56,15 @@ class CertificateNotesTypeUtil {
             splashColor: AppColor.transparent,
             highlightColor: AppColor.transparent,
             onTap: () {
-              launchUrlString(
-                  '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+              launchUrlString('${ApiConstants.baseDocUrl}$url',
                   mode: LaunchMode.inAppWebView);
             },
-            child: CachedNetworkImage(
-                height: kContainerHeight,
-                imageUrl:
-                    '${ApiConstants.viewDocBaseUrl}${data.link}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                placeholder: (context, url) => Shimmer.fromColors(
-                    baseColor: AppColor.paleGrey,
-                    highlightColor: AppColor.white,
-                    child: Container(
-                        height: kNetworkImageContainerTogether,
-                        width: kNetworkImageContainerTogether,
-                        decoration: BoxDecoration(
-                            color: AppColor.white,
-                            borderRadius: BorderRadius.circular(kCardRadius)))),
-                errorWidget: (context, url, error) =>
-                    const Icon(Icons.error_outline_sharp, size: kIconSize)),
+            child: CustomTextButton(
+                onPressed: () {
+                  launchUrlString('${ApiConstants.baseDocUrl}$url',
+                      mode: LaunchMode.inAppBrowserView);
+                },
+                textValue: StringConstants.kOpenPPT),
           ),
         );
       default:

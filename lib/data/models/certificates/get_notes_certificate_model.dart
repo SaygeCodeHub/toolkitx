@@ -2,6 +2,7 @@ import 'dart:convert';
 
 FetchGetNotesModel fetchGetNotesModelFromJson(String str) =>
     FetchGetNotesModel.fromJson(json.decode(str));
+
 String fetchGetNotesModelToJson(FetchGetNotesModel data) =>
     json.encode(data.toJson());
 
@@ -9,17 +10,20 @@ class FetchGetNotesModel {
   final int status;
   final String message;
   final GetNotesData data;
+
   FetchGetNotesModel({
     required this.status,
     required this.message,
     required this.data,
   });
+
   factory FetchGetNotesModel.fromJson(Map<String, dynamic> json) =>
       FetchGetNotesModel(
         status: json["Status"],
         message: json["Message"],
         data: GetNotesData.fromJson(json["Data"]),
       );
+
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
@@ -39,6 +43,8 @@ class GetNotesData {
   final String notescount;
   final String currentpageno;
   final String link;
+  final String url;
+
   GetNotesData({
     required this.topicname,
     required this.topicdescription,
@@ -51,20 +57,24 @@ class GetNotesData {
     required this.notescount,
     required this.currentpageno,
     required this.link,
+    required this.url,
   });
+
   factory GetNotesData.fromJson(Map<String, dynamic> json) => GetNotesData(
-        topicname: json["topicname"] ?? '',
-        topicdescription: json["topicdescription"] ?? '',
-        coursename: json["coursename"] ?? '',
-        certificatename: json["certificatename"] ?? '',
-        id: json["id"] ?? '',
-        type: json["type"] ?? '',
-        notes: json["notes"] ?? '',
-        description: json["description"] ?? '',
-        notescount: json["notescount"] ?? '',
-        currentpageno: json["currentpageno"] ?? '',
-        link: json["link"] ?? '',
+        topicname: json["topicname"],
+        topicdescription: json["topicdescription"],
+        coursename: json["coursename"],
+        certificatename: json["certificatename"],
+        id: json["id"],
+        type: json["type"],
+        notes: json["notes"],
+        description: json["description"],
+        notescount: json["notescount"],
+        currentpageno: json["currentpageno"],
+        link: json["link"],
+        url: json["url"],
       );
+
   Map<String, dynamic> toJson() => {
         "topicname": topicname,
         "topicdescription": topicdescription,
@@ -77,5 +87,6 @@ class GetNotesData {
         "notescount": notescount,
         "currentpageno": currentpageno,
         "link": link,
+        "url": url,
       };
 }

@@ -316,7 +316,7 @@ class AppRoutes {
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
-        return _createRoute(CalendarScreen());
+        return _createRoute(const CalendarScreen());
       case QualityManagementAddCommentsScreen.routeName:
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:

@@ -157,3 +157,13 @@ class CertificateQuizReportNotFetched extends StartCourseCertificateState {
 
   CertificateQuizReportNotFetched({required this.getError});
 }
+
+class CertificateQuizReattempting extends StartCourseCertificateState {}
+
+class CertificateQuizReattempted extends StartCourseCertificateState {}
+
+class CertificateQuizNotReattempted extends StartCourseCertificateState {
+  final String getError;
+
+  CertificateQuizNotReattempted({required this.getError});
+}
