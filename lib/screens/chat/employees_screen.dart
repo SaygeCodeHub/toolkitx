@@ -39,11 +39,11 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ChatBoxBloc>().add(FetchEmployees());
+    context.read<ChatBloc>().add(FetchEmployees());
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEmployees),
       floatingActionButton: (widget.isCreateNewGroup)
-          ? BlocListener<ChatBoxBloc, ChatState>(
+          ? BlocListener<ChatBloc, ChatState>(
               listener: (context, state) {
                 if (state is CreatingChatGroup) {
                   ProgressBar.show(context);
@@ -65,9 +65,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                               titleValue: 'Do you want to create the group?',
                               contentValue: '',
                               onPrimaryButton: () {
-                                context
-                                    .read<ChatBoxBloc>()
-                                    .add(CreateChatGroup());
+                                context.read<ChatBloc>().add(CreateChatGroup());
                                 Navigator.pop(context);
                               });
                         });
@@ -75,7 +73,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   child: const Icon(Icons.check)),
             )
           : null,
-      body: BlocBuilder<ChatBoxBloc, ChatState>(
+      body: BlocBuilder<ChatBloc, ChatState>(
         buildWhen: (previousState, currentState) =>
             currentState is FetchingEmployees ||
             currentState is EmployeesFetched ||

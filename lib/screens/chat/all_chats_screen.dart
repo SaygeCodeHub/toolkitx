@@ -18,7 +18,7 @@ class AllChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ChatBoxBloc>().add(FetchChatsList());
+    context.read<ChatBloc>().add(FetchChatsList());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chats'),
@@ -33,7 +33,7 @@ class AllChatsScreen extends StatelessWidget {
           },
           child: const Icon(Icons.add)),
       body: StreamBuilder<List<ChatData>>(
-        stream: context.read<ChatBoxBloc>().allChatsStream,
+        stream: context.read<ChatBloc>().allChatsStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
@@ -59,9 +59,15 @@ class AllChatsScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: AppColor.deepBlue),
-                            child: const Icon(Icons.person,
-                                color: AppColor.ghostWhite, size: 20)),
-                        title: Text(snapshot.data![index].employeeName),
+                            child: Icon(
+                                (snapshot.data![index].isGroup == true)
+                                    ? Icons.people
+                                    : Icons.person,
+                                color: AppColor.ghostWhite,
+                                size: 20)),
+                        title: Text((snapshot.data![index].isGroup == true)
+                            ? snapshot.data![index].groupName
+                            : snapshot.data![index].employeeName),
                         titleTextStyle: Theme.of(context)
                             .textTheme
                             .small

@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+
+import '../data/models/chatBox/fetch_employees_model.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -38,29 +39,33 @@ class DatabaseHelper {
             isReceiver INTEGER DEFAULT 0
           )
         ''');
-
         await db.execute('''
-    CREATE TABLE chat_group_details (
-      id INTEGER PRIMARY KEY,
-      employee_id INTEGER,
-      employee_name TEXT,
-      msg TEXT,
-      group_name TEXT,
-      group_id INTEGER,
-      purpose TEXT
-    )
+        CREATE TABLE IF NOT EXISTS employees (
+          primary_id INTEGER PRIMARY KEY,
+          id TEXT,
+          name TEXT,
+          type TEXT
+        )
   ''');
-
         await db.execute('''
-    CREATE TABLE chat_group_members (
-      member_id INTEGER PRIMARY KEY,
-      id INTEGER,
-      type INTEGER,
-      name TEXT,
-      isowner INTEGER,
-      group_id INTEGER,
-      FOREIGN KEY (group_id) REFERENCES group_details (group_id)
-    )
+        CREATE TABLE IF NOT EXISTS groups (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        group_id TEXT UNIQUE,
+        group_name TEXT NOT NULL,
+        purpose TEXT
+      );
+        ''');
+
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS members (
+          primary_id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER UNIQUE,
+          type INTEGER,
+          name TEXT,
+          isowner INTEGER DEFAULT 0,
+          group_id TEXT,
+          FOREIGN KEY (group_id) REFERENCES groups(group_id)
+        );
   ''');
       },
     );
@@ -73,6 +78,27 @@ class DatabaseHelper {
       sendMessageMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> insertEmployees(List<EmployeesDatum> employees) async {
+    final db = await database;
+    var batch = db.batch();
+    for (var employee in employees) {
+      Map<String, dynamic> employeeMap = {
+        'id': employee.id,
+        'name': employee.name,
+        'type': employee.type
+      };
+      batch.insert('employees', employeeMap,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future<List<Map<String, dynamic>>> getEmployees() async {
+    final db = await database;
+    List<Map<String, dynamic>> employees = await db.query('employees');
+    return employees;
   }
 
   Future<void> updateMessageStatus(String msgId) async {
@@ -107,48 +133,6 @@ class DatabaseHelper {
     return employees;
   }
 
-  Future<void> insertGroupDetails(ChatData groupDetails) async {
-    final db = await database;
-    await db.insert('chat_group_details', groupDetails.chatToMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-  Future<void> insertGroupMembers(int groupId, List<Members> members) async {
-    final db = await database;
-    final List<Map<String, dynamic>> memberMaps =
-        members.map((member) => member.toMap()).toList();
-    for (var member in memberMaps) {
-      member['group_id'] = groupId;
-      await db.insert('chat_group_members', member);
-    }
-  }
-
-  Future<ChatData?> getGroupDetails(int groupId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('chat_group_details',
-        where: 'group_id = ?', whereArgs: [groupId]);
-    if (maps.isNotEmpty) {
-      return ChatData(
-          groupId: maps[0]['group_id'],
-          groupName: maps[0]['group_name'],
-          groupPurpose: maps[0]['purpose']);
-    }
-    return null;
-  }
-
-  Future<List<Members>> getGroupMembers(int groupId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('chat_group_members',
-        where: 'group_id = ?', whereArgs: [groupId]);
-    return List.generate(maps.length, (i) {
-      return Members(
-          id: maps[i]['id'],
-          name: maps[i]['name'],
-          type: maps[i]['type'],
-          isOwner: maps[i]['isowner']);
-    });
-  }
-
   Future<String> getEmployeeNameFromDatabase(String employeeId) async {
     final Database db = await database;
     final List<Map<String, dynamic>> maps = await db.query('chat_messages',
@@ -156,7 +140,7 @@ class DatabaseHelper {
     if (maps.isNotEmpty) {
       return maps[0]['employee_name'] ?? 'na';
     } else {
-      return 'no employee';
+      return 'employee name not found!';
     }
   }
 
@@ -171,5 +155,28 @@ class DatabaseHelper {
     } else {
       return null;
     }
+  }
+
+  Future<void> insertGroup(Map<String, dynamic> groupData,
+      List<Map<String, dynamic>> members) async {
+    final db = await database;
+    Batch batch = db.batch();
+
+    batch.insert('groups', groupData,
+        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    for (var member in members) {
+      member['group_id'] = groupData['group_id'];
+      batch.insert('members', member,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+
+    await batch.commit(noResult: true);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllGroupsData() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('groups');
+    return maps;
   }
 }

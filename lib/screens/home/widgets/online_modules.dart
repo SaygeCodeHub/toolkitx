@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
@@ -52,6 +54,7 @@ class OnLineModules extends StatelessWidget {
                 child: const Center(child: CircularProgressIndicator()));
           }
           if (state is HomeScreenFetched) {
+            context.read<ChatBloc>().add(FetchEmployees());
             isFirstTime = false;
             return GridView.builder(
                 primary: false,
@@ -94,7 +97,7 @@ class OnLineModules extends StatelessWidget {
                                                   height: kModuleIconSize,
                                                   width: kModuleIconSize))),
                                       if ('${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].key)}' !=
-                                              '-1' ||
+                                          '-1' ||
                                           '${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)}' !=
                                               '-1')
                                         Padding(
@@ -107,21 +110,21 @@ class OnLineModules extends StatelessWidget {
                                                       height: kModulesBadgeSize,
                                                       width: kModulesBadgeSize,
                                                       decoration:
-                                                          const BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              color: AppColor
-                                                                  .errorRed)),
+                                                      const BoxDecoration(
+                                                          shape: BoxShape
+                                                              .circle,
+                                                          color: AppColor
+                                                              .errorRed)),
                                                   Text(
                                                       ('${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)}' !=
-                                                              '-1')
+                                                          '-1')
                                                           ? '${state.homeScreenModel.data!.badges![state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)].count}'
                                                           : '${state.homeScreenModel.data!.badges![state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].key)].count}',
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .xxxSmall
                                                           .copyWith(
-                                                              fontSize: 8))
+                                                          fontSize: 8))
                                                 ]))
                                     ]),
                                 const SizedBox(height: tiniestSpacing),

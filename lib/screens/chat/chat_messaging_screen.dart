@@ -16,17 +16,17 @@ class ChatMessagingScreen extends StatelessWidget {
 
   void _handleMessage(String text, BuildContext context) {
     if (text.isEmpty) return;
-    context.read<ChatBoxBloc>().messagesList.insert(0, {'msg': text});
+    context.read<ChatBloc>().messagesList.insert(0, {'msg': text});
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<ChatBoxBloc>().add(
+    context.read<ChatBloc>().add(
         RebuildChatMessagingScreen(employeeDetailsMap: employeeDetailsMap));
     return Scaffold(
         appBar: GenericAppBar(title: employeeDetailsMap['employee_name'] ?? ''),
         body: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: context.read<ChatBoxBloc>().messageStream,
+            stream: context.read<ChatBloc>().messageStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(children: <Widget>[
@@ -75,7 +75,7 @@ class ChatMessagingScreen extends StatelessWidget {
                   icon: const Icon(Icons.send),
                   onPressed: () {
                     _handleMessage(textEditingController.text, context);
-                    context.read<ChatBoxBloc>().add(
+                    context.read<ChatBloc>().add(
                         SendChatMessage(sendMessageMap: employeeDetailsMap));
                   }),
             ])));

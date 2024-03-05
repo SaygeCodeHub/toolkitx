@@ -6,6 +6,7 @@ class ChatData {
   String groupName;
   String groupPurpose;
   List<Members> members;
+  bool isGroup;
 
   ChatData(
       {this.employeeId = '',
@@ -14,7 +15,8 @@ class ChatData {
       this.groupName = '',
       this.groupId = 0,
       this.groupPurpose = '',
-      List<Members>? members})
+      List<Members>? members,
+      this.isGroup = false})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -38,22 +40,14 @@ class Members {
   int type = 2;
   String name;
   int isOwner = 0;
-  int groupId;
 
   Members(
       {required this.id,
       required this.name,
       required this.type,
-      required this.isOwner,
-      this.groupId = 0});
+      required this.isOwner});
 
   Map<String, dynamic> toMap() {
-    return {
-      "id": id,
-      "type": type,
-      "name": name,
-      "isowner": isOwner,
-      "group_id": groupId
-    };
+    return {"id": id, "type": type, "name": name, "isowner": isOwner};
   }
 }

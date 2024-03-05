@@ -20,7 +20,7 @@ class NotificationUtil {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
-        ChatBoxBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+        ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
           "employee_id": message.data['rid'],
           "employee_name": ''
         }));
@@ -30,6 +30,14 @@ class NotificationUtil {
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
+    List<Map<String, dynamic>> allEmployees =
+        await _databaseHelper.getEmployees();
+    String employeeName = '';
+    for (var item in allEmployees) {
+      if (item['id'] == message.data['rid']) {
+        employeeName = item['name'];
+      }
+    }
     Map<String, dynamic> messageData = {
       'employee_id': message.data['rid'],
       'msg': message.data['chatmsg'],
@@ -38,7 +46,8 @@ class NotificationUtil {
       'msg_id': message.data['id'],
       'rtype': message.data['rtype'],
       'quote_msg_id': message.data['quotemsg'],
-      'sid': message.data['sid']
+      'sid': message.data['sid'],
+      'employee_name': employeeName
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -60,6 +69,14 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 
 Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
   try {
+    List<Map<String, dynamic>> allEmployees =
+        await DatabaseHelper().getEmployees();
+    String employeeName = '';
+    for (var item in allEmployees) {
+      if (item['id'] == message.data['rid']) {
+        employeeName = item['name'];
+      }
+    }
     Map<String, dynamic> messageData = {
       'employee_id': message.data['rid'],
       'msg': message.data['chatmsg'],
@@ -68,7 +85,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'msg_id': message.data['id'],
       'rtype': message.data['rtype'],
       'quote_msg_id': message.data['quotemsg'],
-      'sid': message.data['sid']
+      'sid': message.data['sid'],
+      'employee_name': employeeName
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {
