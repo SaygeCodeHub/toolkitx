@@ -243,6 +243,9 @@ class AddAndEditTimeSheetScreen extends StatelessWidget {
             } else if (state is TimeSheetSaved) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
+              context
+                  .read<LeavesAndHolidaysBloc>()
+                  .add(FetchCheckInTimeSheet(date: saveTimeSheetMap['date']));
             } else if (state is TimeSheetNotSaved) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');

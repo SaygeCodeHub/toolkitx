@@ -14,7 +14,6 @@ dependencies:
   shimmer:
   encrypt:
   equatable:
-#  open_filex:
   flutter_svg:
   flutter_bloc:
   hive_flutter:
@@ -35,6 +34,10 @@ dependencies:
   flutter_inappwebview: ^5.7.2+3
   image_cropper: ^4.0.1
   qr_code_scanner: ^1.0.1
+  pod_player:
+  video_player:
+  flutter_html:
+  html_unescape:
 
 
 dev_dependencies:

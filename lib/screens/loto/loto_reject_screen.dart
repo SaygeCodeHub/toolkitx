@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/loto/loto_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
@@ -59,9 +58,10 @@ class LotoRejectScreen extends StatelessWidget {
                           ProgressBar.show(context);
                         } else if (state is LotoRejected) {
                           ProgressBar.dismiss(context);
-                          Navigator.pushReplacementNamed(
-                              context, LotoDetailsScreen.routeName);
                           Navigator.pop(context);
+                          context
+                              .read<LotoDetailsBloc>()
+                              .add(FetchLotoDetails(lotoTabIndex: 0));
                           showCustomSnackBar(
                               context, StringConstants.kLotoRejected, '');
                         } else if (state is LotoNotRejected) {

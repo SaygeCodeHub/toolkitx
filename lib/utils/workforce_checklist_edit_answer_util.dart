@@ -80,7 +80,8 @@ class EditAnswerUtil {
                 answerList[index]["answer"] = state.multiSelectId
                     .toString()
                     .replaceAll("[", "")
-                    .replaceAll("]", "");
+                    .replaceAll("]", "")
+                    .replaceAll(" ", "");
                 return MultiSelectExpansionTile(
                     answerModelList: answerModelList,
                     index: index,

@@ -36,7 +36,11 @@ class TimeSheetCheckInScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: xxTinierSpacing),
               child: Text(
-                  timeSheetMap['status'] == 1 ? StringConstants.kSubmitted : '',
+                  timeSheetMap['status'] == 1
+                      ? StringConstants.kSubmitted
+                      : timeSheetMap['status'] == 2
+                          ? StringConstants.kApproved
+                          : '',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, color: AppColor.deepBlue)),
             ),
@@ -134,6 +138,9 @@ class TimeSheetCheckInScreen extends StatelessWidget {
                               AddAndEditTimeSheetScreen
                                       .saveTimeSheetMap['date'] =
                                   timeSheetMap['date'];
+                              AddAndEditTimeSheetScreen.saveTimeSheetMap['id'] =
+                                  state.fetchCheckInTimeSheetModel.data
+                                      .timesheetid;
                               Navigator.pushNamed(
                                   context, AddAndEditTimeSheetScreen.routeName);
                             },

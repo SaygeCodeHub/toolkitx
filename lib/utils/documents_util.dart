@@ -21,7 +21,7 @@ class DocumentsUtil {
   ];
 
   static List<String> fileMenuOptions(FileList fileListData) {
-    List<String> fileMenuOptionsList = ['View'];
+    List<String> fileMenuOptionsList = [];
     if (fileListData.canuploadnewversion == '1') {
       fileMenuOptionsList.add(DatabaseUtil.getText('dms_uploadnewversion'));
     }
@@ -31,6 +31,8 @@ class DocumentsUtil {
     if (fileListData.canaddcomments == '1') {
       fileMenuOptionsList.add(DatabaseUtil.getText('AddComments'));
     }
+    fileMenuOptionsList.add(DatabaseUtil.getText('Cancel'));
+
     return fileMenuOptionsList;
   }
 }

@@ -47,10 +47,12 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
                   if (state is ToDoMarkingAsDone) {
                     ProgressBar.show(context);
                   } else if (state is ToDoMarkedAsDone) {
+                    ProgressBar.dismiss(context);
                     context
                         .read<ToDoBloc>()
                         .add(FetchTodoAssignedToMeAndByMeListEvent());
                   } else if (state is ToDoCannotMarkAsDone) {
+                    ProgressBar.dismiss(context);
                     showCustomSnackBar(
                         context,
                         DatabaseUtil.getText(

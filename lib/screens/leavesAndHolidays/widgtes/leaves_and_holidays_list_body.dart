@@ -69,7 +69,11 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                                 : AppColor.errorRed)),
                     const SizedBox(width: tinierSpacing),
                     (data.dates[index].id != '' &&
-                            data.dates[index].hours != '-')
+                            data.dates[index].hours != '-' &&
+                            data.dates[index].status != 1 &&
+                            (data.dates[index].id != '' &&
+                                data.dates[index].hours != '-' &&
+                                data.dates[index].status != 2))
                         ? Text('[${StringConstants.kDraft}]',
                             style: Theme.of(context).textTheme.small.copyWith(
                                 fontWeight: FontWeight.w500,

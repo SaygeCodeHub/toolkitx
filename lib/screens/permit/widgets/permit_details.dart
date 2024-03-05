@@ -73,7 +73,6 @@ class PermitDetails extends StatelessWidget {
                         textDirection: TextDirection.rtl,
                         softWrap: true,
                         maxLines: 2,
-                        textScaleFactor: 1,
                         text: TextSpan(
                             text:
                                 "${permitDetailsModel.data.tab1.maplinks[index].name} : ",
@@ -88,7 +87,8 @@ class PermitDetails extends StatelessWidget {
                                       .copyWith(
                                         color: AppColor.deepBlue,
                                       ))
-                            ])));
+                            ]),
+                        textScaler: const TextScaler.linear(1)));
               }),
           const SizedBox(height: tinySpacing),
           Text(DatabaseUtil.getText('Company'),

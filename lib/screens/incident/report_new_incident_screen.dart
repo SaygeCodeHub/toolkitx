@@ -14,7 +14,6 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'category_screen.dart';
-import 'widgets/incident_edit_view_image.dart';
 import 'widgets/incident_show_image_number.dart';
 import 'widgets/report_new_incident_bottom_bar.dart';
 
@@ -30,6 +29,10 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List dateTimeList = addAndEditIncidentMap['eventdatetime']
+        .toString()
+        .replaceAll(' ', ',')
+        .split(',');
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
@@ -62,17 +65,12 @@ class ReportNewIncidentScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       Visibility(
-                        visible: CategoryScreen.isFromEdit != true &&
+                        visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement: TextFieldWidget(
-                            value:
-                                (addAndEditIncidentMap['eventdatetime'] == null)
-                                    ? ""
-                                    : addAndEditIncidentMap['eventdatetime']
-                                        .toString()
-                                        .substring(0, 10),
-                            readOnly: true,
-                            onTextFieldChanged: (String textField) {}),
+                        replacement: Text(
+                            (addAndEditIncidentMap['eventdatetime'] == null)
+                                ? ""
+                                : dateTimeList[0]),
                         child: DatePickerTextField(
                           hintText: StringConstants.kSelectDate,
                           onDateChanged: (String date) {
@@ -88,17 +86,12 @@ class ReportNewIncidentScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       Visibility(
-                        visible: CategoryScreen.isFromEdit != true &&
+                        visible: CategoryScreen.isFromEdit != true ||
                             addAndEditIncidentMap['eventdatetime'] == null,
-                        replacement: TextFieldWidget(
-                            value:
-                                (addAndEditIncidentMap['eventdatetime'] == null)
-                                    ? ""
-                                    : addAndEditIncidentMap['eventdatetime']
-                                        .toString()
-                                        .substring(12, 19),
-                            readOnly: true,
-                            onTextFieldChanged: (String textField) {}),
+                        replacement: Text(
+                            (addAndEditIncidentMap['eventdatetime'] == null)
+                                ? ""
+                                : dateTimeList[1]),
                         child: TimePickerTextField(
                           hintText: StringConstants.kSelectTime,
                           onTimeChanged: (String time) {
@@ -126,10 +119,6 @@ class ReportNewIncidentScreen extends StatelessWidget {
                           onTextFieldChanged: (String textField) {
                             addAndEditIncidentMap['description'] = textField;
                           }),
-                      const SizedBox(height: xxTinySpacing),
-                      IncidentEditViewImage(
-                          addAndEditIncidentMap: addAndEditIncidentMap,
-                          clientId: ''),
                       const SizedBox(height: xxTinySpacing),
                       IncidentShowImageNumber(numberIndex: imageIndex),
                       const SizedBox(height: xxxTinierSpacing),
