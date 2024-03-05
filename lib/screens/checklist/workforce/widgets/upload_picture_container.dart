@@ -31,6 +31,7 @@ class UploadPictureContainer extends StatelessWidget {
             mainAxisSpacing: tinierSpacing),
         itemCount: imagePathsList.length,
         itemBuilder: (context, index) {
+          print('image path----->$imagePathsList');
           return ListTile(
               title: IconButton(
                   padding: EdgeInsets.zero,

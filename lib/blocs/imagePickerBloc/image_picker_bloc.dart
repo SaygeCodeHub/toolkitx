@@ -11,6 +11,7 @@ import 'image_picker_state.dart';
 class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   final ImagePicker _imagePicker = ImagePicker();
   List<String> pickedImagesList = [];
+  bool isCamera = false;
   int incrementImageCount = 0;
 
   ImagePickerBloc() : super(ImagePickerInitial()) {
@@ -28,10 +29,12 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
       PickImage event, Emitter<ImagePickerState> emit) async {
     try {
       Future<bool> handlePermission() async {
-        final cameraStatus = await Permission.camera.request();
-        if (cameraStatus == PermissionStatus.denied) {
+        final permissionStatus = (isCamera == true)
+            ? await Permission.camera.request()
+            : await Permission.storage.request();
+        if (permissionStatus == PermissionStatus.denied) {
           openAppSettings();
-        } else if (cameraStatus == PermissionStatus.permanentlyDenied) {
+        } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
           emit(FailedToPickImage(errText: StringConstants.kPermissionsDenied));
         }
         return true;
@@ -42,7 +45,9 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
         return;
       } else {
         final pickedFile = await _imagePicker.pickImage(
-            source: ImageSource.camera, imageQuality: 25);
+            source:
+                (isCamera == true) ? ImageSource.camera : ImageSource.gallery,
+            imageQuality: 25);
         if (pickedFile != null) {
           if (pickedImagesList.length > 5) {
             emit(

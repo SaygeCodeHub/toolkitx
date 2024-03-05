@@ -27,7 +27,7 @@ class UploadImageMenu extends StatelessWidget {
   final bool? isUpload;
   final List uploadImageList = [];
   final bool? isFromCertificate;
-  final List? editedImageList;
+  final List<String>? editedImageList;
 
   UploadImageMenu(
       {Key? key,
@@ -43,6 +43,7 @@ class UploadImageMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ImagePickerBloc>().pickedImagesList = editedImageList ?? [];
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       BlocBuilder<ImagePickerBloc, ImagePickerState>(
           buildWhen: (previousState, currentState) =>
@@ -59,6 +60,7 @@ class UploadImageMenu extends StatelessWidget {
                     child: CircularProgressIndicator()),
               );
             } else if (state is ImagePicked) {
+              print('images----->${state.pickedImagesList}');
               return Column(
                 children: [
                   Row(
@@ -88,6 +90,8 @@ class UploadImageMenu extends StatelessWidget {
                                   // if (removeSignPad != null) {
                                   //   removeSignPad!();
                                   // }
+                                  context.read<ImagePickerBloc>().isCamera =
+                                      true;
                                   context
                                       .read<ImagePickerBloc>()
                                       .add(PickImage());
@@ -97,6 +101,8 @@ class UploadImageMenu extends StatelessWidget {
                                   // if (removeSignPad != null) {
                                   //   removeSignPad!();
                                   // }
+                                  context.read<ImagePickerBloc>().isCamera =
+                                      false;
                                   context
                                       .read<ImagePickerBloc>()
                                       .add(PickImage());

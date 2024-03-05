@@ -30,6 +30,8 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
         ? manageSafetyNoticeMap.clear()
         : manageSafetyNoticeMap;
     context.read<ImagePickerBloc>().pickedImagesList.clear();
+    print(
+        'map----->${manageSafetyNoticeMap['file_name'].toString().split(',')}');
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('NewSafetyNotice')),
       bottomNavigationBar: SafetyNoticeAddAndEditBottomAppBar(
@@ -75,11 +77,6 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
               const SizedBox(height: xxTinySpacing),
               const ViewEditSafetyNoticeImages(),
               const SizedBox(height: xxTinySpacing),
-              // SafetyNoticeImageCount(
-              //     imageLength: ViewImageUtil.viewImageList(
-              //             manageSafetyNoticeMap['file_name'] ?? '')
-              //         .length),
-              // const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
                 editedImageList:
                     manageSafetyNoticeMap['file_name'].toString().split(','),
