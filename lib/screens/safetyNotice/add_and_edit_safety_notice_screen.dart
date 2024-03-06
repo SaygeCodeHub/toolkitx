@@ -4,18 +4,10 @@ import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-
-import '../../blocs/imagePickerBloc/image_picker_event.dart';
-import '../../blocs/imagePickerBloc/image_picker_state.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
-import '../../utils/incident_view_image_util.dart';
 import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
 import 'widgets/safety_notice_add_edit_bottom_app_bar.dart';
-import 'widgets/safety_notice_image_count.dart';
-import 'widgets/view_edit_safety_notice_images.dart';
 
 class AddAndEditSafetyNoticeScreen extends StatelessWidget {
   static const routeName = 'AddAndEditSafetyNoticeScreen';
@@ -29,9 +21,6 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
     (isFromEditOption == false)
         ? manageSafetyNoticeMap.clear()
         : manageSafetyNoticeMap;
-    context.read<ImagePickerBloc>().pickedImagesList.clear();
-    print(
-        'map----->${manageSafetyNoticeMap['file_name'].toString().split(',')}');
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('NewSafetyNotice')),
       bottomNavigationBar: SafetyNoticeAddAndEditBottomAppBar(
@@ -75,17 +64,18 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                     manageSafetyNoticeMap['validity'] = textField;
                   }),
               const SizedBox(height: xxTinySpacing),
-              const ViewEditSafetyNoticeImages(),
-              const SizedBox(height: xxTinySpacing),
               UploadImageMenu(
-                editedImageList:
-                    manageSafetyNoticeMap['file_name'].toString().split(','),
+                editedImageList: (manageSafetyNoticeMap['file_name'] != '' ||
+                        manageSafetyNoticeMap['file_name'] == null)
+                    ? context.read<ImagePickerBloc>().pickedImagesList =
+                        manageSafetyNoticeMap['file_name']?.split(',') ?? []
+                    : null,
                 isUpload: false,
                 onUploadImageResponse: (List uploadImageList) {
-                  // manageSafetyNoticeMap['file_name'] = uploadImageList
-                  //     .toString()
-                  //     .replaceAll('[', '')
-                  //     .replaceAll(']', '');
+                  manageSafetyNoticeMap['file_name'] = uploadImageList
+                      .toString()
+                      .replaceAll('[', '')
+                      .replaceAll(']', '');
                 },
               ),
             ],

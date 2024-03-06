@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/screens/safetyNotice/safety_notice_history_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_icon_button_row.dart';
@@ -33,6 +35,8 @@ class SafetyNoticeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             AddAndEditSafetyNoticeScreen.isFromEditOption = false;
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                 context, AddAndEditSafetyNoticeScreen.routeName);
           },

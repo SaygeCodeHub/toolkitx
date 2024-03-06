@@ -19,12 +19,14 @@ class ImagePickerLoaded extends PickAndUploadImageStates {
   final List imagePathsList;
   final String imagePath;
   final int incrementNumber;
+  final UploadPictureModel uploadPictureModel;
 
   ImagePickerLoaded(
       {required this.incrementNumber,
       required this.imagePath,
       required this.imagePathsList,
-      required this.isImageAttached});
+      required this.isImageAttached,
+      required this.uploadPictureModel});
 
   @override
   List<Object> get props =>

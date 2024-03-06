@@ -10,3 +10,5 @@ class RemovePickedImage extends ImagePickerEvent {
 
   RemovePickedImage({required this.index, required this.pickedImagesList});
 }
+
+class FetchImages extends ImagePickerEvent {}

@@ -3,18 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_state.dart';
-import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/checklist/workforce/widgets/upload_picture_container.dart';
-import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
-import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
+import 'package:toolkit/widgets/pick_image_widget.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
 import '../../../../configs/app_spacing.dart';
-import '../../../../utils/constants/string_constants.dart';
-import '../../../../widgets/secondary_button.dart';
-import '../../../../widgets/upload_alert_dialog.dart';
-import '../../../safetyNotice/widgets/safety_notice_image_count.dart';
 
 typedef UploadImageResponseCallBack = Function(List uploadImageList);
 
@@ -27,7 +19,7 @@ class UploadImageMenu extends StatelessWidget {
   final bool? isUpload;
   final List uploadImageList = [];
   final bool? isFromCertificate;
-  final List<String>? editedImageList;
+  final List? editedImageList;
 
   UploadImageMenu(
       {Key? key,
@@ -43,13 +35,14 @@ class UploadImageMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ImagePickerBloc>().pickedImagesList = editedImageList ?? [];
+    context.read<ImagePickerBloc>().add(FetchImages());
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       BlocBuilder<ImagePickerBloc, ImagePickerState>(
           buildWhen: (previousState, currentState) =>
               currentState is PickingImage ||
               currentState is ImagePicked ||
-              currentState is FailedToPickImage,
+              currentState is FailedToPickImage ||
+              currentState is ImagesFetched,
           builder: (context, state) {
             if (state is PickingImage) {
               return const Padding(
@@ -60,121 +53,38 @@ class UploadImageMenu extends StatelessWidget {
                     child: CircularProgressIndicator()),
               );
             } else if (state is ImagePicked) {
-              print('images----->${state.pickedImagesList}');
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(StringConstants.kPhoto,
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      Text('${state.imageCount.toString()}/6',
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                    ],
-                  ),
-                  UploadPictureContainer(
-                      imagePathsList: state.pickedImagesList),
-                  SecondaryButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return UploadAlertDialog(
-                                isSignature: isSignature,
-                                onCamera: () {
-                                  // if (removeSignPad != null) {
-                                  //   removeSignPad!();
-                                  // }
-                                  context.read<ImagePickerBloc>().isCamera =
-                                      true;
-                                  context
-                                      .read<ImagePickerBloc>()
-                                      .add(PickImage());
-                                  Navigator.pop(context);
-                                },
-                                onDevice: () {
-                                  // if (removeSignPad != null) {
-                                  //   removeSignPad!();
-                                  // }
-                                  context.read<ImagePickerBloc>().isCamera =
-                                      false;
-                                  context
-                                      .read<ImagePickerBloc>()
-                                      .add(PickImage());
-                                  Navigator.pop(context);
-                                },
-                                onSign: onSign,
-                              );
-                            });
-                      },
-                      textValue: (isSignature == false)
-                          ? StringConstants.kUpload
-                          : StringConstants.kEditSignature),
-                ],
-              );
+              onUploadImageResponse(state.pickedImagesList);
+              return PickImageWidget(imageMap: {
+                'imageCount': state.imageCount,
+                'imageList': state.pickedImagesList,
+                'clientId': state.clientId,
+                'isSignature': isSignature,
+                'onSign': onSign
+              });
             } else if (state is FailedToPickImage) {
               return Text(
                 state.errText,
                 style: const TextStyle(color: AppColor.errorRed),
               );
+            } else if (state is ImagesFetched) {
+              onUploadImageResponse(state.images);
+              return PickImageWidget(imageMap: {
+                'imageCount': state.imageCount,
+                'imageList': state.images,
+                'clientId': state.clientId,
+                'isSignature': isSignature,
+                'onSign': onSign
+              });
             } else {
-              return Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(StringConstants.kPhoto,
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      Text('0/6',
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                    ],
-                  ),
-                  SecondaryButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return UploadAlertDialog(
-                                isSignature: isSignature,
-                                onCamera: () {
-                                  // if (removeSignPad != null) {
-                                  //   removeSignPad!();
-                                  // }
-                                  context
-                                      .read<ImagePickerBloc>()
-                                      .add(PickImage());
-                                  Navigator.pop(context);
-                                },
-                                onDevice: () {
-                                  // if (removeSignPad != null) {
-                                  //   removeSignPad!();
-                                  // }
-                                  context
-                                      .read<ImagePickerBloc>()
-                                      .add(PickImage());
-                                  Navigator.pop(context);
-                                },
-                                onSign: onSign,
-                              );
-                            });
-                      },
-                      textValue: (isSignature == false)
-                          ? StringConstants.kUpload
-                          : StringConstants.kEditSignature),
-                ],
-              );
+              return PickImageWidget(imageMap: {
+                'imageCount': 0,
+                'imageList': const [],
+                'clientId': '',
+                'isSignature': isSignature,
+                'onSign': onSign
+              });
             }
-          }),
+          })
     ]);
   }
 }
