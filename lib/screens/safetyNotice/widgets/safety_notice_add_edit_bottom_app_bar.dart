@@ -20,6 +20,7 @@ import '../safety_notice_screen.dart';
 
 class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
   final Map manageSafetyNoticeMap;
+  static bool compareLength = false;
 
   const SafetyNoticeAddAndEditBottomAppBar(
       {Key? key, required this.manageSafetyNoticeMap})
@@ -27,6 +28,9 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('list----->${context.read<ImagePickerBloc>().pickedImagesList}');
+    compareLength = context.read<ImagePickerBloc>().pickedImagesList.length !=
+        context.read<ImagePickerBloc>().lengthOfImageList;
     return BottomAppBar(
       child: Row(
         children: [
@@ -42,6 +46,7 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
             listeners: [
               BlocListener<UploadImageBloc, UploadImageState>(
                   listener: (context, state) {
+                    print('listener---->');
                 if (state is UploadingImage) {
                   GenericLoadingPopUp.show(
                       context, StringConstants.kUploadFiles);
@@ -53,70 +58,76 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
                         .replaceAll(']', '')
                         .replaceAll(' ', '');
                     context.read<SafetyNoticeBloc>().add(UpdateSafetyNotice(
-                        updateSafetyNoticeMap: manageSafetyNoticeMap));
-                  } else {
-                    manageSafetyNoticeMap['file_name'] = state.images
-                        .toString()
-                        .replaceAll('[', '')
-                        .replaceAll(']', '')
-                        .replaceAll(' ', '');
-                    context.read<SafetyNoticeBloc>().add(AddSafetyNotice(
-                        addSafetyNoticeMap: manageSafetyNoticeMap));
-                  }
-                } else if (state is ImageCouldNotUpload) {
-                  showCustomSnackBar(context, state.errorMessage, '');
-                }
-              }),
+                            updateSafetyNoticeMap: manageSafetyNoticeMap));
+                      } else {
+                        manageSafetyNoticeMap['file_name'] = state.images
+                            .toString()
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                            .replaceAll(' ', '');
+                        context.read<SafetyNoticeBloc>().add(AddSafetyNotice(
+                            addSafetyNoticeMap: manageSafetyNoticeMap));
+                      }
+                    } else if (state is ImageCouldNotUpload) {
+                      showCustomSnackBar(context, state.errorMessage, '');
+                    }
+                  }),
               BlocListener<SafetyNoticeBloc, SafetyNoticeStates>(
                   listener: (context, state) {
-                if (state is AddingSafetyNotice) {
-                  ProgressBar.show(context);
-                } else if (state is SafetyNoticeAdded) {
-                  ProgressBar.dismiss(context);
-                  if (manageSafetyNoticeMap['file_name'] == null) {
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, SafetyNoticeScreen.routeName,
-                        arguments: false);
-                  }
-                } else if (state is SafetyNoticeNotAdded) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, state.errorMessage, '');
-                }
-                if (state is SavingSafetyNoticeFiles) {
-                  GenericLoadingPopUp.show(
-                      context, StringConstants.kUploadFiles);
-                } else if (state is SafetyNoticeFilesSaved) {
-                  GenericLoadingPopUp.dismiss(context);
+                    if (state is AddingSafetyNotice) {
+                      ProgressBar.show(context);
+                    } else if (state is SafetyNoticeAdded) {
+                      ProgressBar.dismiss(context);
+                      if (manageSafetyNoticeMap['file_name'] == null) {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, SafetyNoticeScreen.routeName,
+                            arguments: false);
+                      }
+                    } else if (state is SafetyNoticeNotAdded) {
+                      ProgressBar.dismiss(context);
+                      showCustomSnackBar(context, state.errorMessage, '');
+                    }
+                    if (state is SavingSafetyNoticeFiles) {
+                      GenericLoadingPopUp.show(
+                          context, StringConstants.kUploadFiles);
+                    } else if (state is SafetyNoticeFilesSaved) {
+                      GenericLoadingPopUp.dismiss(context);
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, SafetyNoticeScreen.routeName,
+                          arguments: false);
+                    } else if (state is SafetyNoticeFilesNotSaved) {
+                      GenericLoadingPopUp.dismiss(context);
+                      showCustomSnackBar(context, state.filesNotSaved, '');
+                    }
+                    if (state is UpdatingSafetyNotice) {
+                      ProgressBar.show(context);
+                    } else if (state is SafetyNoticeUpdated) {
+                      ProgressBar.dismiss(context);
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(
                       context, SafetyNoticeScreen.routeName,
                       arguments: false);
-                } else if (state is SafetyNoticeFilesNotSaved) {
-                  GenericLoadingPopUp.dismiss(context);
-                  showCustomSnackBar(context, state.filesNotSaved, '');
-                }
-                if (state is UpdatingSafetyNotice) {
-                  ProgressBar.show(context);
-                } else if (state is SafetyNoticeUpdated) {
-                  ProgressBar.dismiss(context);
-                  if (manageSafetyNoticeMap['file_name'] == null) {
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, SafetyNoticeScreen.routeName,
-                        arguments: false);
-                  }
                 } else if (state is SafetyNoticeCouldNotUpdate) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, state.noticeNotUpdated, '');
-                }
-              }),
+                      ProgressBar.dismiss(context);
+                      showCustomSnackBar(context, state.noticeNotUpdated, '');
+                    }
+                  }),
             ],
             child: Expanded(
                 child: PrimaryButton(
                     onPressed: () {
-                      if (manageSafetyNoticeMap['file_name'] != null ||
+                      if (context
+                                  .read<ImagePickerBloc>()
+                                  .pickedImagesList
+                                  .length !=
+                              context
+                                  .read<ImagePickerBloc>()
+                                  .lengthOfImageList &&
+                          manageSafetyNoticeMap['file_name'] != null &&
                           manageSafetyNoticeMap['file_name'] != '') {
+                        print('iffff---->');
                         context.read<UploadImageBloc>().add(UploadImage(
                             images: manageSafetyNoticeMap['file_name'],
                             imageLength: context
@@ -125,6 +136,7 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
                       } else {
                         if (AddAndEditSafetyNoticeScreen.isFromEditOption ==
                             true) {
+                          print('heree----->');
                           context.read<SafetyNoticeBloc>().add(
                               UpdateSafetyNotice(
                                   updateSafetyNoticeMap:

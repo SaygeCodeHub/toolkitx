@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/safetyNotice/safety_notice_events.dart';
 import 'package:toolkit/blocs/safetyNotice/safety_notice_states.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
+import 'package:toolkit/screens/safetyNotice/widgets/safety_notice_add_edit_bottom_app_bar.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../di/app_module.dart';
@@ -110,7 +111,9 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
             await _safetyNoticeRepository.addSafetyNotices(addSafetyNoticeMap);
         if (addSafetyNoticeModel.status == 200) {
           emit(SafetyNoticeAdded(addSafetyNoticeModel: addSafetyNoticeModel));
-          if (event.addSafetyNoticeMap['file_name'] != null) {
+          if (event.addSafetyNoticeMap['file_name'] != null &&
+              SafetyNoticeAddAndEditBottomAppBar.compareLength == false) {
+            print('inside bloc---->');
             add(SafetyNoticeSaveFiles(
                 safetyNoticeId: addSafetyNoticeModel.message,
                 addSafetyNoticeMap: event.addSafetyNoticeMap));
@@ -223,7 +226,10 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
       if (updatingSafetyNoticeModel.status == 200) {
         emit(SafetyNoticeUpdated(
             updatingSafetyNoticeModel: updatingSafetyNoticeModel));
-        if (event.updateSafetyNoticeMap['file_name'] != null) {
+        if (event.updateSafetyNoticeMap['file_name'] != null &&
+            SafetyNoticeAddAndEditBottomAppBar.compareLength == false) {
+          print(
+              'inside bloc---->${SafetyNoticeAddAndEditBottomAppBar.compareLength}');
           add(SafetyNoticeSaveFiles(
               safetyNoticeId: updatingSafetyNoticeModel.message,
               addSafetyNoticeMap: event.updateSafetyNoticeMap));

@@ -44,6 +44,7 @@ class UploadImageMenu extends StatelessWidget {
               currentState is FailedToPickImage ||
               currentState is ImagesFetched,
           builder: (context, state) {
+            print('state--->$state');
             if (state is PickingImage) {
               return const Padding(
                 padding: EdgeInsets.all(xxTinierSpacing),

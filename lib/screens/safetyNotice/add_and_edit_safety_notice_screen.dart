@@ -21,6 +21,8 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
     (isFromEditOption == false)
         ? manageSafetyNoticeMap.clear()
         : manageSafetyNoticeMap;
+    List fileNames = [];
+    fileNames.add(manageSafetyNoticeMap['file_name']);
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('NewSafetyNotice')),
       bottomNavigationBar: SafetyNoticeAddAndEditBottomAppBar(
@@ -68,7 +70,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                 editedImageList: (manageSafetyNoticeMap['file_name'] != '' ||
                         manageSafetyNoticeMap['file_name'] == null)
                     ? context.read<ImagePickerBloc>().pickedImagesList =
-                        manageSafetyNoticeMap['file_name']?.split(',') ?? []
+                    fileNames
                     : null,
                 isUpload: false,
                 onUploadImageResponse: (List uploadImageList) {
