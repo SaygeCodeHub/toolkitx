@@ -22,7 +22,8 @@ class NotificationUtil {
         await _storeMessageInDatabase(message);
         ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
           "employee_id": message.data['rid'],
-          "employee_name": ''
+          "employee_name": '',
+          "employee_type": message.data['rtype']
         }));
       }
     });

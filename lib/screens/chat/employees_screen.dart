@@ -109,7 +109,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                     onPressed: () {
                                       ChatMessagingScreen.employeeDetailsMap = {
                                         "employee_name": datum.name,
-                                        'employee_id': datum.id
+                                        'employee_id': datum.id,
+                                        'employee_type': datum.type
                                       };
                                       Navigator.pushNamed(context,
                                           ChatMessagingScreen.routeName);
