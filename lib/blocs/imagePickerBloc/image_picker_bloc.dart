@@ -17,6 +17,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   List pickedImagesList = [];
   bool isCamera = false;
   int incrementImageCount = 0;
+  int lengthOfImageList = 0;
 
   ImagePickerBloc() : super(ImagePickerInitial()) {
     on<PickImageInitial>(_pickImageInitial);
@@ -92,6 +93,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
       FetchImages event, Emitter<ImagePickerState> emit) async {
     if (pickedImagesList.isNotEmpty) {
       incrementImageCount = pickedImagesList.length;
+      lengthOfImageList = pickedImagesList.length;
       emit(ImagesFetched(
           images: pickedImagesList,
           imageCount: incrementImageCount,

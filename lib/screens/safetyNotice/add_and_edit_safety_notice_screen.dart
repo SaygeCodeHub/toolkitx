@@ -72,10 +72,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                     : null,
                 isUpload: false,
                 onUploadImageResponse: (List uploadImageList) {
-                  manageSafetyNoticeMap['file_name'] = uploadImageList
-                      .toString()
-                      .replaceAll('[', '')
-                      .replaceAll(']', '');
+                  manageSafetyNoticeMap['file_name'] = uploadImageList;
                 },
               ),
             ],
