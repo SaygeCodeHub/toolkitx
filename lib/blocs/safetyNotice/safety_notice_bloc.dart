@@ -112,7 +112,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         if (addSafetyNoticeModel.status == 200) {
           emit(SafetyNoticeAdded(addSafetyNoticeModel: addSafetyNoticeModel));
           if (event.addSafetyNoticeMap['file_name'] != null &&
-              SafetyNoticeAddAndEditBottomAppBar.compareLength == false) {
+              SafetyNoticeAddAndEditBottomAppBar.compareLength) {
             print('inside bloc---->');
             add(SafetyNoticeSaveFiles(
                 safetyNoticeId: addSafetyNoticeModel.message,

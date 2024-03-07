@@ -31,6 +31,7 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
     print('list----->${context.read<ImagePickerBloc>().pickedImagesList}');
     compareLength = context.read<ImagePickerBloc>().pickedImagesList.length !=
         context.read<ImagePickerBloc>().lengthOfImageList;
+    print('conditon----->$compareLength');
     return BottomAppBar(
       child: Row(
         children: [
@@ -136,12 +137,14 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
                       } else {
                         if (AddAndEditSafetyNoticeScreen.isFromEditOption ==
                             true) {
+                          compareLength = false;
                           print('heree----->');
                           context.read<SafetyNoticeBloc>().add(
                               UpdateSafetyNotice(
                                   updateSafetyNoticeMap:
                                       manageSafetyNoticeMap));
                         } else {
+                          compareLength = false;
                           context.read<SafetyNoticeBloc>().add(AddSafetyNotice(
                               addSafetyNoticeMap: manageSafetyNoticeMap));
                         }
