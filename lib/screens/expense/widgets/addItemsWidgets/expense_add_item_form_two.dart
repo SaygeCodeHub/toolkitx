@@ -54,8 +54,6 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
                 ExpenseDetailsTabOne.manageItemsMap['description'] = textField;
               }),
           const SizedBox(height: xxTinySpacing),
-          const ExpenseAddedImageCountWidget(),
-          const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {

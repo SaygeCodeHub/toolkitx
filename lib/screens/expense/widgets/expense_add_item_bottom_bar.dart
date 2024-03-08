@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_event.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_state.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/generic_loading_popup.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
@@ -25,98 +31,144 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ExpenseBloc, ExpenseStates>(
-      listener: (context, state) {
-        if (state is SavingExpenseItem) {
-          ProgressBar.show(context);
-        } else if (state is ExpenseItemSaved) {
-          ProgressBar.dismiss(context);
-          context
-              .read<ExpenseBloc>()
-              .add(FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
-        } else if (state is ExpenseItemCouldNotSave) {
-          ProgressBar.dismiss(context);
-          showCustomSnackBar(context, state.itemNotSaved, '');
-        }
-      },
+    return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is FetchingExpenseItemMaster ||
           currentState is ExpenseItemMasterFetched,
       builder: (context, state) {
         if (state is ExpenseItemMasterFetched) {
           if (state.isScreenChange == true) {
-            return BottomAppBar(
-              child: Row(children: [
-                Expanded(
-                    child: PrimaryButton(
-                  onPressed: () {
-                    if (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '') {
-                      context
-                          .read<ExpenseBloc>()
-                          .add(FetchExpenseItemMaster(isScreenChange: true));
+            return MultiBlocListener(
+                listeners: [
+                  BlocListener<UploadImageBloc, UploadImageState>(
+                      listener: (context, state) {
+                    print('UploadImageBloc----->$state');
+                    if (state is UploadingImage) {
+                      GenericLoadingPopUp.show(
+                          context, StringConstants.kUploadFiles);
+                    } else if (state is ImageUploaded) {
+                      GenericLoadingPopUp.dismiss(context);
                       ExpenseDetailsTabOne.manageItemsMap['itemid'] =
                           ExpenseItemList.itemId;
-                      context
-                          .read<ExpenseBloc>()
-                          .add(FetchExpenseItemCustomFields(customFieldsMap: {
-                            "itemid":
-                                ExpenseDetailsTabOne.manageItemsMap['itemid'],
-                            "expenseitemid": expenseDetailsData.id
-                          }));
-                    } else {
-                      context
-                          .read<ExpenseBloc>()
-                          .add(FetchExpenseItemMaster(isScreenChange: false));
+                      context.read<ExpenseBloc>().add(SaveExpenseItem(
+                          expenseItemMap: ExpenseDetailsTabOne.manageItemsMap));
+                    } else if (state is ImageCouldNotUpload) {
+                      GenericLoadingPopUp.dismiss(context);
+                      showCustomSnackBar(context, state.errorMessage, '');
                     }
-                  },
-                  textValue: DatabaseUtil.getText('buttonBack'),
-                )),
-                const SizedBox(width: xxTinierSpacing),
-                (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6' ||
-                        ExpenseDetailsTabOne.manageItemsMap['itemid'] == '3')
-                    ? Expanded(
+                  }),
+                  BlocListener<ExpenseBloc, ExpenseStates>(
+                    listener: (context, state) {
+                      print('ExpenseBloc------>$state');
+                      if (state is SavingExpenseItem) {
+                        ProgressBar.show(context);
+                      } else if (state is ExpenseItemSaved) {
+                        ProgressBar.dismiss(context);
+                        // context.read<ExpenseBloc>().add(FetchExpenseDetails(
+                        //     tabIndex: 0, expenseId: expenseId));
+                      } else if (state is ExpenseItemCouldNotSave) {
+                        ProgressBar.dismiss(context);
+                        showCustomSnackBar(context, state.itemNotSaved, '');
+                      }
+                    },
+                  )
+                ],
+                child: BottomAppBar(
+                  child: Row(children: [
+                    Expanded(
                         child: PrimaryButton(
-                            onPressed: () {
-                              ExpenseDetailsTabOne.manageItemsMap['itemid'] =
-                                  '';
-                              context.read<ExpenseBloc>().add(
-                                  FetchExpenseItemMaster(isScreenChange: true));
-                            },
-                            textValue: DatabaseUtil.getText('nextButtonText')))
-                    : Expanded(
-                        child: PrimaryButton(
-                            onPressed: () {
-                              if (ExpenseDetailsTabOne.manageItemsMap.keys
-                                      .contains('workingatnumber') ==
-                                  false) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AndroidPopUp(
-                                          titleValue: StringConstants
-                                              .kExpenseWorkingAtNumber,
-                                          contentValue: '',
-                                          textValue: StringConstants.kGoBack,
-                                          isNoVisible: false,
-                                          onPrimaryButton: () {
-                                            Navigator.pop(context);
-                                            context.read<ExpenseBloc>().add(
-                                                FetchExpenseDetails(
-                                                    tabIndex: 0,
-                                                    expenseId: expenseId));
-                                          });
-                                    });
-                              } else {
-                                ExpenseDetailsTabOne.manageItemsMap['itemid'] =
-                                    ExpenseItemList.itemId;
-                                context.read<ExpenseBloc>().add(SaveExpenseItem(
-                                    expenseItemMap:
-                                        ExpenseDetailsTabOne.manageItemsMap));
-                              }
-                            },
-                            textValue: DatabaseUtil.getText('buttonSave')))
-              ]),
-            );
+                      onPressed: () {
+                        if (ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
+                            '') {
+                          context.read<ExpenseBloc>().add(
+                              FetchExpenseItemMaster(isScreenChange: true));
+                          ExpenseDetailsTabOne.manageItemsMap['itemid'] =
+                              ExpenseItemList.itemId;
+                          context.read<ExpenseBloc>().add(
+                                  FetchExpenseItemCustomFields(
+                                      customFieldsMap: {
+                                    "itemid": ExpenseDetailsTabOne
+                                        .manageItemsMap['itemid'],
+                                    "expenseitemid": expenseDetailsData.id
+                                  }));
+                        } else {
+                          context.read<ExpenseBloc>().add(
+                              FetchExpenseItemMaster(isScreenChange: false));
+                        }
+                      },
+                      textValue: DatabaseUtil.getText('buttonBack'),
+                    )),
+                    const SizedBox(width: xxTinierSpacing),
+                    (ExpenseDetailsTabOne.manageItemsMap['itemid'] == '6' ||
+                            ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
+                                '3')
+                        ? Expanded(
+                            child: PrimaryButton(
+                                onPressed: () {
+                                  ExpenseDetailsTabOne
+                                      .manageItemsMap['itemid'] = '';
+                                  context.read<ExpenseBloc>().add(
+                                      FetchExpenseItemMaster(
+                                          isScreenChange: true));
+                                },
+                                textValue:
+                                    DatabaseUtil.getText('nextButtonText')))
+                        : Expanded(
+                            child: PrimaryButton(
+                                onPressed: () {
+                                  if (ExpenseDetailsTabOne.manageItemsMap.keys
+                                          .contains('workingatnumber') ==
+                                      false) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AndroidPopUp(
+                                              titleValue: StringConstants
+                                                  .kExpenseWorkingAtNumber,
+                                              contentValue: '',
+                                              textValue:
+                                                  StringConstants.kGoBack,
+                                              isNoVisible: false,
+                                              onPrimaryButton: () {
+                                                // Navigator.pop(context);
+                                                // context.read<ExpenseBloc>().add(
+                                                //     FetchExpenseDetails(
+                                                //         tabIndex: 0,
+                                                //         expenseId: expenseId));
+                                              });
+                                        });
+                                  } else {
+                                    if (context
+                                            .read<ExpenseBloc>()
+                                            .imagesList !=
+                                        context
+                                            .read<ImagePickerBloc>()
+                                            .pickedImagesList) {
+                                      print('if add---->');
+                                      context.read<UploadImageBloc>().add(
+                                          UploadImage(
+                                              imageLength: context
+                                                  .read<ImagePickerBloc>()
+                                                  .lengthOfImageList,
+                                              images: context
+                                                  .read<ImagePickerBloc>()
+                                                  .pickedImagesList));
+                                    } else {
+                                      print('else---->');
+                                      ExpenseDetailsTabOne
+                                              .manageItemsMap['itemid'] =
+                                          ExpenseItemList.itemId;
+                                      context.read<ExpenseBloc>().add(
+                                          SaveExpenseItem(
+                                              expenseItemMap:
+                                                  ExpenseDetailsTabOne
+                                                      .manageItemsMap));
+                                    }
+                                  }
+                                },
+                                textValue: DatabaseUtil.getText('buttonSave')))
+                  ]),
+                ));
           } else {
             return BottomAppBar(
               child: Row(children: [

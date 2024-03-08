@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_state.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
@@ -54,6 +57,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
               visible: expenseDetailsData.canAdditems == '1',
               child: CustomFloatingActionButton(
                   onPressed: () {
+                    context.read<ImagePickerBloc>().add(PickImageInitial());
                     context
                         .read<ExpenseBloc>()
                         .add(FetchExpenseItemMaster(isScreenChange: false));

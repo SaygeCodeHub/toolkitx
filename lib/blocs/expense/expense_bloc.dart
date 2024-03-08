@@ -35,6 +35,7 @@ import 'expense_state.dart';
 class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   final ExpenseRepository _expenseRepository = getIt<ExpenseRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  List imagesList = [];
 
   ExpenseBloc() : super(ExpenseInitial()) {
     on<FetchExpenseList>(_fetchExpenseList);
@@ -478,8 +479,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   Future<void> _saveItem(
       SaveExpenseItem event, Emitter<ExpenseStates> emit) async {
-    emit(SavingExpenseItem());
     try {
+      emit(SavingExpenseItem());
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
@@ -511,8 +512,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           "hashcode": hashCode,
           "questions": filteredList
         };
+        print('map------>${jsonEncode(saveItemMap)}');
         SaveExpenseItemModel saveExpenseItemModel =
             await _expenseRepository.saveExpenseItem(saveItemMap);
+        print('bloc msg----->${saveExpenseItemModel.message}');
         if (saveExpenseItemModel.message == '1') {
           emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
         } else {
@@ -697,6 +700,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
               }
           }
         }
+        imagesList = fetchExpenseItemDetailsModel.data.filenames.split(',');
         emit(ExpenseItemDetailsFetched(
             fetchExpenseItemDetailsModel: fetchExpenseItemDetailsModel));
         add(FetchExpenseItemMaster(isScreenChange: isScreenChange));

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_event.dart';
+import 'package:toolkit/blocs/uploadImage/upload_image_state.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/generic_loading_popup.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
@@ -17,7 +22,6 @@ import '../../../../widgets/progress_bar.dart';
 import '../../../checklist/workforce/widgets/upload_image_section.dart';
 import '../../expense_details_screen.dart';
 import 'expense_add_item_currency_list_tile.dart';
-import 'expense_added_image_count_widget.dart';
 import 'expense_edit_items_screen.dart';
 
 class ExpenseEditFormThree extends StatelessWidget {
@@ -27,6 +31,7 @@ class ExpenseEditFormThree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('bottom------>');
     ExpenseEditItemsScreen.editExpenseMap['amount'] =
         ExpenseEditItemsScreen.editExpenseMap['item_details_model'].amount ??
             '';
@@ -36,55 +41,82 @@ class ExpenseEditFormThree extends StatelessWidget {
             '';
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEditItem),
-      bottomNavigationBar: BlocListener<ExpenseBloc, ExpenseStates>(
-        listener: (context, state) {
-          if (state is SavingExpenseItem) {
-            ProgressBar.show(context);
-          } else if (state is ExpenseItemSaved) {
-            ProgressBar.dismiss(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pushReplacementNamed(
-                context, ExpenseDetailsScreen.routeName,
-                arguments:
-                    ExpenseEditItemsScreen.editExpenseMap['details_model'].id);
-          } else if (state is ExpenseItemCouldNotSave) {
-            ProgressBar.dismiss(context);
-            showCustomSnackBar(context, state.itemNotSaved, '');
-          }
-        },
-        child: BottomAppBar(
-          child: PrimaryButton(
-            onPressed: () {
-              if (ExpenseEditItemsScreen.editExpenseMap.keys
-                      .contains('workingatnumber') ==
-                  false) {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AndroidPopUp(
-                          titleValue: StringConstants.kExpenseWorkingAtNumber,
-                          contentValue: '',
-                          textValue: StringConstants.kGoBack,
-                          isNoVisible: false,
-                          onPrimaryButton: () {
-                            Navigator.pop(context);
-                            context.read<ExpenseBloc>().add(FetchExpenseDetails(
-                                tabIndex: 2,
-                                expenseId: ExpenseEditItemsScreen
-                                    .editExpenseMap['details_model'].id));
-                          });
-                    });
-              } else {
+      bottomNavigationBar: MultiBlocListener(
+          listeners: [
+            BlocListener<UploadImageBloc, UploadImageState>(
+                listener: (context, state) {
+              if (state is UploadingImage) {
+                GenericLoadingPopUp.show(context, StringConstants.kUploadFiles);
+              } else if (state is ImageUploaded) {
+                GenericLoadingPopUp.dismiss(context);
                 context.read<ExpenseBloc>().add(SaveExpenseItem(
                     expenseItemMap: ExpenseEditItemsScreen.editExpenseMap));
+              } else if (state is ImageCouldNotUpload) {
+                showCustomSnackBar(context, state.errorMessage, '');
               }
-            },
-            textValue: DatabaseUtil.getText('buttonSave'),
-          ),
-        ),
-      ),
+            }),
+            BlocListener<ExpenseBloc, ExpenseStates>(
+              listener: (context, state) {
+                if (state is SavingExpenseItem) {
+                  ProgressBar.show(context);
+                } else if (state is ExpenseItemSaved) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, ExpenseDetailsScreen.routeName,
+                      arguments: ExpenseEditItemsScreen
+                          .editExpenseMap['details_model'].id);
+                } else if (state is ExpenseItemCouldNotSave) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.itemNotSaved, '');
+                }
+              },
+            )
+          ],
+          child: BottomAppBar(
+            child: PrimaryButton(
+              onPressed: () {
+                if (ExpenseEditItemsScreen.editExpenseMap.keys
+                        .contains('workingatnumber') ==
+                    false) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AndroidPopUp(
+                            titleValue: StringConstants.kExpenseWorkingAtNumber,
+                            contentValue: '',
+                            textValue: StringConstants.kGoBack,
+                            isNoVisible: false,
+                            onPrimaryButton: () {
+                              Navigator.pop(context);
+                              context.read<ExpenseBloc>().add(
+                                  FetchExpenseDetails(
+                                      tabIndex: 2,
+                                      expenseId: ExpenseEditItemsScreen
+                                          .editExpenseMap['details_model'].id));
+                            });
+                      });
+                } else {
+                  if (context.read<ExpenseBloc>().imagesList !=
+                      context.read<ImagePickerBloc>().pickedImagesList) {
+                    print('if---->');
+                    context.read<UploadImageBloc>().add(UploadImage(
+                        imageLength:
+                            context.read<ImagePickerBloc>().lengthOfImageList,
+                        images: ExpenseEditItemsScreen
+                            .editExpenseMap['filenames']));
+                  } else {
+                    print('else---->');
+                    context.read<ExpenseBloc>().add(SaveExpenseItem(
+                        expenseItemMap: ExpenseEditItemsScreen.editExpenseMap));
+                  }
+                }
+              },
+              textValue: DatabaseUtil.getText('buttonSave'),
+            ),
+          )),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -97,7 +129,7 @@ class ExpenseEditFormThree extends StatelessWidget {
             children: [
               ExpenseAddItemCurrencyListTile(
                   expenseDetailsData:
-                      ExpenseEditItemsScreen.editExpenseMap['details_model']),
+                  ExpenseEditItemsScreen.editExpenseMap['details_model']),
               Text(DatabaseUtil.getText('Amount'),
                   style: Theme.of(context)
                       .textTheme
@@ -106,7 +138,7 @@ class ExpenseEditFormThree extends StatelessWidget {
               const SizedBox(height: xxxTinierSpacing),
               TextFieldWidget(
                   value: ExpenseEditItemsScreen
-                          .editExpenseMap['item_details_model'].amount ??
+                      .editExpenseMap['item_details_model'].amount ??
                       '',
                   maxLength: 20,
                   textInputAction: TextInputAction.next,
@@ -123,7 +155,7 @@ class ExpenseEditFormThree extends StatelessWidget {
               const SizedBox(height: xxxTinierSpacing),
               TextFieldWidget(
                   value: ExpenseEditItemsScreen
-                          .editExpenseMap['item_details_model'].description ??
+                      .editExpenseMap['item_details_model'].description ??
                       '',
                   maxLength: 70,
                   maxLines: 2,
@@ -134,9 +166,15 @@ class ExpenseEditFormThree extends StatelessWidget {
                         textField;
                   }),
               const SizedBox(height: xxTinySpacing),
-              const ExpenseAddedImageCountWidget(),
-              const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
+                  editedImageList: (ExpenseEditItemsScreen
+                                  .editExpenseMap['filenames'] !=
+                              '' ||
+                          ExpenseEditItemsScreen.editExpenseMap['filenames'] ==
+                              null)
+                      ? context.read<ImagePickerBloc>().pickedImagesList =
+                          context.read<ExpenseBloc>().imagesList
+                      : null,
                   isUpload: true,
                   onUploadImageResponse: (List uploadImageList) {
                     ExpenseEditItemsScreen.editExpenseMap['filenames'] =
