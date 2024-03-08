@@ -66,7 +66,7 @@ class UploadPictureContainer extends StatelessWidget {
                             mode: LaunchMode.inAppWebView);
                       },
                       child: CachedNetworkImage(
-                          height: 80,
+                          height: kUploadImageHeight,
                           imageUrl:
                               '${ApiConstants.viewDocBaseUrl}${imagePathsList[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                           placeholder: (context, url) => Shimmer.fromColors(

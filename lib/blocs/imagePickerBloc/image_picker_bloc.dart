@@ -58,8 +58,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
             imageQuality: 25);
         if (pickedFile != null) {
           if (pickedImagesList.length > 5) {
-            emit(
-                FailedToPickImage(errText: 'Can\'t upload more that 6 images'));
+            emit(FailedToPickImage(errText: StringConstants.kCannotPickImage));
           } else {
             pickedImagesList.add(pickedFile.path);
             incrementImageCount++;
@@ -101,7 +100,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
               await _customerCache.getClientId(CacheKeys.clientId) ?? ''));
     } else {
       if (pickedImagesList.length > 5) {
-        emit(FailedToPickImage(errText: 'Can\'t upload more that 6 images'));
+        emit(FailedToPickImage(errText: StringConstants.kCannotPickImage));
       } else {
         incrementImageCount = 0;
         pickedImagesList.clear();
