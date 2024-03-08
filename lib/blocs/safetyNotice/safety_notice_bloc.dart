@@ -36,6 +36,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
   int safetyNoticeTabIndex = 0;
   Map safetyNoticeDetailsMap = {};
   Map safetNoticeFilterMap = {};
+  List imagesList = [];
 
   SafetyNoticeStates get initialState => SafetyNoticeInitialState();
 
@@ -110,13 +111,13 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         AddSafetyNoticeModel addSafetyNoticeModel =
             await _safetyNoticeRepository.addSafetyNotices(addSafetyNoticeMap);
         if (addSafetyNoticeModel.status == 200) {
-          emit(SafetyNoticeAdded(addSafetyNoticeModel: addSafetyNoticeModel));
           if (event.addSafetyNoticeMap['file_name'] != null &&
-              SafetyNoticeAddAndEditBottomAppBar.compareLength) {
-            print('inside bloc---->');
+              SafetyNoticeAddAndEditBottomAppBar.compareLength == true) {
             add(SafetyNoticeSaveFiles(
                 safetyNoticeId: addSafetyNoticeModel.message,
                 addSafetyNoticeMap: event.addSafetyNoticeMap));
+          } else {
+            emit(SafetyNoticeAdded(addSafetyNoticeModel: addSafetyNoticeModel));
           }
         } else {
           emit(SafetyNoticeNotAdded(
@@ -196,6 +197,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         'clientId': clientId,
         'file_name': fetchSafetyNoticeDetailsModel.data.files
       };
+      imagesList = fetchSafetyNoticeDetailsModel.data.files.split(',');
       emit(SafetyNoticeDetailsFetched(
           fetchSafetyNoticeDetailsModel: fetchSafetyNoticeDetailsModel,
           clientId: clientId!,
@@ -224,15 +226,14 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
           await _safetyNoticeRepository
               .updateSafetyNotices(updateSafetyNoticeMap);
       if (updatingSafetyNoticeModel.status == 200) {
-        emit(SafetyNoticeUpdated(
-            updatingSafetyNoticeModel: updatingSafetyNoticeModel));
         if (event.updateSafetyNoticeMap['file_name'] != null &&
-            SafetyNoticeAddAndEditBottomAppBar.compareLength == false) {
-          print(
-              'inside bloc---->${SafetyNoticeAddAndEditBottomAppBar.compareLength}');
+            SafetyNoticeAddAndEditBottomAppBar.compareLength == true) {
           add(SafetyNoticeSaveFiles(
-              safetyNoticeId: updatingSafetyNoticeModel.message,
+              safetyNoticeId: event.updateSafetyNoticeMap['noticeid'],
               addSafetyNoticeMap: event.updateSafetyNoticeMap));
+        } else {
+          emit(SafetyNoticeUpdated(
+              updatingSafetyNoticeModel: updatingSafetyNoticeModel));
         }
       } else {
         emit(SafetyNoticeCouldNotUpdate(
