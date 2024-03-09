@@ -255,3 +255,13 @@ class ExpenseItemDetailsNotFetched extends ExpenseStates {
 
   ExpenseItemDetailsNotFetched({required this.itemDetailsNotFetched});
 }
+
+class RejectingExpense extends ExpenseStates {}
+
+class ExpenseRejected extends ExpenseStates {}
+
+class ExpenseNotRejected extends ExpenseStates {
+  final String errorMessage;
+
+  ExpenseNotRejected({required this.errorMessage});
+}

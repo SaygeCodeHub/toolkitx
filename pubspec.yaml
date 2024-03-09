@@ -36,6 +36,10 @@ dependencies:
   flutter_inappwebview: ^5.7.2+3
   image_cropper: ^4.0.1
   qr_code_scanner: ^1.0.1
+  pod_player:
+  video_player:
+  flutter_html:
+  html_unescape:
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.10
 

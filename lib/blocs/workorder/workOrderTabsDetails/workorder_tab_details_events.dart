@@ -282,3 +282,9 @@ class AssignWorkOrderParts extends WorkOrderTabsDetailsEvent {
 
   AssignWorkOrderParts({required this.assignPartMap});
 }
+
+class CompleteWorkOrder extends WorkOrderTabsDetailsEvent {
+  final Map completeWorkOrderMap;
+
+  CompleteWorkOrder({required this.completeWorkOrderMap});
+}

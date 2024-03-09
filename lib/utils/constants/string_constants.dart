@@ -44,6 +44,8 @@ abstract class StringConstants {
       'Do you want to reissue this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
+  static const String kPREVIOUS = 'PREVIOUS';
+  static const String kFINISH = 'FINISH';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
@@ -71,6 +73,7 @@ abstract class StringConstants {
   static const String kNotAccepted = 'Not Accepted';
   static const String kOverdue = 'Overdue';
   static const String kSubmitted = 'Submitted';
+  static const String kApproved = 'Approved';
   static const String kUploadPhoto = 'Upload Photo';
   static const String kAddCommentImage = 'Add Comment/Image';
   static const String kHint = 'Hint';
@@ -291,6 +294,7 @@ abstract class StringConstants {
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
   static const String kWorkforceAssigned = 'Workforce Assigned';
+  static const String kTeamAssigned = 'Team Assigned';
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
@@ -370,6 +374,8 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kPPTWillBriefAbout =
+      'The PPT will brief about process management tool';
   static const String kNoFiles = 'No Files found!';
   static const String kAssetName = "Asset Name";
   static const String kIsDraft = "[Draft]";
@@ -508,10 +514,24 @@ abstract class StringConstants {
   static const String kWorkorder = "Workorder";
   static const String kAreYouSureToReject = "Are you sure to reject?";
   static const String kRequestRejected = "Request Rejected";
-  static const String kFetchedCode = "Fetched Code :";
+  static const String kPleaseEnterYourAnswer50Bis200 =
+      'Please enter your answer between 50 bis 200';
   static const String kAreYouSureToCloseDocument =
       'Are you sure you want to close this document management ? ';
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kExpenseReportRejected = "Expense Report Rejected";
+  static const String kExpenseReportComments = 'Please add comment first';
+  static const String kYouFailed = "You've Failed";
+  static const String kYouPassed = "You've Passed";
+  static const String kInvalidCode = "Invalid Code";
+  static const String kCannotUploadImage =
+      "There is an issue while uploading the image. Please try again!";
+  static const String kCannotPickImage = "Can't upload more that 6 images";
+  static const String kPleaseScanRemoveLotoQR =
+      "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kPleaseScanStartLotoQR =
+      "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kOpenPPT = 'Open PPT';
 }

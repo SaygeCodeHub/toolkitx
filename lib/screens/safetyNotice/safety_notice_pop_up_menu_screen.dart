@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
@@ -39,6 +41,7 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
           AddAndEditSafetyNoticeScreen.isFromEditOption = true;
           AddAndEditSafetyNoticeScreen.manageSafetyNoticeMap =
               safetyNoticeDetailsMap;
+          context.read<ImagePickerBloc>().add(PickImageInitial());
           Navigator.pushNamed(context, AddAndEditSafetyNoticeScreen.routeName);
         }
         if (value == DatabaseUtil.getText('Issue')) {

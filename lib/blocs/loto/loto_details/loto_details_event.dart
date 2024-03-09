@@ -3,9 +3,9 @@ part of 'loto_details_bloc.dart';
 abstract class LotoDetailsEvent {}
 
 class FetchLotoDetails extends LotoDetailsEvent {
-  final int lotTabIndex;
+  final int lotoTabIndex;
 
-  FetchLotoDetails({required this.lotTabIndex});
+  FetchLotoDetails({required this.lotoTabIndex});
 }
 
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
@@ -33,7 +33,7 @@ class SaveLotoAssignTeam extends LotoDetailsEvent {
 
 class FetchLotoAssignTeam extends LotoDetailsEvent {
   final int pageNo;
-  final int isRemove;
+  final String isRemove;
   final String name;
 
   FetchLotoAssignTeam(

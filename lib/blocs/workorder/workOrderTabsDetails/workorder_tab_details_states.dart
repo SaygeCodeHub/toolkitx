@@ -258,10 +258,7 @@ class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
 
 class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
   final FetchAssignWorkForceModel fetchAssignWorkForceModel;
-  final List<AssignWorkForceDatum> assignWorkForceDatum;
-  AssignWorkOrderFetched(
-      {required this.assignWorkForceDatum,
-      required this.fetchAssignWorkForceModel});
+  AssignWorkOrderFetched({required this.fetchAssignWorkForceModel});
 }
 
 class AssignWorkOrderNotFetched extends WorkOrderTabDetailsStates {
@@ -475,4 +472,14 @@ class WorkOrderPartsNotAssigned extends WorkOrderTabDetailsStates {
   final String errorMessage;
 
   WorkOrderPartsNotAssigned({required this.errorMessage});
+}
+
+class WorkOrderCompleting extends WorkOrderTabDetailsStates {}
+
+class WorkOrderCompleted extends WorkOrderTabDetailsStates {}
+
+class WorkOrderNotCompleted extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderNotCompleted({required this.errorMessage});
 }

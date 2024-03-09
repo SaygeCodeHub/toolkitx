@@ -34,7 +34,6 @@ class IncidentMapLinksList extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 softWrap: true,
                 maxLines: 2,
-                textScaleFactor: 1,
                 text: TextSpan(
                   text:
                       "${incidentDetailsModel.data!.maplinks![index].name} : ",
@@ -47,6 +46,7 @@ class IncidentMapLinksList extends StatelessWidget {
                             )),
                   ],
                 ),
+                textScaler: const TextScaler.linear(1),
               ));
         });
   }

@@ -50,13 +50,16 @@ class ExpenseDetailsTabOne extends StatelessWidget {
           } else if (state is ExpenseItemMasterFetched) {
             return const SizedBox.shrink();
           } else {
-            return CustomFloatingActionButton(
-                onPressed: () {
-                  context
-                      .read<ExpenseBloc>()
-                      .add(FetchExpenseItemMaster(isScreenChange: false));
-                },
-                textValue: DatabaseUtil.getText('AddItems'));
+            return Visibility(
+              visible: expenseDetailsData.canAdditems == '1',
+              child: CustomFloatingActionButton(
+                  onPressed: () {
+                    context
+                        .read<ExpenseBloc>()
+                        .add(FetchExpenseItemMaster(isScreenChange: false));
+                  },
+                  textValue: DatabaseUtil.getText('AddItems')),
+            );
           }
         },
       ),
@@ -64,6 +67,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
         buildWhen: (previousState, currentState) =>
             currentState is FetchingExpenseItemMaster ||
             currentState is ExpenseItemMasterFetched ||
+            currentState is ExpenseDetailsFetched ||
             currentState is ExpenseItemMasterCouldNotFetch,
         builder: (context, state) {
           if (state is ExpenseItemMasterFetched) {
