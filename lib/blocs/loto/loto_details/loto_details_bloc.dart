@@ -18,6 +18,7 @@ import 'package:toolkit/data/models/loto/start_remove_loto_model.dart';
 import 'package:toolkit/repositories/loto/loto_repository.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/loto/fetch_loto_assign_team_model.dart';
 import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../data/models/loto/save_assign_workforce_model.dart';
@@ -27,11 +28,13 @@ import '../../../screens/loto/loto_assign_workfoce_screen.dart';
 import '../../../utils/database_utils.dart';
 
 part 'loto_details_event.dart';
+
 part 'loto_details_state.dart';
 
 class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   final LotoRepository _lotoRepository = getIt<LotoRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+
   LotoDetailsState get initialState => LotoDetailsInitial();
   List<LotoWorkforceDatum> assignWorkforceDatum = [];
   List<LotoAssignTeamDatum> lotoAssignTeamDatum = [];
@@ -48,6 +51,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   bool isFromFirst = true;
   static List popUpMenuItemsList = [];
   int index = 0;
+  String decryptedLocation = '';
 
   List answerList = [];
   List<QuestionList>? questionList;
@@ -90,6 +94,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       ];
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
+      String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       FetchLotoDetailsModel fetchLotoDetailsModel =
           await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
       if (fetchLotoDetailsModel.data.isstart == '1') {
@@ -127,12 +132,17 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
 
       isWorkforceRemove = fetchLotoDetailsModel.data.assignwfremove;
       isRemove = fetchLotoDetailsModel.data.isremove;
+      fetchLotoDetailsModel.data.location2.isNotEmpty
+          ? decryptedLocation = EncryptData.decryptAESPrivateKey(
+              fetchLotoDetailsModel.data.location2, apiKey)
+          : '';
       if (fetchLotoDetailsModel.status == 200) {
         emit(LotoDetailsFetched(
           fetchLotoDetailsModel: fetchLotoDetailsModel,
           showPopUpMenu: true,
           lotoPopUpMenuList: popUpMenuItemsList,
           clientId: clientId ?? '',
+          decryptedLocation: decryptedLocation,
         ));
       }
     } catch (e) {
