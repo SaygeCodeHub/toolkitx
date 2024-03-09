@@ -97,7 +97,7 @@ class OnLineModules extends StatelessWidget {
                                                   height: kModuleIconSize,
                                                   width: kModuleIconSize))),
                                       if ('${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].key)}' !=
-                                          '-1' ||
+                                              '-1' ||
                                           '${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)}' !=
                                               '-1')
                                         Padding(
@@ -110,21 +110,21 @@ class OnLineModules extends StatelessWidget {
                                                       height: kModulesBadgeSize,
                                                       width: kModulesBadgeSize,
                                                       decoration:
-                                                      const BoxDecoration(
-                                                          shape: BoxShape
-                                                              .circle,
-                                                          color: AppColor
-                                                              .errorRed)),
+                                                          const BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color: AppColor
+                                                                  .errorRed)),
                                                   Text(
                                                       ('${state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)}' !=
-                                                          '-1')
+                                                              '-1')
                                                           ? '${state.homeScreenModel.data!.badges![state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].notificationKey)].count}'
                                                           : '${state.homeScreenModel.data!.badges![state.homeScreenModel.data!.badges!.indexWhere((element) => element.type == state.availableModules[index].key)].count}',
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .xxxSmall
                                                           .copyWith(
-                                                          fontSize: 8))
+                                                              fontSize: 8))
                                                 ]))
                                     ]),
                                 const SizedBox(height: tiniestSpacing),

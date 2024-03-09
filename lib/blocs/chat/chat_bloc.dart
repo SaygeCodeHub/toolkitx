@@ -87,7 +87,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "quote_msg_id": "",
         "sid": "1",
         "stype": "1",
-        "rid": event.sendMessageMap['employee_id'] ?? '',
+        "rid": (event.sendMessageMap['isGroup'] == true)
+            ? groupId
+            : event.sendMessageMap['employee_id'] ?? '',
         "rtype": event.sendMessageMap['employee_type'] ?? '',
         "msg_type": "1",
         "msg_time": isoDateString,

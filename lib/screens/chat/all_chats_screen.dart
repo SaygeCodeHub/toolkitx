@@ -49,7 +49,8 @@ class AllChatsScreen extends StatelessWidget {
                         onTap: () {
                           ChatMessagingScreen.employeeDetailsMap = {
                             "employee_name": snapshot.data![index].employeeName,
-                            'employee_id': snapshot.data![index].employeeId
+                            'employee_id': snapshot.data![index].employeeId,
+                            'isGroup': snapshot.data![index].isGroup
                           };
                           Navigator.pushNamed(
                               context, ChatMessagingScreen.routeName);

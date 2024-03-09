@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/di/app_module.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/widgets/custom_icon_button.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 class ChatMessagingScreen extends StatelessWidget {
   static const routeName = 'NewChatScreen';
   static Map<String, dynamic> employeeDetailsMap = {};
+  final ChatData chatData = getIt<ChatData>();
 
-  const ChatMessagingScreen({super.key});
+  ChatMessagingScreen({super.key});
 
   void _handleMessage(String text, BuildContext context) {
     if (text.isEmpty) return;
@@ -35,9 +41,11 @@ class ChatMessagingScreen extends StatelessWidget {
                       physics: const BouncingScrollPhysics(),
                       reverse: true,
                       itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) => ChatMessage(
-                          message: snapshot.data?[index]['msg'],
-                          isMe: snapshot.data?[index]['isReceiver'] ?? 0),
+                      itemBuilder: (context, index) {
+                        return ChatMessage(
+                            message: snapshot.data?[index]['msg'],
+                            isMe: snapshot.data?[index]['isReceiver'] ?? 0);
+                      },
                     ),
                   ),
                   const Divider(height: kChatScreenDividerHeight),
@@ -71,8 +79,78 @@ class ChatMessagingScreen extends StatelessWidget {
                       hintText: 'Send a message'),
                 ),
               ),
+              CustomIconButton(
+                  icon: Icons.attach_file,
+                  onPressed: () {
+                    showModalBottomSheet(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        isScrollControlled: true,
+                        context: (context),
+                        builder: (context) {
+                          return GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      childAspectRatio: 200 / 350,
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: tinierSpacing,
+                                      mainAxisSpacing: tinierSpacing),
+                              itemCount: chatData.attachementOptions().length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        switch (chatData
+                                            .attachementOptions()[index]
+                                            .optionName) {
+                                          case 'Gallery':
+                                            context
+                                                .read<PickAndUploadImageBloc>()
+                                                .add(PickGalleryImage(
+                                                    isImageAttached: null,
+                                                    galleryImagesList: [],
+                                                    isSignature: false,
+                                                    editedGalleryList: []));
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(
+                                            xxTinierSpacing),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: chatData
+                                              .attachementOptions()[index]
+                                              .color,
+                                        ),
+                                        child: Icon(
+                                            chatData
+                                                .attachementOptions()[index]
+                                                .icon,
+                                            color: AppColor.white),
+                                      ),
+                                    ),
+                                    const SizedBox(height: xxTiniestSpacing),
+                                    Text(
+                                        chatData
+                                            .attachementOptions()[index]
+                                            .optionName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xxSmall
+                                            .copyWith(
+                                                fontWeight: FontWeight.w500))
+                                  ],
+                                );
+                              });
+                        });
+                  }),
               IconButton(
-                  icon: const Icon(Icons.send),
+                  icon: const Icon(Icons.send_rounded),
                   onPressed: () {
                     _handleMessage(textEditingController.text, context);
                     context.read<ChatBloc>().add(

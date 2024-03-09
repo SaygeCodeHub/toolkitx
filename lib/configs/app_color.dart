@@ -23,4 +23,8 @@ class AppColor {
   static const Color transparent = Color(0x00000000);
   static const Color paleGrey = Color(0xF5F5F5FF);
   static const Color pastelBlue = Color(0xFFE3F2FD);
+  static const Color pink = Color(0xFFE05383);
+  static const Color blue = Color(0xFF0074F9);
+  static const Color darkViolet = Color(0xFF8C02FA);
+  static const Color tintBlue = Color(0xFF00BEF7);
 }
