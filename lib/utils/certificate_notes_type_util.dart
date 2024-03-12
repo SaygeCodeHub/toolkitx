@@ -61,8 +61,8 @@ class CertificateNotesTypeUtil {
             },
             child: CustomTextButton(
                 onPressed: () {
-                  launchUrlString('${ApiConstants.baseDocUrl}$url',
-                      mode: LaunchMode.inAppBrowserView);
+                  // launchUrlString('${ApiConstants.baseDocUrl}$url',
+                  //     mode: LaunchMode.inAppBrowserView);
                 },
                 textValue: StringConstants.kOpenPPT),
           ),

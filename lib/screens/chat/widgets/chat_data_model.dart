@@ -10,7 +10,9 @@ class ChatData {
   String groupPurpose;
   List<Members> members;
   bool isGroup;
-  AttachementOptions? options;
+  MediaOptions? options;
+  MediaType? mediaType;
+  String fileName;
 
   ChatData(
       {this.employeeId = '',
@@ -20,8 +22,10 @@ class ChatData {
       this.groupId = 0,
       this.groupPurpose = '',
       List<Members>? members,
-      AttachementOptions? options,
-      this.isGroup = false})
+      MediaOptions? options,
+      this.isGroup = false,
+      this.fileName = '',
+      MediaType? mediaType})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -39,30 +43,56 @@ class ChatData {
     };
   }
 
-  List<AttachementOptions> attachementOptions() {
+  List<MediaOptions> mediaOptions() {
     return [
-      AttachementOptions(
+      MediaOptions(
           icon: Icons.camera_alt, optionName: 'Camera', color: AppColor.pink),
-      AttachementOptions(
+      MediaOptions(
           icon: Icons.folder, optionName: 'Gallery', color: AppColor.blue),
-      AttachementOptions(
+      MediaOptions(
           icon: Icons.file_copy,
           optionName: 'Document',
           color: AppColor.darkViolet),
-      AttachementOptions(
+      MediaOptions(
           icon: Icons.perm_contact_cal,
           optionName: 'Contact',
+          color: AppColor.tintBlue),
+      MediaOptions(
+          icon: Icons.image, optionName: 'Image', color: AppColor.tintBlue),
+      MediaOptions(
+          icon: Icons.video_call_outlined,
+          optionName: 'Video',
           color: AppColor.tintBlue)
+    ];
+  }
+
+  List<MediaType> mediaTypes() {
+    return [
+      MediaType(
+          icon: Icons.image, optionName: 'Image', color: AppColor.darkYellow),
+      MediaType(
+          icon: Icons.video_call_outlined,
+          optionName: 'Video',
+          color: AppColor.darkGreen)
     ];
   }
 }
 
-class AttachementOptions {
+class MediaType {
   IconData icon;
   String optionName;
   Color color;
 
-  AttachementOptions(
+  MediaType(
+      {required this.icon, required this.optionName, required this.color});
+}
+
+class MediaOptions {
+  IconData icon;
+  String optionName;
+  Color color;
+
+  MediaOptions(
       {required this.icon,
       required this.optionName,
       this.color = AppColor.deepBlue});
@@ -77,8 +107,8 @@ class Members {
   Members(
       {required this.id,
       required this.name,
-    required this.type,
-    required this.isOwner});
+      required this.type,
+      required this.isOwner});
 
   Map<String, dynamic> toMap() {
     return {"id": id, "type": type, "name": name, "isowner": isOwner};

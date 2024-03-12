@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -21,6 +23,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   final ChatData chatData = getIt<ChatData>();
   final List<Map<String, dynamic>> messagesList = [];
+  final ImagePicker _imagePicker = ImagePicker();
+  bool isCameraImage = false;
+  bool isCameraVideo = false;
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -42,6 +47,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<RebuildChatMessagingScreen>(_rebuildChatMessage);
     on<FetchChatsList>(_fetchChatsList);
     on<CreateChatGroup>(_createChatGroup);
+    on<PickMedia>(_pickMedia);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -107,7 +113,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ...employeeDetailsMap
       };
       chatDetailsMap['isReceiver'] = 0;
+      chatDetailsMap['messageType'] = event.sendMessageMap['mediaType'];
       await _databaseHelper.insertMessage(chatDetailsMap);
+      event.sendMessageMap['isMedia'] = false;
       add(RebuildChatMessagingScreen(employeeDetailsMap: event.sendMessageMap));
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
@@ -191,6 +199,58 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } catch (e) {
       emit(ChatGroupCannotCreate(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _pickMedia(PickMedia event, Emitter<ChatState> emit) async {
+    try {
+      Future<bool> handlePermission() async {
+        final permissionStatus = (isCameraImage == true)
+            ? await Permission.camera.request()
+            : await Permission.storage.request();
+        if (permissionStatus == PermissionStatus.denied) {
+          openAppSettings();
+        } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
+          // add state
+        }
+        return true;
+      }
+
+      final hasPermission = await handlePermission();
+      if (!hasPermission) {
+        return;
+      } else {
+        switch (event.mediaDetailsMap['mediaType']) {
+          case 'Image':
+            final pickedFile = await _imagePicker.pickImage(
+                source: (isCameraImage == true)
+                    ? ImageSource.camera
+                    : ImageSource.gallery,
+                imageQuality: 25);
+            if (pickedFile != null) {
+              chatData.fileName = pickedFile.path;
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
+            } else {
+              return;
+            }
+            break;
+          case 'Video':
+            final pickVideo = await _imagePicker.pickVideo(
+                source: (isCameraVideo == true)
+                    ? ImageSource.camera
+                    : ImageSource.gallery);
+            if (pickVideo != null) {
+              chatData.fileName = pickVideo.path;
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
+            } else {
+              return;
+            }
+        }
+      }
+    } catch (e) {
+      e.toString();
     }
   }
 }

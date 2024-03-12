@@ -47,7 +47,7 @@ class AllChatsScreen extends StatelessWidget {
                   return CustomCard(
                     child: ListTile(
                         onTap: () {
-                          ChatMessagingScreen.employeeDetailsMap = {
+                          ChatMessagingScreen.chatDetailsMap = {
                             "employee_name": snapshot.data![index].employeeName,
                             'employee_id': snapshot.data![index].employeeId,
                             'isGroup': snapshot.data![index].isGroup

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -116,7 +117,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false,
               create: (context) =>
-                  WifiConnectivityBloc()..add(ObserveNetwork())),
+              WifiConnectivityBloc()..add(ObserveNetwork())),
           BlocProvider(lazy: false, create: (context) => LanguageBloc()),
           BlocProvider(lazy: false, create: (context) => DateFormatBloc()),
           BlocProvider(lazy: false, create: (context) => HomeBloc()),
@@ -197,7 +198,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false,
               create: (context) =>
-                  OnBoardingBloc()..add(CheckClientSelected())),
+              OnBoardingBloc()..add(CheckClientSelected())),
           BlocProvider(lazy: false, create: (context) => SignInListBloc()),
           BlocProvider(
               lazy: false, create: (context) => SignInAssignToMeBloc()),
@@ -231,22 +232,22 @@ class MyApp extends StatelessWidget {
                 theme: appTheme,
                 home: BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
                     builder: (context, state) {
-                  return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
-                      builder: (context, state) {
-                    if (state is ClientSelected) {
-                      return const RootScreen(isFromClientList: false);
-                    } else if (state is LoggedIn) {
-                      return const ClientListScreen(isFromProfile: false);
-                    } else if (state is LanguageSelected) {
-                      return const SelectTimeZoneScreen();
-                    } else if (state is TimeZoneSelected) {
-                      return const SelectDateFormatScreen();
-                    } else if (state is DateFormatSelected) {
-                      return LoginScreen();
-                    } else {
-                      return const WelcomeScreen();
-                    }
-                  });
-                }))));
+                      return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
+                          builder: (context, state) {
+                            if (state is ClientSelected) {
+                              return const RootScreen(isFromClientList: false);
+                            } else if (state is LoggedIn) {
+                              return const ClientListScreen(isFromProfile: false);
+                            } else if (state is LanguageSelected) {
+                              return const SelectTimeZoneScreen();
+                            } else if (state is TimeZoneSelected) {
+                              return const SelectDateFormatScreen();
+                            } else if (state is DateFormatSelected) {
+                              return LoginScreen();
+                            } else {
+                              return const WelcomeScreen();
+                            }
+                          });
+                    }))));
   }
 }

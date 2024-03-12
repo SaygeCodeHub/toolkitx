@@ -107,7 +107,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                                   }, chatData: chatData)
                                 : IconButton(
                                     onPressed: () {
-                                      ChatMessagingScreen.employeeDetailsMap = {
+                                      ChatMessagingScreen.chatDetailsMap = {
                                         "employee_name": datum.name,
                                         'employee_id': datum.id,
                                         'employee_type': datum.type

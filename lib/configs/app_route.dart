@@ -553,7 +553,7 @@ class AppRoutes {
       case ExpenseRejectScreen.routeName:
         return _createRoute(const ExpenseRejectScreen());
       case ChatMessagingScreen.routeName:
-        return _createRoute(ChatMessagingScreen());
+        return _createRoute(const ChatMessagingScreen());
       case AllChatsScreen.routeName:
         return _createRoute(const AllChatsScreen());
       default:

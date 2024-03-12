@@ -36,7 +36,8 @@ class DatabaseHelper {
             msg_status TEXT DEFAULT '0',
             employee_name TEXT,
             employee_id TEXT,
-            isReceiver INTEGER DEFAULT 0
+            isReceiver INTEGER DEFAULT 0,
+            messageType TEXT
           )
         ''');
         await db.execute('''

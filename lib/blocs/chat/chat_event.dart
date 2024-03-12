@@ -17,3 +17,9 @@ class RebuildChatMessagingScreen extends ChatEvent {
 class FetchChatsList extends ChatEvent {}
 
 class CreateChatGroup extends ChatEvent {}
+
+class PickMedia extends ChatEvent {
+  final Map mediaDetailsMap;
+
+  PickMedia({required this.mediaDetailsMap});
+}
