@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -27,8 +25,6 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('Comments')),
       body: Padding(
@@ -54,34 +50,38 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                   fetchQualityManagementDetailsModel:
                       fetchQualityManagementDetailsModel,
                   imageIndex: imageIndex),
-              BlocListener<QualityManagementBloc, QualityManagementStates>(
-                  listener: (context, state) {
-                    if (state is QualityManagementSavingComments) {
-                      ProgressBar.show(context);
-                    } else if (state is QualityManagementCommentsSaved) {
-                      ProgressBar.dismiss(context);
-                      Navigator.pop(context);
-                      context.read<QualityManagementBloc>().add(
-                          FetchQualityManagementDetails(
-                              initialIndex: 0, qmId: state.qmId));
-                    } else if (state is QualityManagementCommentsNotSaved) {
-                      ProgressBar.dismiss(context);
-                      showCustomSnackBar(context, state.commentsNotSaved, '');
-                    }
-                  },
-                  child: PrimaryButton(
-                      onPressed: () {
-                        qmCommentsMap['status'] =
-                            fetchQualityManagementDetailsModel.data.nextStatus;
-                        context.read<QualityManagementBloc>().add(
-                            SaveQualityManagementComments(
-                                saveCommentsMap: qmCommentsMap));
-                      },
-                      textValue: StringConstants.kSave)),
             ],
           ),
         ),
       ),
+      bottomNavigationBar:
+          BlocListener<QualityManagementBloc, QualityManagementStates>(
+              listener: (context, state) {
+                if (state is QualityManagementSavingComments) {
+                  ProgressBar.show(context);
+                } else if (state is QualityManagementCommentsSaved) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  context.read<QualityManagementBloc>().add(
+                      FetchQualityManagementDetails(
+                          initialIndex: 0, qmId: state.qmId));
+                } else if (state is QualityManagementCommentsNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.commentsNotSaved, '');
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(xxTinierSpacing),
+                child: PrimaryButton(
+                    onPressed: () {
+                      qmCommentsMap['status'] =
+                          fetchQualityManagementDetailsModel.data.nextStatus;
+                      context.read<QualityManagementBloc>().add(
+                          SaveQualityManagementComments(
+                              saveCommentsMap: qmCommentsMap));
+                    },
+                    textValue: StringConstants.kSave),
+              )),
     );
   }
 }
