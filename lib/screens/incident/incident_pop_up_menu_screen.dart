@@ -4,6 +4,8 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/incident/incident_details_model.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
@@ -43,6 +45,8 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
+          context.read<ImagePickerBloc>().pickedImagesList.clear();
+          context.read<ImagePickerBloc>().add(PickImageInitial());
           if (value == DatabaseUtil.getText('AddComments')) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentAddCommentsScreen(
@@ -59,36 +63,48 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             Navigator.pushNamed(context, CategoryScreen.routeName);
           }
           if (value == DatabaseUtil.getText('Report')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('Acknowledge')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('DefineMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('ApproveMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('ImplementMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
                     incidentListDatum: incidentListDatum,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('Markasresolved')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentMarkAsResolvedScreen(
                     incidentListDatum: incidentListDatum,

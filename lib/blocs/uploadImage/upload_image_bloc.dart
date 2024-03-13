@@ -24,6 +24,7 @@ class UploadImageBloc extends Bloc<UploadImageEvent, UploadImageState> {
 
   FutureOr<void> _uploadImage(
       UploadImage event, Emitter<UploadImageState> emit) async {
+    emit(UploadingImage());
     try {
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
@@ -38,7 +39,8 @@ class UploadImageBloc extends Bloc<UploadImageEvent, UploadImageState> {
         }
         if (uploadPictureModel.data.isNotEmpty) {
           emit(ImageUploaded(images: uploadList));
-        } else {
+        }
+        else {
           emit(ImageCouldNotUpload(
               errorMessage: StringConstants.kCannotUploadImage));
         }
