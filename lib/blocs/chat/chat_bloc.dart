@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -91,7 +92,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": "",
-        "sid": "1",
+        "sid": "1", // Aditya add is here
         "stype": "1",
         "rid": (event.sendMessageMap['isGroup'] == true)
             ? groupId
@@ -104,6 +105,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "sid_2": 2,
         "stype_2": "3"
       };
+      print(
+          'send message map---->${jsonEncode(sendMessageMap)}'); // you can check the post map here.
       Map<String, dynamic> employeeDetailsMap = {
         "employee_name": event.sendMessageMap['employee_name'] ?? '',
         "employee_id": event.sendMessageMap['employee_id'] ?? ''

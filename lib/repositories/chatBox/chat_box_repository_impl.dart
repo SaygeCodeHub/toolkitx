@@ -17,7 +17,7 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   @override
   Future<SendMessageModel> sendMessage(Map sendMessageMap) async {
     final response = await DioClient()
-        .post("${ApiConstants.baseUrl}chat/sendmessage", sendMessageMap);
+        .post("${ApiConstants.baseUrl}chat/sendmessagenew", sendMessageMap);
     return SendMessageModel.fromJson(response);
   }
 
