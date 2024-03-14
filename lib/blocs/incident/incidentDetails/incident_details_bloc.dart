@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../data/cache/cache_keys.dart';
 import '../../../../data/cache/customer_cache.dart';
@@ -198,7 +197,6 @@ class IncidentDetailsBloc
       Map saveCommentMap = event.saveCommentsMap;
       if (saveCommentMap['comments'] == null ||
           saveCommentMap['comments'].isEmpty) {
-        log('here=============>');
         emit(IncidentCommentsNotSaved(
             commentsNotSaved: DatabaseUtil.getText('CommentsInsert')));
       } else {
@@ -210,7 +208,6 @@ class IncidentDetailsBloc
           "comments": saveCommentMap['comments'],
           "classification": saveCommentMap['classification'] ?? ''
         };
-        log('saveCommentsMap=================>$saveCommentsMap');
         SaveIncidentAndQMCommentsModel saveIncidentCommentsModel =
             await _incidentRepository.saveComments(saveCommentsMap);
         if (saveIncidentCommentsModel.status == 200) {
@@ -220,8 +217,7 @@ class IncidentDetailsBloc
           if (saveCommentMap['ImageString'] != null) {
             add(SaveIncidentCommentsFiles(saveCommentsMap: saveCommentMap));
           }
-        }
-        else {
+        } else {
           emit(IncidentCommentsNotSaved(
               commentsNotSaved:
                   DatabaseUtil.getText('some_unknown_error_please_try_again')));

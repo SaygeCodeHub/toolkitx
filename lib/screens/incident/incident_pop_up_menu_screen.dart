@@ -54,6 +54,8 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('EditIncident')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             CategoryScreen.addAndEditIncidentMap = incidentDetailsMap;
             IncidentContractorListTile.contractorName =
                 (incidentDetailsModel.data!.companyname == "null")

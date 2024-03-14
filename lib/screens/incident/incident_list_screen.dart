@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/incident/widgets/incident_list_subtitle.dart';
 import 'package:toolkit/screens/incident/widgets/incident_list_title.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_event.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_state.dart';
@@ -54,6 +56,8 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
         appBar: GenericAppBar(title: DatabaseUtil.getText('ReportanIncident')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              context.read<ImagePickerBloc>().pickedImagesList.clear();
+              context.read<ImagePickerBloc>().add(PickImageInitial());
               CategoryScreen.isFromEdit = false;
               CategoryScreen.addAndEditIncidentMap = {};
               Navigator.pushNamed(context, CategoryScreen.routeName);

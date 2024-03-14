@@ -59,8 +59,7 @@ class IncidentCommonCommentsSection extends StatelessWidget {
           const SizedBox(height: xxTinierSpacing),
           Text(StringConstants.kUploadPhoto,
               style: Theme.of(context).textTheme.small.copyWith(
-                  color: AppColor.black,
-                  fontWeight: FontWeight.w500)),
+                  color: AppColor.black, fontWeight: FontWeight.w500)),
           const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
             isUpload: true,

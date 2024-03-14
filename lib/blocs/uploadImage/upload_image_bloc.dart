@@ -39,8 +39,7 @@ class UploadImageBloc extends Bloc<UploadImageEvent, UploadImageState> {
         }
         if (uploadPictureModel.data.isNotEmpty) {
           emit(ImageUploaded(images: uploadList));
-        }
-        else {
+        } else {
           emit(ImageCouldNotUpload(
               errorMessage: StringConstants.kCannotUploadImage));
         }

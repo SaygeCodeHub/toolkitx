@@ -128,10 +128,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       UploadImageMenu(
                         isUpload: true,
                         onUploadImageResponse: (List uploadImageList) {
-                          addAndEditIncidentMap['filenames'] = uploadImageList
-                              .toString()
-                              .replaceAll("[", "")
-                              .replaceAll("]", "");
+                          addAndEditIncidentMap['filenames'] = uploadImageList;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
