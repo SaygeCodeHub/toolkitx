@@ -532,5 +532,7 @@ abstract class StringConstants {
       "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kPleaseScanStartLotoQR =
       "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kPleaseSelectAtle =
+      "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kOpenPPT = 'Open PPT';
 }

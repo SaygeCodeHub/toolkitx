@@ -4,7 +4,6 @@ import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_event.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_state.dart';
-
 import '../../../blocs/safetyNotice/safety_notice_bloc.dart';
 import '../../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../../blocs/safetyNotice/safety_notice_states.dart';
