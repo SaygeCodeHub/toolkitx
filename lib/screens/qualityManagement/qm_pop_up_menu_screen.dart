@@ -56,6 +56,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Edit')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             ReportNewQA.isFromEdit = true;
             ReportNewQA.reportAndEditQMMap = editQMDetailsMap;
             QualityManagementContractorListTile.contractorName =
