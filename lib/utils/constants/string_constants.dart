@@ -525,9 +525,14 @@ abstract class StringConstants {
   static const String kYouFailed = "You've Failed";
   static const String kYouPassed = "You've Passed";
   static const String kInvalidCode = "Invalid Code";
+  static const String kCannotUploadImage =
+      "There is an issue while uploading the image. Please try again!";
+  static const String kCannotPickImage = "Can't upload more that 6 images";
   static const String kPleaseScanRemoveLotoQR =
       "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kPleaseScanStartLotoQR =
+      "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kPleaseSelectAtle =
       "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kOpenPPT = 'Open PPT';
 }

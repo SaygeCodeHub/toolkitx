@@ -61,6 +61,7 @@ const double kElevationButtonWidth = 45.0;
 const double kFilterTags = 6;
 const double kCachedNetworkImageHeight = 30;
 const double kNetworkImageContainerTogether = 50;
+const double kUploadImageHeight = 80;
 const double kModuleCardMargin = 5;
 const double kModuleImagePadding = 15;
 const double kModulesBadgePadding = 55;
