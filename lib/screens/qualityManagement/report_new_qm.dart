@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/error_section.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/qualityManagement/qm_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
+import '../../blocs/safetyNotice/safety_notice_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
@@ -30,6 +34,8 @@ class ReportNewQA extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('qmid=================> ${context.read<QualityManagementBloc>().newQmId}');
+    (isFromEdit == false) ? reportAndEditQMMap.clear() : reportAndEditQMMap;
     context
         .read<QualityManagementBloc>()
         .add(FetchQualityManagementMaster(reportNewQAMap: reportAndEditQMMap));
@@ -148,16 +154,20 @@ class ReportNewQA extends StatelessWidget {
                                       .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
-                                editedImageList: reportAndEditQMMap['files']
-                                    .toString()
-                                    .split(","),
+                                editedImageList:
+                                    (reportAndEditQMMap['files'] == '' ||
+                                            reportAndEditQMMap['files'] == null)
+                                        ? context
+                                                .read<ImagePickerBloc>()
+                                                .pickedImagesList =
+                                            context
+                                                .read<SafetyNoticeBloc>()
+                                                .imagesList
+                                        : null,
                                 isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
-                                  reportAndEditQMMap['filenames'] =
-                                      uploadImageList
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
+                                  reportAndEditQMMap['files'] = uploadImageList;
+                                  log('files==================>${reportAndEditQMMap['files']}');
                                 },
                               ),
                               const SizedBox(height: xxTinySpacing),

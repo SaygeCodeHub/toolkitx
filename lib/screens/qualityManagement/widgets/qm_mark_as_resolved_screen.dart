@@ -6,7 +6,6 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
-import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../../blocs/qualityManagement/qm_bloc.dart';
 import '../../../blocs/qualityManagement/qm_events.dart';
 import '../../../blocs/qualityManagement/qm_states.dart';
@@ -31,8 +30,7 @@ class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    qmCommentsMap['status'] =
-        QualityManagementStatusEnum.resolved.value;
+    qmCommentsMap['status'] = QualityManagementStatusEnum.resolved.value;
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kResolve),
       body: Padding(
@@ -53,9 +51,8 @@ class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
                   },
                   qmCommentsMap: qmCommentsMap,
                   fetchQualityManagementDetailsModel:
-                  fetchQualityManagementDetailsModel,
+                      fetchQualityManagementDetailsModel,
                   imageIndex: imageIndex),
-
             ],
           ),
         ),
@@ -65,24 +62,26 @@ class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
         child: MultiBlocListener(
           listeners: [
             BlocListener<QualityManagementBloc, QualityManagementStates>(
-                listener: (context, state) {
-                  if (state is QualityManagementSavingComments) {
-                    ProgressBar.show(context);
-                  } else if (state is QualityManagementCommentsSaved) {
-                    ProgressBar.dismiss(context);
-                    Navigator.pop(context);
-                    context.read<QualityManagementBloc>().add(
-                        FetchQualityManagementDetails(
-                            initialIndex: 0, qmId: state.qmId));
-                  } else if (state is QualityManagementCommentsNotSaved) {
-                    ProgressBar.dismiss(context);
-                    showCustomSnackBar(context, state.commentsNotSaved, '');
-                  }
-                },),
+              listener: (context, state) {
+                if (state is QualityManagementSavingComments) {
+                  ProgressBar.show(context);
+                } else if (state is QualityManagementCommentsSaved) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  context.read<QualityManagementBloc>().add(
+                      FetchQualityManagementDetails(
+                          initialIndex: 0, qmId: state.qmId));
+                } else if (state is QualityManagementCommentsNotSaved) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.commentsNotSaved, '');
+                }
+              },
+            ),
             BlocListener<UploadImageBloc, UploadImageState>(
               listener: (context, state) {
                 if (state is UploadingImage) {
-                  GenericLoadingPopUp.show(context, StringConstants.kUploadFiles);
+                  GenericLoadingPopUp.show(
+                      context, StringConstants.kUploadFiles);
                 } else if (state is ImageUploaded) {
                   GenericLoadingPopUp.dismiss(context);
                   qmCommentsMap['ImageString'] = state.images
@@ -105,12 +104,14 @@ class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
           ],
           child: PrimaryButton(
               onPressed: () {
-                if (qmCommentsMap['filenames'] != null &&
+                if (context.read<ImagePickerBloc>().pickedImagesList.length !=
+                        context.read<ImagePickerBloc>().lengthOfImageList &&
+                    qmCommentsMap['filenames'] != null &&
                     qmCommentsMap['filenames'].isNotEmpty) {
                   context.read<UploadImageBloc>().add(UploadImage(
                       images: qmCommentsMap['filenames'],
                       imageLength:
-                      context.read<ImagePickerBloc>().lengthOfImageList));
+                          context.read<ImagePickerBloc>().lengthOfImageList));
                 } else {
                   context.read<QualityManagementBloc>().add(
                       SaveQualityManagementComments(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
 import 'package:toolkit/data/models/pdf_generation_model.dart';
@@ -28,6 +30,7 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
       String qmId, String hashCode, String userId, String role) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}qaincident/getincident?incidentid=$qmId&hashcode=$hashCode&userid=$userId&role=$role");
+    log("${ApiConstants.baseUrl}qaincident/getincident?incidentid=$qmId&hashcode=$hashCode&userid=$userId&role=$role");
     return FetchQualityManagementDetailsModel.fromJson(response);
   }
 

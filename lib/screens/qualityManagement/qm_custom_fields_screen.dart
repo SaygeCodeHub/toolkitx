@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
@@ -123,6 +125,7 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  Navigator.pop(context);
                   context.read<QualityManagementBloc>().add(
                       FetchQualityManagementDetails(
                           initialIndex: 0,
@@ -143,7 +146,9 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                       context.read<QualityManagementBloc>().add(
                           SaveReportNewQualityManagement(
                               role: '', reportNewQAMap: reportNewQAMap));
+                      log('addMap==========>$reportNewQAMap');
                     } else {
+                      log('editMap==========>$reportNewQAMap');
                       reportNewQAMap['customfields'] = customInfoFieldList;
                       context.read<QualityManagementBloc>().add(
                           UpdateQualityManagementDetails(

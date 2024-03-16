@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
@@ -18,7 +19,6 @@ import '../../data/models/qualityManagement/fetch_qm_list_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_master_model.dart';
 import '../../data/models/qualityManagement/fetch_qm_roles_model.dart';
 import '../../data/models/qualityManagement/save_new_qm_reporting_model.dart';
-import '../../data/models/qualityManagement/save_qm_photos_model.dart';
 import '../../data/models/qualityManagement/update_quality_management_details_model.dart';
 import '../../utils/database_utils.dart';
 
@@ -270,7 +270,8 @@ class QualityManagementBloc
               saveIncidentAndQMCommentsFilesModel:
                   saveIncidentAndQMCommentsFilesModel,
               qmId: encryptQmId));
-          if (saveCommentMap['ImageString'] != null) {
+          log('here==========>');
+          if (saveCommentMap['files'] != null) {
             add(SaveQualityManagementCommentsFiles(
                 saveCommentsMap: saveCommentMap,
                 saveIncidentAndQMCommentsModel:
@@ -297,9 +298,10 @@ class QualityManagementBloc
         "userid": userid,
         "incidentid": encryptQmId,
         "commentid": commentId,
-        "filenames": saveFilesMap['ImageString'],
+        "filenames": saveFilesMap['files'],
         "hashcode": hashCode,
       };
+
       SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel =
           await _qualityManagementRepository
               .saveCommentsFile(saveCommentsFilesMap);
@@ -526,7 +528,7 @@ class QualityManagementBloc
             qualityManagementNotSavedMessage:
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
-      (reportNewQAMap['filenames'] != null)
+      (reportNewQAMap['imageString'] != null)
           ? add(SaveReportNewQualityManagementPhotos(
               reportNewQAMap: reportNewQAMap))
           : null;
@@ -548,14 +550,15 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveQMPhotosMap = {
         "incidentid": newQmId,
-        "filenames": reportNewQAMap['filenames'],
+        "filenames": reportNewQAMap['imageString'],
         "hashcode": hashCode
       };
-      SaveQualityManagementPhotos saveQualityManagementPhotos =
-          await _qualityManagementRepository
-              .saveQualityManagementPhotos(saveQMPhotosMap);
-      emit(ReportNewQualityManagementPhotoSaved(
-          saveQualityManagementPhotos: saveQualityManagementPhotos));
+      log('saveQMPhotosMap===============>$saveQMPhotosMap');
+      // SaveQualityManagementPhotos saveQualityManagementPhotos =
+      //     await _qualityManagementRepository
+      //         .saveQualityManagementPhotos(saveQMPhotosMap);
+      // emit(ReportNewQualityManagementPhotoSaved(
+      //     saveQualityManagementPhotos: saveQualityManagementPhotos));
     } catch (e) {
       emit(ReportNewQualityManagementNotSaved(
           qualityManagementNotSavedMessage: e.toString()));
@@ -588,7 +591,7 @@ class QualityManagementBloc
           await _qualityManagementRepository
               .updateQualityManagementDetails(updateQMDetailsMap);
       if (updateQualityManagementDetailsModel.status == 200) {
-        (event.editQMDetailsMap['filenames'] != null)
+        (event.editQMDetailsMap['imageString'] != null)
             ? add(SaveReportNewQualityManagementPhotos(
                 reportNewQAMap: event.editQMDetailsMap))
             : null;
