@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
@@ -11,5 +12,12 @@ class TicketsRepositoryImpl extends TicketsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}ticket/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter");
     return FetchTicketsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchTicketMasterModel> fetchTicketMaster(String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}ticket/getmaster?hashcode=$hashCode");
+    return FetchTicketMasterModel.fromJson(response);
   }
 }
