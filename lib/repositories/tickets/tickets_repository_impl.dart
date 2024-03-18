@@ -16,8 +16,8 @@ class TicketsRepositoryImpl extends TicketsRepository {
 
   @override
   Future<FetchTicketMasterModel> fetchTicketMaster(String hashCode) async {
-    final response = await DioClient().get(
-        "${ApiConstants.baseUrl}ticket/getmaster?hashcode=$hashCode");
+    final response = await DioClient()
+        .get("${ApiConstants.baseUrl}ticket/getmaster?hashcode=$hashCode");
     return FetchTicketMasterModel.fromJson(response);
   }
 }

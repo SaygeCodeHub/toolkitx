@@ -42,7 +42,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     }
   }
 
-  Future<FutureOr<void>> _fetchTicketMaster(FetchTicketMaster event, Emitter<TicketsStates> emit) async {
+  Future<FutureOr<void>> _fetchTicketMaster(
+      FetchTicketMaster event, Emitter<TicketsStates> emit) async {
     emit(TicketMasterFetching());
     try {
       String? hashCode =
@@ -50,9 +51,11 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       FetchTicketMasterModel fetchTicketMasterModel =
           await _ticketsRepository.fetchTicketMaster(hashCode);
       if (fetchTicketMasterModel.status == 200) {
-        emit(TicketMasterFetched(fetchTicketMasterModel: fetchTicketMasterModel));
+        emit(TicketMasterFetched(
+            fetchTicketMasterModel: fetchTicketMasterModel));
       } else {
-        emit(TicketMasterNotFetched(errorMessage: fetchTicketMasterModel.message));
+        emit(TicketMasterNotFetched(
+            errorMessage: fetchTicketMasterModel.message));
       }
     } catch (e) {
       emit(TicketMasterNotFetched(errorMessage: e.toString()));
