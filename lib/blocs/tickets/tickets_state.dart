@@ -17,3 +17,17 @@ class TicketsNotFetched extends TicketsStates {
 
   TicketsNotFetched({required this.errorMessage});
 }
+
+class TicketMasterFetching extends TicketsStates {}
+
+class TicketMasterFetched extends TicketsStates {
+  final FetchTicketMasterModel fetchTicketMasterModel;
+
+  TicketMasterFetched({required this.fetchTicketMasterModel});
+}
+
+class TicketMasterNotFetched extends TicketsStates {
+  final String errorMessage;
+
+  TicketMasterNotFetched({required this.errorMessage});
+}

@@ -7,3 +7,5 @@ class FetchTickets extends TicketsEvents {
 
   FetchTickets({required this.pageNo});
 }
+
+class FetchTicketMaster extends TicketsEvents {}
