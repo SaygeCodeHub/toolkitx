@@ -35,7 +35,8 @@ class TicketListScreen extends StatelessWidget {
                 return Column(children: [
                   CustomIconButtonRow(
                       primaryOnPress: () {
-                        Navigator.pushNamed(context, TicketsFilterScreen.routeName);
+                        Navigator.pushNamed(
+                            context, TicketsFilterScreen.routeName);
                       },
                       secondaryVisible: false,
                       isEnabled: true,

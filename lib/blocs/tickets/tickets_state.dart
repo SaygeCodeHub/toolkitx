@@ -31,3 +31,25 @@ class TicketMasterNotFetched extends TicketsStates {
 
   TicketMasterNotFetched({required this.errorMessage});
 }
+
+class TicketStatusFilterSelected extends TicketsStates {
+  final String selectedIndex;
+  final bool selected;
+
+  TicketStatusFilterSelected(
+      {required this.selected, required this.selectedIndex});
+}
+
+class TicketBugFilterSelected extends TicketsStates {
+  final String selectedIndex;
+  final bool selected;
+
+  TicketBugFilterSelected(
+      {required this.selected, required this.selectedIndex});
+}
+
+class TicketApplicationFilterSelected extends TicketsStates {
+  final int selectApplicationName;
+
+  TicketApplicationFilterSelected({required this.selectApplicationName});
+}

@@ -22,7 +22,12 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
   TicketsBloc() : super(TicketsInitial()) {
     on<FetchTickets>(_fetchTickets);
     on<FetchTicketMaster>(_fetchTicketMaster);
+    on<SelectTicketStatusFilter>(_selectTicketStatusFilter);
+    on<SelectTicketBugFilter>(_selectTicketBugFilter);
+    on<SelectTicketApplication>(_selectTicketApplication);
   }
+
+  String selectApplicationName = '';
 
   Future<FutureOr<void>> _fetchTickets(
       FetchTickets event, Emitter<TicketsStates> emit) async {
@@ -60,5 +65,23 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     } catch (e) {
       emit(TicketMasterNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectTicketStatusFilter(
+      SelectTicketStatusFilter event, Emitter<TicketsStates> emit) {
+    emit(TicketStatusFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _selectTicketBugFilter(
+      SelectTicketBugFilter event, Emitter<TicketsStates> emit) {
+    emit(TicketBugFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _selectTicketApplication(
+      SelectTicketApplication event, Emitter<TicketsStates> emit) {
+    emit(TicketApplicationFilterSelected(
+        selectApplicationName: event.selectApplicationName));
   }
 }

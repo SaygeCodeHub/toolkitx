@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_application_filter.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_bug_filter.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_status_filter.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -24,42 +27,44 @@ class TicketsFilterScreen extends StatelessWidget {
             left: leftRightMargin,
             right: leftRightMargin,
             top: xxTinierSpacing),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(DatabaseUtil.getText('ticket_ticketno'),
-              style: Theme.of(context).textTheme.small.copyWith(
-                  fontWeight: FontWeight.w500, color: AppColor.black)),
-          const SizedBox(height: tiniestSpacing),
-          TextFieldWidget(
-            onTextFieldChanged: (textField) {
-              ticketsFilterMap[''] = textField;
-            },
-          ),
-          const SizedBox(height: xxTinierSpacing),
-          Text(DatabaseUtil.getText('Keywords'),
-              style: Theme.of(context).textTheme.small.copyWith(
-                  fontWeight: FontWeight.w500, color: AppColor.black)),
-          const SizedBox(height: tiniestSpacing),
-          TextFieldWidget(
-            onTextFieldChanged: (textField) {
-              ticketsFilterMap[''] = textField;
-            },
-          ),
-          const SizedBox(height: xxTinierSpacing),
-          Text(DatabaseUtil.getText('ticket_application'),
-              style: Theme.of(context).textTheme.small.copyWith(
-                  fontWeight: FontWeight.w500, color: AppColor.black)),
-          const SizedBox(height: tiniestSpacing),
-          const SizedBox(height: xxTinierSpacing),
-          Text(DatabaseUtil.getText('Status'),
-              style: Theme.of(context).textTheme.small.copyWith(
-                  fontWeight: FontWeight.w500, color: AppColor.black)),
-          const SizedBox(height: tiniestSpacing),
-          const SizedBox(height: xxTinierSpacing),
-          Text(DatabaseUtil.getText('ticket_bug'),
-              style: Theme.of(context).textTheme.small.copyWith(
-                  fontWeight: FontWeight.w500, color: AppColor.black)),
-          const SizedBox(height: tiniestSpacing),
-        ]),
+        child: SingleChildScrollView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(DatabaseUtil.getText('ticket_ticketno'),
+                style: Theme.of(context).textTheme.small.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
+            const SizedBox(height: tiniestSpacing),
+            TextFieldWidget(
+              onTextFieldChanged: (textField) {
+                ticketsFilterMap['ticket_no'] = textField;
+              },
+            ),
+            const SizedBox(height: xxTinierSpacing),
+            Text(DatabaseUtil.getText('Keywords'),
+                style: Theme.of(context).textTheme.small.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
+            const SizedBox(height: tiniestSpacing),
+            TextFieldWidget(
+              onTextFieldChanged: (textField) {
+                ticketsFilterMap['header'] = textField;
+              },
+            ),
+            const SizedBox(height: xxTinierSpacing),
+            TicketApplicationFilter(ticketsFilterMap: ticketsFilterMap),
+            const SizedBox(height: xxTinierSpacing),
+            Text(DatabaseUtil.getText('Status'),
+                style: Theme.of(context).textTheme.small.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
+            const SizedBox(height: tiniestSpacing),
+            TicketStatusFilter(ticketsFilterMap: ticketsFilterMap),
+            const SizedBox(height: xxTinierSpacing),
+            Text(DatabaseUtil.getText('ticket_bug'),
+                style: Theme.of(context).textTheme.small.copyWith(
+                    fontWeight: FontWeight.w500, color: AppColor.black)),
+            const SizedBox(height: tiniestSpacing),
+            TicketBugFilter(ticketsFilterMap: ticketsFilterMap),
+          ]),
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
