@@ -11,6 +11,7 @@ import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
@@ -546,6 +547,8 @@ class AppRoutes {
         return _createRoute(const OpenDocumentForReviewScreen());
       case ExpenseRejectScreen.routeName:
         return _createRoute(const ExpenseRejectScreen());
+      case TicketListScreen.routeName:
+        return _createRoute(const TicketListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
