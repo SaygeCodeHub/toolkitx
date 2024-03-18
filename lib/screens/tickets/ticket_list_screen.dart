@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import 'package:toolkit/screens/tickets/tickets_filter_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_list_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -33,7 +34,9 @@ class TicketListScreen extends StatelessWidget {
                 var data = state.fetchTicketsModel.data;
                 return Column(children: [
                   CustomIconButtonRow(
-                      primaryOnPress: () {},
+                      primaryOnPress: () {
+                        Navigator.pushNamed(context, TicketsFilterScreen.routeName);
+                      },
                       secondaryVisible: false,
                       isEnabled: true,
                       secondaryOnPress: () {},

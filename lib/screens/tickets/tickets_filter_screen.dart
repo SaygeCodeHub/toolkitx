@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/equipmentTraceability/search_equipment_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -12,11 +9,11 @@ import 'package:toolkit/widgets/primary_button.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 
-class SearchEquipmentFilterScreen extends StatelessWidget {
-  static const routeName = 'SearchEquipmentFilterScreen';
-  static Map searchEquipmentFilterMap = {};
+class TicketsFilterScreen extends StatelessWidget {
+  static const routeName = 'TicketsFilterScreen';
+  static Map ticketsFilterMap = {};
 
-  const SearchEquipmentFilterScreen({super.key});
+  const TicketsFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,40 +25,46 @@ class SearchEquipmentFilterScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(StringConstants.kEquipmentName,
+          Text(DatabaseUtil.getText('ticket_ticketno'),
               style: Theme.of(context).textTheme.small.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           const SizedBox(height: tiniestSpacing),
           TextFieldWidget(
             onTextFieldChanged: (textField) {
-              searchEquipmentFilterMap['equname'] = textField;
+              ticketsFilterMap[''] = textField;
             },
           ),
           const SizedBox(height: xxTinierSpacing),
-          Text(StringConstants.kEquipmentCode,
+          Text(DatabaseUtil.getText('Keywords'),
               style: Theme.of(context).textTheme.small.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           const SizedBox(height: tiniestSpacing),
           TextFieldWidget(
             onTextFieldChanged: (textField) {
-              searchEquipmentFilterMap['equcode'] = textField;
+              ticketsFilterMap[''] = textField;
             },
-          )
+          ),
+          const SizedBox(height: xxTinierSpacing),
+          Text(DatabaseUtil.getText('ticket_application'),
+              style: Theme.of(context).textTheme.small.copyWith(
+                  fontWeight: FontWeight.w500, color: AppColor.black)),
+          const SizedBox(height: tiniestSpacing),
+          const SizedBox(height: xxTinierSpacing),
+          Text(DatabaseUtil.getText('Status'),
+              style: Theme.of(context).textTheme.small.copyWith(
+                  fontWeight: FontWeight.w500, color: AppColor.black)),
+          const SizedBox(height: tiniestSpacing),
+          const SizedBox(height: xxTinierSpacing),
+          Text(DatabaseUtil.getText('ticket_bug'),
+              style: Theme.of(context).textTheme.small.copyWith(
+                  fontWeight: FontWeight.w500, color: AppColor.black)),
+          const SizedBox(height: tiniestSpacing),
         ]),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: PrimaryButton(
-            onPressed: () {
-              context.read<EquipmentTraceabilityBloc>().add(
-                  ApplySearchEquipmentFilter(
-                      searchEquipmentFilterMap: searchEquipmentFilterMap));
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, SearchEquipmentListScreen.routeName,
-                  arguments: false);
-            },
-            textValue: StringConstants.kApply),
+        child:
+            PrimaryButton(onPressed: () {}, textValue: StringConstants.kApply),
       ),
     );
   }

@@ -139,6 +139,7 @@ import '../screens/safetyNotice/safety_notice_history_screen.dart';
 import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
+import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -549,6 +550,8 @@ class AppRoutes {
         return _createRoute(const ExpenseRejectScreen());
       case TicketListScreen.routeName:
         return _createRoute(const TicketListScreen());
+      case TicketsFilterScreen.routeName:
+        return _createRoute(const TicketsFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
