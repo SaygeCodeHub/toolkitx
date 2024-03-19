@@ -550,7 +550,8 @@ class AppRoutes {
       case ExpenseRejectScreen.routeName:
         return _createRoute(const ExpenseRejectScreen());
       case TicketListScreen.routeName:
-        return _createRoute(const TicketListScreen());
+        return _createRoute(
+            TicketListScreen(isFromHome: settings.arguments as bool));
       case TicketsFilterScreen.routeName:
         return _createRoute(const TicketsFilterScreen());
       case TicketApplicationFilterList.routeName:

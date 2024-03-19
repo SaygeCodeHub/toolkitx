@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
@@ -25,9 +26,14 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SelectTicketStatusFilter>(_selectTicketStatusFilter);
     on<SelectTicketBugFilter>(_selectTicketBugFilter);
     on<SelectTicketApplication>(_selectTicketApplication);
+    on<ApplyTicketsFilter>(_applyTicketsFilter);
+    on<ClearTicketsFilter>(_clearTicketsFilterFilter);
   }
 
   String selectApplicationName = '';
+  bool hasReachedMax = false;
+  List<TicketListDatum> ticketDatum = [];
+  Map filters = {};
 
   Future<FutureOr<void>> _fetchTickets(
       FetchTickets event, Emitter<TicketsStates> emit) async {
@@ -35,12 +41,24 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchTicketsModel fetchTicketsModel =
-          await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '');
-      if (fetchTicketsModel.status == 200) {
-        emit(TicketsFetched(fetchTicketsModel: fetchTicketsModel));
+      if (event.isFromHome == true) {
+        FetchTicketsModel fetchTicketsModel =
+            await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '');
+        ticketDatum.addAll(fetchTicketsModel.data);
+        hasReachedMax = fetchTicketsModel.data.isEmpty;
+        emit(TicketsFetched(
+            ticketData: ticketDatum,
+            filterMap: {},
+            fetchTicketsModel: fetchTicketsModel));
       } else {
-        emit(TicketsNotFetched(errorMessage: fetchTicketsModel.message));
+        FetchTicketsModel fetchTicketsModel = await _ticketsRepository
+            .fetchTickets(event.pageNo, hashCode, jsonEncode(filters));
+        ticketDatum.addAll((fetchTicketsModel.data));
+        hasReachedMax = fetchTicketsModel.data.isEmpty;
+        emit(TicketsFetched(
+            ticketData: ticketDatum,
+            filterMap: filters,
+            fetchTicketsModel: fetchTicketsModel));
       }
     } catch (e) {
       emit(TicketsNotFetched(errorMessage: e.toString()));
@@ -83,5 +101,15 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       SelectTicketApplication event, Emitter<TicketsStates> emit) {
     emit(TicketApplicationFilterSelected(
         selectApplicationName: event.selectApplicationName));
+  }
+
+  FutureOr<void> _applyTicketsFilter(
+      ApplyTicketsFilter event, Emitter<TicketsStates> emit) {
+    filters = event.ticketsFilterMap;
+  }
+
+  FutureOr<void> _clearTicketsFilterFilter(
+      ClearTicketsFilter event, Emitter<TicketsStates> emit) {
+    filters = {};
   }
 }

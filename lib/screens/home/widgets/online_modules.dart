@@ -239,7 +239,8 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
         break;
       case 'tickets':
-        Navigator.pushNamed(context, TicketListScreen.routeName);
+        Navigator.pushNamed(context, TicketListScreen.routeName,
+            arguments: true);
         break;
     }
   }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_application_filter.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_bug_filter.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_status_filter.dart';
@@ -68,8 +71,17 @@ class TicketsFilterScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child:
-            PrimaryButton(onPressed: () {}, textValue: StringConstants.kApply),
+        child: PrimaryButton(
+            onPressed: () {
+              context
+                  .read<TicketsBloc>()
+                  .add(ApplyTicketsFilter(ticketsFilterMap: ticketsFilterMap));
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, TicketListScreen.routeName,
+                  arguments: false);
+            },
+            textValue: StringConstants.kApply),
       ),
     );
   }

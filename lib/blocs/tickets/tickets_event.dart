@@ -4,8 +4,9 @@ abstract class TicketsEvents {}
 
 class FetchTickets extends TicketsEvents {
   final int pageNo;
+  final bool isFromHome;
 
-  FetchTickets({required this.pageNo});
+  FetchTickets({required this.isFromHome, required this.pageNo});
 }
 
 class FetchTicketMaster extends TicketsEvents {}
@@ -30,3 +31,11 @@ class SelectTicketApplication extends TicketsEvents {
 
   SelectTicketApplication({required this.selectApplicationName});
 }
+
+class ApplyTicketsFilter extends TicketsEvents {
+  final Map ticketsFilterMap;
+
+  ApplyTicketsFilter({required this.ticketsFilterMap});
+}
+
+class ClearTicketsFilter extends TicketsEvents {}
