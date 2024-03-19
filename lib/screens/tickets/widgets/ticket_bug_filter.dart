@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 
 import '../../../configs/app_dimensions.dart';
-import '../../../data/enums/ticket_Bug_enum.dart';
+import '../../../data/enums/ticket_bug_enum.dart';
 import '../../../widgets/custom_choice_chip.dart';
 
 class TicketBugFilter extends StatelessWidget {
