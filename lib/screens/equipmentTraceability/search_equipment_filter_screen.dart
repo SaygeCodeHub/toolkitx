@@ -28,7 +28,7 @@ class SearchEquipmentFilterScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Equipment Name',
+          Text(StringConstants.kEquipmentName,
               style: Theme.of(context).textTheme.small.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           const SizedBox(height: tiniestSpacing),
@@ -38,7 +38,7 @@ class SearchEquipmentFilterScreen extends StatelessWidget {
             },
           ),
           const SizedBox(height: xxTinierSpacing),
-          Text('Equipment Code',
+          Text(StringConstants.kEquipmentCode,
               style: Theme.of(context).textTheme.small.copyWith(
                   fontWeight: FontWeight.w500, color: AppColor.black)),
           const SizedBox(height: tiniestSpacing),
