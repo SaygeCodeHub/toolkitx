@@ -11,6 +11,7 @@ import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/expense/fetch_expense_details_model.dart';
@@ -557,6 +558,9 @@ class AppRoutes {
       case TicketApplicationFilterList.routeName:
         return _createRoute(TicketApplicationFilterList(
             selectApplicationName: settings.arguments.toString()));
+      case TicketDetailsScreen.routeName:
+        return _createRoute(
+            TicketDetailsScreen(ticketId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

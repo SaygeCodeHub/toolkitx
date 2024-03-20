@@ -58,3 +58,19 @@ class TicketApplicationFilterSelected extends TicketsStates {
 
   TicketApplicationFilterSelected({required this.selectApplicationName});
 }
+
+class TicketDetailsFetching extends TicketsStates {}
+
+class TicketDetailsFetched extends TicketsStates {
+  final FetchTicketDetailsModel fetchTicketDetailsModel;
+  final List ticketPopUpMenu;
+
+  TicketDetailsFetched(
+      {required this.fetchTicketDetailsModel, required this.ticketPopUpMenu});
+}
+
+class TicketDetailsNotFetched extends TicketsStates {
+  final String errorMessage;
+
+  TicketDetailsNotFetched({required this.errorMessage});
+}

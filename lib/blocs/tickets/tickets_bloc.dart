@@ -8,7 +8,9 @@ import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/tickets/fetch_ticket_details_model.dart';
 import '../../di/app_module.dart';
+import '../../utils/database_utils.dart';
 
 part 'tickets_event.dart';
 
@@ -28,12 +30,14 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SelectTicketApplication>(_selectTicketApplication);
     on<ApplyTicketsFilter>(_applyTicketsFilter);
     on<ClearTicketsFilter>(_clearTicketsFilterFilter);
+    on<FetchTicketDetails>(_fetchTicketDetails);
   }
 
   String selectApplicationName = '';
   bool hasReachedMax = false;
   List<TicketListDatum> ticketDatum = [];
   Map filters = {};
+  int ticketTabIndex = 0;
 
   Future<FutureOr<void>> _fetchTickets(
       FetchTickets event, Emitter<TicketsStates> emit) async {
@@ -111,5 +115,62 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
   FutureOr<void> _clearTicketsFilterFilter(
       ClearTicketsFilter event, Emitter<TicketsStates> emit) {
     filters = {};
+  }
+
+  Future<FutureOr<void>> _fetchTicketDetails(
+      FetchTicketDetails event, Emitter<TicketsStates> emit) async {
+    ticketTabIndex = event.ticketTabIndex;
+    emit(TicketDetailsFetching());
+    try {
+      List popUpMenuItemsList = [
+        DatabaseUtil.getText('AddComments'),
+        DatabaseUtil.getText('AddDocuments'),
+        DatabaseUtil.getText('ticket_close'),
+        DatabaseUtil.getText('Cancel'),
+      ];
+
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
+          .fetchTicketDetails(hashCode, event.ticketId, userId);
+      if (fetchTicketDetailsModel.data.candeferred == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
+      }
+      if (fetchTicketDetailsModel.data.canestimateedt == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_estimateedt'));
+      }
+      if (fetchTicketDetailsModel.data.candevelopment == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_development'));
+      }
+      if (fetchTicketDetailsModel.data.canapprovedfordevelopment == '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_approvefordevelopment'));
+      }
+      if (fetchTicketDetailsModel.data.canwaitingfordevelopmentapproval ==
+          '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
+      }
+      if (fetchTicketDetailsModel.data.cantesting == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
+      }
+      if (fetchTicketDetailsModel.data.canrolledout == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
+      }
+
+      if (fetchTicketDetailsModel.status == 200) {
+        emit(TicketDetailsFetched(
+            fetchTicketDetailsModel: fetchTicketDetailsModel,
+            ticketPopUpMenu: popUpMenuItemsList));
+      } else {
+        emit(TicketDetailsNotFetched(
+            errorMessage: fetchTicketDetailsModel.message));
+      }
+    } catch (e) {
+      emit(TicketDetailsNotFetched(errorMessage: e.toString()));
+    }
   }
 }
