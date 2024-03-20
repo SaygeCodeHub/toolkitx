@@ -121,54 +121,56 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       FetchTicketDetails event, Emitter<TicketsStates> emit) async {
     ticketTabIndex = event.ticketTabIndex;
     emit(TicketDetailsFetching());
-    // try {
-    List popUpMenuItemsList = [
-      DatabaseUtil.getText('AddComments'),
-      DatabaseUtil.getText('AddDocuments'),
-      DatabaseUtil.getText('ticket_close'),
-      DatabaseUtil.getText('Cancel'),
-    ];
+    try {
+      List popUpMenuItemsList = [
+        DatabaseUtil.getText('AddComments'),
+        DatabaseUtil.getText('AddDocuments'),
+        DatabaseUtil.getText('ticket_close'),
+        DatabaseUtil.getText('Cancel'),
+      ];
 
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-    FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
-        .fetchTicketDetails(hashCode, event.ticketId, userId);
-    if (fetchTicketDetailsModel.data.candeferred == '1') {
-      popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
-    }
-    if (fetchTicketDetailsModel.data.canestimateedt == '1') {
-      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_estimateedt'));
-    }
-    if (fetchTicketDetailsModel.data.candevelopment == '1') {
-      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_development'));
-    }
-    if (fetchTicketDetailsModel.data.canapprovedfordevelopment == '1') {
-      popUpMenuItemsList.insert(
-          3, DatabaseUtil.getText('ticket_approvefordevelopment'));
-    }
-    if (fetchTicketDetailsModel.data.canwaitingfordevelopmentapproval == '1') {
-      popUpMenuItemsList.insert(
-          3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
-    }
-    if (fetchTicketDetailsModel.data.cantesting == '1') {
-      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
-    }
-    if (fetchTicketDetailsModel.data.canrolledout == '1') {
-      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
-    }
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
+          .fetchTicketDetails(hashCode, event.ticketId, userId);
+      if (fetchTicketDetailsModel.data.candeferred == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
+      }
+      if (fetchTicketDetailsModel.data.canestimateedt == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_estimateedt'));
+      }
+      if (fetchTicketDetailsModel.data.candevelopment == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_development'));
+      }
+      if (fetchTicketDetailsModel.data.canapprovedfordevelopment == '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_approvefordevelopment'));
+      }
+      if (fetchTicketDetailsModel.data.canwaitingfordevelopmentapproval ==
+          '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
+      }
+      if (fetchTicketDetailsModel.data.cantesting == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
+      }
+      if (fetchTicketDetailsModel.data.canrolledout == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
+      }
 
-    if (fetchTicketDetailsModel.status == 200) {
-      emit(TicketDetailsFetched(
-          fetchTicketDetailsModel: fetchTicketDetailsModel,
-          ticketPopUpMenu: popUpMenuItemsList));
+      if (fetchTicketDetailsModel.status == 200) {
+        emit(TicketDetailsFetched(
+            fetchTicketDetailsModel: fetchTicketDetailsModel,
+            ticketPopUpMenu: popUpMenuItemsList));
+      } else {
+        emit(TicketDetailsNotFetched(
+            errorMessage: fetchTicketDetailsModel.message));
+      }
+    } catch (e) {
+      emit(TicketDetailsNotFetched(errorMessage: e.toString()));
     }
-    //   else {
-    //     emit(TicketDetailsNotFetched(
-    //         errorMessage: fetchTicketDetailsModel.message));
-    //   }
-    // } catch (e) {
-    //   emit(TicketDetailsNotFetched(errorMessage: e.toString()));
-    // }
   }
 }
