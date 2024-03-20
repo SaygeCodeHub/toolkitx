@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
@@ -26,6 +27,10 @@ class TicketListBody extends StatelessWidget {
                 child: Padding(
               padding: const EdgeInsets.symmetric(vertical: xxTinierSpacing),
               child: ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, TicketDetailsScreen.routeName,
+                      arguments: ticketListDatum[index].id);
+                },
                 title: Text(ticketListDatum[index].ticketNo,
                     style: Theme.of(context).textTheme.small.copyWith(
                         fontWeight: FontWeight.w600, color: AppColor.black)),

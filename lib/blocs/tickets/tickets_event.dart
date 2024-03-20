@@ -39,3 +39,10 @@ class ApplyTicketsFilter extends TicketsEvents {
 }
 
 class ClearTicketsFilter extends TicketsEvents {}
+
+class FetchTicketDetails extends TicketsEvents {
+  final String ticketId;
+  final int ticketTabIndex;
+
+  FetchTicketDetails({required this.ticketId, required this.ticketTabIndex});
+}
