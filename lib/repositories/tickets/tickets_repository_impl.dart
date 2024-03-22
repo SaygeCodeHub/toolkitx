@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/tickets/fetch_ticket_details_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
+import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
 import '../../utils/constants/api_constants.dart';
@@ -28,5 +29,12 @@ class TicketsRepositoryImpl extends TicketsRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}ticket/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId");
     return FetchTicketDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveTicketModel> saveTicketModel(Map saveTicketMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}ticket/save", saveTicketMap);
+    return SaveTicketModel.fromJson(response);
   }
 }

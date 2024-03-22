@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/screens/tickets/tickets_filter_screen.dart';
+import 'package:toolkit/screens/tickets/widgets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_list_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -27,6 +28,11 @@ class TicketListScreen extends StatelessWidget {
         .add(FetchTickets(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('Ticket')),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AddTicketScreen.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

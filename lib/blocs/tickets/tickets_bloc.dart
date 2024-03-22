@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
+import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -31,6 +33,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<ApplyTicketsFilter>(_applyTicketsFilter);
     on<ClearTicketsFilter>(_clearTicketsFilterFilter);
     on<FetchTicketDetails>(_fetchTicketDetails);
+    on<SaveTicket>(_saveTicket);
+    on<SelectPriority>(_selectPriority);
   }
 
   String selectApplicationName = '';
@@ -134,6 +138,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
           .fetchTicketDetails(hashCode, event.ticketId, userId);
+      log('userId=================>$userId');
+      log('hashCode=================>$hashCode');
       if (fetchTicketDetailsModel.data.candeferred == '1') {
         popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
       }
@@ -172,5 +178,32 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     } catch (e) {
       emit(TicketDetailsNotFetched(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _saveTicket(
+      SaveTicket event, Emitter<TicketsStates> emit) async {
+    emit(TicketSaving());
+    // try {
+    event.saveTicketMap['hashcode'] =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    event.saveTicketMap['userId'] =
+        await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    log('saveTicketMap==============>${event.saveTicketMap}');
+    //   SaveTicketModel saveTicketModel =
+    //       await _ticketsRepository.saveTicketModel(event.saveTicketMap);
+    //   if (saveTicketModel.status == 200) {
+    //     emit(TicketSaved(saveTicketModel: saveTicketModel));
+    //   } else {
+    //     emit(TicketNotSaved(errorMessage: saveTicketModel.message));
+    //   }
+    // } catch (e) {
+    //   emit(TicketNotSaved(errorMessage: e.toString()));
+    // }
+  }
+
+  FutureOr<void> _selectPriority(
+      SelectPriority event, Emitter<TicketsStates> emit) {
+    emit(PrioritySelected(
+        priorityId: event.priorityId, priorityName: event.priorityName));
   }
 }
