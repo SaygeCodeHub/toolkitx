@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
@@ -43,7 +42,6 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
   List<TicketListDatum> ticketDatum = [];
   Map filters = {};
   int ticketTabIndex = 0;
-  String ticketId = '';
 
   Future<FutureOr<void>> _fetchTickets(
       FetchTickets event, Emitter<TicketsStates> emit) async {
@@ -127,7 +125,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       FetchTicketDetails event, Emitter<TicketsStates> emit) async {
     ticketTabIndex = event.ticketTabIndex;
     emit(TicketDetailsFetching());
-    // try {
+    try {
       List popUpMenuItemsList = [
         DatabaseUtil.getText('AddComments'),
         DatabaseUtil.getText('AddDocuments'),
@@ -140,8 +138,6 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
           .fetchTicketDetails(hashCode, event.ticketId, userId);
-      ticketId = event.ticketId;
-      log('ticketId============>${event.ticketId}');
       if (fetchTicketDetailsModel.data.candeferred == '1') {
         popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
       }
@@ -177,9 +173,9 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
         emit(TicketDetailsNotFetched(
             errorMessage: fetchTicketDetailsModel.message));
       }
-    // } catch (e) {
-    //   emit(TicketDetailsNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(TicketDetailsNotFetched(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _saveTicket(

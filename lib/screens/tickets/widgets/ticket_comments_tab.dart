@@ -8,12 +8,13 @@ import '../../../widgets/custom_card.dart';
 
 class TicketCommentsTab extends StatelessWidget {
   const TicketCommentsTab({super.key, required this.ticketData});
+
   final TicketData ticketData;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: ticketData.documents.length,
+      itemCount: ticketData.comments.length,
       itemBuilder: (context, index) {
         return CustomCard(
           child: Padding(
@@ -34,8 +35,7 @@ class TicketCommentsTab extends StatelessWidget {
                             color: AppColor.mediumBlack)),
                     Text(ticketData.comments[index].createddate,
                         style: Theme.of(context).textTheme.xSmall.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.grey)),
+                            fontWeight: FontWeight.w400, color: AppColor.grey)),
                   ],
                 ),
               ),

@@ -34,7 +34,9 @@ class TicketDocumentsTab extends StatelessWidget {
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w400,
                           color: AppColor.mediumBlack)),
-                  CustomTextButton(textValue: DatabaseUtil.getText('ticket_view'), onPressed: () {}),
+                  CustomTextButton(
+                      textValue: DatabaseUtil.getText('ticket_view'),
+                      onPressed: () {}),
                 ],
               ),
               trailing: Text(ticketData.documents[index].createddate),

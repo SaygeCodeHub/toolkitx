@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/tickets/fetch_ticket_details_model.dart';
 
 class TicketLogTab extends StatelessWidget {
-
-  const TicketLogTab({Key? key, required this.ticketData,})
-      : super(key: key);
+  const TicketLogTab({
+    Key? key,
+    required this.ticketData,
+  }) : super(key: key);
   final TicketData ticketData;
 
   @override
@@ -20,17 +22,22 @@ class TicketLogTab extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemCount: ticketData.logs.length,
         itemBuilder: (context, index) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _buildDateAndTime(index),
-              const SizedBox(width: xxTinySpacing),
-              _buildVerticalTimelinePath(index, context),
-              const SizedBox(width: xxTinySpacing),
-              _buildContent(index, context)
-            ],
-          );
+          if (ticketData.logs.isNotEmpty) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildDateAndTime(index),
+                const SizedBox(width: xxTinySpacing),
+                _buildVerticalTimelinePath(index, context),
+                const SizedBox(width: xxTinySpacing),
+                _buildContent(index, context)
+              ],
+            );
+          } else {
+            const Center(child: Text(StringConstants.kNoRecordsFound));
+          }
+          return const SizedBox.shrink();
         },
       ),
     );
@@ -60,8 +67,7 @@ class TicketLogTab extends StatelessWidget {
   }
 
   Widget _buildDateAndTime(int index) {
-    List<String> dateTime =
-    ticketData.logs[index].createdAt.split(' ');
+    List<String> dateTime = ticketData.logs[index].createdAt.split(' ');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
