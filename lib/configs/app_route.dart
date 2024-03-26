@@ -13,7 +13,7 @@ import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
-import 'package:toolkit/screens/tickets/widgets/add_ticket_screen.dart';
+import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';

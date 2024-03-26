@@ -1,20 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/utils/database_utils.dart';
-
-import '../../../blocs/login/login_bloc.dart';
-import '../../../blocs/login/login_events.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/enums/user_type_emun.dart';
 import '../../../data/models/tickets/fetch_ticket_master_model.dart';
-import '../../../utils/constants/string_constants.dart';
-import '../../../widgets/expansion_tile_border.dart';
 
 class PriorityExpansionTile extends StatelessWidget {
   const PriorityExpansionTile(
@@ -26,7 +15,6 @@ class PriorityExpansionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String selectedValue = "";
-    log("${ticketMasterDatum[0][1].priorityname}");
     context
         .read<TicketsBloc>()
         .add(SelectPriority(priorityId: 0, priorityName: ''));

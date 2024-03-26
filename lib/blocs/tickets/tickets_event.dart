@@ -59,3 +59,10 @@ class SelectPriority extends TicketsEvents {
 
   SelectPriority({required this.priorityId, required this.priorityName});
 }
+
+class SelectBugType extends TicketsEvents {
+  final String bugType;
+  final String bugValue;
+
+  SelectBugType({required this.bugType, required this.bugValue});
+}

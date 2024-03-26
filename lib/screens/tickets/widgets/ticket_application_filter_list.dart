@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -26,6 +27,10 @@ class TicketApplicationFilterList extends StatelessWidget {
               padding: const EdgeInsets.only(
                   left: leftRightMargin, right: leftRightMargin),
               child: BlocBuilder<TicketsBloc, TicketsStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is TicketMasterFetching ||
+                    currentState is TicketMasterFetched ||
+                    currentState is TicketMasterNotFetched,
                 builder: (context, state) {
                   if (state is TicketMasterFetching) {
                     return Padding(
@@ -55,6 +60,9 @@ class TicketApplicationFilterList extends StatelessWidget {
                                     onChanged: (value) {
                                       TicketsFilterScreen
                                               .ticketsFilterMap["appname"] =
+                                          data[0][index].id;
+                                      AddTicketScreen
+                                              .saveTicketMap['application'] =
                                           data[0][index].id;
                                       context.read<TicketsBloc>().add(
                                           SelectTicketApplication(

@@ -94,5 +94,11 @@ class PrioritySelected extends TicketsStates {
   final String priorityName;
 
   PrioritySelected({required this.priorityId, required this.priorityName});
+}
 
+class BugTypeSelected extends TicketsStates {
+  final String bugType;
+  final String bugValue;
+
+  BugTypeSelected({required this.bugType, required this.bugValue});
 }
