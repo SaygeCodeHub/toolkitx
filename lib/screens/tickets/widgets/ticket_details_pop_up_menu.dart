@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_details_model.dart';
-import '../../../configs/app_dimensions.dart';
-import '../../../configs/app_spacing.dart';
+import 'package:toolkit/screens/tickets/widgets/add_ticket_comment_screen.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 class TicketsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -14,7 +15,7 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
       required this.fetchTicketDetailsModel})
       : super(key: key);
 
-  PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
+  PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
         value: position,
         child: Text(title, style: Theme.of(context).textTheme.xSmall));
@@ -23,16 +24,17 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kCardRadius)),
-        iconSize: kIconSize,
-        icon: const Icon(Icons.more_vert_outlined),
-        offset: const Offset(0, xxTiniestSpacing),
-        onSelected: (value) {},
+        onSelected: (value) {
+          if (value == DatabaseUtil.getText('AddComments')) {
+            Navigator.pushNamed(context, AddTicketCommentScreen.routeName);
+          }
+        },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
-              for (int i = 0; i < popUpMenuItems.length; i++)
-                _buildPopupMenuItem(context, popUpMenuItems[i], i)
-            ]);
+          for (int i = 0; i < popUpMenuItems.length; i++)
+            _buildPopupMenuItem(
+                context, popUpMenuItems[i], popUpMenuItems[i])
+        ]);
+
   }
 }

@@ -66,3 +66,9 @@ class SelectBugType extends TicketsEvents {
 
   SelectBugType({required this.bugType, required this.bugValue});
 }
+
+class SaveTicketComment extends TicketsEvents {
+  final String comment;
+
+  SaveTicketComment({required this.comment});
+}

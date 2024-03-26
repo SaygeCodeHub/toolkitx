@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
+import 'package:toolkit/data/models/tickets/save_ticket_comment_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
@@ -35,6 +36,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SaveTicket>(_saveTicket);
     on<SelectPriority>(_selectPriority);
     on<SelectBugType>(_selectBugType);
+    on<SaveTicketComment>(_saveTicketComment);
   }
 
   String selectApplicationName = '';
@@ -42,6 +44,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
   List<TicketListDatum> ticketDatum = [];
   Map filters = {};
   int ticketTabIndex = 0;
+  String ticketId = '';
 
   Future<FutureOr<void>> _fetchTickets(
       FetchTickets event, Emitter<TicketsStates> emit) async {
@@ -138,6 +141,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
           .fetchTicketDetails(hashCode, event.ticketId, userId);
+      ticketId = event.ticketId;
       if (fetchTicketDetailsModel.data.candeferred == '1') {
         popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
       }
@@ -207,5 +211,32 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
   FutureOr<void> _selectBugType(
       SelectBugType event, Emitter<TicketsStates> emit) {
     emit(BugTypeSelected(bugType: event.bugType, bugValue: event.bugValue));
+  }
+
+  Future<FutureOr<void>> _saveTicketComment(
+      SaveTicketComment event, Emitter<TicketsStates> emit) async {
+    emit(TicketCommentSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId =
+          await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveCommentMap = {
+        "hashcode": hashCode,
+        "ticketid": ticketId,
+        "comments": event.comment,
+        "commentid": "",
+        "userid": userId
+      };
+      SaveTicketCommentModel saveTicketCommentModel =
+          await _ticketsRepository.saveTicketComment(saveCommentMap);
+      if (saveTicketCommentModel.message == '1') {
+        emit(TicketCommentSaved());
+      } else {
+        emit(TicketNotSaved(errorMessage: saveTicketCommentModel.message));
+      }
+    } catch (e) {
+      emit(TicketNotSaved(errorMessage: e.toString()));
+    }
   }
 }

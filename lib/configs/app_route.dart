@@ -142,6 +142,7 @@ import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/tickets/tickets_filter_screen.dart';
+import '../screens/tickets/widgets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -564,6 +565,8 @@ class AppRoutes {
             TicketDetailsScreen(ticketId: settings.arguments.toString()));
       case AddTicketScreen.routeName:
         return _createRoute(const AddTicketScreen());
+      case AddTicketCommentScreen.routeName:
+        return _createRoute(const AddTicketCommentScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
