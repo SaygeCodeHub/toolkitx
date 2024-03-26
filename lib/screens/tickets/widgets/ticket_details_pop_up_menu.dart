@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_details_model.dart';
@@ -31,10 +30,9 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
         },
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) => [
-          for (int i = 0; i < popUpMenuItems.length; i++)
-            _buildPopupMenuItem(
-                context, popUpMenuItems[i], popUpMenuItems[i])
-        ]);
-
+              for (int i = 0; i < popUpMenuItems.length; i++)
+                _buildPopupMenuItem(
+                    context, popUpMenuItems[i], popUpMenuItems[i])
+            ]);
   }
 }

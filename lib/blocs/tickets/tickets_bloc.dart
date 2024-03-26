@@ -219,8 +219,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String? userId =
-          await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map saveCommentMap = {
         "hashcode": hashCode,
         "ticketid": ticketId,
