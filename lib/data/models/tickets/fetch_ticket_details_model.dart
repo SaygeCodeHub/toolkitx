@@ -1,10 +1,9 @@
+
 import 'dart:convert';
 
-FetchTicketDetailsModel fetchTicketDetailsModelFromJson(String str) =>
-    FetchTicketDetailsModel.fromJson(json.decode(str));
+FetchTicketDetailsModel fetchTicketDetailsModelFromJson(String str) => FetchTicketDetailsModel.fromJson(json.decode(str));
 
-String fetchTicketDetailsModelToJson(FetchTicketDetailsModel data) =>
-    json.encode(data.toJson());
+String fetchTicketDetailsModelToJson(FetchTicketDetailsModel data) => json.encode(data.toJson());
 
 class FetchTicketDetailsModel {
   final int status;
@@ -17,18 +16,17 @@ class FetchTicketDetailsModel {
     required this.data,
   });
 
-  factory FetchTicketDetailsModel.fromJson(Map<String, dynamic> json) =>
-      FetchTicketDetailsModel(
-        status: json["Status"],
-        message: json["Message"],
-        data: TicketData.fromJson(json["Data"]),
-      );
+  factory FetchTicketDetailsModel.fromJson(Map<String, dynamic> json) => FetchTicketDetailsModel(
+    status: json["Status"],
+    message: json["Message"],
+    data: TicketData.fromJson(json["Data"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "Status": status,
-        "Message": message,
-        "Data": data.toJson(),
-      };
+    "Status": status,
+    "Message": message,
+    "Data": data.toJson(),
+  };
 }
 
 class TicketData {
@@ -68,6 +66,9 @@ class TicketData {
   final String canaddcomments;
   final String canadddocuments;
   final String id;
+  final List<Ment> comments;
+  final List<Ment> documents;
+  final List<Log> logs;
 
   TicketData({
     required this.ticketno,
@@ -106,84 +107,140 @@ class TicketData {
     required this.canaddcomments,
     required this.canadddocuments,
     required this.id,
+    required this.comments,
+    required this.documents,
+    required this.logs,
   });
 
   factory TicketData.fromJson(Map<String, dynamic> json) => TicketData(
-        ticketno: json["ticketno"],
-        header: json["header"],
-        description: json["description"],
-        application: json["application"],
-        appname: json["appname"],
-        etd: json["etd"],
-        isbug: json["isbug"],
-        createdby: json["createdby"],
-        author: json["author"],
-        authoremail: json["authoremail"],
-        createddate: json["createddate"],
-        notifyUserids: json["notify_userids"],
-        updatedby: json["updatedby"],
-        updatedbyauthor: json["updatedbyauthor"],
-        updateddate: json["updateddate"],
-        voneeded: json["voneeded"],
-        completiondate: json["completiondate"],
-        priority: json["priority"],
-        priorityname: json["priorityname"],
-        status: json["status"],
-        statusname: json["statusname"],
-        invoice: json["invoice"],
-        commentscount: json["commentscount"],
-        doccount: json["doccount"],
-        candeferred: json["candeferred"],
-        canestimateedt: json["canestimateedt"],
-        canapprovedfordevelopment: json["canapprovedfordevelopment"],
-        canclose: json["canclose"],
-        canwaitingfordevelopmentapproval:
-            json["canwaitingfordevelopmentapproval"],
-        candevelopment: json["candevelopment"],
-        cantesting: json["cantesting"],
-        canapproved: json["canapproved"],
-        canrolledout: json["canrolledout"],
-        canaddcomments: json["canaddcomments"],
-        canadddocuments: json["canadddocuments"],
-        id: json["id"],
-      );
+    ticketno: json["ticketno"],
+    header: json["header"],
+    description: json["description"],
+    application: json["application"],
+    appname: json["appname"],
+    etd: json["etd"],
+    isbug: json["isbug"],
+    createdby: json["createdby"],
+    author: json["author"],
+    authoremail: json["authoremail"],
+    createddate: json["createddate"],
+    notifyUserids: json["notify_userids"],
+    updatedby: json["updatedby"],
+    updatedbyauthor: json["updatedbyauthor"],
+    updateddate: json["updateddate"],
+    voneeded: json["voneeded"],
+    completiondate: json["completiondate"],
+    priority: json["priority"],
+    priorityname: json["priorityname"],
+    status: json["status"],
+    statusname: json["statusname"],
+    invoice: json["invoice"],
+    commentscount: json["commentscount"],
+    doccount: json["doccount"],
+    candeferred: json["candeferred"],
+    canestimateedt: json["canestimateedt"],
+    canapprovedfordevelopment: json["canapprovedfordevelopment"],
+    canclose: json["canclose"],
+    canwaitingfordevelopmentapproval: json["canwaitingfordevelopmentapproval"],
+    candevelopment: json["candevelopment"],
+    cantesting: json["cantesting"],
+    canapproved: json["canapproved"],
+    canrolledout: json["canrolledout"],
+    canaddcomments: json["canaddcomments"],
+    canadddocuments: json["canadddocuments"],
+    id: json["id"],
+    comments: List<Ment>.from(json["comments"].map((x) => Ment.fromJson(x))),
+    documents: List<Ment>.from(json["documents"].map((x) => Ment.fromJson(x))),
+    logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "ticketno": ticketno,
-        "header": header,
-        "description": description,
-        "application": application,
-        "appname": appname,
-        "etd": etd,
-        "isbug": isbug,
-        "createdby": createdby,
-        "author": author,
-        "authoremail": authoremail,
-        "createddate": createddate,
-        "notify_userids": notifyUserids,
-        "updatedby": updatedby,
-        "updatedbyauthor": updatedbyauthor,
-        "updateddate": updateddate,
-        "voneeded": voneeded,
-        "completiondate": completiondate,
-        "priority": priority,
-        "priorityname": priorityname,
-        "status": status,
-        "statusname": statusname,
-        "invoice": invoice,
-        "commentscount": commentscount,
-        "doccount": doccount,
-        "candeferred": candeferred,
-        "canestimateedt": canestimateedt,
-        "canapprovedfordevelopment": canapprovedfordevelopment,
-        "canclose": canclose,
-        "canwaitingfordevelopmentapproval": canwaitingfordevelopmentapproval,
-        "candevelopment": candevelopment,
-        "cantesting": cantesting,
-        "canapproved": canapproved,
-        "canrolledout": canrolledout,
-        "canaddcomments": canaddcomments,
-        "canadddocuments": canadddocuments,
-        "id": id,
-      };
+    "ticketno": ticketno,
+    "header": header,
+    "description": description,
+    "application": application,
+    "appname": appname,
+    "etd": etd,
+    "isbug": isbug,
+    "createdby": createdby,
+    "author": author,
+    "authoremail": authoremail,
+    "createddate": createddate,
+    "notify_userids": notifyUserids,
+    "updatedby": updatedby,
+    "updatedbyauthor": updatedbyauthor,
+    "updateddate": updateddate,
+    "voneeded": voneeded,
+    "completiondate": completiondate,
+    "priority": priority,
+    "priorityname": priorityname,
+    "status": status,
+    "statusname": statusname,
+    "invoice": invoice,
+    "commentscount": commentscount,
+    "doccount": doccount,
+    "candeferred": candeferred,
+    "canestimateedt": canestimateedt,
+    "canapprovedfordevelopment": canapprovedfordevelopment,
+    "canclose": canclose,
+    "canwaitingfordevelopmentapproval": canwaitingfordevelopmentapproval,
+    "candevelopment": candevelopment,
+    "cantesting": cantesting,
+    "canapproved": canapproved,
+    "canrolledout": canrolledout,
+    "canaddcomments": canaddcomments,
+    "canadddocuments": canadddocuments,
+    "id": id,
+    "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
+    "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
+    "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+  };
+}
+
+class Ment {
+  final String author;
+  final String createddate;
+  final String comment;
+
+  Ment({
+    required this.author,
+    required this.createddate,
+    required this.comment,
+  });
+
+  factory Ment.fromJson(Map<String, dynamic> json) => Ment(
+    author: json["author"],
+    createddate: json["createddate"],
+    comment: json["comment"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "author": author,
+    "createddate": createddate,
+    "comment": comment,
+  };
+}
+
+class Log {
+  final String createdAt;
+  final String action;
+  final String createdBy;
+
+  Log({
+    required this.createdAt,
+    required this.action,
+    required this.createdBy,
+  });
+
+  factory Log.fromJson(Map<String, dynamic> json) => Log(
+    createdAt: json["created_at"],
+    action: json["action"],
+    createdBy: json["created_by"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "created_at": createdAt,
+    "action": action,
+    "created_by": createdBy,
+  };
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_comments_tab.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_details_pop_up_menu.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_details_tab.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_documents_tab.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_logs_tab.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -87,7 +90,10 @@ class TicketDetailsScreen extends StatelessWidget {
                       tabBarViewIcons: TicketsUtil().tabBarViewIcons,
                       initialIndex: context.read<TicketsBloc>().ticketTabIndex,
                       tabBarViewWidgets: [
-                        TicketDetailsTab(data: data),
+                        TicketDetailsTab(ticketData: data),
+                        TicketCommentsTab(ticketData: data),
+                        TicketDocumentsTab(ticketData: data),
+                        TicketLogTab(ticketData: data),
                       ])
                 ]);
               } else if (state is TicketDetailsNotFetched) {
