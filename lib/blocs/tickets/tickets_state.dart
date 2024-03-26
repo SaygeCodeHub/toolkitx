@@ -74,3 +74,31 @@ class TicketDetailsNotFetched extends TicketsStates {
 
   TicketDetailsNotFetched({required this.errorMessage});
 }
+
+class TicketSaving extends TicketsStates {}
+
+class TicketSaved extends TicketsStates {
+  final SaveTicketModel saveTicketModel;
+
+  TicketSaved({required this.saveTicketModel});
+}
+
+class TicketNotSaved extends TicketsStates {
+  final String errorMessage;
+
+  TicketNotSaved({required this.errorMessage});
+}
+
+class PrioritySelected extends TicketsStates {
+  final int priorityId;
+  final String priorityName;
+
+  PrioritySelected({required this.priorityId, required this.priorityName});
+}
+
+class BugTypeSelected extends TicketsStates {
+  final String bugType;
+  final String bugValue;
+
+  BugTypeSelected({required this.bugType, required this.bugValue});
+}

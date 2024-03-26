@@ -9,7 +9,7 @@ String fetchTicketMasterModelToJson(FetchTicketMasterModel data) =>
 class FetchTicketMasterModel {
   final int status;
   final String message;
-  final List<List<Datum>> data;
+  final List<List<TicketMasterDatum>> data;
 
   FetchTicketMasterModel({
     required this.status,
@@ -21,8 +21,9 @@ class FetchTicketMasterModel {
       FetchTicketMasterModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<List<Datum>>.from(json["Data"]
-            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+        data: List<List<TicketMasterDatum>>.from(json["Data"].map((x) =>
+            List<TicketMasterDatum>.from(
+                x.map((x) => TicketMasterDatum.fromJson(x))))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,22 +34,27 @@ class FetchTicketMasterModel {
       };
 }
 
-class Datum {
+class TicketMasterDatum {
   final int id;
   final String appname;
+  final String priorityname;
 
-  Datum({
+  TicketMasterDatum({
     required this.id,
     required this.appname,
+    required this.priorityname,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory TicketMasterDatum.fromJson(Map<String, dynamic> json) =>
+      TicketMasterDatum(
         id: json["id"],
-        appname: json["appname"],
+        appname: json["appname"] ?? '',
+        priorityname: json["priorityname"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "appname": appname,
+        "priorityname": priorityname,
       };
 }
