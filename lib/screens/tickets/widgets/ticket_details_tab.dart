@@ -9,10 +9,10 @@ import '../../../data/models/tickets/fetch_ticket_details_model.dart';
 class TicketDetailsTab extends StatelessWidget {
   const TicketDetailsTab({
     super.key,
-    required this.data,
+    required this.ticketData,
   });
 
-  final TicketData data;
+  final TicketData ticketData;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.ticketno),
+        Text(ticketData.ticketno),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('Status'),
             style: Theme.of(context)
@@ -33,7 +33,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.statusname),
+        Text(ticketData.statusname),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_header'),
             style: Theme.of(context)
@@ -41,7 +41,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.header),
+        Text(ticketData.header),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('Created'),
             style: Theme.of(context)
@@ -49,7 +49,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.createddate),
+        Text(ticketData.createddate),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_createdby'),
             style: Theme.of(context)
@@ -57,7 +57,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.createdby),
+        Text(ticketData.createdby),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_updated'),
             style: Theme.of(context)
@@ -65,7 +65,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.updateddate),
+        Text(ticketData.updateddate),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_updatedby'),
             style: Theme.of(context)
@@ -73,7 +73,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.updatedby),
+        Text(ticketData.updatedby),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_edt'),
             style: Theme.of(context)
@@ -81,7 +81,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.etd),
+        Text(ticketData.etd),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('Priority'),
             style: Theme.of(context)
@@ -89,7 +89,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.priority),
+        Text(ticketData.priority),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('Description'),
             style: Theme.of(context)
@@ -97,7 +97,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.description),
+        Text(ticketData.description),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('ticket_application'),
             style: Theme.of(context)
@@ -105,7 +105,7 @@ class TicketDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(data.appname),
+        Text(ticketData.appname),
         const SizedBox(height: xxxSmallestSpacing),
       ]),
     );

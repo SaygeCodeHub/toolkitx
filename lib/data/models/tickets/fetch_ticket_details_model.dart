@@ -68,6 +68,9 @@ class TicketData {
   final String canaddcomments;
   final String canadddocuments;
   final String id;
+  final List<Ment> comments;
+  final List<Ment> documents;
+  final List<Log> logs;
 
   TicketData({
     required this.ticketno,
@@ -106,6 +109,9 @@ class TicketData {
     required this.canaddcomments,
     required this.canadddocuments,
     required this.id,
+    required this.comments,
+    required this.documents,
+    required this.logs,
   });
 
   factory TicketData.fromJson(Map<String, dynamic> json) => TicketData(
@@ -146,6 +152,11 @@ class TicketData {
         canaddcomments: json["canaddcomments"],
         canadddocuments: json["canadddocuments"],
         id: json["id"],
+        comments:
+            List<Ment>.from(json["comments"].map((x) => Ment.fromJson(x))),
+        documents:
+            List<Ment>.from(json["documents"].map((x) => Ment.fromJson(x))),
+        logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -185,5 +196,56 @@ class TicketData {
         "canaddcomments": canaddcomments,
         "canadddocuments": canadddocuments,
         "id": id,
+        "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
+        "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
+        "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
+      };
+}
+
+class Ment {
+  final String author;
+  final String createddate;
+  final String comment;
+
+  Ment({
+    required this.author,
+    required this.createddate,
+    required this.comment,
+  });
+
+  factory Ment.fromJson(Map<String, dynamic> json) => Ment(
+        author: json["author"],
+        createddate: json["createddate"],
+        comment: json["comment"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "author": author,
+        "createddate": createddate,
+        "comment": comment,
+      };
+}
+
+class Log {
+  final String createdAt;
+  final String action;
+  final String createdBy;
+
+  Log({
+    required this.createdAt,
+    required this.action,
+    required this.createdBy,
+  });
+
+  factory Log.fromJson(Map<String, dynamic> json) => Log(
+        createdAt: json["created_at"],
+        action: json["action"],
+        createdBy: json["created_by"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "created_at": createdAt,
+        "action": action,
+        "created_by": createdBy,
       };
 }
