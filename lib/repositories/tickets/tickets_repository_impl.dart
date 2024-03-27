@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_comment_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
+import 'package:toolkit/data/models/tickets/update_ticket_status_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
 import '../../utils/constants/api_constants.dart';
@@ -44,5 +45,13 @@ class TicketsRepositoryImpl extends TicketsRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}ticket/savecomments", saveCommentMap);
     return SaveTicketCommentModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateTicketStatusModel> updateTicketStatus(
+      Map updateStatusMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}ticket/updatestatus", updateStatusMap);
+    return UpdateTicketStatusModel.fromJson(response);
   }
 }

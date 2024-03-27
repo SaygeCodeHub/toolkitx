@@ -72,3 +72,14 @@ class SaveTicketComment extends TicketsEvents {
 
   SaveTicketComment({required this.comment});
 }
+
+class UpdateTicketStatus extends TicketsEvents {
+  final String edtHrs;
+  final String completionDate;
+  final String status;
+
+  UpdateTicketStatus(
+      {required this.edtHrs,
+      required this.completionDate,
+      required this.status});
+}
