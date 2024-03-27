@@ -29,7 +29,10 @@ class TicketListBody extends StatelessWidget {
               child: ListTile(
                 onTap: () {
                   Navigator.pushNamed(context, TicketDetailsScreen.routeName,
-                      arguments: ticketListDatum[index].id);
+                          arguments: ticketListDatum[index].id)
+                      .then((_) => context
+                          .read<TicketsBloc>()
+                          .add(FetchTickets(pageNo: 1, isFromHome: false)));
                 },
                 title: Text(ticketListDatum[index].ticketNo,
                     style: Theme.of(context).textTheme.small.copyWith(

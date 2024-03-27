@@ -4,13 +4,13 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
-import '../../../blocs/tickets/tickets_bloc.dart';
-import '../../../configs/app_color.dart';
-import '../../../configs/app_spacing.dart';
-import '../../../widgets/custom_snackbar.dart';
-import '../../../widgets/generic_text_field.dart';
-import '../../../widgets/primary_button.dart';
-import '../../../widgets/progress_bar.dart';
+import '../../blocs/tickets/tickets_bloc.dart';
+import '../../configs/app_color.dart';
+import '../../configs/app_spacing.dart';
+import '../../widgets/custom_snackbar.dart';
+import '../../widgets/generic_text_field.dart';
+import '../../widgets/primary_button.dart';
+import '../../widgets/progress_bar.dart';
 
 class AddTicketCommentScreen extends StatelessWidget {
   const AddTicketCommentScreen({super.key});
