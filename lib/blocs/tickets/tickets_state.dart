@@ -102,3 +102,13 @@ class BugTypeSelected extends TicketsStates {
 
   BugTypeSelected({required this.bugType, required this.bugValue});
 }
+
+class TicketCommentSaving extends TicketsStates {}
+
+class TicketCommentSaved extends TicketsStates {}
+
+class TicketCommentNotSaved extends TicketsStates {
+  final String errorMessage;
+
+  TicketCommentNotSaved({required this.errorMessage});
+}
