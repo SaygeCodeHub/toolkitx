@@ -22,7 +22,8 @@ class TicketListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
-    context.read<TicketsBloc>().filters = {};
+    context.read<TicketsBloc>().hasReachedMax = false;
+    context.read<TicketsBloc>().ticketDatum.clear();
     context
         .read<TicketsBloc>()
         .add(FetchTickets(pageNo: pageNo, isFromHome: isFromHome));
@@ -39,22 +40,20 @@ class TicketListScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing,
                 bottom: xxTinierSpacing),
-            child: BlocBuilder<TicketsBloc, TicketsStates>(
-                buildWhen: (previousState, currentState) {
-              if (currentState is TicketsFetching &&
-                  pageNo == 1 &&
-                  isFromHome == true) {
-                return true;
-              } else if (currentState is TicketsFetched) {
-                return true;
-              }
-              return false;
-            }, builder: (context, state) {
-              if (state is TicketsFetching) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is TicketsFetched) {
-                return Column(children: [
-                  CustomIconButtonRow(
+            child: Column(children: [
+              BlocBuilder<TicketsBloc, TicketsStates>(
+                  buildWhen: (previousState, currentState) {
+                if (currentState is TicketsFetching &&
+                    pageNo == 1 &&
+                    isFromHome == true) {
+                  return true;
+                } else if (currentState is TicketsFetched) {
+                  return true;
+                }
+                return false;
+              }, builder: (context, state) {
+                if (state is TicketsFetched) {
+                  return CustomIconButtonRow(
                       primaryOnPress: () {
                         Navigator.pushNamed(
                             context, TicketsFilterScreen.routeName);
@@ -66,56 +65,46 @@ class TicketListScreen extends StatelessWidget {
                       clearOnPress: () {
                         pageNo = 1;
                         context.read<TicketsBloc>().hasReachedMax = false;
-                        context.read<TicketsBloc>().ticketDatum = [];
-                        context.read<TicketsBloc>().filters = {};
+                        context.read<TicketsBloc>().filters.clear();
+                        context.read<TicketsBloc>().ticketDatum.clear();
                         context.read<TicketsBloc>().selectApplicationName = '';
                         context.read<TicketsBloc>().add(ClearTicketsFilter());
                         context.read<TicketsBloc>().add(
                             FetchTickets(pageNo: 1, isFromHome: isFromHome));
-                      }),
-                  BlocConsumer<TicketsBloc, TicketsStates>(
-                      buildWhen: (previousState, currentState) =>
-                          (currentState is TicketsFetching && pageNo == 1) ||
-                          (currentState is TicketsFetched),
-                      listener: (context, state) {
-                        if (state is TicketsFetched) {
-                          if (state.fetchTicketsModel.status == 204 &&
-                              context
-                                  .read<TicketsBloc>()
-                                  .ticketDatum
-                                  .isNotEmpty) {
-                            showCustomSnackBar(
-                                context, StringConstants.kAllDataLoaded, '');
-                          }
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is TicketsFetching) {
-                          return const Expanded(
-                              child:
-                                  Center(child: CircularProgressIndicator()));
-                        } else if (state is TicketsFetched) {
-                          if (context
-                              .read<TicketsBloc>()
-                              .ticketDatum
-                              .isNotEmpty) {
-                            return Expanded(
-                                child: TicketListBody(
-                                    ticketListDatum: state.ticketData));
-                          } else {
-                            return NoRecordsText(
-                                text: DatabaseUtil.getText('no_records_found'));
-                          }
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      })
-                ]);
-              } else if (state is TicketsNotFetched) {
-                return const Center(
-                    child: Text(StringConstants.kNoRecordsFound));
-              }
-              return const SizedBox.shrink();
-            })));
+                      });
+                } else {
+                  return const SizedBox.shrink();
+                }
+              }),
+              const SizedBox(height: xxTinierSpacing),
+              BlocConsumer<TicketsBloc, TicketsStates>(
+                  buildWhen: (previousState, currentState) =>
+                      (currentState is TicketsFetching && pageNo == 1) ||
+                      (currentState is TicketsFetched),
+                  listener: (context, state) {
+                    if (state is TicketsFetched &&
+                        context.read<TicketsBloc>().hasReachedMax) {
+                      showCustomSnackBar(
+                          context, StringConstants.kAllDataLoaded, '');
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is TicketsFetching) {
+                      return const Expanded(
+                          child: Center(child: CircularProgressIndicator()));
+                    } else if (state is TicketsFetched) {
+                      if (state.ticketData.isNotEmpty) {
+                        return Expanded(
+                            child: TicketListBody(
+                                ticketListDatum: state.ticketData));
+                      } else {
+                        return NoRecordsText(
+                            text: DatabaseUtil.getText('no_records_found'));
+                      }
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  })
+            ])));
   }
 }

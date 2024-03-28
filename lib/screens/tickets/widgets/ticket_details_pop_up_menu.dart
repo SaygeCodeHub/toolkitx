@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/enums/ticket_status_enum.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_details_model.dart';
 import 'package:toolkit/screens/tickets/add_ticket_comment_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
-import 'package:toolkit/screens/tickets/widgets/add_ticket_comment_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_completion_date_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';

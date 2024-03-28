@@ -56,9 +56,9 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      if (event.isFromHome == true) {
+      if (event.isFromHome) {
         FetchTicketsModel fetchTicketsModel =
-            await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '');
+            await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '{}');
         ticketDatum.addAll(fetchTicketsModel.data);
         hasReachedMax = fetchTicketsModel.data.isEmpty;
         emit(TicketsFetched(
