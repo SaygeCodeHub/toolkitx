@@ -72,3 +72,9 @@ class SaveTicketComment extends TicketsEvents {
 
   SaveTicketComment({required this.comment});
 }
+
+class SaveTicketDocument extends TicketsEvents {
+  final Map saveDocumentMap;
+
+  SaveTicketDocument({required this.saveDocumentMap});
+}

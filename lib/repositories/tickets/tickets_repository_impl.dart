@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/tickets/fetch_ticket_details_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_comment_model.dart';
+import 'package:toolkit/data/models/tickets/save_ticket_document_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
@@ -44,5 +45,13 @@ class TicketsRepositoryImpl extends TicketsRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}ticket/savecomments", saveCommentMap);
     return SaveTicketCommentModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveTicketDocumentModel> saveTicketDocument(
+      Map saveDocumentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}ticket/savedocument", saveDocumentMap);
+    return SaveTicketDocumentModel.fromJson(response);
   }
 }
