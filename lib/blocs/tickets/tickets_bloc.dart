@@ -12,6 +12,7 @@ import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/tickets/fetch_ticket_details_model.dart';
+import '../../data/models/tickets/save_ticket_document_model.dart';
 import '../../di/app_module.dart';
 import '../../utils/database_utils.dart';
 
@@ -38,6 +39,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SelectPriority>(_selectPriority);
     on<SelectBugType>(_selectBugType);
     on<SaveTicketComment>(_saveTicketComment);
+    on<SaveTicketDocument>(_saveTicketDocument);
     on<UpdateTicketStatus>(_updateTicketStatus);
   }
 
@@ -237,10 +239,38 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       if (saveTicketCommentModel.message == '1') {
         emit(TicketCommentSaved());
       } else {
-        emit(TicketNotSaved(errorMessage: saveTicketCommentModel.message));
+        emit(TicketCommentNotSaved(
+            errorMessage: saveTicketCommentModel.message));
       }
     } catch (e) {
-      emit(TicketNotSaved(errorMessage: e.toString()));
+      emit(TicketCommentNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveTicketDocument(
+      SaveTicketDocument event, Emitter<TicketsStates> emit) async {
+    emit(TicketDocumentSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveDocumentMap = {
+        "filename": event.saveDocumentMap['fileName'],
+        "ticketid": ticketId,
+        "comments": event.saveDocumentMap['comments'],
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      SaveTicketDocumentModel saveTicketDocumentModel =
+          await _ticketsRepository.saveTicketDocument(saveDocumentMap);
+      if (saveTicketDocumentModel.message == '1') {
+        emit(TicketDocumentSaved());
+      } else {
+        emit(TicketDocumentNotSaved(
+            errorMessage: saveTicketDocumentModel.message));
+      }
+    } catch (e) {
+      emit(TicketDocumentNotSaved(errorMessage: e.toString()));
     }
   }
 

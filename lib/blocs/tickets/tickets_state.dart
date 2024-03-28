@@ -113,6 +113,16 @@ class TicketCommentNotSaved extends TicketsStates {
   TicketCommentNotSaved({required this.errorMessage});
 }
 
+class TicketDocumentSaving extends TicketsStates {}
+
+class TicketDocumentSaved extends TicketsStates {}
+
+class TicketDocumentNotSaved extends TicketsStates {
+  final String errorMessage;
+
+  TicketDocumentNotSaved({required this.errorMessage});
+}
+
 class TicketStatusUpdating extends TicketsStates {}
 
 class TicketStatusUpdated extends TicketsStates {}

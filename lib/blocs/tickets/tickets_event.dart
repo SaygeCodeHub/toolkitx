@@ -73,6 +73,12 @@ class SaveTicketComment extends TicketsEvents {
   SaveTicketComment({required this.comment});
 }
 
+class SaveTicketDocument extends TicketsEvents {
+  final Map saveDocumentMap;
+
+  SaveTicketDocument({required this.saveDocumentMap});
+}
+
 class UpdateTicketStatus extends TicketsEvents {
   final String edtHrs;
   final String completionDate;

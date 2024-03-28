@@ -11,6 +11,7 @@ import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
@@ -143,7 +144,7 @@ import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/tickets/tickets_filter_screen.dart';
-import '../screens/tickets/widgets/add_ticket_comment_screen.dart';
+import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
@@ -569,6 +570,8 @@ class AppRoutes {
         return _createRoute(const AddTicketScreen());
       case AddTicketCommentScreen.routeName:
         return _createRoute(const AddTicketCommentScreen());
+      case AddTicketDocumentScreen.routeName:
+        return _createRoute(const AddTicketDocumentScreen());
       case TicketEDTHoursScreen.routeName:
         return _createRoute(const TicketEDTHoursScreen());
       case TicketCompletionDateScreen.routeName:
