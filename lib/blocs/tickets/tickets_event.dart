@@ -78,3 +78,14 @@ class SaveTicketDocument extends TicketsEvents {
 
   SaveTicketDocument({required this.saveDocumentMap});
 }
+
+class UpdateTicketStatus extends TicketsEvents {
+  final String edtHrs;
+  final String completionDate;
+  final String status;
+
+  UpdateTicketStatus(
+      {required this.edtHrs,
+      required this.completionDate,
+      required this.status});
+}
