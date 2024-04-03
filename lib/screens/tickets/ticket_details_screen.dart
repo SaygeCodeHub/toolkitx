@@ -14,7 +14,9 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
 import '../../utils/ticket_util.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 
 class TicketDetailsScreen extends StatelessWidget {
@@ -32,7 +34,20 @@ class TicketDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: GenericAppBar(
         actions: [
-          BlocBuilder<TicketsBloc, TicketsStates>(
+          BlocConsumer<TicketsBloc, TicketsStates>(
+              listener: (context, state) {
+                if (state is TicketStatusUpdating) {
+                  ProgressBar.show(context);
+                } else if (state is TicketStatusUpdated) {
+                  ProgressBar.dismiss(context);
+                  context.read<TicketsBloc>().add(FetchTicketDetails(
+                      ticketId: context.read<TicketsBloc>().ticketId,
+                      ticketTabIndex: 0));
+                } else if (state is TicketStatusNotUpdated) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
+              },
               buildWhen: (previousState, currentState) =>
                   currentState is TicketDetailsFetched,
               builder: (context, state) {

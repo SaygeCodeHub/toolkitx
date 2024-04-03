@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/tickets/fetch_ticket_master_model.dart';
 import 'package:toolkit/data/models/tickets/fetch_tickets_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_comment_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
+import 'package:toolkit/data/models/tickets/update_ticket_status_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -39,6 +40,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SelectBugType>(_selectBugType);
     on<SaveTicketComment>(_saveTicketComment);
     on<SaveTicketDocument>(_saveTicketDocument);
+    on<UpdateTicketStatus>(_updateTicketStatus);
   }
 
   String selectApplicationName = '';
@@ -54,9 +56,9 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      if (event.isFromHome == true) {
+      if (event.isFromHome) {
         FetchTicketsModel fetchTicketsModel =
-            await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '');
+            await _ticketsRepository.fetchTickets(event.pageNo, hashCode, '{}');
         ticketDatum.addAll(fetchTicketsModel.data);
         hasReachedMax = fetchTicketsModel.data.isEmpty;
         emit(TicketsFetched(
@@ -167,6 +169,9 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       if (fetchTicketDetailsModel.data.cantesting == '1') {
         popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
       }
+      if (fetchTicketDetailsModel.data.canapproved == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
+      }
       if (fetchTicketDetailsModel.data.canrolledout == '1') {
         popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
       }
@@ -266,6 +271,34 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       }
     } catch (e) {
       emit(TicketDocumentNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _updateTicketStatus(
+      UpdateTicketStatus event, Emitter<TicketsStates> emit) async {
+    emit(TicketStatusUpdating());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map updateStatusMap = {
+        "edt": event.edtHrs,
+        "ticketid": ticketId,
+        "userid": userId,
+        "status": event.status,
+        "completiondate": event.completionDate,
+        "hashcode": hashCode
+      };
+      UpdateTicketStatusModel updateTicketStatusModel =
+          await _ticketsRepository.updateTicketStatus(updateStatusMap);
+      if (updateTicketStatusModel.message == '1') {
+        emit(TicketStatusUpdated());
+      } else {
+        emit(TicketStatusNotUpdated(
+            errorMessage: updateTicketStatusModel.message));
+      }
+    } catch (e) {
+      emit(TicketStatusNotUpdated(errorMessage: e.toString()));
     }
   }
 }
