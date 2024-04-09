@@ -214,7 +214,7 @@ class IncidentDetailsBloc
           commentId = saveIncidentCommentsModel.message;
           emit(IncidentCommentsSaved(
               saveIncidentCommentsModel: saveIncidentCommentsModel));
-          if (saveCommentMap['filenames'] != null) {
+          if (saveCommentMap['ImageString'] != null) {
             add(SaveIncidentCommentsFiles(saveCommentsMap: saveCommentMap));
           }
         } else {
@@ -238,7 +238,7 @@ class IncidentDetailsBloc
         "userid": userid,
         "incidentid": sameFilesMap['incidentId'],
         "commentid": commentId,
-        "filenames": sameFilesMap['filenames'],
+        "filenames": sameFilesMap['ImageString'],
         "hashcode": hashCode
       };
       SaveIncidentAndQMCommentsFilesModel saveIncidentCommentsModel =

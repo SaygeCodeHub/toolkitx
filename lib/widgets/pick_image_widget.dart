@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/configs/app_color.dart';
+import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/upload_picture_container.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -34,27 +35,30 @@ class PickImageWidget extends StatelessWidget {
         UploadPictureContainer(
             imagePathsList: imageMap['imageList'] ?? [],
             clientId: imageMap['clientId'] ?? ''),
+        const SizedBox(height: xxTinierSpacing),
         SecondaryButton(
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return UploadAlertDialog(
-                      isSignature: imageMap['isSignature'],
-                      onCamera: () {
-                        context.read<ImagePickerBloc>().isCamera = true;
-                        context.read<ImagePickerBloc>().add(PickImage());
-                        Navigator.pop(context);
-                      },
-                      onDevice: () {
-                        context.read<ImagePickerBloc>().isCamera = false;
-                        context.read<ImagePickerBloc>().add(PickImage());
-                        Navigator.pop(context);
-                      },
-                      onSign: imageMap['onSign'],
-                    );
-                  });
-            },
+            onPressed: imageMap['imageCount'] != 6
+                ? () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return UploadAlertDialog(
+                            isSignature: imageMap['isSignature'],
+                            onCamera: () {
+                              context.read<ImagePickerBloc>().isCamera = true;
+                              context.read<ImagePickerBloc>().add(PickImage());
+                              Navigator.pop(context);
+                            },
+                            onDevice: () {
+                              context.read<ImagePickerBloc>().isCamera = false;
+                              context.read<ImagePickerBloc>().add(PickImage());
+                              Navigator.pop(context);
+                            },
+                            onSign: imageMap['onSign'],
+                          );
+                        });
+                  }
+                : null,
             textValue: (imageMap['isSignature'] == false)
                 ? StringConstants.kUpload
                 : StringConstants.kEditSignature),

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/qualityManagement/widgets/qm_mark_as_resolved_screen.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
@@ -44,6 +46,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
         offset: const Offset(0, xxTinierSpacing),
         onSelected: (value) {
           if (value == DatabaseUtil.getText('AddComments')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -63,6 +67,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Report')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -71,6 +77,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Acknowledge')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -79,6 +87,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('DefineMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -87,6 +97,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ApproveMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -95,6 +107,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ImplementMitigation')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
                     context, QualityManagementAddCommentsScreen.routeName,
                     arguments: fetchQualityManagementDetailsModel)
@@ -103,6 +117,8 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                         qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Markasresolved')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => QualityManagementMarkAsResolvedScreen(
                     fetchQualityManagementDetailsModel:

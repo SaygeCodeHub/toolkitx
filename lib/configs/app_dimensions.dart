@@ -90,6 +90,7 @@ const double kSizedBoxWidth = 380.0;
 const double xSizedBoxWidth = 300.0;
 const double xxSizedBoxWidth = 200.0;
 const double xxxSizedBoxWidth = 150.0;
+const double kSmallSizedBoxWidth = 100.0;
 const double kSearchFieldWidth = 240.0;
 const double kApplyButtonWidth = 105.0;
 const double kDeleteIconSize = 18.0;
