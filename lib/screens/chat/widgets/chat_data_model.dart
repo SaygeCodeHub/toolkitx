@@ -18,12 +18,13 @@ class ChatData {
   MediaType? mediaType;
   String fileName;
 
-  ChatData({this.rId = '',
-    this.sId = '',
-    this.sType = '',
-    this.rType = '',
-    this.isReceiver = 0,
-    this.userName = '',
+  ChatData(
+      {this.rId = '',
+      this.sId = '',
+      this.sType = '',
+      this.rType = '',
+      this.isReceiver = 0,
+      this.userName = '',
       this.message = '',
       this.groupName = '',
       this.groupId = 0,
