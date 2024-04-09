@@ -1,6 +1,11 @@
 abstract class ChatEvent {}
 
-class FetchEmployees extends ChatEvent {}
+class FetchEmployees extends ChatEvent {
+  final int pageNo;
+  final String searchedName;
+
+  FetchEmployees({required this.pageNo, required this.searchedName});
+}
 
 class SendChatMessage extends ChatEvent {
   final Map<String, dynamic> sendMessageMap;
@@ -22,4 +27,10 @@ class PickMedia extends ChatEvent {
   final Map mediaDetailsMap;
 
   PickMedia({required this.mediaDetailsMap});
+}
+
+class SearchEmployeeList extends ChatEvent {
+  final bool isSearchEnabled;
+
+  SearchEmployeeList({required this.isSearchEnabled});
 }

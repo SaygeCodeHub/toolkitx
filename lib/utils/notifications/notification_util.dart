@@ -21,9 +21,11 @@ class NotificationUtil {
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
         ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-          "employee_id": message.data['rid'],
-          "employee_name": '',
-          "employee_type": message.data['rtype']
+          'sid': message.data['sid'] ?? '',
+          'rid': message.data['rid'] ?? '',
+          'rtype': message.data['rtype'] ?? '',
+          'stype': message.data['stype'] ?? '',
+          "employee_name": message.data['username']
         }));
       }
     });
@@ -31,16 +33,8 @@ class NotificationUtil {
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
-    List<Map<String, dynamic>> allEmployees =
-        await _databaseHelper.getEmployees();
-    String employeeName = '';
-    for (var item in allEmployees) {
-      if (item['id'] == message.data['rid']) {
-        employeeName = item['name'];
-      }
-    }
     Map<String, dynamic> messageData = {
-      'employee_id': message.data['rid'],
+      'rid': message.data['rid'],
       'msg': message.data['chatmsg'],
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
@@ -48,7 +42,8 @@ class NotificationUtil {
       'rtype': message.data['rtype'],
       'quote_msg_id': message.data['quotemsg'],
       'sid': message.data['sid'],
-      'employee_name': employeeName
+      'stype': message.data['stype'],
+      'employee_name': message.data['username']
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -70,14 +65,6 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 
 Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
   try {
-    List<Map<String, dynamic>> allEmployees =
-        await DatabaseHelper().getEmployees();
-    String employeeName = '';
-    for (var item in allEmployees) {
-      if (item['id'] == message.data['rid']) {
-        employeeName = item['name'];
-      }
-    }
     Map<String, dynamic> messageData = {
       'employee_id': message.data['rid'],
       'msg': message.data['chatmsg'],
@@ -87,7 +74,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'rtype': message.data['rtype'],
       'quote_msg_id': message.data['quotemsg'],
       'sid': message.data['sid'],
-      'employee_name': employeeName
+      'stype': message.data['stype'],
+      'employee_name': message.data['username']
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {

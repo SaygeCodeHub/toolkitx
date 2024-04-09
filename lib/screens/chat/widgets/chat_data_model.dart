@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
 
 class ChatData {
-  String employeeId;
-  String employeeName;
+  String rId;
+  String sId;
+  String sType;
+  String rType;
+  int isReceiver;
+  String userName;
   String message;
   int groupId;
   String groupName;
@@ -14,9 +18,12 @@ class ChatData {
   MediaType? mediaType;
   String fileName;
 
-  ChatData(
-      {this.employeeId = '',
-      this.employeeName = '',
+  ChatData({this.rId = '',
+    this.sId = '',
+    this.sType = '',
+    this.rType = '',
+    this.isReceiver = 0,
+    this.userName = '',
       this.message = '',
       this.groupName = '',
       this.groupId = 0,
@@ -32,10 +39,14 @@ class ChatData {
     return members.map((member) => member.toMap()).toList();
   }
 
-  Map<String, dynamic> chatToMap() {
+  Map<String, dynamic> toMap() {
     return {
-      'employee_id': employeeId,
-      'employee_name': employeeName,
+      'rid': rId,
+      'sid': sId,
+      'stype': sType,
+      'rtype': rType,
+      'isReceiver': isReceiver,
+      'employee_name': userName,
       'msg': message,
       'group_name': groupName,
       'group_id': groupId,

@@ -7,9 +7,9 @@ class ChatInitial extends ChatState {}
 class FetchingEmployees extends ChatState {}
 
 class EmployeesFetched extends ChatState {
-  final FetchEmployeesModel fetchEmployeesModel;
+  final List<EmployeesDatum> employeeList;
 
-  EmployeesFetched({required this.fetchEmployeesModel});
+  EmployeesFetched({required this.employeeList});
 }
 
 class EmployeesNotFetched extends ChatState {
@@ -38,4 +38,10 @@ class ChatGroupCannotCreate extends ChatState {
   final String errorMessage;
 
   ChatGroupCannotCreate({required this.errorMessage});
+}
+
+class EmployeesListSearched extends ChatState {
+  final bool isSearchedEnabled;
+
+  EmployeesListSearched({required this.isSearchedEnabled});
 }

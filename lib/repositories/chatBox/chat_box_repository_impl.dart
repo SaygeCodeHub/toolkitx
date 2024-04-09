@@ -8,9 +8,10 @@ import '../../data/models/chatBox/fetch_employees_model.dart';
 
 class CheckBoxRepositoryImpl extends ChatBoxRepository {
   @override
-  Future<FetchEmployeesModel> fetchEmployees(String hashCode) async {
+  Future<FetchEmployeesModel> fetchEmployees(
+      int pageNo, String hashCode, String searchName) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}common/getallemployees?hashcode=$hashCode");
+        "${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
     return FetchEmployeesModel.fromJson(response);
   }
 

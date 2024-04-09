@@ -29,16 +29,16 @@ class FetchEmployeesModel {
 }
 
 class EmployeesDatum {
-  final String id;
+  final int id;
   final String name;
-  final String type;
+  final int type;
 
   EmployeesDatum({required this.id, required this.name, required this.type});
 
   factory EmployeesDatum.fromJson(Map<String, dynamic> json) => EmployeesDatum(
-        id: json["id"] ?? '',
+        id: json["id"] ?? 0,
         name: json["name"] ?? '',
-        type: json["type"] ?? '',
+        type: json["type"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {"id": id, "name": name, "type": type};

@@ -54,7 +54,9 @@ class OnLineModules extends StatelessWidget {
                 child: const Center(child: CircularProgressIndicator()));
           }
           if (state is HomeScreenFetched) {
-            context.read<ChatBloc>().add(FetchEmployees());
+            context
+                .read<ChatBloc>()
+                .add(FetchEmployees(pageNo: 1, searchedName: ''));
             isFirstTime = false;
             return GridView.builder(
                 primary: false,

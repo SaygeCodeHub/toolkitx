@@ -48,8 +48,12 @@ class AllChatsScreen extends StatelessWidget {
                     child: ListTile(
                         onTap: () {
                           ChatMessagingScreen.chatDetailsMap = {
-                            "employee_name": snapshot.data![index].employeeName,
-                            'employee_id': snapshot.data![index].employeeId,
+                            "employee_name": snapshot.data![index].userName,
+                            'rid': snapshot.data![index].rId,
+                            'sid': snapshot.data![index].sId,
+                            'isReceiver': snapshot.data![index].isReceiver,
+                            'stype': snapshot.data![index].sType,
+                            'rtype': snapshot.data![index].rType,
                             'isGroup': snapshot.data![index].isGroup
                           };
                           Navigator.pushNamed(
@@ -68,7 +72,7 @@ class AllChatsScreen extends StatelessWidget {
                                 size: 20)),
                         title: Text((snapshot.data![index].isGroup == true)
                             ? snapshot.data![index].groupName
-                            : snapshot.data![index].employeeName),
+                            : snapshot.data![index].userName),
                         titleTextStyle: Theme.of(context)
                             .textTheme
                             .small

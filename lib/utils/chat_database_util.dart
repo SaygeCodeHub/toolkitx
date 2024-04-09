@@ -35,7 +35,6 @@ class DatabaseHelper {
             stype_2 TEXT,
             msg_status TEXT DEFAULT '0',
             employee_name TEXT,
-            employee_id TEXT,
             isReceiver INTEGER DEFAULT 0,
             messageType TEXT
           )
@@ -112,18 +111,21 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployee(
-      String employeeId) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
+      String employeeIdA, String employeeIdB) async {
     final Database db = await database;
-    return await db.query('chat_messages',
-        where: 'employee_id = ?', whereArgs: [employeeId]);
+    return await db.rawQuery('''
+    SELECT * 
+    FROM chat_messages 
+    WHERE (rid = ? AND sid = ?) OR (rid = ? AND sid = ?)
+  ''', [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
   }
 
   Future<List> getLatestMessagesForEmployees() async {
     final Database db = await database;
 
     const empList = '''
-    SELECT DISTINCT employee_id
+    SELECT DISTINCT rid, sid
     FROM chat_messages;
   ''';
 
@@ -136,10 +138,10 @@ class DatabaseHelper {
 
   Future<String> getEmployeeNameFromDatabase(String employeeId) async {
     final Database db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('chat_messages',
-        where: 'employee_id = ?', whereArgs: [employeeId]);
+    final List<Map<String, dynamic>> maps = await db
+        .query('chat_messages', where: 'rid = ?', whereArgs: [employeeId]);
     if (maps.isNotEmpty) {
-      return maps[0]['employee_name'] ?? 'na';
+      return maps[0]['employee_name'] ?? '';
     } else {
       return 'employee name not found!';
     }
@@ -152,7 +154,7 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> results = await db.rawQuery(query);
 
     if (results.isNotEmpty) {
-      return results.first['employee_id'] as String?;
+      return results.first['rid'] as String?;
     } else {
       return null;
     }

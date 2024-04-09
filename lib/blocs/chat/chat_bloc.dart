@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,9 +12,9 @@ import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
+import 'package:toolkit/screens/chat/employees_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
 import 'dart:math';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -27,6 +26,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ImagePicker _imagePicker = ImagePicker();
   bool isCameraImage = false;
   bool isCameraVideo = false;
+  String employeeName = '';
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -41,6 +41,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<List<ChatData>> get allChatsStream =>
       _allChatScreenDetailsStreamController.stream;
   int groupId = 0;
+  List<EmployeesDatum> employeeList = [];
+  bool employeeListReachedMax = false;
 
   ChatBloc._() : super(ChatInitial()) {
     on<FetchEmployees>(_fetchEmployees);
@@ -49,6 +51,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<FetchChatsList>(_fetchChatsList);
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
+    on<SearchEmployeeList>(_searchEmployeeList);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -68,14 +71,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(FetchingEmployees());
       FetchEmployeesModel fetchEmployeesModel =
           await _chatBoxRepository.fetchEmployees(
-              await _customerCache.getHashCode(CacheKeys.hashcode) ?? '');
-      if (fetchEmployeesModel.data.isNotEmpty) {
-        await _databaseHelper.insertEmployees(fetchEmployeesModel.data);
-        emit(EmployeesFetched(fetchEmployeesModel: fetchEmployeesModel));
-      } else {
-        emit(
-            EmployeesNotFetched(errorMessage: StringConstants.kNoRecordsFound));
-      }
+              event.pageNo,
+              await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+              employeeName);
+      employeeListReachedMax = fetchEmployeesModel.data.isEmpty;
+      employeeList.addAll(fetchEmployeesModel.data);
+      await _databaseHelper.insertEmployees(employeeList);
+      emit(EmployeesFetched(employeeList: employeeList));
     } catch (e) {
       emit(EmployeesNotFetched(errorMessage: e.toString()));
     }
@@ -92,12 +94,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": "",
-        "sid": "1", // Aditya add is here
-        "stype": "1",
+        "sid": await _customerCache.getUserId2(CacheKeys.userId2),
+        "stype": (await _customerCache.getUserType(CacheKeys.userType) == "2")
+            ? "2"
+            : "1",
         "rid": (event.sendMessageMap['isGroup'] == true)
             ? groupId
-            : event.sendMessageMap['employee_id'] ?? '',
-        "rtype": event.sendMessageMap['employee_type'] ?? '',
+            : (event.sendMessageMap['isReceiver'] == 1)
+                ? event.sendMessageMap['sid']
+                : event.sendMessageMap['rid'],
+        "rtype": (event.sendMessageMap['isReceiver'] == 1)
+            ? event.sendMessageMap['stype']
+            : event.sendMessageMap['rtype'] ?? '',
         "msg_type": "1",
         "msg_time": isoDateString,
         "msg": event.sendMessageMap['message'] ?? '',
@@ -105,25 +113,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "sid_2": 2,
         "stype_2": "3"
       };
-      print(
-          'send message map---->${jsonEncode(sendMessageMap)}'); // you can check the post map here.
-      Map<String, dynamic> employeeDetailsMap = {
-        "employee_name": event.sendMessageMap['employee_name'] ?? '',
-        "employee_id": event.sendMessageMap['employee_id'] ?? ''
-      };
-      Map<String, dynamic> chatDetailsMap = {
-        ...sendMessageMap,
-        ...employeeDetailsMap
-      };
-      chatDetailsMap['isReceiver'] = 0;
-      chatDetailsMap['messageType'] = event.sendMessageMap['mediaType'];
-      await _databaseHelper.insertMessage(chatDetailsMap);
+      sendMessageMap['isReceiver'] = 0;
+      await _databaseHelper.insertMessage({
+        'employee_name': event.sendMessageMap['employee_name'],
+        ...sendMessageMap
+      });
       event.sendMessageMap['isMedia'] = false;
-      add(RebuildChatMessagingScreen(employeeDetailsMap: event.sendMessageMap));
+      add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
-        await _databaseHelper.updateMessageStatus(messageId);
+        await _databaseHelper.updateMessageStatus(sendMessageModel.data.msgId);
       }
     } catch (e) {
       emit(CouldNotSendMessage(errorMessage: e.toString()));
@@ -132,8 +132,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    List<Map<String, dynamic>> messages = await _databaseHelper
-        .getMessagesForEmployee(event.employeeDetailsMap['employee_id']);
+    List<Map<String, dynamic>> messages =
+        await _databaseHelper.getMessagesForEmployees(
+            event.employeeDetailsMap['rid'].toString(),
+            event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -148,18 +150,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         await _databaseHelper.getAllGroupsData();
     List<ChatData> individualChatList = [];
     List<ChatData> groupChatList = [];
-
     for (int i = 0; i < employees.length; i++) {
-      List<Map<String, dynamic>> message = await _databaseHelper
-          .getMessagesForEmployee(employees[i]['employee_id']);
       List lastMessageList = [];
+      List<Map<String, dynamic>> message =
+          await _databaseHelper.getMessagesForEmployees(
+              employees[i]['sid'].toString(), employees[i]['rid'].toString());
       lastMessageList.addAll(message);
-      ChatData chat = ChatData(
-          employeeId: employees[i]['employee_id'],
-          employeeName: lastMessageList.last['employee_name'] ?? 'xxx',
-          message: lastMessageList.last['msg'],
-          isGroup: false);
-      individualChatList.add(chat);
+      if (lastMessageList.isNotEmpty) {
+        ChatData chat = ChatData(
+            rId: lastMessageList.last['rid'].toString(),
+            sId: lastMessageList.last['sid'].toString(),
+            sType: lastMessageList.last['stype'].toString(),
+            rType: lastMessageList.last['rtype'].toString(),
+            isReceiver: lastMessageList.last['isReceiver'] ?? 0,
+            userName: lastMessageList.last['employee_name'] ?? '',
+            message: lastMessageList.last['msg'] ?? '',
+            isGroup: false);
+        individualChatList.add(chat);
+      }
     }
 
     if (groupChats.isNotEmpty) {
@@ -254,6 +262,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } catch (e) {
       e.toString();
+    }
+  }
+
+  FutureOr<void> _searchEmployeeList(
+      SearchEmployeeList event, Emitter<ChatState> emit) async {
+    if (event.isSearchEnabled == true) {
+      emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
+      add(FetchEmployees(pageNo: 1, searchedName: employeeName));
+    } else {
+      emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
+      EmployeesScreen.textEditingController.clear();
+      add(FetchEmployees(pageNo: 1, searchedName: ''));
     }
   }
 }
