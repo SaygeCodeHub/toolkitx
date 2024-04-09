@@ -9,6 +9,7 @@ import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
+import '../workorder_edit_items_screen.dart';
 import 'workorder_item_tab_delete_button.dart';
 
 class WorkOrderTabThreeItemsTab extends StatelessWidget {
@@ -47,7 +48,15 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
                           const SizedBox(width: xxxTinierSpacing),
                           CustomIconButton(
                               icon: Icons.edit,
-                              onPressed: () {},
+                              onPressed: () {
+                                Map assignItemMap = {
+                                  "item": data.items[index].item,
+                                  "itemid": data.items[index].id
+                                };
+                                Navigator.pushNamed(
+                                    context, WorkOrderEditItemsScreen.routeName,
+                                    arguments: assignItemMap);
+                              },
                               size: kEditAndDeleteIconTogether)
                         ],
                       ),

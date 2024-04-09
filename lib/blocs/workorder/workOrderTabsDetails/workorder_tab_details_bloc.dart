@@ -449,19 +449,7 @@ class WorkOrderTabDetailsBloc
 
   _selectSpecialWorkOptions(
       SelectSpecialWorkOptions event, Emitter<WorkOrderTabDetailsStates> emit) {
-    List idsList = List.from(event.specialWorkIdList);
-    List namesList = List.from(event.specialWorkNameList);
-    if (event.specialWorkId.isNotEmpty) {
-      if (event.specialWorkIdList.contains(event.specialWorkId)) {
-        idsList.remove(event.specialWorkId);
-        namesList.remove(event.specialWorkName);
-      } else {
-        idsList.add(event.specialWorkId);
-        namesList.add(event.specialWorkName);
-      }
-    }
-    emit(SpecialWorkOptionsSelected(
-        specialWorkIdList: idsList, specialWorkNameList: namesList));
+    emit(SpecialWorkOptionsSelected(isChecked: event.isChecked));
   }
 
   FutureOr _manageDownTime(ManageWorkOrderDownTime event,
@@ -1125,21 +1113,27 @@ class WorkOrderTabDetailsBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      Map completeWorkOrderMap = {
-        "woid": workOrderId,
-        "userid": userId,
-        "date": event.completeWorkOrderMap['date'],
-        "time": event.completeWorkOrderMap['time'],
-        "comments": event.completeWorkOrderMap['comments'],
-        "hashcode": hashCode
-      };
-      CompleteWorkOrderModel completeWorkOrderModel =
-          await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
-      if (completeWorkOrderModel.message == '1') {
-        emit(WorkOrderCompleted());
-      } else {
+      if (event.completeWorkOrderMap['date'] == null ||
+          event.completeWorkOrderMap['time'] == null) {
         emit(WorkOrderNotCompleted(
-            errorMessage: completeWorkOrderModel.message));
+            errorMessage: DatabaseUtil.getText('InsertDateTime')));
+      } else {
+        Map completeWorkOrderMap = {
+          "woid": workOrderId,
+          "userid": userId,
+          "date": event.completeWorkOrderMap['date'],
+          "time": event.completeWorkOrderMap['time'],
+          "comments": event.completeWorkOrderMap['comments'],
+          "hashcode": hashCode
+        };
+        CompleteWorkOrderModel completeWorkOrderModel =
+        await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
+        if (completeWorkOrderModel.message == '1') {
+          emit(WorkOrderCompleted());
+        } else {
+          emit(WorkOrderNotCompleted(
+              errorMessage: completeWorkOrderModel.message));
+        }
       }
     } catch (e) {
       emit(WorkOrderNotCompleted(errorMessage: e.toString()));

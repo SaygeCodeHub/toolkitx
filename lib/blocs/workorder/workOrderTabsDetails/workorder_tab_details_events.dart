@@ -114,16 +114,9 @@ class SelectSafetyMeasureOptions extends WorkOrderTabsDetailsEvent {
 }
 
 class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
-  final String specialWorkId;
-  final String specialWorkName;
-  final List specialWorkIdList;
-  final List specialWorkNameList;
+  final bool isChecked;
 
-  SelectSpecialWorkOptions(
-      {required this.specialWorkId,
-      required this.specialWorkName,
-      required this.specialWorkIdList,
-      required this.specialWorkNameList});
+  SelectSpecialWorkOptions({required this.isChecked});
 }
 
 class ManageWorkOrderDownTime extends WorkOrderTabsDetailsEvent {

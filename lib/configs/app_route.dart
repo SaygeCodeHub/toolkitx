@@ -160,6 +160,7 @@ import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_document_filter_screen.dart';
+import '../screens/workorder/workorder_edit_items_screen.dart';
 import '../screens/workorder/workorder_edit_workforce_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
@@ -576,6 +577,8 @@ class AppRoutes {
         return _createRoute(const TicketEDTHoursScreen());
       case TicketCompletionDateScreen.routeName:
         return _createRoute(const TicketCompletionDateScreen());
+      case WorkOrderEditItemsScreen.routeName:
+        return _createRoute(WorkOrderEditItemsScreen(assignPartMap: settings.arguments as Map,));
       default:
         return _createRoute(const WelcomeScreen());
     }
