@@ -43,60 +43,69 @@ class ExpenseItemDetailTab extends StatelessWidget {
               return CustomCard(
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
-                  trailing: PopupMenuButton(
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem(
-                          padding: EdgeInsets.zero,
-                          child: CustomTextButton(
-                              textColor: AppColor.black,
-                              onPressed: () => showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AndroidPopUp(
-                                        titleValue: DatabaseUtil.getText(
-                                            'ApproveLotoTitle'),
-                                        contentValue:
-                                            StringConstants.kDeleteItem,
-                                        onPrimaryButton: () {
-                                          context.read<ExpenseBloc>().add(
-                                              DeleteExpenseItem(
-                                                  itemId: expenseDetailsData
-                                                      .itemlist[index].id));
-                                          Navigator.pop(context);
-                                        });
-                                  }),
-                              textValue: DatabaseUtil.getText('Delete')),
+                  trailing: (expenseDetailsData.status == '1' ||
+                          expenseDetailsData.status == '2')
+                      ? const SizedBox.shrink()
+                      : PopupMenuButton(
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem(
+                                padding: EdgeInsets.zero,
+                                child: CustomTextButton(
+                                    textColor: AppColor.black,
+                                    onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AndroidPopUp(
+                                              titleValue: DatabaseUtil.getText(
+                                                  'ApproveLotoTitle'),
+                                              contentValue:
+                                                  StringConstants.kDeleteItem,
+                                              onPrimaryButton: () {
+                                                context.read<ExpenseBloc>().add(
+                                                    DeleteExpenseItem(
+                                                        itemId:
+                                                            expenseDetailsData
+                                                                .itemlist[index]
+                                                                .id));
+                                                Navigator.pop(context);
+                                              });
+                                        }),
+                                    textValue: DatabaseUtil.getText('Delete')),
+                              ),
+                              PopupMenuItem(
+                                  padding: EdgeInsets.zero,
+                                  child: CustomTextButton(
+                                      textColor: AppColor.black,
+                                      onPressed: () {
+                                        ExpenseEditItemsScreen.editExpenseMap[
+                                                'details_model'] =
+                                            expenseDetailsData;
+                                        ExpenseEditItemsScreen
+                                                .editExpenseMap['expense_id'] =
+                                            expenseId;
+                                        context
+                                            .read<ExpenseBloc>()
+                                            .expenseWorkingAtMap
+                                            .clear();
+                                        ExpenseWorkingAtExpansionTile
+                                            .workingAt = '';
+                                        Navigator.pushNamed(
+                                                context,
+                                                ExpenseEditItemsScreen
+                                                    .routeName,
+                                                arguments: expenseDetailsData
+                                                    .itemlist[index].id)
+                                            .then((value) => context
+                                                .read<ExpenseBloc>()
+                                                .add(FetchExpenseDetails(
+                                                    tabIndex: 2,
+                                                    expenseId: expenseId)));
+                                      },
+                                      textValue: DatabaseUtil.getText('Edit')))
+                            ];
+                          },
                         ),
-                        PopupMenuItem(
-                            padding: EdgeInsets.zero,
-                            child: CustomTextButton(
-                                textColor: AppColor.black,
-                                onPressed: () {
-                                  ExpenseEditItemsScreen
-                                          .editExpenseMap['details_model'] =
-                                      expenseDetailsData;
-                                  ExpenseEditItemsScreen
-                                      .editExpenseMap['expense_id'] = expenseId;
-                                  context
-                                      .read<ExpenseBloc>()
-                                      .expenseWorkingAtMap
-                                      .clear();
-                                  ExpenseWorkingAtExpansionTile.workingAt = '';
-                                  Navigator.pushNamed(context,
-                                          ExpenseEditItemsScreen.routeName,
-                                          arguments: expenseDetailsData
-                                              .itemlist[index].id)
-                                      .then((value) => context
-                                          .read<ExpenseBloc>()
-                                          .add(FetchExpenseDetails(
-                                              tabIndex: 2,
-                                              expenseId: expenseId)));
-                                },
-                                textValue: DatabaseUtil.getText('Edit')))
-                      ];
-                    },
-                  ),
                   title: Padding(
                       padding: const EdgeInsets.only(bottom: xxTinierSpacing),
                       child: Text(expenseDetailsData.itemlist[index].itemname,

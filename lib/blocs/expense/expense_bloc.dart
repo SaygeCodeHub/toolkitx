@@ -72,6 +72,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   List<List<ItemMasterDatum>> fetchItemMaster = [];
   Map expenseWorkingAtMap = {};
   Map expenseWorkingAtNumberMap = {};
+  String editItemDate = '';
+  String editItemId = '';
 
   Future<void> _fetchExpenseList(
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
@@ -344,7 +346,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           fetchItemMasterModel: fetchItemMasterModel,
           isScreenChange: isScreenChange,
           apiKey: apiKey));
-      add(SelectExpenseDate(date: ''));
+      add(SelectExpenseDate(date: editItemDate));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
     }
@@ -483,38 +485,53 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      if (event.expenseItemMap['amount'] == null &&
-          event.expenseItemMap['reportcurrency'] == null) {
+
+      event.expenseItemMap.remove('details_model');
+      event.expenseItemMap.remove('item_details_model');
+
+      List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
+          .expenseCustomFieldsList
+          .where((map) => map.isNotEmpty)
+          .toList();
+      Map saveItemMap = {
+        "id": event.expenseItemMap['id'] ?? '',
+        "expenseid": expenseId,
+        "date": event.expenseItemMap['date'] ?? '',
+        "itemid": event.expenseItemMap['itemid'] ?? '',
+        "amount": event.expenseItemMap['amount'] ?? '',
+        "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
+        "description": event.expenseItemMap['description'] ?? '',
+        "currency": event.expenseItemMap['currency'] ?? '',
+        "filenames": event.expenseItemMap['filenames'] ?? '',
+        "reportcurrency": event.expenseItemMap['reportcurrency'] ??
+            event.expenseItemMap['currency'] ??
+            '',
+        "workingatid": event.expenseItemMap['workingatid'] ?? '',
+        "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode,
+        "questions": filteredList
+      };
+      List<String> keysToExclude = ['id', 'questions'];
+
+      bool isFormDataValid(Map expenseMap, List<String> keysToExclude) {
+        for (var entry in expenseMap.entries) {
+          if (!keysToExclude.contains(entry.key) &&
+              (entry.value == null || entry.value.toString().isEmpty)) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      if (!isFormDataValid(saveItemMap, keysToExclude)) {
         emit(ExpenseItemCouldNotSave(
-            itemNotSaved:
-                StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
       } else {
-        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
-            .expenseCustomFieldsList
-            .where((map) => map.isNotEmpty)
-            .toList();
-        Map saveItemMap = {
-          "id": event.expenseItemMap['id'] ?? '',
-          "expenseid": expenseId,
-          "date": event.expenseItemMap['date'] ?? '',
-          "itemid": event.expenseItemMap['itemid'] ?? '',
-          "amount": event.expenseItemMap['amount'] ?? '',
-          "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
-          "description": event.expenseItemMap['description'] ?? '',
-          "currency": event.expenseItemMap['currency'] ?? '',
-          "filenames": event.expenseItemMap['filenames'] ?? '',
-          "reportcurrency": event.expenseItemMap['reportcurrency'] ??
-              event.expenseItemMap['currency'],
-          "workingatid": event.expenseItemMap['workingatid'] ?? '',
-          "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
-          "userid": userId,
-          "hashcode": hashCode,
-          "questions": filteredList
-        };
         SaveExpenseItemModel saveExpenseItemModel =
             await _expenseRepository.saveExpenseItem(saveItemMap);
         if (saveExpenseItemModel.message == '1') {
-          emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
+          emit(ExpenseItemSaved(expenseId: saveItemMap['expenseid']));
         } else {
           emit(ExpenseItemCouldNotSave(
               itemNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
@@ -577,6 +594,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "item_id": event.expenseItemId,
         "hash_code": await _customerCache.getHashCode(CacheKeys.hashcode)
       });
+      editItemDate = fetchExpenseItemDetailsModel.data.expensedate;
+      editItemId = fetchExpenseItemDetailsModel.data.itemid;
       if (fetchExpenseItemDetailsModel.data.toJson().isNotEmpty) {
         for (int i = 0;
             i < fetchExpenseItemDetailsModel.data.toJson().keys.length;

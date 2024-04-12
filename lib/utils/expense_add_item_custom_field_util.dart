@@ -116,7 +116,7 @@ class _CustomQuestionsRadioTileState extends State<CustomQuestionsRadioTile> {
                             widget.queOption[itemIndex].queoptionid.toString();
                         questionAnswer =
                             widget.queOption[itemIndex].queoptiontext;
-                        widget.expenseCustomFieldCallBack(questionAnswer);
+                        widget.expenseCustomFieldCallBack(questionId);
                       });
                     });
               })
