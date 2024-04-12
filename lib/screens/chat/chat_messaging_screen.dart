@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
@@ -58,13 +59,18 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                         reverse: true,
                         itemCount: snapshot.data?.length,
                         itemBuilder: (context, chatIndex) {
+                          DateTime dateTime = DateTime.parse(
+                              snapshot.data?[chatIndex]['msg_time']);
+                          String formattedTime =
+                              DateFormat('h:mm a').format(dateTime);
                           return ChatMessage(
                               message: snapshot.data?[chatIndex]['msg'] ?? '',
                               isMe:
                                   snapshot.data?[chatIndex]['isReceiver'] ?? 0,
                               messageType: snapshot.data?[chatIndex]
                                       ['messageType'] ??
-                                  '');
+                                  '',
+                              time: formattedTime);
                         },
                       ),
                     ),
@@ -141,15 +147,19 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
             margin: const EdgeInsets.symmetric(horizontal: xxxTinierSpacing),
             child: Row(children: <Widget>[
               Flexible(
-                child: TextField(
-                  controller: textEditingController,
-                  onChanged: (String text) {
-                    textEditingController.text = text;
-                    ChatMessagingScreen.chatDetailsMap['message'] =
-                        textEditingController.text;
-                  },
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Send a message'),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: 2,
+                    onChanged: (String text) {
+                      textEditingController.text = text;
+                      ChatMessagingScreen.chatDetailsMap['message'] =
+                          textEditingController.text;
+                    },
+                    decoration: const InputDecoration.collapsed(
+                        hintText: 'Send a message'),
+                  ),
                 ),
               ),
               CustomIconButton(
@@ -267,19 +277,14 @@ class ChatMessage extends StatelessWidget {
   final String message;
   final int isMe;
   final String messageType;
+  final String time;
 
   const ChatMessage(
       {super.key,
       required this.message,
       required this.isMe,
-      required this.messageType});
-
-  String getCurrentTime() {
-    int hour = DateTime.now().hour;
-    int minute = DateTime.now().minute;
-    String currentTime = '$hour:$minute';
-    return currentTime;
-  }
+      required this.messageType,
+      required this.time});
 
   @override
   Widget build(BuildContext context) {
@@ -292,14 +297,18 @@ class ChatMessage extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(xxTinierSpacing),
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: (isMe == 0)
+                          ? CrossAxisAlignment.end
+                          : CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
                           padding: const EdgeInsets.all(xxxTinySpacing),
                           constraints: BoxConstraints(
                               maxWidth: MediaQuery.sizeOf(context).width / 2),
                           decoration: BoxDecoration(
-                            color: AppColor.lightBlueGrey,
+                            color: (isMe == 0)
+                                ? AppColor.lightBlueGrey
+                                : AppColor.blueishGrey,
                             borderRadius: BorderRadius.only(
                                 topLeft: const Radius.circular(tinierSpacing),
                                 topRight: const Radius.circular(tinierSpacing),
@@ -317,7 +326,8 @@ class ChatMessage extends StatelessWidget {
                         if (isMe == 0)
                           CustomPaint(painter: TrianglePainter(isMe: isMe)),
                         const SizedBox(height: xxxTinierSpacing),
-                        Text(getCurrentTime(),
+                        Text(time,
+                            textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.smallTextBlack)
                       ]))
             ]));

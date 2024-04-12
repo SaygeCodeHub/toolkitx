@@ -29,4 +29,5 @@ class AppColor {
   static const Color tintBlue = Color(0xFF00BEF7);
   static const Color darkYellow = Color(0xFFFFA000);
   static const Color darkGreen = Color(0xFF419341);
+  static const Color blueishGrey = Color(0xFF78ABD9);
 }

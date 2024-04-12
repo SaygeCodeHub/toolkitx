@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/chat/chat_state.dart';
@@ -12,7 +13,6 @@ import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
-import 'package:toolkit/screens/chat/employees_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/chat_database_util.dart';
 import 'dart:math';
@@ -26,7 +26,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ImagePicker _imagePicker = ImagePicker();
   bool isCameraImage = false;
   bool isCameraVideo = false;
-  String employeeName = '';
+  bool isSearchEnabled = false;
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -51,7 +51,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<FetchChatsList>(_fetchChatsList);
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
-    on<SearchEmployeeList>(_searchEmployeeList);
+    // on<SearchEmployeeList>(_searchEmployeeList);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -73,11 +73,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _chatBoxRepository.fetchEmployees(
               event.pageNo,
               await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
-              employeeName);
+              event.searchedName);
       employeeListReachedMax = fetchEmployeesModel.data.isEmpty;
       employeeList.addAll(fetchEmployeesModel.data);
       await _databaseHelper.insertEmployees(employeeList);
-      emit(EmployeesFetched(employeeList: employeeList));
+      if (event.searchedName.isEmpty && isSearchEnabled == true) {
+        emit(EmployeesNotFetched(errorMessage: 'User not found!'));
+      } else {
+        emit(EmployeesFetched(employeeList: employeeList));
+      }
     } catch (e) {
       emit(EmployeesNotFetched(errorMessage: e.toString()));
     }
@@ -116,6 +120,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       sendMessageMap['isReceiver'] = 0;
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
+        'messageType': event.sendMessageMap['mediaType'],
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
@@ -150,39 +155,74 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         await _databaseHelper.getAllGroupsData();
     List<ChatData> individualChatList = [];
     List<ChatData> groupChatList = [];
+
     for (int i = 0; i < employees.length; i++) {
-      List lastMessageList = [];
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
               employees[i]['sid'].toString(), employees[i]['rid'].toString());
-      lastMessageList.addAll(message);
-      if (lastMessageList.isNotEmpty) {
-        ChatData chat = ChatData(
-            rId: lastMessageList.last['rid'].toString(),
-            sId: lastMessageList.last['sid'].toString(),
-            sType: lastMessageList.last['stype'].toString(),
-            rType: lastMessageList.last['rtype'].toString(),
-            isReceiver: lastMessageList.last['isReceiver'] ?? 0,
-            userName: lastMessageList.last['employee_name'] ?? '',
-            message: lastMessageList.last['msg'] ?? '',
-            isGroup: false);
-        individualChatList.add(chat);
+
+      if (message.isNotEmpty) {
+        // Check if an existing chat entry exists
+        int existingChatIndex =
+            findExistingChatIndex(individualChatList, message.last);
+
+        if (existingChatIndex != -1) {
+          // Update existing chat entry
+          ChatData existingChat = individualChatList[existingChatIndex];
+          existingChat.message = message.last['msg'] ?? '';
+          existingChat.date = formattedDate(message.last['msg_time']);
+          existingChat.time = formattedTime(message.last['msg_time']);
+        } else {
+          // Add new chat entry
+          ChatData chat = ChatData(
+            rId: message.last['rid'].toString(),
+            sId: message.last['sid'].toString(),
+            sType: message.last['stype'].toString(),
+            rType: message.last['rtype'].toString(),
+            isReceiver: message.last['isReceiver'] ?? 0,
+            userName: message.last['employee_name'] ?? '',
+            message: message.last['msg'] ?? '',
+            isGroup: false,
+            date: formattedDate(message.last['msg_time']),
+            time: formattedTime(message.last['msg_time']),
+          );
+          individualChatList.add(chat);
+        }
       }
     }
 
-    if (groupChats.isNotEmpty) {
-      for (var item in groupChats) {
-        ChatData chat = ChatData(
-            groupName: item['group_name'],
-            groupPurpose: item['purpose'],
-            message: '',
-            isGroup: true);
-        groupChatList.add(chat);
-      }
+    // Add group chats (if any) to the list
+    for (var item in groupChats) {
+      ChatData chat = ChatData(
+        groupName: item['group_name'],
+        groupPurpose: item['purpose'],
+        message: '',
+        isGroup: true,
+      );
+      groupChatList.add(chat);
     }
 
     final chatsList = [...individualChatList, ...groupChatList];
     _allChatScreenDetailsStreamController.add(chatsList);
+  }
+
+// Method to find the index of an existing chat in the list
+  int findExistingChatIndex(
+      List<ChatData> chatList, Map<String, dynamic> message) {
+    return chatList.indexWhere((chat) =>
+        chat.rId == message['rid'].toString() &&
+        chat.sId == message['sid'].toString());
+  }
+
+// Utility methods for date and time formatting
+  String formattedDate(String timestamp) {
+    DateTime dateTime = DateTime.parse(timestamp);
+    return DateFormat('dd/MM/yyyy').format(dateTime);
+  }
+
+  String formattedTime(String timestamp) {
+    DateTime dateTime = DateTime.parse(timestamp);
+    return DateFormat('h:mm a').format(dateTime);
   }
 
   FutureOr<void> _createChatGroup(
@@ -265,15 +305,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  FutureOr<void> _searchEmployeeList(
-      SearchEmployeeList event, Emitter<ChatState> emit) async {
-    if (event.isSearchEnabled == true) {
-      emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
-      add(FetchEmployees(pageNo: 1, searchedName: employeeName));
-    } else {
-      emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
-      EmployeesScreen.textEditingController.clear();
-      add(FetchEmployees(pageNo: 1, searchedName: ''));
-    }
-  }
+// FutureOr<void> _searchEmployeeList(
+//     SearchEmployeeList event, Emitter<ChatState> emit) async {
+//   if (event.isSearchEnabled == true) {
+//     emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
+//     add(FetchEmployees(pageNo: 1, searchedName: employeeName));
+//   } else {
+//     emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
+//     EmployeesScreen.textEditingController.clear();
+//     add(FetchEmployees(pageNo: 1, searchedName: ''));
+//   }
+// }
 }

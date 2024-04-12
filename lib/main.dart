@@ -22,7 +22,6 @@ import 'package:toolkit/blocs/location/location_bloc.dart';
 import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
-import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';

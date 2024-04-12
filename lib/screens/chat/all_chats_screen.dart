@@ -70,16 +70,51 @@ class AllChatsScreen extends StatelessWidget {
                                     : Icons.person,
                                 color: AppColor.ghostWhite,
                                 size: 20)),
-                        title: Text((snapshot.data![index].isGroup == true)
-                            ? snapshot.data![index].groupName
-                            : snapshot.data![index].userName),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text((snapshot.data![index].isGroup == true)
+                                ? snapshot.data![index].groupName
+                                : snapshot.data![index].userName),
+                            Text(snapshot.data![index].date)
+                          ],
+                        ),
                         titleTextStyle: Theme.of(context)
                             .textTheme
                             .small
                             .copyWith(
                                 color: AppColor.black,
                                 fontWeight: FontWeight.w500),
-                        subtitle: Text(snapshot.data![index].message),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: xxTiniestSpacing),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text((snapshot.data![index].sType == '2')
+                                    ? 'Workforce'
+                                    : 'System User'),
+                                Text(snapshot.data![index].time,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xxSmall
+                                        .copyWith(
+                                            color: AppColor.black,
+                                            fontWeight: FontWeight.w500))
+                              ],
+                            ),
+                            const SizedBox(height: xxTiniestSpacing),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                    child: Text(snapshot.data![index].message))
+                              ],
+                            ),
+                            const SizedBox(height: xxTiniestSpacing)
+                          ],
+                        ),
                         subtitleTextStyle: Theme.of(context).textTheme.xSmall),
                   );
                 },

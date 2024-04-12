@@ -43,7 +43,7 @@ class NotificationUtil {
       'quote_msg_id': message.data['quotemsg'],
       'sid': message.data['sid'],
       'stype': message.data['stype'],
-      'employee_name': message.data['username']
+      'employee_name': message.data['username'],
     };
     await _databaseHelper.insertMessage(messageData);
   }

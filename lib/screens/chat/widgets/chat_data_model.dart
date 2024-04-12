@@ -17,6 +17,8 @@ class ChatData {
   MediaOptions? options;
   MediaType? mediaType;
   String fileName;
+  String date;
+  String time;
 
   ChatData(
       {this.rId = '',
@@ -33,7 +35,9 @@ class ChatData {
       MediaOptions? options,
       this.isGroup = false,
       this.fileName = '',
-      MediaType? mediaType})
+      MediaType? mediaType,
+      this.date = '',
+      this.time = ''})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -51,7 +55,9 @@ class ChatData {
       'msg': message,
       'group_name': groupName,
       'group_id': groupId,
-      'purpose': groupPurpose
+      'purpose': groupPurpose,
+      'date': date,
+      'time': time
     };
   }
 
