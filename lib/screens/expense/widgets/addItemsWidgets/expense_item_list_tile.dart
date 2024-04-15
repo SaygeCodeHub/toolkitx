@@ -12,14 +12,15 @@ import 'expense_item_list.dart';
 
 class ExpenseItemListTile extends StatelessWidget {
   final String itemId;
+  final String itemName;
 
-  const ExpenseItemListTile({Key? key, this.itemId = ''}) : super(key: key);
+  const ExpenseItemListTile({Key? key, this.itemId = '', this.itemName = ''})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ExpenseBloc>()
-        .add(SelectExpenseItem(itemsMap: {'item_id': itemId}));
+    context.read<ExpenseBloc>().add(SelectExpenseItem(
+        itemsMap: {'item_id': itemId, 'item_name': itemName}));
     return BlocBuilder<ExpenseBloc, ExpenseStates>(
       buildWhen: (previousState, currentState) =>
           currentState is ExpenseItemSelected,

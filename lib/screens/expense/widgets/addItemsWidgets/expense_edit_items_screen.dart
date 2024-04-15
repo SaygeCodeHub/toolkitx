@@ -68,7 +68,9 @@ class ExpenseEditItemsScreen extends StatelessWidget {
                 children: [
                   const ExpenseDateExpansionTile(),
                   ExpenseItemListTile(
-                      itemId: state.fetchExpenseItemDetailsModel.data.itemid),
+                      itemId: state.fetchExpenseItemDetailsModel.data.itemid,
+                      itemName:
+                          state.fetchExpenseItemDetailsModel.data.itemName),
                   Text(StringConstants.kWorkingAt,
                       style: Theme.of(context)
                           .textTheme
