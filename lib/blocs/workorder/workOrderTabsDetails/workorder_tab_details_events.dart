@@ -207,9 +207,7 @@ class SearchWorkOrderWorkforce extends WorkOrderTabsDetailsEvent {
   SearchWorkOrderWorkforce({required this.isWorkforceSearched});
 }
 
-class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
-  FetchWorkOrderDocuments();
-}
+class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 
 class SelectWorkOrderDocument extends WorkOrderTabsDetailsEvent {
   final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
@@ -238,9 +236,7 @@ class SelectWorkOrderDocumentStatusOption extends WorkOrderTabsDetailsEvent {
       {required this.statusId, required this.statusOption});
 }
 
-class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
-  ApplyWorkOrderDocumentFilter();
-}
+class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {}
 
 class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
   ClearWorkOrderDocumentFilter();

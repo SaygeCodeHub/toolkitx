@@ -32,7 +32,6 @@ import '../../../data/models/workorder/save_new_and_similar_workorder_model.dart
 import '../../../data/models/workorder/save_workorder_documents_model.dart';
 import '../../../data/models/workorder/start_workorder_model.dart';
 import '../../../data/models/workorder/update_workorder_details_model.dart';
-import '../../../data/models/workorder/workorder_edit_workforce_model.dart';
 import '../../../data/models/workorder/workorder_save_comments_model.dart';
 import '../../../screens/workorder/workorder_add_comments_screen.dart';
 import '../../../screens/workorder/assign_workforce_screen.dart';
@@ -41,7 +40,6 @@ import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
 import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
-import '../../../screens/workorder/workorder_edit_workforce_screen.dart';
 import '../../../screens/workorder/workorder_form_one_screen.dart';
 import 'workorder_tab_details_events.dart';
 import 'workorder_tab_details_states.dart';
@@ -839,6 +837,7 @@ class WorkOrderTabDetailsBloc
               WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
               '',
               jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
+      WorkOrderAssignDocumentScreen.documentDataList.clear();
       emit(WorkOrderDocumentsFetched(
           fetchWorkOrderDocumentsModel: fetchWorkOrderDocumentsModel,
           documentList: [],
@@ -1008,39 +1007,38 @@ class WorkOrderTabDetailsBloc
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
     String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
-    try {
-      if (event.editWorkOrderWorkForceMap['plannedhrs'] == null ||
-          event.editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
-              event.editWorkOrderWorkForceMap['actualhrs'] == null) {
-        emit(WorkOrderWorkForceNotEdited(
-            workForceNotEdited:
-                DatabaseUtil.getText('ValidPlannedActualHours')));
-      } else {
-        String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
-            event.editWorkOrderWorkForceMap['workForceId'], apiKey);
-        Map editWorkForceMap = {
-          "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
-          "workforceid": decryptedWorkForceId,
-          "plannedhrs": event.editWorkOrderWorkForceMap['plannedhrs'] ?? '',
-          "actualhrs": event.editWorkOrderWorkForceMap['actualhrs'] ?? '',
-          "userid": userId,
-          "hashcode": hashCode
-        };
-        print('editWorkForceMap============>$editWorkForceMap');
-        // EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
-        //     await _workOrderRepository.editWorkForce(editWorkForceMap);
-        // if (editWorkOrderWorkForceModel.message == '1') {
-        //   emit(WorkOrderWorkForceEdited(
-        //       editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
-        // } else {
-        //   emit(WorkOrderWorkForceNotEdited(
-        //       workForceNotEdited:
-        //           DatabaseUtil.getText('some_unknown_error_please_try_again')));
-        // }
-      }
-    } catch (e) {
-      emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
+    // try {
+    if (event.editWorkOrderWorkForceMap['plannedhrs'] == null ||
+        event.editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
+            event.editWorkOrderWorkForceMap['actualhrs'] == null) {
+      emit(WorkOrderWorkForceNotEdited(
+          workForceNotEdited: DatabaseUtil.getText('ValidPlannedActualHours')));
+    } else {
+      String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
+          event.editWorkOrderWorkForceMap['workForceId'], apiKey);
+      Map editWorkForceMap = {
+        "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
+        "workforceid": decryptedWorkForceId,
+        "plannedhrs": event.editWorkOrderWorkForceMap['plannedhrs'] ?? '',
+        "actualhrs": event.editWorkOrderWorkForceMap['actualhrs'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      print('editWorkForceMap============>${jsonEncode(editWorkForceMap)}');
+      // EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
+      //     await _workOrderRepository.editWorkForce(editWorkForceMap);
+      // if (editWorkOrderWorkForceModel.message == '1') {
+      //   emit(WorkOrderWorkForceEdited(
+      //       editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
+      // } else {
+      //   emit(WorkOrderWorkForceNotEdited(
+      //       workForceNotEdited:
+      //           DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      // }
     }
+    // } catch (e) {
+    //   emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
+    // }
   }
 
   FutureOr _deleteWorkForce(DeleteWorkOrderWorkForce event,

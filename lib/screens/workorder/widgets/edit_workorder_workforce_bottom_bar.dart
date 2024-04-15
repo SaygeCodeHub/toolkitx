@@ -9,7 +9,6 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
-import '../workorder_edit_workforce_screen.dart';
 
 class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
   const EditWorkOrderWorkForceBottomBar(
@@ -49,8 +48,6 @@ class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    print(
-                        'id====================>${editWorkOrderWorkForceMap['workForceId']}');
                     context.read<WorkOrderTabDetailsBloc>().add(
                         EditWorkOrderWorkForce(
                             editWorkOrderWorkForceMap:

@@ -70,9 +70,11 @@ class WorkOrderEditItemsScreen extends StatelessWidget {
           },
           child: PrimaryButton(
               onPressed: () {
-                context.read<WorkOrderTabDetailsBloc>().add(
-                    AssignWorkOrderParts(assignPartMap: assignPartMap));
-              }, textValue: DatabaseUtil.getText('buttonSave')),
+                context
+                    .read<WorkOrderTabDetailsBloc>()
+                    .add(AssignWorkOrderParts(assignPartMap: assignPartMap));
+              },
+              textValue: DatabaseUtil.getText('buttonSave')),
         ),
       ),
     );

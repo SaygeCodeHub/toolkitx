@@ -51,7 +51,6 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
       String hashCode, String workOrderId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
-    print("${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
     return FetchWorkOrderTabDetailsModel.fromJson(response);
   }
 
