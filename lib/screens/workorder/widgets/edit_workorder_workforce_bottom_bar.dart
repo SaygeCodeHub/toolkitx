@@ -12,7 +12,10 @@ import '../../../widgets/progress_bar.dart';
 import '../workorder_edit_workforce_screen.dart';
 
 class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
-  const EditWorkOrderWorkForceBottomBar({Key? key}) : super(key: key);
+  const EditWorkOrderWorkForceBottomBar(
+      {Key? key, required this.editWorkOrderWorkForceMap})
+      : super(key: key);
+  final Map editWorkOrderWorkForceMap;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +39,8 @@ class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
                 Navigator.pop(context);
                 context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
                     initialTabIndex: 1,
-                    workOrderId: WorkOrderEditWorkForceScreen
-                            .editWorkOrderWorkForceMap['workorderId'] ??
-                        ''));
+                    workOrderId:
+                        editWorkOrderWorkForceMap['workorderId'] ?? ''));
               } else if (state is WorkOrderWorkForceNotEdited) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.workForceNotEdited, '');
@@ -47,9 +49,12 @@ class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    context
-                        .read<WorkOrderTabDetailsBloc>()
-                        .add(EditWorkOrderWorkForce());
+                    print(
+                        'id====================>${editWorkOrderWorkForceMap['workForceId']}');
+                    context.read<WorkOrderTabDetailsBloc>().add(
+                        EditWorkOrderWorkForce(
+                            editWorkOrderWorkForceMap:
+                                editWorkOrderWorkForceMap));
                   },
                   textValue: DatabaseUtil.getText('Save')),
             ),

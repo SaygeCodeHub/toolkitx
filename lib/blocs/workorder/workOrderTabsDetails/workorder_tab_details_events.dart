@@ -260,7 +260,11 @@ class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
 
 class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
 
-class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map editWorkOrderWorkForceMap;
+
+  EditWorkOrderWorkForce({required this.editWorkOrderWorkForceMap});
+}
 
 class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 

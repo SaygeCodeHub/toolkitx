@@ -1009,46 +1009,34 @@ class WorkOrderTabDetailsBloc
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
     String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
     try {
-      if (WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['plannedhrs'] ==
-              null ||
-          WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
-              WorkOrderEditWorkForceScreen
-                      .editWorkOrderWorkForceMap['actualhrs'] ==
-                  null) {
+      if (event.editWorkOrderWorkForceMap['plannedhrs'] == null ||
+          event.editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
+              event.editWorkOrderWorkForceMap['actualhrs'] == null) {
         emit(WorkOrderWorkForceNotEdited(
             workForceNotEdited:
                 DatabaseUtil.getText('ValidPlannedActualHours')));
       } else {
         String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
-            WorkOrderEditWorkForceScreen
-                .editWorkOrderWorkForceMap['workForceId'],
-            apiKey);
+            event.editWorkOrderWorkForceMap['workForceId'], apiKey);
         Map editWorkForceMap = {
-          "workorderid": WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['workorderId'] ??
-              '',
+          "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
           "workforceid": decryptedWorkForceId,
-          "plannedhrs": WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['plannedhrs'] ??
-              '',
-          "actualhrs": WorkOrderEditWorkForceScreen
-                  .editWorkOrderWorkForceMap['actualhrs'] ??
-              '',
+          "plannedhrs": event.editWorkOrderWorkForceMap['plannedhrs'] ?? '',
+          "actualhrs": event.editWorkOrderWorkForceMap['actualhrs'] ?? '',
           "userid": userId,
           "hashcode": hashCode
         };
-        EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
-            await _workOrderRepository.editWorkForce(editWorkForceMap);
-        if (editWorkOrderWorkForceModel.status == 200) {
-          emit(WorkOrderWorkForceEdited(
-              editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
-        } else {
-          emit(WorkOrderWorkForceNotEdited(
-              workForceNotEdited:
-                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
-        }
+        print('editWorkForceMap============>$editWorkForceMap');
+        // EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
+        //     await _workOrderRepository.editWorkForce(editWorkForceMap);
+        // if (editWorkOrderWorkForceModel.message == '1') {
+        //   emit(WorkOrderWorkForceEdited(
+        //       editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
+        // } else {
+        //   emit(WorkOrderWorkForceNotEdited(
+        //       workForceNotEdited:
+        //           DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        // }
       }
     } catch (e) {
       emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
@@ -1127,7 +1115,7 @@ class WorkOrderTabDetailsBloc
           "hashcode": hashCode
         };
         CompleteWorkOrderModel completeWorkOrderModel =
-        await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
+            await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
         if (completeWorkOrderModel.message == '1') {
           emit(WorkOrderCompleted());
         } else {
