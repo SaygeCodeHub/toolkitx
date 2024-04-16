@@ -117,7 +117,8 @@ class ChatboxTextfieldWidget extends StatelessWidget {
                   icon: const Icon(Icons.send_rounded),
                   onPressed: () {
                     if (textEditingController.text.isNotEmpty) {
-                      _handleMessage(textEditingController.text, context);
+                      _handleMessage(
+                          textEditingController.text.trim(), context);
                       context.read<ChatBloc>().chatDetailsMap['message_type'] =
                           '1';
                       context.read<ChatBloc>().add(SendChatMessage(

@@ -30,8 +30,11 @@ class MsgImageWidget extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0), // Rounded corners
               ),
-              child: const Center(
-                child: Icon(Icons.download),
+              child: Center(
+                child: IconButton(
+                  icon: const Icon(Icons.download),
+                  onPressed: () {},
+                ),
               ),
             ),
           ),
