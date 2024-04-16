@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'app_color.dart';
 import 'app_dimensions.dart';
 import 'app_spacing.dart';
@@ -113,7 +114,7 @@ extension AppTextTheme on TextTheme {
 
   TextStyle get smallTextBlack {
     return const TextStyle(
-        fontSize: 9, fontWeight: FontWeight.w400, color: AppColor.black);
+        fontSize: 9, fontWeight: FontWeight.w400, color: AppColor.grey);
   }
 
   TextStyle get smallTextGrey {
