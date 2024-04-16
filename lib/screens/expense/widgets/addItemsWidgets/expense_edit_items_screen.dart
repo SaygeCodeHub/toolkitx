@@ -67,7 +67,10 @@ class ExpenseEditItemsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const ExpenseDateExpansionTile(),
-                  const ExpenseItemListTile(),
+                  ExpenseItemListTile(
+                      itemId: state.fetchExpenseItemDetailsModel.data.itemid,
+                      itemName:
+                          state.fetchExpenseItemDetailsModel.data.itemName),
                   Text(StringConstants.kWorkingAt,
                       style: Theme.of(context)
                           .textTheme

@@ -67,6 +67,8 @@ class ExpenseItemList extends StatelessWidget {
                                         .toString(),
                                 groupValue: itemMap['item_id'],
                                 onChanged: (value) {
+                                  ExpenseDetailsTabOne
+                                      .manageItemsMap['itemid'] = value;
                                   itemMap['item_id'] = (fetchItemMaster
                                           .isNotEmpty)
                                       ? fetchItemMaster[0][index].id.toString()

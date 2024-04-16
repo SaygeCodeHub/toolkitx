@@ -137,8 +137,8 @@ abstract class StringConstants {
   static const String kWorkingAt = 'Working at'; //
   static const String kSelectItem = 'Select Item'; //
   static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
-  static const String kExpenseAddItemAmountAndCurrencyValidation =
-      'Amount and Currency are compulsory.'; //
+  static const String kExpenseAddItemValidation =
+      'All fields are mandatory.'; //
   static const String kExpenseAddItemDateAndItemValidation =
       'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //

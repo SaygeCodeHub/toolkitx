@@ -17,7 +17,6 @@ import '../../../../widgets/progress_bar.dart';
 import '../../../checklist/workforce/widgets/upload_image_section.dart';
 import '../../expense_details_screen.dart';
 import 'expense_add_item_currency_list_tile.dart';
-import 'expense_added_image_count_widget.dart';
 import 'expense_edit_items_screen.dart';
 
 class ExpenseEditFormThree extends StatelessWidget {
@@ -47,8 +46,7 @@ class ExpenseEditFormThree extends StatelessWidget {
             Navigator.pop(context);
             Navigator.pushReplacementNamed(
                 context, ExpenseDetailsScreen.routeName,
-                arguments:
-                    ExpenseEditItemsScreen.editExpenseMap['details_model'].id);
+                arguments: state.expenseId);
           } else if (state is ExpenseItemCouldNotSave) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.itemNotSaved, '');
@@ -134,8 +132,6 @@ class ExpenseEditFormThree extends StatelessWidget {
                         textField;
                   }),
               const SizedBox(height: xxTinySpacing),
-              const ExpenseAddedImageCountWidget(),
-              const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
                   isUpload: true,
                   onUploadImageResponse: (List uploadImageList) {
@@ -144,7 +140,7 @@ class ExpenseEditFormThree extends StatelessWidget {
                             .toString()
                             .replaceAll('[', '')
                             .replaceAll(']', '');
-                  }),
+                  })
             ],
           ),
         ),

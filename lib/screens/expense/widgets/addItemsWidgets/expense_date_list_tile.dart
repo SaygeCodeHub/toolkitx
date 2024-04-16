@@ -10,7 +10,9 @@ import '../../../../utils/database_utils.dart';
 import 'expense_date_list.dart';
 
 class ExpenseDateExpansionTile extends StatelessWidget {
-  const ExpenseDateExpansionTile({Key? key}) : super(key: key);
+  const ExpenseDateExpansionTile({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

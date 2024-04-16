@@ -6,7 +6,6 @@ import '../../data/models/expense/fetch_expense_details_model.dart';
 import '../../data/models/expense/fetch_expense_item_details_model.dart';
 import '../../data/models/expense/fetch_expense_master_model.dart';
 import '../../data/models/expense/fetch_item_master_model.dart';
-import '../../data/models/expense/save_expense_item_model.dart';
 import '../../data/models/expense/save_expense_model.dart';
 import '../../data/models/expense/update_expense_model.dart';
 
@@ -203,9 +202,9 @@ class ExpenseItemNotDeleted extends ExpenseStates {
 class SavingExpenseItem extends ExpenseStates {}
 
 class ExpenseItemSaved extends ExpenseStates {
-  final SaveExpenseItemModel saveExpenseItemModel;
+  final String expenseId;
 
-  ExpenseItemSaved({required this.saveExpenseItemModel});
+  ExpenseItemSaved({required this.expenseId});
 }
 
 class ExpenseItemCouldNotSave extends ExpenseStates {

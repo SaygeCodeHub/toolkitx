@@ -8,7 +8,6 @@ import '../../../../widgets/generic_text_field.dart';
 import '../../../checklist/workforce/widgets/upload_image_section.dart';
 import '../expense_details_tab_one.dart';
 import 'expense_add_item_currency_list_tile.dart';
-import 'expense_added_image_count_widget.dart';
 
 class ExpenseAddItemFormTwo extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
@@ -54,8 +53,6 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
                 ExpenseDetailsTabOne.manageItemsMap['description'] = textField;
               }),
           const SizedBox(height: xxTinySpacing),
-          const ExpenseAddedImageCountWidget(),
-          const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {

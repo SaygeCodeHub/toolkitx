@@ -72,7 +72,7 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                   trailing:
                       const Icon(Icons.navigate_next_rounded, size: kIconSize)),
               Visibility(
-                visible: state.currencyDetailsMap['currency_name'] != null,
+                visible: ExpenseDetailsTabOne.manageItemsMap['itemid'] != null,
                 child: Text(DatabaseUtil.getText('Exchangerate'),
                     style: Theme.of(context)
                         .textTheme
@@ -81,7 +81,8 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
               ),
               const SizedBox(height: xxxTinierSpacing),
               Visibility(
-                  visible: state.currencyDetailsMap['currency_name'] != null,
+                  visible:
+                      ExpenseDetailsTabOne.manageItemsMap['itemid'] != null,
                   child: TextFieldWidget(
                       value: ExpenseEditItemsScreen
                               .editExpenseMap['item_details_model']
