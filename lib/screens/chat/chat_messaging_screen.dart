@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/chat/widgets/attachment_msg_widget.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_preview_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chatbox_textfield_widget.dart';
 import 'package:toolkit/screens/chat/widgets/date_divider_widget.dart';
-import 'package:toolkit/screens/chat/widgets/msg_image_widget.dart';
 import 'package:toolkit/screens/chat/widgets/msg_text_widget.dart';
 
 import '../../blocs/chat/chat_bloc.dart';
@@ -83,7 +83,8 @@ class ChatMessagingScreen extends StatelessWidget {
       case '1':
         return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
       case '2':
-        return MsgImageWidget(snapshot: snapshot, reversedIndex: reversedIndex);
+        return AttachmentMsgWidget(
+            snapshot: snapshot, reversedIndex: reversedIndex);
       default:
         return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
     }
