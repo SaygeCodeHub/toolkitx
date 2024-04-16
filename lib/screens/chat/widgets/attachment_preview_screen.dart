@@ -58,7 +58,8 @@ class _AttachmentPreviewScreenState extends State<AttachmentPreviewScreen> {
                           _handleMessage(
                               context
                                   .read<ChatBloc>()
-                                  .chatDetailsMap['message'],
+                                  .chatDetailsMap['message']
+                                  .toString(),
                               context);
                           context.read<ChatBloc>().add(SendChatMessage(
                               sendMessageMap:

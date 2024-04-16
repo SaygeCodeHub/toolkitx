@@ -9,6 +9,8 @@ import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_spacing.dart';
+import '../../../di/app_module.dart';
+import '../../../utils/chat/chat_database_util.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
   final snapshot;
@@ -19,6 +21,7 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('snapshot data ${snapshot.toString()}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -26,11 +29,16 @@ class AttachmentMsgWidget extends StatelessWidget {
           bottom: kModuleImagePadding),
       child: Column(
         children: [
-          Align(
-              alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-                  ? Alignment.centerLeft
-                  : Alignment.centerRight,
-              child: showDownloadedImage(snapshot.data![reversedIndex]['msg'])),
+          (snapshot.data![reversedIndex]['isReceiver'] == 1)
+              ? Align(
+                  alignment: Alignment.centerLeft,
+                  child: showDownloadedImage(snapshot.data![reversedIndex]
+                          ['localImagePath']
+                      .toString()))
+              : Align(
+                  alignment: Alignment.centerRight,
+                  child: showDownloadedImage(
+                      snapshot.data![reversedIndex]['pickedMedia'].toString())),
           Align(
             alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -49,8 +57,7 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 
   Widget showDownloadedImage(String imagePath) {
-    print('imagePath $imagePath');
-    return (imagePath.isNotEmpty)
+    return (imagePath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
@@ -58,7 +65,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                 (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
               return Text('Failed to load image: $exception');
-            }, File('/data/user/0/com.example.toolkitx/app_flutter/2024-04-16 23:10:21.406681.jpg')),
+            }, File(imagePath)),
           )
         : Container(
             width: 100,
@@ -71,13 +78,11 @@ class AttachmentMsgWidget extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.download),
                 onPressed: () async {
-                  print('${snapshot.data![reversedIndex]['isReceiver']}');
                   String url =
                       "https://images.unsplash.com/photo-1706874505664-b0e5334e3add?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-                  print('image url $url');
                   DateTime imageName = DateTime.now();
-                  String filePath = await downloadImage(url, "$imageName.jpg");
-                  print("Image downloaded to $filePath");
+                  await downloadImage(url, "$imageName.jpg",
+                      snapshot.data![reversedIndex]['msg_id']);
                 },
               ),
             ),
@@ -85,7 +90,7 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 }
 
-Future<String> downloadImage(String url, String filename) async {
+Future<String> downloadImage(String url, String filename, msgId) async {
   await requestPermission();
 
   Directory directory = await getApplicationDocumentsDirectory();
@@ -95,15 +100,12 @@ Future<String> downloadImage(String url, String filename) async {
 
   try {
     await dio.download(url, filePath, onReceiveProgress: (received, total) {
-      if (total != -1) {
-        print(
-            "Received: $received, Total: $total, Progress: ${((received / total) * 100).toStringAsFixed(0)}%");
-      }
+      if (total != -1) {}
     });
-    print("Download completed: $filePath");
+    final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
+    await databaseHelper.updateLocalImagePath(msgId, filePath);
   } catch (e) {
-    print("Error downloading the file: $e");
-    throw e;
+    rethrow;
   }
 
   return filePath;
