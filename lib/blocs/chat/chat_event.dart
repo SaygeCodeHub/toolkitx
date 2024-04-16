@@ -34,3 +34,9 @@ class SearchEmployeeList extends ChatEvent {
 
   SearchEmployeeList({required this.isSearchEnabled});
 }
+
+class UploadChatImage extends ChatEvent {
+  final String pickedImage;
+
+  UploadChatImage({required this.pickedImage});
+}

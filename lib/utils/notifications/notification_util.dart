@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
-import 'package:toolkit/utils/chat_database_util.dart';
+import 'package:toolkit/utils/chat/chat_database_util.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
 import '../../data/cache/cache_keys.dart';
@@ -44,6 +44,7 @@ class NotificationUtil {
       'sid': message.data['sid'],
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
+      'msg_type': message.data['type']
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -75,7 +76,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'quote_msg_id': message.data['quotemsg'],
       'sid': message.data['sid'],
       'stype': message.data['stype'],
-      'employee_name': message.data['username']
+      'employee_name': message.data['username'],
+      'msg_type': message.data['type']
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {

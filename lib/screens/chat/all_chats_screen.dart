@@ -47,7 +47,7 @@ class AllChatsScreen extends StatelessWidget {
                   return CustomCard(
                     child: ListTile(
                         onTap: () {
-                          ChatMessagingScreen.chatDetailsMap = {
+                          context.read<ChatBloc>().chatDetailsMap = {
                             "employee_name": snapshot.data![index].userName,
                             'rid': snapshot.data![index].rId,
                             'sid': snapshot.data![index].sId,
@@ -109,7 +109,9 @@ class AllChatsScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                    child: Text(snapshot.data![index].message))
+                                    child: messageText(
+                                        snapshot.data![index].message,
+                                        snapshot.data![index].messageType))
                               ],
                             ),
                             const SizedBox(height: xxTiniestSpacing)
@@ -129,5 +131,20 @@ class AllChatsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Widget messageText(String message, String type) {
+    switch (type) {
+      case '1':
+        return Text(message, maxLines: 1);
+      case '2':
+        return const Text('Image');
+      case '3':
+        return const Text('Video');
+      case '4':
+        return const Text('Document');
+      default:
+        return const Text('');
+    }
   }
 }

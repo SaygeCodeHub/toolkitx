@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../data/models/chatBox/fetch_employees_model.dart';
+import '../../data/models/chatBox/fetch_employees_model.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -36,7 +36,11 @@ class DatabaseHelper {
             msg_status TEXT DEFAULT '0',
             employee_name TEXT,
             isReceiver INTEGER DEFAULT 0,
-            messageType TEXT
+            messageType TEXT,
+            isDownloadedImage INTEGER,
+            localImagePath TEXT,
+            pickedMedia TEXT,
+            serverImagePath TEXT
           )
         ''');
         await db.execute('''
@@ -78,6 +82,32 @@ class DatabaseHelper {
       sendMessageMap,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<void> updateLocalImagePath(
+      String messageId, String localImagePath) async {
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.update(
+        'chat_messages',
+        {'localImagePath': localImagePath, 'isDownloadedImage': 1},
+        where: 'msg_id = ?',
+        whereArgs: [messageId],
+      );
+    });
+  }
+
+  Future<void> updateServerImagePath(
+      String messageId, String serverImagePath) async {
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.update(
+        'chat_messages',
+        {'serverImagePath': serverImagePath, 'isDownloadedImage': 0},
+        where: 'msg_id = ?',
+        whereArgs: [messageId],
+      );
+    });
   }
 
   Future<void> insertEmployees(List<EmployeesDatum> employees) async {
@@ -150,11 +180,11 @@ class DatabaseHelper {
   Future<String?> getLatestEmployeeId() async {
     final Database db = await database;
     const String query =
-        'SELECT employee_id FROM chat_messages ORDER BY id DESC LIMIT 1;';
+        'SELECT rid FROM chat_messages ORDER BY id DESC LIMIT 1;';
     final List<Map<String, dynamic>> results = await db.rawQuery(query);
 
     if (results.isNotEmpty) {
-      return results.first['rid'] as String?;
+      return results.first['rid'].toString() as String?;
     } else {
       return null;
     }

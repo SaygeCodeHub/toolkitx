@@ -19,6 +19,9 @@ class ChatData {
   String fileName;
   String date;
   String time;
+  String localImagePath;
+  String messageType;
+  String pickedMedia;
 
   ChatData(
       {this.rId = '',
@@ -37,7 +40,10 @@ class ChatData {
       this.fileName = '',
       MediaType? mediaType,
       this.date = '',
-      this.time = ''})
+      this.time = '',
+      this.localImagePath = '',
+      this.messageType = '',
+      this.pickedMedia = ''})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -57,7 +63,10 @@ class ChatData {
       'group_id': groupId,
       'purpose': groupPurpose,
       'date': date,
-      'time': time
+      'time': time,
+      'localImagePath': localImagePath,
+      'messageType': messageType,
+      'pickedMedia': pickedMedia
     };
   }
 

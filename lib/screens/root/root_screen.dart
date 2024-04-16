@@ -5,7 +5,7 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
-import 'package:toolkit/utils/chat_database_util.dart';
+import 'package:toolkit/utils/chat/chat_database_util.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';

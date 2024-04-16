@@ -28,6 +28,7 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
                           chatDetailsMap['isMedia'] = true;
                           chatDetailsMap['mediaType'] =
                               chatData.mediaTypes()[typeIndex].optionName;
+                          chatDetailsMap['message_type'] = '2';
                           if (chatDetailsMap['selectedMedia'] == 'Gallery') {
                             context.read<ChatBloc>().isCameraImage = false;
                             context.read<ChatBloc>().add(
@@ -43,6 +44,7 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
                           chatDetailsMap['isMedia'] = true;
                           chatDetailsMap['mediaType'] =
                               chatData.mediaTypes()[typeIndex].optionName;
+                          chatDetailsMap['message_type'] = '3';
                           if (chatDetailsMap['selectedMedia'] == 'Gallery') {
                             context.read<ChatBloc>().isCameraVideo = false;
                             context.read<ChatBloc>().add(

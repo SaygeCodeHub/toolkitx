@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,22 +12,32 @@ import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
+import 'package:toolkit/data/models/uploadImage/upload_image_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
+import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/chat_database_util.dart';
+import 'package:toolkit/utils/chat/chat_database_util.dart';
 import 'dart:math';
+
+import 'package:toolkit/utils/constants/api_constants.dart';
+import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
+import 'package:toolkit/utils/incident_view_image_util.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ChatBoxRepository _chatBoxRepository = getIt<ChatBoxRepository>();
+  final UploadImageRepository _uploadPictureRepository =
+      getIt<UploadImageRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   final ChatData chatData = getIt<ChatData>();
+  Map<String, dynamic> chatDetailsMap = {};
   final List<Map<String, dynamic>> messagesList = [];
   final ImagePicker _imagePicker = ImagePicker();
   bool isCameraImage = false;
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
+  String clientId = '';
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -51,7 +62,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<FetchChatsList>(_fetchChatsList);
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
-    // on<SearchEmployeeList>(_searchEmployeeList);
+    on<UploadChatImage>(_uploadImage);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -110,7 +121,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "rtype": (event.sendMessageMap['isReceiver'] == 1)
             ? event.sendMessageMap['stype']
             : event.sendMessageMap['rtype'] ?? '',
-        "msg_type": "1",
+        "msg_type": event.sendMessageMap['message_type'] ?? '',
         "msg_time": isoDateString,
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
@@ -121,10 +132,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
+        'pickedMedia': event.sendMessageMap['picked_image'],
+        'isDownloadedImage': 0,
         ...sendMessageMap
       });
+      // print('message map------>${jsonEncode(sendMessageMap)}');
       event.sendMessageMap['isMedia'] = false;
+      clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
+      sendMessageMap.remove('isReceiver');
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -142,6 +158,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
+    for (var message in messages) {
+      if (message['msg_type'] == '2' && message['isDownloadedImage'] == 0) {
+        String image = message['msg'];
+        String imageUrl =
+            '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(image)[0]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}';
+        String serverImagePath = imageUrl;
+        if (serverImagePath.isNotEmpty) {
+          await _databaseHelper.updateServerImagePath(
+              message['msg_id'], serverImagePath);
+        }
+      }
+    }
     messagesList.clear();
     messagesList.addAll(messages);
     _chatScreenMessagesStreamController.add(messagesList);
@@ -160,38 +188,33 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
               employees[i]['sid'].toString(), employees[i]['rid'].toString());
-
       if (message.isNotEmpty) {
-        // Check if an existing chat entry exists
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
 
         if (existingChatIndex != -1) {
-          // Update existing chat entry
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = formattedTime(message.last['msg_time']);
         } else {
-          // Add new chat entry
           ChatData chat = ChatData(
-            rId: message.last['rid'].toString(),
-            sId: message.last['sid'].toString(),
-            sType: message.last['stype'].toString(),
-            rType: message.last['rtype'].toString(),
-            isReceiver: message.last['isReceiver'] ?? 0,
-            userName: message.last['employee_name'] ?? '',
-            message: message.last['msg'] ?? '',
-            isGroup: false,
-            date: formattedDate(message.last['msg_time']),
-            time: formattedTime(message.last['msg_time']),
-          );
+              rId: message.last['rid'].toString(),
+              sId: message.last['sid'].toString(),
+              sType: message.last['stype'].toString(),
+              rType: message.last['rtype'].toString(),
+              isReceiver: message.last['isReceiver'] ?? 0,
+              userName: message.last['employee_name'] ?? '',
+              message: message.last['msg'] ?? '',
+              isGroup: false,
+              date: formattedDate(message.last['msg_time']),
+              time: formattedTime(message.last['msg_time']),
+              messageType: message.last['msg_type'] ?? '');
           individualChatList.add(chat);
         }
       }
     }
 
-    // Add group chats (if any) to the list
     for (var item in groupChats) {
       ChatData chat = ChatData(
         groupName: item['group_name'],
@@ -206,7 +229,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _allChatScreenDetailsStreamController.add(chatsList);
   }
 
-// Method to find the index of an existing chat in the list
   int findExistingChatIndex(
       List<ChatData> chatList, Map<String, dynamic> message) {
     return chatList.indexWhere((chat) =>
@@ -214,7 +236,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         chat.sId == message['sid'].toString());
   }
 
-// Utility methods for date and time formatting
   String formattedDate(String timestamp) {
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('dd/MM/yyyy').format(dateTime);
@@ -280,8 +301,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 imageQuality: 25);
             if (pickedFile != null) {
               chatData.fileName = pickedFile.path;
-              add(RebuildChatMessagingScreen(
-                  employeeDetailsMap: event.mediaDetailsMap));
+              chatDetailsMap['picked_image'] = chatData.fileName;
+              if (chatData.fileName.isNotEmpty) {
+                add(UploadChatImage(pickedImage: chatData.fileName));
+              }
+              if (UploadChatImage(pickedImage: chatData.fileName)
+                  .pickedImage
+                  .isNotEmpty) {
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: event.mediaDetailsMap));
+              }
             } else {
               return;
             }
@@ -293,6 +322,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                     : ImageSource.gallery);
             if (pickVideo != null) {
               chatData.fileName = pickVideo.path;
+              if (chatData.fileName.isNotEmpty) {
+                add(UploadChatImage(pickedImage: chatData.fileName));
+              }
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
             } else {
@@ -305,15 +337,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-// FutureOr<void> _searchEmployeeList(
-//     SearchEmployeeList event, Emitter<ChatState> emit) async {
-//   if (event.isSearchEnabled == true) {
-//     emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
-//     add(FetchEmployees(pageNo: 1, searchedName: employeeName));
-//   } else {
-//     emit(EmployeesListSearched(isSearchedEnabled: event.isSearchEnabled));
-//     EmployeesScreen.textEditingController.clear();
-//     add(FetchEmployees(pageNo: 1, searchedName: ''));
-//   }
-// }
+  FutureOr<bool> _uploadImage(
+      UploadChatImage event, Emitter<ChatState> emit) async {
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    UploadPictureModel uploadPictureModel = await _uploadPictureRepository
+        .uploadImage(File(event.pickedImage), hashCode);
+    if (uploadPictureModel.data.first.isNotEmpty) {
+      chatDetailsMap['message'] = uploadPictureModel.data.first;
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

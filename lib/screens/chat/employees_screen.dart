@@ -126,8 +126,9 @@ class EmployeesScreen extends StatelessWidget {
                                         .read<ChatBloc>()
                                         .employeeListReachedMax = false;
                                     textEditingController.clear();
+                                    sendMessageMap['user_name'] = '';
                                     context.read<ChatBloc>().add(FetchEmployees(
-                                        pageNo: pageNo, searchedName: ''));
+                                        pageNo: 1, searchedName: ''));
                                   }
                                 }
                               },
@@ -213,7 +214,8 @@ class EmployeesScreen extends StatelessWidget {
                                               }, chatData: chatData)
                                             : IconButton(
                                                 onPressed: () {
-                                                  ChatMessagingScreen
+                                                  context
+                                                      .read<ChatBloc>()
                                                       .chatDetailsMap = {
                                                     'rid': state
                                                         .employeeList[index].id

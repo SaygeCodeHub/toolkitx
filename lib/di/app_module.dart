@@ -20,7 +20,7 @@ import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/chat_database_util.dart';
+import 'package:toolkit/utils/chat/chat_database_util.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';

@@ -18,7 +18,6 @@ import 'package:toolkit/widgets/secondary_button.dart';
 
 class ChatMessagingScreen extends StatefulWidget {
   static const routeName = 'NewChatScreen';
-  static Map<String, dynamic> chatDetailsMap = {};
 
   const ChatMessagingScreen({super.key});
 
@@ -36,9 +35,9 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
 
   @override
   void initState() {
-    ChatMessagingScreen.chatDetailsMap['isMedia'] = false;
+    context.read<ChatBloc>().chatDetailsMap['isMedia'] = false;
     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-        employeeDetailsMap: ChatMessagingScreen.chatDetailsMap));
+        employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap));
     super.initState();
   }
 
@@ -46,11 +45,12 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(
-            title: ChatMessagingScreen.chatDetailsMap['employee_name'] ?? ''),
+            title:
+                context.read<ChatBloc>().chatDetailsMap['employee_name'] ?? ''),
         body: StreamBuilder<List<Map<String, dynamic>>>(
             stream: context.read<ChatBloc>().messageStream,
             builder: (context, snapshot) {
-              if (ChatMessagingScreen.chatDetailsMap['isMedia'] == false) {
+              if (context.read<ChatBloc>().chatDetailsMap['isMedia'] == false) {
                 if (snapshot.hasData) {
                   return Column(children: <Widget>[
                     Flexible(
@@ -64,13 +64,29 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           String formattedTime =
                               DateFormat('h:mm a').format(dateTime);
                           return ChatMessage(
-                              message: snapshot.data?[chatIndex]['msg'] ?? '',
-                              isMe:
+                            chatMap: {
+                              'message': snapshot.data?[chatIndex]['msg'] ?? '',
+                              'is_me':
                                   snapshot.data?[chatIndex]['isReceiver'] ?? 0,
-                              messageType: snapshot.data?[chatIndex]
-                                      ['messageType'] ??
+                              'message_type':
+                                  snapshot.data?[chatIndex]['msg_type'] ?? '',
+                              'time': formattedTime,
+                              'image': snapshot.data?[chatIndex]
+                                      ['serverImagePath'] ??
                                   '',
-                              time: formattedTime);
+                              'picked_image': snapshot.data?[chatIndex]
+                                      ['pickedMedia'] ??
+                                  '',
+                              'msg_id':
+                                  snapshot.data?[chatIndex]['msg_id'] ?? '',
+                              'is_downloaded': snapshot.data?[chatIndex]
+                                      ['isDownloadedImage'] ??
+                                  0,
+                              'local_image': snapshot.data?[chatIndex]
+                                      ['localImagePath'] ??
+                                  ''
+                            },
+                          );
                         },
                       ),
                     ),
@@ -91,7 +107,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                   child: Column(
                     children: [
                       MediaTypeUtil().showMediaWidget(
-                          ChatMessagingScreen.chatDetailsMap['mediaType'],
+                          context.read<ChatBloc>().chatDetailsMap['mediaType'],
                           {'file': chatData.fileName},
                           context),
                       const SizedBox(height: tinySpacing),
@@ -101,13 +117,14 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                               child: SecondaryButton(
                                   onPressed: () {
                                     setState(() {
-                                      ChatMessagingScreen
+                                      context
+                                          .read<ChatBloc>()
                                           .chatDetailsMap['isMedia'] = false;
                                       context.read<ChatBloc>().add(
                                           RebuildChatMessagingScreen(
-                                              employeeDetailsMap:
-                                                  ChatMessagingScreen
-                                                      .chatDetailsMap));
+                                              employeeDetailsMap: context
+                                                  .read<ChatBloc>()
+                                                  .chatDetailsMap));
                                     });
                                   },
                                   textValue: 'Remove')),
@@ -115,18 +132,18 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           Expanded(
                               child: SecondaryButton(
                                   onPressed: () {
-                                    ChatMessagingScreen
+                                    context
+                                        .read<ChatBloc>()
                                         .chatDetailsMap['isMedia'] = false;
-                                    ChatMessagingScreen
-                                            .chatDetailsMap['message'] =
-                                        chatData.fileName;
                                     _handleMessage(
-                                        ChatMessagingScreen
+                                        context
+                                            .read<ChatBloc>()
                                             .chatDetailsMap['message'],
                                         context);
                                     context.read<ChatBloc>().add(
                                         SendChatMessage(
-                                            sendMessageMap: ChatMessagingScreen
+                                            sendMessageMap: context
+                                                .read<ChatBloc>()
                                                 .chatDetailsMap));
                                   },
                                   textValue: 'Send')),
@@ -154,7 +171,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                     maxLines: 2,
                     onChanged: (String text) {
                       textEditingController.text = text;
-                      ChatMessagingScreen.chatDetailsMap['message'] =
+                      context.read<ChatBloc>().chatDetailsMap['message'] =
                           textEditingController.text;
                     },
                     decoration: const InputDecoration.collapsed(
@@ -188,7 +205,9 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                           .optionName) {
                                         case 'Gallery':
                                           Navigator.pop(context);
-                                          ChatMessagingScreen.chatDetailsMap[
+                                          context
+                                                      .read<ChatBloc>()
+                                                      .chatDetailsMap[
                                                   'selectedMedia'] =
                                               chatData
                                                   .mediaOptions()[index]
@@ -197,14 +216,16 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                               context: context,
                                               builder: (context) {
                                                 return ChatGalleryMediaAlertDialog(
-                                                    chatDetailsMap:
-                                                        ChatMessagingScreen
-                                                            .chatDetailsMap);
+                                                    chatDetailsMap: context
+                                                        .read<ChatBloc>()
+                                                        .chatDetailsMap);
                                               });
                                           break;
                                         case 'Camera':
                                           Navigator.pop(context);
-                                          ChatMessagingScreen.chatDetailsMap[
+                                          context
+                                                      .read<ChatBloc>()
+                                                      .chatDetailsMap[
                                                   'selectedMedia'] =
                                               chatData
                                                   .mediaOptions()[index]
@@ -213,9 +234,9 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                               context: context,
                                               builder: (context) {
                                                 return ChatGalleryMediaAlertDialog(
-                                                    chatDetailsMap:
-                                                        ChatMessagingScreen
-                                                            .chatDetailsMap);
+                                                    chatDetailsMap: context
+                                                        .read<ChatBloc>()
+                                                        .chatDetailsMap);
                                               });
                                       }
                                     },
@@ -236,8 +257,11 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                   onPressed: () {
                     if (textEditingController.text.isNotEmpty) {
                       _handleMessage(textEditingController.text, context);
+                      context.read<ChatBloc>().chatDetailsMap['message_type'] =
+                          '1';
                       context.read<ChatBloc>().add(SendChatMessage(
-                          sendMessageMap: ChatMessagingScreen.chatDetailsMap));
+                          sendMessageMap:
+                              context.read<ChatBloc>().chatDetailsMap));
                     }
                   }),
             ])));
@@ -274,30 +298,23 @@ class TrianglePainter extends CustomPainter {
 }
 
 class ChatMessage extends StatelessWidget {
-  final String message;
-  final int isMe;
-  final String messageType;
-  final String time;
+  final Map chatMap;
 
-  const ChatMessage(
-      {super.key,
-      required this.message,
-      required this.isMe,
-      required this.messageType,
-      required this.time});
+  const ChatMessage({super.key, required this.chatMap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: xxxSmallestSpacing),
         child: Row(
-            mainAxisAlignment:
-                (isMe == 0) ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: (chatMap['is_me'] == 0)
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             children: <Widget>[
               Padding(
                   padding: const EdgeInsets.all(xxTinierSpacing),
                   child: Column(
-                      crossAxisAlignment: (isMe == 0)
+                      crossAxisAlignment: (chatMap['is_me'] == 0)
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start,
                       children: <Widget>[
@@ -306,27 +323,39 @@ class ChatMessage extends StatelessWidget {
                           constraints: BoxConstraints(
                               maxWidth: MediaQuery.sizeOf(context).width / 2),
                           decoration: BoxDecoration(
-                            color: (isMe == 0)
+                            color: (chatMap['is_me'] == 0)
                                 ? AppColor.lightBlueGrey
                                 : AppColor.blueishGrey,
                             borderRadius: BorderRadius.only(
                                 topLeft: const Radius.circular(tinierSpacing),
                                 topRight: const Radius.circular(tinierSpacing),
-                                bottomLeft: (isMe == 0)
+                                bottomLeft: (chatMap['is_me'] == 0)
                                     ? const Radius.circular(tinierSpacing)
                                     : const Radius.circular(0),
-                                bottomRight: (isMe == 0)
+                                bottomRight: (chatMap['is_me'] == 0)
                                     ? const Radius.circular(0)
                                     : const Radius.circular(tinierSpacing)),
                           ),
-                          child: MediaTypeUtil().showMediaWidget(
-                              messageType, {'file': message}, context,
-                              height: 100, width: 100),
+                          child: MediaTypeUtil().processMessage(
+                              chatMap['message_type'],
+                              {
+                                'file': chatMap['message'],
+                                'picked_image': chatMap['picked_image'],
+                                'server_image': chatMap['image'],
+                                'msg_id': chatMap['msg_id'],
+                                'is_downloaded': chatMap['is_downloaded'],
+                                'local_image': chatMap['local_image']
+                              },
+                              context,
+                              isMe: chatMap['is_me'],
+                              height: 150,
+                              width: 200),
                         ),
-                        if (isMe == 0)
-                          CustomPaint(painter: TrianglePainter(isMe: isMe)),
+                        if (chatMap['is_me'] == 0)
+                          CustomPaint(
+                              painter: TrianglePainter(isMe: chatMap['is_me'])),
                         const SizedBox(height: xxxTinierSpacing),
-                        Text(time,
+                        Text(chatMap['time'],
                             textAlign: TextAlign.left,
                             style: Theme.of(context).textTheme.smallTextBlack)
                       ]))
