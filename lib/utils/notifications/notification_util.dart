@@ -67,19 +67,20 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
   try {
     Map<String, dynamic> messageData = {
-      'employee_id': message.data['rid'],
+      'rid': message.data['rid'],
       'msg': message.data['chatmsg'],
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
       'msg_id': message.data['id'],
       'rtype': message.data['rtype'],
-      'quote_msg_id': message.data['quotemsg'],
+      'quote_msg_id': message.data['quotemsg'] ?? '',
       'sid': message.data['sid'],
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type']
     };
     await DatabaseHelper().insertMessage(messageData);
+    print('message data $messageData');
   } catch (e) {
     log('Error storing message in database: $e');
   }

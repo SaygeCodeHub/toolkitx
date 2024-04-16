@@ -237,6 +237,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   String formattedDate(String timestamp) {
+    print('timestamp $timestamp');
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('dd/MM/yyyy').format(dateTime);
   }

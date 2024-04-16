@@ -27,6 +27,7 @@ class ChatMessagingScreen extends StatefulWidget {
 
 class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
   final ChatData chatData = getIt<ChatData>();
+  bool screenBuild = false;
 
   void _handleMessage(String text, BuildContext context) {
     if (text.isEmpty) return;
@@ -47,13 +48,14 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
         appBar: GenericAppBar(
             title:
                 context.read<ChatBloc>().chatDetailsMap['employee_name'] ?? ''),
-        body: StreamBuilder<List<Map<String, dynamic>>>(
-            stream: context.read<ChatBloc>().messageStream,
-            builder: (context, snapshot) {
-              if (context.read<ChatBloc>().chatDetailsMap['isMedia'] == false) {
-                if (snapshot.hasData) {
-                  return Column(children: <Widget>[
-                    Flexible(
+        body: Column(children: <Widget>[
+          StreamBuilder<List<Map<String, dynamic>>>(
+              stream: context.read<ChatBloc>().messageStream,
+              builder: (context, snapshot) {
+                if (context.read<ChatBloc>().chatDetailsMap['isMedia'] ==
+                    false) {
+                  if (snapshot.hasData) {
+                    return Flexible(
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         reverse: true,
@@ -89,71 +91,73 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           );
                         },
                       ),
-                    ),
-                    const Divider(height: kChatScreenDividerHeight),
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                        ),
-                        child: _buildTextComposer(context))
-                  ]);
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
                 } else {
-                  return const SizedBox.shrink();
-                }
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: xxxTinySpacing, horizontal: xxTinierSpacing),
-                  child: Column(
-                    children: [
-                      MediaTypeUtil().showMediaWidget(
-                          context.read<ChatBloc>().chatDetailsMap['mediaType'],
-                          {'file': chatData.fileName},
-                          context),
-                      const SizedBox(height: tinySpacing),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: SecondaryButton(
-                                  onPressed: () {
-                                    setState(() {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: xxxTinySpacing, horizontal: xxTinierSpacing),
+                    child: Column(
+                      children: [
+                        MediaTypeUtil().showMediaWidget(
+                            context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['mediaType'],
+                            {'file': chatData.fileName},
+                            context),
+                        const SizedBox(height: tinySpacing),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: SecondaryButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        context
+                                            .read<ChatBloc>()
+                                            .chatDetailsMap['isMedia'] = false;
+                                        context.read<ChatBloc>().add(
+                                            RebuildChatMessagingScreen(
+                                                employeeDetailsMap: context
+                                                    .read<ChatBloc>()
+                                                    .chatDetailsMap));
+                                      });
+                                    },
+                                    textValue: 'Remove')),
+                            const SizedBox(width: xxTinierSpacing),
+                            Expanded(
+                                child: SecondaryButton(
+                                    onPressed: () {
                                       context
                                           .read<ChatBloc>()
                                           .chatDetailsMap['isMedia'] = false;
+                                      _handleMessage(
+                                          context
+                                              .read<ChatBloc>()
+                                              .chatDetailsMap['message'],
+                                          context);
                                       context.read<ChatBloc>().add(
-                                          RebuildChatMessagingScreen(
-                                              employeeDetailsMap: context
+                                          SendChatMessage(
+                                              sendMessageMap: context
                                                   .read<ChatBloc>()
                                                   .chatDetailsMap));
-                                    });
-                                  },
-                                  textValue: 'Remove')),
-                          const SizedBox(width: xxTinierSpacing),
-                          Expanded(
-                              child: SecondaryButton(
-                                  onPressed: () {
-                                    context
-                                        .read<ChatBloc>()
-                                        .chatDetailsMap['isMedia'] = false;
-                                    _handleMessage(
-                                        context
-                                            .read<ChatBloc>()
-                                            .chatDetailsMap['message'],
-                                        context);
-                                    context.read<ChatBloc>().add(
-                                        SendChatMessage(
-                                            sendMessageMap: context
-                                                .read<ChatBloc>()
-                                                .chatDetailsMap));
-                                  },
-                                  textValue: 'Send')),
-                        ],
-                      )
-                    ],
-                  ),
-                );
-              }
-            }));
+                                    },
+                                    textValue: 'Send')),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                }
+              }),
+          const Divider(height: kChatScreenDividerHeight),
+          Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+              ),
+              child: _buildTextComposer(context))
+        ]));
   }
 
   Widget _buildTextComposer(BuildContext context) {

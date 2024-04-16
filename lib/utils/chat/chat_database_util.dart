@@ -77,23 +77,22 @@ class DatabaseHelper {
 
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
-    await db.insert(
-      'chat_messages',
-      sendMessageMap,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      await db.insert('chat_messages', sendMessageMap,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      // db.close();
+    } catch (e) {
+      print('error--->$e');
+    }
   }
 
   Future<void> updateLocalImagePath(
       String messageId, String localImagePath) async {
     final db = await database;
     await db.transaction((txn) async {
-      await txn.update(
-        'chat_messages',
-        {'localImagePath': localImagePath, 'isDownloadedImage': 1},
-        where: 'msg_id = ?',
-        whereArgs: [messageId],
-      );
+      await txn.update('chat_messages',
+          {'localImagePath': localImagePath, 'isDownloadedImage': 1},
+          where: 'msg_id = ?', whereArgs: [messageId]);
     });
   }
 
@@ -101,12 +100,9 @@ class DatabaseHelper {
       String messageId, String serverImagePath) async {
     final db = await database;
     await db.transaction((txn) async {
-      await txn.update(
-        'chat_messages',
-        {'serverImagePath': serverImagePath, 'isDownloadedImage': 0},
-        where: 'msg_id = ?',
-        whereArgs: [messageId],
-      );
+      await txn.update('chat_messages',
+          {'serverImagePath': serverImagePath, 'isDownloadedImage': 0},
+          where: 'msg_id = ?', whereArgs: [messageId]);
     });
   }
 
