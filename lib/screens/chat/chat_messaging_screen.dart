@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/chat/widgets/attachment_preview_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chatbox_textfield_widget.dart';
 import 'package:toolkit/screens/chat/widgets/date_divider_widget.dart';
 import 'package:toolkit/screens/chat/widgets/msg_image_widget.dart';
@@ -17,6 +18,7 @@ class ChatMessagingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ChatBloc>().chatDetailsMap['isMedia'] = false;
     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
         employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap));
     return Scaffold(
@@ -29,41 +31,48 @@ class ChatMessagingScreen extends StatelessWidget {
             child: StreamBuilder<List<Map<String, dynamic>>>(
                 stream: context.read<ChatBloc>().messageStream,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final bool needDateDivider =
-                            index == snapshot.data!.length - 1 ||
-                                _needDateDivider(index, snapshot);
-                        return Column(
-                          children: <Widget>[
-                            if (needDateDivider)
-                              Center(
-                                child: DateDividerWidget(
-                                    snapshot: snapshot, reversedIndex: index),
-                              ),
-                            getWidgetBasedOnString(
-                                snapshot.data![index]['msg_type'],
-                                snapshot,
-                                index)
-                          ],
-                        );
-                      },
-                    );
+                  if (context.read<ChatBloc>().chatDetailsMap['isMedia'] ==
+                      false) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        reverse: true,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          final bool needDateDivider =
+                              index == snapshot.data!.length - 1 ||
+                                  _needDateDivider(index, snapshot);
+                          return Column(
+                            children: <Widget>[
+                              if (needDateDivider)
+                                Center(
+                                  child: DateDividerWidget(
+                                      snapshot: snapshot, reversedIndex: index),
+                                ),
+                              getWidgetBasedOnString(
+                                  snapshot.data![index]['msg_type'],
+                                  snapshot,
+                                  index)
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
                   } else {
-                    return const CircularProgressIndicator();
+                    return const AttachmentPreviewScreen();
                   }
                 }),
           ),
           const Divider(height: kChatScreenDividerHeight),
-          Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-              ),
-              child: const ChatboxTextfieldWidget())
+          (context.read<ChatBloc>().chatDetailsMap['isMedia'] == false)
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                  ),
+                  child: const ChatboxTextfieldWidget())
+              : const SizedBox()
         ],
       ),
     );

@@ -4,9 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/utils/chat/chat_database_util.dart';
+
+import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
-import '../../data/cache/cache_keys.dart';
 
 class NotificationUtil {
   final pushNotifications = FirebaseMessaging.instance;
@@ -67,7 +68,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
   try {
     Map<String, dynamic> messageData = {
-      'employee_id': message.data['rid'],
+      'rid': message.data['rid'],
       'msg': message.data['chatmsg'],
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
