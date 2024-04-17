@@ -17,6 +17,7 @@ dependencies:
   sqflite: ^2.3.2
 #  open_filex:
   flutter_svg:
+  file_picker: ^8.0.0+1
   flutter_bloc:
   hive_flutter:
   url_launcher:

@@ -10,8 +10,10 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   @override
   Future<FetchEmployeesModel> fetchEmployees(
       int pageNo, String hashCode, String searchName) async {
+    print(
+        'users==>${"${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName"}');
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}database/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
+        "${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
     return FetchEmployeesModel.fromJson(response);
   }
 

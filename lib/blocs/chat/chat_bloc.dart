@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -324,6 +325,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                     : ImageSource.gallery);
             if (pickVideo != null) {
               chatData.fileName = pickVideo.path;
+              chatDetailsMap['isMedia'] = true;
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
@@ -331,6 +333,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                   employeeDetailsMap: event.mediaDetailsMap));
             } else {
               return;
+            }
+            break;
+          case 'Document':
+            print('here----->');
+            late File pickedFile;
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: ['pdf', 'doc', 'docx']);
+            if (result != null) {
+              pickedFile = File(result.files.single.path!);
+              chatData.fileName = pickedFile.path;
+              chatDetailsMap['isMedia'] = true;
+              print('path====>${pickedFile.path}');
+              if (chatData.fileName.isNotEmpty) {
+                add(UploadChatImage(pickedImage: chatData.fileName));
+              }
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
             }
         }
       }

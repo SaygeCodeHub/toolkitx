@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/chat/widgets/choose_media_widget.dart';
 
 import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../di/app_module.dart';
-import '../../../widgets/custom_icon_button.dart';
-import 'chat_data_model.dart';
-import 'chat_gallery_media_alert_dialog.dart';
-import 'media_options_widget.dart';
 
-class ChatboxTextfieldWidget extends StatelessWidget {
-  const ChatboxTextfieldWidget({super.key});
+class ChatBoxTextFieldWidget extends StatelessWidget {
+  const ChatBoxTextFieldWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ChatData chatData = getIt<ChatData>();
     final TextEditingController textEditingController = TextEditingController();
 
     return IconTheme(
@@ -40,79 +35,7 @@ class ChatboxTextfieldWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomIconButton(
-                  icon: Icons.attach_file,
-                  onPressed: () {
-                    showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        isScrollControlled: true,
-                        context: (context),
-                        builder: (context) {
-                          return GridView.builder(
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio: 200 / 350,
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: tinierSpacing,
-                                      mainAxisSpacing: tinierSpacing),
-                              itemCount: chatData.mediaOptions().length - 2,
-                              itemBuilder: (context, index) {
-                                return MediaOptionsWidget(
-                                    onMediaSelected: () {
-                                      switch (chatData
-                                          .mediaOptions()[index]
-                                          .optionName) {
-                                        case 'Gallery':
-                                          Navigator.pop(context);
-                                          context
-                                                      .read<ChatBloc>()
-                                                      .chatDetailsMap[
-                                                  'selectedMedia'] =
-                                              chatData
-                                                  .mediaOptions()[index]
-                                                  .optionName;
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return ChatGalleryMediaAlertDialog(
-                                                    chatDetailsMap: context
-                                                        .read<ChatBloc>()
-                                                        .chatDetailsMap);
-                                              });
-                                          break;
-                                        case 'Camera':
-                                          Navigator.pop(context);
-                                          context
-                                                      .read<ChatBloc>()
-                                                      .chatDetailsMap[
-                                                  'selectedMedia'] =
-                                              chatData
-                                                  .mediaOptions()[index]
-                                                  .optionName;
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return ChatGalleryMediaAlertDialog(
-                                                    chatDetailsMap: context
-                                                        .read<ChatBloc>()
-                                                        .chatDetailsMap);
-                                              });
-                                      }
-                                    },
-                                    mediaDataMap: {
-                                      'color':
-                                          chatData.mediaOptions()[index].color,
-                                      'icon':
-                                          chatData.mediaOptions()[index].icon,
-                                      'media': chatData
-                                          .mediaOptions()[index]
-                                          .optionName
-                                    });
-                              });
-                        });
-                  }),
+              ChooseMediaWidget(),
               IconButton(
                   icon: const Icon(Icons.send_rounded),
                   onPressed: () {

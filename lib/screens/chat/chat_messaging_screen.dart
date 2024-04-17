@@ -71,7 +71,7 @@ class ChatMessagingScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(context).cardColor,
                   ),
-                  child: const ChatboxTextfieldWidget())
+                  child: const ChatBoxTextFieldWidget())
               : const SizedBox()
         ],
       ),
@@ -83,6 +83,12 @@ class ChatMessagingScreen extends StatelessWidget {
       case '1':
         return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
       case '2':
+        return AttachmentMsgWidget(
+            snapshot: snapshot, reversedIndex: reversedIndex);
+      case '3':
+        return AttachmentMsgWidget(
+            snapshot: snapshot, reversedIndex: reversedIndex);
+      case '4':
         return AttachmentMsgWidget(
             snapshot: snapshot, reversedIndex: reversedIndex);
       default:
