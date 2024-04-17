@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
@@ -11,6 +12,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
+import '../../../utils/database/database_util.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
   final snapshot;
@@ -83,8 +85,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                   String url =
                       '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
-                  await downloadFileFromUrl(url, "$imageName.jpg");
-                  //  snapshot.data![reversedIndex]['msg_id']);
+                  await downloadFileFromUrl(url, "$imageName.jpg",
+                      snapshot.data![reversedIndex]['msg_id']);
                 },
               ),
             ),
@@ -92,7 +94,7 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 }
 
-Future<void> downloadFileFromUrl(String url, imageName) async {
+Future<void> downloadFileFromUrl(String url, imageName, msgId) async {
   try {
     final Dio dio = Dio();
 
@@ -104,7 +106,7 @@ Future<void> downloadFileFromUrl(String url, imageName) async {
       if (messageValue is String) {
         String downloadUrl = messageValue;
         String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
-        await _downloadFile(finalUrl, imageName);
+        await downloadImage(finalUrl, imageName, msgId);
       } else {
         throw Exception('Invalid message value: $messageValue');
       }
@@ -117,22 +119,23 @@ Future<void> downloadFileFromUrl(String url, imageName) async {
   }
 }
 
-Future<void> _downloadFile(String downloadUrl, imageName) async {
+Future<String> downloadImage(String url, String filename, msgId) async {
+//  await requestPermission();
+
+  Directory directory = await getApplicationDocumentsDirectory();
+  String path = directory.path;
+  String filePath = '$path/$filename';
+  Dio dio = Dio();
+
   try {
-    HttpClient httpClient = HttpClient();
-    HttpClientRequest request = await httpClient.getUrl(Uri.parse(downloadUrl));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      File file = File(imageName);
-      IOSink sink = file.openWrite();
-      await response.pipe(sink);
-      await sink.close();
-      print('File downloaded successfully.');
-    } else {
-      throw Exception('Failed to download file');
-    }
+    await dio.download(url, filePath, onReceiveProgress: (received, total) {
+      if (total != -1) {}
+    });
+    final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
+    await databaseHelper.updateLocalImagePath(msgId, filePath);
   } catch (e) {
-    print('Error downloading file: $e');
-    throw e;
+    rethrow;
   }
+
+  return filePath;
 }
