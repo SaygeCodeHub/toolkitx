@@ -143,11 +143,11 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
   FutureOr<void> _applyDocumentFilter(
       ApplyDocumentFilter event, Emitter<DocumentsStates> emit) {
     filters = {
-      "documentName": event.filterMap["documentName"],
-      "documentId": event.filterMap["documentId"],
-      "author": event.filterMap["author"],
-      'type': event.filterMap["type"],
-      "status": event.filterMap["status"]
+      "documentName": event.filterMap["documentName"] ?? '',
+      "documentId": event.filterMap["documentId"] ?? '',
+      "author": event.filterMap["author"] ?? '',
+      'type': event.filterMap["type"] ?? '',
+      "status": event.filterMap["status"] ?? ''
     };
   }
 

@@ -114,6 +114,7 @@ class DocumentFilterScreen extends StatelessWidget {
                     const SizedBox(height: xxTinySpacing),
                     PrimaryButton(
                         onPressed: () {
+                          print('filter screen map $documentFilterMap');
                           context.read<DocumentsBloc>().add(ApplyDocumentFilter(
                               filterMap: documentFilterMap));
                           Navigator.pop(context);
