@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
 
 import '../../../configs/app_spacing.dart';
+import '../../../data/cache/cache_keys.dart';
+import '../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
-import '../../../utils/database/database_util.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
   final snapshot;
@@ -55,8 +55,8 @@ class AttachmentMsgWidget extends StatelessWidget {
     );
   }
 
-  Widget showDownloadedImage(String imagePath) {
-    return (imagePath.toString() != 'null')
+  Widget showDownloadedImage(String attachmentPath) {
+    return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
@@ -64,7 +64,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                 (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
               return Text('Failed to load image: $exception');
-            }, File(imagePath)),
+            }, File(attachmentPath)),
           )
         : Container(
             width: 100,
@@ -77,11 +77,14 @@ class AttachmentMsgWidget extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.download, color: Colors.black45),
                 onPressed: () async {
+                  final CustomerCache customerCache = getIt<CustomerCache>();
+                  String? hashCode =
+                      await customerCache.getHashCode(CacheKeys.hashcode);
                   String url =
-                      "https://images.unsplash.com/photo-1706874505664-b0e5334e3add?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
-                  await downloadImage(url, "$imageName.jpg",
-                      snapshot.data![reversedIndex]['msg_id']);
+                  await downloadFileFromUrl(url, "$imageName.jpg");
+                  //  snapshot.data![reversedIndex]['msg_id']);
                 },
               ),
             ),
@@ -89,30 +92,47 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 }
 
-Future<String> downloadImage(String url, String filename, msgId) async {
-  await requestPermission();
-
-  Directory directory = await getApplicationDocumentsDirectory();
-  String path = directory.path;
-  String filePath = '$path/$filename';
-  Dio dio = Dio();
-
+Future<void> downloadFileFromUrl(String url, imageName) async {
   try {
-    await dio.download(url, filePath, onReceiveProgress: (received, total) {
-      if (total != -1) {}
-    });
-    final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
-    await databaseHelper.updateLocalImagePath(msgId, filePath);
-  } catch (e) {
-    rethrow;
-  }
+    final Dio dio = Dio();
 
-  return filePath;
+    final Response response = await dio.get(url);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = response.data;
+      dynamic messageValue = jsonResponse['Message'];
+
+      if (messageValue is String) {
+        String downloadUrl = messageValue;
+        String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
+        await _downloadFile(finalUrl, imageName);
+      } else {
+        throw Exception('Invalid message value: $messageValue');
+      }
+    } else {
+      throw Exception('Failed to fetch download URL');
+    }
+  } catch (e) {
+    print('Error: $e');
+    throw e;
+  }
 }
 
-Future<void> requestPermission() async {
-  var status = await Permission.storage.status;
-  if (!status.isGranted) {
-    await Permission.storage.request();
+Future<void> _downloadFile(String downloadUrl, imageName) async {
+  try {
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.getUrl(Uri.parse(downloadUrl));
+    HttpClientResponse response = await request.close();
+    if (response.statusCode == 200) {
+      File file = File(imageName);
+      IOSink sink = file.openWrite();
+      await response.pipe(sink);
+      await sink.close();
+      print('File downloaded successfully.');
+    } else {
+      throw Exception('Failed to download file');
+    }
+  } catch (e) {
+    print('Error downloading file: $e');
+    throw e;
   }
 }
