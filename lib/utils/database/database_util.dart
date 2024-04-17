@@ -80,9 +80,8 @@ class DatabaseHelper {
     try {
       await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.replace);
-      // db.close();
     } catch (e) {
-      print('error--->$e');
+      rethrow;
     }
   }
 

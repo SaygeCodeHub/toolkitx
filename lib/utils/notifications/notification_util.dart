@@ -81,7 +81,6 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'msg_type': message.data['type']
     };
     await DatabaseHelper().insertMessage(messageData);
-    print('message data $messageData');
   } catch (e) {
     log('Error storing message in database: $e');
   }

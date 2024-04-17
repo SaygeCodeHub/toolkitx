@@ -88,8 +88,17 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     return Scaffold(
         body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
         bottomNavigationBar:
-            BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-                builder: (context, state) {
+            BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
+                listener: (context, state) {
+          if (state is NoNetwork) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        const RootScreen(isFromClientList: false)),
+                ModalRoute.withName('/'));
+          }
+        }, builder: (context, state) {
           if (state is NoNetwork) {
             return _bottomNavigationBar(true);
           } else {

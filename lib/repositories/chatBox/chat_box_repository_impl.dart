@@ -10,8 +10,6 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   @override
   Future<FetchEmployeesModel> fetchEmployees(
       int pageNo, String hashCode, String searchName) async {
-    print(
-        'users==>${"${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
     return FetchEmployeesModel.fromJson(response);
@@ -20,14 +18,14 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   @override
   Future<SendMessageModel> sendMessage(Map sendMessageMap) async {
     final response = await DioClient()
-        .post("${ApiConstants.baseUrl}database/sendmessagenew", sendMessageMap);
+        .post("${ApiConstants.baseUrl}chat/sendmessagenew", sendMessageMap);
     return SendMessageModel.fromJson(response);
   }
 
   @override
   Future<CreateChatGroupModel> createChatGroup(Map createChatGroupMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}database/creategroup", createChatGroupMap);
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}chat/creategroup", createChatGroupMap);
     return CreateChatGroupModel.fromJson(response);
   }
 }

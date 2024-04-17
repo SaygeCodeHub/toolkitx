@@ -52,27 +52,27 @@ class EmployeesScreen extends StatelessWidget {
                 } else if (state is ChatGroupCreated) {
                   ProgressBar.dismiss(context);
                   Navigator.pop(context);
-                  Navigator.pop(context);
                 } else if (state is ChatGroupCannotCreate) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
                 }
               },
-              child: FloatingActionButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AndroidPopUp(
-                              titleValue: 'Do you want to create the group?',
-                              contentValue: '',
-                              onPrimaryButton: () {
-                                context.read<ChatBloc>().add(CreateChatGroup());
-                                Navigator.pop(context);
-                              });
-                        });
-                  },
-                  child: const Icon(Icons.check)),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AndroidPopUp(
+                            titleValue: 'Do you want to create the group?',
+                            contentValue: '',
+                            onPrimaryButton: () {
+                              context.read<ChatBloc>().add(CreateChatGroup());
+                              Navigator.pop(context);
+                            });
+                      });
+                },
+                label: const Text('Create Group'),
+              ),
             )
           : null,
       body: Padding(
@@ -210,7 +210,9 @@ class EmployeesScreen extends StatelessWidget {
                                                     .employeeList[index].id
                                                     .toString(),
                                                 'employee_name': state
-                                                    .employeeList[index].name
+                                                    .employeeList[index].name,
+                                                'type': state
+                                                    .employeeList[index].type
                                               }, chatData: chatData)
                                             : IconButton(
                                                 onPressed: () {
@@ -289,14 +291,15 @@ class _ShowCheckBoxState extends State<ShowCheckBox> {
 
   void addOrRemoveMember(bool changedValue) {
     if (changedValue) {
-      widget.chatData.members.add(Members(
-          id: int.parse(widget.employeeDetailsMap['employee_id']),
-          name: widget.employeeDetailsMap['employee_name'],
-          type: 2,
-          isOwner: 0));
+      context.read<ChatBloc>().groupDataMap['members'].add({
+        'id': int.parse(widget.employeeDetailsMap['rid']),
+        'type': widget.employeeDetailsMap['type'],
+        'name': widget.employeeDetailsMap['employee_name'],
+        'isowner': 0
+      });
     } else {
-      widget.chatData.members.removeWhere((element) =>
-          element.id == int.parse(widget.employeeDetailsMap['employee_id']));
+      context.read<ChatBloc>().groupDataMap['members']?.removeWhere((element) =>
+          element.id == int.parse(widget.employeeDetailsMap['rid']));
     }
     setState(() {});
   }

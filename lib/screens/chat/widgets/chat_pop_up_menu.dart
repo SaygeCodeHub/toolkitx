@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -8,6 +9,8 @@ import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+
+import '../../../blocs/chat/chat_bloc.dart';
 
 class ChatPopUpMenu extends StatelessWidget {
   final ChatData chatData = getIt<ChatData>();
@@ -23,7 +26,6 @@ class ChatPopUpMenu extends StatelessWidget {
           child: Text('New group', style: Theme.of(context).textTheme.xxSmall),
           onTap: () {
             showDialog(
-                // barrierColor: AppColor.transparent,
                 context: context,
                 builder: (context) {
                   return AlertDialog(
@@ -32,10 +34,35 @@ class ChatPopUpMenu extends StatelessWidget {
                         height: 35,
                         child: PrimaryButton(
                             onPressed: () {
-                              if (chatData.groupName.isEmpty) {
+                              if (context
+                                          .read<ChatBloc>()
+                                          .groupDataMap['group_name'] ==
+                                      null ||
+                                  context
+                                          .read<ChatBloc>()
+                                          .groupDataMap['group_name'] ==
+                                      '') {
                                 showCustomSnackBar(
                                     context, 'Please enter group name!', '');
                               } else {
+                                Navigator.pop(context);
+                                context
+                                        .read<ChatBloc>()
+                                        .groupDataMap['members'] =
+                                    <Map<String, dynamic>>[
+                                  {
+                                    'id': int.parse(context
+                                        .read<ChatBloc>()
+                                        .groupDataMap['user_id']),
+                                    'type': int.parse(context
+                                        .read<ChatBloc>()
+                                        .groupDataMap['user_type']),
+                                    'name': context
+                                        .read<ChatBloc>()
+                                        .groupDataMap['user_name'],
+                                    'isowner': 1
+                                  }
+                                ];
                                 Navigator.pushNamed(
                                     context, EmployeesScreen.routeName,
                                     arguments: true);
@@ -73,7 +100,9 @@ class ChatPopUpMenu extends StatelessWidget {
                           const SizedBox(height: xxTinierSpacing),
                           TextFieldWidget(
                               onTextFieldChanged: (String textValue) {
-                            chatData.groupName = textValue;
+                            context
+                                .read<ChatBloc>()
+                                .groupDataMap['group_name'] = textValue;
                           }),
                           const SizedBox(height: tinySpacing),
                           Text('Purpose of the Group',
@@ -81,7 +110,9 @@ class ChatPopUpMenu extends StatelessWidget {
                           const SizedBox(height: xxTinierSpacing),
                           TextFieldWidget(
                               onTextFieldChanged: (String textValue) {
-                            chatData.groupPurpose = textValue;
+                            context
+                                .read<ChatBloc>()
+                                .groupDataMap['group_purpose'] = textValue;
                           }),
                         ],
                       ),

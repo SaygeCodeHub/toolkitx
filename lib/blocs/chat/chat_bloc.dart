@@ -33,6 +33,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   final ChatData chatData = getIt<ChatData>();
   Map<String, dynamic> chatDetailsMap = {};
+  Map<String, dynamic> groupDataMap = {};
   final List<Map<String, dynamic>> messagesList = [];
   final ImagePicker _imagePicker = ImagePicker();
   bool isCameraImage = false;
@@ -137,7 +138,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'isDownloadedImage': 0,
         ...sendMessageMap
       });
-      // print('message map------>${jsonEncode(sendMessageMap)}');
       event.sendMessageMap['isMedia'] = false;
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
@@ -184,7 +184,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         await _databaseHelper.getAllGroupsData();
     List<ChatData> individualChatList = [];
     List<ChatData> groupChatList = [];
-
+    groupDataMap['user_id'] =
+        await _customerCache.getUserId2(CacheKeys.userId2);
+    groupDataMap['user_type'] =
+        await _customerCache.getUserType(CacheKeys.userType);
+    groupDataMap['user_name'] =
+        await _customerCache.getUserName(CacheKeys.userName);
     for (int i = 0; i < employees.length; i++) {
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
@@ -219,7 +224,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     for (var item in groupChats) {
       ChatData chat = ChatData(
         groupName: item['group_name'],
-        groupPurpose: item['purpose'],
+        groupPurpose: item['purpose'] ?? '',
         message: '',
         isGroup: true,
       );
@@ -238,7 +243,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   String formattedDate(String timestamp) {
-    print('timestamp $timestamp');
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('dd/MM/yyyy').format(dateTime);
   }
@@ -255,17 +259,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       CreateChatGroupModel chatGroupModel =
           await _chatBoxRepository.createChatGroup({
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "name": chatData.groupName,
-        "purpose": chatData.groupPurpose,
-        "members": chatData.membersToMap()
+        "name": groupDataMap['group_name'],
+        "purpose": groupDataMap['group_purpose'] ?? '',
+        "members": groupDataMap['members']
       });
       if (chatGroupModel.status == 200) {
         groupId = chatGroupModel.data.groupId;
         await _databaseHelper.insertGroup({
           'group_id': groupId,
-          'group_name': chatData.groupName,
-          'purpose': chatData.groupPurpose
-        }, chatData.membersToMap());
+          'group_name': groupDataMap['group_name'],
+          'purpose': groupDataMap['group_purpose']
+        }, groupDataMap['members']);
         add(FetchChatsList());
         emit(ChatGroupCreated());
       } else {
@@ -336,16 +340,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             }
             break;
           case 'Document':
-            print('here----->');
             late File pickedFile;
             FilePickerResult? result = await FilePicker.platform.pickFiles(
                 type: FileType.custom,
-                allowedExtensions: ['pdf', 'doc', 'docx']);
+                allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
               chatData.fileName = pickedFile.path;
               chatDetailsMap['isMedia'] = true;
-              print('path====>${pickedFile.path}');
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }

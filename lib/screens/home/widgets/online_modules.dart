@@ -16,10 +16,8 @@ import '../../../blocs/client/client_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
-import '../../../widgets/error_section.dart';
 import '../../checklist/systemUser/sys_user_checklist_list_screen.dart';
 import '../../checklist/workforce/workforce_list_screen.dart';
 import '../../equipmentTraceability/equipment_trace_screen.dart';
@@ -42,6 +40,7 @@ class OnLineModules extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ClientBloc>().add(FetchHomeScreenData());
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||
@@ -142,18 +141,11 @@ class OnLineModules extends StatelessWidget {
                                         textAlign: TextAlign.center))
                               ])));
                 });
-          } else if (state is FetchHomeScreenError) {
+          } else {
             return Padding(
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height / 3.5),
-                child: Center(
-                    child: GenericReloadButton(
-                        onPressed: () {
-                          context.read<ClientBloc>().add(FetchHomeScreenData());
-                        },
-                        textValue: StringConstants.kReload)));
-          } else {
-            return const SizedBox();
+                child: const Center(child: CircularProgressIndicator()));
           }
         });
   }
