@@ -21,13 +21,11 @@ class SelectLanguageBody extends StatelessWidget {
   final bool isFromProfile;
 
   const SelectLanguageBody(
-      {Key? key, required this.getLanguagesData, required this.isFromProfile})
-      : super(key: key);
+      {super.key, required this.getLanguagesData, required this.isFromProfile});
 
   @override
   Widget build(BuildContext context) {
     return SearchableList(
-        autoFocusOnSearch: false,
         initialList: getLanguagesData,
         builder: (List<GetLanguagesData> getLanguagesData, int index,
             GetLanguagesData languageData) {
