@@ -21,7 +21,6 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('snapshot data ${snapshot.toString()}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -71,12 +70,12 @@ class AttachmentMsgWidget extends StatelessWidget {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey[300],
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
             ),
             child: Center(
               child: IconButton(
-                icon: const Icon(Icons.download),
+                icon: const Icon(Icons.download, color: Colors.black45),
                 onPressed: () async {
                   String url =
                       "https://images.unsplash.com/photo-1706874505664-b0e5334e3add?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
