@@ -25,7 +25,6 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
                     onMediaSelected: () {
                       switch (chatData.mediaTypes()[typeIndex].optionName) {
                         case 'Image':
-                          chatDetailsMap['isMedia'] = true;
                           chatDetailsMap['mediaType'] =
                               chatData.mediaTypes()[typeIndex].optionName;
                           chatDetailsMap['message_type'] = '2';
@@ -41,7 +40,6 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
                           Navigator.pop(context);
                           break;
                         case 'Video':
-                          chatDetailsMap['isMedia'] = true;
                           chatDetailsMap['mediaType'] =
                               chatData.mediaTypes()[typeIndex].optionName;
                           chatDetailsMap['message_type'] = '3';

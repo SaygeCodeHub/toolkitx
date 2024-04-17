@@ -302,6 +302,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickedFile != null) {
               chatData.fileName = pickedFile.path;
               chatDetailsMap['picked_image'] = chatData.fileName;
+              chatDetailsMap['isMedia'] = true;
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
@@ -339,13 +340,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<bool> _uploadImage(
       UploadChatImage event, Emitter<ChatState> emit) async {
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    UploadPictureModel uploadPictureModel = await _uploadPictureRepository
-        .uploadImage(File(event.pickedImage), hashCode);
-    if (uploadPictureModel.data.first.isNotEmpty) {
-      chatDetailsMap['message'] = uploadPictureModel.data.first;
-      return true;
-    } else {
+    try {
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      UploadPictureModel uploadPictureModel = await _uploadPictureRepository
+          .uploadImage(File(event.pickedImage), hashCode);
+      if (uploadPictureModel.data.first.isNotEmpty) {
+        chatDetailsMap['message'] = uploadPictureModel.data.first;
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('error while uploading image $e');
       return false;
     }
   }

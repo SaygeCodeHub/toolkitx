@@ -6,6 +6,7 @@ import 'package:toolkit/configs/app_theme.dart';
 class MediaTypeUtil {
   Widget showMediaWidget(type, Map typeData, BuildContext context,
       {double? width, double? height, int? isMe}) {
+    print('inside util==> ${typeData['file']}');
     switch (type) {
       case 'Image':
         return Image.file(File(typeData['file'] ?? ''),
