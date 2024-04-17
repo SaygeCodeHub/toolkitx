@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
-import 'package:toolkit/utils/chat/chat_database_util.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
+import '../database/database_util.dart';
 
 class NotificationUtil {
   final pushNotifications = FirebaseMessaging.instance;

@@ -5,7 +5,6 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
-import 'package:toolkit/utils/chat/chat_database_util.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -14,6 +13,7 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../utils/database/database_util.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
 

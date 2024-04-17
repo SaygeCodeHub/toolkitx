@@ -18,10 +18,11 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/chat/chat_database_util.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
+
+import '../../utils/database/database_util.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final ChatBoxRepository _chatBoxRepository = getIt<ChatBoxRepository>();

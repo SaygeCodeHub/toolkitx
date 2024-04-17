@@ -10,7 +10,7 @@ import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../di/app_module.dart';
-import '../../../utils/chat/chat_database_util.dart';
+import '../../../utils/database/database_util.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
   final snapshot;
