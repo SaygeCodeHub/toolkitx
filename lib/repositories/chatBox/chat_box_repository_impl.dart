@@ -11,21 +11,21 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   Future<FetchEmployeesModel> fetchEmployees(
       int pageNo, String hashCode, String searchName) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}chat/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
+        "${ApiConstants.baseUrl}database/GetAllUsers?pageno=$pageNo&hashcode=$hashCode&search=$searchName");
     return FetchEmployeesModel.fromJson(response);
   }
 
   @override
   Future<SendMessageModel> sendMessage(Map sendMessageMap) async {
     final response = await DioClient()
-        .post("${ApiConstants.baseUrl}chat/sendmessagenew", sendMessageMap);
+        .post("${ApiConstants.baseUrl}database/sendmessagenew", sendMessageMap);
     return SendMessageModel.fromJson(response);
   }
 
   @override
   Future<CreateChatGroupModel> createChatGroup(Map createChatGroupMap) async {
-    final response = await DioClient()
-        .post("${ApiConstants.baseUrl}chat/creategroup", createChatGroupMap);
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}database/creategroup", createChatGroupMap);
     return CreateChatGroupModel.fromJson(response);
   }
 }
