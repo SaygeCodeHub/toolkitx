@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,8 +19,6 @@ import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/chat/chat_database_util.dart';
-import 'dart:math';
-
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
