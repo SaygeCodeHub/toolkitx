@@ -39,8 +39,6 @@ class DocumentsRepositoryImpl extends DocumentsRepository {
   @override
   Future<DocumentDetailsModel> getDocumentsDetails(
       String userId, String hashCode, String roleId, String documentId) async {
-    print(
-        'endpoint ${"${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}document/getdocument?hashcode=$hashCode&documentid=$documentId&role=$roleId&userid=$userId");
     return DocumentDetailsModel.fromJson(response);
