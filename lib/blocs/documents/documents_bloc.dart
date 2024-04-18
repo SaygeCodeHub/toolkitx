@@ -137,6 +137,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   FutureOr<void> _selectDocumentLocationFilter(
       SelectDocumentLocationFilter event, Emitter<DocumentsStates> emit) {
+    linkDocSelectedType = event.selectedType;
     emit(DocumentTypeFilterSelected(selectedType: event.selectedType));
   }
 
