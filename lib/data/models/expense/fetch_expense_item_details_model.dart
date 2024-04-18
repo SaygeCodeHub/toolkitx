@@ -43,6 +43,7 @@ class Data {
   final String wbsid;
   final String projectid;
   final String generalwbsid;
+  final String itemName;
 
   Data(
       {required this.id,
@@ -58,7 +59,8 @@ class Data {
       required this.woid,
       required this.wbsid,
       required this.projectid,
-      required this.generalwbsid});
+      required this.generalwbsid,
+      required this.itemName});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
       id: json["id"] ?? '',
@@ -74,7 +76,8 @@ class Data {
       woid: json["woid"] ?? '',
       wbsid: json["wbsid"] ?? '',
       projectid: json["projectid"] ?? '',
-      generalwbsid: json["generalwbsid"] ?? '');
+      generalwbsid: json["generalwbsid"] ?? '',
+      itemName: json['item_name'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -90,6 +93,7 @@ class Data {
         "woid": woid,
         "wbsid": wbsid,
         "projectid": projectid,
-        "generalwbsid": generalwbsid
+        "generalwbsid": generalwbsid,
+        'item_name': itemName
       };
 }
