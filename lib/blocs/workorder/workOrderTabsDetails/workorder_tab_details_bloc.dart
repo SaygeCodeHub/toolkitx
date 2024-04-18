@@ -6,6 +6,7 @@ import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/workorder/complete_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -1018,7 +1019,7 @@ class WorkOrderTabDetailsBloc
           'workforce id---->${event.editWorkOrderWorkForceMap['workForceId']}');
       String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
           event.editWorkOrderWorkForceMap['workForceId'], apiKey);
-      print('decry---->${event.editWorkOrderWorkForceMap['workForceId']}');
+      print('decry---->$decryptedWorkForceId');
       Map editWorkForceMap = {
         "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
         "workforceid": decryptedWorkForceId,
@@ -1028,16 +1029,16 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode
       };
       print('editWorkForceMap============>${jsonEncode(editWorkForceMap)}');
-      // EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
-      //     await _workOrderRepository.editWorkForce(editWorkForceMap);
-      // if (editWorkOrderWorkForceModel.message == '1') {
-      //   emit(WorkOrderWorkForceEdited(
-      //       editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
-      // } else {
-      //   emit(WorkOrderWorkForceNotEdited(
-      //       workForceNotEdited:
-      //           DatabaseUtil.getText('some_unknown_error_please_try_again')));
-      // }
+      EditWorkOrderWorkForceModel editWorkOrderWorkForceModel =
+          await _workOrderRepository.editWorkForce(editWorkForceMap);
+      if (editWorkOrderWorkForceModel.message == '1') {
+        emit(WorkOrderWorkForceEdited(
+            editWorkOrderWorkForceModel: editWorkOrderWorkForceModel));
+      } else {
+        emit(WorkOrderWorkForceNotEdited(
+            workForceNotEdited:
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+      }
     }
     // } catch (e) {
     //   emit(WorkOrderWorkForceNotEdited(workForceNotEdited: e.toString()));
