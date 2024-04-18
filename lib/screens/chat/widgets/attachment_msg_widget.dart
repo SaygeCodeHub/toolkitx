@@ -85,8 +85,6 @@ class AttachmentMsgWidget extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.download, color: Colors.black45),
                 onPressed: () async {
-                  bool downloadingAttachment = false;
-                  downloadingAttachment = true;
                   ProgressBar.show(context);
                   final CustomerCache customerCache = getIt<CustomerCache>();
                   String? hashCode =
@@ -99,8 +97,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                       "$imageName.jpg",
                       snapshot.data![reversedIndex]['msg_id']);
                   if (downloadProcessComplete) {
+                    if (!context.mounted) return;
                     ProgressBar.dismiss(context);
-                    downloadingAttachment = false;
                     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
                         employeeDetailsMap:
                             context.read<ChatBloc>().chatDetailsMap));

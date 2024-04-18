@@ -49,7 +49,9 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          print('snapshot----> $snapshot');
+                          snapshot.data!.forEach((element) {
+                            print('snapshot----> $element');
+                          });
                           final bool needDateDivider =
                               index == snapshot.data!.length - 1 ||
                                   _needDateDivider(index, snapshot);
