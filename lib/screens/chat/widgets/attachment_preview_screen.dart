@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
@@ -53,17 +54,34 @@ class _AttachmentPreviewScreenState extends State<AttachmentPreviewScreen> {
                 Expanded(
                     child: SecondaryButton(
                         onPressed: () {
-                          context.read<ChatBloc>().chatDetailsMap['isMedia'] =
-                              false;
-                          _handleMessage(
+                          print(
+                              'message ${context.read<ChatBloc>().chatDetailsMap['message']}');
+                          if (context
+                                      .read<ChatBloc>()
+                                      .chatDetailsMap['message']
+                                      .toString() ==
+                                  '' ||
                               context
-                                  .read<ChatBloc>()
-                                  .chatDetailsMap['message']
-                                  .toString(),
-                              context);
-                          context.read<ChatBloc>().add(SendChatMessage(
-                              sendMessageMap:
-                                  context.read<ChatBloc>().chatDetailsMap));
+                                      .read<ChatBloc>()
+                                      .chatDetailsMap['message'] ==
+                                  null) {
+                            showCustomSnackBar(
+                                context,
+                                'Something went wrong. Please try again later!',
+                                '');
+                          } else {
+                            context.read<ChatBloc>().chatDetailsMap['isMedia'] =
+                                false;
+                            _handleMessage(
+                                context
+                                    .read<ChatBloc>()
+                                    .chatDetailsMap['message']
+                                    .toString(),
+                                context);
+                            context.read<ChatBloc>().add(SendChatMessage(
+                                sendMessageMap:
+                                    context.read<ChatBloc>().chatDetailsMap));
+                          }
                         },
                         textValue: 'Send')),
               ],

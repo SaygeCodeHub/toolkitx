@@ -288,9 +288,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             : await Permission.storage.request();
         if (permissionStatus == PermissionStatus.denied) {
           openAppSettings();
-        } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
-          // add state
-        }
+        } else if (permissionStatus == PermissionStatus.permanentlyDenied) {}
         return true;
       }
 
@@ -361,21 +359,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  FutureOr<bool> _uploadImage(
+  FutureOr<void> _uploadImage(
       UploadChatImage event, Emitter<ChatState> emit) async {
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.pickedImage), hashCode);
-      if (uploadPictureModel.data.first.isNotEmpty) {
+      if (uploadPictureModel.data.isNotEmpty) {
         chatDetailsMap['message'] = uploadPictureModel.data.first;
-        return true;
-      } else {
-        return false;
       }
     } catch (e) {
       print('error while uploading image $e');
-      return false;
     }
   }
 }

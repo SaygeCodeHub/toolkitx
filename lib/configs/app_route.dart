@@ -5,6 +5,7 @@ import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/chat/employees_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
+import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
@@ -586,6 +587,9 @@ class AppRoutes {
         return _createRoute(const ChatMessagingScreen());
       case AllChatsScreen.routeName:
         return _createRoute(const AllChatsScreen());
+      case ViewAttachedImageWidget.routeName:
+        return _createRoute(ViewAttachedImageWidget(
+            attachmentPath: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

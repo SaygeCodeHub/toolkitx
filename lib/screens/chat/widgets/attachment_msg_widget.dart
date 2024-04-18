@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
+import 'package:toolkit/utils/chat/attachement_msg_type_util.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
@@ -40,12 +42,14 @@ class AttachmentMsgWidget extends StatelessWidget {
                   child: showDownloadedImage(
                       snapshot.data![reversedIndex]['localImagePath']
                           .toString(),
-                      context))
+                      context,
+                      snapshot.data![reversedIndex]['msg_type']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
                       snapshot.data![reversedIndex]['pickedMedia'].toString(),
-                      context)),
+                      context,
+                      snapshot.data![reversedIndex]['msg_type'])),
           Align(
             alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -63,16 +67,20 @@ class AttachmentMsgWidget extends StatelessWidget {
     );
   }
 
-  Widget showDownloadedImage(String attachmentPath, BuildContext context) {
+  Widget showDownloadedImage(
+      String attachmentPath, BuildContext context, String type) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
-            child: Image.file(fit: BoxFit.cover, errorBuilder:
-                (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-              return Text('Failed to load image: $exception');
-            }, File(attachmentPath)),
+            child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, ViewAttachedImageWidget.routeName,
+                      arguments: attachmentPath);
+                },
+                child: AttachementMsgTypeUtil()
+                    .renderWidget(type, attachmentPath)),
           )
         : Container(
             width: 100,
@@ -122,6 +130,7 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId) async {
       if (messageValue is String) {
         String downloadUrl = messageValue;
         String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
+        print('file url $finalUrl');
         await downloadImage(finalUrl, imageName, msgId);
       } else {
         throw Exception('Invalid message value: $messageValue');
@@ -139,6 +148,7 @@ Future<String> downloadImage(String url, String filename, msgId) async {
   Directory directory = await getApplicationDocumentsDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
+
   Dio dio = Dio();
 
   try {
