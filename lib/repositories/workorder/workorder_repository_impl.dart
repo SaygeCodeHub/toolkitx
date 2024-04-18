@@ -49,8 +49,6 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   @override
   Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
       String hashCode, String workOrderId) async {
-    print(
-        'workorder details ${"${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
     return FetchWorkOrderTabDetailsModel.fromJson(response);
