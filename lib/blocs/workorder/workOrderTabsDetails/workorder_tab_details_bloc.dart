@@ -1014,8 +1014,11 @@ class WorkOrderTabDetailsBloc
       emit(WorkOrderWorkForceNotEdited(
           workForceNotEdited: DatabaseUtil.getText('ValidPlannedActualHours')));
     } else {
+      print(
+          'workforce id---->${event.editWorkOrderWorkForceMap['workForceId']}');
       String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
           event.editWorkOrderWorkForceMap['workForceId'], apiKey);
+      print('decry---->${event.editWorkOrderWorkForceMap['workForceId']}');
       Map editWorkForceMap = {
         "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
         "workforceid": decryptedWorkForceId,
