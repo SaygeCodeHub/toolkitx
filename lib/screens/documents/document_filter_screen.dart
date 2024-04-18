@@ -96,7 +96,7 @@ class DocumentFilterScreen extends StatelessWidget {
                       onTextFieldChanged: (textField) {
                         documentFilterMap["author"] = textField;
                       },
-                      hintText: "Search by Document Id",
+                      hintText: "Search by Author",
                     ),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Status'),
