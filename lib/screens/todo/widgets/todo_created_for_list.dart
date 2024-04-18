@@ -3,6 +3,7 @@ import 'package:searchable_listview/searchable_listview.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -17,10 +18,9 @@ class ToDoCreatedForList extends StatefulWidget {
   final CreatedForListCallBack onCreatedForChanged;
 
   const ToDoCreatedForList(
-      {Key? key,
+      {super.key,
       required this.todoMasterDatum,
-      required this.onCreatedForChanged})
-      : super(key: key);
+      required this.onCreatedForChanged});
 
   @override
   State<ToDoCreatedForList> createState() => _ToDoCreatedForListState();
@@ -60,7 +60,6 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
               right: leftRightMargin,
               top: xxTinierSpacing),
           child: SearchableList(
-              autoFocusOnSearch: false,
               initialList: widget.todoMasterDatum,
               builder: (List<ToDoMasterDatum> todoDatumList, index,
                   ToDoMasterDatum todoMasterDatum) {

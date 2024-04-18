@@ -11,16 +11,26 @@ import '../../blocs/chat/chat_event.dart';
 import '../../configs/app_dimensions.dart';
 import '../../widgets/generic_app_bar.dart';
 
-class ChatMessagingScreen extends StatelessWidget {
+class ChatMessagingScreen extends StatefulWidget {
   static const routeName = 'ChatMessagingScreen';
 
   const ChatMessagingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<ChatMessagingScreen> createState() => _ChatMessagingScreenState();
+}
+
+class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
+  @override
+  void initState() {
     context.read<ChatBloc>().chatDetailsMap['isMedia'] = false;
     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
         employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: GenericAppBar(
           title:
@@ -39,6 +49,9 @@ class ChatMessagingScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
+                          snapshot.data!.forEach((element) {
+                            print('snapshot----> $element');
+                          });
                           final bool needDateDivider =
                               index == snapshot.data!.length - 1 ||
                                   _needDateDivider(index, snapshot);
@@ -66,13 +79,14 @@ class ChatMessagingScreen extends StatelessWidget {
                 }),
           ),
           const Divider(height: kChatScreenDividerHeight),
-          (context.read<ChatBloc>().chatDetailsMap['isMedia'] == false)
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                  ),
-                  child: const ChatBoxTextFieldWidget())
-              : const SizedBox()
+          Visibility(
+            visible: !context.read<ChatBloc>().chatDetailsMap['isMedia'],
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                ),
+                child: const ChatBoxTextFieldWidget()),
+          )
         ],
       ),
     );
@@ -82,17 +96,9 @@ class ChatMessagingScreen extends StatelessWidget {
     switch (msgType) {
       case '1':
         return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
-      case '2':
-        return AttachmentMsgWidget(
-            snapshot: snapshot, reversedIndex: reversedIndex);
-      case '3':
-        return AttachmentMsgWidget(
-            snapshot: snapshot, reversedIndex: reversedIndex);
-      case '4':
-        return AttachmentMsgWidget(
-            snapshot: snapshot, reversedIndex: reversedIndex);
       default:
-        return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
+        return AttachmentMsgWidget(
+            snapshot: snapshot, reversedIndex: reversedIndex);
     }
   }
 

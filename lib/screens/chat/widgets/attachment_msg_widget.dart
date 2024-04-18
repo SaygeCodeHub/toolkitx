@@ -2,13 +2,19 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
+import '../../../blocs/chat/chat_bloc.dart';
+import '../../../blocs/chat/chat_event.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/cache/cache_keys.dart';
+import '../../../data/cache/customer_cache.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database/database_util.dart';
 
@@ -31,13 +37,15 @@ class AttachmentMsgWidget extends StatelessWidget {
           (snapshot.data![reversedIndex]['isReceiver'] == 1)
               ? Align(
                   alignment: Alignment.centerLeft,
-                  child: showDownloadedImage(snapshot.data![reversedIndex]
-                          ['localImagePath']
-                      .toString()))
+                  child: showDownloadedImage(
+                      snapshot.data![reversedIndex]['localImagePath']
+                          .toString(),
+                      context))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
-                      snapshot.data![reversedIndex]['pickedMedia'].toString())),
+                      snapshot.data![reversedIndex]['pickedMedia'].toString(),
+                      context)),
           Align(
             alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -55,8 +63,8 @@ class AttachmentMsgWidget extends StatelessWidget {
     );
   }
 
-  Widget showDownloadedImage(String imagePath) {
-    return (imagePath.toString() != 'null')
+  Widget showDownloadedImage(String attachmentPath, BuildContext context) {
+    return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
@@ -64,7 +72,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                 (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
               return Text('Failed to load image: $exception');
-            }, File(imagePath)),
+            }, File(attachmentPath)),
           )
         : Container(
             width: 100,
@@ -77,11 +85,24 @@ class AttachmentMsgWidget extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.download, color: Colors.black45),
                 onPressed: () async {
+                  ProgressBar.show(context);
+                  final CustomerCache customerCache = getIt<CustomerCache>();
+                  String? hashCode =
+                      await customerCache.getHashCode(CacheKeys.hashcode);
                   String url =
-                      "https://images.unsplash.com/photo-1706874505664-b0e5334e3add?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
-                  await downloadImage(url, "$imageName.jpg",
+                  bool downloadProcessComplete = await downloadFileFromUrl(
+                      url,
+                      "$imageName.jpg",
                       snapshot.data![reversedIndex]['msg_id']);
+                  if (downloadProcessComplete) {
+                    if (!context.mounted) return;
+                    ProgressBar.dismiss(context);
+                    context.read<ChatBloc>().add(RebuildChatMessagingScreen(
+                        employeeDetailsMap:
+                            context.read<ChatBloc>().chatDetailsMap));
+                  }
                 },
               ),
             ),
@@ -89,9 +110,32 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 }
 
-Future<String> downloadImage(String url, String filename, msgId) async {
-  await requestPermission();
+Future<bool> downloadFileFromUrl(String url, imageName, msgId) async {
+  try {
+    final Dio dio = Dio();
 
+    final Response response = await dio.get(url);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = response.data;
+      dynamic messageValue = jsonResponse['Message'];
+
+      if (messageValue is String) {
+        String downloadUrl = messageValue;
+        String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
+        await downloadImage(finalUrl, imageName, msgId);
+      } else {
+        throw Exception('Invalid message value: $messageValue');
+      }
+    } else {
+      throw Exception('Failed to fetch download URL');
+    }
+  } catch (e) {
+    rethrow;
+  }
+  return true;
+}
+
+Future<String> downloadImage(String url, String filename, msgId) async {
   Directory directory = await getApplicationDocumentsDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
@@ -108,11 +152,4 @@ Future<String> downloadImage(String url, String filename, msgId) async {
   }
 
   return filePath;
-}
-
-Future<void> requestPermission() async {
-  var status = await Permission.storage.status;
-  if (!status.isGranted) {
-    await Permission.storage.request();
-  }
 }
