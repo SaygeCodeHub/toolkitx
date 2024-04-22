@@ -8,7 +8,8 @@ class MediaAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      insetPadding: const EdgeInsets.symmetric(vertical: 345, horizontal: 90),
+      insetPadding: EdgeInsets.symmetric(
+          vertical: MediaQuery.sizeOf(context).width / 1.2, horizontal: 90),
       content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: mediaList),

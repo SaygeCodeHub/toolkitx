@@ -7,6 +7,8 @@ import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/screens/chat/widgets/media_alert_dialog.dart';
 import 'package:toolkit/screens/chat/widgets/media_options_widget.dart';
 
+import '../../../configs/app_color.dart';
+
 class ChatGalleryMediaAlertDialog extends StatelessWidget {
   final Map chatDetailsMap;
   final ChatData chatData = getIt<ChatData>();
@@ -19,6 +21,7 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
       mediaList: List.generate(
           chatData.mediaTypes().length,
           (typeIndex) => Material(
+                color: AppColor.white,
                 child: MediaOptionsWidget(
                   onMediaSelected: () {
                     switch (chatData.mediaTypes()[typeIndex].optionName) {

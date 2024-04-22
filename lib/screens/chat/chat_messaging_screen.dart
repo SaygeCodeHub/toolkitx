@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_msg_widget.dart';
@@ -8,6 +9,7 @@ import 'package:toolkit/screens/chat/widgets/msg_text_widget.dart';
 
 import '../../blocs/chat/chat_bloc.dart';
 import '../../blocs/chat/chat_event.dart';
+import '../../blocs/chat/chat_state.dart';
 import '../../configs/app_dimensions.dart';
 import '../../widgets/generic_app_bar.dart';
 
@@ -76,13 +78,24 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                 }),
           ),
           const Divider(height: kChatScreenDividerHeight),
-          Visibility(
-            visible: !context.read<ChatBloc>().chatDetailsMap['isMedia'],
-            child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                ),
-                child: const ChatBoxTextFieldWidget()),
+          BlocBuilder<ChatBloc, ChatState>(
+            builder: (context, state) {
+              if (state is ChatMessagingTextFieldHidden) {
+                return const SizedBox.shrink();
+              } else if (state is ShowChatMessagingTextField) {
+                return Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: const ChatBoxTextFieldWidget());
+              } else {
+                return Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                    ),
+                    child: const ChatBoxTextFieldWidget());
+              }
+            },
           )
         ],
       ),

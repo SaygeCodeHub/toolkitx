@@ -40,7 +40,9 @@ class DatabaseHelper {
             isDownloadedImage INTEGER,
             localImagePath TEXT,
             pickedMedia TEXT,
-            serverImagePath TEXT
+            serverImagePath TEXT,
+            showCount INTEGER,
+            unreadMessageCount INTEGER
           )
         ''');
         await db.execute('''
@@ -56,7 +58,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         group_id TEXT UNIQUE,
         group_name TEXT NOT NULL,
-        purpose TEXT
+        purpose TEXT,
+        date TEXT
       );
         ''');
 
@@ -68,6 +71,7 @@ class DatabaseHelper {
           name TEXT,
           isowner INTEGER DEFAULT 0,
           group_id TEXT,
+          date TEXT,
           FOREIGN KEY (group_id) REFERENCES groups(group_id)
         );
   ''');
@@ -103,6 +107,43 @@ class DatabaseHelper {
           {'serverImagePath': serverImagePath, 'isDownloadedImage': 0},
           where: 'msg_id = ?', whereArgs: [messageId]);
     });
+  }
+
+  Future<void> getUnreadMessageCount(String currentUserId) async {
+    final Database db = await database;
+
+    // Start transaction
+    await db.transaction((txn) async {
+      // Get unread messages for recipient (showCount = 0)
+      final unreadCount = await txn.rawQuery('''
+      SELECT COUNT(*) AS unread_for_recipient
+      FROM chat_messages
+      WHERE sid = ? AND showCount = 0;
+    ''', [currentUserId]);
+
+      // Assuming the first element of unreadCount contains the count
+      final unreadRecipientCount =
+          unreadCount.first['unread_for_recipient'] as int;
+
+      // Update unreadMessageCount with retrieved count
+      await txn.update(
+        'chat_messages',
+        {'unreadMessageCount': unreadRecipientCount},
+        where: 'sid = ?',
+        whereArgs: [currentUserId],
+      );
+    });
+  }
+
+  Future<void> updateShowCountForMessages(
+      String recipientId, String senderId) async {
+    final Database db = await database;
+    await db.update(
+      'chat_messages',
+      {'showCount': 1},
+      where: '(rid = ? AND showCount = 0) OR (sid = ? AND showCount = 0)',
+      whereArgs: [recipientId, senderId],
+    );
   }
 
   Future<void> insertEmployees(List<EmployeesDatum> employees) async {

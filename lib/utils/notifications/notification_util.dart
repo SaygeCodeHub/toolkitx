@@ -26,8 +26,12 @@ class NotificationUtil {
           'rid': message.data['rid'] ?? '',
           'rtype': message.data['rtype'] ?? '',
           'stype': message.data['stype'] ?? '',
-          "employee_name": message.data['username']
+          "employee_name": message.data['username'],
+          'showCount': 0
         }));
+      }
+      if (message.data['ischatgrouprequest'] == '1') {
+        ChatBloc().add(FetchGroupInfo(groupId: message.data['group_id']));
       }
     });
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
@@ -45,7 +49,8 @@ class NotificationUtil {
       'sid': message.data['sid'],
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
-      'msg_type': message.data['type']
+      'msg_type': message.data['type'],
+      'showCount': 0
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -78,7 +83,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'sid': message.data['sid'],
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
-      'msg_type': message.data['type']
+      'msg_type': message.data['type'],
+      'showCount': 0
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {

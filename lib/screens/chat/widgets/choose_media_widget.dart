@@ -16,6 +16,7 @@ class ChooseMediaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('hello');
     return CustomIconButton(
         icon: Icons.attach_file,
         onPressed: () {
@@ -29,8 +30,8 @@ class ChooseMediaWidget extends StatelessWidget {
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 200 / 350,
-                            crossAxisCount: 4,
+                            childAspectRatio: 350 / 300,
+                            crossAxisCount: 3,
                             crossAxisSpacing: tinierSpacing,
                             mainAxisSpacing: tinierSpacing),
                     itemCount: chatData.mediaOptions().length - 2,
@@ -52,6 +53,7 @@ class ChooseMediaWidget extends StatelessWidget {
                                               .read<ChatBloc>()
                                               .chatDetailsMap);
                                     });
+
                                 break;
                               case 'Camera':
                                 Navigator.pop(context);

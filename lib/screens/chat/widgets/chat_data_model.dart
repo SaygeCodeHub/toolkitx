@@ -22,6 +22,7 @@ class ChatData {
   String localImagePath;
   String messageType;
   String pickedMedia;
+  int unreadMsgCount;
 
   ChatData(
       {this.rId = '',
@@ -43,7 +44,8 @@ class ChatData {
       this.time = '',
       this.localImagePath = '',
       this.messageType = '',
-      this.pickedMedia = ''})
+      this.pickedMedia = '',
+      this.unreadMsgCount = 0})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -66,7 +68,8 @@ class ChatData {
       'time': time,
       'localImagePath': localImagePath,
       'messageType': messageType,
-      'pickedMedia': pickedMedia
+      'pickedMedia': pickedMedia,
+      'unreadMsgCount': unreadMsgCount
     };
   }
 
@@ -80,10 +83,6 @@ class ChatData {
           icon: Icons.file_copy,
           optionName: 'Document',
           color: AppColor.darkViolet),
-      MediaOptions(
-          icon: Icons.perm_contact_cal,
-          optionName: 'Contact',
-          color: AppColor.tintBlue),
       MediaOptions(
           icon: Icons.image, optionName: 'Image', color: AppColor.tintBlue),
       MediaOptions(

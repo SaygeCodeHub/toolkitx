@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
@@ -11,6 +12,9 @@ import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
+import '../../di/app_module.dart';
+import '../../utils/database/database_util.dart';
+
 class AllChatsScreen extends StatelessWidget {
   static const routeName = 'AllChatsScreen';
 
@@ -19,6 +23,7 @@ class AllChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ChatBloc>().add(FetchChatsList());
+    final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chats'),
@@ -46,7 +51,10 @@ class AllChatsScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return CustomCard(
                     child: ListTile(
-                        onTap: () {
+                        onTap: () async {
+                          await databaseHelper.updateShowCountForMessages(
+                              snapshot.data![index].rId,
+                              snapshot.data![index].sId);
                           context.read<ChatBloc>().chatDetailsMap = {
                             "employee_name": snapshot.data![index].userName,
                             'rid': snapshot.data![index].rId,
@@ -111,10 +119,33 @@ class AllChatsScreen extends StatelessWidget {
                                 Flexible(
                                     child: messageText(
                                         snapshot.data![index].message,
-                                        snapshot.data![index].messageType))
+                                        snapshot.data![index].messageType)),
+                                Visibility(
+                                  visible:
+                                      snapshot.data![index].unreadMsgCount != 0,
+                                  child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.green,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: Center(
+                                          child: Text(
+                                              snapshot
+                                                  .data![index].unreadMsgCount
+                                                  .toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .xxSmall
+                                                  .copyWith(
+                                                      color: AppColor.black,
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                )
                               ],
                             ),
-                            const SizedBox(height: xxTiniestSpacing)
+                            const SizedBox(height: xxTiniestSpacing),
                           ],
                         ),
                         subtitleTextStyle: Theme.of(context).textTheme.xSmall),

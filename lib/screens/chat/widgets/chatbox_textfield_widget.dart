@@ -12,6 +12,7 @@ class ChatBoxTextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('preview');
     final TextEditingController textEditingController = TextEditingController();
 
     return IconTheme(

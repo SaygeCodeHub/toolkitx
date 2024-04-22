@@ -45,3 +45,7 @@ class EmployeesListSearched extends ChatState {
 
   EmployeesListSearched({required this.isSearchedEnabled});
 }
+
+class ChatMessagingTextFieldHidden extends ChatState {}
+
+class ShowChatMessagingTextField extends ChatState {}

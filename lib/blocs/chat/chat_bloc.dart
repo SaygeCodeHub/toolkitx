@@ -13,15 +13,13 @@ import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
+import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/data/models/uploadImage/upload_image_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/constants/api_constants.dart';
-import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
-import 'package:toolkit/utils/incident_view_image_util.dart';
 
 import '../../utils/database/database_util.dart';
 
@@ -56,6 +54,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   int groupId = 0;
   List<EmployeesDatum> employeeList = [];
   bool employeeListReachedMax = false;
+  int unreadMsgCount = 0;
 
   ChatBloc._() : super(ChatInitial()) {
     on<FetchEmployees>(_fetchEmployees);
@@ -65,6 +64,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
     on<UploadChatImage>(_uploadImage);
+    on<FetchGroupInfo>(_fetchGroupInfo);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -136,6 +136,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
         'isDownloadedImage': 0,
+        'showCount': 1,
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
@@ -154,26 +155,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
+    await _databaseHelper
+        .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
-    for (var message in messages) {
-      if (message['msg_type'] == '2' && message['isDownloadedImage'] == 0) {
-        String image = message['msg'];
-        String imageUrl =
-            '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(image)[0]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}';
-        String serverImagePath = imageUrl;
-        if (serverImagePath.isNotEmpty) {
-          await _databaseHelper.updateServerImagePath(
-              message['msg_id'], serverImagePath);
-        }
-      }
-    }
     messagesList.clear();
     messagesList.addAll(messages);
     _chatScreenMessagesStreamController.add(messagesList);
+    if (chatDetailsMap['isMedia'] == false) {
+      emit(ShowChatMessagingTextField());
+    }
     add(FetchChatsList());
   }
 
@@ -215,7 +209,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               isGroup: false,
               date: formattedDate(message.last['msg_time']),
               time: formattedTime(message.last['msg_time']),
-              messageType: message.last['msg_type'] ?? '');
+              messageType: message.last['msg_type'] ?? '',
+              unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
           individualChatList.add(chat);
         }
       }
@@ -270,7 +265,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           'group_name': groupDataMap['group_name'],
           'purpose': groupDataMap['group_purpose']
         }, groupDataMap['members']);
-        add(FetchChatsList());
         emit(ChatGroupCreated());
       } else {
         emit(ChatGroupCannotCreate(errorMessage: 'Error!'));
@@ -307,6 +301,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               chatData.fileName = pickedFile.path;
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
+              if (chatDetailsMap['isMedia'] == true) {
+                emit(ChatMessagingTextFieldHidden());
+              }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
@@ -370,6 +367,39 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } catch (e) {
       print('error while uploading image $e');
+    }
+  }
+
+  FutureOr<void> _fetchGroupInfo(
+      FetchGroupInfo event, Emitter<ChatState> emit) async {
+    List<Map<String, dynamic>> membersList = [];
+    try {
+      FetchGroupInfoModel fetchGroupInfoModel =
+          await _chatBoxRepository.fetchGroupInfo({
+        'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
+        'group_id': event.groupId
+      });
+      if (fetchGroupInfoModel.data.toJson().isNotEmpty) {
+        for (var item in fetchGroupInfoModel.data.members) {
+          membersList.add({
+            'id': item.id,
+            'type': item.type,
+            'name': item.username,
+            'isowner': item.isowner,
+            'group_id': event.groupId,
+            'date': item.date
+          });
+        }
+        await _databaseHelper.insertGroup({
+          'group_id': event.groupId,
+          'group_name': fetchGroupInfoModel.data.name,
+          'purpose': fetchGroupInfoModel.data.purpose,
+          'date': ''
+        }, membersList);
+        add(FetchChatsList());
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

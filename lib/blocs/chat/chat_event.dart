@@ -40,3 +40,9 @@ class UploadChatImage extends ChatEvent {
 
   UploadChatImage({required this.pickedImage});
 }
+
+class FetchGroupInfo extends ChatEvent {
+  final String groupId;
+
+  FetchGroupInfo({required this.groupId});
+}
