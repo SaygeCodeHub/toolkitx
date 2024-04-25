@@ -22,8 +22,6 @@ class CertificateListBloc
       FetchCertificateDetailsModel();
 
   CertificateListState get initialState => CertificateListInitial();
-  final List<CertificateListDatum> data = [];
-  bool hasReachedMax = false;
 
   CertificateListBloc() : super(CertificateListInitial()) {
     on<FetchCertificateList>(_fetchCertificateList);
@@ -39,11 +37,8 @@ class CertificateListBloc
       FetchCertificatesModel fetchCertificatesModel =
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
-      data.addAll(fetchCertificatesModel.data);
       emit(FetchedCertificateList(
-          fetchCertificatesModel: fetchCertificatesModel,
-          data: data,
-          hasReachedMax: hasReachedMax));
+          fetchCertificatesModel: fetchCertificatesModel));
     } catch (e) {
       emit(CertificateListError(errorMsg: e.toString()));
     }
