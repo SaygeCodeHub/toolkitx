@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -38,6 +39,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
   String clientId = '';
+  int unreadMsgCount = 0;
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -54,7 +56,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   int groupId = 0;
   List<EmployeesDatum> employeeList = [];
   bool employeeListReachedMax = false;
-  int unreadMsgCount = 0;
 
   ChatBloc._() : super(ChatInitial()) {
     on<FetchEmployees>(_fetchEmployees);
@@ -116,13 +117,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             ? "2"
             : "1",
         "rid": (event.sendMessageMap['isGroup'] == true)
-            ? groupId
+            ? event.sendMessageMap['rid']
             : (event.sendMessageMap['isReceiver'] == 1)
                 ? event.sendMessageMap['sid']
                 : event.sendMessageMap['rid'],
-        "rtype": (event.sendMessageMap['isReceiver'] == 1)
-            ? event.sendMessageMap['stype']
-            : event.sendMessageMap['rtype'] ?? '',
+        "rtype": (event.sendMessageMap['isGroup'] == true)
+            ? '3'
+            : (event.sendMessageMap['isReceiver'] == 1)
+                ? event.sendMessageMap['stype']
+                : event.sendMessageMap['rtype'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
         "msg_time": isoDateString,
         "msg": event.sendMessageMap['message'] ?? '',
@@ -131,6 +134,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "stype_2": "3"
       };
       sendMessageMap['isReceiver'] = 0;
+      print('map ${jsonEncode(sendMessageMap)}');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
@@ -198,6 +202,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = formattedTime(message.last['msg_time']);
         } else {
+          unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
               rId: message.last['rid'].toString(),
               sId: message.last['sid'].toString(),
@@ -218,11 +223,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     for (var item in groupChats) {
       ChatData chat = ChatData(
-        groupName: item['group_name'],
-        groupPurpose: item['purpose'] ?? '',
-        message: '',
-        isGroup: true,
-      );
+          groupName: item['group_name'],
+          groupPurpose: item['purpose'] ?? '',
+          date: item['date'] ?? '',
+          message: '',
+          groupId: item['group_id'],
+          isGroup: true);
       groupChatList.add(chat);
     }
 
@@ -325,6 +331,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickVideo != null) {
               chatData.fileName = pickVideo.path;
               chatDetailsMap['isMedia'] = true;
+              if (chatDetailsMap['isMedia'] == true) {
+                emit(ChatMessagingTextFieldHidden());
+              }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
@@ -343,6 +352,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               pickedFile = File(result.files.single.path!);
               chatData.fileName = pickedFile.path;
               chatDetailsMap['isMedia'] = true;
+              if (chatDetailsMap['isMedia'] == true) {
+                emit(ChatMessagingTextFieldHidden());
+              }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
@@ -390,11 +402,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             'date': item.date
           });
         }
+        DateTime date = DateTime.now().toUtc();
+        DateTime dateTime = DateTime.parse(date.toIso8601String());
+        String finalDate = DateFormat('dd/MM/yyyy').format(dateTime);
         await _databaseHelper.insertGroup({
           'group_id': event.groupId,
           'group_name': fetchGroupInfoModel.data.name,
           'purpose': fetchGroupInfoModel.data.purpose,
-          'date': ''
+          'date': finalDate
         }, membersList);
         add(FetchChatsList());
       }

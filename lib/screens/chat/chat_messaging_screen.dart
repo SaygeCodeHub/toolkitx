@@ -25,6 +25,7 @@ class ChatMessagingScreen extends StatefulWidget {
 class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
   @override
   void initState() {
+    print('message screen ${context.read<ChatBloc>().chatDetailsMap}');
     context.read<ChatBloc>().chatDetailsMap['isMedia'] = false;
     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
         employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap));

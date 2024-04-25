@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../configs/app_color.dart';
+
 class MsgTextWidget extends StatelessWidget {
   final snapshot;
   final int reversedIndex;
@@ -20,7 +22,7 @@ class MsgTextWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(8.0),
           color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-              ? Colors.blue
+              ? AppColor.blueGrey
               : Colors.grey[300],
           child: Text(snapshot.data![reversedIndex]['msg']),
         ),

@@ -49,15 +49,19 @@ class AllChatsScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
+                  print('is group ${snapshot.data![index].groupId}');
                   return CustomCard(
                     child: ListTile(
                         onTap: () async {
                           await databaseHelper.updateShowCountForMessages(
                               snapshot.data![index].rId,
                               snapshot.data![index].sId);
+                          print('is group ${snapshot.data![index].isGroup}');
                           context.read<ChatBloc>().chatDetailsMap = {
                             "employee_name": snapshot.data![index].userName,
-                            'rid': snapshot.data![index].rId,
+                            'rid': (snapshot.data![index].isGroup == true)
+                                ? snapshot.data![index].groupId
+                                : snapshot.data![index].rId,
                             'sid': snapshot.data![index].sId,
                             'isReceiver': snapshot.data![index].isReceiver,
                             'stype': snapshot.data![index].sType,
@@ -100,9 +104,11 @@ class AllChatsScreen extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text((snapshot.data![index].sType == '2')
-                                    ? 'Workforce'
-                                    : 'System User'),
+                                Text((snapshot.data![index].isGroup == true)
+                                    ? snapshot.data![index].groupPurpose
+                                    : (snapshot.data![index].sType == '2')
+                                        ? 'Workforce'
+                                        : 'System User'),
                                 Text(snapshot.data![index].time,
                                     style: Theme.of(context)
                                         .textTheme

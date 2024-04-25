@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -161,10 +162,43 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
                 ]),
               ),
               label: ''),
-          const BottomNavigationBarItem(
-              icon: Padding(
-                  padding: EdgeInsets.only(top: xxTiniestSpacing),
-                  child: Icon(Icons.message)),
+          BottomNavigationBarItem(
+              icon: Stack(
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.only(top: xxTiniestSpacing),
+                      child: Icon(Icons.message)),
+                  Padding(
+                      padding: const EdgeInsets.only(
+                          left: kNotificationBadgePadding),
+                      child: StreamBuilder<List<ChatData>>(
+                          stream: context.read<ChatBloc>().allChatsStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                        height: kNotificationBadgeSize,
+                                        width: kNotificationBadgeSize,
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColor.errorRed)),
+                                    Text(
+                                        (snapshot.data!.isNotEmpty)
+                                            ? snapshot.data![0].unreadMsgCount
+                                                .toString()
+                                            : '0',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xxxSmall)
+                                  ]);
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          }))
+                ],
+              ),
               label: ''),
           const BottomNavigationBarItem(
               icon: Padding(

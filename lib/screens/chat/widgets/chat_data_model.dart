@@ -9,7 +9,7 @@ class ChatData {
   int isReceiver;
   String userName;
   String message;
-  int groupId;
+  String groupId;
   String groupName;
   String groupPurpose;
   List<Members> members;
@@ -33,7 +33,7 @@ class ChatData {
       this.userName = '',
       this.message = '',
       this.groupName = '',
-      this.groupId = 0,
+      this.groupId = '',
       this.groupPurpose = '',
       List<Members>? members,
       MediaOptions? options,

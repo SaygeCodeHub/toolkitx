@@ -112,20 +112,16 @@ class DatabaseHelper {
   Future<void> getUnreadMessageCount(String currentUserId) async {
     final Database db = await database;
 
-    // Start transaction
     await db.transaction((txn) async {
-      // Get unread messages for recipient (showCount = 0)
       final unreadCount = await txn.rawQuery('''
       SELECT COUNT(*) AS unread_for_recipient
       FROM chat_messages
       WHERE sid = ? AND showCount = 0;
     ''', [currentUserId]);
 
-      // Assuming the first element of unreadCount contains the count
       final unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
 
-      // Update unreadMessageCount with retrieved count
       await txn.update(
         'chat_messages',
         {'unreadMessageCount': unreadRecipientCount},

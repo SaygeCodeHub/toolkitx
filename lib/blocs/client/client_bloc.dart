@@ -78,6 +78,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         "type": userType,
         "timezonecode": timeZoneCode
       };
+      print('inside client bloc');
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
@@ -107,7 +108,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             homeScreenModel: homeScreenModel,
             image: clientImage,
             availableModules: availableModules,
-            badgeCount: badgeCount));
+            badgeCount: badgeCount,
+            unreadMessageCount: 0));
       } else {
         emit(FetchHomeScreenError());
       }

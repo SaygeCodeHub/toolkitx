@@ -216,6 +216,8 @@ class EmployeesScreen extends StatelessWidget {
                                               }, chatData: chatData)
                                             : IconButton(
                                                 onPressed: () {
+                                                  print(
+                                                      'map ${context.read<ChatBloc>().chatDetailsMap}');
                                                   context
                                                       .read<ChatBloc>()
                                                       .chatDetailsMap = {
