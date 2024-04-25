@@ -35,23 +35,25 @@ class CertificatesListScreen extends StatelessWidget {
                       if (state is FetchingCertificateList) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is FetchedCertificateList) {
-                          return Column(children: [
-                            Expanded(
-                                child: ListView.separated(
-                                    physics: const BouncingScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: state.fetchCertificatesModel.data.length,
-                                    itemBuilder: (context, index) {
-                                        return CertificateListCard(
-                                          data: state.fetchCertificatesModel.data[index],
-                                        );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const SizedBox(
-                                          height: tinierSpacing);
-                                    })),
-                            const SizedBox(height: xxxSmallestSpacing),
-                          ]);
+                        return Column(children: [
+                          Expanded(
+                              child: ListView.separated(
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      state.fetchCertificatesModel.data.length,
+                                  itemBuilder: (context, index) {
+                                    return CertificateListCard(
+                                      data: state
+                                          .fetchCertificatesModel.data[index],
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(
+                                        height: tinierSpacing);
+                                  })),
+                          const SizedBox(height: xxxSmallestSpacing),
+                        ]);
                       }
                       return const SizedBox.shrink();
                     }))));
