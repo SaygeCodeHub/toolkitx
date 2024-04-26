@@ -54,10 +54,10 @@ class DocumentsListScreen extends StatelessWidget {
                       page = 1;
                       context.read<DocumentsBloc>().documentsListDatum.clear();
                       context.read<DocumentsBloc>().filters.clear();
-                      context.read<DocumentsBloc>().add(ClearDocumentFilter());
-                      DocumentFilterScreen.documentFilterMap.clear();
+                      context.read<DocumentsBloc>().docListReachedMax = false;
+                      DocumentFilterScreen.documentFilterMap = {};
                       context.read<DocumentsBloc>().add(
-                          GetDocumentsList(page: page, isFromHome: isFromHome));
+                          GetDocumentsList(page: 1, isFromHome: isFromHome));
                     });
               }),
               const SizedBox(height: xxTinierSpacing),

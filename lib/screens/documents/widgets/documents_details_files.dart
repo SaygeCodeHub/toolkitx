@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:toolkit/screens/documents/widgets/document_view_image_widget.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
-import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/documents_util.dart';
-import '../../../utils/generic_alphanumeric_generator_util.dart';
 import '../../../widgets/custom_card.dart';
 import '../documents_details_screen.dart';
 import 'document_files_menu.dart';
@@ -45,21 +43,13 @@ class DocumentDetailsFiles extends StatelessWidget {
                       padding:
                           const EdgeInsets.symmetric(vertical: xxTinierSpacing),
                       child: ListTile(
-                          onTap: () {
-                            launchUrlString(
-                                '${ApiConstants.viewDocBaseUrl}${documentDetailsModel.data.fileList[index].filename}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                                mode: LaunchMode.externalApplication);
-                          },
                           title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                    documentDetailsModel
+                                DocumentViewImageWidget(
+                                    fileName: documentDetailsModel
                                         .data.fileList[index].filename,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(fontWeight: FontWeight.w500)),
+                                    clientId: clientId),
                                 const SizedBox(height: xxTinierSpacing),
                                 Row(
                                     crossAxisAlignment:

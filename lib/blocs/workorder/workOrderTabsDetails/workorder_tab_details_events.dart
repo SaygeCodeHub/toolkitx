@@ -114,16 +114,9 @@ class SelectSafetyMeasureOptions extends WorkOrderTabsDetailsEvent {
 }
 
 class SelectSpecialWorkOptions extends WorkOrderTabsDetailsEvent {
-  final String specialWorkId;
-  final String specialWorkName;
-  final List specialWorkIdList;
-  final List specialWorkNameList;
+  final bool isChecked;
 
-  SelectSpecialWorkOptions(
-      {required this.specialWorkId,
-      required this.specialWorkName,
-      required this.specialWorkIdList,
-      required this.specialWorkNameList});
+  SelectSpecialWorkOptions({required this.isChecked});
 }
 
 class ManageWorkOrderDownTime extends WorkOrderTabsDetailsEvent {
@@ -214,9 +207,7 @@ class SearchWorkOrderWorkforce extends WorkOrderTabsDetailsEvent {
   SearchWorkOrderWorkforce({required this.isWorkforceSearched});
 }
 
-class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {
-  FetchWorkOrderDocuments();
-}
+class FetchWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 
 class SelectWorkOrderDocument extends WorkOrderTabsDetailsEvent {
   final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
@@ -245,9 +236,7 @@ class SelectWorkOrderDocumentStatusOption extends WorkOrderTabsDetailsEvent {
       {required this.statusId, required this.statusOption});
 }
 
-class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
-  ApplyWorkOrderDocumentFilter();
-}
+class ApplyWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {}
 
 class ClearWorkOrderDocumentFilter extends WorkOrderTabsDetailsEvent {
   ClearWorkOrderDocumentFilter();
@@ -267,7 +256,11 @@ class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
 
 class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
 
-class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {}
+class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {
+  final Map editWorkOrderWorkForceMap;
+
+  EditWorkOrderWorkForce({required this.editWorkOrderWorkForceMap});
+}
 
 class SaveWorkOrderDocuments extends WorkOrderTabsDetailsEvent {}
 

@@ -539,4 +539,5 @@ abstract class StringConstants {
   static const String kdocuments = 'documents';
   static const String kcomments = 'comments';
   static const String kSelectApplication = 'Select Application';
+  static const String kValid = 'Valid';
 }

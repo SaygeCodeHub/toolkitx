@@ -120,7 +120,10 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
                                 .xSmall
                                 .copyWith(color: AppColor.grey)),
                         const SizedBox(width: tiniestSpacing),
-                        Text(data.workforce[index].actualhrs.toString(),
+                        Text(
+                            data.workforce[index].actualhrs.toString() == 'null'
+                                ? ''
+                                : data.workforce[index].actualhrs.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .xSmall

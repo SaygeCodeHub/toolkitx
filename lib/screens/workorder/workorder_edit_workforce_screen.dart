@@ -20,7 +20,8 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
         appBar: GenericAppBar(
           title: DatabaseUtil.getText('EditWorkForce'),
         ),
-        bottomNavigationBar: const EditWorkOrderWorkForceBottomBar(),
+        bottomNavigationBar: EditWorkOrderWorkForceBottomBar(
+            editWorkOrderWorkForceMap: editWorkOrderWorkForceMap),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
