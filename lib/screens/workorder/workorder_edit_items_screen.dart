@@ -51,8 +51,10 @@ class WorkOrderEditItemsScreen extends StatelessWidget {
                   workOrderItemMap['plannedquan'] = textField;
                 }),
             Visibility(
-              visible: (workOrderItemMap['status'] == DatabaseUtil.getText('Accepted') ||
-                  workOrderItemMap['status'] == DatabaseUtil.getText('Started')),
+              visible: (workOrderItemMap['status'] ==
+                      DatabaseUtil.getText('Accepted') ||
+                  workOrderItemMap['status'] ==
+                      DatabaseUtil.getText('Started')),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

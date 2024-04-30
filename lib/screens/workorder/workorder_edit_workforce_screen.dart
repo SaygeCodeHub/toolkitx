@@ -69,6 +69,11 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TextFieldWidget(
+                        value: editWorkOrderWorkForceMap['actualhrs']
+                                    .toString() ==
+                                'null'
+                            ? ''
+                            : editWorkOrderWorkForceMap['actualhrs'].toString(),
                         maxLength: 4,
                         textInputAction: TextInputAction.done,
                         textInputType: TextInputType.number,
