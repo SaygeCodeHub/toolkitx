@@ -17,7 +17,6 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
-import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -528,8 +527,8 @@ class AppRoutes {
         return _createRoute(ExpenseEditItemsScreen(
             expenseItemId: settings.arguments.toString()));
       case ExpenseEditFormTwo.routeName:
-        return _createRoute(ExpenseEditFormTwo(
-            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+        return _createRoute(
+            ExpenseEditFormTwo(arguments: settings.arguments as List));
       case ExpenseEditFormThree.routeName:
         return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:

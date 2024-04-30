@@ -38,7 +38,10 @@ class ExpenseEditItemsScreen extends StatelessWidget {
             if (editExpenseMap['item_details_model'].itemid == '3' ||
                 editExpenseMap['item_details_model'].itemid == '6') {
               Navigator.pushNamed(context, ExpenseEditFormTwo.routeName,
-                  arguments: editExpenseMap['details_model']);
+                  arguments: [
+                    editExpenseMap['item_details_model'].itemid,
+                    expenseItemId
+                  ]);
             } else {
               Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
             }

@@ -27,6 +27,10 @@ class ExpenseEditItemCurrencyListTile extends StatelessWidget {
     ExpenseEditItemsScreen.editExpenseMap['currency'] =
         ExpenseEditItemsScreen.editExpenseMap['item_details_model']?.currency ??
             '';
+    ExpenseEditItemsScreen.editExpenseMap['exchange_rate'] =
+        ExpenseEditItemsScreen
+                .editExpenseMap['item_details_model']?.exchangerate ??
+            '';
     context
         .read<ExpenseBloc>()
         .add(SelectExpenseAddItemsCurrency(currencyDetailsMap: {
@@ -42,6 +46,9 @@ class ExpenseEditItemCurrencyListTile extends StatelessWidget {
               ? ExpenseDetailsTabOne.manageItemsMap['currency'] =
                   expenseDetailsData.currency
               : state.currencyDetailsMap['currency_id'] ??
+                  expenseDetailsData.currency;
+          ExpenseEditItemsScreen.editExpenseMap['currency'] =
+              state.currencyDetailsMap['currency_id'] ??
                   expenseDetailsData.currency;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,6 +97,8 @@ class ExpenseEditItemCurrencyListTile extends StatelessWidget {
                       textInputType: TextInputType.number,
                       onTextFieldChanged: (String textField) {
                         ExpenseDetailsTabOne.manageItemsMap['exchange_rate'] =
+                            textField;
+                        ExpenseEditItemsScreen.editExpenseMap['exchange_rate'] =
                             textField;
                       })),
               const SizedBox(height: xxTinySpacing),

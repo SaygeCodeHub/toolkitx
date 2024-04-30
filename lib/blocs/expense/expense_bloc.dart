@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/expense/reject_expense_model.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -388,8 +389,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     if (expenseWorkingAtNumberMap.isNotEmpty) {
       for (int j = 0; j < expenseWorkingAtNumberMap.values.length; j++) {
         ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
-          "working_at_number_id": expenseWorkingAtNumberMap.values.elementAt(j),
-          "working_at_number": expenseWorkingAtNumberMap.values.elementAt(1)
+          "working_at_number_id": expenseWorkingAtNumberMap.values.first,
+          "working_at_number": expenseWorkingAtNumberMap.values.last
         };
         ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
             ExpenseWorkingAtNumberListTile
@@ -489,11 +490,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
       event.expenseItemMap.remove('details_model');
       event.expenseItemMap.remove('item_details_model');
-
-      List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
-          .expenseCustomFieldsList
-          .where((map) => map.isNotEmpty)
-          .toList();
+      List<Map<String, dynamic>> filteredList =
+          (ExpenseEditFormTwo.expenseCustomFieldsList.isEmpty)
+              ? ExpenseHotelAndMealLayout.expenseCustomFieldsList
+                  .where((map) => map.isNotEmpty)
+                  .toList()
+              : ExpenseEditFormTwo.expenseCustomFieldsList
+                  .where((map) => map.isNotEmpty)
+                  .toList();
       Map saveItemMap = {
         "id": event.expenseItemMap['id'] ?? '',
         "expenseid": expenseId,
@@ -513,7 +517,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "hashcode": hashCode,
         "questions": filteredList
       };
-      print(('save item ${jsonEncode(saveItemMap)}'));
       if (saveItemMap['date'] == null || saveItemMap['date'] == '') {
         emit(ExpenseItemCouldNotSave(
             itemNotSaved: StringConstants.kExpenseAddItemValidation));
