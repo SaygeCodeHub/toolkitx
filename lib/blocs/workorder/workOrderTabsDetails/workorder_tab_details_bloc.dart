@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/workorder/complete_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
@@ -13,7 +14,6 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/enums/workorder_priority_enum.dart';
-import '../../../data/models/encrypt_class.dart';
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/assign_workforce_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
@@ -103,6 +103,7 @@ class WorkOrderTabDetailsBloc
     on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
     on<AssignWorkOrderParts>(_assignWorkOrderParts);
     on<CompleteWorkOrder>(_completeWorkOrder);
+    on<UpdateWorkOrderItem>(_updateWorkOrderItem);
   }
 
   int tabIndex = 0;
@@ -1007,7 +1008,6 @@ class WorkOrderTabDetailsBloc
     emit(EditingWorkOrderWorkForce());
     String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
-    String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
     try {
       if (event.editWorkOrderWorkForceMap['plannedhrs'] == null ||
           event.editWorkOrderWorkForceMap['plannedhrs'].isEmpty &&
@@ -1016,11 +1016,10 @@ class WorkOrderTabDetailsBloc
             workForceNotEdited:
                 DatabaseUtil.getText('ValidPlannedActualHours')));
       } else {
-        String decryptedWorkForceId = EncryptData.decryptAESPrivateKey(
-            event.editWorkOrderWorkForceMap['workForceId'], apiKey);
         Map editWorkForceMap = {
           "workorderid": event.editWorkOrderWorkForceMap['workorderId'] ?? '',
-          "workforceid": decryptedWorkForceId,
+          "workforceid": '',
+          "workforceid2": event.editWorkOrderWorkForceMap['workForceId2'],
           "plannedhrs": event.editWorkOrderWorkForceMap['plannedhrs'] ?? '',
           "actualhrs": event.editWorkOrderWorkForceMap['actualhrs'] ?? '',
           "userid": userId,
@@ -1124,6 +1123,32 @@ class WorkOrderTabDetailsBloc
       }
     } catch (e) {
       emit(WorkOrderNotCompleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _updateWorkOrderItem(UpdateWorkOrderItem event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(WorkOrderItemUpdating());
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map workOrderItemMap = {
+        "workorderid": workOrderId,
+        "itemid": event.workOrderItemMap['itemid'],
+        "plannedquan": event.workOrderItemMap['plannedquan'],
+        "actualquan": event.workOrderItemMap['actualquan'] ?? "0",
+        "userid": userId,
+        "hashcode": hashCode
+      };
+      UpdateWorkOrderItemModel workOrderItemModel =
+          await _workOrderRepository.updateWorkOrderItem(workOrderItemMap);
+      if (workOrderItemModel.message == '1') {
+        emit(WorkOrderItemUpdated());
+      } else {
+        emit(WorkOrderItemNotUpdated(errorMessage: workOrderItemModel.message));
+      }
+    } catch (e) {
+      emit(WorkOrderItemNotUpdated(errorMessage: e.toString()));
     }
   }
 }

@@ -281,3 +281,9 @@ class CompleteWorkOrder extends WorkOrderTabsDetailsEvent {
 
   CompleteWorkOrder({required this.completeWorkOrderMap});
 }
+
+class UpdateWorkOrderItem extends WorkOrderTabsDetailsEvent {
+  final Map workOrderItemMap;
+
+  UpdateWorkOrderItem({required this.workOrderItemMap});
+}
