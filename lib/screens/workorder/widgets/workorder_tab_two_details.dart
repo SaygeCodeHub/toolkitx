@@ -86,6 +86,12 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
                           WorkOrderEditWorkForceScreen
                                   .editWorkOrderWorkForceMap['workForceId'] =
                               data.workforce[index].workforceid;
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['workForceId2'] =
+                              data.workforce[index].workforceid2;
+                          WorkOrderEditWorkForceScreen
+                                  .editWorkOrderWorkForceMap['actualhrs'] =
+                              data.workforce[index].actualhrs;
                           Navigator.pushNamed(
                               context, WorkOrderEditWorkForceScreen.routeName);
                         },

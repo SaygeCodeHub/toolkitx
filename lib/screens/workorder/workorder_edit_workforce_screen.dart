@@ -17,9 +17,7 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GenericAppBar(
-          title: DatabaseUtil.getText('EditWorkForce'),
-        ),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('EditWorkForce')),
         bottomNavigationBar: EditWorkOrderWorkForceBottomBar(
             editWorkOrderWorkForceMap: editWorkOrderWorkForceMap),
         body: Padding(
@@ -71,6 +69,11 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TextFieldWidget(
+                        value: editWorkOrderWorkForceMap['actualhrs']
+                                    .toString() ==
+                                'null'
+                            ? ''
+                            : editWorkOrderWorkForceMap['actualhrs'].toString(),
                         maxLength: 4,
                         textInputAction: TextInputAction.done,
                         textInputType: TextInputType.number,

@@ -578,7 +578,7 @@ class AppRoutes {
         return _createRoute(const TicketCompletionDateScreen());
       case WorkOrderEditItemsScreen.routeName:
         return _createRoute(WorkOrderEditItemsScreen(
-          assignPartMap: settings.arguments as Map,
+          workOrderItemMap: settings.arguments as Map,
         ));
       default:
         return _createRoute(const WelcomeScreen());
