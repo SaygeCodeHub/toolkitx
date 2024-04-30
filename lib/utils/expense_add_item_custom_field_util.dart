@@ -18,7 +18,11 @@ class ExpenseAddItemCustomFieldUtil {
           itemCount: data.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            expenseCustomFieldList.add({});
+            print('custom fields ${data[index].optiontextid}');
+            expenseCustomFieldList.add({
+              // 'questionid': ,
+              // 'answer':
+            });
             switch (data[index].type) {
               case 1:
                 return Column(

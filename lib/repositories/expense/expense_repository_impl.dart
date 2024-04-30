@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/data/models/expense/approve_expnse_model.dart';
 import 'package:toolkit/data/models/expense/close_expense_model.dart';
 import 'package:toolkit/data/models/expense/delete_expense_item_model.dart';
@@ -105,6 +106,10 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   @override
   Future<ExpenseItemCustomFieldsModel> fetchExpenseItemCustomFields(
       Map customFieldsMap) async {
+    print(
+        'repo ${"${ApiConstants.baseUrl}expense/getitemcustomfields?expenseitemid=${customFieldsMap['expenseitemid']}&itemid=${customFieldsMap['itemid']}&hashcode=${customFieldsMap['hashcode']}"}');
+    String encryptId = EncryptData.encryptAES(customFieldsMap['expenseitemid']);
+    print('id $encryptId');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/getitemcustomfields?expenseitemid=${customFieldsMap['expenseitemid']}&itemid=${customFieldsMap['itemid']}&hashcode=${customFieldsMap['hashcode']}");
     return ExpenseItemCustomFieldsModel.fromJson(response);

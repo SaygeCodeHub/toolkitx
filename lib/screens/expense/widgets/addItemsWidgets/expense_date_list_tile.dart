@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_state.dart';
@@ -21,6 +22,7 @@ class ExpenseDateExpansionTile extends StatelessWidget {
             currentState is ExpenseDateSelected,
         builder: (context, state) {
           if (state is ExpenseDateSelected) {
+            ExpenseEditItemsScreen.editExpenseMap['date'] = state.date;
             return ListTile(
                 contentPadding: EdgeInsets.zero,
                 onTap: () async {

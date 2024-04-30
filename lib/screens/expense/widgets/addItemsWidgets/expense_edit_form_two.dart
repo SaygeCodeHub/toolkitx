@@ -26,7 +26,9 @@ class ExpenseEditFormTwo extends StatelessWidget {
     context
         .read<ExpenseBloc>()
         .add(FetchExpenseItemCustomFields(customFieldsMap: {
-          "itemid": ExpenseEditItemsScreen.editExpenseMap['itemid'] ?? '',
+          "itemid": ExpenseEditItemsScreen
+                  .editExpenseMap['item_details_model'].itemid ??
+              '',
           "expenseitemid": expenseDetailsData.id
         }));
     return Scaffold(
