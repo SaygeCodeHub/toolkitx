@@ -42,11 +42,11 @@ class ExpenseItemDetailTab extends StatelessWidget {
             itemBuilder: (context, index) {
               return CustomCard(
                 child: ListTile(
-                  contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   trailing: (expenseDetailsData.status == '1' ||
                           expenseDetailsData.status == '2')
                       ? const SizedBox.shrink()
                       : PopupMenuButton(
+                          padding: EdgeInsets.zero,
                           itemBuilder: (BuildContext context) {
                             return [
                               PopupMenuItem(

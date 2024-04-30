@@ -30,6 +30,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
           ProgressBar.show(context);
         } else if (state is ExpenseItemSaved) {
           ProgressBar.dismiss(context);
+          context.read<ExpenseBloc>().expenseListData.clear();
           context
               .read<ExpenseBloc>()
               .add(FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));

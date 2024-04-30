@@ -36,6 +36,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
+    context.read<ExpenseBloc>().editItemDate = '';
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: ExpenseAddItemBottomBar(
