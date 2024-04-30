@@ -27,73 +27,11 @@ class _AttachmentPreviewScreenState extends State<AttachmentPreviewScreen> {
       padding: const EdgeInsets.symmetric(
           vertical: xxxTinySpacing, horizontal: xxTinierSpacing),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            MediaTypeUtil().showMediaWidget(
-                context.read<ChatBloc>().chatDetailsMap['mediaType'],
-                {'file': chatData.fileName},
-                context),
-            const SizedBox(height: tinySpacing),
-            Row(
-              children: [
-                Expanded(
-                    child: SecondaryButton(
-                        onPressed: () {
-                          setState(() {
-                            context.read<ChatBloc>().chatDetailsMap['isMedia'] =
-                                false;
-                            context.read<ChatBloc>().add(
-                                RebuildChatMessagingScreen(
-                                    employeeDetailsMap: context
-                                        .read<ChatBloc>()
-                                        .chatDetailsMap));
-                          });
-                        },
-                        textValue: 'Remove')),
-                const SizedBox(width: xxTinierSpacing),
-                Expanded(
-                    child: SecondaryButton(
-                        onPressed: () {
-                          print(
-                              'message ${context.read<ChatBloc>().chatDetailsMap['message']}');
-                          if (context
-                                      .read<ChatBloc>()
-                                      .chatDetailsMap['message']
-                                      .toString() ==
-                                  '' ||
-                              context
-                                      .read<ChatBloc>()
-                                      .chatDetailsMap['message'] ==
-                                  null) {
-                            showCustomSnackBar(
-                                context,
-                                'Something went wrong. Please try again later!',
-                                '');
-                          } else {
-                            context.read<ChatBloc>().chatDetailsMap['isMedia'] =
-                                false;
-                            _handleMessage(
-                                context
-                                    .read<ChatBloc>()
-                                    .chatDetailsMap['message']
-                                    .toString(),
-                                context);
-                            context.read<ChatBloc>().add(SendChatMessage(
-                                sendMessageMap:
-                                    context.read<ChatBloc>().chatDetailsMap));
-                          }
-                        },
-                        textValue: 'Send')),
-              ],
-            )
-          ],
-        ),
+        child: MediaTypeUtil().showMediaWidget(
+            context.read<ChatBloc>().chatDetailsMap['mediaType'],
+            {'file': chatData.fileName},
+            context),
       ),
     );
-  }
-
-  void _handleMessage(String text, BuildContext context) {
-    if (text.isEmpty) return;
-    context.read<ChatBloc>().messagesList.insert(0, {'msg': text});
   }
 }

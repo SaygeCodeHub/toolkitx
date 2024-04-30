@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
@@ -29,6 +30,7 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('receiver ${snapshot.data![reversedIndex]['isReceiver']}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -43,13 +45,15 @@ class AttachmentMsgWidget extends StatelessWidget {
                       snapshot.data![reversedIndex]['localImagePath']
                           .toString(),
                       context,
-                      snapshot.data![reversedIndex]['msg_type']))
+                      snapshot.data![reversedIndex]['msg_type'],
+                      snapshot.data![reversedIndex]['isReceiver']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
                       snapshot.data![reversedIndex]['pickedMedia'].toString(),
                       context,
-                      snapshot.data![reversedIndex]['msg_type'])),
+                      snapshot.data![reversedIndex]['msg_type'],
+                      snapshot.data![reversedIndex]['isReceiver'])),
           Align(
             alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -67,21 +71,14 @@ class AttachmentMsgWidget extends StatelessWidget {
     );
   }
 
-  Widget showDownloadedImage(
-      String attachmentPath, BuildContext context, String type) {
+  Widget showDownloadedImage(String attachmentPath, BuildContext context,
+      String type, int isReceiver) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
-            child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, ViewAttachedImageWidget.routeName,
-                      arguments: attachmentPath);
-                },
-                child: AttachementMsgTypeUtil()
-                    .renderWidget(type, attachmentPath)),
-          )
+            child: AttachementMsgTypeUtil()
+                .renderWidget(type, attachmentPath, context, isReceiver))
         : Container(
             width: 100,
             height: 100,
@@ -91,7 +88,7 @@ class AttachmentMsgWidget extends StatelessWidget {
             ),
             child: Center(
               child: IconButton(
-                icon: const Icon(Icons.download, color: Colors.black45),
+                icon: showIconForSender(isReceiver, type),
                 onPressed: () async {
                   ProgressBar.show(context);
                   final CustomerCache customerCache = getIt<CustomerCache>();
@@ -103,7 +100,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
                       "$imageName.jpg",
-                      snapshot.data![reversedIndex]['msg_id']);
+                      snapshot.data![reversedIndex]['msg_id'],
+                      snapshot.data![reversedIndex]['msg_type']);
                   if (downloadProcessComplete) {
                     if (!context.mounted) return;
                     ProgressBar.dismiss(context);
@@ -118,7 +116,18 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 }
 
-Future<bool> downloadFileFromUrl(String url, imageName, msgId) async {
+Widget showIconForSender(int isReceiver, String msgType) {
+  switch (msgType) {
+    case '3':
+      return const Center(child: Icon(Icons.video_collection));
+    case '4':
+      return const Center(child: Icon(Icons.folder));
+    default:
+      return const Center(child: Icon(Icons.download));
+  }
+}
+
+Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
   try {
     final Dio dio = Dio();
 
@@ -126,12 +135,11 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId) async {
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = response.data;
       dynamic messageValue = jsonResponse['Message'];
-
       if (messageValue is String) {
         String downloadUrl = messageValue;
         String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
         print('file url $finalUrl');
-        await downloadImage(finalUrl, imageName, msgId);
+        await downloadImage(finalUrl, imageName, msgId, msgType);
       } else {
         throw Exception('Invalid message value: $messageValue');
       }
@@ -144,11 +152,12 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId) async {
   return true;
 }
 
-Future<String> downloadImage(String url, String filename, msgId) async {
+Future<String> downloadImage(
+    String url, String filename, msgId, msgType) async {
   Directory directory = await getApplicationDocumentsDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
-
+  print('msg type $msgType');
   Dio dio = Dio();
 
   try {
@@ -156,7 +165,20 @@ Future<String> downloadImage(String url, String filename, msgId) async {
       if (total != -1) {}
     });
     final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
-    await databaseHelper.updateLocalImagePath(msgId, filePath);
+    switch (msgType) {
+      case '2':
+        await databaseHelper.updateLocalImagePath(msgId, filePath);
+        break;
+      case '3':
+        filePath = url;
+        await databaseHelper.updateLocalImagePath(msgId, filePath);
+        break;
+      case '4':
+        filePath = url;
+        await databaseHelper.updateLocalImagePath(msgId, filePath);
+        break;
+    }
+    print('file path $filePath');
   } catch (e) {
     rethrow;
   }

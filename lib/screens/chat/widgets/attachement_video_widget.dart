@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AttachementVideoWidget extends StatelessWidget {
   final String videoPath;
@@ -10,10 +11,15 @@ class AttachementVideoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
         alignment: Alignment.centerRight,
-        child: Container(
-            color: AppColor.lightGrey,
-            height: 100,
-            width: 100,
-            child: const Icon(Icons.video_collection)));
+        child: InkWell(
+          onTap: () {
+            launchUrlString(videoPath, mode: LaunchMode.inAppBrowserView);
+          },
+          child: Container(
+              color: AppColor.lightGrey,
+              height: 100,
+              width: 100,
+              child: const Icon(Icons.video_collection)),
+        ));
   }
 }

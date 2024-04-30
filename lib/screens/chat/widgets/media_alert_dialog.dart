@@ -9,7 +9,7 @@ class MediaAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: EdgeInsets.symmetric(
-          vertical: MediaQuery.sizeOf(context).width / 1.2, horizontal: 90),
+          vertical: MediaQuery.sizeOf(context).width / 1.25, horizontal: 90),
       content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: mediaList),

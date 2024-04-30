@@ -30,7 +30,7 @@ class ChooseMediaWidget extends StatelessWidget {
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 350 / 300,
+                            childAspectRatio: 350 / 350,
                             crossAxisCount: 3,
                             crossAxisSpacing: tinierSpacing,
                             mainAxisSpacing: tinierSpacing),

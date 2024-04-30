@@ -168,7 +168,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString(),
-            event.employeeDetailsMap['isGroup']);
+            false);
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -199,7 +199,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _databaseHelper.getMessagesForEmployees(
               employees[i]['sid'].toString(),
               employees[i]['rid'].toString(),
-              employees[i]['isGroup']);
+              false);
       print('chat list rid ${message.last}');
       if (message.isNotEmpty) {
         int existingChatIndex =

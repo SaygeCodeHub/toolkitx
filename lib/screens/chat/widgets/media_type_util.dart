@@ -11,9 +11,17 @@ class MediaTypeUtil {
         return Image.file(File(typeData['file'] ?? ''),
             width: width ?? 400, height: height ?? 650);
       case 'Video':
-        return const Icon(Icons.video_collection);
+        return Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.sizeOf(context).width / 1.5),
+          child: const Center(child: Icon(Icons.video_collection, size: 50)),
+        );
       case 'Document':
-        return const Icon(Icons.folder);
+        return Padding(
+          padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.sizeOf(context).width / 1.5),
+          child: const Center(child: Icon(Icons.folder, size: 50)),
+        );
       default:
         return Text(typeData['file'] ?? '',
             style: Theme.of(context)

@@ -174,8 +174,11 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
-      String employeeIdB, bool isGroup,) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
+    String employeeIdA,
+    String employeeIdB,
+    bool isGroup,
+  ) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
 
@@ -191,11 +194,9 @@ class DatabaseHelper {
       );
     } else {
       // One-on-one chat logic: filter by sender/receiver IDs (rid & sid)
-      messages = await db.query(
-        'chat_messages',
-        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
-      );
+      messages = await db.query('chat_messages',
+          where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+          whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
     }
 
     return messages;
@@ -207,6 +208,7 @@ class DatabaseHelper {
     const empList = '''
     SELECT DISTINCT rid, sid
     FROM chat_messages;
+    ORDER BY msg_time DESC
   ''';
 
     final employeeList = await db.rawQuery(empList);
