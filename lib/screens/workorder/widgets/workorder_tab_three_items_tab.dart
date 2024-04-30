@@ -51,7 +51,10 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
                               onPressed: () {
                                 Map assignItemMap = {
                                   "item": data.items[index].item,
-                                  "itemid": data.items[index].id
+                                  "status": data.status,
+                                  "itemid": data.items[index].itemid,
+                                  "plannedquan": data.items[index].plannedquan,
+                                  "actualquan": data.items[index].actualquan
                                 };
                                 Navigator.pushNamed(
                                     context, WorkOrderEditItemsScreen.routeName,
