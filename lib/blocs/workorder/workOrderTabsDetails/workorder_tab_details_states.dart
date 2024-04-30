@@ -482,3 +482,13 @@ class WorkOrderNotCompleted extends WorkOrderTabDetailsStates {
 
   WorkOrderNotCompleted({required this.errorMessage});
 }
+
+class WorkOrderItemUpdating extends WorkOrderTabDetailsStates {}
+
+class WorkOrderItemUpdated extends WorkOrderTabDetailsStates {}
+
+class WorkOrderItemNotUpdated extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderItemNotUpdated({required this.errorMessage});
+}

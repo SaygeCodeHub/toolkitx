@@ -17,9 +17,7 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GenericAppBar(
-          title: DatabaseUtil.getText('EditWorkForce'),
-        ),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('EditWorkForce')),
         bottomNavigationBar: EditWorkOrderWorkForceBottomBar(
             editWorkOrderWorkForceMap: editWorkOrderWorkForceMap),
         body: Padding(

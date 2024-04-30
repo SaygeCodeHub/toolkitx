@@ -17,12 +17,12 @@ import '../../widgets/progress_bar.dart';
 class WorkOrderEditItemsScreen extends StatelessWidget {
   const WorkOrderEditItemsScreen({
     super.key,
-    required this.assignPartMap,
+    required this.workOrderItemMap,
   });
 
   static const routeName = 'WorkOrderEditItemsScreen';
 
-  final Map assignPartMap;
+  final Map workOrderItemMap;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class WorkOrderEditItemsScreen extends StatelessWidget {
               bottom: tinierSpacing),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(assignPartMap['item'],
+            Text(workOrderItemMap['item'],
                 style: Theme.of(context).textTheme.xSmall.copyWith(
                     fontWeight: FontWeight.w500, color: AppColor.black)),
             const SizedBox(height: xxxSmallestSpacing),
@@ -45,34 +45,57 @@ class WorkOrderEditItemsScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500, color: AppColor.mediumBlack)),
             const SizedBox(height: tinierSpacing),
             TextFieldWidget(
+                value: workOrderItemMap['plannedquan'].toString(),
                 textInputType: TextInputType.number,
                 onTextFieldChanged: (textField) {
-                  assignPartMap['quan'] = textField;
-                })
+                  workOrderItemMap['plannedquan'] = textField;
+                }),
+            Visibility(
+              visible: (workOrderItemMap['status'] == DatabaseUtil.getText('Accepted') ||
+                  workOrderItemMap['status'] == DatabaseUtil.getText('Started')),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: xxxSmallestSpacing),
+                  Text(DatabaseUtil.getText('ActualQuantity'),
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.mediumBlack)),
+                  const SizedBox(height: tinierSpacing),
+                  TextFieldWidget(
+                      value: workOrderItemMap['actualquan'].toString() == 'null'
+                          ? ''
+                          : workOrderItemMap['actualquan'].toString(),
+                      textInputType: TextInputType.number,
+                      onTextFieldChanged: (textField) {
+                        workOrderItemMap['actualquan'] = textField;
+                      }),
+                ],
+              ),
+            )
           ])),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
           listener: (context, state) {
-            if (state is WorkOrderPartsAssigning) {
+            if (state is WorkOrderItemUpdating) {
               ProgressBar.show(context);
-            } else if (state is WorkOrderPartsAssigned) {
+            } else if (state is WorkOrderItemUpdated) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 0,
+                  initialTabIndex: 2,
                   workOrderId:
                       context.read<WorkOrderTabDetailsBloc>().workOrderId));
-            } else if (state is WorkOrderPartsNotAssigned) {
+            } else if (state is WorkOrderItemNotUpdated) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');
             }
           },
           child: PrimaryButton(
               onPressed: () {
-                context
-                    .read<WorkOrderTabDetailsBloc>()
-                    .add(AssignWorkOrderParts(assignPartMap: assignPartMap));
+                context.read<WorkOrderTabDetailsBloc>().add(
+                    UpdateWorkOrderItem(workOrderItemMap: workOrderItemMap));
               },
               textValue: DatabaseUtil.getText('buttonSave')),
         ),
