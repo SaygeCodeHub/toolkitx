@@ -42,7 +42,8 @@ class DatabaseHelper {
             pickedMedia TEXT,
             serverImagePath TEXT,
             showCount INTEGER,
-            unreadMessageCount INTEGER
+            unreadMessageCount INTEGER,
+            isGroup INTEGER
           )
         ''');
         await db.execute('''
@@ -173,14 +174,31 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-      String employeeIdA, String employeeIdB) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
+      String employeeIdB, bool isGroup,) async {
     final Database db = await database;
-    return await db.rawQuery('''
-    SELECT * 
-    FROM chat_messages 
-    WHERE (rid = ? AND sid = ?) OR (rid = ? AND sid = ?)
-  ''', [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
+    List<Map<String, dynamic>> messages;
+
+    if (isGroup) {
+      // Group chat logic: filter by group ID (rid)
+      messages = await db.query(
+        'chat_messages',
+        where: 'isGroup = ? AND rid = ?',
+        whereArgs: [
+          1,
+          employeeIdA
+        ], // Assuming employeeIdA is the user/group ID
+      );
+    } else {
+      // One-on-one chat logic: filter by sender/receiver IDs (rid & sid)
+      messages = await db.query(
+        'chat_messages',
+        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
+      );
+    }
+
+    return messages;
   }
 
   Future<List> getLatestMessagesForEmployees() async {

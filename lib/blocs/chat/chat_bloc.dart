@@ -133,6 +133,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "sid_2": 2,
         "stype_2": "3"
       };
+      print('send messsage ${event.sendMessageMap}');
       sendMessageMap['isReceiver'] = 0;
       print('map ${jsonEncode(sendMessageMap)}');
       await _databaseHelper.insertMessage({
@@ -141,6 +142,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'pickedMedia': event.sendMessageMap['picked_image'],
         'isDownloadedImage': 0,
         'showCount': 1,
+        'isGroup': event.sendMessageMap['isGroup'],
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
@@ -161,10 +163,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
+    print('rebuild bloc ${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
-            event.employeeDetailsMap['sid'].toString());
+            event.employeeDetailsMap['sid'].toString(),
+            event.employeeDetailsMap['isGroup']);
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -189,9 +193,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     groupDataMap['user_name'] =
         await _customerCache.getUserName(CacheKeys.userName);
     for (int i = 0; i < employees.length; i++) {
+      print('chat list group ${employees[i]['isGroup']}');
+      print('chat list rid ${employees[i]['rid'].toString()}');
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
-              employees[i]['sid'].toString(), employees[i]['rid'].toString());
+              employees[i]['sid'].toString(),
+              employees[i]['rid'].toString(),
+              employees[i]['isGroup']);
+      print('chat list rid ${message.last}');
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
