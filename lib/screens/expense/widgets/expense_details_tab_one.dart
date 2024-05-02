@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
@@ -37,6 +38,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     context.read<ExpenseBloc>().editItemDate = '';
+    ExpenseEditFormTwo.expenseCustomFieldsList.clear();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: ExpenseAddItemBottomBar(
