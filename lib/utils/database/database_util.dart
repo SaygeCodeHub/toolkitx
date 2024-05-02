@@ -83,8 +83,38 @@ class DatabaseHelper {
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
     try {
-      await db.insert('chat_messages', sendMessageMap,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      String msgId = sendMessageMap['msg_id'];
+      List<Map<String, dynamic>> existingMessages = await db.query(
+        'chat_messages',
+        where: 'msg_id = ?',
+        whereArgs: [msgId],
+      );
+
+      if (existingMessages.isNotEmpty) {
+        // Update existing message
+        await db.update(
+          'chat_messages',
+          sendMessageMap,
+          where: 'msg_id = ?',
+          whereArgs: [msgId],
+        );
+      } else {
+        // Insert new message
+        await db.insert(
+          'chat_messages',
+          sendMessageMap,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> getAllMessages() async {
+    final Database db = await database;
+    try {
+      await db.query('SELECT * FROM chat_messages');
     } catch (e) {
       rethrow;
     }

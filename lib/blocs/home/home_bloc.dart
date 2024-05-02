@@ -62,9 +62,9 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
             .dateFormat;
       }
       emit(DateAndTimeLoaded(
-          dateTime: dateTime,
-          timeZoneName: timeZoneName,
-          image: image!,
+        dateTime: dateTime,
+        timeZoneName: timeZoneName,
+        image: image!,
         dateFormat: dateFormat,
       ));
     } catch (e) {
@@ -83,6 +83,7 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
       String hashcode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
       String newToken = await NotificationUtil().getToken();
+      print('home bloc $newToken');
       Map saveUserDeviceMap = {
         "hashcode": hashcode,
         "deviceid": "xxx",

@@ -70,6 +70,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     String employeeIdString = employeeId;
     switch (state) {
       case AppLifecycleState.resumed:
+        print('active state');
         context.read<ChatBloc>().add(RebuildChatMessagingScreen(
             employeeDetailsMap: {"employee_id": employeeIdString}));
         break;

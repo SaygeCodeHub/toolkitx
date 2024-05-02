@@ -136,6 +136,39 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
         'token': newToken
       });
+      if (fetchChatMessagesModel.data.isNotEmpty) {
+        for (var item in fetchChatMessagesModel.data) {
+          // List<Map<String, dynamic>> messages =
+          // await _databaseHelper.getAllMessages();
+          print('item $messages');
+          print('msg id ${item.msgJson.msgId}');
+          await _databaseHelper.insertMessage({
+            'msg_id': item.msgJson.msgId,
+            'quote_msg_id': item.msgJson.quoteMsgId,
+            'sid': item.msgJson.sid,
+            'stype': item.msgJson.stype,
+            'rid': item.msgJson.rid,
+            'rtype': item.msgJson.rtype,
+            'msg_type': item.msgJson.msgType,
+            'msg_time': item.msgJson.msgTime.toIso8601String(),
+            'msg': item.msgJson.msg,
+            'hashcode': item.msgJson.hashCode,
+            'sid_2': item.msgJson.sid2,
+            'stype_2': item.msgJson.stype2,
+            'msg_status': '',
+            'employee_name': '',
+            'isReceiver': 0,
+            'messageType': '',
+            'isDownloadedImage': 0,
+            'localImagePath': '',
+            'pickedMedia': '',
+            'serverImagePath': '',
+            'showCount': 0,
+            'unreadMessageCount': 0,
+            'isGroup': 0
+          });
+        }
+      }
       print('messages data client bloc ${fetchChatMessagesModel.data}');
     } catch (e) {}
   }

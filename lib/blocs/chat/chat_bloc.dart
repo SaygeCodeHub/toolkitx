@@ -177,13 +177,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
-    print('rebuild bloc ${event.employeeDetailsMap}');
+    // print('rebuild bloc ${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString(),
             false);
     messages = List.from(messages.reversed);
+    messages.forEach((element) {
+      print('msg elment $element');
+    });
     messagesList.clear();
     messagesList.addAll(messages);
     _chatScreenMessagesStreamController.add(messagesList);
@@ -208,7 +211,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         await _customerCache.getUserName(CacheKeys.userName);
     for (int i = 0; i < employees.length; i++) {
       print('chat list group ${employees[i]['isGroup']}');
-      print('chat list rid ${employees[i]['rid'].toString()}');
+      print('chat list rid ${employees[i]}');
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
               employees[i]['sid'].toString(),
@@ -217,7 +220,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
-
         if (existingChatIndex != -1) {
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
