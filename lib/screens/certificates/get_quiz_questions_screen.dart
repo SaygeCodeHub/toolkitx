@@ -98,7 +98,6 @@ class QuizQuestionsScreen extends StatelessWidget {
                                               questionAnswerMap:
                                                   questionAnswerMap));
                                       pageNo++;
-                                      // questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
