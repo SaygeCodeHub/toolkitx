@@ -18,6 +18,7 @@ class QuizQuestionsScreen extends StatelessWidget {
   final Map quizMap;
   static int pageNo = 1;
   final Map questionAnswerMap = {};
+  static bool isSaveAndNext = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,7 @@ class QuizQuestionsScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is QuizQuestionAnswerSaved) {
               showCustomSnackBar(context, StringConstants.kAnswerSaved, "");
+              isSaveAndNext == true ? questionAnswerMap['answer'] = '' : null;
             } else if (state is QuizQuestionAnswerError) {
               showCustomSnackBar(context, StringConstants.kAnswerNotSaved, "");
             }
@@ -73,6 +75,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                               onPressed: pageNo != 1
                                   ? () {
                                       pageNo--;
+                                      questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -88,12 +91,14 @@ class QuizQuestionsScreen extends StatelessWidget {
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
                                   ? () {
-                                      pageNo++;
+                                      isSaveAndNext = true;
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(SaveQuizQuestionAnswer(
                                               questionAnswerMap:
                                                   questionAnswerMap));
+                                      pageNo++;
+                                      // questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -114,6 +119,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                                       quizMap["questioncount"]
                                   ? () {
                                       pageNo++;
+                                      questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -127,6 +133,7 @@ class QuizQuestionsScreen extends StatelessWidget {
                       Expanded(
                           child: PrimaryButton(
                               onPressed: () {
+                                isSaveAndNext = false;
                                 context.read<StartCourseCertificateBloc>().add(
                                     SaveQuizQuestionAnswer(
                                         questionAnswerMap: questionAnswerMap));
