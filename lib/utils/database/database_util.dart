@@ -208,7 +208,6 @@ class DatabaseHelper {
     const empList = '''
     SELECT DISTINCT rid, sid
     FROM chat_messages;
-    ORDER BY msg_time DESC
   ''';
 
     final employeeList = await db.rawQuery(empList);

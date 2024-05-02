@@ -12,3 +12,5 @@ class SelectClient extends ClientEvents {
 }
 
 class FetchHomeScreenData extends ClientEvents {}
+
+class FetchChatMessages extends ClientEvents {}

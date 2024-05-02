@@ -65,7 +65,8 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
           dateTime: dateTime,
           timeZoneName: timeZoneName,
           image: image!,
-          dateFormat: dateFormat));
+        dateFormat: dateFormat,
+      ));
     } catch (e) {
       emit(DateAndTimeLoaded(
           dateTime: DateTime.now(),

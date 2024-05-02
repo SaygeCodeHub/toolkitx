@@ -9,17 +9,20 @@ class AttachementDocumentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.centerLeft,
-        child: InkWell(
-          onTap: () {
-            launchUrlString(docPath, mode: LaunchMode.externalApplication);
-          },
-          child: Container(
-              color: AppColor.lightGrey,
-              height: 100,
-              width: 100,
-              child: const Icon(Icons.folder)),
-        ));
+    return Tooltip(
+      message: 'Click to view document',
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: InkWell(
+            onTap: () {
+              launchUrlString(docPath, mode: LaunchMode.externalApplication);
+            },
+            child: Container(
+                color: AppColor.lightGrey,
+                height: 100,
+                width: 100,
+                child: const Icon(Icons.folder)),
+          )),
+    );
   }
 }

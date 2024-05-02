@@ -9,17 +9,20 @@ class AttachementVideoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.centerRight,
-        child: InkWell(
-          onTap: () {
-            launchUrlString(videoPath, mode: LaunchMode.inAppBrowserView);
-          },
-          child: Container(
-              color: AppColor.lightGrey,
-              height: 100,
-              width: 100,
-              child: const Icon(Icons.video_collection)),
-        ));
+    return Tooltip(
+      message: 'Click to view video',
+      child: Align(
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            onTap: () {
+              launchUrlString(videoPath, mode: LaunchMode.inAppBrowserView);
+            },
+            child: Container(
+                color: AppColor.lightGrey,
+                height: 100,
+                width: 100,
+                child: const Icon(Icons.video_collection)),
+          )),
+    );
   }
 }

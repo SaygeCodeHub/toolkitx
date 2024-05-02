@@ -117,13 +117,17 @@ class AttachmentMsgWidget extends StatelessWidget {
 }
 
 Widget showIconForSender(int isReceiver, String msgType) {
-  switch (msgType) {
-    case '3':
-      return const Center(child: Icon(Icons.video_collection));
-    case '4':
-      return const Center(child: Icon(Icons.folder));
-    default:
-      return const Center(child: Icon(Icons.download));
+  if (isReceiver == 0) {
+    switch (msgType) {
+      case '3':
+        return const Center(child: Icon(Icons.video_collection));
+      case '4':
+        return const Center(child: Icon(Icons.folder));
+      default:
+        return const Center(child: Icon(Icons.attach_file));
+    }
+  } else {
+    return const Center(child: Icon(Icons.download));
   }
 }
 

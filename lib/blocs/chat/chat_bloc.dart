@@ -104,11 +104,25 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   FutureOr<void> _sendMessage(
       SendChatMessage event, Emitter<ChatState> emit) async {
     try {
-      DateTime now = DateTime.now();
+      DateTime dateTime = DateTime.now();
       Random random = Random();
       int randomValue = random.nextInt(100000);
-      String messageId = '${now.millisecondsSinceEpoch}$randomValue';
-      String isoDateString = now.toIso8601String();
+      String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
+      String? timeZoneOffset =
+          await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset);
+      if (timeZoneOffset != null) {
+        List offset =
+            timeZoneOffset.replaceAll('+', '').replaceAll('-', '').split(':');
+        if (timeZoneOffset.contains('+')) {
+          dateTime = DateTime.now().toUtc().add(Duration(
+              hours: int.parse(offset[0]),
+              minutes: int.parse(offset[1].trim())));
+        } else {
+          dateTime = DateTime.now().toUtc().subtract(Duration(
+              hours: int.parse(offset[0]),
+              minutes: int.parse(offset[1].trim())));
+        }
+      }
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": "",
@@ -127,7 +141,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 ? event.sendMessageMap['stype']
                 : event.sendMessageMap['rtype'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
-        "msg_time": isoDateString,
+        "msg_time": dateTime.toIso8601String(),
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
@@ -135,14 +149,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       };
       print('send messsage ${event.sendMessageMap}');
       sendMessageMap['isReceiver'] = 0;
-      print('map ${jsonEncode(sendMessageMap)}');
+      // print('map ${jsonEncode(sendMessageMap)}');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
         'isDownloadedImage': 0,
         'showCount': 1,
-        'isGroup': event.sendMessageMap['isGroup'],
+        'isGroup': event.sendMessageMap['isGroup'] ?? false,
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
@@ -200,7 +214,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               employees[i]['sid'].toString(),
               employees[i]['rid'].toString(),
               false);
-      print('chat list rid ${message.last}');
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
@@ -229,7 +242,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         }
       }
     }
-
+    individualChatList.sort((a, b) => b.time.compareTo(a.time));
     for (var item in groupChats) {
       ChatData chat = ChatData(
           groupName: item['group_name'],

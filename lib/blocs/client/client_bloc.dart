@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
+import 'package:toolkit/utils/database/database_util.dart';
+import 'package:toolkit/utils/notifications/notification_util.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/client/client_list_model.dart';
@@ -14,6 +17,7 @@ import 'client_states.dart';
 class ClientBloc extends Bloc<ClientEvents, ClientStates> {
   final ClientRepository _clientRepository = getIt<ClientRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
 
   ClientStates get initialState => ClientInitial();
 
@@ -21,6 +25,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     on<FetchClientList>(_fetchClientList);
     on<SelectClient>(_selectClient);
     on<FetchHomeScreenData>(_fetchHomeScreenData);
+    on<FetchChatMessages>(_fetchChatMessages);
   }
 
   FutureOr<void> _fetchClientList(
@@ -82,6 +87,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
+        add(FetchChatMessages());
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
@@ -104,6 +110,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             badgeCount = badgeCount + homeScreenModel.data!.badges![i].count;
           }
         }
+
         emit(HomeScreenFetched(
             homeScreenModel: homeScreenModel,
             image: clientImage,
@@ -116,5 +123,20 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     } catch (e) {
       emit(FetchHomeScreenError());
     }
+  }
+
+  FutureOr<void> _fetchChatMessages(
+      FetchChatMessages event, Emitter<ClientStates> emit) async {
+    try {
+      String newToken = await NotificationUtil().getToken();
+      print('new token $newToken');
+      FetchChatMessagesModel fetchChatMessagesModel =
+          await _clientRepository.fetchChatMessages({
+        'page_no': 1,
+        'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
+        'token': newToken
+      });
+      print('messages data client bloc ${fetchChatMessagesModel.data}');
+    } catch (e) {}
   }
 }
