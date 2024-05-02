@@ -35,13 +35,16 @@ class ExpenseEditItemsScreen extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         child: PrimaryButton(
           onPressed: () {
-            if (editExpenseMap['item_details_model'].itemid == '3' &&
-                    ExpenseEditItemsScreen.editExpenseMap['itemid'] == '3' ||
-                editExpenseMap['item_details_model'].itemid == '6' &&
-                    ExpenseEditItemsScreen.editExpenseMap['itemid'] == '6') {
+            if (editExpenseMap['item_details_model'].itemid == '3' ||
+                ExpenseEditItemsScreen.editExpenseMap['itemid'] == '3' ||
+                editExpenseMap['item_details_model'].itemid == '6' ||
+                ExpenseEditItemsScreen.editExpenseMap['itemid'] == '6') {
               Navigator.pushNamed(context, ExpenseEditFormTwo.routeName,
                   arguments: [
-                    editExpenseMap['item_details_model'].itemid,
+                    (editExpenseMap['item_details_model'].itemid !=
+                            ExpenseEditItemsScreen.editExpenseMap['itemid'])
+                        ? ExpenseEditItemsScreen.editExpenseMap['itemid']
+                        : editExpenseMap['item_details_model'].itemid,
                     expenseItemId
                   ]);
             } else {
