@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/utils/chat/attachement_msg_type_util.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -30,7 +28,8 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('receiver ${snapshot.data![reversedIndex]['isReceiver']}');
+    print(
+        'sender ${snapshot.data![reversedIndex]['localImagePath'].toString()}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -50,7 +49,11 @@ class AttachmentMsgWidget extends StatelessWidget {
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
-                      snapshot.data![reversedIndex]['pickedMedia'].toString(),
+                      (snapshot.data![reversedIndex]['msg_type'] == '4')
+                          ? snapshot.data![reversedIndex]['serverImagePath']
+                              .toString()
+                          : snapshot.data![reversedIndex]['pickedMedia']
+                              .toString(),
                       context,
                       snapshot.data![reversedIndex]['msg_type'],
                       snapshot.data![reversedIndex]['isReceiver'])),
@@ -73,6 +76,7 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
       String type, int isReceiver) {
+    print('path $attachmentPath');
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
@@ -88,7 +92,7 @@ class AttachmentMsgWidget extends StatelessWidget {
             ),
             child: Center(
               child: IconButton(
-                icon: showIconForSender(isReceiver, type),
+                icon: const Center(child: Icon(Icons.download)),
                 onPressed: () async {
                   ProgressBar.show(context);
                   final CustomerCache customerCache = getIt<CustomerCache>();
@@ -96,6 +100,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                       await customerCache.getHashCode(CacheKeys.hashcode);
                   String url =
                       '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
+                  print('url ${snapshot.data![reversedIndex]['msg']}');
                   DateTime imageName = DateTime.now();
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
@@ -113,21 +118,6 @@ class AttachmentMsgWidget extends StatelessWidget {
               ),
             ),
           );
-  }
-}
-
-Widget showIconForSender(int isReceiver, String msgType) {
-  if (isReceiver == 0) {
-    switch (msgType) {
-      case '3':
-        return const Center(child: Icon(Icons.video_collection));
-      case '4':
-        return const Center(child: Icon(Icons.folder));
-      default:
-        return const Center(child: Icon(Icons.attach_file));
-    }
-  } else {
-    return const Center(child: Icon(Icons.download));
   }
 }
 
@@ -174,14 +164,13 @@ Future<String> downloadImage(
         await databaseHelper.updateLocalImagePath(msgId, filePath);
         break;
       case '3':
-        filePath = url;
         await databaseHelper.updateLocalImagePath(msgId, filePath);
         break;
       case '4':
         filePath = url;
         await databaseHelper.updateLocalImagePath(msgId, filePath);
-        break;
     }
+
     print('file path $filePath');
   } catch (e) {
     rethrow;

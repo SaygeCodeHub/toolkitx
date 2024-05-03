@@ -48,10 +48,7 @@ class ChooseMediaWidget extends StatelessWidget {
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return ChatGalleryMediaAlertDialog(
-                                          chatDetailsMap: context
-                                              .read<ChatBloc>()
-                                              .chatDetailsMap);
+                                      return ChatGalleryMediaAlertDialog();
                                     });
 
                                 break;
@@ -64,10 +61,7 @@ class ChooseMediaWidget extends StatelessWidget {
                                 showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return ChatGalleryMediaAlertDialog(
-                                          chatDetailsMap: context
-                                              .read<ChatBloc>()
-                                              .chatDetailsMap);
+                                      return ChatGalleryMediaAlertDialog();
                                     });
                                 break;
                               case 'Document':

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -21,6 +20,8 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
+import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 
 import '../../utils/database/database_util.dart';
 
@@ -147,17 +148,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "sid_2": 2,
         "stype_2": "3"
       };
-      print('send messsage ${event.sendMessageMap['isGroup']}');
       sendMessageMap['isReceiver'] = 0;
       sendMessageMap['isGroup'] = event.sendMessageMap['isGroup'];
-      // print('map ${jsonEncode(sendMessageMap)}');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
         'isDownloadedImage': 0,
         'showCount': 1,
-        'isGroup': event.sendMessageMap['isGroup'] ?? false,
+        'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
+        'serverImagePath': event.sendMessageMap['attachement_path'] ?? '',
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
@@ -178,7 +178,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
-    print('rebuild is group ${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
@@ -213,7 +212,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               employees[i]['sid'].toString(),
               employees[i]['rid'].toString(),
               employees[i]['isGroup'] ?? false);
-      print('existingChatIndex $individualChatList');
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
@@ -326,24 +324,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                     : ImageSource.gallery,
                 imageQuality: 25);
             if (pickedFile != null) {
+              chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
+
               if (chatDetailsMap['isMedia'] == true) {
                 emit(ChatMessagingTextFieldHidden());
               }
-              if (chatData.fileName.isNotEmpty) {
-                add(UploadChatImage(pickedImage: chatData.fileName));
-              }
-              Future.delayed(const Duration(seconds: 3));
-              if (UploadChatImage(pickedImage: chatData.fileName)
-                  .pickedImage
-                  .isNotEmpty) {
+              if (chatDetailsMap['isUploadComplete'] == false) {
                 add(RebuildChatMessagingScreen(
-                    employeeDetailsMap: event.mediaDetailsMap));
+                    employeeDetailsMap: chatDetailsMap));
+              }
+              if (pickedFile.path.isNotEmpty) {
+                add(UploadChatImage(
+                    pickedImage: pickedFile.path,
+                    chatDataMap: event.mediaDetailsMap));
               }
             } else {
-              print('image ${event.mediaDetailsMap}');
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
             }
@@ -354,17 +352,21 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                     ? ImageSource.camera
                     : ImageSource.gallery);
             if (pickVideo != null) {
+              chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickVideo.path;
+              chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
               if (chatDetailsMap['isMedia'] == true) {
                 emit(ChatMessagingTextFieldHidden());
               }
-              if (chatData.fileName.isNotEmpty) {
-                add(UploadChatImage(pickedImage: chatData.fileName));
+              if (chatDetailsMap['isUploadComplete'] == false) {
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: chatDetailsMap));
               }
-              Future.delayed(const Duration(seconds: 3));
-              add(RebuildChatMessagingScreen(
-                  employeeDetailsMap: event.mediaDetailsMap));
+              if (chatData.fileName.isNotEmpty) {
+                add(UploadChatImage(
+                    pickedImage: pickVideo.path, chatDataMap: chatDetailsMap));
+              }
             } else {
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
@@ -377,17 +379,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
+              chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
+              chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
               if (chatDetailsMap['isMedia'] == true) {
                 emit(ChatMessagingTextFieldHidden());
               }
-              if (chatData.fileName.isNotEmpty) {
-                add(UploadChatImage(pickedImage: chatData.fileName));
+              if (chatDetailsMap['isUploadComplete'] == false) {
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: chatDetailsMap));
               }
-              Future.delayed(const Duration(seconds: 3));
-              add(RebuildChatMessagingScreen(
-                  employeeDetailsMap: event.mediaDetailsMap));
+              if (chatData.fileName.isNotEmpty) {
+                add(UploadChatImage(
+                    pickedImage: chatData.fileName,
+                    chatDataMap: event.mediaDetailsMap));
+              }
             } else {
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
@@ -399,18 +406,37 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  FutureOr<void> _uploadImage(
+  FutureOr<bool> _uploadImage(
       UploadChatImage event, Emitter<ChatState> emit) async {
+    bool isUploadComplete = false;
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       UploadPictureModel uploadPictureModel = await _uploadPictureRepository
           .uploadImage(File(event.pickedImage), hashCode);
       if (uploadPictureModel.data.isNotEmpty) {
         chatDetailsMap['message'] = uploadPictureModel.data.first;
+        chatDetailsMap['attachement_path'] = chatDetailsMap['message'];
+        isUploadComplete = true;
+      } else {
+        isUploadComplete = false;
+      }
+      if (isUploadComplete == true) {
+        chatDetailsMap['isUploadComplete'] = true;
+        Future.delayed(const Duration(seconds: 3));
+        if (chatDetailsMap['isUploadComplete'] == true) {
+          if (chatDetailsMap['message_type'] == '4') {
+            chatDetailsMap['attachement_path'] =
+                '${ApiConstants.viewDocBaseUrl}${chatDetailsMap['message']}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}';
+            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
+          } else {
+            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
+          }
+        }
       }
     } catch (e) {
       print('error while uploading image $e');
     }
+    return isUploadComplete;
   }
 
   FutureOr<void> _fetchGroupInfo(

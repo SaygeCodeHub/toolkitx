@@ -85,7 +85,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         "type": userType,
         "timezonecode": timeZoneCode
       };
-      print('inside client bloc');
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
@@ -132,7 +131,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     List<Map<String, dynamic>> apiMessageList = [];
     try {
       String newToken = await NotificationUtil().getToken();
-      print('new token $newToken');
       FetchChatMessagesModel fetchChatMessagesModel =
           await _clientRepository.fetchChatMessages({
         'page_no': 1,

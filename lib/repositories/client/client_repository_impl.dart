@@ -1,4 +1,3 @@
-import 'package:toolkit/blocs/client/client_events.dart';
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
 import 'package:toolkit/data/models/client/save_user_device_model.dart';
 import 'package:toolkit/repositories/client/client_repository.dart';

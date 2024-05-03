@@ -49,14 +49,12 @@ class AllChatsScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  print('is group ${snapshot.data![index].groupId}');
                   return CustomCard(
                     child: ListTile(
                         onTap: () async {
                           await databaseHelper.updateShowCountForMessages(
                               snapshot.data![index].rId,
                               snapshot.data![index].sId);
-                          print('is group ${snapshot.data![index].isGroup}');
                           context.read<ChatBloc>().chatDetailsMap = {
                             "employee_name": snapshot.data![index].userName,
                             'rid': (snapshot.data![index].isGroup == true)

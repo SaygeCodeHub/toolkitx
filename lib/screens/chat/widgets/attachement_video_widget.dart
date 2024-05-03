@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:toolkit/screens/chat/widgets/chat_video_player_eidget.dart';
 
 class AttachementVideoWidget extends StatelessWidget {
   final String videoPath;
@@ -15,7 +15,9 @@ class AttachementVideoWidget extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: InkWell(
             onTap: () {
-              launchUrlString(videoPath, mode: LaunchMode.inAppBrowserView);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      ChatVideoPlayerWidget(videoPath: videoPath)));
             },
             child: Container(
                 color: AppColor.lightGrey,

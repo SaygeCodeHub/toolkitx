@@ -195,29 +195,16 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
-      String employeeIdB,
-      bool isGroup,) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
+    String employeeIdA,
+    String employeeIdB,
+    bool isGroup,
+  ) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
-
-    if (isGroup) {
-      // Group chat logic: filter by group ID (rid)
-      messages = await db.query(
-        'chat_messages',
-        where: 'isGroup = ? AND rid = ? AND rtype = ?',
-        whereArgs: [
-          1,
-          employeeIdB,
-          '3'
-        ], // Assuming employeeIdA is the user/group ID
-      );
-    } else {
-      // One-to-one chat logic (unchanged)
-      messages = await db.query('chat_messages',
-          where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-          whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
-    }
+    messages = await db.query('chat_messages',
+        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
 
     return messages;
   }

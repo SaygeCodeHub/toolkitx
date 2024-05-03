@@ -10,10 +10,9 @@ import 'package:toolkit/screens/chat/widgets/media_options_widget.dart';
 import '../../../configs/app_color.dart';
 
 class ChatGalleryMediaAlertDialog extends StatelessWidget {
-  final Map chatDetailsMap;
   final ChatData chatData = getIt<ChatData>();
 
-  ChatGalleryMediaAlertDialog({super.key, required this.chatDetailsMap});
+  ChatGalleryMediaAlertDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,36 +25,46 @@ class ChatGalleryMediaAlertDialog extends StatelessWidget {
                   onMediaSelected: () {
                     switch (chatData.mediaTypes()[typeIndex].optionName) {
                       case 'Image':
-                        chatDetailsMap['mediaType'] =
+                        context.read<ChatBloc>().chatDetailsMap['mediaType'] =
                             chatData.mediaTypes()[typeIndex].optionName;
-                        chatDetailsMap['message_type'] = '2';
-                        if (chatDetailsMap['selectedMedia'] == 'Gallery') {
+                        context
+                            .read<ChatBloc>()
+                            .chatDetailsMap['message_type'] = '2';
+                        if (context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['selectedMedia'] ==
+                            'Gallery') {
                           context.read<ChatBloc>().isCameraImage = false;
-                          context
-                              .read<ChatBloc>()
-                              .add(PickMedia(mediaDetailsMap: chatDetailsMap));
+                          context.read<ChatBloc>().add(PickMedia(
+                              mediaDetailsMap:
+                                  context.read<ChatBloc>().chatDetailsMap));
                         } else {
                           context.read<ChatBloc>().isCameraImage = true;
-                          context
-                              .read<ChatBloc>()
-                              .add(PickMedia(mediaDetailsMap: chatDetailsMap));
+                          context.read<ChatBloc>().add(PickMedia(
+                              mediaDetailsMap:
+                                  context.read<ChatBloc>().chatDetailsMap));
                         }
                         Navigator.pop(context);
                         break;
                       case 'Video':
-                        chatDetailsMap['mediaType'] =
+                        context.read<ChatBloc>().chatDetailsMap['mediaType'] =
                             chatData.mediaTypes()[typeIndex].optionName;
-                        chatDetailsMap['message_type'] = '3';
-                        if (chatDetailsMap['selectedMedia'] == 'Gallery') {
+                        context
+                            .read<ChatBloc>()
+                            .chatDetailsMap['message_type'] = '3';
+                        if (context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['selectedMedia'] ==
+                            'Gallery') {
                           context.read<ChatBloc>().isCameraVideo = false;
-                          context
-                              .read<ChatBloc>()
-                              .add(PickMedia(mediaDetailsMap: chatDetailsMap));
+                          context.read<ChatBloc>().add(PickMedia(
+                              mediaDetailsMap:
+                                  context.read<ChatBloc>().chatDetailsMap));
                         } else {
                           context.read<ChatBloc>().isCameraVideo = true;
-                          context
-                              .read<ChatBloc>()
-                              .add(PickMedia(mediaDetailsMap: chatDetailsMap));
+                          context.read<ChatBloc>().add(PickMedia(
+                              mediaDetailsMap:
+                                  context.read<ChatBloc>().chatDetailsMap));
                         }
                         Navigator.pop(context);
                         break;

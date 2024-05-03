@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_msg_widget.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_preview_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chatbox_textfield_widget.dart';
@@ -9,7 +10,6 @@ import 'package:toolkit/screens/chat/widgets/date_divider_widget.dart';
 import 'package:toolkit/screens/chat/widgets/msg_text_widget.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
-import 'package:toolkit/widgets/secondary_button.dart';
 
 import '../../blocs/chat/chat_bloc.dart';
 import '../../blocs/chat/chat_event.dart';
@@ -56,7 +56,6 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                         shrinkWrap: true,
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          print('builder ${snapshot.data![index]}');
                           final bool needDateDivider =
                               index == snapshot.data!.length - 1 ||
                                   _needDateDivider(index, snapshot);
@@ -78,6 +77,13 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                     } else {
                       return const Center(child: CircularProgressIndicator());
                     }
+                  } else if (context
+                          .read<ChatBloc>()
+                          .chatDetailsMap['isUploadComplete'] ==
+                      false) {
+                    return Center(
+                        child: Text('Uploading attachement....Please wait!!',
+                            style: Theme.of(context).textTheme.medium));
                   } else {
                     return const AttachmentPreviewScreen();
                   }

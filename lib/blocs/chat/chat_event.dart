@@ -37,8 +37,9 @@ class SearchEmployeeList extends ChatEvent {
 
 class UploadChatImage extends ChatEvent {
   final String pickedImage;
+  final Map chatDataMap;
 
-  UploadChatImage({required this.pickedImage});
+  UploadChatImage({required this.pickedImage, required this.chatDataMap});
 }
 
 class FetchGroupInfo extends ChatEvent {
