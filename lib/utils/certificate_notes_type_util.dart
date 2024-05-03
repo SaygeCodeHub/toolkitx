@@ -11,8 +11,8 @@ import '../configs/app_dimensions.dart';
 import 'constants/api_constants.dart';
 
 class CertificateNotesTypeUtil {
-  Widget fetchSwitchCaseWidget(
-      type, data, htmlText, url, podPlayerController, clientId, pptcontroller, isLoading) {
+  Widget fetchSwitchCaseWidget(type, data, htmlText, url, podPlayerController,
+      clientId, pptcontroller, isLoading) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -51,9 +51,9 @@ class CertificateNotesTypeUtil {
           height: kContainerHeight,
           width: kContainerWidth,
           color: AppColor.blueGrey,
-          child: Stack(children: [WebViewWidget(controller: pptcontroller),
-            if (isLoading)
-            const Center(child: CircularProgressIndicator()),
+          child: Stack(children: [
+            WebViewWidget(controller: pptcontroller),
+            if (isLoading) const Center(child: CircularProgressIndicator()),
           ]),
         );
       default:
