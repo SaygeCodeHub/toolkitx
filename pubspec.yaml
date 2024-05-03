@@ -38,6 +38,7 @@ dependencies:
   video_player:
   flutter_html:
   html_unescape:
+  webview_flutter:
 
 
 dev_dependencies:
