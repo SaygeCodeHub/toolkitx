@@ -3,6 +3,7 @@ import 'package:html_unescape/html_unescape.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:toolkit/data/models/certificates/get_notes_certificate_model.dart';
 import 'package:toolkit/utils/certificate_notes_type_util.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../utils/constants/api_constants.dart';
 
 class GetNotesCertificateBody extends StatefulWidget {
@@ -24,6 +25,8 @@ class GetNotesCertificateBody extends StatefulWidget {
 class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
   late final PodPlayerController podPlayerController;
   final videoTextFieldCtr = TextEditingController();
+  late final WebViewController pptcontroller;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -32,7 +35,24 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         "${ApiConstants.baseDocUrl}${widget.data.url}",
       ),
     )..initialise();
-
+    pptcontroller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            setState(() {
+              isLoading = true;
+            });
+          },
+          onPageFinished: (String url) {
+            setState(() {
+              isLoading = false;
+            });
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(
+          "https://docs.google.com/gview?embedded=true&url=${ApiConstants.baseDocUrl}${widget.data.url}"));
     super.initState();
   }
 
@@ -53,8 +73,15 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CertificateNotesTypeUtil().fetchSwitchCaseWidget(widget.data.type,
-              widget.data, htmlText, url, podPlayerController, widget.clientId)
+          CertificateNotesTypeUtil().fetchSwitchCaseWidget(
+              widget.data.type,
+              widget.data,
+              htmlText,
+              url,
+              podPlayerController,
+              widget.clientId,
+              pptcontroller,
+              isLoading)
         ],
       ),
     );

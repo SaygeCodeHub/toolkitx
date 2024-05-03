@@ -71,7 +71,7 @@ class ExpenseItemDetailTab extends StatelessWidget {
                                                 Navigator.pop(context);
                                               });
                                         }),
-                                    textValue: DatabaseUtil.getText('Delete')),
+                                    textValue: '    ${DatabaseUtil.getText('Delete')}'),
                               ),
                               PopupMenuItem(
                                   padding: EdgeInsets.zero,
