@@ -388,7 +388,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
     if (expenseWorkingAtNumberMap.isNotEmpty) {
       for (int j = 0; j < expenseWorkingAtNumberMap.values.length; j++) {
-        print('expenseWorkingAtNumberMap $expenseWorkingAtNumberMap');
         ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
           "working_at_number_id": expenseWorkingAtNumberMap.values.last,
           "working_at_number": expenseWorkingAtNumberMap.values.first
@@ -518,7 +517,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "hashcode": hashCode,
         "questions": filteredList
       };
-      print('save item ${jsonEncode(saveItemMap)}');
       if (saveItemMap['date'] == null || saveItemMap['date'] == '') {
         emit(ExpenseItemCouldNotSave(
             itemNotSaved: StringConstants.kExpenseAddItemValidation));

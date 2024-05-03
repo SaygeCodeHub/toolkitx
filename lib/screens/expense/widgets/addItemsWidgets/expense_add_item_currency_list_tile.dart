@@ -39,8 +39,6 @@ class ExpenseAddItemCurrencyListTile extends StatelessWidget {
                   expenseDetailsData.currency
               : state.currencyDetailsMap['currency_id'] ??
                   expenseDetailsData.currency;
-          print(
-              'add currency ${ExpenseDetailsTabOne.manageItemsMap['currency']}');
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
