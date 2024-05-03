@@ -388,23 +388,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       SelectExpenseWorkingAtNumber event, Emitter<ExpenseStates> emit) {
     if (expenseWorkingAtNumberMap.isNotEmpty) {
       for (int j = 0; j < expenseWorkingAtNumberMap.values.length; j++) {
-        if (editItemId == '6' || editItemId == '3') {
-          ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
-            "working_at_number_id": expenseWorkingAtNumberMap.values.last,
-            "working_at_number": expenseWorkingAtNumberMap.values.first
-          };
-          ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
-              ExpenseWorkingAtNumberListTile
-                  .workingAtNumberMap['working_at_number_id'];
-        } else {
-          ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
-            "working_at_number_id": expenseWorkingAtNumberMap.values.first,
-            "working_at_number": expenseWorkingAtNumberMap.values.last
-          };
-          ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
-              ExpenseWorkingAtNumberListTile
-                  .workingAtNumberMap['working_at_number_id'];
-        }
+        ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
+          "working_at_number_id": expenseWorkingAtNumberMap.values.last,
+          "working_at_number": expenseWorkingAtNumberMap.values.first
+        };
+        ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
+            ExpenseWorkingAtNumberListTile
+                .workingAtNumberMap['working_at_number_id'];
       }
     } else {
       ExpenseWorkingAtNumberListTile.workingAtNumberMap =
@@ -734,11 +724,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
                       .elementAt(j) !=
                   '') {
                 expenseWorkingAtNumberMap['working_at'] =
-                    expenseWorkingAtNumberMap['general_wbs'] =
-                        fetchExpenseItemDetailsModel.data
-                            .toJson()
-                            .values
-                            .elementAt(j);
+                    fetchExpenseItemDetailsModel.data
+                        .toJson()
+                        .values
+                        .elementAt(j);
               }
           }
         }

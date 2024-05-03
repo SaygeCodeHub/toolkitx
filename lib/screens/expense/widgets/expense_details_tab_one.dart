@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_items_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
@@ -80,6 +81,7 @@ class ExpenseDetailsTabOne extends StatelessWidget {
               ExpenseWorkingAtExpansionTile.workingAt = '';
               ExpenseWorkingAtExpansionTile.workingAtValue = '';
               context.read<ExpenseBloc>().expenseWorkingAtNumberMap.clear();
+              ExpenseEditItemsScreen.editExpenseMap.clear();
               ExpenseWorkingAtNumberListTile.workingAtNumberMap.clear();
               return const ExpenseAddItemFormOne();
             } else if (state.isScreenChange == true) {
