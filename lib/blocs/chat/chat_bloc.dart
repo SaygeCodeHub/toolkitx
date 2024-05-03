@@ -147,8 +147,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "sid_2": 2,
         "stype_2": "3"
       };
-      print('send messsage ${event.sendMessageMap}');
+      print('send messsage ${event.sendMessageMap['isGroup']}');
       sendMessageMap['isReceiver'] = 0;
+      sendMessageMap['isGroup'] = event.sendMessageMap['isGroup'];
       // print('map ${jsonEncode(sendMessageMap)}');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
@@ -177,16 +178,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
-    // print('rebuild bloc ${event.employeeDetailsMap}');
+    print('rebuild is group ${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString(),
-            false);
+            event.employeeDetailsMap['isGroup'] ?? false);
     messages = List.from(messages.reversed);
-    messages.forEach((element) {
-      print('msg elment $element');
-    });
     messagesList.clear();
     messagesList.addAll(messages);
     _chatScreenMessagesStreamController.add(messagesList);
@@ -210,13 +208,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     groupDataMap['user_name'] =
         await _customerCache.getUserName(CacheKeys.userName);
     for (int i = 0; i < employees.length; i++) {
-      print('chat list group ${employees[i]['isGroup']}');
-      print('chat list rid ${employees[i]}');
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
               employees[i]['sid'].toString(),
               employees[i]['rid'].toString(),
-              false);
+              employees[i]['isGroup'] ?? false);
+      print('existingChatIndex $individualChatList');
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
@@ -225,6 +222,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = formattedTime(message.last['msg_time']);
+          existingChat.isGroup = (message.last['isGroup'] == 1) ? true : false;
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -235,7 +233,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               isReceiver: message.last['isReceiver'] ?? 0,
               userName: message.last['employee_name'] ?? '',
               message: message.last['msg'] ?? '',
-              isGroup: false,
+              isGroup: (message.last['isGroup'] == 1) ? true : false,
               date: formattedDate(message.last['msg_time']),
               time: formattedTime(message.last['msg_time']),
               messageType: message.last['msg_type'] ?? '',
@@ -337,6 +335,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
+              Future.delayed(const Duration(seconds: 3));
               if (UploadChatImage(pickedImage: chatData.fileName)
                   .pickedImage
                   .isNotEmpty) {
@@ -344,7 +343,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                     employeeDetailsMap: event.mediaDetailsMap));
               }
             } else {
-              return;
+              print('image ${event.mediaDetailsMap}');
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
             }
             break;
           case 'Video':
@@ -361,10 +362,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
+              Future.delayed(const Duration(seconds: 3));
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
             } else {
-              return;
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
             }
             break;
           case 'Document':
@@ -382,6 +385,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(pickedImage: chatData.fileName));
               }
+              Future.delayed(const Duration(seconds: 3));
+              add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: event.mediaDetailsMap));
+            } else {
               add(RebuildChatMessagingScreen(
                   employeeDetailsMap: event.mediaDetailsMap));
             }

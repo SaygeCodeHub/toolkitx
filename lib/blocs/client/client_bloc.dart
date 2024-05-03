@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
 import 'package:toolkit/utils/database/database_util.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
@@ -127,6 +129,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
   FutureOr<void> _fetchChatMessages(
       FetchChatMessages event, Emitter<ClientStates> emit) async {
+    List<Map<String, dynamic>> apiMessageList = [];
     try {
       String newToken = await NotificationUtil().getToken();
       print('new token $newToken');
@@ -137,39 +140,31 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         'token': newToken
       });
       if (fetchChatMessagesModel.data.isNotEmpty) {
+        List<Map<String, dynamic>> localDbMessageList =
+            await _databaseHelper.getAllMessages();
         for (var item in fetchChatMessagesModel.data) {
-          // List<Map<String, dynamic>> messages =
-          // await _databaseHelper.getAllMessages();
-          print('item $messages');
-          print('msg id ${item.msgJson.msgId}');
-          await _databaseHelper.insertMessage({
-            'msg_id': item.msgJson.msgId,
-            'quote_msg_id': item.msgJson.quoteMsgId,
-            'sid': item.msgJson.sid,
-            'stype': item.msgJson.stype,
-            'rid': item.msgJson.rid,
-            'rtype': item.msgJson.rtype,
-            'msg_type': item.msgJson.msgType,
-            'msg_time': item.msgJson.msgTime.toIso8601String(),
-            'msg': item.msgJson.msg,
-            'hashcode': item.msgJson.hashCode,
-            'sid_2': item.msgJson.sid2,
-            'stype_2': item.msgJson.stype2,
-            'msg_status': '',
-            'employee_name': '',
-            'isReceiver': 0,
-            'messageType': '',
-            'isDownloadedImage': 0,
-            'localImagePath': '',
-            'pickedMedia': '',
-            'serverImagePath': '',
-            'showCount': 0,
-            'unreadMessageCount': 0,
-            'isGroup': 0
-          });
+          apiMessageList.add(item.msgJson.toJson());
+        }
+        for (var apiMessage in apiMessageList) {
+          String msgId = apiMessage['msg_id'];
+          var matchingMessage = localDbMessageList.firstWhere(
+            (message) => message['msg_id'] == msgId,
+            orElse: () => <String, dynamic>{},
+          );
+          apiMessage['quote_msg_id'] ??= matchingMessage['quote_msg_id'];
+          apiMessage['msg_status'] ??= matchingMessage['msg_status'];
+          apiMessage['employee_name'] ??= matchingMessage['employee_name'];
+          apiMessage['isReceiver'] ??= matchingMessage['isReceiver'];
+          apiMessage['showCount'] ??= matchingMessage['showCount'];
+          await _databaseHelper.updateMessage(apiMessage);
+          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+            'rid': apiMessage['rid'],
+            'sid': apiMessage['sid']
+          }));
         }
       }
-      print('messages data client bloc ${fetchChatMessagesModel.data}');
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 }

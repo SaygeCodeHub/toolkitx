@@ -29,7 +29,7 @@ class ChatBoxTextFieldWidget extends StatelessWidget {
                     onChanged: (String text) {
                       textEditingController.text = text;
                       context.read<ChatBloc>().chatDetailsMap['message'] =
-                          textEditingController.text;
+                          textEditingController.text.trim();
                     },
                     decoration: const InputDecoration.collapsed(
                         hintText: 'Send a message'),
@@ -40,7 +40,7 @@ class ChatBoxTextFieldWidget extends StatelessWidget {
               IconButton(
                   icon: const Icon(Icons.send_rounded),
                   onPressed: () {
-                    if (textEditingController.text.isNotEmpty) {
+                    if (textEditingController.text.trim().isNotEmpty) {
                       _handleMessage(
                           textEditingController.text.trim(), context);
                       context.read<ChatBloc>().chatDetailsMap['message_type'] =

@@ -27,7 +27,8 @@ class NotificationUtil {
           'rtype': message.data['rtype'] ?? '',
           'stype': message.data['stype'] ?? '',
           "employee_name": message.data['username'],
-          'showCount': 0
+          'showCount': 0,
+          'isGroup': (message.data['rtype'] == '3') ? true : false
         }));
       }
       if (message.data['ischatgrouprequest'] == '1') {
@@ -50,7 +51,8 @@ class NotificationUtil {
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
-      'showCount': 0
+      'showCount': 0,
+      'isGroup': (message.data['rtype'] == '3') ? true : false
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -84,7 +86,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
-      'showCount': 0
+      'showCount': 0,
+      'isGroup': (message.data['rtype'] == '3') ? true : false
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {

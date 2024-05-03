@@ -78,7 +78,8 @@ class MsgJson {
       rid: json["rid"] ?? '',
       rtype: json["rtype"] ?? '',
       msgType: json["msg_type"] ?? '',
-      msgTime: DateTime.parse(json["msg_time"]),
+      msgTime:
+          DateTime.parse(json["msg_time"] ?? DateTime.now().toIso8601String()),
       msg: json["msg"] ?? '',
       sid2: json["sid_2"] ?? '',
       stype2: json["stype_2"] ?? '');

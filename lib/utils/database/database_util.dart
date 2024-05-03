@@ -83,38 +83,29 @@ class DatabaseHelper {
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
     try {
-      String msgId = sendMessageMap['msg_id'];
-      List<Map<String, dynamic>> existingMessages = await db.query(
-        'chat_messages',
-        where: 'msg_id = ?',
-        whereArgs: [msgId],
-      );
-
-      if (existingMessages.isNotEmpty) {
-        // Update existing message
-        await db.update(
-          'chat_messages',
-          sendMessageMap,
-          where: 'msg_id = ?',
-          whereArgs: [msgId],
-        );
-      } else {
-        // Insert new message
-        await db.insert(
-          'chat_messages',
-          sendMessageMap,
-          conflictAlgorithm: ConflictAlgorithm.replace,
-        );
-      }
+      await db.insert('chat_messages', sendMessageMap,
+          conflictAlgorithm: ConflictAlgorithm.ignore);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> getAllMessages() async {
+  Future<List<Map<String, dynamic>>> getAllMessages() async {
     final Database db = await database;
     try {
-      await db.query('SELECT * FROM chat_messages');
+      List<Map<String, dynamic>> allMessagesList =
+          await db.query('chat_messages');
+      return allMessagesList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateMessage(Map<String, dynamic> message) async {
+    final Database db = await database;
+    try {
+      await db.update('chat_messages', message,
+          where: 'msg_id = ?', whereArgs: [message['msg_id']]);
     } catch (e) {
       rethrow;
     }
@@ -204,11 +195,9 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-    String employeeIdA,
-    String employeeIdB,
-    bool isGroup,
-  ) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
+      String employeeIdB,
+      bool isGroup,) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
 
@@ -216,14 +205,15 @@ class DatabaseHelper {
       // Group chat logic: filter by group ID (rid)
       messages = await db.query(
         'chat_messages',
-        where: 'isGroup = ? AND rid = ?',
+        where: 'isGroup = ? AND rid = ? AND rtype = ?',
         whereArgs: [
           1,
-          employeeIdA
+          employeeIdB,
+          '3'
         ], // Assuming employeeIdA is the user/group ID
       );
     } else {
-      // One-on-one chat logic: filter by sender/receiver IDs (rid & sid)
+      // One-to-one chat logic (unchanged)
       messages = await db.query('chat_messages',
           where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
           whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
