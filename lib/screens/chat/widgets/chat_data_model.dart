@@ -48,10 +48,6 @@ class ChatData {
       this.unreadMsgCount = 0})
       : members = members ?? [];
 
-  List<Map<String, dynamic>> membersToMap() {
-    return members.map((member) => member.toMap()).toList();
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'rid': rId,
@@ -72,6 +68,27 @@ class ChatData {
       'unreadMsgCount': unreadMsgCount
     };
   }
+
+  factory ChatData.fromJson(Map<String, dynamic> json) => ChatData(
+        rId: json['rId'] ?? '',
+        sId: json['sId'] ?? '',
+        sType: json['sType'] ?? '',
+        rType: json['rType'] ?? '',
+        isReceiver: json['isReceiver'] ?? 0,
+        userName: json['userName'] ?? '',
+        message: json['message'] ?? '',
+        groupName: json['groupName'] ?? '',
+        groupId: json['groupId'] ?? '',
+        groupPurpose: json['groupPurpose'] ?? '',
+        isGroup: json['isGroup'] ?? false,
+        fileName: json['fileName'] ?? '',
+        date: json['date'] ?? '',
+        time: json['time'] ?? '',
+        localImagePath: json['localImagePath'] ?? '',
+        messageType: json['messageType'] ?? '',
+        pickedMedia: json['pickedMedia'] ?? '',
+        unreadMsgCount: json['unreadMsgCount'] ?? 0,
+      );
 
   List<MediaOptions> mediaOptions() {
     return [

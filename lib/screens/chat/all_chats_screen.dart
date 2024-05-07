@@ -57,9 +57,7 @@ class AllChatsScreen extends StatelessWidget {
                               snapshot.data![index].sId);
                           context.read<ChatBloc>().chatDetailsMap = {
                             "employee_name": snapshot.data![index].userName,
-                            'rid': (snapshot.data![index].isGroup == true)
-                                ? snapshot.data![index].groupId
-                                : snapshot.data![index].rId,
+                            'rid': snapshot.data![index].rId,
                             'sid': snapshot.data![index].sId,
                             'isReceiver': snapshot.data![index].isReceiver,
                             'stype': snapshot.data![index].sType,

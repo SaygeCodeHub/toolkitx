@@ -176,16 +176,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
+    // if (event.employeeDetailsMap['isGroup'] == true) {
+    //   // Group chat: fetch messages using group ID (rid)
+    //   print('is group rebuild ${event.employeeDetailsMap}');
+    //   String groupId = event.employeeDetailsMap['rid'].toString();
+    //   List<Map<String, dynamic>> messages =
+    //       await _databaseHelper.getMessagesForGroup(groupId);
+    //   messages = List.from(messages.reversed);
+    //   messagesList.clear();
+    //   messagesList.addAll(messages);
+    //   print('inside group $messagesList');
+    // } else {
+    // One-to-one chat: existing logic using getMessagesForEmployees
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
-            event.employeeDetailsMap['sid'].toString(),
-            event.employeeDetailsMap['isGroup'] ?? false);
+            event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
+    // }
+
     _chatScreenMessagesStreamController.add(messagesList);
     if (chatDetailsMap['isMedia'] == false) {
       emit(ShowChatMessagingTextField());
@@ -199,68 +212,103 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     List<Map<String, dynamic>> groupChats =
         await _databaseHelper.getAllGroupsData();
     List<ChatData> individualChatList = [];
-    List<ChatData> groupChatList = [];
     groupDataMap['user_id'] =
         await _customerCache.getUserId2(CacheKeys.userId2);
     groupDataMap['user_type'] =
         await _customerCache.getUserType(CacheKeys.userType);
     groupDataMap['user_name'] =
         await _customerCache.getUserName(CacheKeys.userName);
-    for (int i = 0; i < employees.length; i++) {
-      List<Map<String, dynamic>> message =
-          await _databaseHelper.getMessagesForEmployees(
-              employees[i]['sid'].toString(),
-              employees[i]['rid'].toString(),
-              employees[i]['isGroup'] ?? false);
-      if (message.isNotEmpty) {
-        int existingChatIndex =
-            findExistingChatIndex(individualChatList, message.last);
-        if (existingChatIndex != -1) {
-          ChatData existingChat = individualChatList[existingChatIndex];
-          existingChat.message = message.last['msg'] ?? '';
-          existingChat.date = formattedDate(message.last['msg_time']);
-          existingChat.time = formattedTime(message.last['msg_time']);
-          existingChat.isGroup = (message.last['isGroup'] == 1) ? true : false;
+    if (employees.isNotEmpty) {
+      for (int i = 0; i < employees.length; i++) {
+        List<Map<String, dynamic>> message =
+            await _databaseHelper.getMessagesForEmployees(
+                employees[i]['sid'].toString(), employees[i]['rid'].toString());
+        if (message.isNotEmpty) {
+          int existingChatIndex =
+              findExistingChatIndex(individualChatList, message.last);
+          if (existingChatIndex != -1) {
+            ChatData existingChat = individualChatList[existingChatIndex];
+            print('existing chat ${existingChat.toMap()}');
+            // existingChat.message = message.last['msg'] ?? '';
+            // existingChat.date = formattedDate(message.last['msg_time']);
+            // existingChat.time = formattedTime(message.last['msg_time']);
+            // existingChat.rId = (message.last['isGroup'] == 1)
+            //     ? groupChats.last['group_id'] ?? ''
+            //     : message.last['rid'] ?? '';
+            // existingChat.sId = message.last['sid'];
+            // existingChat.rType = message.last['rtype'];
+            // existingChat.sType = message.last['stype'];
+            // existingChat.messageType = message.last['msg_type'];
+            // existingChat.isReceiver = message.last['isReceiver'];
+            // existingChat.groupName = message.last['employee_name'];
+            // existingChat.groupPurpose = (message.last['isGroup'] == 1)
+            //     ? groupChats.last['purpose'] ?? ''
+            //     : '';
+            // existingChat.userName = message.last['employee_name'] ?? '';
+            existingChat.isGroup =
+                (message.last['isGroup'] == 1) ? true : false;
+          } else {
+            unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
+            print('new chat');
+            // ChatData chat = ChatData.fromJson(message.last);
+            ChatData chat = ChatData(
+                rId: message.last['rid'].toString(),
+                sId: message.last['sid'].toString(),
+                sType: message.last['stype'].toString(),
+                rType: message.last['rtype'].toString(),
+                isReceiver: message.last['isReceiver'] ?? 0,
+                userName: message.last['employee_name'] ?? '',
+                message: message.last['msg'] ?? '',
+                isGroup: (message.last['isGroup'] == 1) ? true : false,
+                date: formattedDate(message.last['msg_time']),
+                time: formattedTime(message.last['msg_time']),
+                messageType: message.last['msg_type'] ?? '',
+                unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
+            individualChatList.add(chat);
+          }
         } else {
-          unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
-          ChatData chat = ChatData(
-              rId: message.last['rid'].toString(),
-              sId: message.last['sid'].toString(),
-              sType: message.last['stype'].toString(),
-              rType: message.last['rtype'].toString(),
-              isReceiver: message.last['isReceiver'] ?? 0,
-              userName: message.last['employee_name'] ?? '',
-              message: message.last['msg'] ?? '',
-              isGroup: (message.last['isGroup'] == 1) ? true : false,
-              date: formattedDate(message.last['msg_time']),
-              time: formattedTime(message.last['msg_time']),
-              messageType: message.last['msg_type'] ?? '',
-              unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
-          individualChatList.add(chat);
+          for (var item in groupChats) {
+            ChatData chat = ChatData(
+                groupName: item['group_name'],
+                groupPurpose: item['purpose'] ?? '',
+                date: item['date'] ?? '',
+                message: '',
+                groupId: item['group_id'],
+                isGroup: true);
+            individualChatList.add(chat);
+          }
         }
       }
-    }
-    individualChatList.sort((a, b) => b.time.compareTo(a.time));
-    for (var item in groupChats) {
-      ChatData chat = ChatData(
-          groupName: item['group_name'],
-          groupPurpose: item['purpose'] ?? '',
-          date: item['date'] ?? '',
-          message: '',
-          groupId: item['group_id'],
-          isGroup: true);
-      groupChatList.add(chat);
+      individualChatList.sort((a, b) => b.time.compareTo(a.time));
+    } else {
+      for (var item in groupChats) {
+        ChatData chat = ChatData(
+            groupName: item['group_name'],
+            groupPurpose: item['purpose'] ?? '',
+            date: item['date'] ?? '',
+            message: '',
+            groupId: item['group_id'],
+            isGroup: true);
+        individualChatList.add(chat);
+      }
     }
 
-    final chatsList = [...individualChatList, ...groupChatList];
+    final chatsList = individualChatList;
     _allChatScreenDetailsStreamController.add(chatsList);
   }
 
   int findExistingChatIndex(
       List<ChatData> chatList, Map<String, dynamic> message) {
-    return chatList.indexWhere((chat) =>
-        chat.rId == message['rid'].toString() &&
-        chat.sId == message['sid'].toString());
+    if (message['isGroup'] == 1) {
+      print('existing index 2 ${message['rid'].toString()}');
+      return chatList
+          .indexWhere((chat) => chat.groupId == message['rid'].toString());
+    } else {
+      // One-to-one chat: existing logic using both rid and sid
+      return chatList.indexWhere((chat) =>
+          chat.rId == message['rid'].toString() &&
+          chat.sId == message['sid'].toString());
+    }
   }
 
   String formattedDate(String timestamp) {

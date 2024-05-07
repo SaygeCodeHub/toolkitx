@@ -196,16 +196,24 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-    String employeeIdA,
-    String employeeIdB,
-    bool isGroup,
-  ) async {
+    String employeeIdA, String employeeIdB) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
     messages = await db.query('chat_messages',
         where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
         whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
 
+    return messages;
+  }
+
+  Future<List<Map<String, dynamic>>> getMessagesForGroup(String groupId) async {
+    final Database db = await database;
+    List<Map<String, dynamic>> messages;
+    messages = await db.query(
+      'chat_messages',
+      where: 'isGroup = ? AND rid = ?',
+      whereArgs: [1, groupId],
+    );
     return messages;
   }
 
