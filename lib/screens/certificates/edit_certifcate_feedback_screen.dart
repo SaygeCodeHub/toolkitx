@@ -59,26 +59,30 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.small.copyWith(
                           fontWeight: FontWeight.w500, color: AppColor.black),
                     ),
-                    subtitle: FeedbackAnswerExpansionTile(
-                      onFeedbackAnswerChecked: (questionId, answer) {
-                        final existingIndex = feedbackAnswerList.indexWhere(
-                            (element) =>
-                                element["questionid"] ==
-                                state.feedbackCertificateModel.data
-                                    .questions[index].id);
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: tiniestSpacing),
+                      child: FeedbackAnswerExpansionTile(
+                        onFeedbackAnswerChecked: (questionId, answer) {
+                          final existingIndex = feedbackAnswerList.indexWhere(
+                              (element) =>
+                                  element["questionid"] ==
+                                  state.feedbackCertificateModel.data
+                                      .questions[index].id);
 
-                        if (existingIndex >= 0) {
-                          feedbackAnswerList[existingIndex]["answer"] = answer;
-                        } else {
-                          feedbackAnswerList.add({
-                            "questionid": state.feedbackCertificateModel.data
-                                .questions[index].id,
-                            "answer": answer
-                          });
-                        }
-                      },
-                      editValue: state.feedbackCertificateModel.data
-                          .questions[index].answer,
+                          if (existingIndex >= 0) {
+                            feedbackAnswerList[existingIndex]["answer"] =
+                                answer;
+                          } else {
+                            feedbackAnswerList.add({
+                              "questionid": state.feedbackCertificateModel.data
+                                  .questions[index].id,
+                              "answer": answer
+                            });
+                          }
+                        },
+                        editValue: state.feedbackCertificateModel.data
+                            .questions[index].answer,
+                      ),
                     ),
                   );
                 },
@@ -96,11 +100,10 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              print('feedbackAnswerList===============>$feedbackAnswerList');
-              // context.read<FeedbackCertificateBloc>().add(
-              //     SaveCertificateFeedback(
-              //         feedbackAnswerList: feedbackAnswerList,
-              //         certificateId: getDetailsMap["id"]));
+              context.read<FeedbackCertificateBloc>().add(
+                  SaveCertificateFeedback(
+                      feedbackAnswerList: feedbackAnswerList,
+                      certificateId: getDetailsMap["id"]));
             },
             textValue: StringConstants.kSave),
       ),

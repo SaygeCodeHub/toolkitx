@@ -44,26 +44,25 @@ class FeedbackCertificateBloc
   Future<FutureOr<void>> _saveCertificateFeedback(SaveCertificateFeedback event,
       Emitter<FeedbackCertificateState> emit) async {
     emit(CertificateFeedbackSaving());
-    // try {
-    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-    String? userId = await _customerCache.getUserId(CacheKeys.userId);
-    Map saveFeedbackMap = {
-      "hashcode": hashCode,
-      "certificateid": event.certificateId,
-      "workforceid": userId,
-      "answers": event.feedbackAnswerList
-    };
-    print('saveFeedbackMap==========>$saveFeedbackMap');
-    SaveCertificateFeedbackModel saveCertificateFeedbackModel =
-        await _certificateRepository.saveCertificateFeedback(saveFeedbackMap);
-    if (saveCertificateFeedbackModel.message == '1') {
-      emit(CertificateFeedbackSaved());
-    } else {
-      emit(CertificateFeedbackNotSaved(
-          getError: saveCertificateFeedbackModel.message!));
+    try {
+      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+      String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      Map saveFeedbackMap = {
+        "hashcode": hashCode,
+        "certificateid": event.certificateId,
+        "workforceid": userId,
+        "answers": event.feedbackAnswerList
+      };
+      SaveCertificateFeedbackModel saveCertificateFeedbackModel =
+          await _certificateRepository.saveCertificateFeedback(saveFeedbackMap);
+      if (saveCertificateFeedbackModel.message == '1') {
+        emit(CertificateFeedbackSaved());
+      } else {
+        emit(CertificateFeedbackNotSaved(
+            getError: saveCertificateFeedbackModel.message!));
+      }
+    } catch (e) {
+      emit(CertificateFeedbackNotSaved(getError: e.toString()));
     }
-    // } catch (e) {
-    //   emit(CertificateFeedbackNotSaved(getError: e.toString()));
-    // }
   }
 }

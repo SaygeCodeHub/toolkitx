@@ -71,7 +71,7 @@ class CertificateButtonRow extends StatelessWidget {
         onPressed: data.accessfeedback == "1"
             ? () {
                 Map certificateMap = {"title": data.name, "id": data.id};
-                data.accessfeedbackedit == "0"
+                data.accessfeedbackedit == "1"
                     ? Navigator.pushNamed(
                         context, EditCertificateFeedbackScreen.routeName,
                         arguments: certificateMap)
