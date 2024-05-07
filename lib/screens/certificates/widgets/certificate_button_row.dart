@@ -6,6 +6,7 @@ import '../../../data/models/certificates/certificate_list_model.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/text_button.dart';
+import '../edit_certifcate_feedback_screen.dart';
 import '../feedback_certificate_screen.dart';
 import '../get_certificate_details_screen.dart';
 import '../get_course_certificate_screen.dart';
@@ -70,9 +71,13 @@ class CertificateButtonRow extends StatelessWidget {
         onPressed: data.accessfeedback == "1"
             ? () {
                 Map certificateMap = {"title": data.name, "id": data.id};
-                Navigator.pushNamed(
-                    context, FeedbackCertificateScreen.routeName,
-                    arguments: certificateMap);
+                data.accessfeedbackedit == "1"
+                    ? Navigator.pushNamed(
+                        context, EditCertificateFeedbackScreen.routeName,
+                        arguments: certificateMap)
+                    : Navigator.pushNamed(
+                        context, FeedbackCertificateScreen.routeName,
+                        arguments: certificateMap);
               }
             : null,
         textValue: StringConstants.kFeedback,

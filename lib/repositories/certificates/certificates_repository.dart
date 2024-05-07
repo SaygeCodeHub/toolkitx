@@ -14,6 +14,7 @@ import '../../data/models/certificates/get_course_certificate_model.dart';
 import '../../data/models/certificates/get_notes_certificate_model.dart';
 import '../../data/models/certificates/get_quiz_report_model.dart';
 import '../../data/models/certificates/get_topic_certificate_model.dart';
+import '../../data/models/certificates/save_certificate_feedback_model.dart';
 
 abstract class CertificateRepository {
   Future<FetchCertificatesModel> fetchCertificatesRepository(
@@ -58,4 +59,7 @@ abstract class CertificateRepository {
 
   Future<ReattemptCertificateQuizModel> reattemptCertificateQuiz(
       Map reattemptQuizMap);
+
+  Future<SaveCertificateFeedbackModel> saveCertificateFeedback(
+      Map saveFeedbackMap);
 }

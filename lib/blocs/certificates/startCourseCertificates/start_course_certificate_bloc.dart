@@ -213,7 +213,7 @@ class StartCourseCertificateBloc
         "questionid": event.finishQuizMap["questionid"],
         "workforceid": userId,
         "quizid": event.finishQuizMap["quizid"],
-        "certificateid": event.finishQuizMap["certificateid"]
+        "certificateid": certificateId
       };
       FinishQuizCertificateModel finishQuizCertificateModel =
           await _certificateRepository.finishQuizCertificate(finishQuizMap);
