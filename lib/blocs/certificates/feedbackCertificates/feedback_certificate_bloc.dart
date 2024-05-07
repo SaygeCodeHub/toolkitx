@@ -55,7 +55,7 @@ class FeedbackCertificateBloc
     };
     print('saveFeedbackMap==========>$saveFeedbackMap');
     SaveCertificateFeedbackModel saveCertificateFeedbackModel =
-    await _certificateRepository.saveCertificateFeedback(saveFeedbackMap);
+        await _certificateRepository.saveCertificateFeedback(saveFeedbackMap);
     if (saveCertificateFeedbackModel.message == '1') {
       emit(CertificateFeedbackSaved());
     } else {
@@ -66,5 +66,4 @@ class FeedbackCertificateBloc
     //   emit(CertificateFeedbackNotSaved(getError: e.toString()));
     // }
   }
-
 }

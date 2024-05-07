@@ -51,7 +51,8 @@ class FeedbackCertificateScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500, color: AppColor.black),
                     ),
                     subtitle: Text(
-                      state.feedbackCertificateModel.data.questions[index].answer,
+                      state.feedbackCertificateModel.data.questions[index]
+                          .answer,
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           fontWeight: FontWeight.w500, color: AppColor.grey),
                     ),

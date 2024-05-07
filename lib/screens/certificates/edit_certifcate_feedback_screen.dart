@@ -61,30 +61,14 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
                     ),
                     subtitle: FeedbackAnswerExpansionTile(
                       onFeedbackAnswerChecked: (questionId, answer) {
-                        var queId = state
-                            .feedbackCertificateModel.data.questions[index].id;
-                        print('id===============>$queId');
-                        print(
-                            'beforeifList================>$feedbackAnswerList');
-                        if (feedbackAnswerList.isNotEmpty) {
-                          if (feedbackAnswerList[index].contains(state
-                              .feedbackCertificateModel
-                              .data
-                              .questions[index]
-                              .id)) {
-                            feedbackAnswerList.remove(state
-                                .feedbackCertificateModel
-                                .data
-                                .questions[index]
-                                .id);
-                            print('ifList================>$feedbackAnswerList');
-                          } else {
-                            feedbackAnswerList.add({
-                              "questionid": state.feedbackCertificateModel.data
-                                  .questions[index].id,
-                              "answer": answer
-                            });
-                          }
+                        final existingIndex = feedbackAnswerList.indexWhere(
+                            (element) =>
+                                element["questionid"] ==
+                                state.feedbackCertificateModel.data
+                                    .questions[index].id);
+
+                        if (existingIndex >= 0) {
+                          feedbackAnswerList[existingIndex]["answer"] = answer;
                         } else {
                           feedbackAnswerList.add({
                             "questionid": state.feedbackCertificateModel.data
