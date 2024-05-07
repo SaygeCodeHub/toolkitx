@@ -10,7 +10,7 @@ typedef FeedbackAnswerCallBack = Function(String questionId, String answer);
 
 class FeedbackAnswerExpansionTile extends StatefulWidget {
   final FeedbackAnswerCallBack onFeedbackAnswerChecked;
-  final String editValue;
+  final String? editValue;
 
   const FeedbackAnswerExpansionTile(
       {Key? key,
@@ -67,8 +67,7 @@ class _FeedbackAnswerExpansionTileState
                                   CertificateUtil().answerList[index]['value'];
                               radioValue = CertificateUtil().answerList[index]
                                   ['answer']!;
-                              widget.onFeedbackAnswerChecked(
-                                  value!, radioValue);
+                              widget.onFeedbackAnswerChecked(value!, value!);
                             });
                           }),
                     );

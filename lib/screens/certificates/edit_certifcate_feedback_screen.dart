@@ -100,10 +100,14 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              context.read<FeedbackCertificateBloc>().add(
-                  SaveCertificateFeedback(
-                      feedbackAnswerList: feedbackAnswerList,
-                      certificateId: getDetailsMap["id"]));
+              if(feedbackAnswerList.length == 4){
+                context.read<FeedbackCertificateBloc>().add(
+                    SaveCertificateFeedback(
+                        feedbackAnswerList: feedbackAnswerList,
+                        certificateId: getDetailsMap["id"]));
+              }else{
+                showCustomSnackBar(context, StringConstants.kAllAnswersRequired, '');
+              }
             },
             textValue: StringConstants.kSave),
       ),
