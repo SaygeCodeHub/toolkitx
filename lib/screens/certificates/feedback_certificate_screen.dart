@@ -43,8 +43,10 @@ class FeedbackCertificateScreen extends StatelessWidget {
               return ListView.separated(
                 itemCount: state.feedbackCertificateModel.data.questions.length,
                 itemBuilder: (context, index) {
-                  final item = state.feedbackCertificateModel.data.questions[index].answer;
-                  final answerText = CertificateUtil().feedbackAnswerToText(item);
+                  final item = state
+                      .feedbackCertificateModel.data.questions[index].answer;
+                  final answerText =
+                      CertificateUtil().feedbackAnswerToText(item);
                   return CustomCard(
                       child: ListTile(
                     onTap: () {},
