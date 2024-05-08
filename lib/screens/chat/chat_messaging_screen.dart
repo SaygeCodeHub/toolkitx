@@ -114,8 +114,6 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                       Expanded(
                           child: PrimaryButton(
                               onPressed: () {
-                                print(
-                                    'message ${context.read<ChatBloc>().chatDetailsMap['message']}');
                                 if (context
                                             .read<ChatBloc>()
                                             .chatDetailsMap['message']

@@ -142,14 +142,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 ? event.sendMessageMap['stype']
                 : event.sendMessageMap['rtype'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
-        "msg_time": dateTime.toIso8601String(),
+        "msg_time": dateTime.toUtc(),
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
         "stype_2": "3"
       };
       sendMessageMap['isReceiver'] = 0;
-      sendMessageMap['isGroup'] = event.sendMessageMap['isGroup'];
+      sendMessageMap.remove('msg_time');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
@@ -157,13 +157,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'isDownloadedImage': 0,
         'showCount': 1,
         'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
-        'serverImagePath': event.sendMessageMap['attachement_path'] ?? '',
+        'msg_time': dateTime.toIso8601String(),
+        'attachementExtension':
+            event.sendMessageMap['attachementExtension'] ?? '',
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
+      sendMessageMap['msg_time'] = dateTime.toUtc().toString();
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -176,20 +179,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    // if (event.employeeDetailsMap['isGroup'] == true) {
-    //   // Group chat: fetch messages using group ID (rid)
-    //   print('is group rebuild ${event.employeeDetailsMap}');
-    //   String groupId = event.employeeDetailsMap['rid'].toString();
-    //   List<Map<String, dynamic>> messages =
-    //       await _databaseHelper.getMessagesForGroup(groupId);
-    //   messages = List.from(messages.reversed);
-    //   messagesList.clear();
-    //   messagesList.addAll(messages);
-    //   print('inside group $messagesList');
-    // } else {
-    // One-to-one chat: existing logic using getMessagesForEmployees
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
+
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
@@ -197,8 +189,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
-    // }
-
     _chatScreenMessagesStreamController.add(messagesList);
     if (chatDetailsMap['isMedia'] == false) {
       emit(ShowChatMessagingTextField());
@@ -427,6 +417,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
+              chatDetailsMap['attachementExtension'] =
+                  result.files.single.extension;
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
               chatDetailsMap['picked_image'] = chatData.fileName;

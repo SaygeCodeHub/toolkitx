@@ -14,7 +14,6 @@ class MsgTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('messaging screen time ${snapshot.data?[reversedIndex]['msg_time']}');
     return ListTile(
       title: Align(
         alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)

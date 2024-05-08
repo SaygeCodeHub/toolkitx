@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/di/app_module.dart';
-import 'package:toolkit/screens/chat/employees_screen.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
@@ -64,7 +64,7 @@ class ChatPopUpMenu extends StatelessWidget {
                                   }
                                 ];
                                 Navigator.pushNamed(
-                                    context, EmployeesScreen.routeName,
+                                    context, UsersScreen.routeName,
                                     arguments: true);
                               }
                             },

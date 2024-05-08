@@ -5,6 +5,8 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
@@ -20,11 +22,11 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../configs/app_color.dart';
 
-class EmployeesScreen extends StatelessWidget {
+class UsersScreen extends StatelessWidget {
   static const routeName = 'EmployeesScreen';
   final bool isCreateNewGroup;
 
-  EmployeesScreen({super.key, this.isCreateNewGroup = false});
+  UsersScreen({super.key, this.isCreateNewGroup = false});
 
   final Map sendMessageMap = {};
 
@@ -33,6 +35,7 @@ class EmployeesScreen extends StatelessWidget {
   final ChatData chatData = getIt<ChatData>();
   static TextEditingController textEditingController = TextEditingController();
   static bool isSearchEnabled = false;
+  final CustomerCache _customerCache = getIt<CustomerCache>();
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +218,7 @@ class EmployeesScreen extends StatelessWidget {
                                                     .employeeList[index].type
                                               }, chatData: chatData)
                                             : IconButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   print(
                                                       'map ${context.read<ChatBloc>().chatDetailsMap}');
                                                   context
@@ -231,6 +234,16 @@ class EmployeesScreen extends StatelessWidget {
                                                         .employeeList[index]
                                                         .type
                                                         .toString(),
+                                                    'sid': await _customerCache
+                                                        .getUserId2(
+                                                            CacheKeys.userId2),
+                                                    'stype': (await _customerCache
+                                                                .getUserType(
+                                                                    CacheKeys
+                                                                        .userType) ==
+                                                            "2")
+                                                        ? "2"
+                                                        : "1",
                                                     'isReceiver': 0
                                                   };
                                                   Navigator.pushNamed(

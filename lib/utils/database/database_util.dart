@@ -43,7 +43,8 @@ class DatabaseHelper {
             serverImagePath TEXT,
             showCount INTEGER,
             unreadMessageCount INTEGER,
-            isGroup INTEGER
+            isGroup INTEGER,
+            attachementExtension TEXT
           )
         ''');
         await db.execute('''
