@@ -24,6 +24,7 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     feedbackAnswerList.clear();
+    int questionListLength = 0;
     context
         .read<FeedbackCertificateBloc>()
         .add(FetchFeedbackCertificate(certificateId: getDetailsMap["id"]));
@@ -49,6 +50,8 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (state is FeedbackCertificateFetched) {
+              questionListLength =
+                  state.feedbackCertificateModel.data.questions.length;
               return ListView.separated(
                 itemCount: state.feedbackCertificateModel.data.questions.length,
                 itemBuilder: (context, index) {
@@ -100,7 +103,7 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              if (feedbackAnswerList.length == 4) {
+              if (feedbackAnswerList.length == questionListLength) {
                 context.read<FeedbackCertificateBloc>().add(
                     SaveCertificateFeedback(
                         feedbackAnswerList: feedbackAnswerList,
