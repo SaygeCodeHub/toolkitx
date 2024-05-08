@@ -8,6 +8,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
+import '../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
 import '../../blocs/certificates/feedbackCertificates/feedback_certificate_event.dart';
 import '../../blocs/certificates/feedbackCertificates/feedback_certificate_state.dart';
@@ -19,11 +20,11 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
 
   static const routeName = 'EditCertificateFeedbackScreen';
   final Map getDetailsMap;
-  static List feedbackAnswerList = [];
 
   @override
   Widget build(BuildContext context) {
-    feedbackAnswerList.clear();
+    List feedbackAnswerList = [];
+    int questionListLength = 0;
     context
         .read<FeedbackCertificateBloc>()
         .add(FetchFeedbackCertificate(certificateId: getDetailsMap["id"]));
@@ -39,6 +40,9 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
             } else if (state is CertificateFeedbackSaved) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
+              context
+                  .read<CertificateListBloc>()
+                  .add(FetchCertificateList(pageNo: 1));
             } else if (state is CertificateFeedbackNotSaved) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.getError, '');
@@ -49,6 +53,8 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (state is FeedbackCertificateFetched) {
+              questionListLength =
+                  state.feedbackCertificateModel.data.questions.length;
               return ListView.separated(
                 itemCount: state.feedbackCertificateModel.data.questions.length,
                 itemBuilder: (context, index) {
@@ -100,7 +106,7 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              if (feedbackAnswerList.length == 4) {
+              if (feedbackAnswerList.length == questionListLength) {
                 context.read<FeedbackCertificateBloc>().add(
                     SaveCertificateFeedback(
                         feedbackAnswerList: feedbackAnswerList,
