@@ -6,16 +6,18 @@ import '../../../../configs/app_color.dart';
 import '../../../../utils/database_utils.dart';
 import '../../../../widgets/expansion_tile_border.dart';
 
-typedef FeedbackAnswerCallBack = Function(String questionId, String answer);
+typedef FeedbackAnswerCallBack = Function(String? answer);
 
 class FeedbackAnswerExpansionTile extends StatefulWidget {
   final FeedbackAnswerCallBack onFeedbackAnswerChecked;
-  final String editValue;
+  final String? editValue;
+  final String? queId;
 
   const FeedbackAnswerExpansionTile(
       {Key? key,
       required this.onFeedbackAnswerChecked,
-      required this.editValue})
+      required this.editValue,
+      this.queId})
       : super(key: key);
 
   @override
@@ -26,6 +28,17 @@ class FeedbackAnswerExpansionTile extends StatefulWidget {
 class _FeedbackAnswerExpansionTileState
     extends State<FeedbackAnswerExpansionTile> {
   String radioValue = '';
+
+  @override
+  void initState() {
+    final item = widget.editValue;
+    final answerText = CertificateUtil().feedbackAnswerToText(item!);
+    radioValue = answerText;
+    if (answerText.isNotEmpty) {
+      widget.onFeedbackAnswerChecked(item);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +80,7 @@ class _FeedbackAnswerExpansionTileState
                                   CertificateUtil().answerList[index]['value'];
                               radioValue = CertificateUtil().answerList[index]
                                   ['answer']!;
-                              widget.onFeedbackAnswerChecked(
-                                  value!, radioValue);
+                              widget.onFeedbackAnswerChecked(value!);
                             });
                           }),
                     );

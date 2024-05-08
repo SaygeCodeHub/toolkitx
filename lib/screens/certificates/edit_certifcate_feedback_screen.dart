@@ -30,11 +30,10 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
     return Scaffold(
       appBar: GenericAppBar(title: getDetailsMap['title']),
       body: Padding(
-        padding: const EdgeInsets.only(top: xxTinierSpacing),
-        child: SafeArea(
-          child:
-              BlocConsumer<FeedbackCertificateBloc, FeedbackCertificateState>(
-                  listener: (context, state) {
+          padding: const EdgeInsets.only(top: xxTinierSpacing),
+          child: SafeArea(
+              child: BlocConsumer<FeedbackCertificateBloc,
+                  FeedbackCertificateState>(listener: (context, state) {
             if (state is CertificateFeedbackSaving) {
               ProgressBar.show(context);
             } else if (state is CertificateFeedbackSaved) {
@@ -54,37 +53,40 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
                 itemCount: state.feedbackCertificateModel.data.questions.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text(
-                      "${index + 1}. ${state.feedbackCertificateModel.data.questions[index].questiontext}",
-                      style: Theme.of(context).textTheme.small.copyWith(
-                          fontWeight: FontWeight.w500, color: AppColor.black),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: tiniestSpacing),
-                      child: FeedbackAnswerExpansionTile(
-                        onFeedbackAnswerChecked: (questionId, answer) {
-                          final existingIndex = feedbackAnswerList.indexWhere(
-                              (element) =>
-                                  element["questionid"] ==
-                                  state.feedbackCertificateModel.data
-                                      .questions[index].id);
-
-                          if (existingIndex >= 0) {
-                            feedbackAnswerList[existingIndex]["answer"] =
-                                answer;
-                          } else {
-                            feedbackAnswerList.add({
-                              "questionid": state.feedbackCertificateModel.data
-                                  .questions[index].id,
-                              "answer": answer
-                            });
-                          }
-                        },
-                        editValue: state.feedbackCertificateModel.data
-                            .questions[index].answer,
+                      title: Text(
+                        "${index + 1}. ${state.feedbackCertificateModel.data.questions[index].questiontext}",
+                        style: Theme.of(context).textTheme.small.copyWith(
+                            fontWeight: FontWeight.w500, color: AppColor.black),
                       ),
-                    ),
-                  );
+                      subtitle: Padding(
+                          padding: const EdgeInsets.only(top: tiniestSpacing),
+                          child: FeedbackAnswerExpansionTile(
+                            onFeedbackAnswerChecked: (answer) {
+                              final existingIndex =
+                                  feedbackAnswerList.indexWhere((element) =>
+                                      element["questionid"] ==
+                                      state.feedbackCertificateModel.data
+                                          .questions[index].id);
+
+                              if (existingIndex >= 0) {
+                                feedbackAnswerList[existingIndex]["answer"] =
+                                    answer;
+                              } else {
+                                feedbackAnswerList.add({
+                                  "questionid": state.feedbackCertificateModel
+                                      .data.questions[index].id,
+                                  "answer": answer ??
+                                      state.feedbackCertificateModel.data
+                                          .questions[index].answer
+                                });
+                              }
+                            },
+                            editValue: state.feedbackCertificateModel.data
+                                .questions[index].answer,
+                            queId: state.feedbackCertificateModel.data
+                                .questions[index].id
+                                .toString(),
+                          )));
                 },
                 separatorBuilder: (context, index) {
                   return const SizedBox(height: tinierSpacing);
@@ -93,17 +95,20 @@ class EditCertificateFeedbackScreen extends StatelessWidget {
             } else {
               return const SizedBox.shrink();
             }
-          }),
-        ),
-      ),
+          }))),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              context.read<FeedbackCertificateBloc>().add(
-                  SaveCertificateFeedback(
-                      feedbackAnswerList: feedbackAnswerList,
-                      certificateId: getDetailsMap["id"]));
+              if (feedbackAnswerList.length == 4) {
+                context.read<FeedbackCertificateBloc>().add(
+                    SaveCertificateFeedback(
+                        feedbackAnswerList: feedbackAnswerList,
+                        certificateId: getDetailsMap["id"]));
+              } else {
+                showCustomSnackBar(
+                    context, StringConstants.kAllAnswersRequired, '');
+              }
             },
             textValue: StringConstants.kSave),
       ),

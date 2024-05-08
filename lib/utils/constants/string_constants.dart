@@ -540,4 +540,5 @@ abstract class StringConstants {
   static const String kcomments = 'comments';
   static const String kSelectApplication = 'Select Application';
   static const String kValid = 'Valid';
+  static const String kAllAnswersRequired = "All answers are required";
 }
