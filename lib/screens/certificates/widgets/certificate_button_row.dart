@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../data/models/certificates/certificate_list_model.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -73,8 +75,11 @@ class CertificateButtonRow extends StatelessWidget {
                 Map certificateMap = {"title": data.name, "id": data.id};
                 data.accessfeedbackedit == "1"
                     ? Navigator.pushNamed(
-                        context, EditCertificateFeedbackScreen.routeName,
-                        arguments: certificateMap)
+                            context, EditCertificateFeedbackScreen.routeName,
+                            arguments: certificateMap)
+                        .then((_) => context
+                            .read<CertificateListBloc>()
+                            .add(FetchCertificateList(pageNo: 1)))
                     : Navigator.pushNamed(
                         context, FeedbackCertificateScreen.routeName,
                         arguments: certificateMap);
