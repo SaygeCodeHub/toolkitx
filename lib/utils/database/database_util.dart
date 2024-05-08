@@ -43,7 +43,8 @@ class DatabaseHelper {
             serverImagePath TEXT,
             showCount INTEGER,
             unreadMessageCount INTEGER,
-            isGroup INTEGER
+            isGroup INTEGER,
+            attachementExtension TEXT
           )
         ''');
         await db.execute('''
@@ -195,11 +196,8 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-    String employeeIdA,
-    String employeeIdB,
-    bool isGroup,
-  ) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
+      String employeeIdB) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
     messages = await db.query('chat_messages',

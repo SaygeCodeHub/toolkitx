@@ -28,8 +28,6 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'sender ${snapshot.data![reversedIndex]['localImagePath'].toString()}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -49,11 +47,7 @@ class AttachmentMsgWidget extends StatelessWidget {
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
-                      (snapshot.data![reversedIndex]['msg_type'] == '4')
-                          ? snapshot.data![reversedIndex]['serverImagePath']
-                              .toString()
-                          : snapshot.data![reversedIndex]['pickedMedia']
-                              .toString(),
+                      snapshot.data![reversedIndex]['pickedMedia'].toString(),
                       context,
                       snapshot.data![reversedIndex]['msg_type'],
                       snapshot.data![reversedIndex]['isReceiver'])),
@@ -76,7 +70,6 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
       String type, int isReceiver) {
-    print('path $attachmentPath');
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
@@ -100,11 +93,12 @@ class AttachmentMsgWidget extends StatelessWidget {
                       await customerCache.getHashCode(CacheKeys.hashcode);
                   String url =
                       '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
-                  print('url ${snapshot.data![reversedIndex]['msg']}');
                   DateTime imageName = DateTime.now();
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
-                      "$imageName.jpg",
+                      (snapshot.data![reversedIndex]['msg_type'] == '4')
+                          ? "$imageName.${snapshot.data![reversedIndex]['attachementExtension']}"
+                          : "$imageName.jpg",
                       snapshot.data![reversedIndex]['msg_id'],
                       snapshot.data![reversedIndex]['msg_type']);
                   if (downloadProcessComplete) {
@@ -132,7 +126,6 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
       if (messageValue is String) {
         String downloadUrl = messageValue;
         String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
-        print('file url $finalUrl');
         await downloadImage(finalUrl, imageName, msgId, msgType);
       } else {
         throw Exception('Invalid message value: $messageValue');
@@ -151,7 +144,6 @@ Future<String> downloadImage(
   Directory directory = await getApplicationDocumentsDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
-  print('msg type $msgType');
   Dio dio = Dio();
 
   try {
@@ -159,19 +151,8 @@ Future<String> downloadImage(
       if (total != -1) {}
     });
     final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
-    switch (msgType) {
-      case '2':
-        await databaseHelper.updateLocalImagePath(msgId, filePath);
-        break;
-      case '3':
-        await databaseHelper.updateLocalImagePath(msgId, filePath);
-        break;
-      case '4':
-        filePath = url;
-        await databaseHelper.updateLocalImagePath(msgId, filePath);
-    }
 
-    print('file path $filePath');
+    await databaseHelper.updateLocalImagePath(msgId, filePath);
   } catch (e) {
     rethrow;
   }

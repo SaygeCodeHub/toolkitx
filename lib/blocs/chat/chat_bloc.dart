@@ -142,14 +142,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 ? event.sendMessageMap['stype']
                 : event.sendMessageMap['rtype'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
-        "msg_time": dateTime.toIso8601String(),
+        "msg_time": dateTime.toUtc(),
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
         "stype_2": "3"
       };
       sendMessageMap['isReceiver'] = 0;
-      sendMessageMap['isGroup'] = event.sendMessageMap['isGroup'];
+      sendMessageMap.remove('msg_time');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
@@ -157,13 +157,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'isDownloadedImage': 0,
         'showCount': 1,
         'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
-        'serverImagePath': event.sendMessageMap['attachement_path'] ?? '',
+        'msg_time': dateTime.toIso8601String(),
+        'attachementExtension':
+            event.sendMessageMap['attachementExtension'] ?? '',
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
+      sendMessageMap['msg_time'] = dateTime.toUtc().toString();
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -178,11 +181,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
+
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
-            event.employeeDetailsMap['sid'].toString(),
-            event.employeeDetailsMap['isGroup'] ?? false);
+            event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -209,9 +212,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     for (int i = 0; i < employees.length; i++) {
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
-              employees[i]['sid'].toString(),
-              employees[i]['rid'].toString(),
-              employees[i]['isGroup'] ?? false);
+              employees[i]['sid'].toString(), employees[i]['rid'].toString());
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
@@ -220,7 +221,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = formattedTime(message.last['msg_time']);
-          existingChat.isGroup = (message.last['isGroup'] == 1) ? true : false;
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -379,6 +379,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
+              chatDetailsMap['attachementExtension'] =
+                  result.files.single.extension;
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
               chatDetailsMap['picked_image'] = chatData.fileName;

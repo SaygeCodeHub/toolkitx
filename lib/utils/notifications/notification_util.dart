@@ -21,21 +21,45 @@ class NotificationUtil {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
-        ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-          'sid': message.data['sid'] ?? '',
-          'rid': message.data['rid'] ?? '',
-          'rtype': message.data['rtype'] ?? '',
-          'stype': message.data['stype'] ?? '',
-          "employee_name": message.data['username'],
-          'showCount': 0,
-          'isGroup': (message.data['rtype'] == '3') ? true : false
-        }));
+        if (_isMessageForCurrentChat(message)) {
+          print('ifffff');
+          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+            'sid': message.data['sid'] ?? '',
+            'rid': message.data['rid'] ?? '',
+            'rtype': message.data['rtype'] ?? '',
+            'stype': message.data['stype'] ?? '',
+            "employee_name": message.data['username'],
+            'showCount': 0,
+            'isGroup': (message.data['rtype'] == '3') ? true : false
+          }));
+        } else {
+          print('elseeee');
+          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+            'sid': ChatBloc().chatDetailsMap['sid'] ?? '',
+            'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
+            'rtype': message.data['rtype'] ?? '',
+            'stype': message.data['stype'] ?? '',
+            "employee_name": message.data['username'],
+            'showCount': 0,
+            'isGroup': (message.data['rtype'] == '3') ? true : false
+          }));
+        }
       }
       if (message.data['ischatgrouprequest'] == '1') {
         ChatBloc().add(FetchGroupInfo(groupId: message.data['group_id']));
       }
     });
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  bool _isMessageForCurrentChat(RemoteMessage message) {
+    if (message.data.isNotEmpty) {
+      String senderId = message.data['sid'];
+      bool isMessageForCurrentChat =
+          senderId == ChatBloc().chatDetailsMap['sid'];
+      return isMessageForCurrentChat;
+    }
+    return false;
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
@@ -52,7 +76,8 @@ class NotificationUtil {
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'showCount': 0,
-      'isGroup': (message.data['rtype'] == '3') ? true : false
+      'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
+      'attachementExtension': 'pdf'
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -87,7 +112,8 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'showCount': 0,
-      'isGroup': (message.data['rtype'] == '3') ? true : false
+      'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
+      'attachementExtension': 'pdf'
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {

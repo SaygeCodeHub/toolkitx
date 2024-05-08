@@ -32,7 +32,6 @@ class _ChatVideoPlayerWidgetState extends State<ChatVideoPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print('path ${widget.videoPath}');
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(

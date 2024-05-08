@@ -6,7 +6,7 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/employees_screen.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
@@ -33,7 +33,7 @@ class AllChatsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, EmployeesScreen.routeName,
+            Navigator.pushNamed(context, UsersScreen.routeName,
                 arguments: false);
           },
           child: const Icon(Icons.add)),

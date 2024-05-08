@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:toolkit/screens/chat/widgets/document_viewer_screen.dart';
 
 class AttachementDocumentWidget extends StatelessWidget {
   final String docPath;
@@ -15,7 +15,11 @@ class AttachementDocumentWidget extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: InkWell(
             onTap: () {
-              launchUrlString(docPath, mode: LaunchMode.externalApplication);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          DocumentViewerScreen(documentPath: docPath)));
             },
             child: Container(
                 color: AppColor.lightGrey,

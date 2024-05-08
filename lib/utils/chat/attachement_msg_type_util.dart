@@ -22,9 +22,9 @@ class AttachementMsgTypeUtil {
           }, File(mediaPath)),
         );
       case '3':
-        print('video attachement $mediaPath');
         return AttachementVideoWidget(videoPath: mediaPath);
       case '4':
+        print('doc attachement $mediaPath');
         return AttachementDocumentWidget(docPath: mediaPath);
       default:
         return const SizedBox.shrink();

@@ -3,7 +3,7 @@ import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
-import 'package:toolkit/screens/chat/employees_screen.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
@@ -553,9 +553,9 @@ class AppRoutes {
             requestId: settings.arguments.toString()));
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
-      case EmployeesScreen.routeName:
+      case UsersScreen.routeName:
         return _createRoute(
-            EmployeesScreen(isCreateNewGroup: settings.arguments as bool));
+            UsersScreen(isCreateNewGroup: settings.arguments as bool));
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
