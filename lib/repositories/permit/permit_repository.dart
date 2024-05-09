@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_close_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/permit_roles_model.dart';
@@ -35,5 +36,8 @@ abstract class PermitRepository {
   Future<OpenClosePermitModel> requestPermit(Map requestPermitMap);
 
   Future<FetchPermitBasicDetailsModel> fetchPermitBasicDetails(
+      String permitId, String hashCode, String roleId);
+
+  Future<FetchDataForOpenPermitModel> fetchDataForOpenPermit(
       String permitId, String hashCode, String roleId);
 }

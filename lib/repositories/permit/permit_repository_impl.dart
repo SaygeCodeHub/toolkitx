@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import '../../data/models/pdf_generation_model.dart';
@@ -94,5 +95,13 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/getbasicdetails?permitid=$permitId&hashcode=$hashCode&role=$roleId");
     return FetchPermitBasicDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchDataForOpenPermitModel> fetchDataForOpenPermit(
+      String permitId, String hashCode, String roleId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforopenpermit?permitid=$permitId&hashcode=$hashCode&role=$roleId");
+    return FetchDataForOpenPermitModel.fromJson(response);
   }
 }

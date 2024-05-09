@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -48,6 +49,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<ClosePermit>(_closePermit);
     on<RequestPermit>(_requestPermit);
     on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
+    on<FetchDataForOpenPermit>(_fetchDataForOpenPermit);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -326,6 +328,27 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(PermitBasicDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchDataForOpenPermit(
+      FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
+    emit(DataForOpenPermitFetching());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
+          await _permitRepository.fetchDataForOpenPermit(
+              event.permitId, hashCode, roleId);
+      if (fetchDataForOpenPermitModel.status == 200) {
+        emit(DataForOpenPermitFetched(
+            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel));
+      } else {
+        emit(DataForOpenPermitNotFetched(
+            errorMessage: fetchDataForOpenPermitModel.message!));
+      }
+    } catch (e) {
+      emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
     }
   }
 }
