@@ -109,21 +109,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Random random = Random();
       int randomValue = random.nextInt(100000);
       String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
-      String? timeZoneOffset =
-          await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset);
-      if (timeZoneOffset != null) {
-        List offset =
-            timeZoneOffset.replaceAll('+', '').replaceAll('-', '').split(':');
-        if (timeZoneOffset.contains('+')) {
-          dateTime = DateTime.now().toUtc().add(Duration(
-              hours: int.parse(offset[0]),
-              minutes: int.parse(offset[1].trim())));
-        } else {
-          dateTime = DateTime.now().toUtc().subtract(Duration(
-              hours: int.parse(offset[0]),
-              minutes: int.parse(offset[1].trim())));
-        }
-      }
+      print('utc date time ${dateTime.toUtc()}');
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": "",
@@ -265,12 +251,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   String formattedDate(String timestamp) {
     DateTime dateTime = DateTime.parse(timestamp);
-    return DateFormat('dd/MM/yyyy').format(dateTime);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 
   String formattedTime(String timestamp) {
     DateTime dateTime = DateTime.parse(timestamp);
-    return DateFormat('h:mm a').format(dateTime);
+    return DateFormat('H:mm').format(dateTime);
   }
 
   FutureOr<void> _createChatGroup(
