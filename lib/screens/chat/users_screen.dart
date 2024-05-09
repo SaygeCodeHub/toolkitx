@@ -219,8 +219,6 @@ class UsersScreen extends StatelessWidget {
                                               }, chatData: chatData)
                                             : IconButton(
                                                 onPressed: () async {
-                                                  print(
-                                                      'map ${context.read<ChatBloc>().chatDetailsMap}');
                                                   context
                                                       .read<ChatBloc>()
                                                       .chatDetailsMap = {
@@ -244,8 +242,11 @@ class UsersScreen extends StatelessWidget {
                                                             "2")
                                                         ? "2"
                                                         : "1",
-                                                    'isReceiver': 0
+                                                    'isReceiver': 0,
+                                                    'isGroup': false
                                                   };
+                                                  print(
+                                                      'map ${context.read<ChatBloc>().chatDetailsMap}');
                                                   Navigator.pushNamed(
                                                       context,
                                                       ChatMessagingScreen

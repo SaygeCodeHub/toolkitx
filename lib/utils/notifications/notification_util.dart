@@ -20,7 +20,12 @@ class NotificationUtil {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
-        await _storeMessageInDatabase(message);
+        if (message.data['rtype'] == '3' &&
+            message.data['sid'] !=
+                await _customerCache.getUserId2(CacheKeys.userId2)) {
+          print('another user');
+          await _storeMessageInDatabase(message);
+        }
         if (_isMessageForCurrentChat(message)) {
           print('ifffff');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
@@ -33,10 +38,10 @@ class NotificationUtil {
             'isGroup': (message.data['rtype'] == '3') ? true : false
           }));
         } else {
-          print('elseeee');
+          print('elseeee notification${ChatBloc().chatDetailsMap}');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-            'sid': ChatBloc().chatDetailsMap['sid'] ?? '',
-            'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
+            'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
+            'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
             'rtype': message.data['rtype'] ?? '',
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
@@ -54,10 +59,17 @@ class NotificationUtil {
 
   bool _isMessageForCurrentChat(RemoteMessage message) {
     if (message.data.isNotEmpty) {
-      String senderId = message.data['sid'];
-      bool isMessageForCurrentChat =
-          senderId == ChatBloc().chatDetailsMap['sid'];
-      return isMessageForCurrentChat;
+      if (message.data['rtype'] == '3') {
+        String groupId = message.data['rid'];
+        bool isMessageForCurrentChat =
+            groupId == ChatBloc().chatDetailsMap['rid'];
+        return isMessageForCurrentChat;
+      } else {
+        String senderId = message.data['sid'];
+        bool isMessageForCurrentChat =
+            senderId == ChatBloc().chatDetailsMap['sid'];
+        return isMessageForCurrentChat;
+      }
     }
     return false;
   }

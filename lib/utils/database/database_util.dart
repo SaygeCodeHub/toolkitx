@@ -196,13 +196,23 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-    String employeeIdA, String employeeIdB) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
+      String employeeIdB, bool isGroup) async {
     final Database db = await database;
+
     List<Map<String, dynamic>> messages;
-    messages = await db.query('chat_messages',
-        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
+    if (isGroup) {
+      print('inside db group');
+      messages = await db.query(
+        'chat_messages',
+        where: 'rid = ? AND rtype = "3"',
+        whereArgs: [employeeIdA],
+      );
+    } else {
+      messages = await db.query('chat_messages',
+          where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+          whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
+    }
 
     return messages;
   }
@@ -220,15 +230,11 @@ class DatabaseHelper {
 
   Future<List> getLatestMessagesForEmployees() async {
     final Database db = await database;
+    List empList = [];
 
-    const empList = '''
-    SELECT DISTINCT rid, sid
-    FROM chat_messages;
-  ''';
+    empList = await db.query('chat_messages', columns: ['DISTINCT rid', 'sid']);
 
-    final employeeList = await db.rawQuery(empList);
-
-    List employees = List.from(employeeList);
+    List employees = List.from(empList);
 
     return employees;
   }

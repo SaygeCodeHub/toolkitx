@@ -64,6 +64,8 @@ class AllChatsScreen extends StatelessWidget {
                             'rtype': snapshot.data![index].rType,
                             'isGroup': snapshot.data![index].isGroup
                           };
+                          print(
+                              'all chat screen map ${context.read<ChatBloc>().chatDetailsMap}');
                           Navigator.pushNamed(
                               context, ChatMessagingScreen.routeName);
                         },
