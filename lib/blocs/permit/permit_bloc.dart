@@ -57,10 +57,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       OfflinePermitModel offlinePermitModel =
           await _permitRepository.fetchOfflinePermit(hashCode);
-      print('offlinepermit status ${offlinePermitModel.status}');
-      print('offlinepermit model ${offlinePermitModel.data}');
+      emit(const PermitLocalDatabasePrepared());
     } catch (e) {
-      emit(PreparingPermitLocalDatabaseFailed());
+      emit(const PreparingPermitLocalDatabaseFailed());
       print('error in $e');
     }
   }

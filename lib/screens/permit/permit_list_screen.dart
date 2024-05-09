@@ -43,6 +43,8 @@ class PermitListScreen extends StatelessWidget {
                 ProgressBar.show(context);
               }
               if (state is PermitLocalDatabasePrepared) {
+                showCustomSnackBar(
+                    context, StringConstants.kOfflineDataReady, '');
                 ProgressBar.dismiss(context);
               }
               if (state is PreparingPermitLocalDatabaseFailed) {
