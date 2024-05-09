@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
@@ -52,6 +53,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
     on<FetchDataForOpenPermit>(_fetchDataForOpenPermit);
     on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
+    on<AcceptPermitRequest>(_acceptPermitRequest);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -203,6 +205,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitBasicData?.iseditsafetydocument == '1') {
         permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
       }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
@@ -243,7 +249,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             ? DateFormat('dd.MM.yyyy').format(DateTime.now())
             : event.openPermitMap['date'],
         "time": event.openPermitMap['time'],
-        "details": event.openPermitMap['details']
+        "details": event.openPermitMap['details'],
+        "user_sign": "",
+        "user_name": "",
+        "user_email": ""
       };
       OpenClosePermitModel openClosePermitModel =
           await _permitRepository.openPermit(openPermitMap);
@@ -385,6 +394,36 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _acceptPermitRequest(
+      AcceptPermitRequest event, Emitter<PermitStates> emit) async {
+    emit(PermitRequestAccepting());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
+      Map acceptPermitRequestMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+        "userid": userId,
+        "npw_name": "",
+        "npw_auth": "",
+        "npw_company": "",
+        "npw_email": "",
+        "npw_phone": ""
+      };
+      AcceptPermitRequestModel acceptPermitRequestModel =
+          await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
+      if (acceptPermitRequestModel.message == '1') {
+        emit(PermitRequestAccepted());
+      } else {
+        emit(PermitRequestNotAccepted(
+            errorMessage: acceptPermitRequestModel.message!));
+      }
+    } catch (e) {
+      emit(PermitRequestNotAccepted(errorMessage: e.toString()));
     }
   }
 }

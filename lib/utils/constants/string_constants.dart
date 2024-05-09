@@ -277,6 +277,8 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kEditSafetyDocument = 'Edit Safety Document';
+  static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kAcceptPermit = 'Accept Permit';
   static const String kPermitNo = 'Permit No';
   static const String kKeySafeNo = 'Key Safe No';
   static const String kKeySafeKeyNo = 'Key Safe Key No';
