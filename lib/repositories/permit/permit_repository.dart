@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart
 import 'package:toolkit/data/models/permit/open_close_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/permit_roles_model.dart';
+import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -40,4 +41,6 @@ abstract class PermitRepository {
 
   Future<FetchDataForOpenPermitModel> fetchDataForOpenPermit(
       String permitId, String hashCode, String roleId);
+
+  Future<SaveMarkAsPreparedModel> saveMarkAsPrepared(Map saveMarkAsPreparedMap);
 }

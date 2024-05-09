@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_color.dart';
@@ -21,6 +23,7 @@ class PreparePermitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<PermitBloc>().add(FetchDataForOpenPermit(permitId));
+    String controlPerson = '';
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kPreparePermit),
       body: Padding(
@@ -28,7 +31,17 @@ class PreparePermitScreen extends StatelessWidget {
               left: leftRightMargin,
               right: leftRightMargin,
               top: xxTinierSpacing),
-          child: BlocBuilder<PermitBloc, PermitStates>(
+          child: BlocConsumer<PermitBloc, PermitStates>(
+            listener: (context, state) {
+              if (state is MarkAsPreparedSaving) {
+                ProgressBar.show(context);
+              } else if (state is MarkAsPreparedSaved) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                Navigator.pushNamed(context, PermitDetailsScreen.routeName,
+                    arguments: permitId);
+              }
+            },
             builder: (context, state) {
               if (state is DataForOpenPermitFetching) {
                 return const Center(child: CircularProgressIndicator());
@@ -63,7 +76,9 @@ class PreparePermitScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               color: AppColor.black)),
                       const SizedBox(height: tiniestSpacing),
-                      TextFieldWidget(onTextFieldChanged: (textField) {}),
+                      TextFieldWidget(onTextFieldChanged: (textField) {
+                        controlPerson = textField;
+                      }),
                       const SizedBox(height: xxTinierSpacing),
                     ]);
               } else if (state is DataForOpenPermitNotFetched) {
@@ -75,7 +90,11 @@ class PreparePermitScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
-            onPressed: () {}, textValue: StringConstants.kMarkAsPrepared),
+            onPressed: () {
+              context.read<PermitBloc>().add(SaveMarkAsPrepared(
+                  permitId: permitId, controlPerson: controlPerson));
+            },
+            textValue: StringConstants.kMarkAsPrepared),
       ),
     );
   }

@@ -193,7 +193,6 @@ class PermitBasicDetailsFetched extends PermitStates {
 
 class PermitBasicDetailsNotFetched extends PermitStates {
   final String errorMessage;
-
   const PermitBasicDetailsNotFetched({required this.errorMessage});
 }
 
@@ -209,4 +208,14 @@ class DataForOpenPermitNotFetched extends PermitStates {
   final String errorMessage;
 
   const DataForOpenPermitNotFetched({required this.errorMessage});
+}
+
+class MarkAsPreparedSaving extends PermitStates {}
+
+class MarkAsPreparedSaved extends PermitStates {}
+
+class MarkAsPreparedNotSaved extends PermitStates {
+  final String errorMessage;
+
+  const MarkAsPreparedNotSaved({required this.errorMessage});
 }

@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -103,5 +104,13 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/getdataforopenpermit?permitid=$permitId&hashcode=$hashCode&role=$roleId");
     return FetchDataForOpenPermitModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveMarkAsPreparedModel> saveMarkAsPrepared(
+      Map saveMarkAsPreparedMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/markasprepared", saveMarkAsPreparedMap);
+    return SaveMarkAsPreparedModel.fromJson(response);
   }
 }
