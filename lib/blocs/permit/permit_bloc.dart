@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -50,6 +51,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<RequestPermit>(_requestPermit);
     on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
     on<FetchDataForOpenPermit>(_fetchDataForOpenPermit);
+    on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -179,7 +181,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     try {
-      add(FetchPermitBasicDetails(event.permitId));
+      add(FetchPermitBasicDetails(permitId: event.permitId));
       emit(const FetchingPermitDetails());
       List permitPopUpMenu = [StringConstants.kGeneratePdf];
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
@@ -349,6 +351,40 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveMarkAsPrepared(
+      SaveMarkAsPrepared event, Emitter<PermitStates> emit) async {
+    emit(MarkAsPreparedSaving());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
+      Map saveMarkAsPreparedMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+        "userid": userId,
+        "controlpersons": event.controlPerson,
+        "user_sign": "",
+        "user_name": "",
+        "user_email": ""
+      };
+      if (event.controlPerson != '') {
+        SaveMarkAsPreparedModel saveMarkAsPreparedModel =
+            await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
+        if (saveMarkAsPreparedModel.message == '1') {
+          emit(MarkAsPreparedSaved());
+        } else {
+          emit(MarkAsPreparedNotSaved(
+              errorMessage: saveMarkAsPreparedModel.message!));
+        }
+      } else {
+        emit(const MarkAsPreparedNotSaved(
+            errorMessage: StringConstants.kPleaseFillControlPerson));
+      }
+    } catch (e) {
+      emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
     }
   }
 }

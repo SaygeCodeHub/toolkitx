@@ -91,5 +91,13 @@ class FetchDataForOpenPermit extends PermitEvents {
 class FetchPermitBasicDetails extends PermitEvents {
   final String permitId;
 
-  const FetchPermitBasicDetails(this.permitId);
+  const FetchPermitBasicDetails({required this.permitId});
+}
+
+class SaveMarkAsPrepared extends PermitEvents {
+  final String permitId;
+  final String controlPerson;
+
+  const SaveMarkAsPrepared(
+      {required this.permitId, required this.controlPerson});
 }
