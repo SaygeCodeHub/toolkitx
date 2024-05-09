@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
@@ -178,4 +180,17 @@ class ClosePermitDetailsFetched extends PermitStates {
 
 class ClosePermitDetailsError extends PermitStates {
   const ClosePermitDetailsError();
+}
+
+class PermitBasicDetailsFetching extends PermitStates {}
+
+class PermitBasicDetailsFetched extends PermitStates {
+  final FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel;
+
+  const PermitBasicDetailsFetched({required this.fetchPermitBasicDetailsModel});
+}
+
+class PermitBasicDetailsNotFetched extends PermitStates {
+  final String errorMessage;
+  const PermitBasicDetailsNotFetched({required this.errorMessage});
 }

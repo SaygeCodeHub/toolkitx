@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
@@ -53,6 +54,9 @@ class PTWActionMenu extends StatelessWidget {
                     .add(GetPermitDetails(permitId: permitId)));
           } else if (popUpMenuItems[value] == StringConstants.kRequestPermit) {
             context.read<PermitBloc>().add(RequestPermit(permitId));
+          }
+          if (popUpMenuItems[value] == StringConstants.kPreparePermit) {
+            Navigator.of(context).pushNamed(PreparePermitScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

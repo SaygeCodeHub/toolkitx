@@ -81,3 +81,9 @@ class RequestPermit extends PermitEvents {
 
   const RequestPermit(this.permitId);
 }
+
+class FetchPermitBasicDetails extends PermitEvents {
+  final String permitId;
+
+  const FetchPermitBasicDetails(this.permitId);
+}
