@@ -195,6 +195,30 @@ class UsersScreen extends StatelessWidget {
                                 children: [
                                   CustomCard(
                                     child: ListTile(
+                                        onTap: () async {
+                                          context
+                                              .read<ChatBloc>()
+                                              .chatDetailsMap = {
+                                            'rid': state.employeeList[index].id
+                                                .toString(),
+                                            'employee_name':
+                                                state.employeeList[index].name,
+                                            'rtype': state
+                                                .employeeList[index].type
+                                                .toString(),
+                                            'sid': await _customerCache
+                                                .getUserId2(CacheKeys.userId2),
+                                            'stype': (await _customerCache
+                                                        .getUserType(CacheKeys
+                                                            .userType) ==
+                                                    "2")
+                                                ? "2"
+                                                : "1",
+                                            'isReceiver': 0
+                                          };
+                                          Navigator.pushNamed(context,
+                                              ChatMessagingScreen.routeName);
+                                        },
                                         leading: const Icon(Icons.person,
                                             color: AppColor.deepBlue),
                                         title: Text(
@@ -219,8 +243,6 @@ class UsersScreen extends StatelessWidget {
                                               }, chatData: chatData)
                                             : IconButton(
                                                 onPressed: () async {
-                                                  print(
-                                                      'map ${context.read<ChatBloc>().chatDetailsMap}');
                                                   context
                                                       .read<ChatBloc>()
                                                       .chatDetailsMap = {
