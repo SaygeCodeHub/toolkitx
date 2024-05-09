@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +10,7 @@ import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -45,6 +47,22 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<OpenPermit>(_openPermit);
     on<ClosePermit>(_closePermit);
     on<RequestPermit>(_requestPermit);
+    on<PreparePermitLocalDatabase>(_preparePermitLocalDatabase);
+  }
+
+  FutureOr<void> _preparePermitLocalDatabase(
+      PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
+    try {
+      emit(const PreparingPermitLocalDatabase());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      OfflinePermitModel offlinePermitModel =
+          await _permitRepository.fetchOfflinePermit(hashCode);
+      print('offlinepermit status ${offlinePermitModel.status}');
+      print('offlinepermit model ${offlinePermitModel.data}');
+    } catch (e) {
+      emit(PreparingPermitLocalDatabaseFailed());
+      print('error in $e');
+    }
   }
 
   FutureOr<void> _fetchPermitRoles(

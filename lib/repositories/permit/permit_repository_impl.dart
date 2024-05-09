@@ -1,7 +1,9 @@
 import 'package:toolkit/utils/constants/api_constants.dart';
+
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -25,6 +27,13 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/getroles?hashcode=$hashCode&userid=$userId");
     return PermitRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<OfflinePermitModel> fetchOfflinePermit(String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode");
+    return OfflinePermitModel.fromJson(response);
   }
 
   @override

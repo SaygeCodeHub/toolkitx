@@ -81,3 +81,5 @@ class RequestPermit extends PermitEvents {
 
   const RequestPermit(this.permitId);
 }
+
+class PreparePermitLocalDatabase extends PermitEvents {}

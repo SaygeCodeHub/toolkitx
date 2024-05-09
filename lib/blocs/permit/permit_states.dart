@@ -179,3 +179,15 @@ class ClosePermitDetailsFetched extends PermitStates {
 class ClosePermitDetailsError extends PermitStates {
   const ClosePermitDetailsError();
 }
+
+class PreparingPermitLocalDatabase extends PermitStates {
+  const PreparingPermitLocalDatabase();
+}
+
+class PermitLocalDatabasePrepared extends PermitStates {
+  const PermitLocalDatabasePrepared();
+}
+
+class PreparingPermitLocalDatabaseFailed extends PermitStates {
+  const PreparingPermitLocalDatabaseFailed();
+}
