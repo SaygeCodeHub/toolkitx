@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -30,6 +31,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   List location = [];
   List<AllPermitDatum> permitListData = [];
   bool listReachedMax = false;
+  PermitBasicData? permitBasicData;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -45,6 +47,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<OpenPermit>(_openPermit);
     on<ClosePermit>(_closePermit);
     on<RequestPermit>(_requestPermit);
+    on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -174,6 +177,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     try {
+      add(FetchPermitBasicDetails(event.permitId));
       emit(const FetchingPermitDetails());
       List permitPopUpMenu = [StringConstants.kGeneratePdf];
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
@@ -188,6 +192,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitDetailsModel.data.tab1.status ==
           DatabaseUtil.getText('Created')) {
         permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
       }
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
@@ -294,6 +304,28 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(ClosePermitError(e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchPermitBasicDetails(
+      FetchPermitBasicDetails event, Emitter<PermitStates> emit) async {
+    emit(PermitBasicDetailsFetching());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel =
+          await _permitRepository.fetchPermitBasicDetails(
+              event.permitId, hashCode, roleId);
+      if (fetchPermitBasicDetailsModel.status == 200) {
+        emit(PermitBasicDetailsFetched(
+            fetchPermitBasicDetailsModel: fetchPermitBasicDetailsModel));
+        permitBasicData = fetchPermitBasicDetailsModel.data;
+      } else {
+        emit(PermitBasicDetailsNotFetched(
+            errorMessage: fetchPermitBasicDetailsModel.message!));
+      }
+    } catch (e) {
+      emit(PermitBasicDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 }

@@ -275,6 +275,8 @@ abstract class StringConstants {
   static const String kClosePermit = 'Close Permit';
   static const String kOpenPermit = 'Open Permit';
   static const String kRequestPermit = 'Request Permit';
+  static const String kPreparePermit = 'Prepare Permit';
+  static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kPermitNo = 'Permit No';
   static const String kKeySafeNo = 'Key Safe No';
   static const String kKeySafeKeyNo = 'Key Safe Key No';
@@ -290,6 +292,7 @@ abstract class StringConstants {
   static const String kControlPerson = 'Control Person(s)';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
   static const String kOPENPERMIT = 'OPEN PERMIT';
+  static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
