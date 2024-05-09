@@ -290,6 +290,8 @@ abstract class StringConstants {
   static const String kSingleLineDiagram = 'Single Line Diagram';
   static const String kPID = 'P&ID';
   static const String kControlPerson = 'Control Person(s)';
+  static const String kPleaseFillControlPerson =
+      'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
   static const String kOPENPERMIT = 'OPEN PERMIT';
   static const String kMarkAsPrepared = 'Mark as Prepared';

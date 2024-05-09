@@ -370,13 +370,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "user_name": "",
         "user_email": ""
       };
-      SaveMarkAsPreparedModel saveMarkAsPreparedModel =
-          await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
-      if (saveMarkAsPreparedModel.message == '1') {
-        emit(MarkAsPreparedSaved());
+      if (event.controlPerson != '') {
+        SaveMarkAsPreparedModel saveMarkAsPreparedModel =
+            await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
+        if (saveMarkAsPreparedModel.message == '1') {
+          emit(MarkAsPreparedSaved());
+        } else {
+          emit(MarkAsPreparedNotSaved(
+              errorMessage: saveMarkAsPreparedModel.message!));
+        }
       } else {
-        emit(MarkAsPreparedNotSaved(
-            errorMessage: saveMarkAsPreparedModel.message!));
+        emit(const MarkAsPreparedNotSaved(
+            errorMessage: StringConstants.kPleaseFillControlPerson));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
