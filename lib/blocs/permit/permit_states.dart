@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
@@ -192,5 +193,20 @@ class PermitBasicDetailsFetched extends PermitStates {
 
 class PermitBasicDetailsNotFetched extends PermitStates {
   final String errorMessage;
+
   const PermitBasicDetailsNotFetched({required this.errorMessage});
+}
+
+class DataForOpenPermitFetching extends PermitStates {}
+
+class DataForOpenPermitFetched extends PermitStates {
+  final FetchDataForOpenPermitModel fetchDataForOpenPermitModel;
+
+  const DataForOpenPermitFetched({required this.fetchDataForOpenPermitModel});
+}
+
+class DataForOpenPermitNotFetched extends PermitStates {
+  final String errorMessage;
+
+  const DataForOpenPermitNotFetched({required this.errorMessage});
 }

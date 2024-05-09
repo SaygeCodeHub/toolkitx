@@ -56,7 +56,8 @@ class PTWActionMenu extends StatelessWidget {
             context.read<PermitBloc>().add(RequestPermit(permitId));
           }
           if (popUpMenuItems[value] == StringConstants.kPreparePermit) {
-            Navigator.of(context).pushNamed(PreparePermitScreen.routeName);
+            Navigator.of(context)
+                .pushNamed(PreparePermitScreen.routeName, arguments: permitId);
           }
         },
         position: PopupMenuPosition.under,

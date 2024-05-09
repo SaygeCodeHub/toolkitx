@@ -586,7 +586,8 @@ class AppRoutes {
         return _createRoute(EditCertificateFeedbackScreen(
             getDetailsMap: settings.arguments as Map));
       case PreparePermitScreen.routeName:
-        return _createRoute(const PreparePermitScreen());
+        return _createRoute(
+            PreparePermitScreen(permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
