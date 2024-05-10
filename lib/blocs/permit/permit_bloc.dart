@@ -67,7 +67,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(const PermitLocalDatabasePrepared());
     } catch (e) {
       emit(const PreparingPermitLocalDatabaseFailed());
-      print('error in $e');
     }
   }
 
