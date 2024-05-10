@@ -10,6 +10,7 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../home/home_screen.dart';
+import '../location/current_location_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -39,7 +40,7 @@ class _RootScreenState extends State<RootScreen> {
 
   static const List _widgetOptions = [
     HomeScreen(),
-    Text('Index 1: Location'),
+    CurrentLocationScreen(),
     Text('Index 2: Notification'),
     Text('Index 3: Chat'),
     ProfileScreen()

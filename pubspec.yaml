@@ -39,6 +39,7 @@ dependencies:
   flutter_html:
   html_unescape:
   webview_flutter:
+  flutter_osm_plugin:
 
 
 dev_dependencies:
@@ -48,6 +49,8 @@ dev_dependencies:
   build_runner:
   flutter_lints: ^2.0.0
   json_serializable:
+  flutter_native_splash: ^2.4.0
+
 
 
 flutter:
