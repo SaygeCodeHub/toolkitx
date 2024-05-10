@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/expense/reject_expense_model.dart';
+import 'package:toolkit/screens/expense/widgets/addItemsWidgets/expense_edit_form_two.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -72,6 +73,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
   List<List<ItemMasterDatum>> fetchItemMaster = [];
   Map expenseWorkingAtMap = {};
   Map expenseWorkingAtNumberMap = {};
+  String editItemDate = '';
+  String editItemId = '';
 
   Future<void> _fetchExpenseList(
       FetchExpenseList event, Emitter<ExpenseStates> emit) async {
@@ -344,7 +347,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           fetchItemMasterModel: fetchItemMasterModel,
           isScreenChange: isScreenChange,
           apiKey: apiKey));
-      add(SelectExpenseDate(date: ''));
+
+      add(SelectExpenseDate(date: editItemDate));
     } catch (e) {
       emit(ExpenseItemMasterCouldNotFetch(itemsNotFound: e.toString()));
     }
@@ -385,8 +389,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
     if (expenseWorkingAtNumberMap.isNotEmpty) {
       for (int j = 0; j < expenseWorkingAtNumberMap.values.length; j++) {
         ExpenseWorkingAtNumberListTile.workingAtNumberMap = {
-          "working_at_number_id": expenseWorkingAtNumberMap.values.elementAt(j),
-          "working_at_number": expenseWorkingAtNumberMap.values.elementAt(1)
+          "working_at_number_id": expenseWorkingAtNumberMap.values.last,
+          "working_at_number": expenseWorkingAtNumberMap.values.first
         };
         ExpenseEditItemsScreen.editExpenseMap['workingatnumber'] =
             ExpenseWorkingAtNumberListTile
@@ -483,38 +487,66 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      if (event.expenseItemMap['amount'] == null &&
-          event.expenseItemMap['reportcurrency'] == null) {
+
+      event.expenseItemMap.remove('details_model');
+      event.expenseItemMap.remove('item_details_model');
+      List<Map<String, dynamic>> filteredList =
+          (ExpenseEditFormTwo.expenseCustomFieldsList.isEmpty)
+              ? ExpenseHotelAndMealLayout.expenseCustomFieldsList
+                  .where((map) => map.isNotEmpty)
+                  .toList()
+              : ExpenseEditFormTwo.expenseCustomFieldsList
+                  .where((map) => map.isNotEmpty)
+                  .toList();
+      Map saveItemMap = {
+        "id": event.expenseItemMap['id'] ?? '',
+        "expenseid": expenseId,
+        "date": event.expenseItemMap['date'] ?? '',
+        "itemid": event.expenseItemMap['itemid'] ?? '',
+        "amount": event.expenseItemMap['amount'] ?? '',
+        "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
+        "description": event.expenseItemMap['description'] ?? '',
+        "currency": event.expenseItemMap['currency'] ?? '',
+        "filenames": event.expenseItemMap['filenames'] ?? '',
+        "reportcurrency": event.expenseItemMap['reportcurrency'] ??
+            event.expenseItemMap['currency'] ??
+            '',
+        "workingatid": event.expenseItemMap['workingatid'] ?? '',
+        "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
+        "userid": userId,
+        "hashcode": hashCode,
+        "questions": filteredList
+      };
+      if (saveItemMap['date'] == null || saveItemMap['date'] == '') {
         emit(ExpenseItemCouldNotSave(
-            itemNotSaved:
-                StringConstants.kExpenseAddItemAmountAndCurrencyValidation));
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['itemid'] == null || saveItemMap['itemid'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['amount'] == null || saveItemMap['amount'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['description'] == null ||
+          saveItemMap['description'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['currency'] == null ||
+          saveItemMap['currency'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['workingatid'] == null ||
+          saveItemMap['workingatid'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
+      } else if (saveItemMap['workingatnumber'] == null ||
+          saveItemMap['workingatnumber'] == '') {
+        emit(ExpenseItemCouldNotSave(
+            itemNotSaved: StringConstants.kExpenseAddItemValidation));
       } else {
-        List<Map<String, dynamic>> filteredList = ExpenseHotelAndMealLayout
-            .expenseCustomFieldsList
-            .where((map) => map.isNotEmpty)
-            .toList();
-        Map saveItemMap = {
-          "id": event.expenseItemMap['id'] ?? '',
-          "expenseid": expenseId,
-          "date": event.expenseItemMap['date'] ?? '',
-          "itemid": event.expenseItemMap['itemid'] ?? '',
-          "amount": event.expenseItemMap['amount'] ?? '',
-          "exchange_rate": event.expenseItemMap['exchange_rate'] ?? '',
-          "description": event.expenseItemMap['description'] ?? '',
-          "currency": event.expenseItemMap['currency'] ?? '',
-          "filenames": event.expenseItemMap['filenames'] ?? '',
-          "reportcurrency": event.expenseItemMap['reportcurrency'] ??
-              event.expenseItemMap['currency'],
-          "workingatid": event.expenseItemMap['workingatid'] ?? '',
-          "workingatnumber": event.expenseItemMap['workingatnumber'] ?? '',
-          "userid": userId,
-          "hashcode": hashCode,
-          "questions": filteredList
-        };
         SaveExpenseItemModel saveExpenseItemModel =
             await _expenseRepository.saveExpenseItem(saveItemMap);
         if (saveExpenseItemModel.message == '1') {
-          emit(ExpenseItemSaved(saveExpenseItemModel: saveExpenseItemModel));
+          emit(ExpenseItemSaved(expenseId: saveItemMap['expenseid']));
         } else {
           emit(ExpenseItemCouldNotSave(
               itemNotSaved: DatabaseUtil.getText('UnknownErrorMessage')));
@@ -577,6 +609,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
         "item_id": event.expenseItemId,
         "hash_code": await _customerCache.getHashCode(CacheKeys.hashcode)
       });
+      expenseWorkingAtNumberMap.clear();
+      editItemDate = fetchExpenseItemDetailsModel.data.expensedate;
+      editItemId = fetchExpenseItemDetailsModel.data.itemid;
       if (fetchExpenseItemDetailsModel.data.toJson().isNotEmpty) {
         for (int i = 0;
             i < fetchExpenseItemDetailsModel.data.toJson().keys.length;
@@ -689,11 +724,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
                       .elementAt(j) !=
                   '') {
                 expenseWorkingAtNumberMap['working_at'] =
-                    expenseWorkingAtNumberMap['general_wbs'] =
-                        fetchExpenseItemDetailsModel.data
-                            .toJson()
-                            .values
-                            .elementAt(j);
+                    fetchExpenseItemDetailsModel.data
+                        .toJson()
+                        .values
+                        .elementAt(j);
               }
           }
         }

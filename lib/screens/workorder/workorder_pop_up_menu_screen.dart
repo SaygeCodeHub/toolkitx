@@ -164,6 +164,8 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                   WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddDocuments')) {
+          WorkOrderAssignDocumentScreen.documentDataList.clear();
+          WorkOrderAssignDocumentScreen.documentFilterMap.clear();
           Navigator.pushNamed(context, WorkOrderAssignDocumentScreen.routeName)
               .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
                   WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));

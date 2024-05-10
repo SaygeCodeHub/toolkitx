@@ -14,6 +14,7 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
@@ -21,7 +22,6 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
-import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -40,6 +40,7 @@ import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/assets/widgets/assets_report_failure_location_list.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/edit_certifcate_feedback_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
@@ -164,6 +165,7 @@ import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_document_filter_screen.dart';
+import '../screens/workorder/workorder_edit_items_screen.dart';
 import '../screens/workorder/workorder_edit_workforce_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
@@ -531,8 +533,8 @@ class AppRoutes {
         return _createRoute(ExpenseEditItemsScreen(
             expenseItemId: settings.arguments.toString()));
       case ExpenseEditFormTwo.routeName:
-        return _createRoute(ExpenseEditFormTwo(
-            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+        return _createRoute(
+            ExpenseEditFormTwo(arguments: settings.arguments as List));
       case ExpenseEditFormThree.routeName:
         return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:
@@ -590,6 +592,16 @@ class AppRoutes {
       case ViewAttachedImageWidget.routeName:
         return _createRoute(ViewAttachedImageWidget(
             attachmentPath: settings.arguments.toString()));
+      case WorkOrderEditItemsScreen.routeName:
+        return _createRoute(WorkOrderEditItemsScreen(
+          workOrderItemMap: settings.arguments as Map,
+        ));
+      case EditCertificateFeedbackScreen.routeName:
+        return _createRoute(EditCertificateFeedbackScreen(
+            getDetailsMap: settings.arguments as Map));
+      case PreparePermitScreen.routeName:
+        return _createRoute(
+            PreparePermitScreen(permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

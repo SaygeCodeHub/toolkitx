@@ -167,11 +167,9 @@ class SafetyMeasuresOptionsSelected extends WorkOrderTabDetailsStates {
 }
 
 class SpecialWorkOptionsSelected extends WorkOrderTabDetailsStates {
-  final List specialWorkIdList;
-  final List specialWorkNameList;
+  final bool isChecked;
 
-  SpecialWorkOptionsSelected(
-      {required this.specialWorkIdList, required this.specialWorkNameList});
+  SpecialWorkOptionsSelected({required this.isChecked});
 }
 
 class AcceptingWorkOrder extends WorkOrderTabDetailsStates {}
@@ -258,6 +256,7 @@ class FetchingAssignWorkOrder extends WorkOrderTabDetailsStates {}
 
 class AssignWorkOrderFetched extends WorkOrderTabDetailsStates {
   final FetchAssignWorkForceModel fetchAssignWorkForceModel;
+
   AssignWorkOrderFetched({required this.fetchAssignWorkForceModel});
 }
 
@@ -482,4 +481,14 @@ class WorkOrderNotCompleted extends WorkOrderTabDetailsStates {
   final String errorMessage;
 
   WorkOrderNotCompleted({required this.errorMessage});
+}
+
+class WorkOrderItemUpdating extends WorkOrderTabDetailsStates {}
+
+class WorkOrderItemUpdated extends WorkOrderTabDetailsStates {}
+
+class WorkOrderItemNotUpdated extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderItemNotUpdated({required this.errorMessage});
 }

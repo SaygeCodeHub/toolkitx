@@ -19,6 +19,7 @@ import 'package:toolkit/data/models/workorder/reject_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/start_workorder_model.dart';
+import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_details_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
@@ -233,5 +234,14 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
         "${ApiConstants.baseUrl}workorder/completeworkorder",
         completeWorkOrderMap);
     return CompleteWorkOrderModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateWorkOrderItemModel> updateWorkOrderItem(
+      Map workOrderItemMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}workorder/updateitemquantity",
+        workOrderItemMap);
+    return UpdateWorkOrderItemModel.fromJson(response);
   }
 }

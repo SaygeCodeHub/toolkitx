@@ -161,7 +161,6 @@ class StartCourseCertificateBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       GetQuizQuestionsModel getQuizQuestionsModel = await _certificateRepository
           .getQuizQuestions(hashCode!, event.pageNo, event.workforcequizId);
-
       if (getQuizQuestionsModel.status == 200) {
         emit(QuizQuestionsFetched(
             getQuizQuestionsModel: getQuizQuestionsModel, answerId: ''));
@@ -214,7 +213,7 @@ class StartCourseCertificateBloc
         "questionid": event.finishQuizMap["questionid"],
         "workforceid": userId,
         "quizid": event.finishQuizMap["quizid"],
-        "certificateid": event.finishQuizMap["certificateid"]
+        "certificateid": certificateId
       };
       FinishQuizCertificateModel finishQuizCertificateModel =
           await _certificateRepository.finishQuizCertificate(finishQuizMap);

@@ -90,10 +90,20 @@ class GetWorkforceScreen extends StatelessWidget {
                           textValue: StringConstants.kStartQuiz),
                     ),
                     Visibility(
+                      visible: (data.isquizrunning == '1'),
+                      child: PrimaryButton(
+                          onPressed: () {
+                            context.read<StartCourseCertificateBloc>().add(
+                                StartCertificateQuiz(
+                                    quizId: workforceQuizMap["quizId"]));
+                          },
+                          textValue: "Continue quiz"),
+                    ),
+                    Visibility(
                       visible: data.showquizreport == '1',
                       child: CertificateQuizReportWidget(
                           workforceQuizData: state.getWorkforceQuizModel.data,
-                          quizId: workforceQuizMap["quizId"]),
+                          quizId: state.getWorkforceQuizModel.data.userquizid),
                     ),
                     const SizedBox(height: xxTinySpacing),
                   ],

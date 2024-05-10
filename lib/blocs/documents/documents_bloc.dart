@@ -137,17 +137,18 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
 
   FutureOr<void> _selectDocumentLocationFilter(
       SelectDocumentLocationFilter event, Emitter<DocumentsStates> emit) {
+    linkDocSelectedType = event.selectedType;
     emit(DocumentTypeFilterSelected(selectedType: event.selectedType));
   }
 
   FutureOr<void> _applyDocumentFilter(
       ApplyDocumentFilter event, Emitter<DocumentsStates> emit) {
     filters = {
-      "documentName": event.filterMap["documentName"],
-      "documentId": event.filterMap["documentId"],
-      "author": event.filterMap["author"],
-      'type': event.filterMap["type"],
-      "status": event.filterMap["status"]
+      "name": event.filterMap["documentName"] ?? '',
+      "docno": event.filterMap["documentId"] ?? '',
+      "author": event.filterMap["author"] ?? '',
+      'type': event.filterMap["type"] ?? '',
+      "status": event.filterMap["status"] ?? ''
     };
   }
 
@@ -232,7 +233,7 @@ class DocumentsBloc extends Bloc<DocumentsEvents, DocumentsStates> {
       Map saveLinkedDocumentsMap = {
         "hashcode": hashCode,
         "documentid": documentId,
-        "documents": event.linkedDocuments,
+        "documents": event.linkedDocuments.replaceAll(" ", ""),
         "userid": userId
       };
       PostDocumentsModel saveLinkedDocumentsModel = await _documentsRepository

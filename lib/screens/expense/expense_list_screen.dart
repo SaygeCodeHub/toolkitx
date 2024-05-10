@@ -30,7 +30,7 @@ class ExpenseListScreen extends StatelessWidget {
     context.read<ExpenseBloc>().expenseListData.clear();
     context
         .read<ExpenseBloc>()
-        .add(FetchExpenseList(pageNo: pageNo, isFromHome: isFromHome));
+        .add(FetchExpenseList(pageNo: 1, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ExpenseReport')),
         floatingActionButton: FloatingActionButton(

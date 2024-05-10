@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 
 import '../../data/models/workorder/assign_workforce_model.dart';
@@ -91,4 +92,6 @@ abstract class WorkOrderRepository {
   Future<WorkorderAssignItemModel> workorderAssignItem(Map assignPartMap);
 
   Future<CompleteWorkOrderModel> completeWorkOrder(Map completeWorkOrderMap);
+
+  Future<UpdateWorkOrderItemModel> updateWorkOrderItem(Map workOrderItemMap);
 }

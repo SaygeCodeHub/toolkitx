@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/widgets/text_button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import 'constants/api_constants.dart';
 
 class CertificateNotesTypeUtil {
-  Widget fetchSwitchCaseWidget(
-      type, data, htmlText, url, podPlayerController, clientId) {
+  Widget fetchSwitchCaseWidget(type, data, htmlText, url, podPlayerController,
+      clientId, pptcontroller, isLoading) {
     switch (type) {
       case '0':
         return Html(shrinkWrap: true, data: htmlText);
@@ -52,20 +51,10 @@ class CertificateNotesTypeUtil {
           height: kContainerHeight,
           width: kContainerWidth,
           color: AppColor.blueGrey,
-          child: InkWell(
-            splashColor: AppColor.transparent,
-            highlightColor: AppColor.transparent,
-            onTap: () {
-              launchUrlString('${ApiConstants.baseDocUrl}$url',
-                  mode: LaunchMode.inAppWebView);
-            },
-            child: CustomTextButton(
-                onPressed: () {
-                  // launchUrlString('${ApiConstants.baseDocUrl}$url',
-                  //     mode: LaunchMode.inAppBrowserView);
-                },
-                textValue: StringConstants.kOpenPPT),
-          ),
+          child: Stack(children: [
+            WebViewWidget(controller: pptcontroller),
+            if (isLoading) const Center(child: CircularProgressIndicator()),
+          ]),
         );
       default:
         return Container();

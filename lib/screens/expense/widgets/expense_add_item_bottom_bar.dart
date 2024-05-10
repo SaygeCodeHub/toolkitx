@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../blocs/expense/expense_bloc.dart';
@@ -31,6 +30,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
           ProgressBar.show(context);
         } else if (state is ExpenseItemSaved) {
           ProgressBar.dismiss(context);
+          context.read<ExpenseBloc>().expenseListData.clear();
           context
               .read<ExpenseBloc>()
               .add(FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
@@ -86,33 +86,11 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                     : Expanded(
                         child: PrimaryButton(
                             onPressed: () {
-                              if (ExpenseDetailsTabOne.manageItemsMap.keys
-                                      .contains('workingatnumber') ==
-                                  false) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AndroidPopUp(
-                                          titleValue: StringConstants
-                                              .kExpenseWorkingAtNumber,
-                                          contentValue: '',
-                                          textValue: StringConstants.kGoBack,
-                                          isNoVisible: false,
-                                          onPrimaryButton: () {
-                                            Navigator.pop(context);
-                                            context.read<ExpenseBloc>().add(
-                                                FetchExpenseDetails(
-                                                    tabIndex: 0,
-                                                    expenseId: expenseId));
-                                          });
-                                    });
-                              } else {
-                                ExpenseDetailsTabOne.manageItemsMap['itemid'] =
-                                    ExpenseItemList.itemId;
-                                context.read<ExpenseBloc>().add(SaveExpenseItem(
-                                    expenseItemMap:
-                                        ExpenseDetailsTabOne.manageItemsMap));
-                              }
+                              ExpenseDetailsTabOne.manageItemsMap['itemid'] =
+                                  ExpenseItemList.itemId;
+                              context.read<ExpenseBloc>().add(SaveExpenseItem(
+                                  expenseItemMap:
+                                      ExpenseDetailsTabOne.manageItemsMap));
                             },
                             textValue: DatabaseUtil.getText('buttonSave')))
               ]),
@@ -123,6 +101,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                   onPressed: () {
+                    ExpenseDetailsTabOne.manageItemsMap.clear();
                     context.read<ExpenseBloc>().add(
                         FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
                   },
@@ -132,15 +111,18 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                 Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          if (ExpenseDetailsTabOne.manageItemsMap['date'] ==
-                                  null &&
-                              ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
+                          if (ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
+                                  null ||
+                              ExpenseDetailsTabOne.manageItemsMap['date'] ==
+                                  null ||
+                              ExpenseDetailsTabOne
+                                      .manageItemsMap['workingatid'] ==
+                                  null ||
+                              ExpenseDetailsTabOne
+                                      .manageItemsMap['workingatnumber'] ==
                                   null) {
-                            showCustomSnackBar(
-                                context,
-                                StringConstants
-                                    .kExpenseAddItemDateAndItemValidation,
-                                '');
+                            showCustomSnackBar(context,
+                                StringConstants.kExpenseAddItemValidation, '');
                           } else {
                             if (ExpenseDetailsTabOne.manageItemsMap['itemid'] ==
                                 '3') {
