@@ -188,12 +188,10 @@ class DatabaseHelper {
 
   Future<void> updateMessageStatus(String msgId) async {
     final Database db = await database;
-    await db.update(
-      'chat_messages',
-      {'msg_status': '1'},
-      where: 'msg_id = ?',
-      whereArgs: [msgId],
-    );
+    print('msg id $msgId');
+    await db.update('chat_messages', {'msg_status': '1'},
+        where: 'msg_id = ?', whereArgs: [msgId]);
+    print('status changed');
   }
 
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
@@ -288,5 +286,13 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('groups');
     return maps;
+  }
+
+  Future<List<Map<String, dynamic>>> getMessagesWithStatusZero() async {
+    final Database db = await database;
+    List<Map<String, dynamic>> messages;
+    messages = await db
+        .query('chat_messages', where: 'msg_status = ?', whereArgs: ['0']);
+    return messages;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_states.dart';
@@ -19,7 +21,7 @@ class WifiConnectivityBloc
     ConnectivityUtil.observeNetwork();
   }
 
-  void _notifyNetworkStatus(NotifyNetworkStatus event, emit) {
+  FutureOr<void> _notifyNetworkStatus(NotifyNetworkStatus event, emit) {
     event.isConnected ? emit(EstablishedNetwork()) : emit(NoNetwork());
   }
 }

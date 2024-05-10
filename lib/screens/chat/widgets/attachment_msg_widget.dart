@@ -42,7 +42,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                       snapshot.data![reversedIndex]['localImagePath']
                           .toString(),
                       context,
-                      snapshot.data![reversedIndex]['msg_type'],
+                      snapshot.data![reversedIndex]['msg_type'] ?? '',
                       snapshot.data![reversedIndex]['isReceiver']))
               : Align(
                   alignment: Alignment.centerRight,

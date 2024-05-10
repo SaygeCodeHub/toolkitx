@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
@@ -66,8 +65,6 @@ class AllChatsScreen extends StatelessWidget {
                             'rtype': snapshot.data![index].rType,
                             'isGroup': snapshot.data![index].isGroup
                           };
-                          print(
-                              'all chats screen ${ChatBloc().chatDetailsMap}');
                           Navigator.pushNamed(
                               context, ChatMessagingScreen.routeName);
                         },

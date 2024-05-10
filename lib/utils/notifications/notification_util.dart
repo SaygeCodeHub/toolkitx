@@ -35,8 +35,8 @@ class NotificationUtil {
         } else {
           print('elseeee ${ChatBloc().chatDetailsMap}');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-            'sid': ChatBloc().chatDetailsMap['sid'] ?? '',
-            'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
+            'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
+            'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
             'rtype': message.data['rtype'] ?? '',
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],

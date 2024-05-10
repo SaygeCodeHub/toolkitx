@@ -85,12 +85,12 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         "type": userType,
         "timezonecode": timeZoneCode
       };
-      if (event.isFirstTime == true) {
-        add(FetchChatMessages());
-      }
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
+        if (event.isFirstTime == true) {
+          add(FetchChatMessages());
+        }
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
@@ -145,7 +145,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
         if (fetchChatMessagesModel.data.isNotEmpty) {
           for (var item in fetchChatMessagesModel.data) {
-            print('msgs from api ${item.msgJson.toJson()}');
             await _databaseHelper.insertMessage(item.msgJson.toJson());
             ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
               'rid': item.msgJson.toJson()['rid'],

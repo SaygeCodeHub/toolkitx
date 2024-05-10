@@ -44,8 +44,6 @@ class ChatBoxTextFieldWidget extends StatelessWidget {
                           textEditingController.text.trim(), context);
                       context.read<ChatBloc>().chatDetailsMap['message_type'] =
                           '1';
-                      print(
-                          'on tap of send${context.read<ChatBloc>().chatDetailsMap}');
                       context.read<ChatBloc>().add(SendChatMessage(
                           sendMessageMap:
                               context.read<ChatBloc>().chatDetailsMap));

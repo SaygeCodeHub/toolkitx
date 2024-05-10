@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -69,6 +68,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<PickMedia>(_pickMedia);
     on<UploadChatImage>(_uploadImage);
     on<FetchGroupInfo>(_fetchGroupInfo);
+    on<FetchChatMessage>(_fetchChatMessages);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -151,7 +151,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
-      print('send message map${jsonEncode(sendMessageMap)}');
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -168,18 +167,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
     timeZoneFormat =
         await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
-    print('rebuild chat msg${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString());
-    // for (var i = 0; i < messages.length; i++) {
-    //   if (messages[i]['employee_name'] == null ||
-    //       messages[i]['employee_name'].isEmpty) {
-    //     print('inside database query bloc ${messages.last}');
-    //     messages[i]['employee_name'] = messages.first['employee_name'];
-    //   }
-    // }
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -211,7 +202,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
         if (existingChatIndex != -1) {
-          print('last message ${message.last}');
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
@@ -280,7 +270,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
       }
     }
-    print('new date time $dateTime');
     return DateFormat('H:mm').format(dateTime);
   }
 
@@ -447,7 +436,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         }
       }
     } catch (e) {
-      print('error while uploading image $e');
+      e.toString();
     }
     return isUploadComplete;
   }
@@ -482,6 +471,38 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           'date': finalDate
         }, membersList);
         add(FetchChatsList());
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchChatMessages(
+      FetchChatMessage event, Emitter<ChatState> emit) async {
+    try {
+      List<Map<String, dynamic>> chatMessages =
+          await _databaseHelper.getMessagesWithStatusZero();
+      for (var item in chatMessages) {
+        Map<String, dynamic> sendMessageMap = {
+          "msg_id": item['msg_id'],
+          "quote_msg_id": "",
+          "sid": item['sid'],
+          "stype": item['stype'],
+          "rid": item['rid'],
+          "rtype": item['rtype'],
+          "msg_type": item['msg_type'],
+          "msg_time": item['msg_time'],
+          "msg": item['msg'],
+          "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+          "sid_2": 2,
+          "stype_2": "3"
+        };
+        SendMessageModel sendMessageModel =
+            await _chatBoxRepository.sendMessage(sendMessageMap);
+        if (sendMessageModel.status == 200) {
+          await _databaseHelper
+              .updateMessageStatus(sendMessageModel.data.msgId);
+        }
       }
     } catch (e) {
       rethrow;

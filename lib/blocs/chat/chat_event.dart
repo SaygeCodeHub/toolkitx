@@ -47,3 +47,5 @@ class FetchGroupInfo extends ChatEvent {
 
   FetchGroupInfo({required this.groupId});
 }
+
+class FetchChatMessage extends ChatEvent {}

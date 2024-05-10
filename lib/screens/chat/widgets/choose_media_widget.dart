@@ -16,7 +16,6 @@ class ChooseMediaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('hello');
     return CustomIconButton(
         icon: Icons.attach_file,
         onPressed: () {
