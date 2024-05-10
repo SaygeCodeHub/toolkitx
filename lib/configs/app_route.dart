@@ -10,6 +10,7 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
@@ -584,6 +585,9 @@ class AppRoutes {
       case EditCertificateFeedbackScreen.routeName:
         return _createRoute(EditCertificateFeedbackScreen(
             getDetailsMap: settings.arguments as Map));
+      case PreparePermitScreen.routeName:
+        return _createRoute(
+            PreparePermitScreen(permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

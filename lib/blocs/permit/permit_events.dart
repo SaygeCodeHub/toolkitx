@@ -83,3 +83,23 @@ class RequestPermit extends PermitEvents {
 }
 
 class PreparePermitLocalDatabase extends PermitEvents {}
+
+class FetchDataForOpenPermit extends PermitEvents {
+  final String permitId;
+
+  const FetchDataForOpenPermit(this.permitId);
+}
+
+class FetchPermitBasicDetails extends PermitEvents {
+  final String permitId;
+
+  const FetchPermitBasicDetails({required this.permitId});
+}
+
+class SaveMarkAsPrepared extends PermitEvents {
+  final String permitId;
+  final String controlPerson;
+
+  const SaveMarkAsPrepared(
+      {required this.permitId, required this.controlPerson});
+}

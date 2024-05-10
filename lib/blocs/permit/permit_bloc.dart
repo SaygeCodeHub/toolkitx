@@ -3,6 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
+import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -32,6 +35,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   List location = [];
   List<AllPermitDatum> permitListData = [];
   bool listReachedMax = false;
+  PermitBasicData? permitBasicData;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -48,6 +52,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<ClosePermit>(_closePermit);
     on<RequestPermit>(_requestPermit);
     on<PreparePermitLocalDatabase>(_preparePermitLocalDatabase);
+    on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
+    on<FetchDataForOpenPermit>(_fetchDataForOpenPermit);
+    on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -191,6 +198,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     try {
+      add(FetchPermitBasicDetails(permitId: event.permitId));
       emit(const FetchingPermitDetails());
       List permitPopUpMenu = [StringConstants.kGeneratePdf];
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
@@ -205,6 +213,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitDetailsModel.data.tab1.status ==
           DatabaseUtil.getText('Created')) {
         permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
       }
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
@@ -311,6 +325,83 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(ClosePermitError(e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchPermitBasicDetails(
+      FetchPermitBasicDetails event, Emitter<PermitStates> emit) async {
+    emit(PermitBasicDetailsFetching());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel =
+          await _permitRepository.fetchPermitBasicDetails(
+              event.permitId, hashCode, roleId);
+      if (fetchPermitBasicDetailsModel.status == 200) {
+        emit(PermitBasicDetailsFetched(
+            fetchPermitBasicDetailsModel: fetchPermitBasicDetailsModel));
+        permitBasicData = fetchPermitBasicDetailsModel.data;
+      } else {
+        emit(PermitBasicDetailsNotFetched(
+            errorMessage: fetchPermitBasicDetailsModel.message!));
+      }
+    } catch (e) {
+      emit(PermitBasicDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchDataForOpenPermit(
+      FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
+    emit(DataForOpenPermitFetching());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
+          await _permitRepository.fetchDataForOpenPermit(
+              event.permitId, hashCode, roleId);
+      if (fetchDataForOpenPermitModel.status == 200) {
+        emit(DataForOpenPermitFetched(
+            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel));
+      } else {
+        emit(DataForOpenPermitNotFetched(
+            errorMessage: fetchDataForOpenPermitModel.message!));
+      }
+    } catch (e) {
+      emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveMarkAsPrepared(
+      SaveMarkAsPrepared event, Emitter<PermitStates> emit) async {
+    emit(MarkAsPreparedSaving());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
+      Map saveMarkAsPreparedMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+        "userid": userId,
+        "controlpersons": event.controlPerson,
+        "user_sign": "",
+        "user_name": "",
+        "user_email": ""
+      };
+      if (event.controlPerson != '') {
+        SaveMarkAsPreparedModel saveMarkAsPreparedModel =
+            await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
+        if (saveMarkAsPreparedModel.message == '1') {
+          emit(MarkAsPreparedSaved());
+        } else {
+          emit(MarkAsPreparedNotSaved(
+              errorMessage: saveMarkAsPreparedModel.message!));
+        }
+      } else {
+        emit(const MarkAsPreparedNotSaved(
+            errorMessage: StringConstants.kPleaseFillControlPerson));
+      }
+    } catch (e) {
+      emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
     }
   }
 }
