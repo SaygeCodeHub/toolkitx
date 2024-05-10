@@ -15,13 +15,13 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'chat_database.db');
 
     return await openDatabase(
+      readOnly: false,
       path,
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE chat_messages (
-            id INTEGER PRIMARY KEY,
-            msg_id TEXT,
+            msg_id TEXT PRIMARY KEY,
             quote_msg_id TEXT,
             sid TEXT,
             stype TEXT,
@@ -196,15 +196,36 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
-      String employeeIdB) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
+      String employeeIdA, String employeeIdB) async {
     final Database db = await database;
-    List<Map<String, dynamic>> messages;
+    List<Map<String, dynamic>> messages = [];
+
     messages = await db.query('chat_messages',
         where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
         whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
 
-    return messages;
+    List<Map<String, dynamic>> updatedMessages = [];
+
+    for (var message in messages) {
+      updatedMessages.add(Map<String, dynamic>.from(message));
+    }
+    for (var i = 0; i < updatedMessages.length; i++) {
+      if (updatedMessages[i]['employee_name'] == null ||
+          updatedMessages[i]['employee_name'].isEmpty) {
+        final nameResult = await db.query(
+          'chat_messages',
+          where: 'sid = ? OR rid = ?',
+          whereArgs: [updatedMessages[i]['sid'], updatedMessages[i]['rid']],
+        );
+        if (nameResult.isNotEmpty) {
+          print('inside database query');
+          updatedMessages[i]['employee_name'] =
+              nameResult.first['employee_name'];
+        }
+      }
+    }
+    return updatedMessages;
   }
 
   Future<List> getLatestMessagesForEmployees() async {
@@ -236,7 +257,7 @@ class DatabaseHelper {
   Future<String?> getLatestEmployeeId() async {
     final Database db = await database;
     const String query =
-        'SELECT rid FROM chat_messages ORDER BY id DESC LIMIT 1;';
+        'SELECT rid FROM chat_messages ORDER BY msg_id DESC LIMIT 1;';
     final List<Map<String, dynamic>> results = await db.rawQuery(query);
 
     if (results.isNotEmpty) {

@@ -85,10 +85,12 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         "type": userType,
         "timezonecode": timeZoneCode
       };
+      if (event.isFirstTime == true) {
+        add(FetchChatMessages());
+      }
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
-        add(FetchChatMessages());
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
@@ -128,37 +130,35 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
   FutureOr<void> _fetchChatMessages(
       FetchChatMessages event, Emitter<ClientStates> emit) async {
-    List<Map<String, dynamic>> apiMessageList = [];
+    int pageNo = 1;
     try {
       String newToken = await NotificationUtil().getToken();
-      FetchChatMessagesModel fetchChatMessagesModel =
-          await _clientRepository.fetchChatMessages({
-        'page_no': 1,
-        'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
-        'token': newToken
-      });
-      if (fetchChatMessagesModel.data.isNotEmpty) {
-        List<Map<String, dynamic>> localDbMessageList =
-            await _databaseHelper.getAllMessages();
-        for (var item in fetchChatMessagesModel.data) {
-          apiMessageList.add(item.msgJson.toJson());
-        }
-        for (var apiMessage in apiMessageList) {
-          String msgId = apiMessage['msg_id'];
-          var matchingMessage = localDbMessageList.firstWhere(
-            (message) => message['msg_id'] == msgId,
-            orElse: () => <String, dynamic>{},
-          );
-          apiMessage['quote_msg_id'] ??= matchingMessage['quote_msg_id'];
-          apiMessage['msg_status'] ??= matchingMessage['msg_status'];
-          apiMessage['employee_name'] ??= matchingMessage['employee_name'];
-          apiMessage['isReceiver'] ??= matchingMessage['isReceiver'];
-          apiMessage['showCount'] ??= matchingMessage['showCount'];
-          await _databaseHelper.updateMessage(apiMessage);
-          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-            'rid': apiMessage['rid'],
-            'sid': apiMessage['sid']
-          }));
+      bool hasMoreData = true;
+
+      while (hasMoreData) {
+        FetchChatMessagesModel fetchChatMessagesModel =
+            await _clientRepository.fetchChatMessages({
+          'page_no': pageNo,
+          'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
+          'token': newToken
+        });
+
+        if (fetchChatMessagesModel.data.isNotEmpty) {
+          for (var item in fetchChatMessagesModel.data) {
+            print('msgs from api ${item.msgJson.toJson()}');
+            await _databaseHelper.insertMessage(item.msgJson.toJson());
+            ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+              'rid': item.msgJson.toJson()['rid'],
+              'sid': item.msgJson.toJson()['sid']
+            }));
+          }
+          if (fetchChatMessagesModel.data.length < 30) {
+            hasMoreData = false;
+          } else {
+            pageNo++;
+          }
+        } else {
+          hasMoreData = false;
         }
       }
     } catch (e) {

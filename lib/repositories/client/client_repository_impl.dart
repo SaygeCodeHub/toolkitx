@@ -32,8 +32,8 @@ class ClientRepositoryImpl extends ClientRepository {
 
   @override
   Future<FetchChatMessagesModel> fetchChatMessages(Map chatMessagesMap) async {
-    // print(
-    //     'repo client ${"${ApiConstants.baseUrl}chat/getchatmessages?pageno=${chatMessagesMap['page_no']}&hashcode=${chatMessagesMap['hashcode']}&token=${chatMessagesMap['token']}"}');
+    print(
+        'repo client ${"${ApiConstants.baseUrl}chat/getchatmessages?pageno=${chatMessagesMap['page_no']}&hashcode=${chatMessagesMap['hashcode']}&token=${chatMessagesMap['token']}"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}chat/getchatmessages?pageno=${chatMessagesMap['page_no']}&hashcode=${chatMessagesMap['hashcode']}&token=${chatMessagesMap['token']}");
     return FetchChatMessagesModel.fromJson(response);

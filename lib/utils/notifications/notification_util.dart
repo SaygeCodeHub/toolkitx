@@ -33,7 +33,7 @@ class NotificationUtil {
             'isGroup': (message.data['rtype'] == '3') ? true : false
           }));
         } else {
-          print('elseeee');
+          print('elseeee ${ChatBloc().chatDetailsMap}');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': ChatBloc().chatDetailsMap['sid'] ?? '',
             'rid': ChatBloc().chatDetailsMap['rid'] ?? '',

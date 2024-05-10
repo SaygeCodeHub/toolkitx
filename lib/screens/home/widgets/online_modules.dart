@@ -40,7 +40,9 @@ class OnLineModules extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ClientBloc>().add(FetchHomeScreenData());
+    context
+        .read<ClientBloc>()
+        .add(FetchHomeScreenData(isFirstTime: isFirstTime));
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||

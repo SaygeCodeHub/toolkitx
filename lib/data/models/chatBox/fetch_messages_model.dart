@@ -56,6 +56,7 @@ class MsgJson {
   final String msg;
   final String sid2;
   final String stype2;
+  final int isReceiver;
 
   MsgJson(
       {required this.msgId,
@@ -68,7 +69,8 @@ class MsgJson {
       required this.msgTime,
       required this.msg,
       required this.sid2,
-      required this.stype2});
+      required this.stype2,
+      this.isReceiver = 0});
 
   factory MsgJson.fromJson(Map<String, dynamic> json) => MsgJson(
       msgId: json["msg_id"] ?? '',
@@ -82,7 +84,8 @@ class MsgJson {
           DateTime.parse(json["msg_time"] ?? DateTime.now().toIso8601String()),
       msg: json["msg"] ?? '',
       sid2: json["sid_2"] ?? '',
-      stype2: json["stype_2"] ?? '');
+      stype2: json["stype_2"] ?? '',
+      isReceiver: json['isReceiver'] ?? 1);
 
   Map<String, dynamic> toJson() => {
         "msg_id": msgId,
@@ -95,6 +98,7 @@ class MsgJson {
         "msg_time": msgTime.toIso8601String(),
         "msg": msg,
         "sid_2": sid2,
-        "stype_2": stype2
+        "stype_2": stype2,
+        "isReceiver": isReceiver
       };
 }

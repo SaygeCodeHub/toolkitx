@@ -14,6 +14,7 @@ import 'package:toolkit/widgets/primary_button.dart';
 import '../../blocs/chat/chat_bloc.dart';
 import '../../blocs/chat/chat_event.dart';
 import '../../blocs/chat/chat_state.dart';
+import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../widgets/generic_app_bar.dart';
 
@@ -81,9 +82,21 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           .read<ChatBloc>()
                           .chatDetailsMap['isUploadComplete'] ==
                       false) {
-                    return Center(
-                        child: Text('Uploading attachement....Please wait!!',
-                            style: Theme.of(context).textTheme.medium));
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: tiniestSpacing),
+                        Center(
+                            child: Text(
+                                'Uploading attachement....Please wait!!',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xSmall
+                                    .copyWith(color: AppColor.grey))),
+                      ],
+                    );
                   } else {
                     return const AttachmentPreviewScreen();
                   }

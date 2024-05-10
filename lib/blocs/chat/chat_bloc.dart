@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -41,6 +42,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isSearchEnabled = false;
   String clientId = '';
   int unreadMsgCount = 0;
+  String timeZoneFormat = '';
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -109,7 +111,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Random random = Random();
       int randomValue = random.nextInt(100000);
       String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
-      print('utc date time ${dateTime.toUtc()}');
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": "",
@@ -128,14 +129,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 ? event.sendMessageMap['stype']
                 : event.sendMessageMap['rtype'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
-        "msg_time": dateTime.toUtc(),
+        "msg_time": dateTime.toUtc().toString(),
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
         "stype_2": "3"
       };
       sendMessageMap['isReceiver'] = 0;
-      sendMessageMap.remove('msg_time');
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
@@ -143,7 +143,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'isDownloadedImage': 0,
         'showCount': 1,
         'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
-        'msg_time': dateTime.toIso8601String(),
         'attachementExtension':
             event.sendMessageMap['attachementExtension'] ?? '',
         ...sendMessageMap
@@ -152,7 +151,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
-      sendMessageMap['msg_time'] = dateTime.toUtc().toString();
+      print('send message map${jsonEncode(sendMessageMap)}');
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
@@ -167,11 +166,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
     await _databaseHelper
         .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
-
+    timeZoneFormat =
+        await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
+    print('rebuild chat msg${event.employeeDetailsMap}');
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
             event.employeeDetailsMap['sid'].toString());
+    // for (var i = 0; i < messages.length; i++) {
+    //   if (messages[i]['employee_name'] == null ||
+    //       messages[i]['employee_name'].isEmpty) {
+    //     print('inside database query bloc ${messages.last}');
+    //     messages[i]['employee_name'] = messages.first['employee_name'];
+    //   }
+    // }
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -203,10 +211,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
         if (existingChatIndex != -1) {
+          print('last message ${message.last}');
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
-          existingChat.time = formattedTime(message.last['msg_time']);
+          existingChat.time = await formattedTime(message.last['msg_time']);
+          existingChat.userName = message.last['employee_name'] ?? '';
+          existingChat.isReceiver = message.last['isReceiver'] ?? '';
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -219,7 +230,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               message: message.last['msg'] ?? '',
               isGroup: (message.last['isGroup'] == 1) ? true : false,
               date: formattedDate(message.last['msg_time']),
-              time: formattedTime(message.last['msg_time']),
+              time: await formattedTime(message.last['msg_time']),
               messageType: message.last['msg_type'] ?? '',
               unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
           individualChatList.add(chat);
@@ -254,8 +265,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 
-  String formattedTime(String timestamp) {
+  Future<String> formattedTime(String timestamp) async {
     DateTime dateTime = DateTime.parse(timestamp);
+    String? timeZoneOffset =
+        await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset);
+    if (timeZoneOffset != null) {
+      List offset =
+          timeZoneOffset.replaceAll('+', '').replaceAll('-', '').split(':');
+      if (timeZoneOffset.contains('+')) {
+        dateTime = dateTime.toUtc().add(Duration(
+            hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
+      } else {
+        dateTime = dateTime.toUtc().subtract(Duration(
+            hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
+      }
+    }
+    print('new date time $dateTime');
     return DateFormat('H:mm').format(dateTime);
   }
 

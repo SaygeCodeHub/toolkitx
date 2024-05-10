@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:toolkit/blocs/home/home_events.dart';
 import 'package:toolkit/blocs/home/home_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,7 +87,7 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
       String newToken = await NotificationUtil().getToken();
       Map saveUserDeviceMap = {
         "hashcode": hashcode,
-        "deviceid": "xxx",
+        "deviceid": await getDeviceId(),
         "token": newToken
       };
       SaveUserDeviceModel saveUserDeviceModel =
@@ -94,5 +96,17 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
         _customerCache.setFCMToken(CacheKeys.fcmToken, newToken);
       }
     }
+  }
+
+  Future<String?> getDeviceId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id;
+    }
+    return null;
   }
 }
