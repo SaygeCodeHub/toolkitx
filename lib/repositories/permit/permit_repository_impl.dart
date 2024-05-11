@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
@@ -112,5 +113,14 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}permit/markasprepared", saveMarkAsPreparedMap);
     return SaveMarkAsPreparedModel.fromJson(response);
+  }
+
+  @override
+  Future<AcceptPermitRequestModel> acceptPermitRequest(
+      Map acceptPermitRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/accpetpermitrequest",
+        acceptPermitRequestMap);
+    return AcceptPermitRequestModel.fromJson(response);
   }
 }
