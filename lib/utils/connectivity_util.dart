@@ -18,11 +18,8 @@ class ConnectivityUtil {
       final result =
           results.isNotEmpty ? results.first : ConnectivityResult.none;
       if (result == ConnectivityResult.none) {
-        print('connectivity util none');
         WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: false));
-        print('connectivity util done');
       } else {
-        print('connectivity util');
         WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: true));
       }
     });

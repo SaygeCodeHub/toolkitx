@@ -25,8 +25,6 @@ import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_locatio
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
-import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
-import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';

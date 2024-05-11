@@ -24,11 +24,10 @@ dependencies:
   path_provider:
   toggle_switch:
   table_calendar:
-  webview_flutter:
   device_info_plus: ^10.1.0
-  json_annotation: 4.8.1
+  json_annotation: ^4.9.0
   cupertino_icons: ^1.0.2
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   connectivity_plus:
   shared_preferences:
   permission_handler:
@@ -46,7 +45,7 @@ dependencies:
   firebase_messaging: ^14.7.10
   document_viewer: ^0.0.1
   webview_flutter:
-  flutter_osm_plugin:
+  flutter_osm_plugin: ^0.70.0
 
 
 dev_dependencies:
@@ -54,7 +53,7 @@ dev_dependencies:
     sdk: flutter
 
   build_runner:
-  flutter_lints: ^3.0.2
+  flutter_lints: ^4.0.0
   json_serializable:
 
 flutter:
