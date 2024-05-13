@@ -244,6 +244,7 @@ abstract class StringConstants {
   static const String kSearch = 'Search'; //
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
+  static const String kNoDataFound = 'No data found!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kSafetyNoticeValidation = 'Please enter notice!'; //
   static const String kSafetyNoticeValidityValidation =
@@ -278,13 +279,20 @@ abstract class StringConstants {
   static const String kPreparePermit = 'Prepare Permit';
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
-  static const String kAcceptPermit = 'Accept Permit';
-  static const String kPermitNo = 'Permit No';
-  static const String kKeySafeNo = 'Key Safe No';
-  static const String kKeySafeKeyNo = 'Key Safe Key No';
-  static const String kEarthingScheduleNo = 'Earthing Schedule No';
-  static const String kSelectedPersonReport = 'Selected Person Report';
-  static const String kPortableDrainEarth = 'Portable Drain Earth';
+  static const String kClearPermitRequest = 'Clear Permit'; //
+  static const String kAllGearPermit =
+      'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
+  static const String kClearPermit = 'Clear Permit'; //
+  static const String kAcceptPermit = 'Accept Permit'; //
+  static const String kPermitNo = 'Permit No'; //
+  static const String kKeySafeNo = 'Key Safe No'; //
+  static const String kKeySafeKeyNo = 'Key Safe Key No'; //
+  static const String kEarthingScheduleNo = 'Earthing Schedule No'; //
+  static const String kSelectedPersonReport = 'Selected Person Report'; //
+  static const String kPortableDrainEarth = 'Portable Drain Earth'; //
+  static const String kAccessKeys = 'Access Keys'; //
+  static const String kAllGearsValidation =
+      'All gear, tools & loose materials have...cannot be empty'; //
   static const String kCircuitIdentificationFlag =
       'Circuit Identification Flag';
   static const String kCircuitIdentificationWristlets =
@@ -296,6 +304,7 @@ abstract class StringConstants {
       'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
   static const String kOPENPERMIT = 'OPEN PERMIT';
+  static const String kCLEARPERMIT = 'CLEAR PERMIT'; //
   static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';

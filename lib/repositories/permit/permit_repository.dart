@@ -1,8 +1,10 @@
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_close_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/permit_roles_model.dart';
+import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
@@ -47,4 +49,9 @@ abstract class PermitRepository {
 
   Future<AcceptPermitRequestModel> acceptPermitRequest(
       Map acceptPermitRequestMap);
+
+  Future<FetchClearPermitDetailsModel> fetchClearPermitDetails(
+      Map clearPermitMap);
+
+  Future<SaveClearPermitModel> saveClearPermit(Map clearPermitMap);
 }
