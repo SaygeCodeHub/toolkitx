@@ -36,6 +36,8 @@ class PermitRepositoryImpl extends PermitRepository {
   @override
   Future<PermitDetailsModel> fetchPermitDetails(
       String hashCode, String permitId, String role) async {
+    print(
+        'permit repo ${"${ApiConstants.baseUrl}permit/GetPermitAllDetails?permitid=$permitId&hashcode=$hashCode&role=$role"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/GetPermitAllDetails?permitid=$permitId&hashcode=$hashCode&role=$role");
     return PermitDetailsModel.fromJson(response);

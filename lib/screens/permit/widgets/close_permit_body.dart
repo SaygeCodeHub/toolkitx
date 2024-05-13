@@ -58,25 +58,6 @@ class ClosePermitBody extends StatelessWidget {
                     hintText: DatabaseUtil.getText('Status'),
                     onTextFieldChanged: (String textField) {}),
                 const SizedBox(height: xxTinySpacing),
-                Visibility(
-                    visible: getClosePermitData.panelSaint == '1',
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(StringConstants.kControlPerson,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(fontWeight: FontWeight.w600)),
-                          const SizedBox(height: xxxTinierSpacing),
-                          TextFieldWidget(
-                              maxLength: 100,
-                              hintText: StringConstants.kControlPerson,
-                              onTextFieldChanged: (String textField) {
-                                closePermitMap['controlPerson'] = textField;
-                              }),
-                          const SizedBox(height: xxTinySpacing)
-                        ])),
                 Text(DatabaseUtil.getText('Date'),
                     style: Theme.of(context)
                         .textTheme
@@ -97,7 +78,6 @@ class ClosePermitBody extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.w600)),
                 const SizedBox(height: xxxTinierSpacing),
                 TimePickerTextField(
-                    hintText: DatabaseUtil.getText('Time'),
                     onTimeChanged: (String time) {
                       closePermitMap['time'] = time;
                     }),
@@ -107,17 +87,17 @@ class ClosePermitBody extends StatelessWidget {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(DatabaseUtil.getText('Comments'),
+                          Text(StringConstants.kControlPerson,
                               style: Theme.of(context)
                                   .textTheme
                                   .xSmall
                                   .copyWith(fontWeight: FontWeight.w600)),
                           const SizedBox(height: xxxTinierSpacing),
                           TextFieldWidget(
-                              maxLength: 255,
-                              hintText: DatabaseUtil.getText('Comments'),
+                              maxLength: 100,
+                              hintText: StringConstants.kControlPerson,
                               onTextFieldChanged: (String textField) {
-                                closePermitMap['details'] = textField;
+                                closePermitMap['controlPerson'] = textField;
                               }),
                           const SizedBox(height: xxTinySpacing)
                         ])),
