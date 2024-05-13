@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
+import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -59,6 +60,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<AcceptPermitRequest>(_acceptPermitRequest);
     on<FetchClearPermit>(_fetchClearPermit);
     on<SaveClearPermit>(saveClearPermit);
+    on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -531,6 +533,46 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(ClearPermitNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> savePermitEditSafetyDocument(
+      SavePermitEditSafetyDocument event, Emitter<PermitStates> emit) async {
+    try {
+      emit(SavingPermitEditSafetyDocument());
+      Map editSafetyDocumentMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "permitid": event.editSafetyDocumentMap['permit_id'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "location": event.editSafetyDocumentMap['location'] ?? '',
+        "description": event.editSafetyDocumentMap['permit_id'] ?? '',
+        "methodstmt": event.editSafetyDocumentMap['methodstmt'] ?? '',
+        "lwc_environment": event.editSafetyDocumentMap['lwc_environment'] ?? '',
+        "lwc_precautions": event.editSafetyDocumentMap['lwc_precautions'] ?? '',
+        "lwc_accessto": event.editSafetyDocumentMap['lwc_accessto'] ?? '',
+        "st_circuit": event.editSafetyDocumentMap['st_circuit'] ?? '',
+        "st_precautions": event.editSafetyDocumentMap['st_precautions'] ?? '',
+        "st_safety": event.editSafetyDocumentMap['st_safety'] ?? '',
+        "ptw_isolation": event.editSafetyDocumentMap['ptw_isolation'] ?? '',
+        "ptw_circuit": event.editSafetyDocumentMap['ptw_circuit'] ?? '',
+        "ptw_circuit2": event.editSafetyDocumentMap['ptw_circuit2'] ?? '',
+        "ptw_precautions": event.editSafetyDocumentMap['ptw_precautions'] ?? '',
+        "ptw_precautions2":
+            event.editSafetyDocumentMap['ptw_precautions2'] ?? '',
+        "ptw_safety": event.editSafetyDocumentMap['ptw_safety'] ?? ''
+      };
+      SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
+          await _permitRepository
+              .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
+      if (savePermitEditSafetyDocumentModel.message == '1') {
+        emit(PermitEditSafetyDocumentSaved());
+      } else {
+        emit(PermitEditSafetyDocumentNotSaved(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(PermitEditSafetyDocumentNotSaved(
+          errorMessage: StringConstants.kSomethingWentWrong));
     }
   }
 }

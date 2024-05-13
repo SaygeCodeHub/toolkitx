@@ -18,6 +18,8 @@ class EditSafetyDocumentPlotUtil {
       case StringConstants.kPermitFirstQuestion:
         PlannedLocationDropdown.selectedLocation =
             fetchDataForOpenPermitModel.data?.location ?? '';
+        editSafetyDocumentMap['location'] =
+            PlannedLocationDropdown.selectedLocation;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

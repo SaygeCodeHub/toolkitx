@@ -119,3 +119,9 @@ class SaveClearPermit extends PermitEvents {
 
   SaveClearPermit({required this.clearPermitMap});
 }
+
+class SavePermitEditSafetyDocument extends PermitEvents {
+  final Map editSafetyDocumentMap;
+
+  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap});
+}

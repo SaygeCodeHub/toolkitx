@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/widgets/save_permit_edit_safety_notice_button.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/permit/edit_safety_document_plot_util.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -23,6 +24,8 @@ class PermitEditSafetyDocumentScreen extends StatelessWidget {
     context.read<PermitBloc>().add(FetchDataForOpenPermit(permitId: permitId));
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEditSafetyDocument),
+      bottomNavigationBar: SavePermitEditSafetyNoticeButton(
+          editSafetyDocumentMap: editSafetyDocumentMap, permitId: permitId),
       body: BlocBuilder<PermitBloc, PermitStates>(
         buildWhen: (previousState, currentState) =>
             currentState is DataForOpenPermitFetching ||
