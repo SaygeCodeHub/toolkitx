@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../blocs/permit/permit_bloc.dart';
@@ -22,7 +23,7 @@ class PreparePermitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PermitBloc>().add(FetchDataForOpenPermit(permitId));
+    context.read<PermitBloc>().add(FetchDataForOpenPermit(permitId: permitId));
     String controlPerson = '';
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kPreparePermit),
@@ -40,6 +41,9 @@ class PreparePermitScreen extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, PermitDetailsScreen.routeName,
                     arguments: permitId);
+              } else if (state is MarkAsPreparedNotSaved) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
               }
             },
             builder: (context, state) {

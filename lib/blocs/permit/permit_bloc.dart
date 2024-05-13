@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -52,6 +55,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<FetchPermitBasicDetails>(_fetchPermitBasicDetails);
     on<FetchDataForOpenPermit>(_fetchDataForOpenPermit);
     on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
+    on<AcceptPermitRequest>(_acceptPermitRequest);
+    on<FetchClearPermit>(_fetchClearPermit);
+    on<SaveClearPermit>(saveClearPermit);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -203,6 +209,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitBasicData?.iseditsafetydocument == '1') {
         permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
       }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (permitBasicData?.isclearpermit == '1') {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
@@ -243,7 +256,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             ? DateFormat('dd.MM.yyyy').format(DateTime.now())
             : event.openPermitMap['date'],
         "time": event.openPermitMap['time'],
-        "details": event.openPermitMap['details']
+        "details": event.openPermitMap['details'],
+        "user_sign": "",
+        "user_name": "",
+        "user_email": ""
       };
       OpenClosePermitModel openClosePermitModel =
           await _permitRepository.openPermit(openPermitMap);
@@ -385,6 +401,131 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _acceptPermitRequest(
+      AcceptPermitRequest event, Emitter<PermitStates> emit) async {
+    emit(PermitRequestAccepting());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
+      Map acceptPermitRequestMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+        "userid": userId,
+        "npw_name": "",
+        "npw_auth": "",
+        "npw_company": "",
+        "npw_email": "",
+        "npw_phone": ""
+      };
+      AcceptPermitRequestModel acceptPermitRequestModel =
+          await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
+      if (acceptPermitRequestModel.message == '1') {
+        emit(PermitRequestAccepted());
+      } else {
+        emit(PermitRequestNotAccepted(
+            errorMessage: acceptPermitRequestModel.message!));
+      }
+    } catch (e) {
+      emit(PermitRequestNotAccepted(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _fetchClearPermit(
+      FetchClearPermit event, Emitter<PermitStates> emit) async {
+    try {
+      emit(FetchingClearPermitDetails());
+      FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
+          await _permitRepository.fetchClearPermitDetails({
+        'permit_id': event.permitId,
+        'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+        'role': roleId
+      });
+      final List<Map<String, dynamic>> customFields = [
+        {"questionid": 4000010, "answer": ""},
+        {
+          "questionid": 4000001,
+          "answer": fetchClearPermitDetailsModel.data.keysafeno
+        },
+        {
+          "questionid": 4000002,
+          "answer": fetchClearPermitDetailsModel.data.earthscheduleno
+        },
+        {
+          "questionid": 4000003,
+          "answer": fetchClearPermitDetailsModel.data.selectedpersonreport
+        },
+        {
+          "questionid": 4000004,
+          "answer": fetchClearPermitDetailsModel.data.safetykeys
+        },
+        {
+          "questionid": 4000005,
+          "answer": fetchClearPermitDetailsModel.data.circuitflags
+        },
+        {
+          "questionid": 4000006,
+          "answer": fetchClearPermitDetailsModel.data.circuitwristlets
+        },
+        {
+          "questionid": 4000007,
+          "answer": fetchClearPermitDetailsModel.data.singleline
+        },
+        {
+          "questionid": 4000008,
+          "answer": fetchClearPermitDetailsModel.data.pid
+        },
+        {
+          "questionid": 4000013,
+          "answer": fetchClearPermitDetailsModel.data.accessKeys
+        },
+        {
+          "questionid": 4000014,
+          "answer": fetchClearPermitDetailsModel.data.other
+        }
+      ];
+      if (fetchClearPermitDetailsModel.data.toJson().isNotEmpty) {
+        emit(ClearPermitDetailsFetched(
+            fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
+            customFields: customFields));
+      } else {
+        emit(ClearPermitDetailsCouldNotFetched(
+            errorMessage: StringConstants.kNoDataFound));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> saveClearPermit(
+      SaveClearPermit event, Emitter<PermitStates> emit) async {
+    try {
+      emit(SavingClearPermit());
+      Map clearPermitMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "permitid": event.clearPermitMap['permit_id'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "customfields": event.clearPermitMap['customfields'],
+        "npwid": "",
+        "npw_name": "",
+        "npw_auth": "",
+        "npw_company": "",
+        "npw_email": "",
+        "npw_phone": ""
+      };
+      SaveClearPermitModel saveClearPermitModel =
+          await _permitRepository.saveClearPermit(clearPermitMap);
+      if (saveClearPermitModel.message == '1') {
+        emit(ClearPermitSaved());
+      } else {
+        emit(ClearPermitNotSaved(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(ClearPermitNotSaved(errorMessage: e.toString()));
     }
   }
 }
