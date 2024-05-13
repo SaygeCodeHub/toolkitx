@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 
@@ -229,4 +230,30 @@ class PermitRequestNotAccepted extends PermitStates {
   final String errorMessage;
 
   const PermitRequestNotAccepted({required this.errorMessage});
+}
+
+class FetchingClearPermitDetails extends PermitStates {}
+
+class ClearPermitDetailsFetched extends PermitStates {
+  final FetchClearPermitDetailsModel fetchClearPermitDetailsModel;
+  final List<Map<String, dynamic>> customFields;
+
+  ClearPermitDetailsFetched(
+      {required this.fetchClearPermitDetailsModel, required this.customFields});
+}
+
+class ClearPermitDetailsCouldNotFetched extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitDetailsCouldNotFetched({required this.errorMessage});
+}
+
+class SavingClearPermit extends PermitStates {}
+
+class ClearPermitSaved extends PermitStates {}
+
+class ClearPermitNotSaved extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitNotSaved({required this.errorMessage});
 }

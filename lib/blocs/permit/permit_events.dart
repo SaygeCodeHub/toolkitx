@@ -107,3 +107,15 @@ class AcceptPermitRequest extends PermitEvents {
 
   const AcceptPermitRequest({required this.permitId});
 }
+
+class FetchClearPermit extends PermitEvents {
+  final String permitId;
+
+  FetchClearPermit({required this.permitId});
+}
+
+class SaveClearPermit extends PermitEvents {
+  final Map clearPermitMap;
+
+  SaveClearPermit({required this.clearPermitMap});
+}
