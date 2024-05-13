@@ -363,7 +363,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               event.permitId, hashCode, roleId);
       if (fetchDataForOpenPermitModel.status == 200) {
         emit(DataForOpenPermitFetched(
-            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel));
+            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
+            questions: []));
       } else {
         emit(DataForOpenPermitNotFetched(
             errorMessage: fetchDataForOpenPermitModel.message!));

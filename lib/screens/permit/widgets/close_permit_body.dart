@@ -77,10 +77,9 @@ class ClosePermitBody extends StatelessWidget {
                         .xSmall
                         .copyWith(fontWeight: FontWeight.w600)),
                 const SizedBox(height: xxxTinierSpacing),
-                TimePickerTextField(
-                    onTimeChanged: (String time) {
-                      closePermitMap['time'] = time;
-                    }),
+                TimePickerTextField(onTimeChanged: (String time) {
+                  closePermitMap['time'] = time;
+                }),
                 const SizedBox(height: xxTinySpacing),
                 Visibility(
                     visible: getClosePermitData.panelSaint == '1',
