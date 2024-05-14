@@ -258,7 +258,7 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> results = await db.rawQuery(query);
 
     if (results.isNotEmpty) {
-      return results.first['rid'].toString() as String?;
+      return results.first['rid'].toString();
     } else {
       return null;
     }
