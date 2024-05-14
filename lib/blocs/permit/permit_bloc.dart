@@ -18,6 +18,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
+import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
 import '../../di/app_module.dart';
@@ -215,7 +216,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitBasicData?.isclearpermit == '1') {
         permitPopUpMenu.add(StringConstants.kClearPermit);
       }
-
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
@@ -306,12 +306,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           "hashcode": hashCode,
           "permitid": event.closePermitMap['permitId'],
           "userid": userId,
+          "controlpersons": event.closePermitMap['controlPerson'],
           "date": (event.closePermitMap['date'] == null)
               ? DateFormat('dd.MM.yyyy').format(DateTime.now())
               : event.closePermitMap['date'],
-          "controlpersons": event.closePermitMap['controlPerson'],
           "time": event.closePermitMap['time'],
-          "details": event.closePermitMap['details']
+          "details": event.closePermitMap['details'] ?? '',
+          "user_sign": "",
+          "user_name": "",
+          "user_email": ""
         };
         OpenClosePermitModel openClosePermitModel =
             await _permitRepository.closePermit(closePermitMap);
@@ -359,8 +362,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           await _permitRepository.fetchDataForOpenPermit(
               event.permitId, hashCode, roleId);
       if (fetchDataForOpenPermitModel.status == 200) {
+        final List<Question> questions = [
+          Question(questionNo: StringConstants.kPermitFirstQuestion),
+          Question(questionNo: StringConstants.kPermitSecondQuestion)
+        ];
         emit(DataForOpenPermitFetched(
-            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel));
+            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
+            questions: questions));
       } else {
         emit(DataForOpenPermitNotFetched(
             errorMessage: fetchDataForOpenPermitModel.message!));
