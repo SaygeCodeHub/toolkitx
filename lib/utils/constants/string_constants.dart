@@ -579,4 +579,8 @@ abstract class StringConstants {
   static const String kSelectApplication = 'Select Application';
   static const String kValid = 'Valid';
   static const String kAllAnswersRequired = "All answers are required";
+  static const String kOfflineDataReady =
+      "You are ready to use the app in offline mode!";
+  static const String kOfflineFailedInDataPreparation =
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
 }
