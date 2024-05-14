@@ -308,12 +308,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           "hashcode": hashCode,
           "permitid": event.closePermitMap['permitId'],
           "userid": userId,
+          "controlpersons": event.closePermitMap['controlPerson'],
           "date": (event.closePermitMap['date'] == null)
               ? DateFormat('dd.MM.yyyy').format(DateTime.now())
               : event.closePermitMap['date'],
-          "controlpersons": event.closePermitMap['controlPerson'],
           "time": event.closePermitMap['time'],
-          "details": event.closePermitMap['details']
+          "details": event.closePermitMap['details'] ?? '',
+          "user_sign": "",
+          "user_name": "",
+          "user_email": ""
         };
         OpenClosePermitModel openClosePermitModel =
             await _permitRepository.closePermit(closePermitMap);
