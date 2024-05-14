@@ -22,7 +22,6 @@ class NotificationUtil {
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
         if (_isMessageForCurrentChat(message)) {
-          print('ifffff');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': message.data['sid'] ?? '',
             'rid': message.data['rid'] ?? '',
@@ -33,7 +32,6 @@ class NotificationUtil {
             'isGroup': (message.data['rtype'] == '3') ? true : false
           }));
         } else {
-          print('elseeee ${ChatBloc().chatDetailsMap}');
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
             'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],

@@ -60,7 +60,6 @@ class _RootScreenState extends State<RootScreen> {
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
       listener: (context, state) {
         if (state is NoNetwork) {
-          print('no network established');
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -68,7 +67,6 @@ class _RootScreenState extends State<RootScreen> {
                       const RootScreen(isFromClientList: false)),
               ModalRoute.withName('/'));
         } else {
-          print('network established');
           context.read<ChatBloc>().add(FetchChatMessage());
         }
       },
@@ -125,7 +123,7 @@ class _RootScreenState extends State<RootScreen> {
       IconData icon, String label) {
     return BottomNavigationBarItem(
       icon: Padding(
-        padding: EdgeInsets.only(top: xxTiniestSpacing),
+        padding: const EdgeInsets.only(top: xxTiniestSpacing),
         child: Icon(icon),
       ),
       label: label,
@@ -138,7 +136,7 @@ class _RootScreenState extends State<RootScreen> {
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: xxTiniestSpacing),
               child: Icon(Icons.notifications_sharp),
             ),

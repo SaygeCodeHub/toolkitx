@@ -20,11 +20,11 @@ import '../../../di/app_module.dart';
 import '../../../utils/database/database_util.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
-  final snapshot;
+  final dynamic snapShot;
   final int reversedIndex;
 
   const AttachmentMsgWidget(
-      {super.key, required this.snapshot, required this.reversedIndex});
+      {super.key, required this.snapShot, required this.reversedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +35,24 @@ class AttachmentMsgWidget extends StatelessWidget {
           bottom: kModuleImagePadding),
       child: Column(
         children: [
-          (snapshot.data![reversedIndex]['isReceiver'] == 1)
+          (snapShot.data![reversedIndex]['isReceiver'] == 1)
               ? Align(
                   alignment: Alignment.centerLeft,
                   child: showDownloadedImage(
-                      snapshot.data![reversedIndex]['localImagePath']
+                      snapShot.data![reversedIndex]['localImagePath']
                           .toString(),
                       context,
-                      snapshot.data![reversedIndex]['msg_type'] ?? '',
-                      snapshot.data![reversedIndex]['isReceiver']))
+                      snapShot.data![reversedIndex]['msg_type'] ?? '',
+                      snapShot.data![reversedIndex]['isReceiver']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
-                      snapshot.data![reversedIndex]['pickedMedia'].toString(),
+                      snapShot.data![reversedIndex]['pickedMedia'].toString(),
                       context,
-                      snapshot.data![reversedIndex]['msg_type'],
-                      snapshot.data![reversedIndex]['isReceiver'])),
+                      snapShot.data![reversedIndex]['msg_type'],
+                      snapShot.data![reversedIndex]['isReceiver'])),
           Align(
-            alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+            alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
                 : Alignment.centerRight,
             child: Padding(
@@ -60,7 +60,7 @@ class AttachmentMsgWidget extends StatelessWidget {
               child: Text(
                   DateFormat('h:mm a').format(DateTime.parse(
                       getTimeForUserTimeZone(context,
-                              snapshot.data?[reversedIndex]['msg_time'])
+                              snapShot.data?[reversedIndex]['msg_time'])
                           .toString())),
                   style: Theme.of(context).textTheme.smallTextBlack),
             ),
@@ -113,15 +113,15 @@ class AttachmentMsgWidget extends StatelessWidget {
                   String? hashCode =
                       await customerCache.getHashCode(CacheKeys.hashcode);
                   String url =
-                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapshot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
+                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
-                      (snapshot.data![reversedIndex]['msg_type'] == '4')
-                          ? "$imageName.${snapshot.data![reversedIndex]['attachementExtension']}"
+                      (snapShot.data![reversedIndex]['msg_type'] == '4')
+                          ? "$imageName.${snapShot.data![reversedIndex]['attachementExtension']}"
                           : "$imageName.jpg",
-                      snapshot.data![reversedIndex]['msg_id'],
-                      snapshot.data![reversedIndex]['msg_type']);
+                      snapShot.data![reversedIndex]['msg_id'],
+                      snapShot.data![reversedIndex]['msg_type']);
                   if (downloadProcessComplete) {
                     if (!context.mounted) return;
                     ProgressBar.dismiss(context);

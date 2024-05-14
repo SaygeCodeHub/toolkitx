@@ -35,26 +35,26 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
             stepZoom: 1.0,
           ),
           userLocationMarker: UserLocationMaker(
-            personMarker: MarkerIcon(
-              icon: const Icon(
+            personMarker: const MarkerIcon(
+              icon: Icon(
                 Icons.location_history_rounded,
                 color: Colors.red,
                 size: 48,
               ),
             ),
-            directionArrowMarker: MarkerIcon(
-              icon: const Icon(
+            directionArrowMarker: const MarkerIcon(
+              icon: Icon(
                 Icons.double_arrow,
                 size: 48,
               ),
             ),
           ),
-          roadConfiguration: RoadOption(
+          roadConfiguration: const RoadOption(
             roadColor: Colors.yellowAccent,
           ),
           markerOption: MarkerOption(
-              defaultMarker: MarkerIcon(
-            icon: const Icon(
+              defaultMarker: const MarkerIcon(
+            icon: Icon(
               Icons.person_pin_circle,
               color: Colors.blue,
               size: 56,

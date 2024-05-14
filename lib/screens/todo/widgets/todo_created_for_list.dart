@@ -61,6 +61,7 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
               top: xxTinierSpacing),
           child: SearchableList(
               initialList: widget.todoMasterDatum,
+              // ignore: deprecated_member_use
               builder: (List<ToDoMasterDatum> todoDatumList, index,
                   ToDoMasterDatum todoMasterDatum) {
                 return CheckboxListTile(

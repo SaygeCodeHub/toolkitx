@@ -8,7 +8,6 @@ import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 class AttachementMsgTypeUtil {
   Widget renderWidget(
       String type, String mediaPath, BuildContext context, int isReceiver) {
-    print('renderWidget $type');
     switch (type) {
       case '2':
         return InkWell(
@@ -24,7 +23,6 @@ class AttachementMsgTypeUtil {
       case '3':
         return AttachementVideoWidget(videoPath: mediaPath);
       case '4':
-        print('doc attachement $mediaPath');
         return AttachementDocumentWidget(docPath: mediaPath);
       default:
         return const SizedBox.shrink();

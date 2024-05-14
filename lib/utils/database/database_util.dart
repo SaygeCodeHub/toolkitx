@@ -1,4 +1,6 @@
 import 'package:sqflite/sqflite.dart';
+
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import '../../data/models/chatBox/fetch_employees_model.dart';
@@ -188,10 +190,8 @@ class DatabaseHelper {
 
   Future<void> updateMessageStatus(String msgId) async {
     final Database db = await database;
-    print('msg id $msgId');
     await db.update('chat_messages', {'msg_status': '1'},
         where: 'msg_id = ?', whereArgs: [msgId]);
-    print('status changed');
   }
 
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
@@ -217,7 +217,6 @@ class DatabaseHelper {
           whereArgs: [updatedMessages[i]['sid'], updatedMessages[i]['rid']],
         );
         if (nameResult.isNotEmpty) {
-          print('inside database query');
           updatedMessages[i]['employee_name'] =
               nameResult.first['employee_name'];
         }

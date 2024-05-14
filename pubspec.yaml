@@ -45,6 +45,7 @@ dependencies:
   document_viewer: ^0.0.1
   webview_flutter:
   flutter_osm_plugin: ^0.70.0
+  package_info_plus:
 
 
 dev_dependencies:
@@ -52,7 +53,7 @@ dev_dependencies:
     sdk: flutter
 
   build_runner:
-  flutter_lints: ^4.0.0
+  flutter_lints: ^2.0.0
   json_serializable:
 
 flutter:

@@ -45,6 +45,7 @@ class SelectTimeZoneScreen extends StatelessWidget {
                   Expanded(
                       child: SearchableList(
                           initialList: state.getTimeZoneModel.data!,
+                          // ignore: deprecated_member_use
                           builder: (List<TimeZoneData> dataList, index,
                               TimeZoneData data) {
                             return Padding(

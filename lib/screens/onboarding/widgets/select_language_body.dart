@@ -27,6 +27,7 @@ class SelectLanguageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SearchableList(
         initialList: getLanguagesData,
+        // ignore: deprecated_member_use
         builder: (List<GetLanguagesData> getLanguagesData, int index,
             GetLanguagesData languageData) {
           return Padding(

@@ -184,7 +184,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
         return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
       default:
         return AttachmentMsgWidget(
-            snapshot: snapshot, reversedIndex: reversedIndex);
+            snapShot: snapshot, reversedIndex: reversedIndex);
     }
   }
 

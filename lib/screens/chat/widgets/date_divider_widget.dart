@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateDividerWidget extends StatelessWidget {
-  final snapshot;
+  final dynamic snapshot;
   final int reversedIndex;
 
   const DateDividerWidget(

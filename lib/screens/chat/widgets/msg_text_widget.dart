@@ -8,7 +8,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_color.dart';
 
 class MsgTextWidget extends StatelessWidget {
-  final snapshot;
+  final dynamic snapshot;
   final int reversedIndex;
 
   const MsgTextWidget(
