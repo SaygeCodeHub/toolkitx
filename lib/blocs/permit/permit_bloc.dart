@@ -356,8 +356,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<FutureOr<void>> _fetchDataForOpenPermit(
       FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
-    emit(DataForOpenPermitFetching());
     try {
+      emit(DataForOpenPermitFetching());
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
       FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
@@ -366,7 +366,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (fetchDataForOpenPermitModel.status == 200) {
         final List<Question> questions = [
           Question(questionNo: StringConstants.kPermitFirstQuestion),
-          Question(questionNo: StringConstants.kPermitSecondQuestion)
+          Question(questionNo: StringConstants.kPanel12),
+          Question(questionNo: StringConstants.kPanel15),
+          Question(questionNo: StringConstants.kPanel16)
         ];
         emit(DataForOpenPermitFetched(
             fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,

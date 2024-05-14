@@ -306,8 +306,17 @@ abstract class StringConstants {
   static const String kKeySafeNo = 'Key Safe No'; //
   static const String kPermitPrimaryEarthing =
       '(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryProcedure =
+      '(v). Primary earthing device(s) which may be varied (procedure required)'; //
   static const String kKeySafeKeyNo = 'Key Safe Key No'; //
+  static const String kPermitLimitOfWork = '(i) Limit of Work'; //
+  static const String kPermitLimitOfWorkArea = '(ii) Limit of Work area'; //
+  static const String kPermitHazards =
+      '(iii) Further precautions to be taken during the course of the work to avoid system derived hazards'; //
   static const String kPermitSelectLocation = 'Select location'; //
+  static const String kPanel12 = 'panel_12'; //
+  static const String kPanel15 = 'panel_15'; //
+  static const String kPanel16 = 'panel_16'; //
   static const String kEarthingScheduleNo = 'Earthing Schedule No'; //
   static const String kSelectedPersonReport = 'Selected Person Report'; //
   static const String kPortableDrainEarth = 'Portable Drain Earth'; //
