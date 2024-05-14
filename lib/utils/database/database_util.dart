@@ -79,6 +79,113 @@ class DatabaseHelper {
           FOREIGN KEY (group_id) REFERENCES groups(group_id)
         );
   ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS OfflinePermit (
+            id INTEGER PRIMARY KEY,
+            status INTEGER,
+            message TEXT,
+            data TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Datum (
+            id TEXT PRIMARY KEY,
+            id2 TEXT,
+            listpage TEXT,
+            tab1 TEXT,
+            tab2 TEXT,
+            tab3 TEXT,
+            tab4 TEXT,
+            tab5 TEXT,
+            tab6 TEXT,
+            html TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Listpage (
+            id TEXT PRIMARY KEY,
+            id2 TEXT,
+            permit TEXT,
+            typeOfPermit INTEGER,
+            schedule TEXT,
+            location TEXT,
+            description TEXT,
+            statusid INTEGER,
+            status TEXT,
+            expired TEXT,
+            pname TEXT,
+            pcompany TEXT,
+            emergency INTEGER,
+            npiStatus TEXT,
+            npwStatus TEXT,
+            startdate TEXT,
+            enddate TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Tab1 (
+            id TEXT PRIMARY KEY,
+            typeOfPermit INTEGER,
+            permit TEXT,
+            schedule TEXT,
+            location TEXT,
+            details TEXT,
+            status TEXT,
+            expired TEXT,
+            pnameNpi TEXT,
+            pname TEXT,
+            pcompany TEXT,
+            emergency INTEGER,
+            isopen TEXT,
+            ishold TEXT,
+            isclose TEXT,
+            isnpiaccept TEXT,
+            isnpwaccept TEXT,
+            clientid TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Tab2 (
+            id INTEGER PRIMARY KEY,
+            typeOfPermit INTEGER,
+            permitNo INTEGER,
+            safetyisolation TEXT,
+            safetyisolationinfo TEXT,
+            protectivemeasures TEXT,
+            generalMessage TEXT,
+            methodStatement TEXT,
+            specialWork TEXT,
+            specialppe TEXT,
+            layout TEXT,
+            layoutFile TEXT,
+            layoutLink TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Customfield (
+            title TEXT PRIMARY KEY,
+            fieldvalue TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Tab3 (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            jobTitle TEXT,
+            company TEXT,
+            certificatecode TEXT,
+            npiId TEXT,
+            npwId TEXT
+          );
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Tab5 (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            type TEXT,
+            files TEXT
+          );
+        ''');
       },
     );
   }
@@ -293,5 +400,15 @@ class DatabaseHelper {
     messages = await db
         .query('chat_messages', where: 'msg_status = ?', whereArgs: ['0']);
     return messages;
+  }
+
+  Future<void> insertOfflinePermit(Map<String, dynamic> model) async {
+    final db = await database;
+    await db.insert('OfflinePermit', model);
+  }
+
+  Future<List<Map<String, dynamic>>> getOfflinePermits() async {
+    final db = await database;
+    return await db.query('OfflinePermit');
   }
 }
