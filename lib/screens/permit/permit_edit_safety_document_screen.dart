@@ -35,6 +35,12 @@ class PermitEditSafetyDocumentScreen extends StatelessWidget {
           if (state is DataForOpenPermitFetching) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is DataForOpenPermitFetched) {
+            editSafetyDocumentMap['panel_12'] =
+                state.fetchDataForOpenPermitModel.data?.panel12;
+            editSafetyDocumentMap['panel_15'] =
+                state.fetchDataForOpenPermitModel.data?.panel15;
+            editSafetyDocumentMap['panel_16'] =
+                state.fetchDataForOpenPermitModel.data?.panel16;
             return SingleChildScrollView(
               child: Padding(
                   padding: const EdgeInsets.only(

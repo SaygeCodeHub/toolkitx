@@ -47,10 +47,99 @@ class SavePermitEditSafetyNoticeButton extends StatelessWidget {
             child: Expanded(
                 child: PrimaryButton(
                     onPressed: () {
-                      editSafetyDocumentMap['permit_id'] = permitId;
-                      context.read<PermitBloc>().add(
-                          SavePermitEditSafetyDocument(
-                              editSafetyDocumentMap: editSafetyDocumentMap));
+                      if (editSafetyDocumentMap['panel_12'] == '1') {
+                        if (editSafetyDocumentMap['ptw_isolation'] == null ||
+                            editSafetyDocumentMap['ptw_isolation'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_circuit'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_circuit'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_isolation'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_isolation'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_safety'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_safety'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_precautions'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_precautions'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_precautions2'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_precautions2'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else {
+                          editSafetyDocumentMap['permit_id'] = permitId;
+                          context.read<PermitBloc>().add(
+                              SavePermitEditSafetyDocument(
+                                  editSafetyDocumentMap:
+                                      editSafetyDocumentMap));
+                        }
+                      }
+                      if (editSafetyDocumentMap['panel_15'] == '1') {
+                        if (editSafetyDocumentMap['ptw_isolation'] == null ||
+                            editSafetyDocumentMap['ptw_isolation'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_circuit'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_circuit'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['st_precautions'] ==
+                                null ||
+                            editSafetyDocumentMap['st_precautions'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['st_safety'] == null ||
+                            editSafetyDocumentMap['st_safety'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['ptw_circuit2'] ==
+                                null ||
+                            editSafetyDocumentMap['ptw_circuit2'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else {
+                          editSafetyDocumentMap['permit_id'] = permitId;
+                          context.read<PermitBloc>().add(
+                              SavePermitEditSafetyDocument(
+                                  editSafetyDocumentMap:
+                                      editSafetyDocumentMap));
+                        }
+                      }
+                      if (editSafetyDocumentMap['panel_16'] == '1') {
+                        if (editSafetyDocumentMap['lwc_accessto'] == null ||
+                            editSafetyDocumentMap['lwc_accessto'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['lwc_environment'] ==
+                                null ||
+                            editSafetyDocumentMap['lwc_environment'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else if (editSafetyDocumentMap['lwc_precautions'] ==
+                                null ||
+                            editSafetyDocumentMap['lwc_precautions'] == '') {
+                          showCustomSnackBar(
+                              context, 'All fields are mandatory!', '');
+                        } else {
+                          editSafetyDocumentMap['permit_id'] = permitId;
+                          context.read<PermitBloc>().add(
+                              SavePermitEditSafetyDocument(
+                                  editSafetyDocumentMap:
+                                      editSafetyDocumentMap));
+                        }
+                      }
                     },
                     textValue: StringConstants.kSave)),
           )
