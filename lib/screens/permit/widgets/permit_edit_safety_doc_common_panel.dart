@@ -21,12 +21,6 @@ class PermitEditSafetyDocCommonPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(StringConstants.kPermitIdentification,
-            style: Theme.of(context)
-                .textTheme
-                .small
-                .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
-        const SizedBox(height: xxxTinierSpacing),
         Text(StringConstants.kPermitPlannedLocation,
             style: Theme.of(context)
                 .textTheme

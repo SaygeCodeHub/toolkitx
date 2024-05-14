@@ -20,12 +20,6 @@ class PermitEditSafetyDoc16Section extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(StringConstants.kPermitPrecautions,
-            style: Theme.of(context)
-                .textTheme
-                .small
-                .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
-        const SizedBox(height: xxxTinierSpacing),
         Text(StringConstants.kPermitLimitOfWork,
             style: Theme.of(context)
                 .textTheme
@@ -33,9 +27,9 @@ class PermitEditSafetyDoc16Section extends StatelessWidget {
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwIsolation ?? '',
+            value: fetchDataForOpenPermitModel.data?.lwcAccessto ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_isolation'] = textValue;
+              editSafetyDocumentMap['lwc_accessto'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
         Text(StringConstants.kPermitLimitOfWorkArea,
@@ -45,9 +39,9 @@ class PermitEditSafetyDoc16Section extends StatelessWidget {
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwCircuit ?? '',
+            value: fetchDataForOpenPermitModel.data?.lwcEnvironment ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_circuit'] = textValue;
+              editSafetyDocumentMap['lwc_environment'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
         Text(StringConstants.kPermitHazards,
@@ -57,9 +51,9 @@ class PermitEditSafetyDoc16Section extends StatelessWidget {
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwSafety ?? '',
+            value: fetchDataForOpenPermitModel.data?.lwcPrecautions ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_safety'] = textValue;
+              editSafetyDocumentMap['lwc_precautions'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing)
       ],

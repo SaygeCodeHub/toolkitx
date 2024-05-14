@@ -566,6 +566,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.editSafetyDocumentMap['ptw_precautions2'] ?? '',
         "ptw_safety": event.editSafetyDocumentMap['ptw_safety'] ?? ''
       };
+      print('post json body ${jsonEncode(editSafetyDocumentMap)}');
       SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
           await _permitRepository
               .saveEditSafetyNoticeDocument(editSafetyDocumentMap);

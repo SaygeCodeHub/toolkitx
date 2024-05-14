@@ -286,33 +286,42 @@ abstract class StringConstants {
       'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
   static const String kClearPermit = 'Clear Permit'; //
   static const String kPermitIdentification = '1. IDENTIFICATION'; //
-  static const String kPermitPlannedLocation = '(i). Planned Location'; //
+  static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
   static const String kPermitEquipmentIdentification =
-      '(ii). Equipment Identification'; //
+      '1.(ii). Equipment Identification'; //
   static const String kPermitCircuitNumber =
       '[String/Circuit Number, WTG number and Plant and/or Apparatus to be worked on]'; //
   static const String kAcceptPermit = 'Accept Permit'; //
-  static const String kPermitWorkDescription = '(iii). Work Description'; //
+  static const String kPermitWorkDescription = '1.(iii). Work Description'; //
   static const String kPermitPrecautions =
       '1. PRECAUTIONS TAKEN TO ACHIEVE SAFETYFROM THIS SYATEM'; //
   static const String kPermitNo = 'Permit No'; //
-  static const String kPermitIsolation = '(i). Points of isolation'; //
+  static const String kPermitIsolation = '2.(i). Points of isolation'; //
+  static const String kPermitIsolationPanel15 = '3.(i). Points of isolation'; //
   static const String kPermitEarthingDevice =
-      '(ii). Primary Earthing Device'; //
+      '2.(ii). Primary Earthing Device'; //
+  static const String kPermitEarthingDevicePanel15 =
+      '3.(ii). Primary Earthing Device'; //
   static const String kPermitAction =
-      '(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+      '2.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitActionPanel15 =
+      '3.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
   static const String kPermitPrecautionsTaken =
-      '(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+      '2.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kPermitPrecautionsTakenPanel15 =
+      '3.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
   static const String kKeySafeNo = 'Key Safe No'; //
   static const String kPermitPrimaryEarthing =
-      '(v). Primary earthing device(s) which may be varied'; //
+      '2.(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryEarthingPanel15 =
+      '3.(v). Primary earthing device(s) which may be varied'; //
   static const String kPermitPrimaryProcedure =
       '(v). Primary earthing device(s) which may be varied (procedure required)'; //
   static const String kKeySafeKeyNo = 'Key Safe Key No'; //
-  static const String kPermitLimitOfWork = '(i) Limit of Work'; //
-  static const String kPermitLimitOfWorkArea = '(ii) Limit of Work area'; //
+  static const String kPermitLimitOfWork = '4.(i) Limit of Work'; //
+  static const String kPermitLimitOfWorkArea = '4.(ii) Limit of Work area'; //
   static const String kPermitHazards =
-      '(iii) Further precautions to be taken during the course of the work to avoid system derived hazards'; //
+      '4.(iii) Further precautions to be taken during the course of the work to avoid system derived hazards'; //
   static const String kPermitSelectLocation = 'Select location'; //
   static const String kPanel12 = 'panel_12'; //
   static const String kPanel15 = 'panel_15'; //

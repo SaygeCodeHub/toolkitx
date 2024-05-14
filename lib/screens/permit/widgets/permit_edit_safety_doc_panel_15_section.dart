@@ -20,13 +20,7 @@ class PermitEditSafetyDocPanel15Section extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(StringConstants.kPermitPrecautions,
-            style: Theme.of(context)
-                .textTheme
-                .small
-                .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
-        const SizedBox(height: xxxTinierSpacing),
-        Text(StringConstants.kPermitIsolation,
+        Text(StringConstants.kPermitIsolationPanel15,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -38,7 +32,7 @@ class PermitEditSafetyDocPanel15Section extends StatelessWidget {
               editSafetyDocumentMap['ptw_isolation'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
-        Text(StringConstants.kPermitEarthingDevice,
+        Text(StringConstants.kPermitEarthingDevicePanel15,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -50,40 +44,40 @@ class PermitEditSafetyDocPanel15Section extends StatelessWidget {
               editSafetyDocumentMap['ptw_circuit'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
-        Text(StringConstants.kPermitAction,
+        Text(StringConstants.kPermitActionPanel15,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwSafety ?? '',
+            value: fetchDataForOpenPermitModel.data?.stPrecautions ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_safety'] = textValue;
+              editSafetyDocumentMap['st_precautions'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
-        Text(StringConstants.kPermitPrecautionsTaken,
+        Text(StringConstants.kPermitPrecautionsTakenPanel15,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwPrecautions ?? '',
+            value: fetchDataForOpenPermitModel.data?.stSafety ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_precautions'] = textValue;
+              editSafetyDocumentMap['st_safety'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
-        Text(StringConstants.kPermitPrimaryEarthing,
+        Text(StringConstants.kPermitPrimaryEarthingPanel15,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
         TextFieldWidget(
-            value: fetchDataForOpenPermitModel.data?.ptwPrecautions2 ?? '',
+            value: fetchDataForOpenPermitModel.data?.ptwCircuit2 ?? '',
             onTextFieldChanged: (String textValue) {
-              editSafetyDocumentMap['ptw_precautions2'] = textValue;
+              editSafetyDocumentMap['ptw_circuit2'] = textValue;
             }),
         const SizedBox(height: xxTinySpacing),
       ],
