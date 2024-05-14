@@ -210,6 +210,7 @@ abstract class StringConstants {
   static const String kDateRange = 'Date Range';
   static const String kName = 'Name';
   static const String kSelectDate = 'Select Date';
+  static const String kPleaseSelectDate = 'Please Select Date';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
   static const String kSelectStatus = 'Select Status';
@@ -221,6 +222,7 @@ abstract class StringConstants {
   static const String kDateOfIncident = 'Date of incident';
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
+  static const String kPleaseSelectTime = 'Please Select Time';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -326,6 +328,7 @@ abstract class StringConstants {
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
   static const String kOPENPERMIT = 'OPEN PERMIT';
   static const String kCLEARPERMIT = 'CLEAR PERMIT'; //
+  static const String kAllFieldsMandatory = 'All fields are mandatory!'; //
   static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';

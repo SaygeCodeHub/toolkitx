@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/permit/permit_details_screen.dart';
+import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
@@ -38,8 +38,8 @@ class ClosePermitScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.pushNamed(context, PermitDetailsScreen.routeName,
-                    arguments: permitDetailsModel.data.tab1.id);
+                Navigator.pushNamed(context, PermitListScreen.routeName,
+                    arguments: false);
               }
               if (state is ClosePermitError) {
                 ProgressBar.dismiss(context);
