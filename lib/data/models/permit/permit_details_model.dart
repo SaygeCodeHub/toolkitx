@@ -73,7 +73,7 @@ class PermitDerailsData {
         "tab3": List<dynamic>.from(tab3.map((x) => x.toJson())),
         "tab4": List<dynamic>.from(tab4.map((x) => x.toJson())),
         "tab5": List<dynamic>.from(tab5.map((x) => x.toJson())),
-        "tab6": List<dynamic>.from(tab6.map((x) => x)),
+        "tab6": List<dynamic>.from(tab6.map((x) => x.toJson())),
       };
 }
 

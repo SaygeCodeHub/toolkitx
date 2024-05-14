@@ -5,7 +5,6 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
-import 'package:toolkit/utils/global.dart';
 
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -23,7 +22,6 @@ class PermitRepositoryImpl extends PermitRepository {
   @override
   Future<AllPermitModel> getAllPermits(
       String hashCode, String filter, String role, int pageNo) async {
-    print('network $isNetworkEstablished');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter&role=$role");
     return AllPermitModel.fromJson(response);
@@ -39,8 +37,6 @@ class PermitRepositoryImpl extends PermitRepository {
 
   @override
   Future<OfflinePermitModel> fetchOfflinePermit(String hashCode) async {
-    print(
-        'offline permit repo ${"${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode");
     return OfflinePermitModel.fromJson(response);

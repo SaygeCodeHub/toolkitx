@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_events.dart';
@@ -56,36 +57,39 @@ class PermitListScreen extends StatelessWidget {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BlocBuilder<PermitBloc, PermitStates>(
-                        builder: (context, state) {
-                      return CustomIconButtonRow(
-                          downloadVisible: true,
-                          onDownloadPress: () {
-                            context
-                                .read<PermitBloc>()
-                                .add(PreparePermitLocalDatabase());
-                          },
-                          isEnabled: true,
-                          primaryOnPress: () {
-                            PermitFilterScreen.isFromLocation = false;
-                            Navigator.pushNamed(
-                                context, PermitFilterScreen.routeName);
-                          },
-                          secondaryOnPress: () {
-                            Navigator.pushNamed(
-                                context, GetPermitRolesScreen.routeName);
-                          },
-                          clearVisible:
-                              context.read<PermitBloc>().filters.isNotEmpty,
-                          clearOnPress: () {
-                            page = 1;
-                            context
-                                .read<PermitBloc>()
-                                .add(const ClearPermitFilters());
-                            context.read<PermitBloc>().add(
-                                GetAllPermits(isFromHome: isFromHome, page: 1));
-                          });
-                    }),
+                    Visibility(
+                      visible: isNetworkEstablished == true,
+                      child: BlocBuilder<PermitBloc, PermitStates>(
+                          builder: (context, state) {
+                        return CustomIconButtonRow(
+                            downloadVisible: true,
+                            onDownloadPress: () {
+                              context
+                                  .read<PermitBloc>()
+                                  .add(PreparePermitLocalDatabase());
+                            },
+                            isEnabled: true,
+                            primaryOnPress: () {
+                              PermitFilterScreen.isFromLocation = false;
+                              Navigator.pushNamed(
+                                  context, PermitFilterScreen.routeName);
+                            },
+                            secondaryOnPress: () {
+                              Navigator.pushNamed(
+                                  context, GetPermitRolesScreen.routeName);
+                            },
+                            clearVisible:
+                                context.read<PermitBloc>().filters.isNotEmpty,
+                            clearOnPress: () {
+                              page = 1;
+                              context
+                                  .read<PermitBloc>()
+                                  .add(const ClearPermitFilters());
+                              context.read<PermitBloc>().add(GetAllPermits(
+                                  isFromHome: isFromHome, page: 1));
+                            });
+                      }),
+                    ),
                     const SizedBox(height: xxTinierSpacing),
                     const PermitListTile()
                   ]);

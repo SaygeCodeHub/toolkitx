@@ -175,58 +175,58 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
-    // try {
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-    if (isNetworkEstablished) {
-      emit(const FetchingAllPermits());
-      if (!listReachedMax) {
-        if (roleId == '' || event.isFromHome) {
-          add(const ClearPermitFilters());
-          PermitRolesModel permitRolesModel =
-              await _permitRepository.fetchPermitRoles(hashCode, userId);
-          if (permitRolesModel.status == 200) {
-            roleId = permitRolesModel.data![0].groupId!;
-            AllPermitModel allPermitModel = await _permitRepository
-                .getAllPermits(hashCode, '', roleId, event.page);
+    try {
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      if (isNetworkEstablished) {
+        emit(const FetchingAllPermits());
+        if (!listReachedMax) {
+          if (roleId == '' || event.isFromHome) {
+            add(const ClearPermitFilters());
+            PermitRolesModel permitRolesModel =
+                await _permitRepository.fetchPermitRoles(hashCode, userId);
+            if (permitRolesModel.status == 200) {
+              roleId = permitRolesModel.data![0].groupId!;
+              AllPermitModel allPermitModel = await _permitRepository
+                  .getAllPermits(hashCode, '', roleId, event.page);
+              permitListData.addAll(allPermitModel.data);
+              listReachedMax = allPermitModel.data.isEmpty;
+              emit(AllPermitsFetched(
+                  allPermitModel: allPermitModel,
+                  filters: {},
+                  permitListData: permitListData));
+            }
+          } else {
+            AllPermitModel allPermitModel =
+                await _permitRepository.getAllPermits(
+                    hashCode, jsonEncode(filters), roleId, event.page);
             permitListData.addAll(allPermitModel.data);
             listReachedMax = allPermitModel.data.isEmpty;
             emit(AllPermitsFetched(
                 allPermitModel: allPermitModel,
-                filters: {},
+                filters: filters,
                 permitListData: permitListData));
           }
-        } else {
-          AllPermitModel allPermitModel = await _permitRepository.getAllPermits(
-              hashCode, jsonEncode(filters), roleId, event.page);
-          permitListData.addAll(allPermitModel.data);
-          listReachedMax = allPermitModel.data.isEmpty;
+        }
+      } else {
+        emit(const FetchingAllPermits());
+        List<Map<String, dynamic>> fetchListPageData =
+            await _databaseHelper.fetchListPageData();
+        AllPermitModel allPermitModel = AllPermitModel.fromJson(
+            {'Status': 200, 'Message': '', 'Data': fetchListPageData});
+        permitListData.addAll(allPermitModel.data);
+        if (permitListData.isNotEmpty) {
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
-              filters: filters,
+              filters: {},
               permitListData: permitListData));
+        } else {
+          emit(const CouldNotFetchPermits());
         }
       }
-    } else {
-      emit(const FetchingAllPermits());
-      List<Map<String, dynamic>> fetchListPageData =
-          await _databaseHelper.fetchListPageData();
-      AllPermitModel allPermitModel = AllPermitModel.fromJson(
-          {'Status': 200, 'Message': '', 'Data': fetchListPageData});
-      permitListData.addAll(allPermitModel.data);
-      if (permitListData.isNotEmpty) {
-        emit(AllPermitsFetched(
-            allPermitModel: allPermitModel,
-            filters: {},
-            permitListData: permitListData));
-        print('offline permit data $fetchListPageData');
-      } else {
-        emit(const CouldNotFetchPermits());
-      }
+    } catch (e) {
+      emit(const CouldNotFetchPermits());
     }
-    // } catch (e) {
-    //   emit(const CouldNotFetchPermits());
-    // }
   }
 
   FutureOr<void> _getPermitDetails(
@@ -265,20 +265,42 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
     } else {
-      PermitDetailsModel permitDetailsModel = PermitDetailsModel.fromJson({});
-      List<PermitDerailsData> permitDetailsData =
-          await _databaseHelper.fetchPermitDetails();
-      for (var item in permitDetailsData) {
-        print('this is item ${item.tab1}');
-        permitDetailsModel = PermitDetailsModel(
-            status: 200,
-            message: '',
-            data: PermitDerailsData.fromJson(item.toJson()));
+      emit(const FetchingPermitDetails());
+      PermitDerailsData? permitDerailsData =
+          await _databaseHelper.fetchPermitDetailsById(event.permitId);
+      PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+          status: 200,
+          message: '',
+          data: PermitDerailsData.fromJson(permitDerailsData!.toJson()));
+      if (permitDetailsModel.data.tab1.isopen == '1') {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (permitDetailsModel.data.tab1.isclose == '1') {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (permitDetailsModel.data.tab1.status ==
+          DatabaseUtil.getText('Created')) {
+        permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (permitBasicData?.isclearpermit == '1') {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      if (permitDetailsModel.toJson().isNotEmpty) {
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu));
+      } else {
+        emit(const CouldNotFetchPermitDetails());
       }
-      print('permit details model ${permitDetailsData.first.tab1.permit}');
     }
     // } catch (e) {
     //   emit(const CouldNotFetchPermitDetails());

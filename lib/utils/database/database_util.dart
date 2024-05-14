@@ -90,105 +90,6 @@ class DatabaseHelper {
             Data TEXT
           );
         ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Datum (
-            id TEXT PRIMARY KEY,
-            id2 TEXT,
-            listpage TEXT,
-            tab1 TEXT,
-            tab2 TEXT,
-            tab3 TEXT,
-            tab4 TEXT,
-            tab5 TEXT,
-            tab6 TEXT,
-            html TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Listpage (
-            id TEXT PRIMARY KEY,
-            id2 TEXT,
-            permit TEXT,
-            typeOfPermit INTEGER,
-            schedule TEXT,
-            location TEXT,
-            description TEXT,
-            statusid INTEGER,
-            status TEXT,
-            expired TEXT,
-            pname TEXT,
-            pcompany TEXT,
-            emergency INTEGER,
-            npiStatus TEXT,
-            npwStatus TEXT,
-            startdate TEXT,
-            enddate TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Tab1 (
-            id TEXT PRIMARY KEY,
-            typeOfPermit INTEGER,
-            permit TEXT,
-            schedule TEXT,
-            location TEXT,
-            details TEXT,
-            status TEXT,
-            expired TEXT,
-            pnameNpi TEXT,
-            pname TEXT,
-            pcompany TEXT,
-            emergency INTEGER,
-            isopen TEXT,
-            ishold TEXT,
-            isclose TEXT,
-            isnpiaccept TEXT,
-            isnpwaccept TEXT,
-            clientid TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Tab2 (
-            id INTEGER PRIMARY KEY,
-            typeOfPermit INTEGER,
-            permitNo INTEGER,
-            safetyisolation TEXT,
-            safetyisolationinfo TEXT,
-            protectivemeasures TEXT,
-            generalMessage TEXT,
-            methodStatement TEXT,
-            special_work TEXT,
-            specialppe TEXT,
-            layout TEXT,
-            layout_file TEXT,
-            layout_link TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Customfield (
-            title TEXT PRIMARY KEY,
-            fieldvalue TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Tab3 (
-            id TEXT PRIMARY KEY,
-            name TEXT,
-            jobTitle TEXT,
-            company TEXT,
-            certificatecode TEXT,
-            npiId TEXT,
-            npwId TEXT
-          );
-        ''');
-        await db.execute('''
-          CREATE TABLE IF NOT EXISTS Tab5 (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            type TEXT,
-            files TEXT
-          );
-        ''');
       },
     );
   }
@@ -420,13 +321,11 @@ class DatabaseHelper {
     final List<Map<String, dynamic>> result = await db
         .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
 
-    // Deserialize JSON data and extract 'listpage' objects
     List<Map<String, dynamic>> listPageData = [];
     for (var row in result) {
       String jsonString = row['Data'];
       List<dynamic> jsonDataList = json.decode(jsonString);
 
-      // Extract 'listpage' objects from each item in the JSON array
       for (var item in jsonDataList) {
         if (item is Map<String, dynamic> && item.containsKey('listpage')) {
           listPageData.add(item['listpage']);
@@ -437,29 +336,33 @@ class DatabaseHelper {
     return listPageData;
   }
 
-  Future<List<PermitDerailsData>> fetchPermitDetails() async {
+  Future<PermitDerailsData?> fetchPermitDetailsById(String id) async {
     final db = await database;
     final List<Map<String, dynamic>> result = await db
         .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
 
     if (result.isNotEmpty) {
-      final List<dynamic> dataList = json.decode(result.first['Data']);
-      List<PermitDerailsData> permitDataList = [];
-      for (var item in dataList) {
-        if (item is Map<String, dynamic>) {
-          final PermitDerailsData data = PermitDerailsData(
-            tab1: Tab1.fromJson(item['tab1']),
-            tab2: Tab2.fromJson(item['tab2']),
-            tab3: List<Tab3>.from(item['tab3'].map((x) => Tab3.fromJson(x))),
-            tab4: List<Tab4>.from(item['tab4'].map((x) => Tab4.fromJson(x))),
-            tab5: List<Tab5>.from(item['tab5'].map((x) => Tab5.fromJson(x))),
-            tab6: [],
-            // tab6: List<Tab6>.from(item['tab6'].map((x) => Tab6.fromJson(x))),
-          );
-          permitDataList.add(data);
+      PermitDerailsData? permitData;
+      for (var row in result) {
+        final List<dynamic> dataList = json.decode(row['Data']);
+        for (var item in dataList) {
+          if (item is Map<String, dynamic> && item['id'] == id) {
+            permitData = PermitDerailsData(
+              tab1: Tab1.fromJson(item['tab1']),
+              tab2: Tab2.fromJson(item['tab2']),
+              tab3: List<Tab3>.from(item['tab3'].map((x) => Tab3.fromJson(x))),
+              tab4: List<Tab4>.from(item['tab4'].map((x) => Tab4.fromJson(x))),
+              tab5: List<Tab5>.from(item['tab5'].map((x) => Tab5.fromJson(x))),
+              tab6: List<Tab6>.from(item['tab6'].map((x) => Tab6.fromJson(x))),
+            );
+            break;
+          }
+        }
+        if (permitData != null) {
+          break;
         }
       }
-      return permitDataList;
+      return permitData;
     } else {
       throw Exception('No data found in OfflinePermit table');
     }
