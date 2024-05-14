@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
+import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
@@ -68,6 +69,11 @@ class PTWActionMenu extends StatelessWidget {
           if (popUpMenuItems[value] == StringConstants.kClearPermitRequest) {
             Navigator.of(context)
                 .pushNamed(ClearPermitScreen.routeName, arguments: permitId);
+          }
+          if (popUpMenuItems[value] == StringConstants.kEditSafetyDocument) {
+            Navigator.of(context).pushNamed(
+                PermitEditSafetyDocumentScreen.routeName,
+                arguments: permitId);
           }
         },
         position: PopupMenuPosition.under,

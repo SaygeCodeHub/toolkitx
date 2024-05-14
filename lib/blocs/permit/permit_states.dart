@@ -8,6 +8,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
+import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
 
@@ -202,8 +203,10 @@ class DataForOpenPermitFetching extends PermitStates {}
 
 class DataForOpenPermitFetched extends PermitStates {
   final FetchDataForOpenPermitModel fetchDataForOpenPermitModel;
+  final List<Question> questions;
 
-  const DataForOpenPermitFetched({required this.fetchDataForOpenPermitModel});
+  const DataForOpenPermitFetched(
+      {required this.questions, required this.fetchDataForOpenPermitModel});
 }
 
 class DataForOpenPermitNotFetched extends PermitStates {
