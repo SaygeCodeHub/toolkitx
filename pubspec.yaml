@@ -24,7 +24,7 @@ dependencies:
   path_provider:
   toggle_switch:
   table_calendar:
-  device_info_plus: ^5.0.1
+  device_info_plus: ^9.1.1
   json_annotation: ^4.9.0
   cupertino_icons: ^1.0.2
   package_info_plus: ^8.0.0
