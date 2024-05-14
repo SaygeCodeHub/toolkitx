@@ -9,6 +9,7 @@ import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -26,6 +27,7 @@ import '../../data/models/permit/permit_roles_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/permit/permit_repository.dart';
 import '../../utils/constants/string_constants.dart';
+import '../../utils/database/database_util.dart';
 import '../../utils/database_utils.dart';
 import 'permit_events.dart';
 import 'permit_states.dart';
@@ -33,6 +35,7 @@ import 'permit_states.dart';
 class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   final PermitRepository _permitRepository = getIt<PermitRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   String roleId = '';
   PermitMasterDatum? selectedDatum;
   Map filters = {};
@@ -66,15 +69,22 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
-    try {
-      emit(const PreparingPermitLocalDatabase());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      OfflinePermitModel offlinePermitModel =
-          await _permitRepository.fetchOfflinePermit(hashCode);
-      emit(const PermitLocalDatabasePrepared());
-    } catch (e) {
-      emit(const PreparingPermitLocalDatabaseFailed());
-    }
+    // try {
+    emit(const PreparingPermitLocalDatabase());
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    OfflinePermitModel offlinePermitModel =
+        await _permitRepository.fetchOfflinePermit(hashCode);
+    await _databaseHelper.insertOfflinePermit({
+      'Status': offlinePermitModel.status,
+      'Message': offlinePermitModel.message,
+      'Data': json.encode(
+          offlinePermitModel.data.map((datum) => datum.toJson()).toList()),
+      // Serialize List<Map> to JSON
+    });
+    emit(const PermitLocalDatabasePrepared());
+    // } catch (e) {
+    //   emit(const PreparingPermitLocalDatabaseFailed());
+    // }
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -165,10 +175,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
-    emit(const FetchingAllPermits());
-    try {
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+    // try {
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+    if (isNetworkEstablished) {
+      emit(const FetchingAllPermits());
       if (!listReachedMax) {
         if (roleId == '' || event.isFromHome) {
           add(const ClearPermitFilters());
@@ -196,17 +207,35 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               permitListData: permitListData));
         }
       }
-    } catch (e) {
-      emit(const CouldNotFetchPermits());
+    } else {
+      emit(const FetchingAllPermits());
+      List<Map<String, dynamic>> fetchListPageData =
+          await _databaseHelper.fetchListPageData();
+      AllPermitModel allPermitModel = AllPermitModel.fromJson(
+          {'Status': 200, 'Message': '', 'Data': fetchListPageData});
+      permitListData.addAll(allPermitModel.data);
+      if (permitListData.isNotEmpty) {
+        emit(AllPermitsFetched(
+            allPermitModel: allPermitModel,
+            filters: {},
+            permitListData: permitListData));
+        print('offline permit data $fetchListPageData');
+      } else {
+        emit(const CouldNotFetchPermits());
+      }
     }
+    // } catch (e) {
+    //   emit(const CouldNotFetchPermits());
+    // }
   }
 
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
-    try {
+    List permitPopUpMenu = [StringConstants.kGeneratePdf];
+    // try {
+    if (isNetworkEstablished) {
       add(FetchPermitBasicDetails(permitId: event.permitId));
       emit(const FetchingPermitDetails());
-      List permitPopUpMenu = [StringConstants.kGeneratePdf];
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       PermitDetailsModel permitDetailsModel = await _permitRepository
           .fetchPermitDetails(hashCode, event.permitId, roleId);
@@ -235,9 +264,25 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
-    } catch (e) {
-      emit(const CouldNotFetchPermitDetails());
+    } else {
+      PermitDetailsModel permitDetailsModel = PermitDetailsModel.fromJson({});
+      List<PermitDerailsData> permitDetailsData =
+          await _databaseHelper.fetchPermitDetails();
+      for (var item in permitDetailsData) {
+        print('this is item ${item.tab1}');
+        permitDetailsModel = PermitDetailsModel(
+            status: 200,
+            message: '',
+            data: PermitDerailsData.fromJson(item.toJson()));
+        emit(PermitDetailsFetched(
+            permitDetailsModel: permitDetailsModel,
+            permitPopUpMenu: permitPopUpMenu));
+      }
+      print('permit details model ${permitDetailsData.first.tab1.permit}');
     }
+    // } catch (e) {
+    //   emit(const CouldNotFetchPermitDetails());
+    // }
   }
 
   FutureOr<void> _generatePDF(

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+import 'package:toolkit/data/models/permit/permit_details_model.dart';
 
 import '../../data/models/chatBox/fetch_employees_model.dart';
 
@@ -82,9 +85,9 @@ class DatabaseHelper {
         await db.execute('''
           CREATE TABLE IF NOT EXISTS OfflinePermit (
             id INTEGER PRIMARY KEY,
-            status INTEGER,
-            message TEXT,
-            data TEXT
+            Status INTEGER,
+            Message TEXT,
+            Data TEXT
           );
         ''');
         await db.execute('''
@@ -154,11 +157,11 @@ class DatabaseHelper {
             protectivemeasures TEXT,
             generalMessage TEXT,
             methodStatement TEXT,
-            specialWork TEXT,
+            special_work TEXT,
             specialppe TEXT,
             layout TEXT,
-            layoutFile TEXT,
-            layoutLink TEXT
+            layout_file TEXT,
+            layout_link TEXT
           );
         ''');
         await db.execute('''
@@ -410,5 +413,55 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getOfflinePermits() async {
     final db = await database;
     return await db.query('OfflinePermit');
+  }
+
+  Future<List<Map<String, dynamic>>> fetchListPageData() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db
+        .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
+
+    // Deserialize JSON data and extract 'listpage' objects
+    List<Map<String, dynamic>> listPageData = [];
+    for (var row in result) {
+      String jsonString = row['Data'];
+      List<dynamic> jsonDataList = json.decode(jsonString);
+
+      // Extract 'listpage' objects from each item in the JSON array
+      for (var item in jsonDataList) {
+        if (item is Map<String, dynamic> && item.containsKey('listpage')) {
+          listPageData.add(item['listpage']);
+        }
+      }
+    }
+
+    return listPageData;
+  }
+
+  Future<List<PermitDerailsData>> fetchPermitDetails() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db
+        .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
+
+    if (result.isNotEmpty) {
+      final List<dynamic> dataList = json.decode(result.first['Data']);
+      List<PermitDerailsData> permitDataList = [];
+      for (var item in dataList) {
+        if (item is Map<String, dynamic>) {
+          final PermitDerailsData data = PermitDerailsData(
+            tab1: Tab1.fromJson(item['tab1']),
+            tab2: Tab2.fromJson(item['tab2']),
+            tab3: List<Tab3>.from(item['tab3'].map((x) => Tab3.fromJson(x))),
+            tab4: List<Tab4>.from(item['tab4'].map((x) => Tab4.fromJson(x))),
+            tab5: List<Tab5>.from(item['tab5'].map((x) => Tab5.fromJson(x))),
+            tab6: [],
+            // tab6: List<Tab6>.from(item['tab6'].map((x) => Tab6.fromJson(x))),
+          );
+          permitDataList.add(data);
+        }
+      }
+      return permitDataList;
+    } else {
+      throw Exception('No data found in OfflinePermit table');
+    }
   }
 }

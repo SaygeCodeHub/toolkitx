@@ -65,7 +65,7 @@ class AllPermitDatum {
 
   factory AllPermitDatum.fromJson(Map<String, dynamic> json) => AllPermitDatum(
       id: json["id"],
-      id2: json["id2"],
+      id2: int.parse(json["id2"]),
       permit: json["permit"],
       schedule: json["schedule"],
       location: json["location"],
