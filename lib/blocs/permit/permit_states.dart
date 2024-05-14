@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 
@@ -7,6 +8,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
+import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
 
@@ -205,6 +207,7 @@ class PermitBasicDetailsFetched extends PermitStates {
 
 class PermitBasicDetailsNotFetched extends PermitStates {
   final String errorMessage;
+
   const PermitBasicDetailsNotFetched({required this.errorMessage});
 }
 
@@ -212,8 +215,10 @@ class DataForOpenPermitFetching extends PermitStates {}
 
 class DataForOpenPermitFetched extends PermitStates {
   final FetchDataForOpenPermitModel fetchDataForOpenPermitModel;
+  final List<Question> questions;
 
-  const DataForOpenPermitFetched({required this.fetchDataForOpenPermitModel});
+  const DataForOpenPermitFetched(
+      {required this.questions, required this.fetchDataForOpenPermitModel});
 }
 
 class DataForOpenPermitNotFetched extends PermitStates {
@@ -230,4 +235,40 @@ class MarkAsPreparedNotSaved extends PermitStates {
   final String errorMessage;
 
   const MarkAsPreparedNotSaved({required this.errorMessage});
+}
+
+class PermitRequestAccepting extends PermitStates {}
+
+class PermitRequestAccepted extends PermitStates {}
+
+class PermitRequestNotAccepted extends PermitStates {
+  final String errorMessage;
+
+  const PermitRequestNotAccepted({required this.errorMessage});
+}
+
+class FetchingClearPermitDetails extends PermitStates {}
+
+class ClearPermitDetailsFetched extends PermitStates {
+  final FetchClearPermitDetailsModel fetchClearPermitDetailsModel;
+  final List<Map<String, dynamic>> customFields;
+
+  ClearPermitDetailsFetched(
+      {required this.fetchClearPermitDetailsModel, required this.customFields});
+}
+
+class ClearPermitDetailsCouldNotFetched extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitDetailsCouldNotFetched({required this.errorMessage});
+}
+
+class SavingClearPermit extends PermitStates {}
+
+class ClearPermitSaved extends PermitStates {}
+
+class ClearPermitNotSaved extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitNotSaved({required this.errorMessage});
 }

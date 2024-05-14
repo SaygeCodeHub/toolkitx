@@ -242,8 +242,11 @@ abstract class StringConstants {
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
+  static const String kPermitFirstQuestion = 'First'; //
+  static const String kPermitSecondQuestion = 'Second'; //
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
+  static const String kNoDataFound = 'No data found!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kSafetyNoticeValidation = 'Please enter notice!'; //
   static const String kSafetyNoticeValidityValidation =
@@ -277,12 +280,40 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kEditSafetyDocument = 'Edit Safety Document';
-  static const String kPermitNo = 'Permit No';
-  static const String kKeySafeNo = 'Key Safe No';
-  static const String kKeySafeKeyNo = 'Key Safe Key No';
-  static const String kEarthingScheduleNo = 'Earthing Schedule No';
-  static const String kSelectedPersonReport = 'Selected Person Report';
-  static const String kPortableDrainEarth = 'Portable Drain Earth';
+  static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kClearPermitRequest = 'Clear Permit'; //
+  static const String kAllGearPermit =
+      'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
+  static const String kClearPermit = 'Clear Permit'; //
+  static const String kPermitIdentification = '1. IDENTIFICATION'; //
+  static const String kPermitPlannedLocation = '(i). Planned Location'; //
+  static const String kPermitEquipmentIdentification =
+      '(ii). Equipment Identification'; //
+  static const String kPermitCircuitNumber =
+      '[String/Circuit Number, WTG number and Plant and/or Apparatus to be worked on]'; //
+  static const String kAcceptPermit = 'Accept Permit'; //
+  static const String kPermitWorkDescription = '(iii). Work Description'; //
+  static const String kPermitPrecautions =
+      '1. PRECAUTIONS TAKEN TO ACHIEVE SAFETYFROM THIS SYATEM'; //
+  static const String kPermitNo = 'Permit No'; //
+  static const String kPermitIsolation = '(i). Points of isolation'; //
+  static const String kPermitEarthingDevice =
+      '(ii). Primary Earthing Device'; //
+  static const String kPermitAction =
+      '(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitPrecautionsTaken =
+      '(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kKeySafeNo = 'Key Safe No'; //
+  static const String kPermitPrimaryEarthing =
+      '(v). Primary earthing device(s) which may be varied'; //
+  static const String kKeySafeKeyNo = 'Key Safe Key No'; //
+  static const String kPermitSelectLocation = 'Select location'; //
+  static const String kEarthingScheduleNo = 'Earthing Schedule No'; //
+  static const String kSelectedPersonReport = 'Selected Person Report'; //
+  static const String kPortableDrainEarth = 'Portable Drain Earth'; //
+  static const String kAccessKeys = 'Access Keys'; //
+  static const String kAllGearsValidation =
+      'All gear, tools & loose materials have...cannot be empty'; //
   static const String kCircuitIdentificationFlag =
       'Circuit Identification Flag';
   static const String kCircuitIdentificationWristlets =
@@ -294,6 +325,7 @@ abstract class StringConstants {
       'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
   static const String kOPENPERMIT = 'OPEN PERMIT';
+  static const String kCLEARPERMIT = 'CLEAR PERMIT'; //
   static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';

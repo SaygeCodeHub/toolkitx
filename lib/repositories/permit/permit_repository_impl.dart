@@ -1,5 +1,8 @@
+import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 
@@ -121,5 +124,29 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}permit/markasprepared", saveMarkAsPreparedMap);
     return SaveMarkAsPreparedModel.fromJson(response);
+  }
+
+  @override
+  Future<AcceptPermitRequestModel> acceptPermitRequest(
+      Map acceptPermitRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/accpetpermitrequest",
+        acceptPermitRequestMap);
+    return AcceptPermitRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchClearPermitDetailsModel> fetchClearPermitDetails(
+      Map clearPermitMap) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforclearpermit?permitid=${clearPermitMap['permit_id']}&hashcode=${clearPermitMap['hashcode']}&role=${clearPermitMap['role']}");
+    return FetchClearPermitDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveClearPermitModel> saveClearPermit(Map clearPermitMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}permit/clearpermit", clearPermitMap);
+    return SaveClearPermitModel.fromJson(response);
   }
 }

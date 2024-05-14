@@ -10,6 +10,9 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
+import 'package:toolkit/screens/permit/clear_permit_screen.dart';
+import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
@@ -588,6 +591,15 @@ class AppRoutes {
       case PreparePermitScreen.routeName:
         return _createRoute(
             PreparePermitScreen(permitId: settings.arguments.toString()));
+      case AcceptPermitRequestScreen.routeName:
+        return _createRoute(
+            AcceptPermitRequestScreen(permitId: settings.arguments.toString()));
+      case ClearPermitScreen.routeName:
+        return _createRoute(
+            ClearPermitScreen(permitId: settings.arguments.toString()));
+      case PermitEditSafetyDocumentScreen.routeName:
+        return _createRoute(PermitEditSafetyDocumentScreen(
+            permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
