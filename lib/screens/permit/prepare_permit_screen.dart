@@ -33,6 +33,10 @@ class PreparePermitScreen extends StatelessWidget {
               right: leftRightMargin,
               top: xxTinierSpacing),
           child: BlocConsumer<PermitBloc, PermitStates>(
+            buildWhen: (previousState, currentState) =>
+                currentState is DataForOpenPermitFetching ||
+                currentState is DataForOpenPermitFetched ||
+                currentState is DataForOpenPermitNotFetched,
             listener: (context, state) {
               if (state is MarkAsPreparedSaving) {
                 ProgressBar.show(context);
