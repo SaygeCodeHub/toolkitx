@@ -61,18 +61,18 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        notificationmessage: json["notificationmessage"],
-        processedDate: json["processed_date"],
-        userid: json["userid"],
-        usertype: json["usertype"],
-        redirect: redirectValues.map[json["redirect"]]!,
-        redirectionkey: json["redirectionkey"],
+        id: json["id"] ?? '',
+        notificationmessage: json["notificationmessage"] ?? '',
+        processedDate: json["processed_date"] ?? '',
+        userid: json["userid"] ?? '',
+        usertype: json["usertype"] ?? '',
+        redirect: redirectValues.map[json["redirect"] ?? ''],
+        redirectionkey: json["redirectionkey"] ?? '',
         createddate: json["createddate"] == null
             ? null
             : DateTime.parse(json["createddate"]),
-        isread: json["isread"],
-        processedDate1: json["processed_date1"],
+        isread: json["isread"] ?? '',
+        processedDate1: json["processed_date1"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
