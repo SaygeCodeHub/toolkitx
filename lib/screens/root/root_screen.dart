@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../blocs/client/client_bloc.dart';
@@ -29,6 +30,7 @@ class _RootScreenState extends State<RootScreen> {
   @override
   void initState() {
     widget.isFromClientList == true ? _selectedIndex = 0 : null;
+    context.read<WifiConnectivityBloc>().add(ObserveUserLocation());
     super.initState();
   }
 
