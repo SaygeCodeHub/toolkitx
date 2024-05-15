@@ -29,6 +29,8 @@ import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
 import '../repositories/expense/expense_repository.dart';
 import '../repositories/expense/expense_repository_impl.dart';
+import '../repositories/global/global_repository.dart';
+import '../repositories/global/global_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/loto/loto_repository.dart';
@@ -104,4 +106,5 @@ configurableDependencies() {
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
   getIt.registerLazySingleton<TicketsRepository>(() => TicketsRepositoryImpl());
+  getIt.registerLazySingleton<GlobalRepository>(() => GlobalRepositoryImpl());
 }

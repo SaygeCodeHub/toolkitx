@@ -42,6 +42,7 @@ import 'blocs/checklist/workforce/submitAnswer/workforce_checklist_submit_answer
 import 'blocs/checklist/workforce/workforceList/workforce_list_bloc.dart';
 import 'blocs/client/client_bloc.dart';
 import 'blocs/dateFormat/date_format_bloc.dart';
+import 'blocs/global/global_bloc.dart';
 import 'blocs/home/home_bloc.dart';
 import 'blocs/incident/editIncidentDetails/edit_incident_details_bloc.dart';
 import 'blocs/incident/incidentDetails/incident_details_bloc.dart';
@@ -214,6 +215,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false, create: (context) => EquipmentTraceabilityBloc()),
           BlocProvider(lazy: true, create: (context) => TicketsBloc()),
+          BlocProvider(lazy: true, create: (context) => GlobalBloc()),
         ],
         child: GestureDetector(
             onTap: () {
