@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchMessagesModel fetchMessagesModelFromJson(String str) => FetchMessagesModel.fromJson(json.decode(str));
+FetchMessagesModel fetchMessagesModelFromJson(String str) =>
+    FetchMessagesModel.fromJson(json.decode(str));
 
-String fetchMessagesModelToJson(FetchMessagesModel data) => json.encode(data.toJson());
+String fetchMessagesModelToJson(FetchMessagesModel data) =>
+    json.encode(data.toJson());
 
 class FetchMessagesModel {
   final int? status;
@@ -16,17 +17,22 @@ class FetchMessagesModel {
     this.data,
   });
 
-  factory FetchMessagesModel.fromJson(Map<String, dynamic> json) => FetchMessagesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: json["Data"] == null ? [] : List<Datum>.from(json["Data"]!.map((x) => Datum.fromJson(x))),
-  );
+  factory FetchMessagesModel.fromJson(Map<String, dynamic> json) =>
+      FetchMessagesModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: json["Data"] == null
+            ? []
+            : List<Datum>.from(json["Data"]!.map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -55,28 +61,30 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"] ?? '',
-    notificationmessage: json["notificationmessage"] ?? '',
-    processedDate: json["processed_date"] ?? '',
-    userid: json["userid"] ?? '',
-    usertype: json["usertype"] ?? '',
-    redirect: json["redirect"] ?? '',
-    redirectionkey: json["redirectionkey"] ?? '',
-    createddate: json["createddate"] == null ? null : DateTime.parse(json["createddate"] ?? ''),
-    isread: json["isread"] ?? '',
-    processedDate1: json["processed_date1"] ?? '',
-  );
+        id: json["id"] ?? '',
+        notificationmessage: json["notificationmessage"] ?? '',
+        processedDate: json["processed_date"] ?? '',
+        userid: json["userid"] ?? '',
+        usertype: json["usertype"] ?? '',
+        redirect: json["redirect"] ?? '',
+        redirectionkey: json["redirectionkey"] ?? '',
+        createddate: json["createddate"] == null
+            ? null
+            : DateTime.parse(json["createddate"] ?? ''),
+        isread: json["isread"] ?? '',
+        processedDate1: json["processed_date1"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "notificationmessage": notificationmessage,
-    "processed_date": processedDate,
-    "userid": userid,
-    "usertype": usertype,
-    "redirect": redirect,
-    "redirectionkey": redirectionkey,
-    "createddate": createddate?.toIso8601String(),
-    "isread": isread,
-    "processed_date1": processedDate1,
-  };
+        "id": id,
+        "notificationmessage": notificationmessage,
+        "processed_date": processedDate,
+        "userid": userid,
+        "usertype": usertype,
+        "redirect": redirect,
+        "redirectionkey": redirectionkey,
+        "createddate": createddate?.toIso8601String(),
+        "isread": isread,
+        "processed_date1": processedDate1,
+      };
 }
