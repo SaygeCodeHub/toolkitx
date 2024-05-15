@@ -95,3 +95,4 @@ const double kApplyButtonWidth = 105.0;
 const double kDeleteIconSize = 18.0;
 const double kExpansionBorderWidth = 0.2;
 const double kDatePickerTextSize = 22;
+const double kMessageIconSize = 30;
