@@ -39,7 +39,7 @@ class _RootScreenState extends State<RootScreen> {
   void _getCurrentUserLocation() {
     if (!context.read<WifiConnectivityBloc>().isLocationPermissionDenied ||
         !context.read<WifiConnectivityBloc>().locationPermissionDeniedForever) {
-      Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+      Timer.periodic(const Duration(minutes: 5), (Timer timer) {
         context.read<WifiConnectivityBloc>().add(ObserveUserLocation());
       });
     }
