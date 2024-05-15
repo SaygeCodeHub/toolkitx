@@ -20,8 +20,9 @@ class NotificationUtil {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
-        await _storeMessageInDatabase(message);
         if (_isMessageForCurrentChat(message)) {
+          print('heyyyyyyyyyy');
+          await _storeMessageInDatabase(message);
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': message.data['sid'] ?? '',
             'rid': message.data['rid'] ?? '',
@@ -31,9 +32,12 @@ class NotificationUtil {
             'showCount': 0,
             'currentSenderId': message.data['sid'] ?? '',
             'currentReceiverId': message.data['rid'] ?? '',
-            'isGroup': (message.data['rtype'] == '3') ? true : false
+            'isGroup': (message.data['rtype'] == '3') ? true : false,
+            'isCurrentUser': true
           }));
         } else {
+          print('hmmmmmmmmmm');
+          await _storeMessageInDatabase(message);
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
             'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
@@ -45,7 +49,8 @@ class NotificationUtil {
                 ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
             'currentReceiverId':
                 ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
-            'isGroup': (message.data['rtype'] == '3') ? true : false
+            'isGroup': (message.data['rtype'] == '3') ? true : false,
+            'isCurrentUser': false
           }));
         }
       }
@@ -61,6 +66,7 @@ class NotificationUtil {
       String senderId = message.data['sid'];
       bool isMessageForCurrentChat =
           senderId == ChatBloc().chatDetailsMap['sid'];
+      print('inside elseeeeeeeeee of utillllll $isMessageForCurrentChat');
       return isMessageForCurrentChat;
     }
     return false;

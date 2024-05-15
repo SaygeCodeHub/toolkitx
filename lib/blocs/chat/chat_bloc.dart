@@ -161,11 +161,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
+    print('bool value ${event.employeeDetailsMap['isCurrentUser']}');
     await _databaseHelper.getUnreadMessageCount(
         event.employeeDetailsMap['sid'].toString(),
         event.employeeDetailsMap['currentSenderId'].toString(),
         event.employeeDetailsMap['rid'].toString(),
-        event.employeeDetailsMap['currentReceiverId'].toString());
+        event.employeeDetailsMap['currentReceiverId'].toString(),
+        event.employeeDetailsMap['isCurrentUser'] ?? false);
     timeZoneFormat =
         await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
     List<Map<String, dynamic>> messages =
@@ -203,13 +205,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
         if (existingChatIndex != -1) {
+          print('existing msg ${message.last['unreadMessageCount']}');
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = await formattedTime(message.last['msg_time']);
           existingChat.userName = message.last['employee_name'] ?? '';
           existingChat.isReceiver = message.last['isReceiver'] ?? '';
-          existingChat.unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
+          existingChat.unreadMsgCount = (_isMessageForCurrentChat(
+                      chatDetailsMap['sid'], message.last['sid'].toString()) ==
+                  true)
+              ? 0
+              : message.last['unreadMessageCount'];
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -224,7 +231,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               date: formattedDate(message.last['msg_time']),
               time: await formattedTime(message.last['msg_time']),
               messageType: message.last['msg_type'] ?? '',
-              unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
+              unreadMsgCount: (_isMessageForCurrentChat(chatDetailsMap['sid'],
+                          message.last['sid'].toString()) ==
+                      true)
+                  ? message.last['unreadMessageCount'] ?? 0
+                  : 0);
           individualChatList.add(chat);
         }
       }
@@ -250,6 +261,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return chatList.indexWhere((chat) =>
         chat.rId == message['rid'].toString() &&
         chat.sId == message['sid'].toString());
+  }
+
+  bool _isMessageForCurrentChat(mapId, senderId) {
+    bool isMessageForCurrentChat = senderId == mapId;
+    print('inside elseeeeeeeeee bloc $isMessageForCurrentChat');
+    return isMessageForCurrentChat;
   }
 
   String formattedDate(String timestamp) {

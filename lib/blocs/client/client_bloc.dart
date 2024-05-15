@@ -88,9 +88,9 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
-        if (event.isFirstTime == true) {
-          add(FetchChatMessages());
-        }
+        // if (event.isFirstTime == true) {
+        //   add(FetchChatMessages());
+        // }
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
@@ -136,29 +136,30 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       bool hasMoreData = true;
 
       while (hasMoreData) {
-        FetchChatMessagesModel fetchChatMessagesModel =
-            await _clientRepository.fetchChatMessages({
-          'page_no': pageNo,
-          'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
-          'token': newToken
-        });
+        // FetchChatMessagesModel fetchChatMessagesModel =
+        //     await _clientRepository.fetchChatMessages({
+        //   'page_no': pageNo,
+        //   'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
+        //   'token': newToken
+        // });
 
-        if (fetchChatMessagesModel.data.isNotEmpty) {
-          for (var item in fetchChatMessagesModel.data) {
-            await _databaseHelper.insertMessage(item.msgJson.toJson());
-            ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-              'rid': item.msgJson.toJson()['rid'],
-              'sid': item.msgJson.toJson()['sid']
-            }));
-          }
-          if (fetchChatMessagesModel.data.length < 30) {
-            hasMoreData = false;
-          } else {
-            pageNo++;
-          }
-        } else {
-          hasMoreData = false;
-        }
+        // if (fetchChatMessagesModel.data.isNotEmpty) {
+        //   for (var item in fetchChatMessagesModel.data) {
+        //     await _databaseHelper.insertMessage(item.msgJson.toJson());
+        //     ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+        //       'rid': item.msgJson.toJson()['rid'],
+        //       'sid': item.msgJson.toJson()['sid']
+        //     }));
+        //   }
+        //   if (fetchChatMessagesModel.data.length < 30) {
+        //     hasMoreData = false;
+        //   } else {
+        //     pageNo++;
+        //   }
+        // }
+        // else {
+        //   hasMoreData = false;
+        // }
       }
     } catch (e) {
       rethrow;

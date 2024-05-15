@@ -41,6 +41,8 @@ class AllChatsScreen extends StatelessWidget {
       body: StreamBuilder<List<ChatData>>(
         stream: context.read<ChatBloc>().allChatsStream,
         builder: (context, snapshot) {
+          print(
+              'stream builder chat list ${context.read<ChatBloc>().chatDetailsMap}');
           if (snapshot.hasData) {
             return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -65,10 +67,13 @@ class AllChatsScreen extends StatelessWidget {
                               'isReceiver': snapshot.data![index].isReceiver,
                               'stype': snapshot.data![index].sType,
                               'rtype': snapshot.data![index].rType,
-                              'isGroup': snapshot.data![index].isGroup,
+                              'isGroup': snapshot.data![index].isGroup
                             };
                             Navigator.pushNamed(
-                                context, ChatMessagingScreen.routeName);
+                                    context, ChatMessagingScreen.routeName)
+                                .then((value) => context
+                                    .read<ChatBloc>()
+                                    .add(FetchChatsList()));
                           },
                           leading: Container(
                               padding: const EdgeInsets.all(tiniestSpacing),

@@ -138,7 +138,8 @@ class DatabaseHelper {
       String currentUserId,
       String currentSenderId,
       String receiverId,
-      String currentReceiverId) async {
+      String currentReceiverId,
+      bool onChatMessagingScreen) async {
     final Database db = await database;
 
     await db.transaction((txn) async {
@@ -150,11 +151,13 @@ class DatabaseHelper {
 
       int unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
-      print('idss received $currentReceiverId');
+      print(
+          'idss received ${(currentUserId == currentSenderId && onChatMessagingScreen == true) && (receiverId == currentReceiverId && onChatMessagingScreen == true)}');
       print('idss send $currentSenderId');
-      if (currentUserId == currentSenderId && receiverId == currentReceiverId) {
-        unreadRecipientCount = 0;
-      }
+      // if ((currentUserId == currentSenderId && onChatMessagingScreen == true) &&
+      //     (receiverId == currentReceiverId && onChatMessagingScreen == true)) {
+      //   unreadRecipientCount = 0;
+      // }
       await txn.update(
           'chat_messages', {'unreadMessageCount': unreadRecipientCount},
           where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
