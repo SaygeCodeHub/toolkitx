@@ -14,6 +14,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/fetch_permit_basic_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
+import '../../data/models/permit/surrender_permit_model.dart';
 
 abstract class PermitRepository {
   Future<AllPermitModel> getAllPermits(
@@ -58,4 +59,6 @@ abstract class PermitRepository {
 
   Future<SavePermitEditSafetyDocumentModel> saveEditSafetyNoticeDocument(
       Map editSafetyDocumentMap);
+
+  Future<SurrenderPermitModel> surrenderPermit(Map surrenderPermitMap);
 }

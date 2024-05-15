@@ -5,6 +5,7 @@ import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
+import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
@@ -73,6 +74,10 @@ class PTWActionMenu extends StatelessWidget {
           if (popUpMenuItems[value] == StringConstants.kEditSafetyDocument) {
             Navigator.of(context).pushNamed(
                 PermitEditSafetyDocumentScreen.routeName,
+                arguments: permitId);
+          }
+          if (popUpMenuItems[value] == StringConstants.kSurrenderPermit) {
+            Navigator.of(context).pushNamed(SurrenderPermitScreen.routeName,
                 arguments: permitId);
           }
         },
