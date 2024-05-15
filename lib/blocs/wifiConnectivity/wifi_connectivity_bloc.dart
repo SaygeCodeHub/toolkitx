@@ -1,15 +1,21 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import 'package:toolkit/utils/connectivity_util.dart';
 
+import '../../data/models/currentLocation/current_location.dart';
+import '../../di/app_module.dart';
+import '../../repositories/root/root_repository.dart';
+
 class WifiConnectivityBloc
     extends Bloc<WifiConnectivityEvent, WifiConnectivityState> {
   bool isLocationPermissionDenied = false;
   bool locationPermissionDeniedForever = false;
+  final RootRepository _rootRepository = getIt<RootRepository>();
 
   WifiConnectivityBloc._() : super(EstablishingNetwork()) {
     on<ObserveNetwork>(_observeNetwork);
@@ -44,10 +50,17 @@ class WifiConnectivityBloc
   Future<void> _initialiseLocationService() async {
     try {
       final position = await _getLocation();
-      // CurrentLocationUpdateModel currentLocationUpdateModel =
+      Future.delayed(const Duration(seconds: 5));
+      updateCurrentLocation(position.latitude, position.longitude);
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> updateCurrentLocation(latitude, longitude) async {
+    CurrentLocationUpdateModel currentLocationUpdateModel =
+        await _rootRepository.updateCurrentLocation(latitude, longitude);
+    debugPrint(currentLocationUpdateModel.toString());
   }
 
   Future<Position> _getLocation() async {
