@@ -28,6 +28,8 @@ class AttachmentMsgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'local path ${snapShot.data![reversedIndex]['localImagePath'].toString()}');
     return Padding(
       padding: const EdgeInsets.only(
           right: kModuleImagePadding,
@@ -115,11 +117,14 @@ class AttachmentMsgWidget extends StatelessWidget {
                   String url =
                       '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
+                  print('url $url');
+                  // check below code
+                  String attachementExtension = getFileName(
+                      snapShot.data![reversedIndex]['msg'].toString());
+                  print('attacheent extension $attachementExtension');
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
-                      (snapShot.data![reversedIndex]['msg_type'] == '4')
-                          ? "$imageName.${snapShot.data![reversedIndex]['attachementExtension']}"
-                          : "$imageName.jpg",
+                      "$imageName.$attachementExtension",
                       snapShot.data![reversedIndex]['msg_id'],
                       snapShot.data![reversedIndex]['msg_type']);
                   if (downloadProcessComplete) {
@@ -134,6 +139,11 @@ class AttachmentMsgWidget extends StatelessWidget {
             ),
           );
   }
+}
+
+// check below code
+String getFileName(String filePath) {
+  return filePath.split('/').last;
 }
 
 Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
@@ -172,7 +182,6 @@ Future<String> downloadImage(
       if (total != -1) {}
     });
     final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
-
     await databaseHelper.updateLocalImagePath(msgId, filePath);
   } catch (e) {
     rethrow;

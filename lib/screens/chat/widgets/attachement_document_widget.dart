@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/screens/chat/widgets/document_viewer_screen.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AttachementDocumentWidget extends StatelessWidget {
   final String docPath;
@@ -15,6 +17,8 @@ class AttachementDocumentWidget extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: InkWell(
             onTap: () {
+              print('open path $docPath');
+              // OpenFile.open(docPath);
               Navigator.push(
                   context,
                   MaterialPageRoute(

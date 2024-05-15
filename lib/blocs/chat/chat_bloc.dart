@@ -20,8 +20,6 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/constants/api_constants.dart';
-import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 
 import '../../utils/database/database_util.dart';
 
@@ -163,8 +161,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    await _databaseHelper
-        .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
+    await _databaseHelper.getUnreadMessageCount(
+        event.employeeDetailsMap['sid'].toString(),
+        event.employeeDetailsMap['currentSenderId'].toString(),
+        event.employeeDetailsMap['rid'].toString(),
+        event.employeeDetailsMap['currentReceiverId'].toString());
     timeZoneFormat =
         await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
     List<Map<String, dynamic>> messages =
@@ -208,6 +209,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.time = await formattedTime(message.last['msg_time']);
           existingChat.userName = message.last['employee_name'] ?? '';
           existingChat.isReceiver = message.last['isReceiver'] ?? '';
+          existingChat.unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -326,6 +328,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickedFile != null) {
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
+              int fileSizeInBytes = await pickedFile.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
 
@@ -333,8 +337,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                add(RebuildChatMessagingScreen(
-                    employeeDetailsMap: chatDetailsMap));
+                if (fileSizeInMB > 20) {
+                  chatDetailsMap['file_size'] = fileSizeInMB;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                } else {
+                  chatDetailsMap['file_size'] = 0;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                }
               }
               if (pickedFile.path.isNotEmpty) {
                 add(UploadChatImage(
@@ -354,14 +365,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickVideo != null) {
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickVideo.path;
+              int fileSizeInBytes = await pickVideo.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
               if (chatDetailsMap['isMedia'] == true) {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                add(RebuildChatMessagingScreen(
-                    employeeDetailsMap: chatDetailsMap));
+                if (fileSizeInMB > 20) {
+                  chatDetailsMap['file_size'] = fileSizeInMB;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                } else {
+                  chatDetailsMap['file_size'] = 0;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                }
               }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(
@@ -379,6 +399,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
+              int fileSizeInBytes = await pickedFile.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['attachementExtension'] =
                   result.files.single.extension;
               chatDetailsMap['isUploadComplete'] = false;
@@ -389,8 +411,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                add(RebuildChatMessagingScreen(
-                    employeeDetailsMap: chatDetailsMap));
+                if (fileSizeInMB > 20) {
+                  chatDetailsMap['file_size'] = fileSizeInMB;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                } else {
+                  chatDetailsMap['file_size'] = 0;
+                  add(RebuildChatMessagingScreen(
+                      employeeDetailsMap: chatDetailsMap));
+                }
               }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(
@@ -426,13 +455,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         chatDetailsMap['isUploadComplete'] = true;
         Future.delayed(const Duration(seconds: 3));
         if (chatDetailsMap['isUploadComplete'] == true) {
-          if (chatDetailsMap['message_type'] == '4') {
-            chatDetailsMap['attachement_path'] =
-                '${ApiConstants.viewDocBaseUrl}${chatDetailsMap['message']}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}';
-            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
-          } else {
-            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
-          }
+          add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
         }
       }
     } catch (e) {

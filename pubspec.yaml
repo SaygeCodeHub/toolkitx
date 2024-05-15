@@ -46,6 +46,7 @@ dependencies:
   webview_flutter:
   flutter_osm_plugin: ^0.70.0
   package_info_plus:
+  open_file: ^3.3.2
 
 
 dev_dependencies:

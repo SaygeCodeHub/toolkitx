@@ -65,7 +65,7 @@ class AllChatsScreen extends StatelessWidget {
                               'isReceiver': snapshot.data![index].isReceiver,
                               'stype': snapshot.data![index].sType,
                               'rtype': snapshot.data![index].rType,
-                              'isGroup': snapshot.data![index].isGroup
+                              'isGroup': snapshot.data![index].isGroup,
                             };
                             Navigator.pushNamed(
                                 context, ChatMessagingScreen.routeName);

@@ -29,6 +29,8 @@ class NotificationUtil {
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
             'showCount': 0,
+            'currentSenderId': message.data['sid'] ?? '',
+            'currentReceiverId': message.data['rid'] ?? '',
             'isGroup': (message.data['rtype'] == '3') ? true : false
           }));
         } else {
@@ -39,6 +41,10 @@ class NotificationUtil {
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
             'showCount': 0,
+            'currentSenderId':
+                ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
+            'currentReceiverId':
+                ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
             'isGroup': (message.data['rtype'] == '3') ? true : false
           }));
         }

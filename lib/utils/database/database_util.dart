@@ -134,25 +134,30 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> getUnreadMessageCount(String currentUserId) async {
+  Future<void> getUnreadMessageCount(
+      String currentUserId,
+      String currentSenderId,
+      String receiverId,
+      String currentReceiverId) async {
     final Database db = await database;
 
     await db.transaction((txn) async {
       final unreadCount = await txn.rawQuery('''
       SELECT COUNT(*) AS unread_for_recipient
       FROM chat_messages
-      WHERE sid = ? AND showCount = 0;
-    ''', [currentUserId]);
+       WHERE sid = ? AND rid = ? AND showCount = 0;
+    ''', [currentUserId, receiverId]);
 
-      final unreadRecipientCount =
+      int unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
-
+      print('idss received $currentReceiverId');
+      print('idss send $currentSenderId');
+      if (currentUserId == currentSenderId && receiverId == currentReceiverId) {
+        unreadRecipientCount = 0;
+      }
       await txn.update(
-        'chat_messages',
-        {'unreadMessageCount': unreadRecipientCount},
-        where: 'sid = ?',
-        whereArgs: [currentUserId],
-      );
+          'chat_messages', {'unreadMessageCount': unreadRecipientCount},
+          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
     });
   }
 

@@ -80,21 +80,38 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           .read<ChatBloc>()
                           .chatDetailsMap['isUploadComplete'] ==
                       false) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(),
-                        const SizedBox(height: tiniestSpacing),
-                        Center(
-                            child: Text(
-                                'Uploading attachement....Please wait!!',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .xSmall
-                                    .copyWith(color: AppColor.grey))),
-                      ],
-                    );
+                    if (context.read<ChatBloc>().chatDetailsMap['file_size'] >
+                        20) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Text(
+                                  'Cannot upload attachement more than 20 mb!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(color: AppColor.black))),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: tiniestSpacing),
+                          Center(
+                              child: Text(
+                                  'Uploading attachement....Please wait!!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(color: AppColor.grey))),
+                        ],
+                      );
+                    }
                   } else {
                     return const AttachmentPreviewScreen();
                   }
