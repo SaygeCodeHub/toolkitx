@@ -277,8 +277,8 @@ abstract class StringConstants {
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
   static const String kGeneratePdf = 'Generate PDF';
-  static const String kClosePermit = 'Close Permit';
-  static const String kOpenPermit = 'Open Permit';
+  static const String kClosePermit = 'Cancel Permit';
+  static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kEditSafetyDocument = 'Edit Safety Document';
@@ -294,7 +294,7 @@ abstract class StringConstants {
   static const String kPermitCircuitNumber =
       '[String/Circuit Number, WTG number and Plant and/or Apparatus to be worked on]'; //
   static const String kAcceptPermit = 'Accept Permit'; //
-  static const String kPermitWorkDescription = '1.(iii). Work Description'; //
+  static const String kPermitWorkDescription = '1.(iii). Work to be done'; //
   static const String kPermitPrecautions =
       '1. PRECAUTIONS TAKEN TO ACHIEVE SAFETYFROM THIS SYATEM'; //
   static const String kPermitNo = 'Permit No'; //
@@ -344,8 +344,8 @@ abstract class StringConstants {
   static const String kPleaseFillControlPerson =
       'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
-  static const String kOPENPERMIT = 'OPEN PERMIT';
-  static const String kCLEARPERMIT = 'CLEAR PERMIT'; //
+  static const String kISSUEPERMIT = 'ISSUE PERMIT';
+  static const String kCANCELPERMIT = 'CANCEL PERMIT'; //
   static const String kAllFieldsMandatory = 'All fields are mandatory!'; //
   static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';

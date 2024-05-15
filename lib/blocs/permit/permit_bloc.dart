@@ -127,7 +127,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           {"questionid": 3000005, "answer": ""},
           {"questionid": 3000006, "answer": ""},
           {"questionid": 3000007, "answer": ""},
-          {"questionid": 3000008, "answer": ""}
+          {"questionid": 3000008, "answer": ""},
+          {"questionid": 3000013, "answer": ""},
+          {"questionid": 3000014, "answer": ""}
         ];
       }
       emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));

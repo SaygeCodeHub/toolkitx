@@ -18,6 +18,10 @@ class EditSafetyDocumentPlotUtil {
             fetchDataForOpenPermitModel.data?.location ?? '';
         editSafetyDocumentMap['location'] =
             PlannedLocationDropdown.selectedLocation;
+        editSafetyDocumentMap['methodstmt'] =
+            fetchDataForOpenPermitModel.data?.methodstatement ?? '';
+        editSafetyDocumentMap['description'] =
+            fetchDataForOpenPermitModel.data?.description ?? '';
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -68,6 +72,16 @@ class EditSafetyDocumentPlotUtil {
           ],
         );
       case StringConstants.kPanel12:
+        editSafetyDocumentMap['ptw_isolation'] =
+            fetchDataForOpenPermitModel.data?.ptwIsolation ?? '';
+        editSafetyDocumentMap['ptw_circuit'] =
+            fetchDataForOpenPermitModel.data?.ptwCircuit ?? '';
+        editSafetyDocumentMap['ptw_safety'] =
+            fetchDataForOpenPermitModel.data?.ptwSafety ?? '';
+        editSafetyDocumentMap['ptw_precautions'] =
+            fetchDataForOpenPermitModel.data?.ptwPrecautions ?? '';
+        editSafetyDocumentMap['ptw_precautions2'] =
+            fetchDataForOpenPermitModel.data?.ptwPrecautions2 ?? '';
         if (fetchDataForOpenPermitModel.data?.panel12 == '1') {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,6 +154,16 @@ class EditSafetyDocumentPlotUtil {
         }
 
       case StringConstants.kPanel15:
+        editSafetyDocumentMap['ptw_isolation'] =
+            fetchDataForOpenPermitModel.data?.ptwIsolation ?? '';
+        editSafetyDocumentMap['ptw_circuit'] =
+            fetchDataForOpenPermitModel.data?.ptwCircuit ?? '';
+        editSafetyDocumentMap['st_precautions'] =
+            fetchDataForOpenPermitModel.data?.stPrecautions ?? '';
+        editSafetyDocumentMap['st_safety'] =
+            fetchDataForOpenPermitModel.data?.stSafety ?? '';
+        editSafetyDocumentMap['ptw_circuit2'] =
+            fetchDataForOpenPermitModel.data?.ptwCircuit2 ?? '';
         if (fetchDataForOpenPermitModel.data?.panel15 == '1') {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,6 +235,12 @@ class EditSafetyDocumentPlotUtil {
         }
 
       case StringConstants.kPanel16:
+        editSafetyDocumentMap['lwc_accessto'] =
+            fetchDataForOpenPermitModel.data?.lwcAccessto ?? '';
+        editSafetyDocumentMap['lwc_environment'] =
+            fetchDataForOpenPermitModel.data?.lwcEnvironment ?? '';
+        editSafetyDocumentMap['lwc_precautions'] =
+            fetchDataForOpenPermitModel.data?.lwcPrecautions ?? '';
         if (fetchDataForOpenPermitModel.data?.panel16 == '1') {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
