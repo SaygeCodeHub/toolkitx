@@ -6,7 +6,6 @@ import 'package:toolkit/data/models/incident/incident_details_model.dart';
 import '../../../configs/app_color.dart';
 import '../../../utils/database_utils.dart';
 import 'incident_details_view_network_image.dart';
-import 'incident_map_links_list.dart';
 
 class IncidentDetails extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
@@ -82,8 +81,6 @@ class IncidentDetails extends StatelessWidget {
             const SizedBox(height: xxTinierSpacing),
             Text(incidentDetailsModel.data!.locationname,
                 style: Theme.of(context).textTheme.small),
-            const SizedBox(height: xxTinierSpacing),
-            IncidentMapLinksList(incidentDetailsModel: incidentDetailsModel),
             const SizedBox(height: tinySpacing),
             Text(
               DatabaseUtil.getText('Reportedauthority'),
