@@ -24,7 +24,7 @@ class PermitEditSafetyDocumentScreen extends StatelessWidget {
     context.read<PermitBloc>().add(FetchDataForOpenPermit(permitId: permitId));
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEditSafetyDocument),
-      bottomNavigationBar: SavePermitEditSafetyNoticeButton(
+      bottomNavigationBar: SavePermitEditSafetyDocumentButton(
           editSafetyDocumentMap: editSafetyDocumentMap, permitId: permitId),
       body: BlocBuilder<PermitBloc, PermitStates>(
         buildWhen: (previousState, currentState) =>
