@@ -249,23 +249,31 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(const OpeningPermit());
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      Map openPermitMap = {
-        "hashcode": hashCode,
-        "permitid": event.openPermitMap['permitId'],
-        "userid": userId,
-        "customfields": event.openPermitMap['customfields'],
-        "date": (event.openPermitMap['date'] == null)
-            ? DateFormat('dd.MM.yyyy').format(DateTime.now())
-            : event.openPermitMap['date'],
-        "time": event.openPermitMap['time'],
-        "details": event.openPermitMap['details'],
-        "user_sign": "",
-        "user_name": "",
-        "user_email": ""
-      };
-      OpenClosePermitModel openClosePermitModel =
-          await _permitRepository.openPermit(openPermitMap);
-      emit(PermitOpened(openClosePermitModel));
+      if (event.openPermitMap['date'] == null ||
+          event.openPermitMap['date'] == '') {
+        emit(const OpenPermitError(StringConstants.kPleaseSelectDate));
+      } else if (event.openPermitMap['time'] == null ||
+          event.openPermitMap['time'] == '') {
+        emit(const OpenPermitError(StringConstants.kPleaseSelectTime));
+      } else {
+        Map openPermitMap = {
+          "hashcode": hashCode,
+          "permitid": event.openPermitMap['permitId'],
+          "userid": userId,
+          "customfields": event.openPermitMap['customfields'],
+          "date": (event.openPermitMap['date'] == null)
+              ? DateFormat('dd.MM.yyyy').format(DateTime.now())
+              : event.openPermitMap['date'],
+          "time": event.openPermitMap['time'],
+          "details": event.openPermitMap['details'] ?? '',
+          "user_sign": "",
+          "user_name": "",
+          "user_email": ""
+        };
+        OpenClosePermitModel openClosePermitModel =
+            await _permitRepository.openPermit(openPermitMap);
+        emit(PermitOpened(openClosePermitModel));
+      }
     } catch (e) {
       emit(OpenPermitError(e.toString()));
     }
@@ -298,8 +306,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       if (event.closePermitMap['panel_saint'] == '1' &&
           event.closePermitMap['controlPerson'] == null) {
-        emit(ClosePermitError(
-            DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
+        emit(const ClosePermitError(StringConstants.kAllFieldsMandatory));
       } else if (event.closePermitMap['time'] == null) {
         emit(const ClosePermitError(
             StringConstants.kPleaseEnterTimeToClosePermit));
