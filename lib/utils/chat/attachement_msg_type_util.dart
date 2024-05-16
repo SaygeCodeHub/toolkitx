@@ -23,7 +23,7 @@ class AttachementMsgTypeUtil {
       case '3':
         return AttachementVideoWidget(videoPath: mediaPath);
       case '4':
-        return AttachementDocumentWidget(docPath: mediaPath);
+        return AttachmentDocumentWidget(docPath: mediaPath);
       default:
         return const SizedBox.shrink();
     }

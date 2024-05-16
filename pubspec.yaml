@@ -47,7 +47,8 @@ dependencies:
   flutter_osm_plugin: ^0.70.0
   package_info_plus:
   open_file: ^3.3.2
-
+  csv:
+  flutter_document_picker: ^5.2.3
 
 dev_dependencies:
   flutter_test:

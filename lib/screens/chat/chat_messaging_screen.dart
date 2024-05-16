@@ -109,7 +109,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                             const SizedBox(height: tiniestSpacing),
                             Center(
                                 child: Text(
-                                    'Uploading attachement....Please wait!!',
+                                    'Uploading attachment, please wait!',
                                     style: Theme.of(context)
                                         .textTheme
                                         .xSmall

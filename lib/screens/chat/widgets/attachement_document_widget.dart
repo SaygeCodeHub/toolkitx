@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
 import 'package:toolkit/configs/app_color.dart';
-import 'package:toolkit/screens/chat/widgets/document_viewer_screen.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-class AttachementDocumentWidget extends StatelessWidget {
+import '../file_viewer.dart';
+import 'document_viewer_screen.dart';
+
+class AttachmentDocumentWidget extends StatelessWidget {
   final String docPath;
 
-  const AttachementDocumentWidget({super.key, required this.docPath});
+  const AttachmentDocumentWidget({super.key, required this.docPath});
 
   @override
   Widget build(BuildContext context) {
+    final FileViewer fileViewer = FileViewer();
+
     return Tooltip(
       message: 'Click to view document',
       child: Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              print('open path $docPath');
-              // OpenFile.open(docPath);
+        alignment: Alignment.centerLeft,
+        child: InkWell(
+          onTap: () async {
+            print('local path ------ $docPath');
+            if (docPath.toLowerCase().endsWith('.pdf')) {
+              print('pdf');
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           DocumentViewerScreen(documentPath: docPath)));
-            },
-            child: Container(
-                color: AppColor.lightGrey,
-                height: 100,
-                width: 100,
-                child: const Icon(Icons.folder)),
-          )),
+            } else {
+              print('other than pdf');
+              await fileViewer.viewFile(context, docPath);
+            }
+          },
+          child: Container(
+            color: AppColor.lightGrey,
+            height: 100,
+            width: 100,
+            child: const Icon(Icons.folder),
+          ),
+        ),
+      ),
     );
   }
 }

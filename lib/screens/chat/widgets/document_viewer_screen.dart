@@ -1,6 +1,5 @@
 import 'package:document_viewer/document_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
