@@ -260,3 +260,13 @@ class ClearPermitNotSaved extends PermitStates {
 
   ClearPermitNotSaved({required this.errorMessage});
 }
+
+class SavingPermitEditSafetyDocument extends PermitStates {}
+
+class PermitEditSafetyDocumentSaved extends PermitStates {}
+
+class PermitEditSafetyDocumentNotSaved extends PermitStates {
+  final String errorMessage;
+
+  PermitEditSafetyDocumentNotSaved({required this.errorMessage});
+}

@@ -109,7 +109,7 @@ class OpenPermitBody extends StatelessWidget {
                     onPressed: () {
                       context.read<PermitBloc>().add(OpenPermit(openPermitMap));
                     },
-                    textValue: StringConstants.kOPENPERMIT)
+                    textValue: StringConstants.kISSUEPERMIT)
               ],
             )));
   }

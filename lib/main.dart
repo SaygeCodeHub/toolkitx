@@ -54,6 +54,7 @@ import 'blocs/language/language_bloc.dart';
 import 'blocs/login/login_bloc.dart';
 import 'blocs/loto/loto_details/loto_details_bloc.dart';
 import 'blocs/loto/loto_list/loto_list_bloc.dart';
+import 'blocs/notification/notification_bloc.dart';
 import 'blocs/onboarding/onboarding_bloc.dart';
 import 'blocs/onboarding/onboarding_events.dart';
 import 'blocs/onboarding/onboarding_states.dart';
@@ -215,6 +216,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               lazy: false, create: (context) => EquipmentTraceabilityBloc()),
           BlocProvider(lazy: true, create: (context) => TicketsBloc()),
+          BlocProvider(lazy: true, create: (context) => NotificationBloc()),
           BlocProvider(lazy: true, create: (context) => GlobalBloc()),
         ],
         child: GestureDetector(
