@@ -81,6 +81,7 @@ class NotificationUtil {
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
+      'msg_status': '1',
       'showCount': 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
@@ -117,6 +118,7 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
+      'msg_status': '1',
       'showCount': 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
