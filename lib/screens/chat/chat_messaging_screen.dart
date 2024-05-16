@@ -170,6 +170,8 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                             .chatDetailsMap['message']
                                             .toString(),
                                         context);
+                                    print(
+                                        'chat messaging screen ${context.read<ChatBloc>().chatDetailsMap}');
                                     context.read<ChatBloc>().add(
                                         SendChatMessage(
                                             sendMessageMap: context

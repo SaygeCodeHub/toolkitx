@@ -20,9 +20,8 @@ class NotificationUtil {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
+        await _storeMessageInDatabase(message);
         if (_isMessageForCurrentChat(message)) {
-          print('heyyyyyyyyyy');
-          await _storeMessageInDatabase(message);
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': message.data['sid'] ?? '',
             'rid': message.data['rid'] ?? '',
@@ -36,8 +35,6 @@ class NotificationUtil {
             'isCurrentUser': true
           }));
         } else {
-          print('hmmmmmmmmmm');
-          await _storeMessageInDatabase(message);
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
             'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],

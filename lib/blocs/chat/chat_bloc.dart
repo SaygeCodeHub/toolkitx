@@ -149,9 +149,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
+      print('send map $sendMessageMap');
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
+        print('success');
         await _databaseHelper.updateMessageStatus(sendMessageModel.data.msgId);
       }
     } catch (e) {
@@ -205,7 +207,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
         if (existingChatIndex != -1) {
-          print('existing msg ${message.last['unreadMessageCount']}');
           ChatData existingChat = individualChatList[existingChatIndex];
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
@@ -216,7 +217,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                       chatDetailsMap['sid'], message.last['sid'].toString()) ==
                   true)
               ? 0
-              : message.last['unreadMessageCount'];
+              : message.last['unreadMessageCount'] ?? 0;
         } else {
           unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
@@ -445,7 +446,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           .uploadImage(File(event.pickedImage), hashCode);
       if (uploadPictureModel.data.isNotEmpty) {
         chatDetailsMap['message'] = uploadPictureModel.data.first;
-        chatDetailsMap['attachement_path'] = chatDetailsMap['message'];
         isUploadComplete = true;
       } else {
         isUploadComplete = false;
