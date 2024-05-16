@@ -60,6 +60,22 @@ class FileViewer {
 
   void _viewDocumentFile(BuildContext context, File file) async {
     final result = await OpenFile.open(file.path);
+    if (result.type == ResultType.fileNotFound) {
+      print('fileNotFound');
+    }
+    if (result.type == ResultType.error) {
+      print('error');
+    }
+    if (result.type == ResultType.permissionDenied) {
+      print('permissionDenied');
+    }
+    if (result.type == ResultType.values) {
+      print('values');
+    }
+    if (result.type == ResultType.done) {
+      print('doneee');
+    }
+
     if (result.type == ResultType.noAppToOpen) {
       showDialog(
         context: context,
