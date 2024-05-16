@@ -194,14 +194,19 @@ class DatabaseHelper {
         where: 'msg_id = ?', whereArgs: [msgId]);
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-      String employeeIdA, String employeeIdB) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
+      String employeeIdB, String rtype, String stype) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 
     messages = await db.query('chat_messages',
         where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
+        whereArgs: [
+          employeeIdA,
+          employeeIdB,
+          employeeIdB,
+          employeeIdA,
+        ],
         orderBy: 'msg_time ASC');
 
     List<Map<String, dynamic>> updatedMessages = [];
