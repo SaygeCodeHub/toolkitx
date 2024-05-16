@@ -201,13 +201,7 @@ class DatabaseHelper {
 
     messages = await db.query('chat_messages',
         where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [
-          employeeIdA,
-          employeeIdB,
-          employeeIdB,
-          employeeIdA,
-        ],
-        orderBy: 'msg_time ASC');
+        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
 
     List<Map<String, dynamic>> updatedMessages = [];
 

@@ -175,6 +175,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             event.employeeDetailsMap['sid'].toString(),
             event.employeeDetailsMap['rtype'].toString(),
             event.employeeDetailsMap['stype'].toString());
+    print('chat message map ${event.employeeDetailsMap}');
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -403,7 +404,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             late File pickedFile;
             FilePickerResult? result = await FilePicker.platform.pickFiles(
                 type: FileType.custom,
-                allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
+                allowedExtensions: [
+                  'pdf',
+                  'doc',
+                  'docx',
+                  'ppt',
+                  'pptx',
+                  'xlsx'
+                ]);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
               int fileSizeInBytes = await pickedFile.length();
