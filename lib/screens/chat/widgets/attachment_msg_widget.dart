@@ -172,7 +172,7 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
 
 Future<String> downloadImage(
     String url, String filename, msgId, msgType) async {
-  Directory directory = await getApplicationDocumentsDirectory();
+  Directory directory = await getApplicationCacheDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
   Dio dio = Dio();

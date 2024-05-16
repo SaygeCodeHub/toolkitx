@@ -354,15 +354,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                if (fileSizeInMB > 20) {
-                  chatDetailsMap['file_size'] = fileSizeInMB;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                } else {
-                  chatDetailsMap['file_size'] = 0;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                }
+                chatDetailsMap['file_size'] = fileSizeInMB;
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: chatDetailsMap));
               }
               if (pickedFile.path.isNotEmpty) {
                 add(UploadChatImage(
@@ -390,15 +384,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                if (fileSizeInMB > 20) {
-                  chatDetailsMap['file_size'] = fileSizeInMB;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                } else {
-                  chatDetailsMap['file_size'] = 0;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                }
+                chatDetailsMap['file_size'] = fileSizeInMB;
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: chatDetailsMap));
               }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(
@@ -428,15 +416,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
-                if (fileSizeInMB > 20) {
-                  chatDetailsMap['file_size'] = fileSizeInMB;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                } else {
-                  chatDetailsMap['file_size'] = 0;
-                  add(RebuildChatMessagingScreen(
-                      employeeDetailsMap: chatDetailsMap));
-                }
+                chatDetailsMap['file_size'] = fileSizeInMB;
+                add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: chatDetailsMap));
               }
               if (chatData.fileName.isNotEmpty) {
                 add(UploadChatImage(
