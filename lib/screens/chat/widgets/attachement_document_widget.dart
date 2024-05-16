@@ -19,16 +19,13 @@ class AttachmentDocumentWidget extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: InkWell(
           onTap: () async {
-            print('local path ------ $docPath');
             if (docPath.toLowerCase().endsWith('.pdf')) {
-              print('pdf');
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           DocumentViewerScreen(documentPath: docPath)));
             } else {
-              print('other than pdf');
               await fileViewer.viewFile(context, docPath);
             }
           },

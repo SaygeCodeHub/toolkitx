@@ -148,16 +148,8 @@ class DatabaseHelper {
       FROM chat_messages
        WHERE sid = ? AND rid = ? AND showCount = 0;
     ''', [currentUserId, receiverId]);
-
       int unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
-      print(
-          'idss received ${(currentUserId == currentSenderId && onChatMessagingScreen == true) && (receiverId == currentReceiverId && onChatMessagingScreen == true)}');
-      print('idss send $currentSenderId');
-      // if ((currentUserId == currentSenderId && onChatMessagingScreen == true) &&
-      //     (receiverId == currentReceiverId && onChatMessagingScreen == true)) {
-      //   unreadRecipientCount = 0;
-      // }
       await txn.update(
           'chat_messages', {'unreadMessageCount': unreadRecipientCount},
           where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);

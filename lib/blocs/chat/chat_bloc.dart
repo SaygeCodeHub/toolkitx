@@ -149,11 +149,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
-      print('send map $sendMessageMap');
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
-        print('success');
         await _databaseHelper.updateMessageStatus(sendMessageModel.data.msgId);
       }
     } catch (e) {
@@ -163,7 +161,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    print('bool value ${event.employeeDetailsMap['isCurrentUser']}');
     await _databaseHelper.getUnreadMessageCount(
         event.employeeDetailsMap['sid'].toString(),
         event.employeeDetailsMap['currentSenderId'].toString(),
@@ -266,7 +263,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   bool _isMessageForCurrentChat(mapId, senderId) {
     bool isMessageForCurrentChat = senderId == mapId;
-    print('inside elseeeeeeeeee bloc $isMessageForCurrentChat');
     return isMessageForCurrentChat;
   }
 
@@ -455,6 +451,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         Future.delayed(const Duration(seconds: 3));
         if (chatDetailsMap['isUploadComplete'] == true) {
           add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
+          emit(ChatMessagingTextFieldHidden());
         }
       }
     } catch (e) {

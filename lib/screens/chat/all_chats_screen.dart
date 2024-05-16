@@ -39,8 +39,6 @@ class AllChatsScreen extends StatelessWidget {
       body: StreamBuilder<List<ChatData>>(
         stream: context.read<ChatBloc>().allChatsStream,
         builder: (context, snapshot) {
-          print(
-              'stream builder chat list ${context.read<ChatBloc>().chatDetailsMap}');
           if (snapshot.hasData) {
             return Padding(
                 padding: const EdgeInsets.symmetric(

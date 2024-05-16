@@ -63,7 +63,6 @@ class NotificationUtil {
       String senderId = message.data['sid'];
       bool isMessageForCurrentChat =
           senderId == ChatBloc().chatDetailsMap['sid'];
-      print('inside elseeeeeeeeee of utillllll $isMessageForCurrentChat');
       return isMessageForCurrentChat;
     }
     return false;
