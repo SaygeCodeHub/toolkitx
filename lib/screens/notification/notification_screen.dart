@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
+import '../../blocs/global/global_bloc.dart';
 import '../../blocs/notification/notification_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -13,6 +14,7 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GlobalBloc>().add(UpdateCount(type: 'All'));
     context.read<NotificationBloc>().add(FetchMessages());
     return Scaffold(
       body: Padding(
