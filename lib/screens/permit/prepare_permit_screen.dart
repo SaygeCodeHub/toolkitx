@@ -63,8 +63,9 @@ class PreparePermitScreen extends StatelessWidget {
                               color: AppColor.black)),
                       const SizedBox(height: tiniestSpacing),
                       TextFieldWidget(
-                          value: state
-                              .fetchDataForOpenPermitModel.data!.permitName!,
+                          value: state.fetchDataForOpenPermitModel.data!
+                                  .permitName ??
+                              '',
                           readOnly: true,
                           onTextFieldChanged: (textField) {}),
                       const SizedBox(height: xxTinierSpacing),
@@ -74,8 +75,9 @@ class PreparePermitScreen extends StatelessWidget {
                               color: AppColor.black)),
                       const SizedBox(height: tiniestSpacing),
                       TextFieldWidget(
-                          value: state
-                              .fetchDataForOpenPermitModel.data!.permitStatus!,
+                          value: state.fetchDataForOpenPermitModel.data!
+                                  .permitStatus ??
+                              '',
                           readOnly: true,
                           onTextFieldChanged: (textField) {}),
                       const SizedBox(height: xxTinierSpacing),

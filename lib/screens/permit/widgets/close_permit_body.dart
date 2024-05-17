@@ -41,7 +41,7 @@ class ClosePermitBody extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.w600)),
                 const SizedBox(height: xxxTinierSpacing),
                 TextFieldWidget(
-                    value: getClosePermitData.permitName!,
+                    value: getClosePermitData.permitName ?? '',
                     readOnly: true,
                     hintText: StringConstants.kPermitNo,
                     onTextFieldChanged: (String textField) {}),
@@ -53,7 +53,7 @@ class ClosePermitBody extends StatelessWidget {
                         .copyWith(fontWeight: FontWeight.w600)),
                 const SizedBox(height: xxxTinierSpacing),
                 TextFieldWidget(
-                    value: getClosePermitData.permitStatus!,
+                    value: getClosePermitData.permitStatus ?? '',
                     readOnly: true,
                     hintText: DatabaseUtil.getText('Status'),
                     onTextFieldChanged: (String textField) {}),

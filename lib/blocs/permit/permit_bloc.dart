@@ -173,11 +173,32 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getClosePermitDetails(
       FetchClosePermitDetails event, Emitter<PermitStates> emit) async {
     try {
-      emit(const FetchingClosePermitDetails());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      ClosePermitDetailsModel closePermitDetailsModel = await _permitRepository
-          .closePermitDetails(hashCode, event.permitId, roleId);
-      emit(ClosePermitDetailsFetched(closePermitDetailsModel));
+      if (isNetworkEstablished) {
+        emit(const FetchingClosePermitDetails());
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+        ClosePermitDetailsModel closePermitDetailsModel =
+            await _permitRepository.closePermitDetails(
+                hashCode, event.permitId, roleId);
+        if (closePermitDetailsModel.status == 200) {
+          emit(ClosePermitDetailsFetched(closePermitDetailsModel));
+        } else {
+          emit(const ClosePermitDetailsError());
+        }
+      } else {
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        ClosePermitDetailsModel closePermitDetailsModel =
+            ClosePermitDetailsModel(
+                status: 200,
+                message: '',
+                data: GetClosePermitData.fromJson(permitHtmlMap));
+        if (permitHtmlMap.isNotEmpty) {
+          emit(ClosePermitDetailsFetched(closePermitDetailsModel));
+        } else {
+          emit(const ClosePermitDetailsError());
+        }
+      }
     } catch (e) {
       emit(const ClosePermitDetailsError());
     }
