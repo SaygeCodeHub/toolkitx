@@ -43,12 +43,13 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.10
   document_viewer: ^0.0.1
-  webview_flutter:
+  webview_flutter: ^4.7.0
   flutter_osm_plugin: ^0.70.0
   package_info_plus:
   open_file: ^3.3.2
   csv:
   flutter_document_picker: ^5.2.3
+
 
 dev_dependencies:
   flutter_test:

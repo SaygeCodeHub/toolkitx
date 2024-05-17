@@ -1,7 +1,5 @@
-import 'package:sqflite/sqflite.dart';
-
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../data/models/chatBox/fetch_employees_model.dart';
 
