@@ -125,3 +125,9 @@ class SavePermitEditSafetyDocument extends PermitEvents {
 
   SavePermitEditSafetyDocument({required this.editSafetyDocumentMap});
 }
+
+class ChangePermitCP extends PermitEvents {
+  final Map changePermitCP;
+
+  ChangePermitCP({required this.changePermitCP});
+}

@@ -270,3 +270,13 @@ class PermitEditSafetyDocumentNotSaved extends PermitStates {
 
   PermitEditSafetyDocumentNotSaved({required this.errorMessage});
 }
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}

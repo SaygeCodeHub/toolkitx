@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
@@ -61,6 +62,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<FetchClearPermit>(_fetchClearPermit);
     on<SaveClearPermit>(saveClearPermit);
     on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
+    on<ChangePermitCP>(_changePermitCP);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -587,6 +589,33 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(PermitEditSafetyDocumentNotSaved(
           errorMessage: StringConstants.kSomethingWentWrong));
+    }
+  }
+
+  Future<FutureOr<void>> _changePermitCP(
+      ChangePermitCP event, Emitter<PermitStates> emit) async {
+    emit(PermitCPChanging());
+    try {
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      Map changePermitCPMap = {
+        "hashcode": hashCode,
+        "permitid": "CglqiejuVM2pt6haHB6I9Q==",
+        "userid": userId,
+        "npw": "1",
+        "sap": "",
+        "role": "fGLj9XEzYUQ+1lz4/JymXw==",
+        "controlroom": "xxxx"
+      };
+      ChangePermitCpModel changePermitCpModel =
+          await _permitRepository.changePermitCP(changePermitCPMap);
+      if (changePermitCpModel.message == '1') {
+        emit(PermitCPChanged());
+      } else {
+        emit(PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+      }
+    } catch (e) {
+      emit(PermitCPNotChanged(errorMessage: e.toString()));
     }
   }
 }
