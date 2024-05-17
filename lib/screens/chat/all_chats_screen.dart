@@ -8,7 +8,6 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -16,11 +15,16 @@ import 'package:toolkit/widgets/custom_card.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 
-class AllChatsScreen extends StatelessWidget {
+class AllChatsScreen extends StatefulWidget {
   static const routeName = 'AllChatsScreen';
 
   const AllChatsScreen({super.key});
 
+  @override
+  State<AllChatsScreen> createState() => _AllChatsScreenState();
+}
+
+class _AllChatsScreenState extends State<AllChatsScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<ChatBloc>().add(FetchChatsList());
@@ -53,9 +57,6 @@ class AllChatsScreen extends StatelessWidget {
                     return CustomCard(
                       child: ListTile(
                           onTap: () async {
-                            await databaseHelper.updateShowCountForMessages(
-                                snapshot.data![index].rId,
-                                snapshot.data![index].sId);
                             context.read<ChatBloc>().chatDetailsMap = {
                               "employee_name": snapshot.data![index].userName,
                               'rid': (snapshot.data![index].isGroup == true)
@@ -67,11 +68,8 @@ class AllChatsScreen extends StatelessWidget {
                               'rtype': snapshot.data![index].rType,
                               'isGroup': snapshot.data![index].isGroup
                             };
-                            Navigator.pushNamed(
-                                    context, ChatMessagingScreen.routeName)
-                                .then((value) => context
-                                    .read<ChatBloc>()
-                                    .add(FetchChatsList()));
+                            await databaseHelper.updateShowCountForMessages(
+                                snapshot.data![index].sId);
                           },
                           leading: Container(
                               padding: const EdgeInsets.all(tiniestSpacing),
@@ -128,7 +126,7 @@ class AllChatsScreen extends StatelessWidget {
                                 children: [
                                   Flexible(
                                       child: messageText(
-                                          snapshot.data![index].message,
+                                          snapshot.data![index].fileName,
                                           snapshot.data![index].messageType)),
                                   Visibility(
                                     visible:

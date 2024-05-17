@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_msg_widget.dart';
 import 'package:toolkit/screens/chat/widgets/attachment_preview_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chatbox_textfield_widget.dart';
@@ -39,6 +40,10 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GenericAppBar(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, AllChatsScreen.routeName);
+          },
           title:
               context.read<ChatBloc>().chatDetailsMap['employee_name'] ?? ''),
       body: Column(

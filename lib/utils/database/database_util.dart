@@ -43,7 +43,7 @@ class DatabaseHelper {
             localImagePath TEXT,
             pickedMedia TEXT,
             serverImagePath TEXT,
-            showCount INTEGER,
+            isMessageRead INTEGER,
             unreadMessageCount INTEGER,
             isGroup INTEGER,
             attachementExtension TEXT
@@ -134,37 +134,37 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> getUnreadMessageCount(
-      String currentUserId,
-      String currentSenderId,
-      String receiverId,
-      String currentReceiverId,
-      bool onChatMessagingScreen) async {
+  Future<void> getUnreadMessageCount(String currentSenderId,
+      String currentReceiverId) async {
     final Database db = await database;
 
     await db.transaction((txn) async {
       final unreadCount = await txn.rawQuery('''
       SELECT COUNT(*) AS unread_for_recipient
       FROM chat_messages
-       WHERE sid = ? AND rid = ? AND showCount = 0;
-    ''', [currentUserId, receiverId]);
-      int unreadRecipientCount =
+      WHERE sid = ? AND rid = ? AND isMessageRead = 0;
+    ''', [currentSenderId, currentReceiverId]);
+
+      final unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
+
       await txn.update(
           'chat_messages', {'unreadMessageCount': unreadRecipientCount},
-          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
+          where: 'sid = ? AND rid = ?',
+          whereArgs: [currentSenderId, currentReceiverId]);
     });
   }
 
-  Future<void> updateShowCountForMessages(
-      String recipientId, String senderId) async {
-    final Database db = await database;
-    await db.update(
-      'chat_messages',
-      {'showCount': 1},
-      where: '(rid = ? AND showCount = 0) OR (sid = ? AND showCount = 0)',
-      whereArgs: [recipientId, senderId],
-    );
+  Future<void> updateShowCountForMessages(String recipientId) async {
+    try {
+      final Database db = await database;
+      int count = await db.update(
+          'chat_messages', {'isMessageRead': 1, 'unreadMessageCount': 0},
+          where: 'sid = ? AND isMessageRead = 0', whereArgs: [recipientId]);
+      print('$count message(s) updated for recipientId: $recipientId');
+    } catch (e) {
+      print('Error updating messages for recipientId $recipientId: $e');
+    }
   }
 
   Future<void> insertEmployees(List<EmployeesDatum> employees) async {
@@ -204,7 +204,6 @@ class DatabaseHelper {
       where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
       whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
     );
-
     List<Map<String, dynamic>> updatedMessages = [];
 
     for (var message in messages) {

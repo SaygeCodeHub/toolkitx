@@ -21,14 +21,14 @@ class NotificationUtil {
       log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
-        if (_isMessageForCurrentChat(message)) {
+        if (await _isMessageForCurrentChat(message)) {
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
             'sid': message.data['sid'] ?? '',
             'rid': message.data['rid'] ?? '',
             'rtype': message.data['rtype'] ?? '',
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
-            'showCount': 0,
+            'isMessageRead': await _isMessageForCurrentChat(message) ? 1 : 0,
             'currentSenderId': message.data['sid'] ?? '',
             'currentReceiverId': message.data['rid'] ?? '',
             'isGroup': (message.data['rtype'] == '3') ? true : false,
@@ -41,7 +41,7 @@ class NotificationUtil {
             'rtype': message.data['rtype'] ?? '',
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
-            'showCount': 0,
+            'isMessageRead': 0,
             'currentSenderId':
                 ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
             'currentReceiverId':
@@ -58,7 +58,7 @@ class NotificationUtil {
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
 
-  bool _isMessageForCurrentChat(RemoteMessage message) {
+  Future<bool> _isMessageForCurrentChat(RemoteMessage message) async {
     if (message.data.isNotEmpty) {
       String senderId = message.data['sid'];
       bool isMessageForCurrentChat =
@@ -82,7 +82,7 @@ class NotificationUtil {
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageRead': await _isMessageForCurrentChat(message) ? 1 : 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
     };
@@ -119,7 +119,7 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'employee_name': message.data['username'] ?? '',
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageRead': 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
     };
