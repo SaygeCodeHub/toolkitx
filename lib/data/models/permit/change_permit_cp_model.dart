@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-ChangePermitCpModel changePermitCpModelFromJson(String str) => ChangePermitCpModel.fromJson(json.decode(str));
+ChangePermitCpModel changePermitCpModelFromJson(String str) =>
+    ChangePermitCpModel.fromJson(json.decode(str));
 
-String changePermitCpModelToJson(ChangePermitCpModel data) => json.encode(data.toJson());
+String changePermitCpModelToJson(ChangePermitCpModel data) =>
+    json.encode(data.toJson());
 
 class ChangePermitCpModel {
   final int? status;
@@ -16,25 +17,24 @@ class ChangePermitCpModel {
     this.data,
   });
 
-  factory ChangePermitCpModel.fromJson(Map<String, dynamic> json) => ChangePermitCpModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: json["Data"] == null ? null : Data.fromJson(json["Data"]),
-  );
+  factory ChangePermitCpModel.fromJson(Map<String, dynamic> json) =>
+      ChangePermitCpModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: json["Data"] == null ? null : Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data?.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data?.toJson(),
+      };
 }
 
 class Data {
   Data();
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-  );
+  factory Data.fromJson(Map<String, dynamic> json) => Data();
 
-  Map<String, dynamic> toJson() => {
-  };
+  Map<String, dynamic> toJson() => {};
 }

@@ -160,7 +160,7 @@ class SelectTransferValue extends PermitEvents {
 }
 
 class ChangePermitCP extends PermitEvents {
-  final Map changePermitCP;
+  final Map changePermitCPMap;
 
-  ChangePermitCP({required this.changePermitCP});
+  ChangePermitCP({required this.changePermitCPMap});
 }

@@ -651,19 +651,25 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       Map changePermitCPMap = {
         "hashcode": hashCode,
-        "permitid": "CglqiejuVM2pt6haHB6I9Q==",
+        "permitid": event.changePermitCPMap['permitId'],
         "userid": userId,
-        "npw": "1",
-        "sap": "",
-        "role": "fGLj9XEzYUQ+1lz4/JymXw==",
-        "controlroom": "xxxx"
+        "npw": event.changePermitCPMap['npw'],
+        "sap": event.changePermitCPMap['sap'],
+        "role": roleId,
+        "controlroom": event.changePermitCPMap['controlePerson']
       };
-      ChangePermitCpModel changePermitCpModel =
-          await _permitRepository.changePermitCP(changePermitCPMap);
-      if (changePermitCpModel.message == '1') {
-        emit(PermitCPChanged());
+      if ((event.changePermitCPMap['sap'] != '' &&
+          event.changePermitCPMap['controlePerson'] != null)) {
+        ChangePermitCpModel changePermitCpModel =
+            await _permitRepository.changePermitCP(changePermitCPMap);
+        if (changePermitCpModel.message == '1') {
+          emit(PermitCPChanged());
+        } else {
+          emit(PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+        }
       } else {
-        emit(PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+        emit(PermitCPNotChanged(
+            errorMessage: "SAP and control person can't be empty"));
       }
     } catch (e) {
       emit(PermitCPNotChanged(errorMessage: e.toString()));
