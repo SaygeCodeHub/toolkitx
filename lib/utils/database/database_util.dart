@@ -366,4 +366,31 @@ class DatabaseHelper {
       return {};
     }
   }
+
+  Future<Map<String, dynamic>> fetchPermitDetailsHtml(
+      String permitId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      'SELECT html FROM OfflinePermit WHERE permitId = ?',
+      [permitId],
+    );
+    if (results.isNotEmpty) {
+      final Map<String, dynamic> result = results.first;
+      Map<String, dynamic> returnMap = jsonDecode(result['html']);
+      return returnMap;
+    } else {
+      return {};
+    }
+  }
+
+  Future<int> fetchPermitStatusId(String permitId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      'SELECT listPage FROM OfflinePermit WHERE permitId = ?',
+      [permitId],
+    );
+    final listPage = jsonDecode(results.first['listPage']);
+    print(listPage['statusid']);
+    return listPage['statusid'];
+  }
 }

@@ -230,83 +230,78 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     List permitPopUpMenu = [StringConstants.kGeneratePdf];
-    try {
-      if (isNetworkEstablished) {
-        add(FetchPermitBasicDetails(permitId: event.permitId));
-        emit(const FetchingPermitDetails());
-        String hashCode =
-            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-        PermitDetailsModel permitDetailsModel = await _permitRepository
-            .fetchPermitDetails(hashCode, event.permitId, roleId);
-        if (permitDetailsModel.data.tab1.isopen == '1') {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (permitDetailsModel.data.tab1.isclose == '1') {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (permitDetailsModel.data.tab1.status ==
-            DatabaseUtil.getText('Created')) {
-          permitPopUpMenu.add(StringConstants.kRequestPermit);
-        }
-        if (permitBasicData?.isprepared == '1') {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (permitBasicData?.iseditsafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (permitBasicData?.isacceptissue == '1') {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-        }
-        if (permitBasicData?.isclearpermit == '1') {
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
+    // try {
+    if (isNetworkEstablished) {
+      add(FetchPermitBasicDetails(permitId: event.permitId));
+      emit(const FetchingPermitDetails());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      PermitDetailsModel permitDetailsModel = await _permitRepository
+          .fetchPermitDetails(hashCode, event.permitId, roleId);
+      if (permitDetailsModel.data.tab1.isopen == '1') {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (permitDetailsModel.data.tab1.isclose == '1') {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (permitDetailsModel.data.tab1.status ==
+          DatabaseUtil.getText('Created')) {
+        permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (permitBasicData?.isclearpermit == '1') {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      emit(PermitDetailsFetched(
+          permitDetailsModel: permitDetailsModel,
+          permitPopUpMenu: permitPopUpMenu));
+    } else {
+      emit(const FetchingPermitDetails());
+      Map<String, dynamic> permitDetailsMap =
+          await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+      int statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
+      PermitDetailsData permitDerailsData =
+          PermitDetailsData.fromJson(permitDetailsMap);
+      PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+          status: 200,
+          message: '',
+          data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+      if (statusId == 16 || statusId == 7) {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (statusId == 18) {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (statusId == 10) {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (statusId == 10 || statusId == 5) {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (statusId == 2) {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (statusId == 17) {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      if (permitDetailsModel.toJson().isNotEmpty) {
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu));
       } else {
-        emit(const FetchingPermitDetails());
-        Map<String, dynamic> permitDetailsMap =
-            await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
-        PermitDetailsData permitDerailsData =
-            PermitDetailsData.fromJson(permitDetailsMap);
-        PermitDetailsModel permitDetailsModel = PermitDetailsModel(
-            status: 200,
-            message: '',
-            data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-
-        if (permitDetailsModel.data.tab1.isopen == '1') {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (permitDetailsModel.data.tab1.isclose == '1') {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (permitDetailsModel.data.tab1.status ==
-            DatabaseUtil.getText('Created')) {
-          permitPopUpMenu.add(StringConstants.kRequestPermit);
-        }
-        if (permitBasicData?.isprepared == '1') {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (permitBasicData?.iseditsafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (permitBasicData?.isacceptissue == '1') {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-        }
-        if (permitBasicData?.isclearpermit == '1') {
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
-        if (permitDetailsModel.toJson().isNotEmpty) {
-          emit(PermitDetailsFetched(
-              permitDetailsModel: permitDetailsModel,
-              permitPopUpMenu: permitPopUpMenu));
-        } else {
-          emit(const CouldNotFetchPermitDetails());
-        }
+        emit(const CouldNotFetchPermitDetails());
       }
-    } catch (e) {
-      emit(const CouldNotFetchPermitDetails());
     }
+    // } catch (e) {
+    //   emit(const CouldNotFetchPermitDetails());
+    // }
   }
 
   FutureOr<void> _generatePDF(
@@ -440,27 +435,49 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _fetchDataForOpenPermit(
       FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
     emit(DataForOpenPermitFetching());
-    try {
-      String hashCode =
-          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-      FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
-          await _permitRepository.fetchDataForOpenPermit(
-              event.permitId, hashCode, roleId);
-      if (fetchDataForOpenPermitModel.status == 200) {
+    // try {
+      if (isNetworkEstablished) {
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+        FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
+            await _permitRepository.fetchDataForOpenPermit(
+                event.permitId, hashCode, roleId);
+        if (fetchDataForOpenPermitModel.status == 200) {
+          final List<Question> questions = [
+            Question(questionNo: StringConstants.kPermitFirstQuestion),
+            Question(questionNo: StringConstants.kPermitSecondQuestion)
+          ];
+          emit(DataForOpenPermitFetched(
+              fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
+              questions: questions));
+        } else {
+          emit(DataForOpenPermitNotFetched(
+              errorMessage: fetchDataForOpenPermitModel.message!));
+        }
+      } else {
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
+            FetchDataForOpenPermitModel(
+                status: 200,
+                message: '',
+                data: FetchDataForOpenPermitDatum.fromJson(permitHtmlMap));
         final List<Question> questions = [
           Question(questionNo: StringConstants.kPermitFirstQuestion),
           Question(questionNo: StringConstants.kPermitSecondQuestion)
         ];
-        emit(DataForOpenPermitFetched(
-            fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
-            questions: questions));
-      } else {
-        emit(DataForOpenPermitNotFetched(
-            errorMessage: fetchDataForOpenPermitModel.message!));
+        if (permitHtmlMap.isNotEmpty) {
+          emit(DataForOpenPermitFetched(
+              fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
+              questions: questions));
+        } else {
+          emit(DataForOpenPermitNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
       }
-    } catch (e) {
-      emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _saveMarkAsPrepared(
