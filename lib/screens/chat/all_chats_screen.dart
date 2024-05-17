@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
@@ -8,7 +10,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
 import '../../di/app_module.dart';
@@ -28,7 +29,7 @@ class AllChatsScreen extends StatelessWidget {
         title: const Text('Chats'),
         automaticallyImplyLeading: false,
         titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-        actions: [ChatPopUpMenu()],
+        actions: const [],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {

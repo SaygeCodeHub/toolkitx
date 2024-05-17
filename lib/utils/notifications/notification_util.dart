@@ -95,7 +95,6 @@ class NotificationUtil {
   }
 
   getToken<String>() async {
-    print('get token ${await pushNotifications.getToken()}');
     return await pushNotifications.getToken();
   }
 }

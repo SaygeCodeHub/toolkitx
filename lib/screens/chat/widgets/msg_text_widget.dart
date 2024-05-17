@@ -21,13 +21,28 @@ class MsgTextWidget extends StatelessWidget {
         alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
             ? Alignment.centerLeft
             : Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-              ? AppColor.blueGrey
-              : Colors.grey[300],
-          child: Text(snapshot.data![reversedIndex]['msg']),
-        ),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                  (snapshot.data![reversedIndex]['isReceiver'] == 1)
+                      ? context
+                              .read<ChatBloc>()
+                              .chatDetailsMap['employee_name'] ??
+                          ''
+                      : '',
+                  style: Theme.of(context).textTheme.tinySmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1),
+              const SizedBox(height: xxTiniestSpacing),
+              Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+                      ? AppColor.blueGrey
+                      : Colors.grey[300],
+                  child: Text(snapshot.data![reversedIndex]['msg'])),
+            ]),
       ),
       subtitle: Align(
         alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)

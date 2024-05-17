@@ -85,7 +85,6 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
       String hashcode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
       String newToken = await NotificationUtil().getToken();
-      print('device token $newToken');
       Map saveUserDeviceMap = {
         "hashcode": hashcode,
         "deviceid": await getDeviceId(),

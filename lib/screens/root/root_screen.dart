@@ -12,6 +12,8 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../di/app_module.dart';
+import '../../utils/database/database_util.dart';
 import '../home/home_screen.dart';
 import '../profile/profile_screen.dart';
 
@@ -25,8 +27,9 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState();
 }
 
-class _RootScreenState extends State<RootScreen> {
+class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
+  final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
 
   @override
   void initState() {
@@ -34,6 +37,13 @@ class _RootScreenState extends State<RootScreen> {
     if (widget.isFromClientList) {
       _selectedIndex = 0;
     }
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this); // Unregister the observer
   }
 
   void _onItemTapped(int index) {
@@ -54,6 +64,28 @@ class _RootScreenState extends State<RootScreen> {
     const HomeScreen(),
     const AllChatsScreen(),
   ];
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        context
+            .read<ChatBloc>()
+            .add(RebuildChatMessagingScreen(employeeDetailsMap: {
+              'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
+              'sid': ChatBloc().chatDetailsMap['sid'] ?? ''
+            }));
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

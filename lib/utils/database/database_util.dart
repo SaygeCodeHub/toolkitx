@@ -194,8 +194,8 @@ class DatabaseHelper {
         where: 'msg_id = ?', whereArgs: [msgId]);
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String employeeIdA,
-      String employeeIdB, String rtype, String stype) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
+      String employeeIdA, String employeeIdB) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 

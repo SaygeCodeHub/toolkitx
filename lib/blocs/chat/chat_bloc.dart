@@ -38,7 +38,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
   String clientId = '';
-  int unreadMsgCount = 0;
   String timeZoneFormat = '';
 
   List<ChatData> chatDetailsList = [];
@@ -172,10 +171,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     List<Map<String, dynamic>> messages =
         await _databaseHelper.getMessagesForEmployees(
             event.employeeDetailsMap['rid'].toString(),
-            event.employeeDetailsMap['sid'].toString(),
-            event.employeeDetailsMap['rtype'].toString(),
-            event.employeeDetailsMap['stype'].toString());
-    print('chat message map ${event.employeeDetailsMap}');
+            event.employeeDetailsMap['sid'].toString());
     messages = List.from(messages.reversed);
     messagesList.clear();
     messagesList.addAll(messages);
@@ -202,10 +198,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     for (int i = 0; i < employees.length; i++) {
       List<Map<String, dynamic>> message =
           await _databaseHelper.getMessagesForEmployees(
-              employees[i]['sid'].toString(),
-              employees[i]['rid'].toString(),
-              employees[i]['rtype'].toString(),
-              employees[i]['stype'].toString());
+              employees[i]['sid'].toString(), employees[i]['rid'].toString());
       if (message.isNotEmpty) {
         int existingChatIndex =
             findExistingChatIndex(individualChatList, message.last);
@@ -222,7 +215,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               ? 0
               : message.last['unreadMessageCount'] ?? 0;
         } else {
-          unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
               rId: message.last['rid'].toString(),
               sId: message.last['sid'].toString(),

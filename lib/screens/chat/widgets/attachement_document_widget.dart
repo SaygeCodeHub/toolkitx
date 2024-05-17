@@ -16,7 +16,7 @@ class AttachmentDocumentWidget extends StatelessWidget {
     return Tooltip(
       message: 'Click to view document',
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.centerRight,
         child: InkWell(
           onTap: () async {
             if (docPath.toLowerCase().endsWith('.pdf')) {
@@ -29,12 +29,32 @@ class AttachmentDocumentWidget extends StatelessWidget {
               await fileViewer.viewFile(context, docPath);
             }
           },
-          child: Container(
-            color: AppColor.lightGrey,
-            height: 100,
-            width: 100,
-            child: const Icon(Icons.folder),
-          ),
+          child: (docPath.toLowerCase().endsWith('.pdf'))
+              ? Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      decoration:
+                          const BoxDecoration(color: AppColor.lightGrey),
+                    ),
+                    Image.asset(
+                      'assets/icons/pdf.png',
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
+                )
+              : Stack(alignment: Alignment.center, children: [
+                  Container(
+                      height: 100,
+                      width: 100,
+                      decoration:
+                          const BoxDecoration(color: AppColor.lightGrey)),
+                  fileViewer.viewDocumentIcons(docPath)
+                ]),
         ),
       ),
     );
