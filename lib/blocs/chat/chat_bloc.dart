@@ -207,6 +207,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = await formattedTime(message.last['msg_time']);
+          existingChat.dateTime = message.last['msg_time'];
           existingChat.userName = message.last['employee_name'] ?? '';
           existingChat.isReceiver = message.last['isReceiver'] ?? '';
           existingChat.unreadMsgCount = (_isMessageForCurrentChat(
@@ -225,6 +226,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               message: message.last['msg'] ?? '',
               isGroup: (message.last['isGroup'] == 1) ? true : false,
               date: formattedDate(message.last['msg_time']),
+              dateTime: message.last['msg_time'],
               time: await formattedTime(message.last['msg_time']),
               messageType: message.last['msg_type'] ?? '',
               unreadMsgCount: (_isMessageForCurrentChat(chatDetailsMap['sid'],
@@ -284,7 +286,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
       }
     }
-    return DateFormat('H:mm').format(dateTime);
+    return DateFormat('H:mm:ss').format(dateTime);
   }
 
   FutureOr<void> _createChatGroup(

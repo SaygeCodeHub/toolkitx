@@ -69,7 +69,6 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        print('resumed');
         context
             .read<ChatBloc>()
             .add(RebuildChatMessagingScreen(employeeDetailsMap: {

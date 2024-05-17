@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
@@ -111,7 +112,7 @@ class AllChatsScreen extends StatelessWidget {
                                       : (snapshot.data![index].sType == '2')
                                           ? 'Workforce'
                                           : 'System User'),
-                                  Text(snapshot.data![index].time,
+                                  Text(time(snapshot.data![index].dateTime),
                                       style: Theme.of(context)
                                           .textTheme
                                           .xxSmall
@@ -172,6 +173,11 @@ class AllChatsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String time(String time) {
+    DateTime formattedTime = DateTime.parse(time);
+    return DateFormat('H:mm').format(formattedTime);
   }
 
   Widget messageText(String message, String type) {
