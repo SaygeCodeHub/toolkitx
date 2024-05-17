@@ -5,6 +5,7 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -269,4 +270,45 @@ class PermitEditSafetyDocumentNotSaved extends PermitStates {
   final String errorMessage;
 
   PermitEditSafetyDocumentNotSaved({required this.errorMessage});
+}
+
+class DataForChangePermitCPFetching extends PermitStates {}
+
+class DataForChangePermitCPFetched extends PermitStates {
+  final FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel;
+
+  DataForChangePermitCPFetched({required this.fetchDataForChangePermitCpModel});
+}
+
+class DataForChangePermitCPNotFetched extends PermitStates {
+  final String errorMessage;
+
+  DataForChangePermitCPNotFetched({required this.errorMessage});
+}
+
+class TransferToSelected extends PermitStates {
+  final String transferType;
+  final String transferValue;
+
+  TransferToSelected({required this.transferType, required this.transferValue});
+}
+
+class TransferCPWorkforceSelected extends PermitStates {
+  final int id;
+  final String name;
+
+  TransferCPWorkforceSelected({required this.id, required this.name});
+}
+
+class TransferCPSapSelected extends PermitStates {
+  final int id;
+  final String name;
+
+  TransferCPSapSelected({required this.id, required this.name});
+}
+
+class TransferValueSelected extends PermitStates {
+  final String value;
+
+  TransferValueSelected({required this.value});
 }
