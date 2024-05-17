@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
@@ -61,6 +62,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<FetchClearPermit>(_fetchClearPermit);
     on<SaveClearPermit>(saveClearPermit);
     on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
+    on<FetchDataForChangePermitCP>(_fetchDataForChangePermitCP);
+    on<SelectTransferTo>(_selectTransferTo);
+    on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
+    on<SelectTransferCPSap>(_selectTransferCPSap);
+    on<SelectTransferValue>(_selectTransferValue);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -219,6 +225,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
       if (permitBasicData?.isclearpermit == '1') {
         permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      if (permitBasicData?.istransfersafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
       }
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
@@ -588,5 +597,47 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(PermitEditSafetyDocumentNotSaved(
           errorMessage: StringConstants.kSomethingWentWrong));
     }
+  }
+
+  Future<FutureOr<void>> _fetchDataForChangePermitCP(
+      FetchDataForChangePermitCP event, Emitter<PermitStates> emit) async {
+    try {
+      emit(DataForChangePermitCPFetching());
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+          await _permitRepository.fetchDataForChangePermitCP(
+              event.permitId, hashCode);
+      if (fetchDataForChangePermitCpModel.status == 200) {
+        emit(DataForChangePermitCPFetched(
+            fetchDataForChangePermitCpModel: fetchDataForChangePermitCpModel));
+      } else {
+        emit(DataForChangePermitCPNotFetched(
+            errorMessage: fetchDataForChangePermitCpModel.message!));
+      }
+    } catch (e) {
+      emit(DataForChangePermitCPNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectTransferTo(
+      SelectTransferTo event, Emitter<PermitStates> emit) {
+    emit(TransferToSelected(
+        transferType: event.transferType, transferValue: event.transferValue));
+  }
+
+  FutureOr<void> _selectTransferCPWorkForce(
+      SelectTransferCPWorkForce event, Emitter<PermitStates> emit) {
+    emit(TransferCPWorkforceSelected(id: event.id, name: event.name));
+  }
+
+  FutureOr<void> _selectTransferCPSap(
+      SelectTransferCPSap event, Emitter<PermitStates> emit) {
+    emit(TransferCPSapSelected(id: event.id, name: event.name));
+  }
+
+  FutureOr<void> _selectTransferValue(
+      SelectTransferValue event, Emitter<PermitStates> emit) {
+    emit(TransferValueSelected(value: event.value));
   }
 }
