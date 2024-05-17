@@ -40,7 +40,7 @@ class IncidentDetailsBloc
   FutureOr<void> _fetchDetails(FetchIncidentDetailsEvent event,
       Emitter<IncidentDetailsStates> emit) async {
     emit(const FetchingIncidentDetails());
-    // try {
+    try {
     List popUpMenuItems = [
       DatabaseUtil.getText('AddComments'),
     ];
@@ -125,9 +125,9 @@ class IncidentDetailsBloc
         showPopUpMenu: true,
       ));
     }
-    // } catch (e) {
-    //   emit(const IncidentDetailsNotFetched());
-    // }
+    } catch (e) {
+      emit(const IncidentDetailsNotFetched());
+    }
   }
 
   FutureOr<void> _generateIncidentPDF(

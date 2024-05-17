@@ -26,6 +26,7 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    todoMap['todoid'] = todoId;
     context.read<ToDoBloc>().add(
         FetchToDoDetailsAndDocumentDetails(selectedIndex: 0, todoId: todoId));
     return Scaffold(
