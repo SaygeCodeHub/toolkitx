@@ -9,7 +9,7 @@ String fetchDataForOpenPermitModelToJson(FetchDataForOpenPermitModel data) =>
 class FetchDataForOpenPermitModel {
   final int? status;
   final String? message;
-  final FetchDataForOpenPermitDatum? data;
+  final FetchDataForOpenPermitData? data;
 
   FetchDataForOpenPermitModel({
     this.status,
@@ -21,7 +21,9 @@ class FetchDataForOpenPermitModel {
       FetchDataForOpenPermitModel(
         status: json["Status"],
         message: json["Message"],
-        data: json["Data"] == null ? null : FetchDataForOpenPermitDatum.fromJson(json["Data"]),
+        data: json["Data"] == null
+            ? null
+            : FetchDataForOpenPermitData.fromJson(json["Data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +33,7 @@ class FetchDataForOpenPermitModel {
       };
 }
 
-class FetchDataForOpenPermitDatum {
+class FetchDataForOpenPermitData {
   final String? clientid;
   final String? permitName;
   final String? permitStatus;
@@ -78,7 +80,7 @@ class FetchDataForOpenPermitDatum {
   final String? npiPhone;
   final String? npwPhone;
 
-  FetchDataForOpenPermitDatum({
+  FetchDataForOpenPermitData({
     this.clientid,
     this.permitName,
     this.permitStatus,
@@ -126,7 +128,8 @@ class FetchDataForOpenPermitDatum {
     this.npwPhone,
   });
 
-  factory FetchDataForOpenPermitDatum.fromJson(Map<String, dynamic> json) => FetchDataForOpenPermitDatum(
+  factory FetchDataForOpenPermitData.fromJson(Map<String, dynamic> json) =>
+      FetchDataForOpenPermitData(
         clientid: json["clientid"],
         permitName: json["permit_name"],
         permitStatus: json["permit_status"],

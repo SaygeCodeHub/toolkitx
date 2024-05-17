@@ -40,6 +40,7 @@ class AcceptPermitRequestScreen extends StatelessWidget {
                   } else if (state is PermitRequestAccepted) {
                     ProgressBar.dismiss(context);
                     Navigator.pop(context);
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, PermitDetailsScreen.routeName,
                         arguments: permitId);
                   } else if (state is PermitRequestNotAccepted) {

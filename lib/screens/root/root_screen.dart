@@ -30,6 +30,7 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   void initState() {
+    widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
     if (widget.isFromClientList) {
       _selectedIndex = 0;
@@ -42,19 +43,17 @@ class _RootScreenState extends State<RootScreen> {
     });
   }
 
-  final List<Widget> _onlineWidgetOptions = [
-    const HomeScreen(),
-    const Text('Index 2: Location'),
-    const Text('Index 2: Notification'),
-    const AllChatsScreen(),
-    const ProfileScreen(),
+  static const List _widgetOptions = [
+    HomeScreen(),
+    CurrentLocationScreen(),
+    NotificationScreen(),
+    Text('Index 3: Chat'),
+    ProfileScreen()
   ];
-
   final List<Widget> _offlineWidgetOptions = [
     const HomeScreen(),
     const AllChatsScreen(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
