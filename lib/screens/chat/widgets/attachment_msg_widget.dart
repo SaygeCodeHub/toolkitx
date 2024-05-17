@@ -34,7 +34,18 @@ class AttachmentMsgWidget extends StatelessWidget {
           left: kModuleImagePadding,
           bottom: kModuleImagePadding),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Text(
+              (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                  ? context.read<ChatBloc>().chatDetailsMap['employee_name'] ??
+                      ''
+                  : '',
+              style: Theme.of(context).textTheme.tinySmall,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1),
+          const SizedBox(height: xxTiniestSpacing),
           (snapShot.data![reversedIndex]['isReceiver'] == 1)
               ? Align(
                   alignment: Alignment.centerLeft,
