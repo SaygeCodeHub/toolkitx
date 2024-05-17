@@ -3,7 +3,7 @@ import 'dart:convert';
 class OfflinePermitModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<OfflinePermitDatum> data;
 
   OfflinePermitModel({
     required this.status,
@@ -21,7 +21,8 @@ class OfflinePermitModel {
         status: json["Status"] ?? 0,
         message: json["Message"] ?? '',
         data: (json["Data"] != null)
-            ? List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x)))
+            ? List<OfflinePermitDatum>.from(
+                json["Data"].map((x) => OfflinePermitDatum.fromJson(x)))
             : [],
       );
 
@@ -32,9 +33,9 @@ class OfflinePermitModel {
       };
 }
 
-class Datum {
+class OfflinePermitDatum {
   final String id;
-  final String id2;
+  final int id2;
   final Listpage listpage;
   final Tab1 tab1;
   final Tab2 tab2;
@@ -44,7 +45,7 @@ class Datum {
   final List<dynamic> tab6;
   final Map<String, String> html;
 
-  Datum({
+  OfflinePermitDatum({
     required this.id,
     required this.id2,
     required this.listpage,
@@ -57,13 +58,16 @@ class Datum {
     required this.html,
   });
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+  factory OfflinePermitDatum.fromRawJson(String str) =>
+      OfflinePermitDatum.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory OfflinePermitDatum.fromJson(Map<String, dynamic> json) =>
+      OfflinePermitDatum(
         id: json["id"] ?? '',
-        id2: json["id2"] ?? '',
+        id2: json["id2"] != null ? int.parse(json["id2"].toString()) : 0,
+        // Parse as int
         listpage: json["listpage"] != null
             ? Listpage.fromJson(json["listpage"])
             : Listpage(),
@@ -99,7 +103,7 @@ class Datum {
 
 class Listpage {
   final String id;
-  final String id2;
+  final int id2;
   final String permit;
   final int typeOfPermit;
   final String schedule;
@@ -118,7 +122,7 @@ class Listpage {
 
   Listpage({
     this.id = '',
-    this.id2 = '',
+    this.id2 = 0,
     this.permit = '',
     this.typeOfPermit = 0,
     this.schedule = '',
@@ -143,7 +147,7 @@ class Listpage {
 
   factory Listpage.fromJson(Map<String, dynamic> json) => Listpage(
         id: json["id"] ?? '',
-        id2: json["id2"] ?? '',
+        id2: json["id2"] ?? 0,
         permit: json["permit"] ?? '',
         typeOfPermit: json["type_of_permit"] ?? 0,
         schedule: json["schedule"] ?? '',

@@ -1,12 +1,10 @@
 import 'dart:convert';
 
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
-import 'package:toolkit/data/models/permit/permit_details_model.dart';
-
 import '../../data/models/chatBox/fetch_employees_model.dart';
+import '../../data/models/permit/offline_permit_model.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -70,7 +68,7 @@ class DatabaseHelper {
       );
         ''');
 
-        db.execute('''
+        await db.execute('''
         CREATE TABLE IF NOT EXISTS members (
           primary_id INTEGER PRIMARY KEY AUTOINCREMENT,
           id INTEGER UNIQUE,
@@ -82,15 +80,43 @@ class DatabaseHelper {
           FOREIGN KEY (group_id) REFERENCES groups(group_id)
         );
   ''');
+
         await db.execute('''
-          CREATE TABLE IF NOT EXISTS OfflinePermit (
-            id INTEGER PRIMARY KEY,
-            Status INTEGER,
-            Message TEXT,
-            Data TEXT
-          );
-        ''');
+        CREATE TABLE IF NOT EXISTS OfflinePermit (
+          id INTEGER PRIMARY KEY,
+          permitId INTEGER,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          tab6 TEXT,
+          html TEXT,
+          statusId INTEGER
+        );
+''');
       },
+    );
+  }
+
+  Future<void> insertOfflinePermit(OfflinePermitDatum data) async {
+    final Database db = await database;
+    await db.insert(
+      'OfflinePermit',
+      {
+        'permitId': data.id,
+        'listpage': jsonEncode(data.listpage.toJson()),
+        'tab1': jsonEncode(data.tab1.toJson()),
+        'tab2': jsonEncode(data.tab2.toJson()),
+        'tab3': jsonEncode(data.tab3.map((e) => e.toJson()).toList()),
+        'tab4': jsonEncode(data.tab4),
+        'tab5': jsonEncode(data.tab5.map((e) => e.toJson()).toList()),
+        'tab6': jsonEncode(data.tab6),
+        'html': jsonEncode(data.html),
+        'statusId': data.id2
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -306,11 +332,6 @@ class DatabaseHelper {
     return messages;
   }
 
-  Future<void> insertOfflinePermit(Map<String, dynamic> model) async {
-    final db = await database;
-    await db.insert('OfflinePermit', model);
-  }
-
   Future<List<Map<String, dynamic>>> getOfflinePermits() async {
     final db = await database;
     return await db.query('OfflinePermit');
@@ -334,37 +355,5 @@ class DatabaseHelper {
     }
 
     return listPageData;
-  }
-
-  Future<PermitDerailsData?> fetchPermitDetailsById(String id) async {
-    final db = await database;
-    final List<Map<String, dynamic>> result = await db
-        .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
-
-    if (result.isNotEmpty) {
-      PermitDerailsData? permitData;
-      for (var row in result) {
-        final List<dynamic> dataList = json.decode(row['Data']);
-        for (var item in dataList) {
-          if (item is Map<String, dynamic> && item['id'] == id) {
-            permitData = PermitDerailsData(
-              tab1: Tab1.fromJson(item['tab1']),
-              tab2: Tab2.fromJson(item['tab2']),
-              tab3: List<Tab3>.from(item['tab3'].map((x) => Tab3.fromJson(x))),
-              tab4: List<Tab4>.from(item['tab4'].map((x) => Tab4.fromJson(x))),
-              tab5: List<Tab5>.from(item['tab5'].map((x) => Tab5.fromJson(x))),
-              tab6: List<Tab6>.from(item['tab6'].map((x) => Tab6.fromJson(x))),
-            );
-            break;
-          }
-        }
-        if (permitData != null) {
-          break;
-        }
-      }
-      return permitData;
-    } else {
-      throw Exception('No data found in OfflinePermit table');
-    }
   }
 }
