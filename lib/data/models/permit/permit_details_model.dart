@@ -9,7 +9,7 @@ String permitDetailsModelToJson(PermitDetailsModel data) =>
 class PermitDetailsModel {
   final int status;
   final String message;
-  final PermitDerailsData data;
+  final PermitDetailsData data;
 
   PermitDetailsModel({
     required this.status,
@@ -21,7 +21,7 @@ class PermitDetailsModel {
       PermitDetailsModel(
         status: json["Status"] ?? 0,
         message: json["Message"] ?? '',
-        data: PermitDerailsData.fromJson(
+        data: PermitDetailsData.fromJson(
             (json["Data"] == null) ? {} : json["Data"]),
       );
 
@@ -32,40 +32,42 @@ class PermitDetailsModel {
       };
 }
 
-class PermitDerailsData {
+class PermitDetailsData {
   final Tab1 tab1;
   final Tab2 tab2;
   final List<Tab3> tab3;
   final List<Tab4> tab4;
   final List<Tab5> tab5;
   final List<Tab6> tab6;
+  final Map<String, String> html;
 
-  PermitDerailsData({
-    required this.tab1,
-    required this.tab2,
-    required this.tab3,
-    required this.tab4,
-    required this.tab5,
-    required this.tab6,
-  });
+  PermitDetailsData(
+      {required this.tab1,
+      required this.tab2,
+      required this.tab3,
+      required this.tab4,
+      required this.tab5,
+      required this.tab6,
+      required this.html});
 
-  factory PermitDerailsData.fromJson(Map<String, dynamic> json) =>
-      PermitDerailsData(
-        tab1: Tab1.fromJson((json["tab1"] == null) ? {} : json["tab1"]),
-        tab2: Tab2.fromJson((json["tab2"] == null) ? {} : json["tab2"]),
-        tab3: (json["tab3"] == null)
-            ? []
-            : List<Tab3>.from(json["tab3"].map((x) => Tab3.fromJson(x))),
-        tab4: (json["tab4"] == null)
-            ? []
-            : List<Tab4>.from(json["tab4"].map((x) => Tab4.fromJson(x))),
-        tab5: (json["tab5"] == null)
-            ? []
-            : List<Tab5>.from(json["tab5"].map((x) => Tab5.fromJson(x))),
-        tab6: (json["tab6"] == null)
-            ? []
-            : List<Tab6>.from(json["tab6"].map((x) => Tab6.fromJson(x))),
-      );
+  factory PermitDetailsData.fromJson(Map<String, dynamic> json) =>
+      PermitDetailsData(
+          tab1: Tab1.fromJson((json["tab1"] == null) ? {} : json["tab1"]),
+          tab2: Tab2.fromJson((json["tab2"] == null) ? {} : json["tab2"]),
+          tab3: (json["tab3"] == null)
+              ? []
+              : List<Tab3>.from(json["tab3"].map((x) => Tab3.fromJson(x))),
+          tab4: (json["tab4"] == null)
+              ? []
+              : List<Tab4>.from(json["tab4"].map((x) => Tab4.fromJson(x))),
+          tab5: (json["tab5"] == null)
+              ? []
+              : List<Tab5>.from(json["tab5"].map((x) => Tab5.fromJson(x))),
+          tab6: (json["tab6"] == null)
+              ? []
+              : List<Tab6>.from(json["tab6"].map((x) => Tab6.fromJson(x))),
+          html: Map.from(json["html"] ?? {})
+              .map((k, v) => MapEntry<String, String>(k, v)));
 
   Map<String, dynamic> toJson() => {
         "tab1": tab1.toJson(),
@@ -74,6 +76,7 @@ class PermitDerailsData {
         "tab4": List<dynamic>.from(tab4.map((x) => x.toJson())),
         "tab5": List<dynamic>.from(tab5.map((x) => x.toJson())),
         "tab6": List<dynamic>.from(tab6.map((x) => x.toJson())),
+        "html": Map.from(html).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
 

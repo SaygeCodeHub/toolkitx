@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/connectivity_util.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
 import '../../../configs/app_spacing.dart';
@@ -25,11 +26,13 @@ class PermitListCard extends StatelessWidget {
                   Navigator.pushNamed(context, PermitDetailsScreen.routeName,
                           arguments: allPermitDatum.id)
                       .whenComplete(() {
-                    PermitListScreen.page = 1;
-                    context.read<PermitBloc>().permitListData = [];
-                    context
-                        .read<PermitBloc>()
-                        .add(const GetAllPermits(isFromHome: false, page: 1));
+                    if (ConnectivityUtil.isConnected) {
+                      PermitListScreen.page = 1;
+                      context.read<PermitBloc>().permitListData = [];
+                      context
+                          .read<PermitBloc>()
+                          .add(const GetAllPermits(isFromHome: false, page: 1));
+                    }
                   });
                 },
                 title: PermitListTileTitle(allPermitDatum: allPermitDatum),

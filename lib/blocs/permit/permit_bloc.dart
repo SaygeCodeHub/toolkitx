@@ -20,6 +20,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
+import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
@@ -73,10 +74,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       OfflinePermitModel offlinePermitModel =
           await _permitRepository.fetchOfflinePermit(hashCode);
-      for (var datum in offlinePermitModel.data) {
-        await _databaseHelper.insertOfflinePermit(datum);
+      if (offlinePermitModel.status == 200) {
+        for (var datum in offlinePermitModel.data) {
+          await _databaseHelper.insertOfflinePermit(datum);
+        }
+        emit(const PermitLocalDatabasePrepared());
+      } else {
+        emit(const PreparingPermitLocalDatabaseFailed());
       }
-      emit(const PermitLocalDatabasePrepared());
     } catch (e) {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
@@ -173,9 +178,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      if (isNetworkEstablished) {
-        emit(const FetchingAllPermits());
-        if (!listReachedMax) {
+
+      emit(const FetchingAllPermits());
+      if (!listReachedMax) {
+        if (isNetworkEstablished) {
           if (roleId == '' || event.isFromHome) {
             add(const ClearPermitFilters());
             PermitRolesModel permitRolesModel =
@@ -202,21 +208,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 filters: filters,
                 permitListData: permitListData));
           }
-        }
-      } else {
-        emit(const FetchingAllPermits());
-        List<Map<String, dynamic>> fetchListPageData =
-            await _databaseHelper.fetchListPageData();
-        AllPermitModel allPermitModel = AllPermitModel.fromJson(
-            {'Status': 200, 'Message': '', 'Data': fetchListPageData});
-        permitListData.addAll(allPermitModel.data);
-        if (permitListData.isNotEmpty) {
+        } else {
+          emit(const FetchingAllPermits());
+          List<Map<String, dynamic>> fetchListPageData =
+              await _databaseHelper.fetchPermitListOffline();
+          AllPermitModel allPermitModel = AllPermitModel.fromJson(
+              {'Status': 200, 'Message': '', 'Data': fetchListPageData});
+          permitListData.addAll(allPermitModel.data);
+          listReachedMax = true;
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
               filters: {},
               permitListData: permitListData));
-        } else {
-          emit(const CouldNotFetchPermits());
         }
       }
     } catch (e) {
@@ -227,79 +230,83 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     List permitPopUpMenu = [StringConstants.kGeneratePdf];
-    // try {
-    // if (isNetworkEstablished) {
-    //   add(FetchPermitBasicDetails(permitId: event.permitId));
-    //   emit(const FetchingPermitDetails());
-    //   String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    //   PermitDetailsModel permitDetailsModel = await _permitRepository
-    //       .fetchPermitDetails(hashCode, event.permitId, roleId);
-    //   if (permitDetailsModel.data.tab1.isopen == '1') {
-    //     permitPopUpMenu.add(StringConstants.kOpenPermit);
-    //   }
-    //   if (permitDetailsModel.data.tab1.isclose == '1') {
-    //     permitPopUpMenu.add(StringConstants.kClosePermit);
-    //   }
-    //   if (permitDetailsModel.data.tab1.status ==
-    //       DatabaseUtil.getText('Created')) {
-    //     permitPopUpMenu.add(StringConstants.kRequestPermit);
-    //   }
-    //   if (permitBasicData?.isprepared == '1') {
-    //     permitPopUpMenu.add(StringConstants.kPreparePermit);
-    //   }
-    //   if (permitBasicData?.iseditsafetydocument == '1') {
-    //     permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-    //   }
-    //   if (permitBasicData?.isacceptissue == '1') {
-    //     permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-    //   }
-    //   if (permitBasicData?.isclearpermit == '1') {
-    //     permitPopUpMenu.add(StringConstants.kClearPermit);
-    //   }
-    //   emit(PermitDetailsFetched(
-    //       permitDetailsModel: permitDetailsModel,
-    //       permitPopUpMenu: permitPopUpMenu));
-    // } else {
-    //   emit(const FetchingPermitDetails());
-    //   PermitDerailsData? permitDerailsData =
-    //       await _databaseHelper.fetchPermitDetailsById(event.permitId);
-    //   PermitDetailsModel permitDetailsModel = PermitDetailsModel(
-    //       status: 200,
-    //       message: '',
-    //       data: PermitDerailsData.fromJson(permitDerailsData!.toJson()));
-    //   if (permitDetailsModel.data.tab1.isopen == '1') {
-    //     permitPopUpMenu.add(StringConstants.kOpenPermit);
-    //   }
-    //   if (permitDetailsModel.data.tab1.isclose == '1') {
-    //     permitPopUpMenu.add(StringConstants.kClosePermit);
-    //   }
-    //   if (permitDetailsModel.data.tab1.status ==
-    //       DatabaseUtil.getText('Created')) {
-    //     permitPopUpMenu.add(StringConstants.kRequestPermit);
-    //   }
-    //   if (permitBasicData?.isprepared == '1') {
-    //     permitPopUpMenu.add(StringConstants.kPreparePermit);
-    //   }
-    //   if (permitBasicData?.iseditsafetydocument == '1') {
-    //     permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-    //   }
-    //   if (permitBasicData?.isacceptissue == '1') {
-    //     permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-    //   }
-    //   if (permitBasicData?.isclearpermit == '1') {
-    //     permitPopUpMenu.add(StringConstants.kClearPermit);
-    //   }
-    //   if (permitDetailsModel.toJson().isNotEmpty) {
-    //     emit(PermitDetailsFetched(
-    //         permitDetailsModel: permitDetailsModel,
-    //         permitPopUpMenu: permitPopUpMenu));
-    //   } else {
-    //     emit(const CouldNotFetchPermitDetails());
-    //   }
-    // }
-    // } catch (e) {
-    //   emit(const CouldNotFetchPermitDetails());
-    // }
+    try {
+      if (isNetworkEstablished) {
+        add(FetchPermitBasicDetails(permitId: event.permitId));
+        emit(const FetchingPermitDetails());
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+        PermitDetailsModel permitDetailsModel = await _permitRepository
+            .fetchPermitDetails(hashCode, event.permitId, roleId);
+        if (permitDetailsModel.data.tab1.isopen == '1') {
+          permitPopUpMenu.add(StringConstants.kOpenPermit);
+        }
+        if (permitDetailsModel.data.tab1.isclose == '1') {
+          permitPopUpMenu.add(StringConstants.kClosePermit);
+        }
+        if (permitDetailsModel.data.tab1.status ==
+            DatabaseUtil.getText('Created')) {
+          permitPopUpMenu.add(StringConstants.kRequestPermit);
+        }
+        if (permitBasicData?.isprepared == '1') {
+          permitPopUpMenu.add(StringConstants.kPreparePermit);
+        }
+        if (permitBasicData?.iseditsafetydocument == '1') {
+          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+        }
+        if (permitBasicData?.isacceptissue == '1') {
+          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        }
+        if (permitBasicData?.isclearpermit == '1') {
+          permitPopUpMenu.add(StringConstants.kClearPermit);
+        }
+        emit(PermitDetailsFetched(
+            permitDetailsModel: permitDetailsModel,
+            permitPopUpMenu: permitPopUpMenu));
+      } else {
+        emit(const FetchingPermitDetails());
+        Map<String, dynamic> permitDetailsMap =
+            await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+        PermitDetailsData permitDerailsData =
+            PermitDetailsData.fromJson(permitDetailsMap);
+        PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+            status: 200,
+            message: '',
+            data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+
+        if (permitDetailsModel.data.tab1.isopen == '1') {
+          permitPopUpMenu.add(StringConstants.kOpenPermit);
+        }
+        if (permitDetailsModel.data.tab1.isclose == '1') {
+          permitPopUpMenu.add(StringConstants.kClosePermit);
+        }
+        if (permitDetailsModel.data.tab1.status ==
+            DatabaseUtil.getText('Created')) {
+          permitPopUpMenu.add(StringConstants.kRequestPermit);
+        }
+        if (permitBasicData?.isprepared == '1') {
+          permitPopUpMenu.add(StringConstants.kPreparePermit);
+        }
+        if (permitBasicData?.iseditsafetydocument == '1') {
+          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+        }
+        if (permitBasicData?.isacceptissue == '1') {
+          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        }
+        if (permitBasicData?.isclearpermit == '1') {
+          permitPopUpMenu.add(StringConstants.kClearPermit);
+        }
+        if (permitDetailsModel.toJson().isNotEmpty) {
+          emit(PermitDetailsFetched(
+              permitDetailsModel: permitDetailsModel,
+              permitPopUpMenu: permitPopUpMenu));
+        } else {
+          emit(const CouldNotFetchPermitDetails());
+        }
+      }
+    } catch (e) {
+      emit(const CouldNotFetchPermitDetails());
+    }
   }
 
   FutureOr<void> _generatePDF(

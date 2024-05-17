@@ -84,7 +84,7 @@ class DatabaseHelper {
         await db.execute('''
         CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
-          permitId INTEGER,
+          permitId INTEGER UNIQUE,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -332,28 +332,38 @@ class DatabaseHelper {
     return messages;
   }
 
-  Future<List<Map<String, dynamic>>> getOfflinePermits() async {
+  Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
-    return await db.query('OfflinePermit');
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT listPage FROM OfflinePermit');
+    final List<Map<String, dynamic>> permitList = [];
+    for (var data in result) {
+      permitList.add(jsonDecode(data['listPage']));
+    }
+    return permitList;
   }
 
-  Future<List<Map<String, dynamic>>> fetchListPageData() async {
+  Future<Map<String, dynamic>> fetchPermitDetailsOffline(
+      String permitId) async {
     final db = await database;
-    final List<Map<String, dynamic>> result = await db
-        .rawQuery('SELECT Data FROM OfflinePermit WHERE Data IS NOT NULL');
-
-    List<Map<String, dynamic>> listPageData = [];
-    for (var row in result) {
-      String jsonString = row['Data'];
-      List<dynamic> jsonDataList = json.decode(jsonString);
-
-      for (var item in jsonDataList) {
-        if (item is Map<String, dynamic> && item.containsKey('listpage')) {
-          listPageData.add(item['listpage']);
-        }
-      }
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
+      [permitId],
+    );
+    if (results.isNotEmpty) {
+      final Map<String, dynamic> result = results.first;
+      Map<String, dynamic> returnMap = {
+        "tab1": jsonDecode(result['tab1']),
+        "tab2": jsonDecode(result['tab2']),
+        "tab3": jsonDecode(result['tab3']),
+        "tab4": jsonDecode(result['tab4']),
+        "tab5": jsonDecode(result['tab5']),
+        "tab6": jsonDecode(result['tab6']),
+        "html": jsonDecode(result['html'])
+      };
+      return returnMap;
+    } else {
+      return {};
     }
-
-    return listPageData;
   }
 }

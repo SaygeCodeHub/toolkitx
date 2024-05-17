@@ -30,7 +30,6 @@ dependencies:
   connectivity_plus:
   shared_preferences:
   permission_handler:
-  searchable_listview: ^2.4.0
   cached_network_image:
   signature: ^5.4.0
   flutter_inappwebview: ^6.0.0
@@ -46,6 +45,7 @@ dependencies:
   webview_flutter:
   flutter_osm_plugin: ^0.70.0
   package_info_plus:
+  searchable_listview:
 
 
 dev_dependencies:
