@@ -179,7 +179,7 @@ class OnLineModules extends StatelessWidget {
             .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'wf_checklist':
-        globalBloc.add(UpdateCount(type: 'wf_checklist'));
+        globalBloc.add(UpdateCount(type: 'checklist'));
         Navigator.pushNamed(context, WorkForceListScreen.routeName)
             .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;

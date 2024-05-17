@@ -26,14 +26,16 @@ import 'workorder_pop_up_menu_screen.dart';
 
 class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
-  static Map workOrderMap = {};
+  final String workOrderId;
 
-  const WorkOrderDetailsTabScreen({Key? key}) : super(key: key);
+  const WorkOrderDetailsTabScreen({Key? key, required this.workOrderId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-        initialTabIndex: 0, workOrderId: workOrderMap['workOrderId']));
+    context
+        .read<WorkOrderTabDetailsBloc>()
+        .add(WorkOrderDetails(initialTabIndex: 0, workOrderId: workOrderId));
     return Scaffold(
       appBar: GenericAppBar(
         actions: [
@@ -48,7 +50,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                   return WorkOrderPopUpMenuScreen(
                     popUpMenuOptions: state.popUpMenuList,
                     workOrderDetailsMap: state.workOrderDetailsMap,
-                    woId: workOrderMap['workOrderId'],
+                    woId: workOrderId,
                   );
                 } else {
                   return const SizedBox.shrink();
@@ -67,8 +69,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is ItemTabItemDeleted) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 2,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 2, workOrderId: workOrderId));
             } else if (state is ItemTabItemNotDeleted) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.cannotDeleteItem, '');
@@ -79,8 +80,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is DocumentDeleted) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 2,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 2, workOrderId: workOrderId));
             } else if (state is DocumentNotDeleted) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.documentNotDeleted, '');
@@ -91,8 +91,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderAccepted) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 0,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 0, workOrderId: workOrderId));
             } else if (state is WorkOrderNotAccepted) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.workOrderNotAccepted, '');
@@ -103,8 +102,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderGotOnHold) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 2,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 2, workOrderId: workOrderId));
             } else if (state is WorkOrderCannotHold) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.workOrderCannotHold, '');
@@ -115,8 +113,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderRejected) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 0,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 0, workOrderId: workOrderId));
             } else if (state is WorkOrderNotRejected) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.workOrderNotRejected, '');
@@ -127,8 +124,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderSingleMiscCostDeleted) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 2,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 2, workOrderId: workOrderId));
             } else if (state is WorkOrderSingleMiscCostNotDeleted) {
               ProgressBar.dismiss(context);
             }
@@ -138,8 +134,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
             } else if (state is WorkOrderWorkForceDeleted) {
               ProgressBar.dismiss(context);
               context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                  initialTabIndex: 1,
-                  workOrderId: workOrderMap['workOrderId']));
+                  initialTabIndex: 1, workOrderId: workOrderId));
             } else if (state is WorkOrderWorkForceNotDeleted) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.workForceNotDeleted, '');
@@ -168,7 +163,9 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(workOrderMap['workOrderName'],
+                                      Text(
+                                          state.fetchWorkOrderDetailsModel.data
+                                              .workorder,
                                           style: Theme.of(context)
                                               .textTheme
                                               .medium),
@@ -214,8 +211,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<WorkOrderTabDetailsBloc>().add(
                             WorkOrderDetails(
-                                workOrderId: workOrderMap['workOrderId'],
-                                initialTabIndex: 0));
+                                workOrderId: workOrderId, initialTabIndex: 0));
                       },
                       textValue: StringConstants.kReload));
             } else {

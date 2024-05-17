@@ -40,94 +40,94 @@ class IncidentDetailsBloc
   FutureOr<void> _fetchDetails(FetchIncidentDetailsEvent event,
       Emitter<IncidentDetailsStates> emit) async {
     emit(const FetchingIncidentDetails());
-    try {
-      List popUpMenuItems = [
-        DatabaseUtil.getText('AddComments'),
-      ];
-      List customFieldList = [];
-      List injuredPersonList = [];
-      List customFieldsOptionIds = [];
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
-      incidentTabIndex = event.initialIndex;
-      incidentId = event.incidentId;
-      incidentDetailsModel = await _incidentRepository.fetchIncidentDetails(
-          event.incidentId, hashCode!, userId!, event.role);
-      if (incidentDetailsModel.status == 200) {
-        for (int i = 0;
-            i < incidentDetailsModel.data!.customfields!.length;
-            i++) {
-          customFieldList.add({
-            "id": incidentDetailsModel.data!.customfields![i].fieldid,
-            "value": incidentDetailsModel.data!.customfields![i].fieldvalue
-          });
-        }
-        for (int k = 0;
-            k < incidentDetailsModel.data!.customfields!.length;
-            k++) {
-          customFieldsOptionIds.add({
-            "optionId": incidentDetailsModel.data!.customfields![k].optionid
-          });
-        }
-        for (int j = 0;
-            j < incidentDetailsModel.data!.injuredpersonlist!.length;
-            j++) {
-          injuredPersonList.add({
-            "name": incidentDetailsModel.data!.injuredpersonlist![j].name,
-            "company": "",
-            "injury": "",
-            "bodypart": ""
-          });
-        }
-        Map editIncidentDetailsMap = {
-          "description": incidentDetailsModel.data!.description,
-          "responsible_person": incidentDetailsModel.data!.responsiblePerson,
-          "site_name": incidentDetailsModel.data!.sitename,
-          "location_name": incidentDetailsModel.data!.locationname,
-          "category": incidentDetailsModel.data!.category,
-          "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,
-          "customfields": customFieldList,
-          "incidentid": event.incidentId,
-          "persons": injuredPersonList,
-          "eventdatetime": incidentDetailsModel.data!.eventdatetime,
-          "optionIds": customFieldsOptionIds,
-          "companyid": incidentDetailsModel.data!.companyid,
-          "files": incidentDetailsModel.data!.files,
-          "incidentId": incidentDetailsModel.data!.id
-        };
-        if (incidentDetailsModel.data!.canEdit == '1') {
-          popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
-        }
-        if (incidentDetailsModel.data!.nextStatus == '0') {
-          popUpMenuItems.add(DatabaseUtil.getText('Report'));
-        }
-        if (incidentDetailsModel.data!.nextStatus == '1') {
-          popUpMenuItems.add(DatabaseUtil.getText('Acknowledge'));
-        }
-        if (incidentDetailsModel.data!.nextStatus == '2') {
-          popUpMenuItems.add(DatabaseUtil.getText('DefineMitigation'));
-        }
-        if (incidentDetailsModel.data!.nextStatus == '3') {
-          popUpMenuItems.add(DatabaseUtil.getText('ApproveMitigation'));
-        }
-        if (incidentDetailsModel.data!.nextStatus == '4') {
-          popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
-        }
-        if (incidentDetailsModel.data!.canResolve == '1') {
-          popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
-        }
-        popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
-        emit(IncidentDetailsFetched(
-            incidentDetailsModel: incidentDetailsModel,
-            clientId: hashKey!,
-            editIncidentDetailsMap: editIncidentDetailsMap,
-            incidentPopUpMenu: popUpMenuItems,
-            showPopUpMenu: true));
+    // try {
+    List popUpMenuItems = [
+      DatabaseUtil.getText('AddComments'),
+    ];
+    List customFieldList = [];
+    List injuredPersonList = [];
+    List customFieldsOptionIds = [];
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    String? hashKey = await _customerCache.getClientId(CacheKeys.clientId);
+    incidentTabIndex = event.initialIndex;
+    incidentId = event.incidentId;
+    incidentDetailsModel = await _incidentRepository.fetchIncidentDetails(
+        event.incidentId, hashCode!, userId!, event.role);
+    if (incidentDetailsModel.status == 200) {
+      for (int i = 0;
+          i < incidentDetailsModel.data!.customfields!.length;
+          i++) {
+        customFieldList.add({
+          "id": incidentDetailsModel.data!.customfields![i].fieldid,
+          "value": incidentDetailsModel.data!.customfields![i].fieldvalue
+        });
       }
-    } catch (e) {
-      emit(const IncidentDetailsNotFetched());
+      for (int k = 0;
+          k < incidentDetailsModel.data!.customfields!.length;
+          k++) {
+        customFieldsOptionIds.add(
+            {"optionId": incidentDetailsModel.data!.customfields![k].optionid});
+      }
+      for (int j = 0;
+          j < incidentDetailsModel.data!.injuredpersonlist!.length;
+          j++) {
+        injuredPersonList.add({
+          "name": incidentDetailsModel.data!.injuredpersonlist![j].name,
+          "company": "",
+          "injury": "",
+          "bodypart": ""
+        });
+      }
+      Map editIncidentDetailsMap = {
+        "description": incidentDetailsModel.data!.description,
+        "responsible_person": incidentDetailsModel.data!.responsiblePerson,
+        "site_name": incidentDetailsModel.data!.sitename,
+        "location_name": incidentDetailsModel.data!.locationname,
+        "category": incidentDetailsModel.data!.category,
+        "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,
+        "customfields": customFieldList,
+        "incidentid": event.incidentId,
+        "persons": injuredPersonList,
+        "eventdatetime": incidentDetailsModel.data!.eventdatetime,
+        "optionIds": customFieldsOptionIds,
+        "companyid": incidentDetailsModel.data!.companyid,
+        "files": incidentDetailsModel.data!.files,
+        "incidentId": incidentDetailsModel.data!.id
+      };
+      if (incidentDetailsModel.data!.canEdit == '1') {
+        popUpMenuItems.add(DatabaseUtil.getText('EditIncident'));
+      }
+      if (incidentDetailsModel.data!.nextStatus == '0') {
+        popUpMenuItems.add(DatabaseUtil.getText('Report'));
+      }
+      if (incidentDetailsModel.data!.nextStatus == '1') {
+        popUpMenuItems.add(DatabaseUtil.getText('Acknowledge'));
+      }
+      if (incidentDetailsModel.data!.nextStatus == '2') {
+        popUpMenuItems.add(DatabaseUtil.getText('DefineMitigation'));
+      }
+      if (incidentDetailsModel.data!.nextStatus == '3') {
+        popUpMenuItems.add(DatabaseUtil.getText('ApproveMitigation'));
+      }
+      if (incidentDetailsModel.data!.nextStatus == '4') {
+        popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
+      }
+      if (incidentDetailsModel.data!.canResolve == '1') {
+        popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
+      }
+      popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
+      emit(IncidentDetailsFetched(
+        incidentDetailsModel: incidentDetailsModel,
+        clientId: hashKey!,
+        editIncidentDetailsMap: editIncidentDetailsMap,
+        incidentPopUpMenu: popUpMenuItems,
+        showPopUpMenu: true,
+      ));
     }
+    // } catch (e) {
+    //   emit(const IncidentDetailsNotFetched());
+    // }
   }
 
   FutureOr<void> _generateIncidentPDF(

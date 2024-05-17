@@ -21,7 +21,6 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
-import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
@@ -262,8 +261,8 @@ class AppRoutes {
         return _createRoute(OpenPermitScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
       case IncidentDetailsScreen.routeName:
-        return _createRoute(IncidentDetailsScreen(
-            incidentListDatum: settings.arguments as IncidentListDatum));
+        return _createRoute(
+            IncidentDetailsScreen(incidentId: settings.arguments.toString()));
       case ReportNewIncidentScreen.routeName:
         return _createRoute(ReportNewIncidentScreen(
             addAndEditIncidentMap: settings.arguments as Map));
@@ -286,7 +285,7 @@ class AppRoutes {
         return _createRoute(TodoAssignedByMeAndToMeListScreen());
       case ToDoDetailsAndDocumentDetailsScreen.routeName:
         return _createRoute(ToDoDetailsAndDocumentDetailsScreen(
-            todoMap: settings.arguments as Map));
+            todoId: settings.arguments.toString()));
       case LeavesAndHolidaysScreen.routeName:
         return _createRoute(const LeavesAndHolidaysScreen());
       case LeavesSummaryScreen.routeName:
@@ -324,7 +323,7 @@ class AppRoutes {
             isFromHome: settings.arguments as bool));
       case QualityManagementDetailsScreen.routeName:
         return _createRoute(QualityManagementDetailsScreen(
-            qmListMap: settings.arguments as Map));
+            qmId: settings.arguments.toString()));
       case LogBookFilterScreen.routeName:
         return _createRoute(const LogBookFilterScreen());
       case QualityManagementRolesScreen.routeName:
@@ -355,7 +354,8 @@ class AppRoutes {
         return _createRoute(WorkOrderFormScreenTwo(
             workOrderDetailsMap: settings.arguments as Map));
       case WorkOrderDetailsTabScreen.routeName:
-        return _createRoute(const WorkOrderDetailsTabScreen());
+        return _createRoute(WorkOrderDetailsTabScreen(
+            workOrderId: settings.arguments.toString()));
       case LotoListScreen.routeName:
         return _createRoute(const LotoListScreen());
       case LotoFilterScreen.routeName:
@@ -410,7 +410,8 @@ class AppRoutes {
         return _createRoute(GetCertificateDetailsScreen(
             certificateMap: settings.arguments as Map));
       case LotoDetailsScreen.routeName:
-        return _createRoute(const LotoDetailsScreen());
+        return _createRoute(
+            LotoDetailsScreen(lotoId: settings.arguments.toString()));
       case ChangeRoleDocumentsScreen.routeName:
         return _createRoute(const ChangeRoleDocumentsScreen());
       case WorkOrderAddPartsScreen.routeName:
@@ -451,7 +452,9 @@ class AppRoutes {
       case AddAndEditSafetyNoticeScreen.routeName:
         return _createRoute(const AddAndEditSafetyNoticeScreen());
       case SafetyNoticeDetailsScreen.routeName:
-        return _createRoute(const SafetyNoticeDetailsScreen());
+        return _createRoute(SafetyNoticeDetailsScreen(
+          safetyNoticeId: settings.arguments.toString(),
+        ));
       case SafetyNoticeHistoryScreen.routeName:
         return _createRoute(const SafetyNoticeHistoryScreen());
       case LinkDocumentScreen.routeName:
