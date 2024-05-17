@@ -95,8 +95,33 @@ class DatabaseHelper {
           html TEXT,
           statusId INTEGER
         );
-''');
+  ''');
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflinePermitAction (
+         id INTEGER PRIMARY KEY,
+          permitId INTEGER,
+          actionText TEXT,
+          actionJson TEXT,
+          actionDateTime TEXT,
+          sign TEXT
+        );
+  ''');
       },
+    );
+  }
+
+  Future<void> insertOfflinePermitAction(
+      String permitId, String actionText, Map actionJson, String sign) async {
+    final Database db = await database;
+    await db.insert(
+      'OfflinePermitAction',
+      {
+        'permitId': permitId,
+        'actionText': actionText,
+        'actionJson': jsonEncode(actionJson),
+        'actionDateTime': DateTime.now().toUtc(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
