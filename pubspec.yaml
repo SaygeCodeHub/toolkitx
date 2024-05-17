@@ -40,6 +40,8 @@ dependencies:
   html_unescape:
   webview_flutter:
   flutter_osm_plugin:
+  geolocator: ^11.0.0
+  background_fetch:
 
 
 dev_dependencies:

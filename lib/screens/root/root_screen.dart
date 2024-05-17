@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
 
@@ -30,7 +33,17 @@ class _RootScreenState extends State<RootScreen> {
   @override
   void initState() {
     widget.isFromClientList == true ? _selectedIndex = 0 : null;
+    _getCurrentUserLocation();
     super.initState();
+  }
+
+  void _getCurrentUserLocation() {
+    if (!context.read<WifiConnectivityBloc>().isLocationPermissionDenied ||
+        !context.read<WifiConnectivityBloc>().locationPermissionDeniedForever) {
+      Timer.periodic(const Duration(minutes: 5), (Timer timer) {
+        context.read<WifiConnectivityBloc>().add(ObserveUserLocation());
+      });
+    }
   }
 
   void _onItemTapped(int index) {

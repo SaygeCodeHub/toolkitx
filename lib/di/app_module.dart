@@ -17,6 +17,8 @@ import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
+
+import '../data/cache/customer_cache.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
@@ -27,27 +29,28 @@ import '../repositories/checklist/systemUser/sys_user_checklist_repository.dart'
 import '../repositories/checklist/systemUser/sys_user_checklist_repository_impl.dart';
 import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
+import '../repositories/client/client_repository.dart';
+import '../repositories/client/client_repository_impl.dart';
 import '../repositories/expense/expense_repository.dart';
 import '../repositories/expense/expense_repository_impl.dart';
 import '../repositories/global/global_repository.dart';
 import '../repositories/global/global_repository_impl.dart';
+import '../repositories/language/language_repository.dart';
+import '../repositories/language/language_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
+import '../repositories/login/login_repository.dart';
 import '../repositories/loto/loto_repository.dart';
 import '../repositories/loto/loto_repository_impl.dart';
 import '../repositories/notification/notification_repository.dart';
 import '../repositories/notification/notification_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
 import '../repositories/permit/permit_repository_impl.dart';
-import '../data/cache/customer_cache.dart';
-import '../repositories/client/client_repository.dart';
-import '../repositories/client/client_repository_impl.dart';
-import '../repositories/language/language_repository.dart';
-import '../repositories/language/language_repository_impl.dart';
-import '../repositories/login/login_repository.dart';
 import '../repositories/profile/profile_repository.dart';
 import '../repositories/qualityManagement/qm_repository.dart';
 import '../repositories/qualityManagement/qm_repository_impl.dart';
+import '../repositories/root/root_repository.dart';
+import '../repositories/root/root_repository_impl.dart';
 import '../repositories/safetyNotice/safety_notice_repository.dart';
 import '../repositories/safetyNotice/safety_notice_repository_impl.dart';
 import '../repositories/timeZone/time_zone_repository.dart';
@@ -107,6 +110,8 @@ configurableDependencies() {
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
+  getIt.registerLazySingleton<RootRepository>(() => RootRepositoryImpl());
+
   getIt.registerLazySingleton<TicketsRepository>(() => TicketsRepositoryImpl());
   getIt.registerLazySingleton<NotificationRepository>(
       () => NotificationRepositoryImpl());
