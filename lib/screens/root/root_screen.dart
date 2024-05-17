@@ -13,6 +13,8 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../home/home_screen.dart';
+import '../location/current_location_screen.dart';
+import '../notification/notification_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -43,17 +45,18 @@ class _RootScreenState extends State<RootScreen> {
     });
   }
 
-  static const List _widgetOptions = [
-    HomeScreen(),
-    CurrentLocationScreen(),
-    NotificationScreen(),
-    Text('Index 3: Chat'),
-    ProfileScreen()
+  final List<Widget> _onlineWidgetOptions = [
+    const HomeScreen(),
+    const CurrentLocationScreen(),
+    const NotificationScreen(),
+    const Text('Index 3: Chat'),
+    const ProfileScreen()
   ];
   final List<Widget> _offlineWidgetOptions = [
     const HomeScreen(),
     const AllChatsScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(

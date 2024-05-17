@@ -14,7 +14,7 @@ class SelectClient extends ClientEvents {
 class FetchHomeScreenData extends ClientEvents {
   final bool isFirstTime;
 
-  FetchHomeScreenData({required this.isFirstTime});
+  FetchHomeScreenData({this.isFirstTime = false});
 }
 
 class FetchChatMessages extends ClientEvents {}

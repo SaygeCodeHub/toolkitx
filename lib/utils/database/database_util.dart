@@ -367,8 +367,7 @@ class DatabaseHelper {
     }
   }
 
-  Future<Map<String, dynamic>> fetchPermitDetailsHtml(
-      String permitId) async {
+  Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
       'SELECT html FROM OfflinePermit WHERE permitId = ?',
@@ -390,7 +389,6 @@ class DatabaseHelper {
       [permitId],
     );
     final listPage = jsonDecode(results.first['listPage']);
-    print(listPage['statusid']);
     return listPage['statusid'];
   }
 }

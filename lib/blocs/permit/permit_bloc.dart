@@ -455,14 +455,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _fetchDataForOpenPermit(
       FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
     emit(DataForOpenPermitFetching());
-    // try {
+    try {
       if (isNetworkEstablished) {
         emit(DataForOpenPermitFetching());
         String hashCode =
             (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
         FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
-        await _permitRepository.fetchDataForOpenPermit(
-            event.permitId, hashCode, roleId);
+            await _permitRepository.fetchDataForOpenPermit(
+                event.permitId, hashCode, roleId);
         if (fetchDataForOpenPermitModel.status == 200) {
           final List<Question> questions = [
             Question(questionNo: StringConstants.kPermitFirstQuestion),
@@ -484,7 +484,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             FetchDataForOpenPermitModel(
                 status: 200,
                 message: '',
-                data: FetchDataForOpenPermitDatum.fromJson(permitHtmlMap));
+                data: FetchDataForOpenPermitData.fromJson(permitHtmlMap));
         final List<Question> questions = [
           Question(questionNo: StringConstants.kPermitFirstQuestion),
           Question(questionNo: StringConstants.kPermitSecondQuestion)
@@ -494,13 +494,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
               questions: questions));
         } else {
-          emit(DataForOpenPermitNotFetched(
+          emit(const DataForOpenPermitNotFetched(
               errorMessage: StringConstants.kNoDataFound));
         }
       }
-    // } catch (e) {
-    //   emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(DataForOpenPermitNotFetched(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _saveMarkAsPrepared(
