@@ -45,7 +45,8 @@ class PermitSignAsSapScreen extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pushReplacementNamed(
                         context, PermitDetailsScreen.routeName,
-                        arguments: permitSignAsSapMap['permitid']);
+                        arguments: permitSignAsSapMap['permitid'] ??
+                            permitSignAsSapMap['permitId']);
                   } else if (state is OfflineDataNotSaved) {
                     showCustomSnackBar(
                         context, StringConstants.kFailedToSaveData, '');

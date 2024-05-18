@@ -226,6 +226,7 @@ abstract class StringConstants {
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
   static const String kPleaseSelectTime = 'Please Select Time';
+  static const String kPleaseAddSignature = 'Please add signature';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -265,6 +266,7 @@ abstract class StringConstants {
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
   static const String kFailedToSaveData = 'Failed to save data!';
+  static const String kNameValidation = 'Please add name!';
   static const String kDataSavedSuccessfully = 'Data saved successfully!';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //
@@ -399,7 +401,7 @@ abstract class StringConstants {
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
-  static const String kNameValidation = 'Please enter name';
+  static const String kEnterNameValidation = 'Please enter name';
   static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';

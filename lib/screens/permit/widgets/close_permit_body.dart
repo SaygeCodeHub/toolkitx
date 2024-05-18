@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
@@ -102,9 +105,29 @@ class ClosePermitBody extends StatelessWidget {
                         ])),
                 PrimaryButton(
                     onPressed: () {
-                      context
-                          .read<PermitBloc>()
-                          .add(ClosePermit(closePermitMap));
+                      if (isNetworkEstablished) {
+                        context
+                            .read<PermitBloc>()
+                            .add(ClosePermit(closePermitMap: closePermitMap));
+                      } else {
+                        if (closePermitMap['panel_saint'] == '1' &&
+                            closePermitMap['controlPerson'] == null) {
+                          showCustomSnackBar(
+                              context, StringConstants.kAllFieldsMandatory, '');
+                        } else if (closePermitMap['time'] == null) {
+                          showCustomSnackBar(
+                              context,
+                              StringConstants.kPleaseEnterTimeToClosePermit,
+                              '');
+                        } else {
+                          Navigator.pushNamed(
+                              context, PermitSignAsSapScreen.routeName,
+                              arguments: {
+                                'permitId': closePermitMap['permitId'],
+                                'controlPerson': closePermitMap['controlPerson']
+                              });
+                        }
+                      }
                     },
                     textValue: StringConstants.kCANCELPERMIT)
               ],

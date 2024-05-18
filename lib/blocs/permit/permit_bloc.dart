@@ -433,7 +433,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _openPermit(
       OpenPermit event, Emitter<PermitStates> emit) async {
     try {
-      emit(const OpeningPermit());
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       if (event.openPermitMap['date'] == null ||
@@ -453,13 +452,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               : event.openPermitMap['date'],
           "time": event.openPermitMap['time'],
           "details": event.openPermitMap['details'] ?? '',
-          "user_sign": "",
-          "user_name": "",
-          "user_email": ""
+          "user_sign": event.openPermitMap['user_sign'] ?? '',
+          "user_name": event.openPermitMap['user_name'] ?? '',
+          "user_email": event.openPermitMap['user_email'] ?? ''
         };
-        OpenClosePermitModel openClosePermitModel =
-            await _permitRepository.openPermit(openPermitMap);
-        emit(PermitOpened(openClosePermitModel));
+        if (isNetworkEstablished) {
+          emit(const OpeningPermit());
+          OpenClosePermitModel openClosePermitModel =
+              await _permitRepository.openPermit(openPermitMap);
+          emit(PermitOpened(openClosePermitModel));
+        } else {
+          add(SaveOfflineData(offlineDataMap: openPermitMap));
+        }
       }
     } catch (e) {
       emit(OpenPermitError(e.toString()));
@@ -488,7 +492,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _closePermit(
       ClosePermit event, Emitter<PermitStates> emit) async {
     try {
-      emit(const ClosingPermit());
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       if (event.closePermitMap['panel_saint'] == '1' &&
@@ -508,17 +511,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               : event.closePermitMap['date'],
           "time": event.closePermitMap['time'],
           "details": event.closePermitMap['details'] ?? '',
-          "user_sign": "",
-          "user_name": "",
-          "user_email": ""
+          "user_sign": event.closePermitMap['user_sign'] ?? '',
+          "user_name": event.closePermitMap['user_name'] ?? '',
+          "user_email": event.closePermitMap['user_email'] ?? ''
         };
-        OpenClosePermitModel openClosePermitModel =
-            await _permitRepository.closePermit(closePermitMap);
-        if (openClosePermitModel.message == '1') {
-          emit(PermitClosed(openClosePermitModel));
+        if (isNetworkEstablished) {
+          emit(const ClosingPermit());
+          OpenClosePermitModel openClosePermitModel =
+              await _permitRepository.closePermit(closePermitMap);
+          if (openClosePermitModel.message == '1') {
+            emit(PermitClosed(openClosePermitModel));
+          } else {
+            emit(ClosePermitError(
+                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+          }
         } else {
-          emit(ClosePermitError(
-              DatabaseUtil.getText('some_unknown_error_please_try_again')));
+          closePermitMap['action_key'] = 'cancel_permit';
+          add(SaveOfflineData(offlineDataMap: closePermitMap));
         }
       }
     } catch (e) {
@@ -932,17 +941,35 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _saveOfflineData(
       SaveOfflineData event, Emitter<PermitStates> emit) async {
     try {
-      bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-          event.offlineDataMap['permitid'],
-          event.offlineDataMap['action_key'],
-          event.offlineDataMap,
-          event.offlineDataMap['user_sign']);
-      if (isDataInserted) {
-        emit(OfflineDataSaved(
-            successMessage: StringConstants.kDataSavedSuccessfully));
-      } else {
+      if (event.offlineDataMap['user_name'] == null ||
+          event.offlineDataMap['user_name'] == '') {
         emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kFailedToSaveData));
+            errorMessage: StringConstants.kEnterNameValidation));
+      } else if (event.offlineDataMap['date'] == null ||
+          event.offlineDataMap['date'] == '') {
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kPleaseSelectDate));
+      } else if (event.offlineDataMap['time'] == null ||
+          event.offlineDataMap['time'] == '') {
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kPleaseSelectTime));
+      } else if (event.offlineDataMap['user_sign'] == null ||
+          event.offlineDataMap['user_sign'] == '') {
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kPleaseAddSignature));
+      } else {
+        bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
+            event.offlineDataMap['permitid'],
+            event.offlineDataMap['action_key'],
+            event.offlineDataMap,
+            event.offlineDataMap['user_sign']);
+        if (isDataInserted) {
+          emit(OfflineDataSaved(
+              successMessage: StringConstants.kDataSavedSuccessfully));
+        } else {
+          emit(OfflineDataNotSaved(
+              errorMessage: StringConstants.kFailedToSaveData));
+        }
       }
     } catch (e) {
       emit(

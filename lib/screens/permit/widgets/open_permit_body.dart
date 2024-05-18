@@ -4,7 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/open_permit_details_model.dart';
@@ -105,7 +108,30 @@ class OpenPermitBody extends StatelessWidget {
                 const SizedBox(height: xxTinySpacing),
                 PrimaryButton(
                     onPressed: () {
-                      context.read<PermitBloc>().add(OpenPermit(openPermitMap));
+                      if (isNetworkEstablished) {
+                        context
+                            .read<PermitBloc>()
+                            .add(OpenPermit(openPermitMap));
+                      } else {
+                        if (openPermitMap['date'] == null ||
+                            openPermitMap['date'] == '') {
+                          showCustomSnackBar(
+                              context, StringConstants.kPleaseSelectDate, '');
+                        } else if (openPermitMap['time'] == null ||
+                            openPermitMap['time'] == '') {
+                          showCustomSnackBar(
+                              context, StringConstants.kPleaseSelectTime, '');
+                        } else {
+                          Navigator.pushNamed(
+                              context, PermitSignAsSapScreen.routeName,
+                              arguments: {
+                                'permitId': openPermitMap['permitId'],
+                                'date': openPermitMap['date'],
+                                'time': openPermitMap['time'],
+                                'customfields': openPermitMap['customfields']
+                              });
+                        }
+                      }
                     },
                     textValue: StringConstants.kISSUEPERMIT)
               ],

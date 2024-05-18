@@ -8,6 +8,10 @@ class SaveOfflineDataUtil {
     switch (statusId) {
       case 3:
       case 5:
+      case 7:
+        saveOfflineDataMap['action_key'] = 'open_permit';
+        context.read<PermitBloc>().add(OpenPermit(saveOfflineDataMap));
+        break;
       case 10:
         saveOfflineDataMap['action_key'] = 'prepare_permit';
         context.read<PermitBloc>().add(SaveMarkAsPrepared(
@@ -16,8 +20,16 @@ class SaveOfflineDataUtil {
             saveOfflineMarkAsPreparedMap: saveOfflineDataMap));
         break;
       case 16:
+        saveOfflineDataMap['action_key'] = 'open_permit';
+        context.read<PermitBloc>().add(OpenPermit(saveOfflineDataMap));
+        break;
       case 17:
       case 18:
+        saveOfflineDataMap['action_key'] = 'cancel_permit';
+        context
+            .read<PermitBloc>()
+            .add(ClosePermit(closePermitMap: saveOfflineDataMap));
+        break;
     }
   }
 }
