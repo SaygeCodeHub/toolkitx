@@ -898,7 +898,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.editSafetyDocumentMap['permit_id'],
             'edit_safety_document',
             editSafetyDocumentMap,
-            "sign");
+            "sign",
+            null);
         if (isDataInserted) {
           emit(PermitEditSafetyDocumentSaved(
               successMessage: StringConstants.kDataSavedSuccessfully));
@@ -962,7 +963,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.permitId,
           event.actionKey,
           event.offlineDataMap,
-          event.signature);
+          event.signature,
+          null);
       if (isDataInserted) {
         emit(OfflineDataSaved(
             successMessage: StringConstants.kDataSavedSuccessfully));

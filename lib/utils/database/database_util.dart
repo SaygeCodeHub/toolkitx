@@ -133,8 +133,8 @@ class DatabaseHelper {
   ''');
   }
 
-  Future<bool> insertOfflinePermitAction(
-      String permitId, String actionText, Map actionJson, String sign) async {
+  Future<bool> insertOfflinePermitAction(String permitId, String actionText,
+      Map actionJson, String sign, String? actionDateTime) async {
     final Database db = await database;
     try {
       int result = await db.insert(
@@ -143,7 +143,8 @@ class DatabaseHelper {
             'permitId': permitId,
             'actionText': actionText,
             'actionJson': jsonEncode(actionJson),
-            'actionDateTime': DateTime.now().toUtc().toString(),
+            'actionDateTime':
+                actionDateTime ?? DateTime.now().toUtc().toString(),
           },
           conflictAlgorithm: ConflictAlgorithm.replace);
 
