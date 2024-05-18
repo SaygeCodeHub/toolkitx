@@ -328,3 +328,17 @@ class TransferValueSelected extends PermitStates {
 
   TransferValueSelected({required this.value});
 }
+
+class SavingOfflineData extends PermitStates {}
+
+class OfflineDataSaved extends PermitStates {
+  final String successMessage;
+
+  OfflineDataSaved({required this.successMessage});
+}
+
+class OfflineDataNotSaved extends PermitStates {
+  final String errorMessage;
+
+  OfflineDataNotSaved({required this.errorMessage});
+}

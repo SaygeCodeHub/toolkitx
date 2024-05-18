@@ -101,9 +101,10 @@ class SaveMarkAsPrepared extends PermitEvents {
   final String controlPerson;
   final Map saveOfflineMarkAsPreparedMap;
 
-  const SaveMarkAsPrepared({required this.permitId,
-    required this.controlPerson,
-    required this.saveOfflineMarkAsPreparedMap});
+  const SaveMarkAsPrepared(
+      {required this.permitId,
+      required this.controlPerson,
+      required this.saveOfflineMarkAsPreparedMap});
 }
 
 class AcceptPermitRequest extends PermitEvents {
@@ -161,4 +162,10 @@ class SelectTransferValue extends PermitEvents {
   final String value;
 
   SelectTransferValue({required this.value});
+}
+
+class SaveOfflineData extends PermitEvents {
+  final Map offlineDataMap;
+
+  SaveOfflineData({required this.offlineDataMap});
 }

@@ -39,8 +39,6 @@ class PermitRepositoryImpl extends PermitRepository {
 
   @override
   Future<OfflinePermitModel> fetchOfflinePermit(String hashCode) async {
-    print(
-        'offline permit ${"${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode");
     return OfflinePermitModel.fromJson(response);

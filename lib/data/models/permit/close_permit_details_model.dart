@@ -31,11 +31,12 @@ class GetClosePermitData {
   final String? showComment;
   final int statusid;
 
-  GetClosePermitData({this.permitName,
-    this.permitStatus,
-    this.panelSaint,
-    this.showComment,
-    required this.statusid});
+  GetClosePermitData(
+      {this.permitName,
+      this.permitStatus,
+      this.panelSaint,
+      this.showComment,
+      required this.statusid});
 
   factory GetClosePermitData.fromJson(Map<String, dynamic> json) =>
       GetClosePermitData(

@@ -113,7 +113,7 @@ class DatabaseHelper {
   Future<bool> insertOfflinePermitAction(
       String permitId, String actionText, Map actionJson, String sign) async {
     final Database db = await database;
-
+    print('json action $actionJson');
     try {
       int result = await db.insert(
           'OfflinePermitAction',

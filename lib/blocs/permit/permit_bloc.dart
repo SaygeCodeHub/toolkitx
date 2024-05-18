@@ -74,6 +74,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
+    on<SaveOfflineData>(_saveOfflineData);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -619,7 +620,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<FutureOr<void>> _saveMarkAsPrepared(
       SaveMarkAsPrepared event, Emitter<PermitStates> emit) async {
-    emit(MarkAsPreparedSaving());
     try {
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
@@ -629,22 +629,29 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "permitid": event.permitId,
         "userid": userId,
         "controlpersons": event.controlPerson,
-        "user_sign": "",
-        "user_name": "",
-        "user_email": ""
+        "user_sign": event.saveOfflineMarkAsPreparedMap['user_sign'] ?? '',
+        "user_name": event.saveOfflineMarkAsPreparedMap['user_name'] ?? '',
+        "user_email": event.saveOfflineMarkAsPreparedMap['user_email'] ?? ''
       };
-      if (event.controlPerson != '') {
-        SaveMarkAsPreparedModel saveMarkAsPreparedModel =
-            await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
-        if (saveMarkAsPreparedModel.message == '1') {
-          emit(MarkAsPreparedSaved());
+      if (isNetworkEstablished) {
+        emit(MarkAsPreparedSaving());
+        if (event.controlPerson != '') {
+          SaveMarkAsPreparedModel saveMarkAsPreparedModel =
+              await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
+          if (saveMarkAsPreparedModel.message == '1') {
+            emit(MarkAsPreparedSaved());
+          } else {
+            emit(MarkAsPreparedNotSaved(
+                errorMessage: saveMarkAsPreparedModel.message!));
+          }
         } else {
-          emit(MarkAsPreparedNotSaved(
-              errorMessage: saveMarkAsPreparedModel.message!));
+          emit(const MarkAsPreparedNotSaved(
+              errorMessage: StringConstants.kPleaseFillControlPerson));
         }
       } else {
-        emit(const MarkAsPreparedNotSaved(
-            errorMessage: StringConstants.kPleaseFillControlPerson));
+        saveMarkAsPreparedMap['action_key'] =
+            event.saveOfflineMarkAsPreparedMap['action_key'];
+        add(SaveOfflineData(offlineDataMap: saveMarkAsPreparedMap));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
@@ -920,5 +927,26 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _selectTransferValue(
       SelectTransferValue event, Emitter<PermitStates> emit) {
     emit(TransferValueSelected(value: event.value));
+  }
+
+  FutureOr<void> _saveOfflineData(
+      SaveOfflineData event, Emitter<PermitStates> emit) async {
+    try {
+      bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
+          event.offlineDataMap['permitid'],
+          event.offlineDataMap['action_key'],
+          event.offlineDataMap,
+          event.offlineDataMap['user_sign']);
+      if (isDataInserted) {
+        emit(OfflineDataSaved(
+            successMessage: StringConstants.kDataSavedSuccessfully));
+      } else {
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kFailedToSaveData));
+      }
+    } catch (e) {
+      emit(
+          OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
+    }
   }
 }

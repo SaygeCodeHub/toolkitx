@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
-import 'package:toolkit/blocs/permit/permit_events.dart';
+import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
+import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/screens/profile/widgets/signature.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/offlinePermit/save_offline_data.dart';
+import 'package:toolkit/utils/offlinePermit/save_offline_data_util.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -33,15 +35,32 @@ class PermitSignAsSapScreen extends StatelessWidget {
                       },
                       textValue: StringConstants.kBack)),
               const SizedBox(width: xxTinierSpacing),
-              Expanded(
-                  child: PrimaryButton(
-                      onPressed: () {
-                        SaveOfflineData().saveData(
-                            context.read<PermitBloc>().statusId,
-                            permitSignAsSapMap,
-                            context);
-                      },
-                      textValue: StringConstants.kSignAsSapCap))
+              BlocListener<PermitBloc, PermitStates>(
+                listener: (context, state) {
+                  if (state is OfflineDataSaved) {
+                    showCustomSnackBar(
+                        context, StringConstants.kDataSavedSuccessfully, '');
+                    Future.delayed(const Duration(seconds: 3));
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(
+                        context, PermitDetailsScreen.routeName,
+                        arguments: permitSignAsSapMap['permitid']);
+                  } else if (state is OfflineDataNotSaved) {
+                    showCustomSnackBar(
+                        context, StringConstants.kFailedToSaveData, '');
+                  }
+                },
+                child: Expanded(
+                    child: PrimaryButton(
+                        onPressed: () {
+                          SaveOfflineDataUtil().saveData(
+                              context.read<PermitBloc>().statusId,
+                              permitSignAsSapMap,
+                              context);
+                        },
+                        textValue: StringConstants.kSignAsSapCap)),
+              )
             ])),
         body: SingleChildScrollView(
             child: Padding(
@@ -58,9 +77,11 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(onTextFieldChanged: (String textValue) {
-                      permitSignAsSapMap['user_name'] = textValue;
-                    }),
+                    TextFieldWidget(
+                        textInputAction: TextInputAction.next,
+                        onTextFieldChanged: (String textValue) {
+                          permitSignAsSapMap['user_name'] = textValue;
+                        }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kEmailAndPhoneNo,
                         style: Theme.of(context)
@@ -68,9 +89,12 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(onTextFieldChanged: (String textValue) {
-                      permitSignAsSapMap['user_email'] = textValue;
-                    }),
+                    TextFieldWidget(
+                        textInputType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        onTextFieldChanged: (String textValue) {
+                          permitSignAsSapMap['user_email'] = textValue;
+                        }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kDate,
                         style: Theme.of(context)
