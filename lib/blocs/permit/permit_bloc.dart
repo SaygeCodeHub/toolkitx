@@ -462,13 +462,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               await _permitRepository.openPermit(openPermitMap);
           emit(PermitOpened(openClosePermitModel));
         } else {
-          openPermitMap['user_date'] = event.openPermitMap['user_date'];
-          openPermitMap['user_time'] = event.openPermitMap['user_time'];
           add(SavePermitOfflineAction(
               offlineDataMap: openPermitMap,
               permitId: event.openPermitMap['permitId'],
               signature: event.openPermitMap['user_sign'],
-              actionKey: 'open_permit'));
+              actionKey: 'open_permit',
+              dateTime:
+                  '${event.openPermitMap['user_date']}${event.openPermitMap['user_time']}'));
         }
       }
     } catch (e) {
@@ -532,13 +532,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
           }
         } else {
-          closePermitMap['user_date'] = event.closePermitMap['user_date'];
-          closePermitMap['user_time'] = event.closePermitMap['user_time'];
           add(SavePermitOfflineAction(
               offlineDataMap: closePermitMap,
               permitId: event.closePermitMap['permitId'],
               signature: event.closePermitMap['user_sign'] ?? '',
-              actionKey: 'cancel_permit'));
+              actionKey: 'cancel_permit',
+              dateTime:
+                  '${event.closePermitMap['user_date']}${event.closePermitMap['user_time']}'));
         }
       }
     } catch (e) {
@@ -669,15 +669,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kPleaseFillControlPerson));
         }
       } else {
-        saveMarkAsPreparedMap['user_date'] =
-            event.saveOfflineMarkAsPreparedMap['user_date'];
-        saveMarkAsPreparedMap['user_time'] =
-            event.saveOfflineMarkAsPreparedMap['user_time'];
         add(SavePermitOfflineAction(
             offlineDataMap: saveMarkAsPreparedMap,
             permitId: event.permitId,
             signature: event.saveOfflineMarkAsPreparedMap['user_sign'] ?? '',
-            actionKey: 'prepare_permit'));
+            actionKey: 'prepare_permit',
+            dateTime:
+                '${event.saveOfflineMarkAsPreparedMap['user_date']}${event.saveOfflineMarkAsPreparedMap['user_time']}'));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
@@ -695,19 +693,29 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "hashcode": hashCode,
         "permitid": event.permitId,
         "userid": userId,
-        "npw_name": "",
-        "npw_auth": "",
-        "npw_company": "",
-        "npw_email": "",
-        "npw_phone": ""
+        "npw_name": event.acceptPermitMap['npw_name'] ?? '',
+        "npw_auth": event.acceptPermitMap['npw_auth'] ?? '',
+        "npw_company": event.acceptPermitMap['npw_company'] ?? '',
+        "npw_email": event.acceptPermitMap['npw_email'] ?? '',
+        "npw_phone": event.acceptPermitMap['npw_phone'] ?? ''
       };
-      AcceptPermitRequestModel acceptPermitRequestModel =
-          await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
-      if (acceptPermitRequestModel.message == '1') {
-        emit(PermitRequestAccepted());
+      if (isNetworkEstablished) {
+        AcceptPermitRequestModel acceptPermitRequestModel =
+            await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
+        if (acceptPermitRequestModel.message == '1') {
+          emit(PermitRequestAccepted());
+        } else {
+          emit(PermitRequestNotAccepted(
+              errorMessage: acceptPermitRequestModel.message!));
+        }
       } else {
-        emit(PermitRequestNotAccepted(
-            errorMessage: acceptPermitRequestModel.message!));
+        add(SavePermitOfflineAction(
+            offlineDataMap: acceptPermitRequestMap,
+            permitId: event.permitId,
+            signature: event.acceptPermitMap['user_sign'],
+            actionKey: event.acceptPermitMap['action_key'],
+            dateTime:
+                '${event.acceptPermitMap['user_date']}${event.acceptPermitMap['user_time']}'));
       }
     } catch (e) {
       emit(PermitRequestNotAccepted(errorMessage: e.toString()));
@@ -835,23 +843,34 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(SavingClearPermit());
       Map clearPermitMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "permitid": event.clearPermitMap['permit_id'],
+        "permitid": event.clearPermitMap['permit_id'] ??
+            event.clearPermitMap['permitid'],
         "userid": await _customerCache.getUserId(CacheKeys.userId),
         "customfields": event.clearPermitMap['customfields'],
         "npwid": "",
-        "npw_name": "",
-        "npw_auth": "",
-        "npw_company": "",
-        "npw_email": "",
-        "npw_phone": ""
+        "npw_name": event.clearPermitMap['npw_name'] ?? '',
+        "npw_auth": event.clearPermitMap['npw_auth'] ?? '',
+        "npw_company": event.clearPermitMap['npw_company'] ?? '',
+        "npw_email": event.clearPermitMap['npw_email'] ?? '',
+        "npw_phone": event.clearPermitMap['npw_phone'] ?? ''
       };
-      SaveClearPermitModel saveClearPermitModel =
-          await _permitRepository.saveClearPermit(clearPermitMap);
-      if (saveClearPermitModel.message == '1') {
-        emit(ClearPermitSaved());
+      if (isNetworkEstablished) {
+        SaveClearPermitModel saveClearPermitModel =
+            await _permitRepository.saveClearPermit(clearPermitMap);
+        if (saveClearPermitModel.message == '1') {
+          emit(ClearPermitSaved());
+        } else {
+          emit(ClearPermitNotSaved(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       } else {
-        emit(ClearPermitNotSaved(
-            errorMessage: StringConstants.kSomethingWentWrong));
+        add(SavePermitOfflineAction(
+            offlineDataMap: clearPermitMap,
+            permitId: event.clearPermitMap['permitid'],
+            signature: event.clearPermitMap['user_sign'],
+            actionKey: event.clearPermitMap['action_key'],
+            dateTime:
+                '${event.clearPermitMap['user_date']}${event.clearPermitMap['user_time']}'));
       }
     } catch (e) {
       emit(ClearPermitNotSaved(errorMessage: e.toString()));
@@ -964,7 +983,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.actionKey,
           event.offlineDataMap,
           event.signature,
-          null);
+          event.dateTime);
       if (isDataInserted) {
         emit(OfflineDataSaved(
             successMessage: StringConstants.kDataSavedSuccessfully));

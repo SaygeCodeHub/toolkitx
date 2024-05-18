@@ -192,6 +192,7 @@ abstract class StringConstants {
   static const String kSignature = 'Signature';
   static const String kEditSignature = 'Edit Signature';
   static const String kSignatureNotFound = 'Signature Not Found';
+  static const String kPleaseEnterSignature = 'Please enter signature!';
   static const String kUpload = 'Upload';
   static const String kChecklist = 'Checklist';
   static const String kFilters = 'Filters';

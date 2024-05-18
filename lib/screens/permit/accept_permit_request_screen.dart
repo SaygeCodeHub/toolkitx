@@ -112,7 +112,8 @@ class AcceptPermitRequestScreen extends StatelessWidget {
                       onPressed: () {
                         if (isNetworkEstablished) {
                           context.read<PermitBloc>().add(AcceptPermitRequest(
-                              permitId: permitDetailsModel.data.tab1.id));
+                              permitId: permitDetailsModel.data.tab1.id,
+                              acceptPermitMap: {}));
                         } else {
                           Navigator.pushNamed(
                               context, PermitSignAsCpScreen.routeName,

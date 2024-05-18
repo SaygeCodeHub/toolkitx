@@ -109,8 +109,10 @@ class SaveMarkAsPrepared extends PermitEvents {
 
 class AcceptPermitRequest extends PermitEvents {
   final String permitId;
+  final Map acceptPermitMap;
 
-  const AcceptPermitRequest({required this.permitId});
+  const AcceptPermitRequest(
+      {required this.permitId, required this.acceptPermitMap});
 }
 
 class FetchClearPermit extends PermitEvents {
@@ -169,10 +171,12 @@ class SavePermitOfflineAction extends PermitEvents {
   final String permitId;
   final String signature;
   final String actionKey;
+  final String dateTime;
 
   SavePermitOfflineAction(
       {required this.offlineDataMap,
       required this.permitId,
       required this.signature,
-      required this.actionKey});
+      required this.actionKey,
+      required this.dateTime});
 }

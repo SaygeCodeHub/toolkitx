@@ -64,6 +64,7 @@ class ClearPermitBottomBar extends StatelessWidget {
                   } else {
                     clearPermitMap['permitid'] = permitId;
                     clearPermitMap['action_key'] = "clear_permit";
+                    print('on tap permit map $clearPermitMap');
                     Navigator.pushNamed(context, PermitSignAsCpScreen.routeName,
                         arguments: PermitCpSapModel(
                             sapCpMap: clearPermitMap,

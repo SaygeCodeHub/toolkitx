@@ -57,10 +57,31 @@ class PermitSignAsCpScreen extends StatelessWidget {
                       },
                       child: PrimaryButton(
                           onPressed: () {
-                            SaveOfflineDataUtil().saveData(
-                                permitCpSapModel.previousScreen,
-                                permitCpSapModel.sapCpMap,
-                                context);
+                            if (permitCpSapModel.sapCpMap['npw_name'] == null ||
+                                permitCpSapModel.sapCpMap['npw_name'] == '') {
+                              showCustomSnackBar(context,
+                                  StringConstants.kEnterNameValidation, '');
+                            } else if (permitCpSapModel.sapCpMap['user_date'] ==
+                                    null ||
+                                permitCpSapModel.sapCpMap['user_date'] == '') {
+                              showCustomSnackBar(context,
+                                  StringConstants.kPleaseSelectDate, '');
+                            } else if (permitCpSapModel.sapCpMap['user_time'] ==
+                                    null ||
+                                permitCpSapModel.sapCpMap['user_time'] == '') {
+                              showCustomSnackBar(context,
+                                  StringConstants.kPleaseSelectTime, '');
+                            } else if (permitCpSapModel.sapCpMap['user_sign'] ==
+                                    null ||
+                                permitCpSapModel.sapCpMap['user_sign'] == '') {
+                              showCustomSnackBar(context,
+                                  StringConstants.kPleaseEnterSignature, '');
+                            } else {
+                              SaveOfflineDataUtil().saveData(
+                                  permitCpSapModel.previousScreen,
+                                  permitCpSapModel.sapCpMap,
+                                  context);
+                            }
                           },
                           textValue: StringConstants.kSignAsCpCap)))
             ])),
@@ -79,9 +100,11 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String textValue) {
-                        permitCpSapModel.sapCpMap['npw_name'] = textValue;
-                      }),
+                      TextFieldWidget(
+                          textInputAction: TextInputAction.next,
+                          onTextFieldChanged: (String textValue) {
+                            permitCpSapModel.sapCpMap['npw_name'] = textValue;
+                          }),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kAuthNumber,
                           style: Theme.of(context)
@@ -89,9 +112,11 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String textValue) {
-                        permitCpSapModel.sapCpMap['npw_auth'] = textValue;
-                      }),
+                      TextFieldWidget(
+                          textInputAction: TextInputAction.next,
+                          onTextFieldChanged: (String textValue) {
+                            permitCpSapModel.sapCpMap['npw_auth'] = textValue;
+                          }),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kCompanyName,
                           style: Theme.of(context)
@@ -99,9 +124,12 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String textValue) {
-                        permitCpSapModel.sapCpMap['npw_company'] = textValue;
-                      }),
+                      TextFieldWidget(
+                          textInputAction: TextInputAction.next,
+                          onTextFieldChanged: (String textValue) {
+                            permitCpSapModel.sapCpMap['npw_company'] =
+                                textValue;
+                          }),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kEmailAndPhoneNo,
                           style: Theme.of(context)
@@ -109,9 +137,12 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String textValue) {
-                        permitCpSapModel.sapCpMap['npw_email'] = textValue;
-                      }),
+                      TextFieldWidget(
+                          textInputAction: TextInputAction.next,
+                          textInputType: TextInputType.emailAddress,
+                          onTextFieldChanged: (String textValue) {
+                            permitCpSapModel.sapCpMap['npw_email'] = textValue;
+                          }),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kDate,
                           style: Theme.of(context)
@@ -120,7 +151,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       DatePickerTextField(onDateChanged: (String textValue) {
-                        permitCpSapModel.sapCpMap['date'] = textValue;
+                        permitCpSapModel.sapCpMap['user_date'] = textValue;
                       }),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kTime,
@@ -130,7 +161,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
                       TimePickerTextField(onTimeChanged: (String date) {
-                        permitCpSapModel.sapCpMap['time'] = date;
+                        permitCpSapModel.sapCpMap['user_time'] = date;
                       }),
                       const SizedBox(height: xxTinySpacing),
                       SignaturePad(

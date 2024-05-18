@@ -7,7 +7,16 @@ class SaveOfflineDataUtil {
   void saveData(String status, Map saveOfflineDataMap, BuildContext context) {
     switch (status) {
       case 'ClearPermitScreen':
+        print('util map $saveOfflineDataMap');
+        context
+            .read<PermitBloc>()
+            .add(SaveClearPermit(clearPermitMap: saveOfflineDataMap));
+        break;
       case 'AcceptPermitRequestScreen':
+        context.read<PermitBloc>().add(AcceptPermitRequest(
+            permitId: saveOfflineDataMap['permitid'],
+            acceptPermitMap: saveOfflineDataMap));
+        break;
       case 'OpenPermitScreen':
         context.read<PermitBloc>().add(OpenPermit(saveOfflineDataMap));
         break;

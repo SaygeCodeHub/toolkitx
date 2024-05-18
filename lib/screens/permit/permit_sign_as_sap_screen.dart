@@ -56,10 +56,31 @@ class PermitSignAsSapScreen extends StatelessWidget {
                 child: Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          SaveOfflineDataUtil().saveData(
-                              permitCpSapModel.previousScreen,
-                              permitCpSapModel.sapCpMap,
-                              context);
+                          if (permitCpSapModel.sapCpMap['npw_name'] == null ||
+                              permitCpSapModel.sapCpMap['npw_name'] == '') {
+                            showCustomSnackBar(context,
+                                StringConstants.kEnterNameValidation, '');
+                          } else if (permitCpSapModel.sapCpMap['user_date'] ==
+                                  null ||
+                              permitCpSapModel.sapCpMap['user_date'] == '') {
+                            showCustomSnackBar(
+                                context, StringConstants.kPleaseSelectDate, '');
+                          } else if (permitCpSapModel.sapCpMap['user_time'] ==
+                                  null ||
+                              permitCpSapModel.sapCpMap['user_time'] == '') {
+                            showCustomSnackBar(
+                                context, StringConstants.kPleaseSelectTime, '');
+                          } else if (permitCpSapModel.sapCpMap['user_sign'] ==
+                                  null ||
+                              permitCpSapModel.sapCpMap['user_sign'] == '') {
+                            showCustomSnackBar(context,
+                                StringConstants.kPleaseEnterSignature, '');
+                          } else {
+                            SaveOfflineDataUtil().saveData(
+                                permitCpSapModel.previousScreen,
+                                permitCpSapModel.sapCpMap,
+                                context);
+                          }
                         },
                         textValue: StringConstants.kSignAsSapCap)),
               )
