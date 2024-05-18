@@ -24,7 +24,7 @@ class SaveOfflineDataUtil {
         context.read<PermitBloc>().add(SaveMarkAsPrepared(
             permitId: saveOfflineDataMap['permitid'],
             controlPerson: saveOfflineDataMap['controlpersons'],
-            saveOfflineMarkAsPreparedMap: saveOfflineDataMap));
+            markAsPreparedMap: saveOfflineDataMap));
         break;
       case 'ClosePermitScreen':
         context

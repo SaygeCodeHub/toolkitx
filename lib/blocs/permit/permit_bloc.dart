@@ -649,9 +649,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "permitid": event.permitId,
         "userid": userId,
         "controlpersons": event.controlPerson,
-        "user_sign": event.saveOfflineMarkAsPreparedMap['user_sign'] ?? '',
-        "user_name": event.saveOfflineMarkAsPreparedMap['user_name'] ?? '',
-        "user_email": event.saveOfflineMarkAsPreparedMap['user_email'] ?? ''
+        "user_sign": event.markAsPreparedMap['user_sign'] ?? '',
+        "user_name": event.markAsPreparedMap['user_name'] ?? '',
+        "user_email": event.markAsPreparedMap['user_email'] ?? ''
       };
       if (isNetworkEstablished) {
         emit(MarkAsPreparedSaving());
@@ -672,10 +672,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         add(SavePermitOfflineAction(
             offlineDataMap: saveMarkAsPreparedMap,
             permitId: event.permitId,
-            signature: event.saveOfflineMarkAsPreparedMap['user_sign'] ?? '',
+            signature: event.markAsPreparedMap['user_sign'] ?? '',
             actionKey: 'prepare_permit',
             dateTime:
-                '${event.saveOfflineMarkAsPreparedMap['user_date']}${event.saveOfflineMarkAsPreparedMap['user_time']}'));
+                '${event.markAsPreparedMap['user_date']}${event.markAsPreparedMap['user_time']}'));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));

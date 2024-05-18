@@ -108,7 +108,7 @@ class PreparePermitScreen extends StatelessWidget {
                 context.read<PermitBloc>().add(SaveMarkAsPrepared(
                     permitId: permitId,
                     controlPerson: controlPerson,
-                    saveOfflineMarkAsPreparedMap: {}));
+                    markAsPreparedMap: {'controlpersons': controlPerson}));
               } else {
                 Navigator.pushNamed(context, PermitSignAsSapScreen.routeName,
                     arguments: PermitCpSapModel(sapCpMap: {
