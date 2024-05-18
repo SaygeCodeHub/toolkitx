@@ -29,28 +29,21 @@ class GetClosePermitData {
   final String? permitStatus;
   final String? panelSaint;
   final String? showComment;
-  final int statusid;
 
   GetClosePermitData(
-      {this.permitName,
-      this.permitStatus,
-      this.panelSaint,
-      this.showComment,
-      required this.statusid});
+      {this.permitName, this.permitStatus, this.panelSaint, this.showComment});
 
   factory GetClosePermitData.fromJson(Map<String, dynamic> json) =>
       GetClosePermitData(
           permitName: json["permit_name"],
           permitStatus: json["permit_status"],
           panelSaint: json["panel_saint"],
-          showComment: json["show_comment"],
-          statusid: json["statusid"] ?? 0);
+          showComment: json["show_comment"]);
 
   Map<String, dynamic> toJson() => {
         "permit_name": permitName,
         "permit_status": permitStatus,
         "panel_saint": panelSaint,
-        "show_comment": showComment,
-        "statusid": statusid
+        "show_comment": showComment
       };
 }

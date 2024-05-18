@@ -84,7 +84,7 @@ class DatabaseHelper {
         await db.execute('''
         CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
-          permitId INTEGER UNIQUE,
+          permitId TEXT UNIQUE,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -99,7 +99,7 @@ class DatabaseHelper {
         await db.execute('''
         CREATE TABLE IF NOT EXISTS OfflinePermitAction (
          id INTEGER PRIMARY KEY,
-          permitId INTEGER,
+          permitId TEXT,
           actionText TEXT,
           actionJson TEXT,
           actionDateTime TEXT,
@@ -114,12 +114,13 @@ class DatabaseHelper {
     final Database db = await database;
     // Drop the table if it exists
     await db.execute('DROP TABLE IF EXISTS OfflinePermit');
+    await db.execute('DROP TABLE IF EXISTS OfflinePermitAction');
 
     // Create the table again
     await db.execute('''
     CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
-          permitId INTEGER UNIQUE,
+          permitId TEXT UNIQUE,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -129,6 +130,17 @@ class DatabaseHelper {
           tab6 TEXT,
           html TEXT,
           statusId INTEGER
+        );
+  ''');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflinePermitAction (
+         id INTEGER PRIMARY KEY,
+          permitId TEXT,
+          actionText TEXT,
+          actionJson TEXT,
+          actionDateTime TEXT,
+          sign TEXT
         );
   ''');
   }
@@ -467,5 +479,44 @@ class DatabaseHelper {
       where: 'permitId = ?',
       whereArgs: [permitId],
     );
+  }
+
+  Future<int> getTypeOfPermit(String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermit',
+      columns: ['listPage'],
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      return listPageMap['type_of_permit'];
+    } else {
+      return -1;
+    }
+  }
+
+  Future<void> updateStatus(String permitId, String updatedStatus) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermit',
+      columns: ['listPage'],
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      listPageMap['status'] = updatedStatus;
+      String updatedListPageJson = jsonEncode(listPageMap);
+      await db.update(
+        'OfflinePermit',
+        {'listPage': updatedListPageJson},
+        where: 'permitId = ?',
+        whereArgs: [permitId],
+      );
+    }
   }
 }

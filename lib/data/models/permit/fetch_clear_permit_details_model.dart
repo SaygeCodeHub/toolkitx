@@ -46,7 +46,6 @@ class ClearPermitData {
   final String pid;
   final String accessKeys;
   final String other;
-  final int statusid;
 
   ClearPermitData(
       {required this.clientid,
@@ -65,30 +64,27 @@ class ClearPermitData {
       required this.singleline,
       required this.pid,
       required this.accessKeys,
-      required this.other,
-      required this.statusid});
+      required this.other});
 
   factory ClearPermitData.fromJson(Map<String, dynamic> json) =>
       ClearPermitData(
-        clientid: json["clientid"] ?? '',
-        permitName: json["permit_name"] ?? '',
-        permitStatus: json["permit_status"] ?? '',
-        typeOfPermit: json["type_of_permit"] ?? '',
-        panelSaint: json["panel_saint"] ?? '',
-        panelSaint1215: json["panel_saint1215"] ?? '',
-        isstopclear: json["isstopclear"] ?? '',
-        keysafeno: json["keysafeno"] ?? '',
-        earthscheduleno: json["earthscheduleno"] ?? '',
-        selectedpersonreport: json["selectedpersonreport"] ?? '',
-        safetykeys: json["safetykeys"] ?? '',
-        circuitflags: json["circuitflags"] ?? '',
-        circuitwristlets: json["circuitwristlets"] ?? '',
-        singleline: json["singleline"] ?? '',
-        pid: json["pid"] ?? '',
-        accessKeys: json["accesskey"] ?? '',
-        other: json["other"] ?? '',
-        statusid: json["statusid"] ?? 0,
-      );
+          clientid: json["clientid"] ?? '',
+          permitName: json["permit_name"] ?? '',
+          permitStatus: json["permit_status"] ?? '',
+          typeOfPermit: json["type_of_permit"] ?? '',
+          panelSaint: json["panel_saint"] ?? '',
+          panelSaint1215: json["panel_saint1215"] ?? '',
+          isstopclear: json["isstopclear"] ?? '',
+          keysafeno: json["keysafeno"] ?? '',
+          earthscheduleno: json["earthscheduleno"] ?? '',
+          selectedpersonreport: json["selectedpersonreport"] ?? '',
+          safetykeys: json["safetykeys"] ?? '',
+          circuitflags: json["circuitflags"] ?? '',
+          circuitwristlets: json["circuitwristlets"] ?? '',
+          singleline: json["singleline"] ?? '',
+          pid: json["pid"] ?? '',
+          accessKeys: json["accesskey"] ?? '',
+          other: json["other"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "clientid": clientid,
@@ -107,7 +103,6 @@ class ClearPermitData {
         "singleline": singleline,
         "pid": pid,
         "accesskey": accessKeys,
-        "other": other,
-        "statusid": statusid
+        "other": other
       };
 }

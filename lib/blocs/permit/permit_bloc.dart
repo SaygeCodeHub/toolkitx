@@ -1015,25 +1015,38 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.offlineDataMap,
           event.signature,
           event.dateTime);
+      int typeOfPermit = await _databaseHelper.getTypeOfPermit(event.permitId);
       if (isDataInserted) {
         switch (event.actionKey) {
           case 'open_permit':
             await _databaseHelper.updateStatusId(event.permitId, 2);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '2'));
             break;
           case 'cancel_permit':
             await _databaseHelper.updateStatusId(event.permitId, 3);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '3'));
             break;
           case 'prepare_permit':
             await _databaseHelper.updateStatusId(event.permitId, 16);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '16'));
             break;
           case 'clear_permit':
             await _databaseHelper.updateStatusId(event.permitId, 18);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '18'));
             break;
           case 'accept_permit_request':
             await _databaseHelper.updateStatusId(event.permitId, 17);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '17'));
             break;
           case 'edit_safety_document':
             await _databaseHelper.updateStatusId(event.permitId, 0);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '0'));
             break;
           default:
             emit(OfflineDataNotSaved(
@@ -1058,36 +1071,41 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         await _databaseHelper.fetchOfflinePermitAction();
     if (permitActions.isNotEmpty) {
       for (var action in permitActions) {
-        switch (action['action_key']) {
+        switch (action['actionText']) {
           case 'open_permit':
-            add(OpenPermit(
-                action['actionJson'], action['permitId'], action['id']));
+            add(OpenPermit(jsonDecode(action['actionJson']), action['permitId'],
+                action['id']));
             break;
           case 'cancel_permit':
             add(ClosePermit(
                 permitId: action['permitId'],
-                closePermitMap: action['actionJson']));
+                closePermitMap: jsonDecode(action['actionJson']),
+                offlineActionId: action['id']));
             break;
           case 'prepare_permit':
             add(SaveMarkAsPrepared(
                 permitId: action['permitId'],
-                markAsPreparedMap: action['actionJson']));
+                markAsPreparedMap: jsonDecode(action['actionJson']),
+                offlineActionId: action['id']));
             break;
           case 'clear_permit':
             add(SaveClearPermit(
                 permitId: action['permitId'],
-                clearPermitMap: action['actionJson'],
-                syncDate: action['actionDateTime']));
+                clearPermitMap: jsonDecode(action['actionJson']),
+                syncDate: action['actionDateTime'],
+                offlineActionId: action['id']));
             break;
           case 'accept_permit_request':
             add(AcceptPermitRequest(
                 permitId: action['permitId'],
-                acceptPermitMap: action['actionJson'],
-                syncDate: action['actionDateTime']));
+                acceptPermitMap: jsonDecode(action['actionJson']),
+                syncDate: action['actionDateTime'],
+                offlineActionId: action['id']));
             break;
           case 'edit_safety_document':
             add(SavePermitEditSafetyDocument(
-                editSafetyDocumentMap: action['actionJson']));
+                editSafetyDocumentMap: jsonDecode(action['actionJson']),
+                offlineActionId: action['id']));
             break;
           default:
             null;

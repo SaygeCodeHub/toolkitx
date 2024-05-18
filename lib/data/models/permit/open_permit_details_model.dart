@@ -54,7 +54,6 @@ class GetOpenPermitData {
   final String? npwEmail;
   final String? npiPhone;
   final String? npwPhone;
-  final int statusId;
 
   GetOpenPermitData(
       {this.permitName,
@@ -78,8 +77,7 @@ class GetOpenPermitData {
       this.npiEmail,
       this.npwEmail,
       this.npiPhone,
-      this.npwPhone,
-      required this.statusId});
+      this.npwPhone});
 
   factory GetOpenPermitData.fromJson(Map<String, dynamic> json) =>
       GetOpenPermitData(
@@ -104,8 +102,7 @@ class GetOpenPermitData {
           npiEmail: json["npi_email"],
           npwEmail: json["npw_email"],
           npiPhone: json["npi_phone"],
-          npwPhone: json["npw_phone"],
-          statusId: json["statusid"] ?? 0);
+          npwPhone: json["npw_phone"]);
 
   Map<String, dynamic> toJson() => {
         "permit_name": permitName,
@@ -129,7 +126,6 @@ class GetOpenPermitData {
         "npi_email": npiEmail,
         "npw_email": npwEmail,
         "npi_phone": npiPhone,
-        "npw_phone": npwPhone,
-        "statusid": statusId
+        "npw_phone": npwPhone
       };
 }

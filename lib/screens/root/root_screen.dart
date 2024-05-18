@@ -72,17 +72,18 @@ class _RootScreenState extends State<RootScreen> {
             ModalRoute.withName('/'));
       } else {
         context.read<ChatBloc>().add(FetchChatMessage());
+        context.read<PermitBloc>().add(PermitInternetActions());
       }
     }, builder: (context, state) {
       final bool hasNetwork = state is! NoNetwork;
       final List<Widget> currentWidgetOptions =
           hasNetwork ? _onlineWidgetOptions : _offlineWidgetOptions;
-      final BottomNavigationBar bottomNavigationBar = hasNetwork
-          ? _buildOnlineBottomNavigationBar()
-          : _buildOfflineBottomNavigationBar();
       if (_selectedIndex >= currentWidgetOptions.length) {
         _selectedIndex = 0;
       }
+      final BottomNavigationBar bottomNavigationBar = hasNetwork
+          ? _buildOnlineBottomNavigationBar()
+          : _buildOfflineBottomNavigationBar();
       return Scaffold(
           body: Center(child: currentWidgetOptions[_selectedIndex]),
           bottomNavigationBar: bottomNavigationBar);
@@ -90,7 +91,6 @@ class _RootScreenState extends State<RootScreen> {
   }
 
   BottomNavigationBar _buildOnlineBottomNavigationBar() {
-    context.read<PermitBloc>().add(PermitInternetActions());
     return BottomNavigationBar(
         enableFeedback: true,
         type: BottomNavigationBarType.fixed,

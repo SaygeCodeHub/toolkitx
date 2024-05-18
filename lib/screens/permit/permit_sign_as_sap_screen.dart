@@ -56,8 +56,8 @@ class PermitSignAsSapScreen extends StatelessWidget {
                 child: Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          if (permitCpSapModel.sapCpMap['npw_name'] == null ||
-                              permitCpSapModel.sapCpMap['npw_name'] == '') {
+                          if (permitCpSapModel.sapCpMap['user_name'] == null ||
+                              permitCpSapModel.sapCpMap['user_name'] == '') {
                             showCustomSnackBar(context,
                                 StringConstants.kEnterNameValidation, '');
                           } else if (permitCpSapModel.sapCpMap['user_date'] ==
