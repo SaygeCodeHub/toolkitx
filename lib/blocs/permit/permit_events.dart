@@ -73,8 +73,9 @@ class ClosePermit extends PermitEvents {
 
 class OpenPermit extends PermitEvents {
   final Map openPermitMap;
+  final String permitId;
 
-  const OpenPermit(this.openPermitMap);
+  const OpenPermit(this.openPermitMap, this.permitId);
 }
 
 class RequestPermit extends PermitEvents {

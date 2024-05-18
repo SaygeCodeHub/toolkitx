@@ -444,7 +444,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       } else {
         Map openPermitMap = {
           "hashcode": hashCode,
-          "permitid": event.openPermitMap['permitId'],
+          "permitid": event.permitId,
           "userid": userId,
           "customfields": event.openPermitMap['customfields'],
           "date": (event.openPermitMap['date'] == null)

@@ -111,9 +111,8 @@ class OpenPermitBody extends StatelessWidget {
                 PrimaryButton(
                     onPressed: () {
                       if (isNetworkEstablished) {
-                        context
-                            .read<PermitBloc>()
-                            .add(OpenPermit(openPermitMap));
+                        context.read<PermitBloc>().add(OpenPermit(
+                            openPermitMap, openPermitMap['permitId']));
                       } else {
                         if (openPermitMap['date'] == null ||
                             openPermitMap['date'] == '') {
