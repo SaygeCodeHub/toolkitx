@@ -65,9 +65,10 @@ class FetchOpenPermitDetails extends PermitEvents {
 }
 
 class ClosePermit extends PermitEvents {
+  final String permitId;
   final Map closePermitMap;
 
-  const ClosePermit({required this.closePermitMap});
+  const ClosePermit({required this.closePermitMap, required this.permitId});
 }
 
 class OpenPermit extends PermitEvents {

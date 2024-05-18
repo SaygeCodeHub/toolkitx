@@ -509,7 +509,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       } else {
         Map closePermitMap = {
           "hashcode": hashCode,
-          "permitid": event.closePermitMap['permitId'],
+          "permitid": event.permitId,
           "userid": userId,
           "controlpersons": event.closePermitMap['controlPerson'],
           "date": (event.closePermitMap['date'] == null)

@@ -104,9 +104,9 @@ class ClosePermitBody extends StatelessWidget {
                 PrimaryButton(
                     onPressed: () {
                       if (isNetworkEstablished) {
-                        context
-                            .read<PermitBloc>()
-                            .add(ClosePermit(closePermitMap: closePermitMap));
+                        context.read<PermitBloc>().add(ClosePermit(
+                            closePermitMap: closePermitMap,
+                            permitId: closePermitMap['permitId']));
                       } else {
                         if (closePermitMap['panel_saint'] == '1' &&
                             closePermitMap['controlPerson'] == null) {

@@ -27,9 +27,9 @@ class SaveOfflineDataUtil {
             markAsPreparedMap: saveOfflineDataMap));
         break;
       case 'ClosePermitScreen':
-        context
-            .read<PermitBloc>()
-            .add(ClosePermit(closePermitMap: saveOfflineDataMap));
+        context.read<PermitBloc>().add(ClosePermit(
+            closePermitMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitId']));
         break;
     }
   }
