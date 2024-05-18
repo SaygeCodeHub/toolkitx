@@ -850,14 +850,22 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.editSafetyDocumentMap['ptw_precautions2'] ?? '',
         "ptw_safety": event.editSafetyDocumentMap['ptw_safety'] ?? ''
       };
-      SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
-          await _permitRepository
-              .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
-      if (savePermitEditSafetyDocumentModel.message == '1') {
-        emit(PermitEditSafetyDocumentSaved());
+      if (isNetworkEstablished) {
+        SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
+            await _permitRepository
+                .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
+        if (savePermitEditSafetyDocumentModel.message == '1') {
+          emit(PermitEditSafetyDocumentSaved());
+        } else {
+          emit(PermitEditSafetyDocumentNotSaved(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       } else {
-        emit(PermitEditSafetyDocumentNotSaved(
-            errorMessage: StringConstants.kSomethingWentWrong));
+        await _databaseHelper.insertOfflinePermitAction(
+            event.editSafetyDocumentMap['permit_id'],
+            'edit_safety_document',
+            editSafetyDocumentMap,
+            "sign");
       }
     } catch (e) {
       emit(PermitEditSafetyDocumentNotSaved(
