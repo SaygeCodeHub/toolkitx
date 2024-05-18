@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/screens/profile/widgets/signature.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/offlinePermit/save_offline_data.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
 class PermitSignAsSapScreen extends StatelessWidget {
   static const routeName = 'PermitSignAsSapScreen';
-  final Map permitSignAsSapMap = {};
+  final Map permitSignAsSapMap;
 
-  PermitSignAsSapScreen({super.key});
+  const PermitSignAsSapScreen({super.key, required this.permitSignAsSapMap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,12 @@ class PermitSignAsSapScreen extends StatelessWidget {
               const SizedBox(width: xxTinierSpacing),
               Expanded(
                   child: PrimaryButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        SaveOfflineData().saveData(
+                            context.read<PermitBloc>().statusId,
+                            permitSignAsSapMap,
+                            context);
+                      },
                       textValue: StringConstants.kSignAsSapCap))
             ])),
         body: SingleChildScrollView(
@@ -49,7 +58,9 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(onTextFieldChanged: (String textValue) {}),
+                    TextFieldWidget(onTextFieldChanged: (String textValue) {
+                      permitSignAsSapMap['user_name'] = textValue;
+                    }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kEmailAndPhoneNo,
                         style: Theme.of(context)
@@ -57,7 +68,9 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    TextFieldWidget(onTextFieldChanged: (String textValue) {}),
+                    TextFieldWidget(onTextFieldChanged: (String textValue) {
+                      permitSignAsSapMap['user_email'] = textValue;
+                    }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kDate,
                         style: Theme.of(context)
@@ -65,7 +78,9 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    DatePickerTextField(onDateChanged: (String textValue) {}),
+                    DatePickerTextField(onDateChanged: (String date) {
+                      permitSignAsSapMap['date'] = date;
+                    }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kTime,
                         style: Theme.of(context)
@@ -73,9 +88,11 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .xSmall
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
-                    TimePickerTextField(onTimeChanged: (String textValue) {}),
+                    TimePickerTextField(onTimeChanged: (String time) {
+                      permitSignAsSapMap['time'] = time;
+                    }),
                     const SizedBox(height: xxTinySpacing),
-                    const SignaturePad(map: {}, mapKey: ''),
+                    SignaturePad(map: permitSignAsSapMap, mapKey: 'user_sign'),
                     const SizedBox(height: xxTinySpacing),
                   ],
                 ))));

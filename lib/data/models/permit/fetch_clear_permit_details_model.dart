@@ -46,6 +46,7 @@ class ClearPermitData {
   final String pid;
   final String accessKeys;
   final String other;
+  final int statusid;
 
   ClearPermitData(
       {required this.clientid,
@@ -64,7 +65,8 @@ class ClearPermitData {
       required this.singleline,
       required this.pid,
       required this.accessKeys,
-      required this.other});
+      required this.other,
+      required this.statusid});
 
   factory ClearPermitData.fromJson(Map<String, dynamic> json) =>
       ClearPermitData(
@@ -85,6 +87,7 @@ class ClearPermitData {
         pid: json["pid"] ?? '',
         accessKeys: json["accesskey"] ?? '',
         other: json["other"] ?? '',
+        statusid: json["statusid"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +107,7 @@ class ClearPermitData {
         "singleline": singleline,
         "pid": pid,
         "accesskey": accessKeys,
-        "other": other
+        "other": other,
+        "statusid": statusid
       };
 }

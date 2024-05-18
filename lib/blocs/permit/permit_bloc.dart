@@ -45,6 +45,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   List<AllPermitDatum> permitListData = [];
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
+  int statusId = 0;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -329,8 +330,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         emit(const FetchingPermitDetails());
         Map<String, dynamic> permitDetailsMap =
             await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
-        int statusId =
-            await _databaseHelper.fetchPermitStatusId(event.permitId);
+        statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
         PermitDetailsData permitDerailsData =
             PermitDetailsData.fromJson(permitDetailsMap);
         permitDerailsData.tab1.status = getStatusText(

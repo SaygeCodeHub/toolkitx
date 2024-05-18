@@ -621,7 +621,8 @@ class AppRoutes {
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
       case PermitSignAsSapScreen.routeName:
-        return _createRoute(PermitSignAsSapScreen());
+        return _createRoute(PermitSignAsSapScreen(
+            permitSignAsSapMap: settings.arguments as Map));
       case PermitSignAsCpScreen.routeName:
         return _createRoute(PermitSignAsCpScreen());
       default:

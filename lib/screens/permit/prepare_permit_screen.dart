@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -101,8 +103,18 @@ class PreparePermitScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              context.read<PermitBloc>().add(SaveMarkAsPrepared(
-                  permitId: permitId, controlPerson: controlPerson));
+              if (isNetworkEstablished) {
+                context.read<PermitBloc>().add(SaveMarkAsPrepared(
+                    permitId: permitId,
+                    controlPerson: controlPerson,
+                    saveOfflineMarkAsPreparedMap: {}));
+              } else {
+                Navigator.pushNamed(context, PermitSignAsSapScreen.routeName,
+                    arguments: {
+                      'permitid': permitId,
+                      'controlpersons': controlPerson
+                    });
+              }
             },
             textValue: StringConstants.kMarkAsPrepared),
       ),

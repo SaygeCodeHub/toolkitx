@@ -99,9 +99,11 @@ class FetchPermitBasicDetails extends PermitEvents {
 class SaveMarkAsPrepared extends PermitEvents {
   final String permitId;
   final String controlPerson;
+  final Map saveOfflineMarkAsPreparedMap;
 
-  const SaveMarkAsPrepared(
-      {required this.permitId, required this.controlPerson});
+  const SaveMarkAsPrepared({required this.permitId,
+    required this.controlPerson,
+    required this.saveOfflineMarkAsPreparedMap});
 }
 
 class AcceptPermitRequest extends PermitEvents {
