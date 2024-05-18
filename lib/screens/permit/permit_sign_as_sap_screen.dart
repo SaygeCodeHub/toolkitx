@@ -118,7 +118,8 @@ class PermitSignAsSapScreen extends StatelessWidget {
                       permitCpSapModel.sapCpMap['user_time'] = time;
                     }),
                     const SizedBox(height: xxTinySpacing),
-                    SignaturePad(map: permitCpSapModel.sapCpMap, mapKey: 'user_sign'),
+                    SignaturePad(
+                        map: permitCpSapModel.sapCpMap, mapKey: 'user_sign'),
                     const SizedBox(height: xxTinySpacing)
                   ],
                 ))));

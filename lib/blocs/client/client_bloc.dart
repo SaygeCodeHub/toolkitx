@@ -30,20 +30,21 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     on<FetchChatMessages>(_fetchChatMessages);
   }
 
-  FutureOr<void> _fetchClientList(FetchClientList event,
-      Emitter<ClientStates> emit) async {
+  FutureOr<void> _fetchClientList(
+      FetchClientList event, Emitter<ClientStates> emit) async {
     emit(ClientListFetching());
     try {
       String clientDataKey =
-      (await _customerCache.getClientDataKey(CacheKeys.clientDataKey))!;
+          (await _customerCache.getClientDataKey(CacheKeys.clientDataKey))!;
       String userType = (await _customerCache.getUserType(CacheKeys.userType))!;
       ClientListModel clientListModel =
-      await _clientRepository.fetchClientList(clientDataKey, userType);
+          await _clientRepository.fetchClientList(clientDataKey, userType);
       if (clientListModel.data!.length == 1) {
         add(SelectClient(
             hashKey: clientListModel.data![0].hashkey.toString(),
             apiKey: clientListModel.data![0].apikey,
-            image: clientListModel.data![0].hashimg, isFromProfile: false));
+            image: clientListModel.data![0].hashimg,
+            isFromProfile: false));
       }
       emit(ClientListFetched(clientListModel: clientListModel));
     } catch (e) {
@@ -51,39 +52,38 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     }
   }
 
-  FutureOr<void> _selectClient(SelectClient event,
-      Emitter<ClientStates> emit) async {
+  FutureOr<void> _selectClient(
+      SelectClient event, Emitter<ClientStates> emit) async {
     if (event.isFromProfile) {
       await _databaseHelper.recreateOfflinePermitTable();
     }
     _customerCache.setApiKey(CacheKeys.apiKey, event.apiKey);
     _customerCache.setClientId(CacheKeys.clientId, event.hashKey);
     String timeZoneCode =
-    (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
+        (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
     String userType = (await _customerCache.getUserType(CacheKeys.userType))!;
     String dateTimeValue =
-    (await _customerCache.getDateFormat(CacheKeys.dateFormatKey))!;
+        (await _customerCache.getDateFormat(CacheKeys.dateFormatKey))!;
     String hashCode =
-        '${event.apiKey}|${event
-        .hashKey}|$userType|$dateTimeValue|$timeZoneCode';
+        '${event.apiKey}|${event.hashKey}|$userType|$dateTimeValue|$timeZoneCode';
     _customerCache.setHashCode(CacheKeys.hashcode, hashCode);
     _customerCache.setClientImage(CacheKeys.clientImage, event.image);
     emit(ClientSelected());
   }
 
-  FutureOr<void> _fetchHomeScreenData(FetchHomeScreenData event,
-      Emitter<ClientStates> emit) async {
+  FutureOr<void> _fetchHomeScreenData(
+      FetchHomeScreenData event, Emitter<ClientStates> emit) async {
     emit(HomeScreenFetching());
     try {
       List permissionsList = [];
       int badgeCount = 0;
       String timeZoneCode =
-      (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
+          (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
       String userType = (await _customerCache.getUserType(CacheKeys.userType))!;
       String hashKey = (await _customerCache.getClientId(CacheKeys.clientId))!;
       String apiKey = (await _customerCache.getApiKey(CacheKeys.apiKey))!;
       String clientImage =
-      (await _customerCache.getClientImage(CacheKeys.clientImage))!;
+          (await _customerCache.getClientImage(CacheKeys.clientImage))!;
       Map fetchHomeScreenMap = {
         "hashkey": hashKey,
         "apikey": apiKey,
@@ -91,7 +91,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         "timezonecode": timeZoneCode
       };
       HomeScreenModel homeScreenModel =
-      await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
+          await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
         if (event.isFirstTime == true) {
           add(FetchChatMessages());
@@ -133,8 +133,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     }
   }
 
-  FutureOr<void> _fetchChatMessages(FetchChatMessages event,
-      Emitter<ClientStates> emit) async {
+  FutureOr<void> _fetchChatMessages(
+      FetchChatMessages event, Emitter<ClientStates> emit) async {
     int pageNo = 1;
     try {
       String newToken = await NotificationUtil().getToken();
@@ -142,7 +142,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
       while (hasMoreData) {
         FetchChatMessagesModel fetchChatMessagesModel =
-        await _clientRepository.fetchChatMessages({
+            await _clientRepository.fetchChatMessages({
           'page_no': pageNo,
           'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
           'token': newToken
