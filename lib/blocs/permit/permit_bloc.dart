@@ -74,7 +74,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
-    on<SaveOfflineData>(_saveOfflineData);
+    on<SavePermitOfflineAction>(_saveOfflineData);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -463,9 +463,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           emit(PermitOpened(openClosePermitModel));
         } else {
           openPermitMap['user_date'] = event.openPermitMap['user_date'];
-          openPermitMap['action_key'] = event.openPermitMap['action_key'];
           openPermitMap['user_time'] = event.openPermitMap['user_time'];
-          add(SaveOfflineData(offlineDataMap: openPermitMap));
+          add(SavePermitOfflineAction(
+              offlineDataMap: openPermitMap,
+              permitId: event.openPermitMap['permitId'],
+              signature: event.openPermitMap['user_sign'],
+              actionKey: 'open_permit'));
         }
       }
     } catch (e) {
@@ -529,10 +532,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
           }
         } else {
-          closePermitMap['action_key'] = event.closePermitMap['action_key'];
           closePermitMap['user_date'] = event.closePermitMap['user_date'];
           closePermitMap['user_time'] = event.closePermitMap['user_time'];
-          add(SaveOfflineData(offlineDataMap: closePermitMap));
+          add(SavePermitOfflineAction(
+              offlineDataMap: closePermitMap,
+              permitId: event.closePermitMap['permitId'],
+              signature: event.closePermitMap['user_sign'] ?? '',
+              actionKey: 'cancel_permit'));
         }
       }
     } catch (e) {
@@ -663,13 +669,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kPleaseFillControlPerson));
         }
       } else {
-        saveMarkAsPreparedMap['action_key'] =
-            event.saveOfflineMarkAsPreparedMap['action_key'];
         saveMarkAsPreparedMap['user_date'] =
             event.saveOfflineMarkAsPreparedMap['user_date'];
         saveMarkAsPreparedMap['user_time'] =
             event.saveOfflineMarkAsPreparedMap['user_time'];
-        add(SaveOfflineData(offlineDataMap: saveMarkAsPreparedMap));
+        add(SavePermitOfflineAction(
+            offlineDataMap: saveMarkAsPreparedMap,
+            permitId: event.permitId,
+            signature: event.saveOfflineMarkAsPreparedMap['user_sign'] ?? '',
+            actionKey: 'prepare_permit'));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
@@ -948,37 +956,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   }
 
   FutureOr<void> _saveOfflineData(
-      SaveOfflineData event, Emitter<PermitStates> emit) async {
+      SavePermitOfflineAction event, Emitter<PermitStates> emit) async {
     try {
-      if (event.offlineDataMap['user_name'] == null ||
-          event.offlineDataMap['user_name'] == '') {
-        emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kEnterNameValidation));
-      } else if (event.offlineDataMap['user_date'] == null ||
-          event.offlineDataMap['user_date'] == '') {
-        emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kPleaseSelectDate));
-      } else if (event.offlineDataMap['user_time'] == null ||
-          event.offlineDataMap['user_time'] == '') {
-        emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kPleaseSelectTime));
-      } else if (event.offlineDataMap['user_sign'] == null ||
-          event.offlineDataMap['user_sign'] == '') {
-        emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kPleaseAddSignature));
+      bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
+          event.permitId,
+          event.actionKey,
+          event.offlineDataMap,
+          event.signature);
+      if (isDataInserted) {
+        emit(OfflineDataSaved(
+            successMessage: StringConstants.kDataSavedSuccessfully));
       } else {
-        bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-            event.offlineDataMap['permitid'],
-            event.offlineDataMap['action_key'],
-            event.offlineDataMap,
-            event.offlineDataMap['user_sign']);
-        if (isDataInserted) {
-          emit(OfflineDataSaved(
-              successMessage: StringConstants.kDataSavedSuccessfully));
-        } else {
-          emit(OfflineDataNotSaved(
-              errorMessage: StringConstants.kFailedToSaveData));
-        }
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kFailedToSaveData));
       }
     } catch (e) {
       emit(

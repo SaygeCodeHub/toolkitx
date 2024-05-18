@@ -4,8 +4,10 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/permit_details_model.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -13,6 +15,7 @@ import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import '../../data/models/permit/permit_sap_cp_model.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 
@@ -107,8 +110,17 @@ class AcceptPermitRequestScreen extends StatelessWidget {
               Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        context.read<PermitBloc>().add(AcceptPermitRequest(
-                            permitId: permitDetailsModel.data.tab1.id));
+                        if (isNetworkEstablished) {
+                          context.read<PermitBloc>().add(AcceptPermitRequest(
+                              permitId: permitDetailsModel.data.tab1.id));
+                        } else {
+                          Navigator.pushNamed(
+                              context, PermitSignAsCpScreen.routeName,
+                              arguments: PermitCpSapModel(sapCpMap: {
+                                "permitid": permitDetailsModel.data.tab1.id,
+                                "action_key": "accept_permit_request"
+                              }, previousScreen: routeName));
+                        }
                       },
                       textValue: StringConstants.kAcceptPermit))
             ])));

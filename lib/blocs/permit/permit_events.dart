@@ -164,8 +164,15 @@ class SelectTransferValue extends PermitEvents {
   SelectTransferValue({required this.value});
 }
 
-class SaveOfflineData extends PermitEvents {
+class SavePermitOfflineAction extends PermitEvents {
   final Map offlineDataMap;
+  final String permitId;
+  final String signature;
+  final String actionKey;
 
-  SaveOfflineData({required this.offlineDataMap});
+  SavePermitOfflineAction(
+      {required this.offlineDataMap,
+      required this.permitId,
+      required this.signature,
+      required this.actionKey});
 }

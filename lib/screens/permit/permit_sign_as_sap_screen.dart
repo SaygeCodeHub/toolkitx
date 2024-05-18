@@ -15,11 +15,13 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
+import '../../data/models/permit/permit_sap_cp_model.dart';
+
 class PermitSignAsSapScreen extends StatelessWidget {
   static const routeName = 'PermitSignAsSapScreen';
-  final Map permitSignAsSapMap;
+  final PermitCpSapModel permitCpSapModel;
 
-  const PermitSignAsSapScreen({super.key, required this.permitSignAsSapMap});
+  const PermitSignAsSapScreen({super.key, required this.permitCpSapModel});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +47,8 @@ class PermitSignAsSapScreen extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pushReplacementNamed(
                         context, PermitDetailsScreen.routeName,
-                        arguments: permitSignAsSapMap['permitid'] ??
-                            permitSignAsSapMap['permitId']);
+                        arguments: permitCpSapModel.sapCpMap['permitid'] ??
+                            permitCpSapModel.sapCpMap['permitId']);
                   } else if (state is OfflineDataNotSaved) {
                     showCustomSnackBar(context, state.errorMessage, '');
                   }
@@ -55,8 +57,8 @@ class PermitSignAsSapScreen extends StatelessWidget {
                     child: PrimaryButton(
                         onPressed: () {
                           SaveOfflineDataUtil().saveData(
-                              context.read<PermitBloc>().statusId,
-                              permitSignAsSapMap,
+                              permitCpSapModel.previousScreen,
+                              permitCpSapModel.sapCpMap,
                               context);
                         },
                         textValue: StringConstants.kSignAsSapCap)),
@@ -80,7 +82,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                     TextFieldWidget(
                         textInputAction: TextInputAction.next,
                         onTextFieldChanged: (String textValue) {
-                          permitSignAsSapMap['user_name'] = textValue;
+                          permitCpSapModel.sapCpMap['user_name'] = textValue;
                         }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kEmailAndPhoneNo,
@@ -93,7 +95,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                         textInputType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         onTextFieldChanged: (String textValue) {
-                          permitSignAsSapMap['user_email'] = textValue;
+                          permitCpSapModel.sapCpMap['user_email'] = textValue;
                         }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kDate,
@@ -103,7 +105,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     DatePickerTextField(onDateChanged: (String date) {
-                      permitSignAsSapMap['user_date'] = date;
+                      permitCpSapModel.sapCpMap['user_date'] = date;
                     }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kTime,
@@ -113,11 +115,11 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TimePickerTextField(onTimeChanged: (String time) {
-                      permitSignAsSapMap['user_time'] = time;
+                      permitCpSapModel.sapCpMap['user_time'] = time;
                     }),
                     const SizedBox(height: xxTinySpacing),
-                    SignaturePad(map: permitSignAsSapMap, mapKey: 'user_sign'),
-                    const SizedBox(height: xxTinySpacing),
+                    SignaturePad(map: permitCpSapModel.sapCpMap, mapKey: 'user_sign'),
+                    const SizedBox(height: xxTinySpacing)
                   ],
                 ))));
   }

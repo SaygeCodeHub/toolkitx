@@ -32,7 +32,7 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   void initState() {
-    widget.isFromClientList == true ? _selectedIndex = 0 : null;
+    // widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
     if (widget.isFromClientList) {
       _selectedIndex = 0;
@@ -79,7 +79,9 @@ class _RootScreenState extends State<RootScreen> {
         final BottomNavigationBar bottomNavigationBar = hasNetwork
             ? _buildOnlineBottomNavigationBar()
             : _buildOfflineBottomNavigationBar();
-
+        if (_selectedIndex >= currentWidgetOptions.length) {
+          _selectedIndex = 0;
+        }
         return Scaffold(
           body: Center(child: currentWidgetOptions[_selectedIndex]),
           bottomNavigationBar: bottomNavigationBar,

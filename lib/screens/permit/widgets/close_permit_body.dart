@@ -12,10 +12,12 @@ import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/close_permit_details_model.dart';
+import '../../../data/models/permit/permit_sap_cp_model.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../incident/widgets/date_picker.dart';
 import '../../incident/widgets/time_picker.dart';
+import '../close_permit_screen.dart';
 
 class ClosePermitBody extends StatelessWidget {
   final Map closePermitMap;
@@ -118,12 +120,12 @@ class ClosePermitBody extends StatelessWidget {
                         } else {
                           Navigator.pushNamed(
                               context, PermitSignAsSapScreen.routeName,
-                              arguments: {
+                              arguments: PermitCpSapModel(sapCpMap: {
                                 'permitId': closePermitMap['permitId'],
                                 'controlPerson':
                                     closePermitMap['controlPerson'],
                                 'time': closePermitMap['time']
-                              });
+                              }, previousScreen: ClosePermitScreen.routeName));
                         }
                       }
                     },

@@ -14,6 +14,7 @@ class ClientListFetched extends ClientStates {
 }
 
 class FetchClientListError extends ClientStates {}
+class ClientSelected extends ClientStates {}
 
 class HomeScreenFetching extends ClientStates {}
 

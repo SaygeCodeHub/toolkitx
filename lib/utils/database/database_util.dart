@@ -110,6 +110,29 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> recreateOfflinePermitTable() async {
+    final Database db = await database;
+    // Drop the table if it exists
+    await db.execute('DROP TABLE IF EXISTS OfflinePermit');
+
+    // Create the table again
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS OfflinePermit (
+          id INTEGER PRIMARY KEY,
+          permitId INTEGER UNIQUE,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          tab6 TEXT,
+          html TEXT,
+          statusId INTEGER
+        );
+  ''');
+  }
+
   Future<bool> insertOfflinePermitAction(
       String permitId, String actionText, Map actionJson, String sign) async {
     final Database db = await database;
@@ -415,9 +438,19 @@ class DatabaseHelper {
   Future<int> fetchPermitStatusId(String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT statusId FROM OfflinePermit WHERE permitId = ?',
-      [permitId],
-    );
+        'SELECT statusId FROM OfflinePermit WHERE permitId = ?', [permitId]);
     return results.first['statusId'];
+  }
+
+  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction() async {
+    final db = await database;
+    final List<Map<String, dynamic>> permitActionList =
+        await db.rawQuery('SELECT * FROM OfflinePermitAction');
+    return permitActionList;
+  }
+
+  Future<void> deleteOfflinePermitAction(int id) async {
+    final db = await database;
+    await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
   }
 }

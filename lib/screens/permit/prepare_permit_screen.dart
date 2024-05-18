@@ -13,6 +13,7 @@ import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import '../../data/models/permit/permit_sap_cp_model.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
 
@@ -110,10 +111,10 @@ class PreparePermitScreen extends StatelessWidget {
                     saveOfflineMarkAsPreparedMap: {}));
               } else {
                 Navigator.pushNamed(context, PermitSignAsSapScreen.routeName,
-                    arguments: {
+                    arguments: PermitCpSapModel(sapCpMap: {
                       'permitid': permitId,
                       'controlpersons': controlPerson
-                    });
+                    }, previousScreen: routeName));
               }
             },
             textValue: StringConstants.kMarkAsPrepared),

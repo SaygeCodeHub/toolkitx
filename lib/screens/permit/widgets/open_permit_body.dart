@@ -11,11 +11,13 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/open_permit_details_model.dart';
+import '../../../data/models/permit/permit_sap_cp_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../incident/widgets/date_picker.dart';
 import '../../incident/widgets/time_picker.dart';
+import '../open_permit_screen.dart';
 import 'open_permit_custom_fields.dart';
 
 class OpenPermitBody extends StatelessWidget {
@@ -124,12 +126,12 @@ class OpenPermitBody extends StatelessWidget {
                         } else {
                           Navigator.pushNamed(
                               context, PermitSignAsSapScreen.routeName,
-                              arguments: {
+                              arguments: PermitCpSapModel(sapCpMap: {
                                 'permitId': openPermitMap['permitId'],
                                 'date': openPermitMap['date'],
                                 'time': openPermitMap['time'],
                                 'customfields': openPermitMap['customfields']
-                              });
+                              }, previousScreen: OpenPermitScreen.routeName));
                         }
                       }
                     },

@@ -30,6 +30,7 @@ import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
+import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
@@ -622,9 +623,10 @@ class AppRoutes {
             permitId: settings.arguments.toString()));
       case PermitSignAsSapScreen.routeName:
         return _createRoute(PermitSignAsSapScreen(
-            permitSignAsSapMap: settings.arguments as Map));
+            permitCpSapModel: settings.arguments as PermitCpSapModel));
       case PermitSignAsCpScreen.routeName:
-        return _createRoute(PermitSignAsCpScreen());
+        return _createRoute(PermitSignAsCpScreen(
+            permitCpSapModel: settings.arguments as PermitCpSapModel));
       default:
         return _createRoute(const WelcomeScreen());
     }
