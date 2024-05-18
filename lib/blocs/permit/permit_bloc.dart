@@ -391,13 +391,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       '18_17': 'Accepted',
       '18_18': 'Request Closure',
       '12_5': 'Pre-prepared',
-      '12_2': 'Issued (not recipted)',
+      '12_2': 'Issued (not receipted)',
       '15_5': 'Pre-prepared',
       '12_3': 'Cancelled',
-      '15_2': 'Issued (not recipted)',
+      '15_2': 'Issued (not receipted)',
       '15_3': 'Cancelled',
       '16_5': 'Pre-prepared',
-      '16_2': 'Issued (not recipted)',
+      '16_2': 'Issued (not receipted)',
       '16_3': 'Cancelled'
     };
 

@@ -59,7 +59,7 @@ class ClearPermitBottomBar extends StatelessWidget {
                         .add(SaveClearPermit(clearPermitMap: clearPermitMap));
                   }
                 },
-                textValue: StringConstants.kCANCELPERMIT),
+                textValue: StringConstants.kClearPermitCap),
           ),
         ],
       ),
