@@ -261,6 +261,8 @@ abstract class StringConstants {
   static const String kEventDateValidation = 'Event date cannot be empty.'; //
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
+  static const String kFailedToSaveData = 'Failed to save data!';
+  static const String kDataSavedSuccessfully = 'Data saved successfully!';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //
   static const String kValidatePassword = 'Please enter old password/opt';

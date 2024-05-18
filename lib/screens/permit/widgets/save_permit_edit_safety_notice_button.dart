@@ -10,6 +10,8 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
+import '../../../utils/global.dart';
+
 class SavePermitEditSafetyDocumentButton extends StatelessWidget {
   final Map editSafetyDocumentMap;
   final String permitId;
@@ -33,11 +35,20 @@ class SavePermitEditSafetyDocumentButton extends StatelessWidget {
             if (state is SavingPermitEditSafetyDocument) {
               ProgressBar.show(context);
             } else if (state is PermitEditSafetyDocumentSaved) {
-              ProgressBar.dismiss(context);
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, PermitDetailsScreen.routeName,
-                  arguments: permitId);
+              if (isNetworkEstablished) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(
+                    context, PermitDetailsScreen.routeName,
+                    arguments: permitId);
+              } else {
+                Navigator.pop(context);
+                showCustomSnackBar(context, state.successMessage, '');
+                Future.delayed(const Duration(seconds: 3));
+                Navigator.pushReplacementNamed(
+                    context, PermitDetailsScreen.routeName,
+                    arguments: permitId);
+              }
             } else if (state is PermitEditSafetyDocumentNotSaved) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');

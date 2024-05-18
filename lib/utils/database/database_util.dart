@@ -110,19 +110,25 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertOfflinePermitAction(
+  Future<bool> insertOfflinePermitAction(
       String permitId, String actionText, Map actionJson, String sign) async {
     final Database db = await database;
-    await db.insert(
-      'OfflinePermitAction',
-      {
-        'permitId': permitId,
-        'actionText': actionText,
-        'actionJson': jsonEncode(actionJson),
-        'actionDateTime': DateTime.now().toUtc(),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+
+    try {
+      int result = await db.insert(
+          'OfflinePermitAction',
+          {
+            'permitId': permitId,
+            'actionText': actionText,
+            'actionJson': jsonEncode(actionJson),
+            'actionDateTime': DateTime.now().toUtc().toString(),
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace);
+
+      return result > 0;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> insertOfflinePermit(OfflinePermitDatum data) async {

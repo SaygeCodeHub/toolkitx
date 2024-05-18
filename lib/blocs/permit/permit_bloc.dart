@@ -828,7 +828,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> savePermitEditSafetyDocument(
       SavePermitEditSafetyDocument event, Emitter<PermitStates> emit) async {
     try {
-      emit(SavingPermitEditSafetyDocument());
       Map editSafetyDocumentMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "permitid": event.editSafetyDocumentMap['permit_id'],
@@ -851,6 +850,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "ptw_safety": event.editSafetyDocumentMap['ptw_safety'] ?? ''
       };
       if (isNetworkEstablished) {
+        emit(SavingPermitEditSafetyDocument());
         SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
             await _permitRepository
                 .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
@@ -861,11 +861,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kSomethingWentWrong));
         }
       } else {
-        await _databaseHelper.insertOfflinePermitAction(
+        bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
             event.editSafetyDocumentMap['permit_id'],
             'edit_safety_document',
             editSafetyDocumentMap,
             "sign");
+        if (isDataInserted) {
+          emit(PermitEditSafetyDocumentSaved(
+              successMessage: StringConstants.kDataSavedSuccessfully));
+        } else {
+          emit(PermitEditSafetyDocumentNotSaved(
+              errorMessage: StringConstants.kFailedToSaveData));
+        }
       }
     } catch (e) {
       emit(PermitEditSafetyDocumentNotSaved(
