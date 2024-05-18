@@ -86,7 +86,7 @@ class Tab1 {
   final String schedule;
   final String location;
   final String details;
-  final String status;
+  String status;
   final String expired;
   final String pnameNpi;
   final String pname;
@@ -97,53 +97,54 @@ class Tab1 {
   final String isclose;
   final String isnpiaccept;
   final String isnpwaccept;
+  final int permitType;
   final List<Maplink> maplinks;
   final String html;
 
-  Tab1({
-    required this.id,
-    required this.permit,
-    required this.schedule,
-    required this.location,
-    required this.details,
-    required this.status,
-    required this.expired,
-    required this.pnameNpi,
-    required this.pname,
-    required this.pcompany,
-    required this.emergency,
-    required this.isopen,
-    required this.ishold,
-    required this.isclose,
-    required this.isnpiaccept,
-    required this.isnpwaccept,
-    required this.maplinks,
-    required this.html,
-  });
+  Tab1(
+      {required this.id,
+      required this.permit,
+      required this.schedule,
+      required this.location,
+      required this.details,
+      required this.status,
+      required this.expired,
+      required this.pnameNpi,
+      required this.pname,
+      required this.pcompany,
+      required this.emergency,
+      required this.isopen,
+      required this.ishold,
+      required this.isclose,
+      required this.isnpiaccept,
+      required this.isnpwaccept,
+      required this.maplinks,
+      required this.html,
+      required this.permitType});
 
   factory Tab1.fromJson(Map<String, dynamic> json) => Tab1(
-        id: json["id"] ?? '',
-        permit: json["permit"] ?? '',
-        schedule: json["schedule"] ?? '',
-        location: json["location"] ?? '',
-        details: json["details"] ?? '',
-        status: json["status"] ?? '',
-        expired: json["expired"] ?? '',
-        pnameNpi: json["pname_npi"] ?? '',
-        pname: json["pname"] ?? '',
-        pcompany: json["pcompany"] ?? '',
-        emergency: json["emergency"] ?? 0,
-        isopen: json["isopen"] ?? '',
-        ishold: json["ishold"] ?? '',
-        isclose: json["isclose"] ?? '',
-        isnpiaccept: json["isnpiaccept"] ?? '',
-        isnpwaccept: json["isnpwaccept"] ?? '',
-        maplinks: (json["maplinks"] == null)
-            ? []
-            : List<Maplink>.from(
-                json["maplinks"].map((x) => Maplink.fromJson(x))),
-        html: json["html"] ?? '',
-      );
+      id: json["id"] ?? '',
+      permit: json["permit"] ?? '',
+      schedule: json["schedule"] ?? '',
+      location: json["location"] ?? '',
+      details: json["details"] ?? '',
+      status: json["status"] ?? '',
+      expired: json["expired"] ?? '',
+      pnameNpi: json["pname_npi"] ?? '',
+      pname: json["pname"] ?? '',
+      pcompany: json["pcompany"] ?? '',
+      emergency: json["emergency"] ?? 0,
+      isopen: json["isopen"] ?? '',
+      ishold: json["ishold"] ?? '',
+      isclose: json["isclose"] ?? '',
+      isnpiaccept: json["isnpiaccept"] ?? '',
+      isnpwaccept: json["isnpwaccept"] ?? '',
+      maplinks: (json["maplinks"] == null)
+          ? []
+          : List<Maplink>.from(
+              json["maplinks"].map((x) => Maplink.fromJson(x))),
+      html: json["html"] ?? '',
+      permitType: json['type_of_permit']);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -164,6 +165,7 @@ class Tab1 {
         "isnpwaccept": isnpwaccept,
         "maplinks": List<dynamic>.from(maplinks.map((x) => x.toJson())),
         "html": html,
+        'type_of_permit': permitType
       };
 }
 

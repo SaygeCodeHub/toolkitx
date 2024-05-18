@@ -607,8 +607,8 @@ class AppRoutes {
         return _createRoute(
             PreparePermitScreen(permitId: settings.arguments.toString()));
       case AcceptPermitRequestScreen.routeName:
-        return _createRoute(
-            AcceptPermitRequestScreen(permitId: settings.arguments.toString()));
+        return _createRoute(AcceptPermitRequestScreen(
+            permitDetailsModel: settings.arguments as PermitDetailsModel));
       case ClearPermitScreen.routeName:
         return _createRoute(
             ClearPermitScreen(permitId: settings.arguments.toString()));

@@ -145,11 +145,31 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       FetchOpenPermitDetails event, Emitter<PermitStates> emit) async {
     try {
       List customFields = [];
-      emit(const FetchingOpenPermitDetails());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      OpenPermitDetailsModel openPermitDetailsModel = await _permitRepository
-          .openPermitDetails(hashCode, event.permitId, roleId);
-      if (openPermitDetailsModel.data.panelSaint == '1') {
+      if (isNetworkEstablished) {
+        emit(const FetchingOpenPermitDetails());
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+        OpenPermitDetailsModel openPermitDetailsModel = await _permitRepository
+            .openPermitDetails(hashCode, event.permitId, roleId);
+        if (openPermitDetailsModel.data.panelSaint == '1') {
+          customFields = [
+            {"questionid": 3000009, "answer": ""},
+            {"questionid": 3000001, "answer": ""},
+            {"questionid": 3000002, "answer": ""},
+            {"questionid": 3000003, "answer": ""},
+            {"questionid": 3000004, "answer": ""},
+            {"questionid": 3000005, "answer": ""},
+            {"questionid": 3000006, "answer": ""},
+            {"questionid": 3000007, "answer": ""},
+            {"questionid": 3000008, "answer": ""},
+            {"questionid": 3000013, "answer": ""},
+            {"questionid": 3000014, "answer": ""}
+          ];
+        }
+        emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
+      } else {
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
         customFields = [
           {"questionid": 3000009, "answer": ""},
           {"questionid": 3000001, "answer": ""},
@@ -163,8 +183,16 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           {"questionid": 3000013, "answer": ""},
           {"questionid": 3000014, "answer": ""}
         ];
+        OpenPermitDetailsModel openPermitDetailsModel = OpenPermitDetailsModel(
+            status: 200,
+            message: '',
+            data: GetOpenPermitData.fromJson(permitHtmlMap));
+        if (permitHtmlMap.isNotEmpty) {
+          emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
+        } else {
+          emit(const OpenPermitDetailsError());
+        }
       }
-      emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
     } catch (e) {
       emit(const OpenPermitDetailsError());
     }
@@ -261,81 +289,127 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     List permitPopUpMenu = [StringConstants.kGeneratePdf];
-    // try {
-    if (isNetworkEstablished) {
-      add(FetchPermitBasicDetails(permitId: event.permitId));
-      emit(const FetchingPermitDetails());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      PermitDetailsModel permitDetailsModel = await _permitRepository
-          .fetchPermitDetails(hashCode, event.permitId, roleId);
-      if (permitDetailsModel.data.tab1.isopen == '1') {
-        permitPopUpMenu.add(StringConstants.kOpenPermit);
-      }
-      if (permitDetailsModel.data.tab1.isclose == '1') {
-        permitPopUpMenu.add(StringConstants.kClosePermit);
-      }
-      if (permitDetailsModel.data.tab1.status ==
-          DatabaseUtil.getText('Created')) {
-        permitPopUpMenu.add(StringConstants.kRequestPermit);
-      }
-      if (permitBasicData?.isprepared == '1') {
-        permitPopUpMenu.add(StringConstants.kPreparePermit);
-      }
-      if (permitBasicData?.iseditsafetydocument == '1') {
-        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-      }
-      if (permitBasicData?.isacceptissue == '1') {
-        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-      }
-      if (permitBasicData?.isclearpermit == '1') {
-        permitPopUpMenu.add(StringConstants.kClearPermit);
-      }
-      if (permitBasicData?.istransfersafetydocument == '1') {
-        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-      }
-      emit(PermitDetailsFetched(
-          permitDetailsModel: permitDetailsModel,
-          permitPopUpMenu: permitPopUpMenu));
-    } else {
-      emit(const FetchingPermitDetails());
-      Map<String, dynamic> permitDetailsMap =
-          await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
-      int statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
-      PermitDetailsData permitDerailsData =
-          PermitDetailsData.fromJson(permitDetailsMap);
-      PermitDetailsModel permitDetailsModel = PermitDetailsModel(
-          status: 200,
-          message: '',
-          data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-      if (statusId == 16 || statusId == 7) {
-        permitPopUpMenu.add(StringConstants.kOpenPermit);
-      }
-      if (statusId == 18) {
-        permitPopUpMenu.add(StringConstants.kClosePermit);
-      }
-      if (statusId == 10) {
-        permitPopUpMenu.add(StringConstants.kPreparePermit);
-      }
-      if (statusId == 10 || statusId == 5) {
-        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-      }
-      if (statusId == 2) {
-        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-      }
-      if (statusId == 17) {
-        permitPopUpMenu.add(StringConstants.kClearPermit);
-      }
-      if (permitDetailsModel.toJson().isNotEmpty) {
+    try {
+      if (isNetworkEstablished) {
+        add(FetchPermitBasicDetails(permitId: event.permitId));
+        emit(const FetchingPermitDetails());
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+        PermitDetailsModel permitDetailsModel = await _permitRepository
+            .fetchPermitDetails(hashCode, event.permitId, roleId);
+        if (permitDetailsModel.data.tab1.isopen == '1') {
+          permitPopUpMenu.add(StringConstants.kOpenPermit);
+        }
+        if (permitDetailsModel.data.tab1.isclose == '1') {
+          permitPopUpMenu.add(StringConstants.kClosePermit);
+        }
+        if (permitDetailsModel.data.tab1.status ==
+            DatabaseUtil.getText('Created')) {
+          permitPopUpMenu.add(StringConstants.kRequestPermit);
+        }
+        if (permitBasicData?.isprepared == '1') {
+          permitPopUpMenu.add(StringConstants.kPreparePermit);
+        }
+        if (permitBasicData?.iseditsafetydocument == '1') {
+          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+        }
+        if (permitBasicData?.isacceptissue == '1') {
+          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        }
+        if (permitBasicData?.isclearpermit == '1') {
+          permitPopUpMenu.add(StringConstants.kClearPermit);
+        }
+        if (permitBasicData?.istransfersafetydocument == '1') {
+          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu));
       } else {
-        emit(const CouldNotFetchPermitDetails());
+        emit(const FetchingPermitDetails());
+        Map<String, dynamic> permitDetailsMap =
+            await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+        int statusId =
+            await _databaseHelper.fetchPermitStatusId(event.permitId);
+        PermitDetailsData permitDerailsData =
+            PermitDetailsData.fromJson(permitDetailsMap);
+        permitDerailsData.tab1.status = getStatusText(
+            permitDerailsData.tab1.permitType.toString(), statusId.toString());
+        PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+            status: 200,
+            message: '',
+            data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+        if (statusId == 16 || statusId == 7) {
+          permitPopUpMenu.add(StringConstants.kOpenPermit);
+        }
+        if (statusId == 18) {
+          permitPopUpMenu.add(StringConstants.kClosePermit);
+        }
+        if (statusId == 10) {
+          permitPopUpMenu.add(StringConstants.kPreparePermit);
+        }
+        if (statusId == 10 || statusId == 5) {
+          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+        }
+        if (statusId == 2) {
+          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        }
+        if (statusId == 17) {
+          permitPopUpMenu.add(StringConstants.kClearPermit);
+        }
+        if (permitDetailsModel.toJson().isNotEmpty) {
+          emit(PermitDetailsFetched(
+              permitDetailsModel: permitDetailsModel,
+              permitPopUpMenu: permitPopUpMenu));
+        } else {
+          emit(const CouldNotFetchPermitDetails());
+        }
       }
+    } catch (e) {
+      emit(const CouldNotFetchPermitDetails());
     }
-    // } catch (e) {
-    //   emit(const CouldNotFetchPermitDetails());
-    // }
+  }
+
+  String getStatusText(String ptype, String pstatus) {
+    Map<String, String> statusArray = {
+      '0_0': 'Created',
+      '0_1': 'Requested',
+      '0_2': 'Opened',
+      '0_3': 'Closed',
+      '0_4': 'Cancelled',
+      '0_5': 'Approved',
+      '0_6': 'Deleted',
+      '0_7': 'Hold',
+      '0_8': 'Unlock Applied',
+      '0_9': 'Withdraw Permit',
+      '0_10': 'Approved',
+      '0_16': 'Prepared',
+      '0_17': 'Issued (Accepted)',
+      '0_18': 'Cleared',
+      '19_17': 'Accepted',
+      '19_18': 'Request Closure',
+      '18_17': 'Accepted',
+      '18_18': 'Request Closure',
+      '12_5': 'Pre-prepared',
+      '12_2': 'Issued (not recipted)',
+      '15_5': 'Pre-prepared',
+      '12_3': 'Cancelled',
+      '15_2': 'Issued (not recipted)',
+      '15_3': 'Cancelled',
+      '16_5': 'Pre-prepared',
+      '16_2': 'Issued (not recipted)',
+      '16_3': 'Cancelled'
+    };
+
+    String key = '${ptype}_$pstatus';
+    String? status = statusArray[key];
+
+    if (status == null) {
+      key = '0_$pstatus';
+      status = statusArray[key];
+    }
+
+    return status ?? '';
   }
 
   FutureOr<void> _generatePDF(
@@ -453,20 +527,37 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<FutureOr<void>> _fetchPermitBasicDetails(
       FetchPermitBasicDetails event, Emitter<PermitStates> emit) async {
-    emit(PermitBasicDetailsFetching());
     try {
-      String hashCode =
-          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-      FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel =
-          await _permitRepository.fetchPermitBasicDetails(
-              event.permitId, hashCode, roleId);
-      if (fetchPermitBasicDetailsModel.status == 200) {
-        emit(PermitBasicDetailsFetched(
-            fetchPermitBasicDetailsModel: fetchPermitBasicDetailsModel));
-        permitBasicData = fetchPermitBasicDetailsModel.data;
+      if (isNetworkEstablished) {
+        emit(PermitBasicDetailsFetching());
+        String hashCode =
+            (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+        FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel =
+            await _permitRepository.fetchPermitBasicDetails(
+                event.permitId, hashCode, roleId);
+        if (fetchPermitBasicDetailsModel.status == 200) {
+          emit(PermitBasicDetailsFetched(
+              fetchPermitBasicDetailsModel: fetchPermitBasicDetailsModel));
+          permitBasicData = fetchPermitBasicDetailsModel.data;
+        } else {
+          emit(PermitBasicDetailsNotFetched(
+              errorMessage: fetchPermitBasicDetailsModel.message!));
+        }
       } else {
-        emit(PermitBasicDetailsNotFetched(
-            errorMessage: fetchPermitBasicDetailsModel.message!));
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel =
+            FetchPermitBasicDetailsModel(
+                status: 200,
+                message: '',
+                data: PermitBasicData.fromJson(permitHtmlMap));
+        if (permitHtmlMap.isNotEmpty) {
+          emit(PermitBasicDetailsFetched(
+              fetchPermitBasicDetailsModel: fetchPermitBasicDetailsModel));
+        } else {
+          emit(const PermitBasicDetailsNotFetched(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       }
     } catch (e) {
       emit(PermitBasicDetailsNotFetched(errorMessage: e.toString()));
@@ -508,7 +599,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 data: FetchDataForOpenPermitData.fromJson(permitHtmlMap));
         final List<Question> questions = [
           Question(questionNo: StringConstants.kPermitFirstQuestion),
-          Question(questionNo: StringConstants.kPermitSecondQuestion)
+          Question(questionNo: StringConstants.kPanel12),
+          Question(questionNo: StringConstants.kPanel15),
+          Question(questionNo: StringConstants.kPanel16)
         ];
         if (permitHtmlMap.isNotEmpty) {
           emit(DataForOpenPermitFetched(
@@ -591,63 +684,112 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _fetchClearPermit(
       FetchClearPermit event, Emitter<PermitStates> emit) async {
     try {
-      emit(FetchingClearPermitDetails());
-      FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
-          await _permitRepository.fetchClearPermitDetails({
-        'permit_id': event.permitId,
-        'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
-        'role': roleId
-      });
-      final List<Map<String, dynamic>> customFields = [
-        {"questionid": 4000010, "answer": ""},
-        {
-          "questionid": 4000001,
-          "answer": fetchClearPermitDetailsModel.data.keysafeno
-        },
-        {
-          "questionid": 4000002,
-          "answer": fetchClearPermitDetailsModel.data.earthscheduleno
-        },
-        {
-          "questionid": 4000003,
-          "answer": fetchClearPermitDetailsModel.data.selectedpersonreport
-        },
-        {
-          "questionid": 4000004,
-          "answer": fetchClearPermitDetailsModel.data.safetykeys
-        },
-        {
-          "questionid": 4000005,
-          "answer": fetchClearPermitDetailsModel.data.circuitflags
-        },
-        {
-          "questionid": 4000006,
-          "answer": fetchClearPermitDetailsModel.data.circuitwristlets
-        },
-        {
-          "questionid": 4000007,
-          "answer": fetchClearPermitDetailsModel.data.singleline
-        },
-        {
-          "questionid": 4000008,
-          "answer": fetchClearPermitDetailsModel.data.pid
-        },
-        {
-          "questionid": 4000013,
-          "answer": fetchClearPermitDetailsModel.data.accessKeys
-        },
-        {
-          "questionid": 4000014,
-          "answer": fetchClearPermitDetailsModel.data.other
+      if (isNetworkEstablished) {
+        emit(FetchingClearPermitDetails());
+        FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
+            await _permitRepository.fetchClearPermitDetails({
+          'permit_id': event.permitId,
+          'hashcode':
+              await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+          'role': roleId
+        });
+        final List<Map<String, dynamic>> customFields = [
+          {"questionid": 4000010, "answer": ""},
+          {
+            "questionid": 4000001,
+            "answer": fetchClearPermitDetailsModel.data.keysafeno
+          },
+          {
+            "questionid": 4000002,
+            "answer": fetchClearPermitDetailsModel.data.earthscheduleno
+          },
+          {
+            "questionid": 4000003,
+            "answer": fetchClearPermitDetailsModel.data.selectedpersonreport
+          },
+          {
+            "questionid": 4000004,
+            "answer": fetchClearPermitDetailsModel.data.safetykeys
+          },
+          {
+            "questionid": 4000005,
+            "answer": fetchClearPermitDetailsModel.data.circuitflags
+          },
+          {
+            "questionid": 4000006,
+            "answer": fetchClearPermitDetailsModel.data.circuitwristlets
+          },
+          {
+            "questionid": 4000007,
+            "answer": fetchClearPermitDetailsModel.data.singleline
+          },
+          {
+            "questionid": 4000008,
+            "answer": fetchClearPermitDetailsModel.data.pid
+          },
+          {
+            "questionid": 4000013,
+            "answer": fetchClearPermitDetailsModel.data.accessKeys
+          },
+          {
+            "questionid": 4000014,
+            "answer": fetchClearPermitDetailsModel.data.other
+          }
+        ];
+        if (fetchClearPermitDetailsModel.data.toJson().isNotEmpty) {
+          emit(ClearPermitDetailsFetched(
+              fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
+              customFields: customFields));
+        } else {
+          emit(ClearPermitDetailsCouldNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
         }
-      ];
-      if (fetchClearPermitDetailsModel.data.toJson().isNotEmpty) {
-        emit(ClearPermitDetailsFetched(
-            fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
-            customFields: customFields));
       } else {
-        emit(ClearPermitDetailsCouldNotFetched(
-            errorMessage: StringConstants.kNoDataFound));
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
+            FetchClearPermitDetailsModel(
+                status: 200,
+                message: '',
+                data: ClearPermitData.fromJson(permitHtmlMap));
+
+        final List<Map<String, dynamic>> customFields = [
+          {"questionid": 4000010, "answer": ""},
+          {"questionid": 4000001, "answer": ''},
+          {"questionid": 4000002, "answer": ''},
+          {"questionid": 4000003, "answer": ''},
+          {"questionid": 4000004, "answer": ''},
+          {"questionid": 4000005, "answer": ''},
+          {"questionid": 4000006, "answer": ''},
+          {"questionid": 4000007, "answer": ''},
+          {"questionid": 4000008, "answer": ''},
+          {"questionid": 4000013, "answer": ''},
+          {"questionid": 4000014, "answer": ''}
+        ];
+
+        for (var key in permitHtmlMap.keys) {
+          var keyParts = key.split('_');
+          if (keyParts.length == 3 &&
+              keyParts[0] == 'clear' &&
+              keyParts[1] == 'permit') {
+            int questionId = int.tryParse(keyParts[2]) ?? -1;
+
+            for (var field in customFields) {
+              if (field['questionid'] == questionId) {
+                field['answer'] = permitHtmlMap[key] ?? '';
+                break;
+              }
+            }
+          }
+        }
+        if (permitHtmlMap.isNotEmpty) {
+          emit(ClearPermitDetailsFetched(
+              fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
+              customFields: customFields));
+        } else {
+          emit(ClearPermitDetailsCouldNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
       }
     } catch (e) {
       rethrow;

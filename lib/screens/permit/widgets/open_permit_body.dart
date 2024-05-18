@@ -86,12 +86,10 @@ class OpenPermitBody extends StatelessWidget {
                       openPermitMap['time'] = time;
                     }),
                 const SizedBox(height: xxTinySpacing),
-                Visibility(
-                    visible: openPermitMap['panel_saint'] == '1',
-                    child: Column(children: [
-                      OpenPermitCustomFields(openPermitMap: openPermitMap),
-                      const SizedBox(height: xxTinySpacing)
-                    ])),
+                Column(children: [
+                  OpenPermitCustomFields(openPermitMap: openPermitMap),
+                  const SizedBox(height: xxTinySpacing)
+                ]),
                 Text(DatabaseUtil.getText('Comments'),
                     style: Theme.of(context)
                         .textTheme

@@ -106,7 +106,7 @@ class ClosePermitBody extends StatelessWidget {
                           .read<PermitBloc>()
                           .add(ClosePermit(closePermitMap));
                     },
-                    textValue: StringConstants.kCLOSEPERMIT)
+                    textValue: StringConstants.kCANCELPERMIT)
               ],
             )));
   }

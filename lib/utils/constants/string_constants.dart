@@ -359,6 +359,7 @@ abstract class StringConstants {
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
+  static const String kCancelPermit = 'Cancel Permit';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
   static const String kQ = 'Q';

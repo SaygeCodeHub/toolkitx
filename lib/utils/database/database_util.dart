@@ -114,7 +114,7 @@ class DatabaseHelper {
         'tab5': jsonEncode(data.tab5.map((e) => e.toJson()).toList()),
         'tab6': jsonEncode(data.tab6),
         'html': jsonEncode(data.html),
-        'statusId': data.id2
+        'statusId': data.listpage.statusid
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -385,10 +385,9 @@ class DatabaseHelper {
   Future<int> fetchPermitStatusId(String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT listPage FROM OfflinePermit WHERE permitId = ?',
+      'SELECT statusId FROM OfflinePermit WHERE permitId = ?',
       [permitId],
     );
-    final listPage = jsonDecode(results.first['listPage']);
-    return listPage['statusid'];
+    return results.first['statusId'];
   }
 }

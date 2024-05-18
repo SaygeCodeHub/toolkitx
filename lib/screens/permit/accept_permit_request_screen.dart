@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/permit/permit_details_model.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -17,14 +18,15 @@ import '../../widgets/generic_text_field.dart';
 
 class AcceptPermitRequestScreen extends StatelessWidget {
   static const routeName = 'AcceptPermitRequestScreen';
-  final String permitId;
+  final PermitDetailsModel permitDetailsModel;
 
-  const AcceptPermitRequestScreen({Key? key, required this.permitId})
+  const AcceptPermitRequestScreen({Key? key, required this.permitDetailsModel})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<PermitBloc>().add(FetchPermitBasicDetails(permitId: permitId));
+    context.read<PermitBloc>().add(
+        FetchPermitBasicDetails(permitId: permitDetailsModel.data.tab1.id));
     return Scaffold(
         appBar:
             const GenericAppBar(title: StringConstants.kAcceptPermitRequest),
@@ -42,7 +44,7 @@ class AcceptPermitRequestScreen extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pushNamed(context, PermitDetailsScreen.routeName,
-                        arguments: permitId);
+                        arguments: permitDetailsModel.data.tab1.id);
                   } else if (state is PermitRequestNotAccepted) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.errorMessage, '');
@@ -68,8 +70,7 @@ class AcceptPermitRequestScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: state
-                                  .fetchPermitBasicDetailsModel.data!.permit!,
+                              value: permitDetailsModel.data.tab1.permit,
                               readOnly: true,
                               onTextFieldChanged: (textField) {}),
                           const SizedBox(height: xxTinierSpacing),
@@ -82,10 +83,9 @@ class AcceptPermitRequestScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: state
-                                  .fetchPermitBasicDetailsModel.data!.status!,
+                              value: permitDetailsModel.data.tab1.status,
                               readOnly: true,
-                              onTextFieldChanged: (textField) {}),
+                              onTextFieldChanged: (textField) {})
                         ]);
                   } else if (state is PermitBasicDetailsNotFetched) {
                     return Center(child: Text(state.errorMessage));
@@ -98,16 +98,17 @@ class AcceptPermitRequestScreen extends StatelessWidget {
               Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        context.read<PermitBloc>().add(GeneratePDF(permitId));
+                        context
+                            .read<PermitBloc>()
+                            .add(GeneratePDF(permitDetailsModel.data.tab1.id));
                       },
                       textValue: DatabaseUtil.getText('generatepdf'))),
               const SizedBox(width: xxTinierSpacing),
               Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        context
-                            .read<PermitBloc>()
-                            .add(AcceptPermitRequest(permitId: permitId));
+                        context.read<PermitBloc>().add(AcceptPermitRequest(
+                            permitId: permitDetailsModel.data.tab1.id));
                       },
                       textValue: StringConstants.kAcceptPermit))
             ])));
