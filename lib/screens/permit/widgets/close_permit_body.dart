@@ -84,25 +84,21 @@ class ClosePermitBody extends StatelessWidget {
                   closePermitMap['time'] = time;
                 }),
                 const SizedBox(height: xxTinySpacing),
-                Visibility(
-                    visible: getClosePermitData.panelSaint == '1',
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(StringConstants.kControlPerson,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(fontWeight: FontWeight.w600)),
-                          const SizedBox(height: xxxTinierSpacing),
-                          TextFieldWidget(
-                              maxLength: 100,
-                              hintText: StringConstants.kControlPerson,
-                              onTextFieldChanged: (String textField) {
-                                closePermitMap['controlPerson'] = textField;
-                              }),
-                          const SizedBox(height: xxTinySpacing)
-                        ])),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(StringConstants.kControlPerson,
+                      style: Theme.of(context)
+                          .textTheme
+                          .xSmall
+                          .copyWith(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: xxxTinierSpacing),
+                  TextFieldWidget(
+                      maxLength: 100,
+                      hintText: StringConstants.kControlPerson,
+                      onTextFieldChanged: (String textField) {
+                        closePermitMap['controlPerson'] = textField;
+                      }),
+                  const SizedBox(height: xxTinySpacing)
+                ]),
                 PrimaryButton(
                     onPressed: () {
                       if (isNetworkEstablished) {
@@ -124,7 +120,9 @@ class ClosePermitBody extends StatelessWidget {
                               context, PermitSignAsSapScreen.routeName,
                               arguments: {
                                 'permitId': closePermitMap['permitId'],
-                                'controlPerson': closePermitMap['controlPerson']
+                                'controlPerson':
+                                    closePermitMap['controlPerson'],
+                                'time': closePermitMap['time']
                               });
                         }
                       }

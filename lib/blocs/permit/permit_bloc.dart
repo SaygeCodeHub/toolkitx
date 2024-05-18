@@ -462,6 +462,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               await _permitRepository.openPermit(openPermitMap);
           emit(PermitOpened(openClosePermitModel));
         } else {
+          openPermitMap['user_date'] = event.openPermitMap['user_date'];
+          openPermitMap['action_key'] = event.openPermitMap['action_key'];
+          openPermitMap['user_time'] = event.openPermitMap['user_time'];
           add(SaveOfflineData(offlineDataMap: openPermitMap));
         }
       }
@@ -526,7 +529,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
           }
         } else {
-          closePermitMap['action_key'] = 'cancel_permit';
+          closePermitMap['action_key'] = event.closePermitMap['action_key'];
+          closePermitMap['user_date'] = event.closePermitMap['user_date'];
+          closePermitMap['user_time'] = event.closePermitMap['user_time'];
           add(SaveOfflineData(offlineDataMap: closePermitMap));
         }
       }
@@ -660,6 +665,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       } else {
         saveMarkAsPreparedMap['action_key'] =
             event.saveOfflineMarkAsPreparedMap['action_key'];
+        saveMarkAsPreparedMap['user_date'] =
+            event.saveOfflineMarkAsPreparedMap['user_date'];
+        saveMarkAsPreparedMap['user_time'] =
+            event.saveOfflineMarkAsPreparedMap['user_time'];
         add(SaveOfflineData(offlineDataMap: saveMarkAsPreparedMap));
       }
     } catch (e) {
@@ -945,12 +954,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.offlineDataMap['user_name'] == '') {
         emit(OfflineDataNotSaved(
             errorMessage: StringConstants.kEnterNameValidation));
-      } else if (event.offlineDataMap['date'] == null ||
-          event.offlineDataMap['date'] == '') {
+      } else if (event.offlineDataMap['user_date'] == null ||
+          event.offlineDataMap['user_date'] == '') {
         emit(OfflineDataNotSaved(
             errorMessage: StringConstants.kPleaseSelectDate));
-      } else if (event.offlineDataMap['time'] == null ||
-          event.offlineDataMap['time'] == '') {
+      } else if (event.offlineDataMap['user_time'] == null ||
+          event.offlineDataMap['user_time'] == '') {
         emit(OfflineDataNotSaved(
             errorMessage: StringConstants.kPleaseSelectTime));
       } else if (event.offlineDataMap['user_sign'] == null ||

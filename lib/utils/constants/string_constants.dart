@@ -213,7 +213,7 @@ abstract class StringConstants {
   static const String kDateRange = 'Date Range';
   static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
-  static const String kPleaseSelectDate = 'Please Select Date';
+  static const String kPleaseSelectDate = 'Please Select Date!';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
   static const String kSelectStatus = 'Select Status';
@@ -225,8 +225,8 @@ abstract class StringConstants {
   static const String kDateOfIncident = 'Date of incident';
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
-  static const String kPleaseSelectTime = 'Please Select Time';
-  static const String kPleaseAddSignature = 'Please add signature';
+  static const String kPleaseSelectTime = 'Please Select Time!';
+  static const String kPleaseAddSignature = 'Please add signature!';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -401,7 +401,7 @@ abstract class StringConstants {
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
-  static const String kEnterNameValidation = 'Please enter name';
+  static const String kEnterNameValidation = 'Please enter name!';
   static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';

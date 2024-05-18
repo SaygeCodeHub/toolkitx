@@ -48,8 +48,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                         arguments: permitSignAsSapMap['permitid'] ??
                             permitSignAsSapMap['permitId']);
                   } else if (state is OfflineDataNotSaved) {
-                    showCustomSnackBar(
-                        context, StringConstants.kFailedToSaveData, '');
+                    showCustomSnackBar(context, state.errorMessage, '');
                   }
                 },
                 child: Expanded(
@@ -104,7 +103,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     DatePickerTextField(onDateChanged: (String date) {
-                      permitSignAsSapMap['date'] = date;
+                      permitSignAsSapMap['user_date'] = date;
                     }),
                     const SizedBox(height: xxTinySpacing),
                     Text(StringConstants.kTime,
@@ -114,7 +113,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxxTinierSpacing),
                     TimePickerTextField(onTimeChanged: (String time) {
-                      permitSignAsSapMap['time'] = time;
+                      permitSignAsSapMap['user_time'] = time;
                     }),
                     const SizedBox(height: xxTinySpacing),
                     SignaturePad(map: permitSignAsSapMap, mapKey: 'user_sign'),
