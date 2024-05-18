@@ -7,7 +7,6 @@ class SaveOfflineDataUtil {
   void saveData(String status, Map saveOfflineDataMap, BuildContext context) {
     switch (status) {
       case 'ClearPermitScreen':
-        print('util map $saveOfflineDataMap');
         context
             .read<PermitBloc>()
             .add(SaveClearPermit(clearPermitMap: saveOfflineDataMap));
