@@ -7,9 +7,9 @@ class SaveOfflineDataUtil {
   void saveData(String status, Map saveOfflineDataMap, BuildContext context) {
     switch (status) {
       case 'ClearPermitScreen':
-        context
-            .read<PermitBloc>()
-            .add(SaveClearPermit(clearPermitMap: saveOfflineDataMap));
+        context.read<PermitBloc>().add(SaveClearPermit(
+            clearPermitMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitId']));
         break;
       case 'AcceptPermitRequestScreen':
         context.read<PermitBloc>().add(AcceptPermitRequest(
@@ -17,13 +17,12 @@ class SaveOfflineDataUtil {
             acceptPermitMap: saveOfflineDataMap));
         break;
       case 'OpenPermitScreen':
-        context.read<PermitBloc>().add(
-            OpenPermit(saveOfflineDataMap, saveOfflineDataMap['permitId']));
+        context.read<PermitBloc>().add(OpenPermit(
+            saveOfflineDataMap, saveOfflineDataMap['permitId'], null));
         break;
       case 'PreparePermitScreen':
         context.read<PermitBloc>().add(SaveMarkAsPrepared(
             permitId: saveOfflineDataMap['permitid'],
-            controlPerson: saveOfflineDataMap['controlpersons'],
             markAsPreparedMap: saveOfflineDataMap));
         break;
       case 'ClosePermitScreen':

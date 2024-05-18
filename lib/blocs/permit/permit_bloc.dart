@@ -75,6 +75,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
     on<SavePermitOfflineAction>(_saveOfflineData);
+    on<PermitInternetActions>(_permitInternetActions);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -460,7 +461,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           emit(const OpeningPermit());
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.openPermit(openPermitMap);
-          emit(PermitOpened(openClosePermitModel));
+          if (openClosePermitModel.message == '1') {
+            if (event.offlineActionId != null) {
+              await _databaseHelper
+                  .deleteOfflinePermitAction(event.offlineActionId!);
+            }
+            emit(PermitOpened(openClosePermitModel));
+          }
         } else {
           add(SavePermitOfflineAction(
               offlineDataMap: openPermitMap,
@@ -526,6 +533,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.closePermit(closePermitMap);
           if (openClosePermitModel.message == '1') {
+            if (event.offlineActionId != null) {
+              await _databaseHelper
+                  .deleteOfflinePermitAction(event.offlineActionId!);
+            }
             emit(PermitClosed(openClosePermitModel));
           } else {
             emit(ClosePermitError(
@@ -648,17 +659,21 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "hashcode": hashCode,
         "permitid": event.permitId,
         "userid": userId,
-        "controlpersons": event.controlPerson,
+        "controlpersons": event.markAsPreparedMap['controlpersons'],
         "user_sign": event.markAsPreparedMap['user_sign'] ?? '',
         "user_name": event.markAsPreparedMap['user_name'] ?? '',
         "user_email": event.markAsPreparedMap['user_email'] ?? ''
       };
       if (isNetworkEstablished) {
         emit(MarkAsPreparedSaving());
-        if (event.controlPerson != '') {
+        if (event.markAsPreparedMap['controlpersons'] != '') {
           SaveMarkAsPreparedModel saveMarkAsPreparedModel =
               await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
           if (saveMarkAsPreparedModel.message == '1') {
+            if (event.offlineActionId != null) {
+              await _databaseHelper
+                  .deleteOfflinePermitAction(event.offlineActionId!);
+            }
             emit(MarkAsPreparedSaved());
           } else {
             emit(MarkAsPreparedNotSaved(
@@ -670,7 +685,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
       } else {
         add(SavePermitOfflineAction(
-            offlineDataMap: saveMarkAsPreparedMap,
+            offlineDataMap: event.markAsPreparedMap,
             permitId: event.permitId,
             signature: event.markAsPreparedMap['user_sign'] ?? '',
             actionKey: 'prepare_permit',
@@ -697,12 +712,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_auth": event.acceptPermitMap['npw_auth'] ?? '',
         "npw_company": event.acceptPermitMap['npw_company'] ?? '',
         "npw_email": event.acceptPermitMap['npw_email'] ?? '',
-        "npw_phone": event.acceptPermitMap['npw_phone'] ?? ''
+        "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
+        "sync_sign:": event.acceptPermitMap['user_sign'] ?? '',
+        "sync-date": event.syncDate,
       };
       if (isNetworkEstablished) {
         AcceptPermitRequestModel acceptPermitRequestModel =
             await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
         if (acceptPermitRequestModel.message == '1') {
+          if (event.offlineActionId != null) {
+            await _databaseHelper
+                .deleteOfflinePermitAction(event.offlineActionId!);
+          }
           emit(PermitRequestAccepted());
         } else {
           emit(PermitRequestNotAccepted(
@@ -852,12 +873,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_auth": event.clearPermitMap['npw_auth'] ?? '',
         "npw_company": event.clearPermitMap['npw_company'] ?? '',
         "npw_email": event.clearPermitMap['npw_email'] ?? '',
-        "npw_phone": event.clearPermitMap['npw_phone'] ?? ''
+        "npw_phone": event.clearPermitMap['npw_phone'] ?? '',
+        "sync_sign": event.clearPermitMap['user_sign'] ?? '',
+        "sync-date": event.syncDate,
       };
       if (isNetworkEstablished) {
         SaveClearPermitModel saveClearPermitModel =
             await _permitRepository.saveClearPermit(clearPermitMap);
         if (saveClearPermitModel.message == '1') {
+          if (event.offlineActionId != null) {
+            await _databaseHelper
+                .deleteOfflinePermitAction(event.offlineActionId!);
+          }
           emit(ClearPermitSaved());
         } else {
           emit(ClearPermitNotSaved(
@@ -907,6 +934,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             await _permitRepository
                 .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
         if (savePermitEditSafetyDocumentModel.message == '1') {
+          if (event.offlineActionId != null) {
+            await _databaseHelper
+                .deleteOfflinePermitAction(event.offlineActionId!);
+          }
           emit(PermitEditSafetyDocumentSaved());
         } else {
           emit(PermitEditSafetyDocumentNotSaved(
@@ -985,6 +1016,30 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.signature,
           event.dateTime);
       if (isDataInserted) {
+        switch (event.actionKey) {
+          case 'open_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 2);
+            break;
+          case 'cancel_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 3);
+            break;
+          case 'prepare_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 16);
+            break;
+          case 'clear_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 18);
+            break;
+          case 'accept_permit_request':
+            await _databaseHelper.updateStatusId(event.permitId, 17);
+            break;
+          case 'edit_safety_document':
+            await _databaseHelper.updateStatusId(event.permitId, 0);
+            break;
+          default:
+            emit(OfflineDataNotSaved(
+                errorMessage: StringConstants.kFailedToSaveData));
+            break;
+        }
         emit(OfflineDataSaved(
             successMessage: StringConstants.kDataSavedSuccessfully));
       } else {
@@ -994,6 +1049,51 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(
           OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
+    }
+  }
+
+  FutureOr<void> _permitInternetActions(
+      PermitInternetActions event, Emitter<PermitStates> emit) async {
+    List<Map<String, dynamic>> permitActions =
+        await _databaseHelper.fetchOfflinePermitAction();
+    if (permitActions.isNotEmpty) {
+      for (var action in permitActions) {
+        switch (action['action_key']) {
+          case 'open_permit':
+            add(OpenPermit(
+                action['actionJson'], action['permitId'], action['id']));
+            break;
+          case 'cancel_permit':
+            add(ClosePermit(
+                permitId: action['permitId'],
+                closePermitMap: action['actionJson']));
+            break;
+          case 'prepare_permit':
+            add(SaveMarkAsPrepared(
+                permitId: action['permitId'],
+                markAsPreparedMap: action['actionJson']));
+            break;
+          case 'clear_permit':
+            add(SaveClearPermit(
+                permitId: action['permitId'],
+                clearPermitMap: action['actionJson'],
+                syncDate: action['actionDateTime']));
+            break;
+          case 'accept_permit_request':
+            add(AcceptPermitRequest(
+                permitId: action['permitId'],
+                acceptPermitMap: action['actionJson'],
+                syncDate: action['actionDateTime']));
+            break;
+          case 'edit_safety_document':
+            add(SavePermitEditSafetyDocument(
+                editSafetyDocumentMap: action['actionJson']));
+            break;
+          default:
+            null;
+            break;
+        }
+      }
     }
   }
 }

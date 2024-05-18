@@ -445,13 +445,27 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> fetchOfflinePermitAction() async {
     final db = await database;
-    final List<Map<String, dynamic>> permitActionList =
+    final List<Map<String, dynamic>> result =
         await db.rawQuery('SELECT * FROM OfflinePermitAction');
-    return permitActionList;
+    if (result.isEmpty) {
+      return [];
+    } else {
+      return result;
+    }
   }
 
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateStatusId(String permitId, int updatedStatus) async {
+    final db = await database;
+    await db.update(
+      'OfflinePermit',
+      {'statusId': updatedStatus},
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
   }
 }

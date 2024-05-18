@@ -58,9 +58,8 @@ class ClearPermitBottomBar extends StatelessWidget {
                 } else {
                   if (isNetworkEstablished) {
                     clearPermitMap['permit_id'] = permitId;
-                    context
-                        .read<PermitBloc>()
-                        .add(SaveClearPermit(clearPermitMap: clearPermitMap));
+                    context.read<PermitBloc>().add(SaveClearPermit(
+                        clearPermitMap: clearPermitMap, permitId: permitId));
                   } else {
                     clearPermitMap['permitid'] = permitId;
                     clearPermitMap['action_key'] = "clear_permit";

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
@@ -54,7 +52,6 @@ class OnLineModules extends StatelessWidget {
             currentState is HomeScreenFetched ||
             currentState is FetchHomeScreenError,
         builder: (context, state) {
-          log('state?======>$state');
           if (state is HomeScreenFetching) {
             return Padding(
                 padding: EdgeInsets.only(
@@ -76,7 +73,6 @@ class OnLineModules extends StatelessWidget {
                     crossAxisCount: 3,
                     crossAxisSpacing: xxTinierSpacing),
                 itemBuilder: (BuildContext context, int index) {
-                  log('state.availableModules[index].key?======>${state.availableModules[index].key}');
                   return InkWell(
                       borderRadius: BorderRadius.circular(kCardRadius),
                       onTap: () => navigateToModule(
