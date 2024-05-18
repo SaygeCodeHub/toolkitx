@@ -6,22 +6,18 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 class SaveOfflineDataUtil {
   void saveData(String status, Map saveOfflineDataMap, BuildContext context) {
     switch (status) {
-      case '3':
-      case '5':
-      case '7':
+      case 'ClearPermitScreen':
+      case 'AcceptPermitRequestScreen':
+      case 'OpenPermitScreen':
         context.read<PermitBloc>().add(OpenPermit(saveOfflineDataMap));
         break;
-      case '10':
+      case 'PreparePermitScreen':
         context.read<PermitBloc>().add(SaveMarkAsPrepared(
             permitId: saveOfflineDataMap['permitid'],
             controlPerson: saveOfflineDataMap['controlpersons'],
             saveOfflineMarkAsPreparedMap: saveOfflineDataMap));
         break;
-      case '16':
-        context.read<PermitBloc>().add(OpenPermit(saveOfflineDataMap));
-        break;
-      case '17':
-      case '18':
+      case 'ClosePermitScreen':
         context
             .read<PermitBloc>()
             .add(ClosePermit(closePermitMap: saveOfflineDataMap));
