@@ -17,6 +17,8 @@ import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -618,6 +620,10 @@ class AppRoutes {
       case PermitTransferComponentScreen.routeName:
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
+      case PermitSignAsSapScreen.routeName:
+        return _createRoute(PermitSignAsSapScreen());
+      case PermitSignAsCpScreen.routeName:
+        return _createRoute(PermitSignAsCpScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

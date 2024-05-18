@@ -9,6 +9,9 @@ abstract class StringConstants {
   static const String kSelectTimeZone = 'Select Your TimeZone';
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
+  static const String kName = 'Name'; //
+  static const String kCompanyName = 'Company Name'; //
+  static const String kAuthNumber = 'Auth/OTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
@@ -208,7 +211,7 @@ abstract class StringConstants {
       'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
-  static const String kName = 'Name';
+  static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
   static const String kPleaseSelectDate = 'Please Select Date';
   static const String kBis = 'bis';
@@ -286,6 +289,8 @@ abstract class StringConstants {
   static const String kTransferTo = 'Transfer To';
   static const String kCP = 'CP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
+  static const String kSignAsSap = 'Sign as SAP';
+  static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
   static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
@@ -377,6 +382,8 @@ abstract class StringConstants {
   static const String kFeedback = 'Feedback';
   static const String kSkip = 'Skip';
   static const String kBack = 'Back';
+  static const String kSignAsSapCap = 'SIGN AS SAP';
+  static const String kSignAsCpCap = 'SIGN AS CP';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
   static const String kAnswerSaved = "Answer Saved";
