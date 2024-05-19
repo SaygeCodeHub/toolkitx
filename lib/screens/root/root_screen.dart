@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -15,6 +16,7 @@ import '../../configs/app_spacing.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 import '../home/home_screen.dart';
+import '../location/current_location_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {

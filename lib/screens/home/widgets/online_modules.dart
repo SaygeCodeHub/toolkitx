@@ -13,6 +13,7 @@ import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
 import '../../../blocs/client/client_states.dart';
+import '../../../blocs/global/global_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -43,6 +44,8 @@ class OnLineModules extends StatelessWidget {
     context
         .read<ClientBloc>()
         .add(FetchHomeScreenData(isFirstTime: isFirstTime));
+    final globalBloc = context.read<GlobalBloc>();
+    final clientBloc = context.read<ClientBloc>();
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||
@@ -75,7 +78,9 @@ class OnLineModules extends StatelessWidget {
                       onTap: () => navigateToModule(
                           state.availableModules[index].key,
                           state.availableModules[index].moduleName,
-                          context),
+                          context,
+                          globalBloc,
+                          clientBloc),
                       child: CustomCard(
                           color: AppColor.transparent,
                           elevation: kZeroElevation,
@@ -152,49 +157,71 @@ class OnLineModules extends StatelessWidget {
         });
   }
 
-  navigateToModule(moduleKey, moduleName, context) {
+  navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc) {
     switch (moduleKey) {
       case 'ptw':
+        globalBloc.add(UpdateCount(type: 'permit'));
         Navigator.pushNamed(context, PermitListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'hse':
+        globalBloc.add(UpdateCount(type: 'hse'));
         Navigator.pushNamed(context, IncidentListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'checklist':
+        globalBloc.add(UpdateCount(type: 'checklist'));
         Navigator.pushNamed(context, SystemUserCheckListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'wf_checklist':
-        Navigator.pushNamed(context, WorkForceListScreen.routeName);
+        globalBloc.add(UpdateCount(type: 'wf_checklist'));
+        Navigator.pushNamed(context, WorkForceListScreen.routeName)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'sl':
+        globalBloc.add(UpdateCount(type: 'sl'));
         Navigator.pushNamed(context, LogbookListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'todo':
+        globalBloc.add(UpdateCount(type: 'todo'));
         Navigator.pushNamed(
-            context, TodoAssignedByMeAndToMeListScreen.routeName);
+                context, TodoAssignedByMeAndToMeListScreen.routeName)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'timesheet':
         if (moduleName == 'Expense') {
+          globalBloc.add(UpdateCount(type: 'expensereport'));
           Navigator.pushNamed(context, ExpenseListScreen.routeName,
-              arguments: true);
+                  arguments: true)
+              .then((_) => clientBloc.add(FetchHomeScreenData()));
         } else {
-          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+          globalBloc.add(UpdateCount(type: 'wf_timesheet'));
+          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName)
+              .then((_) => clientBloc.add(FetchHomeScreenData()));
         }
         break;
       case 'wf_timesheet':
         if (moduleName == 'Expense') {
-          Navigator.pushNamed(context, ExpenseListScreen.routeName);
+          globalBloc.add(UpdateCount(type: 'expensereport'));
+          Navigator.pushNamed(context, ExpenseListScreen.routeName)
+              .then((_) => clientBloc.add(FetchHomeScreenData()));
         } else {
-          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName);
+          globalBloc.add(UpdateCount(type: 'wf_timesheet'));
+          Navigator.pushNamed(context, LeavesAndHolidaysScreen.routeName)
+              .then((_) => clientBloc.add(FetchHomeScreenData()));
         }
         break;
       case 'qareport':
+        globalBloc.add(UpdateCount(type: 'qareport'));
         Navigator.pushNamed(context, QualityManagementListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'tracking':
         Navigator.pushNamed(context, SignInListScreen.routeName);
@@ -203,23 +230,33 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, CalendarScreen.routeName);
         break;
       case 'workorder':
+        globalBloc.add(UpdateCount(type: 'workorder'));
         Navigator.pushNamed(context, WorkOrderListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'certificates':
+        globalBloc.add(UpdateCount(type: 'certificatecourse'));
         Navigator.pushNamed(context, CertificatesListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'loto':
-        Navigator.pushNamed(context, LotoListScreen.routeName, arguments: true);
+        globalBloc.add(UpdateCount(type: 'loto'));
+        Navigator.pushNamed(context, LotoListScreen.routeName, arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'dms':
+        globalBloc.add(UpdateCount(type: 'dms'));
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'safetyNotice':
+        globalBloc.add(UpdateCount(type: 'safetynotice'));
         Navigator.pushNamed(context, SafetyNoticeScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'eam':
         if (moduleName == 'Location') {
@@ -229,17 +266,24 @@ class OnLineModules extends StatelessWidget {
         }
         break;
       case 'expensereport':
-        Navigator.pushNamed(context, ExpenseListScreen.routeName);
+        globalBloc.add(UpdateCount(type: 'expensereport'));
+        Navigator.pushNamed(context, ExpenseListScreen.routeName)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'trace':
-        Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
+        globalBloc.add(UpdateCount(type: 'trace'));
+        Navigator.pushNamed(context, EquipmentTraceScreen.routeName)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'meetingRoom':
-        Navigator.pushNamed(context, EquipmentTraceScreen.routeName);
+        globalBloc.add(UpdateCount(type: 'meetingroom'));
+
         break;
       case 'tickets':
+        globalBloc.add(UpdateCount(type: 'tickets'));
         Navigator.pushNamed(context, TicketListScreen.routeName,
-            arguments: true);
+                arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
     }
   }

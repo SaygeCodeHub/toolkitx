@@ -4,10 +4,12 @@ import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
+import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -139,5 +141,21 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}permit/clearpermit", clearPermitMap);
     return SaveClearPermitModel.fromJson(response);
+  }
+
+  @override
+  Future<SavePermitEditSafetyDocumentModel> saveEditSafetyNoticeDocument(
+      Map editSafetyDocumentMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/updatesddetails", editSafetyDocumentMap);
+    return SavePermitEditSafetyDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchDataForChangePermitCpModel> fetchDataForChangePermitCP(
+      String permitId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforchangepermitcp?permitid=$permitId&hashcode=$hashCode");
+    return FetchDataForChangePermitCpModel.fromJson(response);
   }
 }

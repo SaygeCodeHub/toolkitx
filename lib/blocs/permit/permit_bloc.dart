@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
+import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -59,6 +61,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<AcceptPermitRequest>(_acceptPermitRequest);
     on<FetchClearPermit>(_fetchClearPermit);
     on<SaveClearPermit>(saveClearPermit);
+    on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
+    on<FetchDataForChangePermitCP>(_fetchDataForChangePermitCP);
+    on<SelectTransferTo>(_selectTransferTo);
+    on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
+    on<SelectTransferCPSap>(_selectTransferCPSap);
+    on<SelectTransferValue>(_selectTransferValue);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -125,7 +133,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           {"questionid": 3000005, "answer": ""},
           {"questionid": 3000006, "answer": ""},
           {"questionid": 3000007, "answer": ""},
-          {"questionid": 3000008, "answer": ""}
+          {"questionid": 3000008, "answer": ""},
+          {"questionid": 3000013, "answer": ""},
+          {"questionid": 3000014, "answer": ""}
         ];
       }
       emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
@@ -216,6 +226,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (permitBasicData?.isclearpermit == '1') {
         permitPopUpMenu.add(StringConstants.kClearPermit);
       }
+      if (permitBasicData?.istransfersafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
           permitPopUpMenu: permitPopUpMenu));
@@ -247,23 +260,31 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(const OpeningPermit());
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      Map openPermitMap = {
-        "hashcode": hashCode,
-        "permitid": event.openPermitMap['permitId'],
-        "userid": userId,
-        "customfields": event.openPermitMap['customfields'],
-        "date": (event.openPermitMap['date'] == null)
-            ? DateFormat('dd.MM.yyyy').format(DateTime.now())
-            : event.openPermitMap['date'],
-        "time": event.openPermitMap['time'],
-        "details": event.openPermitMap['details'],
-        "user_sign": "",
-        "user_name": "",
-        "user_email": ""
-      };
-      OpenClosePermitModel openClosePermitModel =
-          await _permitRepository.openPermit(openPermitMap);
-      emit(PermitOpened(openClosePermitModel));
+      if (event.openPermitMap['date'] == null ||
+          event.openPermitMap['date'] == '') {
+        emit(const OpenPermitError(StringConstants.kPleaseSelectDate));
+      } else if (event.openPermitMap['time'] == null ||
+          event.openPermitMap['time'] == '') {
+        emit(const OpenPermitError(StringConstants.kPleaseSelectTime));
+      } else {
+        Map openPermitMap = {
+          "hashcode": hashCode,
+          "permitid": event.openPermitMap['permitId'],
+          "userid": userId,
+          "customfields": event.openPermitMap['customfields'],
+          "date": (event.openPermitMap['date'] == null)
+              ? DateFormat('dd.MM.yyyy').format(DateTime.now())
+              : event.openPermitMap['date'],
+          "time": event.openPermitMap['time'],
+          "details": event.openPermitMap['details'] ?? '',
+          "user_sign": "",
+          "user_name": "",
+          "user_email": ""
+        };
+        OpenClosePermitModel openClosePermitModel =
+            await _permitRepository.openPermit(openPermitMap);
+        emit(PermitOpened(openClosePermitModel));
+      }
     } catch (e) {
       emit(OpenPermitError(e.toString()));
     }
@@ -296,8 +317,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       if (event.closePermitMap['panel_saint'] == '1' &&
           event.closePermitMap['controlPerson'] == null) {
-        emit(ClosePermitError(
-            DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
+        emit(const ClosePermitError(StringConstants.kAllFieldsMandatory));
       } else if (event.closePermitMap['time'] == null) {
         emit(const ClosePermitError(
             StringConstants.kPleaseEnterTimeToClosePermit));
@@ -354,8 +374,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<FutureOr<void>> _fetchDataForOpenPermit(
       FetchDataForOpenPermit event, Emitter<PermitStates> emit) async {
-    emit(DataForOpenPermitFetching());
     try {
+      emit(DataForOpenPermitFetching());
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
       FetchDataForOpenPermitModel fetchDataForOpenPermitModel =
@@ -364,7 +384,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (fetchDataForOpenPermitModel.status == 200) {
         final List<Question> questions = [
           Question(questionNo: StringConstants.kPermitFirstQuestion),
-          Question(questionNo: StringConstants.kPermitSecondQuestion)
+          Question(questionNo: StringConstants.kPanel12),
+          Question(questionNo: StringConstants.kPanel15),
+          Question(questionNo: StringConstants.kPanel16)
         ];
         emit(DataForOpenPermitFetched(
             fetchDataForOpenPermitModel: fetchDataForOpenPermitModel,
@@ -535,5 +557,87 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(ClearPermitNotSaved(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> savePermitEditSafetyDocument(
+      SavePermitEditSafetyDocument event, Emitter<PermitStates> emit) async {
+    try {
+      emit(SavingPermitEditSafetyDocument());
+      Map editSafetyDocumentMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "permitid": event.editSafetyDocumentMap['permit_id'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "location": event.editSafetyDocumentMap['location'] ?? '',
+        "description": event.editSafetyDocumentMap['permit_id'] ?? '',
+        "methodstmt": event.editSafetyDocumentMap['methodstmt'] ?? '',
+        "lwc_environment": event.editSafetyDocumentMap['lwc_environment'] ?? '',
+        "lwc_precautions": event.editSafetyDocumentMap['lwc_precautions'] ?? '',
+        "lwc_accessto": event.editSafetyDocumentMap['lwc_accessto'] ?? '',
+        "st_circuit": event.editSafetyDocumentMap['st_circuit'] ?? '',
+        "st_precautions": event.editSafetyDocumentMap['st_precautions'] ?? '',
+        "st_safety": event.editSafetyDocumentMap['st_safety'] ?? '',
+        "ptw_isolation": event.editSafetyDocumentMap['ptw_isolation'] ?? '',
+        "ptw_circuit": event.editSafetyDocumentMap['ptw_circuit'] ?? '',
+        "ptw_circuit2": event.editSafetyDocumentMap['ptw_circuit2'] ?? '',
+        "ptw_precautions": event.editSafetyDocumentMap['ptw_precautions'] ?? '',
+        "ptw_precautions2":
+            event.editSafetyDocumentMap['ptw_precautions2'] ?? '',
+        "ptw_safety": event.editSafetyDocumentMap['ptw_safety'] ?? ''
+      };
+      SavePermitEditSafetyDocumentModel savePermitEditSafetyDocumentModel =
+          await _permitRepository
+              .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
+      if (savePermitEditSafetyDocumentModel.message == '1') {
+        emit(PermitEditSafetyDocumentSaved());
+      } else {
+        emit(PermitEditSafetyDocumentNotSaved(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(PermitEditSafetyDocumentNotSaved(
+          errorMessage: StringConstants.kSomethingWentWrong));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchDataForChangePermitCP(
+      FetchDataForChangePermitCP event, Emitter<PermitStates> emit) async {
+    try {
+      emit(DataForChangePermitCPFetching());
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+          await _permitRepository.fetchDataForChangePermitCP(
+              event.permitId, hashCode);
+      if (fetchDataForChangePermitCpModel.status == 200) {
+        emit(DataForChangePermitCPFetched(
+            fetchDataForChangePermitCpModel: fetchDataForChangePermitCpModel));
+      } else {
+        emit(DataForChangePermitCPNotFetched(
+            errorMessage: fetchDataForChangePermitCpModel.message!));
+      }
+    } catch (e) {
+      emit(DataForChangePermitCPNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectTransferTo(
+      SelectTransferTo event, Emitter<PermitStates> emit) {
+    emit(TransferToSelected(
+        transferType: event.transferType, transferValue: event.transferValue));
+  }
+
+  FutureOr<void> _selectTransferCPWorkForce(
+      SelectTransferCPWorkForce event, Emitter<PermitStates> emit) {
+    emit(TransferCPWorkforceSelected(id: event.id, name: event.name));
+  }
+
+  FutureOr<void> _selectTransferCPSap(
+      SelectTransferCPSap event, Emitter<PermitStates> emit) {
+    emit(TransferCPSapSelected(id: event.id, name: event.name));
+  }
+
+  FutureOr<void> _selectTransferValue(
+      SelectTransferValue event, Emitter<PermitStates> emit) {
+    emit(TransferValueSelected(value: event.value));
   }
 }
