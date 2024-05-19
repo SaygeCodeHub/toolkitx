@@ -68,24 +68,23 @@ class ClearPermitData {
 
   factory ClearPermitData.fromJson(Map<String, dynamic> json) =>
       ClearPermitData(
-        clientid: json["clientid"] ?? '',
-        permitName: json["permit_name"] ?? '',
-        permitStatus: json["permit_status"] ?? '',
-        typeOfPermit: json["type_of_permit"] ?? '',
-        panelSaint: json["panel_saint"] ?? '',
-        panelSaint1215: json["panel_saint1215"] ?? '',
-        isstopclear: json["isstopclear"] ?? '',
-        keysafeno: json["keysafeno"] ?? '',
-        earthscheduleno: json["earthscheduleno"] ?? '',
-        selectedpersonreport: json["selectedpersonreport"] ?? '',
-        safetykeys: json["safetykeys"] ?? '',
-        circuitflags: json["circuitflags"] ?? '',
-        circuitwristlets: json["circuitwristlets"] ?? '',
-        singleline: json["singleline"] ?? '',
-        pid: json["pid"] ?? '',
-        accessKeys: json["accesskey"] ?? '',
-        other: json["other"] ?? '',
-      );
+          clientid: json["clientid"] ?? '',
+          permitName: json["permit_name"] ?? '',
+          permitStatus: json["permit_status"] ?? '',
+          typeOfPermit: json["type_of_permit"] ?? '',
+          panelSaint: json["panel_saint"] ?? '',
+          panelSaint1215: json["panel_saint1215"] ?? '',
+          isstopclear: json["isstopclear"] ?? '',
+          keysafeno: json["keysafeno"] ?? '',
+          earthscheduleno: json["earthscheduleno"] ?? '',
+          selectedpersonreport: json["selectedpersonreport"] ?? '',
+          safetykeys: json["safetykeys"] ?? '',
+          circuitflags: json["circuitflags"] ?? '',
+          circuitwristlets: json["circuitwristlets"] ?? '',
+          singleline: json["singleline"] ?? '',
+          pid: json["pid"] ?? '',
+          accessKeys: json["accesskey"] ?? '',
+          other: json["other"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "clientid": clientid,

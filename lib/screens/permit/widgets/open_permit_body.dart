@@ -4,15 +4,20 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/open_permit_details_model.dart';
+import '../../../data/models/permit/permit_sap_cp_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../incident/widgets/date_picker.dart';
 import '../../incident/widgets/time_picker.dart';
+import '../open_permit_screen.dart';
 import 'open_permit_custom_fields.dart';
 
 class OpenPermitBody extends StatelessWidget {
@@ -86,12 +91,10 @@ class OpenPermitBody extends StatelessWidget {
                       openPermitMap['time'] = time;
                     }),
                 const SizedBox(height: xxTinySpacing),
-                Visibility(
-                    visible: openPermitMap['panel_saint'] == '1',
-                    child: Column(children: [
-                      OpenPermitCustomFields(openPermitMap: openPermitMap),
-                      const SizedBox(height: xxTinySpacing)
-                    ])),
+                Column(children: [
+                  OpenPermitCustomFields(openPermitMap: openPermitMap),
+                  const SizedBox(height: xxTinySpacing)
+                ]),
                 Text(DatabaseUtil.getText('Comments'),
                     style: Theme.of(context)
                         .textTheme
@@ -107,7 +110,29 @@ class OpenPermitBody extends StatelessWidget {
                 const SizedBox(height: xxTinySpacing),
                 PrimaryButton(
                     onPressed: () {
-                      context.read<PermitBloc>().add(OpenPermit(openPermitMap));
+                      if (isNetworkEstablished) {
+                        context.read<PermitBloc>().add(OpenPermit(
+                            openPermitMap, openPermitMap['permitId'], null));
+                      } else {
+                        if (openPermitMap['date'] == null ||
+                            openPermitMap['date'] == '') {
+                          showCustomSnackBar(
+                              context, StringConstants.kPleaseSelectDate, '');
+                        } else if (openPermitMap['time'] == null ||
+                            openPermitMap['time'] == '') {
+                          showCustomSnackBar(
+                              context, StringConstants.kPleaseSelectTime, '');
+                        } else {
+                          Navigator.pushNamed(
+                              context, PermitSignAsSapScreen.routeName,
+                              arguments: PermitCpSapModel(sapCpMap: {
+                                'permitId': openPermitMap['permitId'],
+                                'date': openPermitMap['date'],
+                                'time': openPermitMap['time'],
+                                'customfields': openPermitMap['customfields']
+                              }, previousScreen: OpenPermitScreen.routeName));
+                        }
+                      }
                     },
                     textValue: StringConstants.kISSUEPERMIT)
               ],

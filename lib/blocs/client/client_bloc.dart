@@ -43,7 +43,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         add(SelectClient(
             hashKey: clientListModel.data![0].hashkey.toString(),
             apiKey: clientListModel.data![0].apikey,
-            image: clientListModel.data![0].hashimg));
+            image: clientListModel.data![0].hashimg,
+            isFromProfile: false));
       }
       emit(ClientListFetched(clientListModel: clientListModel));
     } catch (e) {
@@ -53,6 +54,9 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
   FutureOr<void> _selectClient(
       SelectClient event, Emitter<ClientStates> emit) async {
+    if (event.isFromProfile) {
+      await _databaseHelper.recreateOfflinePermitTable();
+    }
     _customerCache.setApiKey(CacheKeys.apiKey, event.apiKey);
     _customerCache.setClientId(CacheKeys.clientId, event.hashKey);
     String timeZoneCode =
@@ -64,6 +68,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         '${event.apiKey}|${event.hashKey}|$userType|$dateTimeValue|$timeZoneCode';
     _customerCache.setHashCode(CacheKeys.hashcode, hashCode);
     _customerCache.setClientImage(CacheKeys.clientImage, event.image);
+    emit(ClientSelected());
   }
 
   FutureOr<void> _fetchHomeScreenData(

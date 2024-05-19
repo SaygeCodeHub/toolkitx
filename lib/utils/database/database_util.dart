@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/models/chatBox/fetch_employees_model.dart';
+import '../../data/models/permit/offline_permit_model.dart';
 
 class DatabaseHelper {
   static Database? _database;
@@ -65,7 +68,7 @@ class DatabaseHelper {
       );
         ''');
 
-        db.execute('''
+        await db.execute('''
         CREATE TABLE IF NOT EXISTS members (
           primary_id INTEGER PRIMARY KEY AUTOINCREMENT,
           id INTEGER UNIQUE,
@@ -77,7 +80,109 @@ class DatabaseHelper {
           FOREIGN KEY (group_id) REFERENCES groups(group_id)
         );
   ''');
+
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflinePermit (
+          id INTEGER PRIMARY KEY,
+          permitId TEXT UNIQUE,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          tab6 TEXT,
+          html TEXT,
+          statusId INTEGER
+        );
+  ''');
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflinePermitAction (
+         id INTEGER PRIMARY KEY,
+          permitId TEXT,
+          actionText TEXT,
+          actionJson TEXT,
+          actionDateTime TEXT,
+          sign TEXT
+        );
+  ''');
       },
+    );
+  }
+
+  Future<void> recreateOfflinePermitTable() async {
+    final Database db = await database;
+    // Drop the table if it exists
+    await db.execute('DROP TABLE IF EXISTS OfflinePermit');
+    await db.execute('DROP TABLE IF EXISTS OfflinePermitAction');
+
+    // Create the table again
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS OfflinePermit (
+          id INTEGER PRIMARY KEY,
+          permitId TEXT UNIQUE,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          tab6 TEXT,
+          html TEXT,
+          statusId INTEGER
+        );
+  ''');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflinePermitAction (
+         id INTEGER PRIMARY KEY,
+          permitId TEXT,
+          actionText TEXT,
+          actionJson TEXT,
+          actionDateTime TEXT,
+          sign TEXT
+        );
+  ''');
+  }
+
+  Future<bool> insertOfflinePermitAction(String permitId, String actionText,
+      Map actionJson, String sign, String? actionDateTime) async {
+    final Database db = await database;
+    try {
+      int result = await db.insert(
+          'OfflinePermitAction',
+          {
+            'permitId': permitId,
+            'actionText': actionText,
+            'actionJson': jsonEncode(actionJson),
+            'actionDateTime':
+                actionDateTime ?? DateTime.now().toUtc().toString(),
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace);
+
+      return result > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> insertOfflinePermit(OfflinePermitDatum data) async {
+    final Database db = await database;
+    await db.insert(
+      'OfflinePermit',
+      {
+        'permitId': data.id,
+        'listpage': jsonEncode(data.listpage.toJson()),
+        'tab1': jsonEncode(data.tab1.toJson()),
+        'tab2': jsonEncode(data.tab2.toJson()),
+        'tab3': jsonEncode(data.tab3.map((e) => e.toJson()).toList()),
+        'tab4': jsonEncode(data.tab4),
+        'tab5': jsonEncode(data.tab5.map((e) => e.toJson()).toList()),
+        'tab6': jsonEncode(data.tab6),
+        'html': jsonEncode(data.html),
+        'statusId': data.listpage.statusid
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -293,5 +398,127 @@ class DatabaseHelper {
     messages = await db
         .query('chat_messages', where: 'msg_status = ?', whereArgs: ['0']);
     return messages;
+  }
+
+  Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT listPage FROM OfflinePermit');
+    final List<Map<String, dynamic>> permitList = [];
+    for (var data in result) {
+      permitList.add(jsonDecode(data['listPage']));
+    }
+    return permitList;
+  }
+
+  Future<Map<String, dynamic>> fetchPermitDetailsOffline(
+      String permitId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
+      [permitId],
+    );
+    if (results.isNotEmpty) {
+      final Map<String, dynamic> result = results.first;
+      Map<String, dynamic> returnMap = {
+        "tab1": jsonDecode(result['tab1']),
+        "tab2": jsonDecode(result['tab2']),
+        "tab3": jsonDecode(result['tab3']),
+        "tab4": jsonDecode(result['tab4']),
+        "tab5": jsonDecode(result['tab5']),
+        "tab6": jsonDecode(result['tab6']),
+        "html": jsonDecode(result['html'])
+      };
+      return returnMap;
+    } else {
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+      'SELECT html FROM OfflinePermit WHERE permitId = ?',
+      [permitId],
+    );
+    if (results.isNotEmpty) {
+      final Map<String, dynamic> result = results.first;
+      Map<String, dynamic> returnMap = jsonDecode(result['html']);
+      return returnMap;
+    } else {
+      return {};
+    }
+  }
+
+  Future<int> fetchPermitStatusId(String permitId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+        'SELECT statusId FROM OfflinePermit WHERE permitId = ?', [permitId]);
+    return results.first['statusId'];
+  }
+
+  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT * FROM OfflinePermitAction');
+    if (result.isEmpty) {
+      return [];
+    } else {
+      return result;
+    }
+  }
+
+  Future<void> deleteOfflinePermitAction(int id) async {
+    final db = await database;
+    await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
+  }
+
+  Future<void> updateStatusId(String permitId, int updatedStatus) async {
+    final db = await database;
+    await db.update(
+      'OfflinePermit',
+      {'statusId': updatedStatus},
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+  }
+
+  Future<int> getTypeOfPermit(String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermit',
+      columns: ['listPage'],
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      return listPageMap['type_of_permit'];
+    } else {
+      return -1;
+    }
+  }
+
+  Future<void> updateStatus(String permitId, String updatedStatus) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermit',
+      columns: ['listPage'],
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      listPageMap['status'] = updatedStatus;
+      String updatedListPageJson = jsonEncode(listPageMap);
+      await db.update(
+        'OfflinePermit',
+        {'listPage': updatedListPageJson},
+        where: 'permitId = ?',
+        whereArgs: [permitId],
+      );
+    }
   }
 }

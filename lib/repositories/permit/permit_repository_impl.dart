@@ -6,10 +6,12 @@ import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
+
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
+import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -33,6 +35,13 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/getroles?hashcode=$hashCode&userid=$userId");
     return PermitRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<OfflinePermitModel> fetchOfflinePermit(String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/GetPermitAllDetailsForOffline?hashcode=$hashCode");
+    return OfflinePermitModel.fromJson(response);
   }
 
   @override

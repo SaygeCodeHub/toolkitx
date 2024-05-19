@@ -21,29 +21,27 @@ class ClearPermitScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<PermitBloc>().add(FetchClearPermit(permitId: permitId));
     return Scaffold(
-      appBar: const GenericAppBar(title: StringConstants.kClearPermitRequest),
-      bottomNavigationBar: ClearPermitBottomBar(
-          permitId: permitId, clearPermitMap: clearPermitMap),
-      body: BlocBuilder<PermitBloc, PermitStates>(
-        buildWhen: (previousState, currentState) =>
-            currentState is FetchingClearPermitDetails ||
-            currentState is ClearPermitDetailsFetched ||
-            currentState is ClearPermitDetailsCouldNotFetched,
-        builder: (context, state) {
-          if (state is FetchingClearPermitDetails) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ClearPermitDetailsFetched) {
-            clearPermitMap['customfields'] = state.customFields;
-            return ClearPermitSection(
-                clearPermitMap: clearPermitMap,
-                data: state.fetchClearPermitDetailsModel.data);
-          } else if (state is ClearPermitDetailsCouldNotFetched) {
-            return NoRecordsText(text: state.errorMessage);
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
-    );
+        appBar: const GenericAppBar(title: StringConstants.kClearPermitRequest),
+        bottomNavigationBar: ClearPermitBottomBar(
+            permitId: permitId, clearPermitMap: clearPermitMap),
+        body: BlocBuilder<PermitBloc, PermitStates>(
+            buildWhen: (previousState, currentState) =>
+                currentState is FetchingClearPermitDetails ||
+                currentState is ClearPermitDetailsFetched ||
+                currentState is ClearPermitDetailsCouldNotFetched,
+            builder: (context, state) {
+              if (state is FetchingClearPermitDetails) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ClearPermitDetailsFetched) {
+                clearPermitMap['customfields'] = state.customFields;
+                return ClearPermitSection(
+                    clearPermitMap: clearPermitMap,
+                    data: state.fetchClearPermitDetailsModel.data);
+              } else if (state is ClearPermitDetailsCouldNotFetched) {
+                return NoRecordsText(text: state.errorMessage);
+              } else {
+                return const SizedBox.shrink();
+              }
+            }));
   }
 }
