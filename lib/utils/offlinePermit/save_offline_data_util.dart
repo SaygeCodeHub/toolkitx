@@ -9,7 +9,7 @@ class SaveOfflineDataUtil {
       case 'ClearPermitScreen':
         context.read<PermitBloc>().add(SaveClearPermit(
             clearPermitMap: saveOfflineDataMap,
-            permitId: saveOfflineDataMap['permitId']));
+            permitId: saveOfflineDataMap['permitid']));
         break;
       case 'AcceptPermitRequestScreen':
         context.read<PermitBloc>().add(AcceptPermitRequest(

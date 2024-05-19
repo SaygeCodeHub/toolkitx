@@ -25,6 +25,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    permitCpSapModel.sapCpMap['user_sign'] = '';
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSignAsSap),
         bottomNavigationBar: Padding(

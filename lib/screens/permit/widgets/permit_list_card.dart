@@ -33,9 +33,11 @@ class PermitListCard extends StatelessWidget {
                           .read<PermitBloc>()
                           .add(const GetAllPermits(isFromHome: false, page: 1));
                     } else {
+                      PermitListScreen.page = 1;
+                      context.read<PermitBloc>().permitListData = [];
                       context
                           .read<PermitBloc>()
-                          .add(const GetAllPermits(isFromHome: true, page: 1));
+                          .add(const GetAllPermits(isFromHome: false, page: 1));
                     }
                   });
                 },

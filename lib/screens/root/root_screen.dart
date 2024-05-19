@@ -71,8 +71,8 @@ class _RootScreenState extends State<RootScreen> {
                     const RootScreen(isFromClientList: false)),
             ModalRoute.withName('/'));
       } else {
-        context.read<ChatBloc>().add(FetchChatMessage());
         context.read<PermitBloc>().add(PermitInternetActions());
+        context.read<ChatBloc>().add(FetchChatMessage());
       }
     }, builder: (context, state) {
       final bool hasNetwork = state is! NoNetwork;

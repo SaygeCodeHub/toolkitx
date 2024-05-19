@@ -11,7 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kName = 'Name'; //
   static const String kCompanyName = 'Company Name'; //
-  static const String kAuthNumber = 'Auth/OTCP Number'; //
+  static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
@@ -209,7 +209,7 @@ abstract class StringConstants {
   static const String kLogoutDialogContent =
       'Are you sure you want to log out?';
   static const String kNoInternetMessage =
-      'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
+      "We couldn't connect to the internet. Try checking your connection. Limited features will be available"; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
   static const String kEmailAndPhoneNo = 'Email & Phone';
