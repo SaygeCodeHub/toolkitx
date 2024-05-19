@@ -70,6 +70,10 @@ class CustomerCache {
     await sharedPreferences.setString(CacheKeys.timeZoneOffset, string);
   }
 
+  void setFCMToken(String key, String string) async {
+    await sharedPreferences.setString(CacheKeys.fcmToken, string);
+  }
+
   Future<String?> getDateFormat(String key) async {
     return sharedPreferences.getString(CacheKeys.dateFormatKey);
   }
@@ -132,6 +136,10 @@ class CustomerCache {
 
   Future<String?> getTimeZoneName(String key) async {
     return sharedPreferences.getString(CacheKeys.timeZoneName);
+  }
+
+  Future<String?> getFCMToken(String key) async {
+    return sharedPreferences.getString(CacheKeys.fcmToken);
   }
 
   Future<bool> clearAll() async {

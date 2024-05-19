@@ -17,4 +17,5 @@ class CacheKeys {
   static const isLoggedIn = "isLoggedIn ";
   static const userName = "userName ";
   static const timeZoneOffset = "timeZoneOffset ";
+  static const fcmToken = "fcmToken";
 }

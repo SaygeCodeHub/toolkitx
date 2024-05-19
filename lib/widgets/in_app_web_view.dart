@@ -5,7 +5,7 @@ class InAppWebViewScreen extends StatefulWidget {
   static const routeName = 'InAppWebView';
   final String url;
 
-  const InAppWebViewScreen({Key? key, required this.url}) : super(key: key);
+  const InAppWebViewScreen({super.key, required this.url});
 
   @override
   State<InAppWebViewScreen> createState() => _InAppWebViewScreenState();
@@ -25,7 +25,8 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                 isLoading = false;
               });
             },
-            initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+            initialUrlRequest: URLRequest(
+                url: WebUri.uri(Uri.parse(widget.url))), // Updated line
           ),
           Visibility(
               visible: isLoading,

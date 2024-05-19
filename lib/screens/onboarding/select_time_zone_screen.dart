@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../blocs/timeZone/time_zone_bloc.dart';
 import '../../blocs/timeZone/time_zone_events.dart';
 import '../../blocs/timeZone/time_zone_states.dart';
@@ -19,8 +20,7 @@ class SelectTimeZoneScreen extends StatelessWidget {
   static const routeName = 'SelectTimeZoneScreen';
   final bool isFromProfile;
 
-  const SelectTimeZoneScreen({Key? key, this.isFromProfile = false})
-      : super(key: key);
+  const SelectTimeZoneScreen({super.key, this.isFromProfile = false});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class SelectTimeZoneScreen extends StatelessWidget {
                 return Column(children: [
                   Expanded(
                       child: SearchableList(
-                          autoFocusOnSearch: false,
                           initialList: state.getTimeZoneModel.data!,
+                          // ignore: deprecated_member_use
                           builder: (List<TimeZoneData> dataList, index,
                               TimeZoneData data) {
                             return Padding(

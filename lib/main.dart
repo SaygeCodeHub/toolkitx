@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.
 import 'package:toolkit/blocs/certificates/feedbackCertificates/feedback_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
 import 'package:toolkit/blocs/certificates/uploadCertificates/upload_certificate_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/documents/documents_bloc.dart';
 import 'package:toolkit/blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import 'package:toolkit/blocs/expense/expense_bloc.dart';
@@ -23,7 +25,7 @@ import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_locatio
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
-
+import 'package:toolkit/utils/notifications/notification_util.dart';
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -86,6 +88,7 @@ import 'utils/profile_util.dart';
 void main() async {
   await _initApp();
   await _initDependencies();
+  await _initFirebase();
   runApp(const MyApp());
 }
 
@@ -95,6 +98,11 @@ _initApp() async {
   await Hive.initFlutter();
   DatabaseUtil.box = await Hive.openBox('languages_box');
   ProfileUtil.packageInfo = await PackageInfo.fromPlatform();
+}
+
+_initFirebase() async {
+  await Firebase.initializeApp();
+  await NotificationUtil().initNotifications();
 }
 
 _initDependencies() async {
@@ -213,6 +221,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => SearchTextFieldBloc()),
           BlocProvider(lazy: true, create: (context) => AssetsBloc()),
           BlocProvider(lazy: true, create: (context) => UploadImageBloc()),
+          BlocProvider(lazy: true, create: (context) => UploadImageBloc()),
+          BlocProvider(lazy: false, create: (context) => ChatBloc()),
           BlocProvider(
               lazy: false, create: (context) => EquipmentTraceabilityBloc()),
           BlocProvider(lazy: true, create: (context) => TicketsBloc()),

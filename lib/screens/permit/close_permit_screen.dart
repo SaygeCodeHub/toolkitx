@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/permit/permit_list_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
@@ -25,7 +26,7 @@ class ClosePermitScreen extends StatelessWidget {
         .read<PermitBloc>()
         .add(FetchClosePermitDetails(permitDetailsModel.data.tab1.id));
     return Scaffold(
-        appBar: const GenericAppBar(title: 'Close Permit'),
+        appBar: const GenericAppBar(title: StringConstants.kCancelPermit),
         body: BlocConsumer<PermitBloc, PermitStates>(
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingClosePermitDetails ||

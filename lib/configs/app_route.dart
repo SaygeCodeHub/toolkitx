@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
+import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
+import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
@@ -13,6 +17,8 @@ import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
+import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -24,6 +30,7 @@ import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
+import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
@@ -555,6 +562,9 @@ class AppRoutes {
             requestId: settings.arguments.toString()));
       case DocumentsApproveAndRejectScreen.routeName:
         return _createRoute(const DocumentsApproveAndRejectScreen());
+      case UsersScreen.routeName:
+        return _createRoute(
+            UsersScreen(isCreateNewGroup: settings.arguments as bool));
       case AddDocumentCommentsScreen.routeName:
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
@@ -582,6 +592,13 @@ class AppRoutes {
         return _createRoute(const TicketEDTHoursScreen());
       case TicketCompletionDateScreen.routeName:
         return _createRoute(const TicketCompletionDateScreen());
+      case ChatMessagingScreen.routeName:
+        return _createRoute(const ChatMessagingScreen());
+      case AllChatsScreen.routeName:
+        return _createRoute(const AllChatsScreen());
+      case ViewAttachedImageWidget.routeName:
+        return _createRoute(ViewAttachedImageWidget(
+            attachmentPath: settings.arguments.toString()));
       case WorkOrderEditItemsScreen.routeName:
         return _createRoute(WorkOrderEditItemsScreen(
           workOrderItemMap: settings.arguments as Map,
@@ -593,8 +610,8 @@ class AppRoutes {
         return _createRoute(
             PreparePermitScreen(permitId: settings.arguments.toString()));
       case AcceptPermitRequestScreen.routeName:
-        return _createRoute(
-            AcceptPermitRequestScreen(permitId: settings.arguments.toString()));
+        return _createRoute(AcceptPermitRequestScreen(
+            permitDetailsModel: settings.arguments as PermitDetailsModel));
       case ClearPermitScreen.routeName:
         return _createRoute(
             ClearPermitScreen(permitId: settings.arguments.toString()));
@@ -604,6 +621,12 @@ class AppRoutes {
       case PermitTransferComponentScreen.routeName:
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
+      case PermitSignAsSapScreen.routeName:
+        return _createRoute(PermitSignAsSapScreen(
+            permitCpSapModel: settings.arguments as PermitCpSapModel));
+      case PermitSignAsCpScreen.routeName:
+        return _createRoute(PermitSignAsCpScreen(
+            permitCpSapModel: settings.arguments as PermitCpSapModel));
       default:
         return _createRoute(const WelcomeScreen());
     }

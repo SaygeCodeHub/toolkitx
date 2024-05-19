@@ -9,3 +9,7 @@ class StartTimer extends HomeEvents {
 class SetDateAndTime extends HomeEvents {
   const SetDateAndTime();
 }
+
+class SaveUserDevice extends HomeEvents {
+  const SaveUserDevice();
+}

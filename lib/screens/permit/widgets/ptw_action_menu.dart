@@ -65,7 +65,7 @@ class PTWActionMenu extends StatelessWidget {
           }
           if (popUpMenuItems[value] == StringConstants.kAcceptPermitRequest) {
             Navigator.of(context).pushNamed(AcceptPermitRequestScreen.routeName,
-                arguments: permitId);
+                arguments: permitDetailsModel);
           }
           if (popUpMenuItems[value] == StringConstants.kClearPermitRequest) {
             Navigator.of(context)
