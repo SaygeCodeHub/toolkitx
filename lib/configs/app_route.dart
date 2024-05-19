@@ -21,6 +21,7 @@ import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
+import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
@@ -604,6 +605,8 @@ class AppRoutes {
       case PermitTransferComponentScreen.routeName:
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
+      case TripsListScreen.routeName:
+        return _createRoute(const TripsListScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
