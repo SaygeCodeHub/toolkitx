@@ -43,7 +43,6 @@ dependencies:
   firebase_messaging: ^14.7.10
   document_viewer: ^0.0.1
   webview_flutter:
-  flutter_osm_plugin:
   geolocator: ^11.0.0
   background_fetch:
   flutter_osm_plugin: ^0.70.0

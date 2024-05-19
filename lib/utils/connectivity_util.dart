@@ -4,7 +4,6 @@ import '../blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
 import '../blocs/wifiConnectivity/wifi_connectivity_events.dart';
 
 class ConnectivityUtil {
-  static final Connectivity _connectivity = Connectivity();
   static WifiConnectivityBloc? _wifiBloc;
 
   static void initialize() {
@@ -13,12 +12,9 @@ class ConnectivityUtil {
   }
 
   static void observeNetwork() {
-    _connectivity.onConnectivityChanged
-        .listen((List<ConnectivityResult> results) {
-      final result =
-          results.isNotEmpty ? results.first : ConnectivityResult.none;
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
-        WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: false));
+        WifiConnectivityBloc().add(NotifyNetworkStatus());
       } else {
         WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: true));
       }
