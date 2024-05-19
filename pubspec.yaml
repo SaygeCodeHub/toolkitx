@@ -48,6 +48,7 @@ dependencies:
   flutter_osm_plugin: ^0.70.0
   package_info_plus: ^4.2.0
   searchable_listview:
+  path: ^1.8.3
 
 
 dev_dependencies:
