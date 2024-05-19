@@ -8,7 +8,6 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../blocs/certificates/startCourseCertificates/start_course_certificate_bloc.dart';
-import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 
 class QuizQuestionsScreen extends StatelessWidget {
@@ -19,6 +18,7 @@ class QuizQuestionsScreen extends StatelessWidget {
   final Map quizMap;
   static int pageNo = 1;
   final Map questionAnswerMap = {};
+  static bool isSaveAndNext = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +33,15 @@ class QuizQuestionsScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(
-          left: leftRightMargin,
-          right: leftRightMargin,
-          top: xxTinierSpacing,
-        ),
+            left: leftRightMargin,
+            right: leftRightMargin,
+            top: xxTinierSpacing),
         child: BlocConsumer<StartCourseCertificateBloc,
             StartCourseCertificateState>(
           listener: (context, state) {
             if (state is QuizQuestionAnswerSaved) {
               showCustomSnackBar(context, StringConstants.kAnswerSaved, "");
+              isSaveAndNext == true ? questionAnswerMap['answer'] = '' : null;
             } else if (state is QuizQuestionAnswerError) {
               showCustomSnackBar(context, StringConstants.kAnswerNotSaved, "");
             }
@@ -70,13 +70,12 @@ class QuizQuestionsScreen extends StatelessWidget {
                   const SizedBox(height: mediumSpacing),
                   Row(
                     children: [
-                      SizedBox(
-                          width: xxSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
-                              onPressed: pageNo.toString() !=
-                                      quizMap["questioncount"]
+                              onPressed: pageNo != 1
                                   ? () {
-                                      pageNo++;
+                                      pageNo--;
+                                      questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -85,20 +84,20 @@ class QuizQuestionsScreen extends StatelessWidget {
                                                   quizMap["userquizid"]));
                                     }
                                   : null,
-                              textValue: StringConstants.kNext)),
+                              textValue: StringConstants.kPREVIOUS)),
                       const SizedBox(width: tinierSpacing),
-                      SizedBox(
-                          width: xSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
                                   ? () {
-                                      pageNo++;
+                                      isSaveAndNext = true;
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(SaveQuizQuestionAnswer(
                                               questionAnswerMap:
                                                   questionAnswerMap));
+                                      pageNo++;
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -113,13 +112,13 @@ class QuizQuestionsScreen extends StatelessWidget {
                   const SizedBox(height: tinierSpacing),
                   Row(
                     children: [
-                      SizedBox(
-                          width: xxSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: pageNo.toString() !=
                                       quizMap["questioncount"]
                                   ? () {
                                       pageNo++;
+                                      questionAnswerMap['answer'] = '';
                                       context
                                           .read<StartCourseCertificateBloc>()
                                           .add(GetQuizQuestions(
@@ -130,10 +129,10 @@ class QuizQuestionsScreen extends StatelessWidget {
                                   : null,
                               textValue: StringConstants.kSkip)),
                       const SizedBox(width: tinierSpacing),
-                      SizedBox(
-                          width: xSizedBoxWidth,
+                      Expanded(
                           child: PrimaryButton(
                               onPressed: () {
+                                isSaveAndNext = false;
                                 context.read<StartCourseCertificateBloc>().add(
                                     SaveQuizQuestionAnswer(
                                         questionAnswerMap: questionAnswerMap));

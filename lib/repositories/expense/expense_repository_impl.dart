@@ -5,9 +5,9 @@ import 'package:toolkit/data/models/expense/expense_item_custom_field_model.dart
 import 'package:toolkit/data/models/expense/expense_submit_for_approval_model.dart';
 import 'package:toolkit/data/models/expense/expense_working_at_number_model.dart';
 import 'package:toolkit/data/models/expense/fetch_expense_details_model.dart';
-
 import 'package:toolkit/data/models/expense/fetch_expense_master_model.dart';
 import 'package:toolkit/data/models/expense/fetch_item_master_model.dart';
+import 'package:toolkit/data/models/expense/reject_expense_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_item_model.dart';
 import 'package:toolkit/data/models/expense/save_expense_model.dart';
 import 'package:toolkit/data/models/expense/update_expense_model.dart';
@@ -76,14 +76,14 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
   @override
   Future<ApproveExpenseModel> approveExpense(Map approveExpenseMap) async {
     final response = await DioClient()
-        .post("${ApiConstants.baseUrl}api/expense/Approve", approveExpenseMap);
+        .post("${ApiConstants.baseUrl}expense/Approve", approveExpenseMap);
     return ApproveExpenseModel.fromJson(response);
   }
 
   @override
   Future<CloseExpenseModel> closeExpense(Map closeExpenseMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}api/expense/CloseReport", closeExpenseMap);
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}expense/CloseReport", closeExpenseMap);
     return CloseExpenseModel.fromJson(response);
   }
 
@@ -124,5 +124,12 @@ class ExpenseRepositoryImpl extends ExpenseRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}expense/GetExpenseItem?itemid=${itemDetailsMap['item_id']}&hashcode=${itemDetailsMap['hash_code']}");
     return FetchExpenseItemDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<ExpenseRejectModel> rejectExpense(Map rejectExpenseMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}expense/RejectReport", rejectExpenseMap);
+    return ExpenseRejectModel.fromJson(response);
   }
 }

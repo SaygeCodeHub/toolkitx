@@ -117,11 +117,11 @@ class Topiclist {
   });
 
   factory Topiclist.fromJson(Map<String, dynamic> json) => Topiclist(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        notescount: json["notescount"],
-        completedcount: json["completedcount"],
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
+        description: json["description"] ?? '',
+        notescount: json["notescount"] ?? '',
+        completedcount: json["completedcount"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

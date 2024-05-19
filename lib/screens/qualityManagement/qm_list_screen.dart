@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/qualityManagement/qm_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../blocs/qualityManagement/qm_states.dart';
@@ -54,6 +56,8 @@ class _QualityManagementListScreenState
         appBar: GenericAppBar(title: DatabaseUtil.getText('QAReporting')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              context.read<ImagePickerBloc>().pickedImagesList.clear();
+              context.read<ImagePickerBloc>().add(PickImageInitial());
               ReportNewQA.isFromEdit = false;
               ReportNewQA.reportAndEditQMMap = {};
               Navigator.pushNamed(context, ReportNewQA.routeName);

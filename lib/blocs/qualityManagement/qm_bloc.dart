@@ -398,8 +398,7 @@ class QualityManagementBloc
           QMMasterDatum.fromJson({"location": DatabaseUtil.getText('Other')}));
       emit(QualityManagementMasterFetched(
           fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
-          clientId: clientId!,
-          imageNumber: imageNumber));
+          clientId: clientId!));
     } catch (e) {
       emit(QualityManagementMasterNotFetched(masterNotFetched: e.toString()));
     }

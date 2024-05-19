@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/expense/widgets/editItemsWidgets/expense_edit_item_list.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
 
@@ -14,7 +15,6 @@ import '../../../../widgets/primary_button.dart';
 import 'expense_date_list_tile.dart';
 import 'expense_edit_form_three.dart';
 import 'expense_edit_form_two.dart';
-import 'expense_item_list_tile.dart';
 import 'expense_working_at_expansion_tile.dart';
 import 'expense_working_at_number_list_tile.dart';
 
@@ -35,10 +35,18 @@ class ExpenseEditItemsScreen extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         child: PrimaryButton(
           onPressed: () {
-            if (editExpenseMap['itemid'] == '3' ||
-                editExpenseMap['itemid'] == '6') {
+            if (editExpenseMap['item_details_model'].itemid == '3' ||
+                ExpenseEditItemsScreen.editExpenseMap['itemid'] == '3' ||
+                editExpenseMap['item_details_model'].itemid == '6' ||
+                ExpenseEditItemsScreen.editExpenseMap['itemid'] == '6') {
               Navigator.pushNamed(context, ExpenseEditFormTwo.routeName,
-                  arguments: editExpenseMap['details_model']);
+                  arguments: [
+                    (editExpenseMap['item_details_model'].itemid !=
+                            ExpenseEditItemsScreen.editExpenseMap['itemid'])
+                        ? ExpenseEditItemsScreen.editExpenseMap['itemid']
+                        : editExpenseMap['item_details_model'].itemid,
+                    expenseItemId
+                  ]);
             } else {
               Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
             }
@@ -67,7 +75,10 @@ class ExpenseEditItemsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const ExpenseDateExpansionTile(),
-                  const ExpenseItemListTile(),
+                  ExpenseEditItemListTile(
+                      itemId: state.fetchExpenseItemDetailsModel.data.itemid,
+                      itemName:
+                          state.fetchExpenseItemDetailsModel.data.itemName),
                   Text(StringConstants.kWorkingAt,
                       style: Theme.of(context)
                           .textTheme

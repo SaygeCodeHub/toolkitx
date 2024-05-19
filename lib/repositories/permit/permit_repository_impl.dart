@@ -1,7 +1,15 @@
+import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
+import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
+import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
+import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
@@ -85,5 +93,69 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}permit/RequestPermit", requestPermitMap);
     return OpenClosePermitModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchPermitBasicDetailsModel> fetchPermitBasicDetails(
+      String permitId, String hashCode, String roleId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getbasicdetails?permitid=$permitId&hashcode=$hashCode&role=$roleId");
+    return FetchPermitBasicDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchDataForOpenPermitModel> fetchDataForOpenPermit(
+      String permitId, String hashCode, String roleId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforopenpermit?permitid=$permitId&hashcode=$hashCode&role=$roleId");
+    return FetchDataForOpenPermitModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveMarkAsPreparedModel> saveMarkAsPrepared(
+      Map saveMarkAsPreparedMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/markasprepared", saveMarkAsPreparedMap);
+    return SaveMarkAsPreparedModel.fromJson(response);
+  }
+
+  @override
+  Future<AcceptPermitRequestModel> acceptPermitRequest(
+      Map acceptPermitRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/accpetpermitrequest",
+        acceptPermitRequestMap);
+    return AcceptPermitRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchClearPermitDetailsModel> fetchClearPermitDetails(
+      Map clearPermitMap) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforclearpermit?permitid=${clearPermitMap['permit_id']}&hashcode=${clearPermitMap['hashcode']}&role=${clearPermitMap['role']}");
+    return FetchClearPermitDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveClearPermitModel> saveClearPermit(Map clearPermitMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}permit/clearpermit", clearPermitMap);
+    return SaveClearPermitModel.fromJson(response);
+  }
+
+  @override
+  Future<SavePermitEditSafetyDocumentModel> saveEditSafetyNoticeDocument(
+      Map editSafetyDocumentMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/updatesddetails", editSafetyDocumentMap);
+    return SavePermitEditSafetyDocumentModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchDataForChangePermitCpModel> fetchDataForChangePermitCP(
+      String permitId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/getdataforchangepermitcp?permitid=$permitId&hashcode=$hashCode");
+    return FetchDataForChangePermitCpModel.fromJson(response);
   }
 }

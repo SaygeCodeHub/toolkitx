@@ -71,12 +71,11 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => AndroidPopUp(
-                titleValue: StringConstants.kDocumentManagement,
-                contentValue: StringConstants.kAreYouSureToCloseDocument,
-                onPrimaryButton: () {
-                  context.read<DocumentsBloc>().add(CloseDocument());
-                },
-              ),
+                  titleValue: StringConstants.kDocumentManagement,
+                  contentValue: StringConstants.kAreYouSureToCloseDocument,
+                  onPrimaryButton: () {
+                    context.read<DocumentsBloc>().add(CloseDocument());
+                  }),
             );
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_rejectdocument')) {

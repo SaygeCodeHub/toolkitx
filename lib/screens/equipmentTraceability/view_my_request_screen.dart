@@ -57,7 +57,8 @@ class ViewMyRequestScreen extends StatelessWidget {
           },
           buildWhen: (previousState, currentState) =>
               (currentState is MyRequestFetching && pageNo == 1) ||
-              (currentState is MyRequestFetched),
+              (currentState is MyRequestFetched) ||
+              currentState is MyRequestNotFetched,
           builder: (context, state) {
             if (state is MyRequestFetching) {
               return const Center(child: CircularProgressIndicator());

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/di/app_module.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -31,8 +32,10 @@ class UploadCertificateBloc
         "hashcode": hashCode,
         "certificateid": event.uploadCertificateMap['certificateid'],
         "workforceid": userid,
-        "startdate": event.uploadCertificateMap['startdate'],
-        "enddate": event.uploadCertificateMap['enddate'],
+        "startdate": event.uploadCertificateMap['startdate'] ??
+            DateFormat('dd.MM.yyyy').format(DateTime.now()),
+        "enddate": event.uploadCertificateMap['enddate'] ??
+            DateFormat('dd.MM.yyyy').format(DateTime.now()),
         "name": event.uploadCertificateMap['name']
       };
       UploadCertificateModel uploadCertificateModel =

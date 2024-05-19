@@ -81,3 +81,80 @@ class RequestPermit extends PermitEvents {
 
   const RequestPermit(this.permitId);
 }
+
+class FetchDataForOpenPermit extends PermitEvents {
+  final String permitId;
+
+  const FetchDataForOpenPermit({required this.permitId});
+}
+
+class FetchPermitBasicDetails extends PermitEvents {
+  final String permitId;
+
+  const FetchPermitBasicDetails({required this.permitId});
+}
+
+class SaveMarkAsPrepared extends PermitEvents {
+  final String permitId;
+  final String controlPerson;
+
+  const SaveMarkAsPrepared(
+      {required this.permitId, required this.controlPerson});
+}
+
+class AcceptPermitRequest extends PermitEvents {
+  final String permitId;
+
+  const AcceptPermitRequest({required this.permitId});
+}
+
+class FetchClearPermit extends PermitEvents {
+  final String permitId;
+
+  FetchClearPermit({required this.permitId});
+}
+
+class SaveClearPermit extends PermitEvents {
+  final Map clearPermitMap;
+
+  SaveClearPermit({required this.clearPermitMap});
+}
+
+class SavePermitEditSafetyDocument extends PermitEvents {
+  final Map editSafetyDocumentMap;
+
+  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap});
+}
+
+class FetchDataForChangePermitCP extends PermitEvents {
+  final String permitId;
+
+  FetchDataForChangePermitCP({required this.permitId});
+}
+
+class SelectTransferTo extends PermitEvents {
+  final String transferType;
+  final String transferValue;
+
+  SelectTransferTo({required this.transferType, required this.transferValue});
+}
+
+class SelectTransferCPWorkForce extends PermitEvents {
+  final int id;
+  final String name;
+
+  SelectTransferCPWorkForce({required this.id, required this.name});
+}
+
+class SelectTransferCPSap extends PermitEvents {
+  final int id;
+  final String name;
+
+  SelectTransferCPSap({required this.id, required this.name});
+}
+
+class SelectTransferValue extends PermitEvents {
+  final String value;
+
+  SelectTransferValue({required this.value});
+}

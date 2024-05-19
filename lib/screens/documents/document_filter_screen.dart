@@ -51,6 +51,7 @@ class DocumentFilterScreen extends StatelessWidget {
             if (state is FetchingDocumentMaster) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is DocumentMasterFetched) {
+              documentFilterMap.clear();
               documentFilterMap.addAll(context.read<DocumentsBloc>().filters);
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -64,6 +65,7 @@ class DocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
+                        value: documentFilterMap["documentName"] ?? '',
                         onTextFieldChanged: (textField) {
                           documentFilterMap["documentName"] = textField;
                         },
@@ -76,6 +78,7 @@ class DocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
+                      value: documentFilterMap["documentId"] ?? '',
                       onTextFieldChanged: (textField) {
                         documentFilterMap["documentId"] = textField;
                       },
@@ -89,10 +92,11 @@ class DocumentFilterScreen extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: tiniestSpacing),
                     TextFieldWidget(
+                      value: documentFilterMap["author"] ?? '',
                       onTextFieldChanged: (textField) {
                         documentFilterMap["author"] = textField;
                       },
-                      hintText: "Search by Document Id",
+                      hintText: "Search by Author",
                     ),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('Status'),

@@ -9,15 +9,16 @@ class LotoDetailsFetching extends LotoDetailsState {}
 class LotoDetailsFetched extends LotoDetailsState {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
   final String clientId;
+  final String decryptedLocation;
   final bool showPopUpMenu;
   final List lotoPopUpMenuList;
 
-  LotoDetailsFetched({
-    required this.fetchLotoDetailsModel,
-    required this.showPopUpMenu,
-    required this.lotoPopUpMenuList,
-    required this.clientId,
-  });
+  LotoDetailsFetched(
+      {required this.fetchLotoDetailsModel,
+      required this.showPopUpMenu,
+      required this.lotoPopUpMenuList,
+      required this.clientId,
+      required this.decryptedLocation});
 }
 
 class LotoDetailsNotFetched extends LotoDetailsState {

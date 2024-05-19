@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
+import 'package:toolkit/screens/permit/permit_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -43,11 +44,11 @@ class OpenPermitScreen extends StatelessWidget {
               }
               if (state is PermitOpened) {
                 ProgressBar.dismiss(context);
-                context
-                    .read<PermitBloc>()
-                    .add(const GetAllPermits(isFromHome: false, page: 1));
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Navigator.pushReplacementNamed(
+                    context, PermitDetailsScreen.routeName,
+                    arguments: permitDetailsModel.data.tab1.id);
               }
               if (state is OpenPermitError) {
                 ProgressBar.dismiss(context);

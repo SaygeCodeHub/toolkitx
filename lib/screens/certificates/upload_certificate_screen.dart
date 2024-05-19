@@ -113,6 +113,7 @@ class UploadCertificateScreen extends StatelessWidget {
                     onPressed: () {
                       uploadCertificateMap['certificateid'] =
                           certificateItemsMap['id'];
+
                       context
                           .read<UploadCertificateBloc>()
                           .add(UploadCertificates(uploadCertificateMap));

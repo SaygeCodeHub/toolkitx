@@ -19,7 +19,6 @@ import 'widgets/qm_bottom_navigation_bar.dart';
 import 'widgets/qm_contractor_list_tile.dart';
 import 'widgets/qm_edit_view_image.dart';
 import 'widgets/qm_report_anonymously_expansion_tile.dart';
-import 'widgets/qm_show_upload_increment_number.dart';
 
 class ReportNewQA extends StatelessWidget {
   static const routeName = 'ReportNewQA';
@@ -46,7 +45,6 @@ class ReportNewQA extends StatelessWidget {
               if (state is FetchingQualityManagementMaster) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is QualityManagementMasterFetched) {
-                int incrementNum = state.imageNumber;
                 return Padding(
                     padding: const EdgeInsets.only(
                         left: leftRightMargin,
@@ -143,8 +141,11 @@ class ReportNewQA extends StatelessWidget {
                                   reportAndEditQMMap: reportAndEditQMMap,
                                   clientId: state.clientId),
                               const SizedBox(height: xxTinySpacing),
-                              QMShowUploadIncrementNumber(
-                                  incrementNum: incrementNum),
+                              Text(StringConstants.kUploadPhoto,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(fontWeight: FontWeight.w600)),
                               const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
                                 editedImageList: reportAndEditQMMap['files']

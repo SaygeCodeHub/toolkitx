@@ -49,11 +49,10 @@ class AssignWorkForceBody extends StatelessWidget {
           } else if (state is WorkForceAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, "Workforce Assigned", '');
+            Navigator.pop(context);
             context
                 .read<WorkOrderTabDetailsBloc>()
                 .add(SearchWorkOrderWorkforce(isWorkforceSearched: false));
-            Navigator.pushReplacementNamed(
-                context, AssignWorkForceScreen.routeName);
           } else if (state is WorkForceNotAssigned) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.workForceNotFetched, '');
@@ -71,7 +70,10 @@ class AssignWorkForceBody extends StatelessWidget {
             return const Expanded(
                 child: Center(child: CircularProgressIndicator()));
           } else if (state is AssignWorkOrderFetched) {
-            if (state.assignWorkForceDatum.isNotEmpty) {
+            if (context
+                .read<WorkOrderTabDetailsBloc>()
+                .assignWorkForceDatum
+                .isNotEmpty) {
               return Expanded(
                   child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
@@ -80,14 +82,26 @@ class AssignWorkForceBody extends StatelessWidget {
                                   .read<WorkOrderTabDetailsBloc>()
                                   .assignWorkForceListReachedMax ==
                               true
-                          ? state.assignWorkForceDatum.length
-                          : state.assignWorkForceDatum.length + 1,
+                          ? context
+                              .read<WorkOrderTabDetailsBloc>()
+                              .assignWorkForceDatum
+                              .length
+                          : context
+                                  .read<WorkOrderTabDetailsBloc>()
+                                  .assignWorkForceDatum
+                                  .length +
+                              1,
                       itemBuilder: (context, index) {
-                        if (index < state.assignWorkForceDatum.length) {
+                        if (index <
+                            context
+                                .read<WorkOrderTabDetailsBloc>()
+                                .assignWorkForceDatum
+                                .length) {
                           return WorkOrderAssignWorkforceCard(
                               index: index,
-                              assignWorkForceDatum:
-                                  state.assignWorkForceDatum[index]);
+                              assignWorkForceDatum: context
+                                  .read<WorkOrderTabDetailsBloc>()
+                                  .assignWorkForceDatum[index]);
                         } else if (!context
                             .read<WorkOrderTabDetailsBloc>()
                             .assignWorkForceListReachedMax) {
@@ -114,7 +128,10 @@ class AssignWorkForceBody extends StatelessWidget {
                         return const SizedBox(height: xxTinierSpacing);
                       }));
             } else if (state.fetchAssignWorkForceModel.status == 204 &&
-                state.assignWorkForceDatum.isEmpty) {
+                context
+                    .read<WorkOrderTabDetailsBloc>()
+                    .assignWorkForceDatum
+                    .isEmpty) {
               return NoRecordsText(
                   text: DatabaseUtil.getText('no_records_found'));
             } else {

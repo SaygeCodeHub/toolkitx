@@ -33,8 +33,10 @@ class ExpenseListBody extends StatelessWidget {
                   child: ListTile(
                     onTap: () {
                       Navigator.pushNamed(
-                          context, ExpenseDetailsScreen.routeName,
-                          arguments: expenseListDatum[index].id);
+                              context, ExpenseDetailsScreen.routeName,
+                              arguments: expenseListDatum[index].id)
+                          .then((_) => context.read<ExpenseBloc>().add(
+                              FetchExpenseList(pageNo: 1, isFromHome: false)));
                     },
                     contentPadding: const EdgeInsets.all(xxTinierSpacing),
                     title: Padding(

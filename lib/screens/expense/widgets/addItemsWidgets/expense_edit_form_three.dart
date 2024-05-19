@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/expense/widgets/editItemsWidgets/expense_edit_item_currency_list_tile.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
@@ -16,8 +17,6 @@ import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
 import '../../../checklist/workforce/widgets/upload_image_section.dart';
 import '../../expense_details_screen.dart';
-import 'expense_add_item_currency_list_tile.dart';
-import 'expense_added_image_count_widget.dart';
 import 'expense_edit_items_screen.dart';
 
 class ExpenseEditFormThree extends StatelessWidget {
@@ -45,10 +44,11 @@ class ExpenseEditFormThree extends StatelessWidget {
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.pop(context);
+            Navigator.pop(context);
+            context.read<ExpenseBloc>().expenseListData.clear();
             Navigator.pushReplacementNamed(
                 context, ExpenseDetailsScreen.routeName,
-                arguments:
-                    ExpenseEditItemsScreen.editExpenseMap['details_model'].id);
+                arguments: state.expenseId);
           } else if (state is ExpenseItemCouldNotSave) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.itemNotSaved, '');
@@ -95,7 +95,7 @@ class ExpenseEditFormThree extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ExpenseAddItemCurrencyListTile(
+              ExpenseEditItemCurrencyListTile(
                   expenseDetailsData:
                       ExpenseEditItemsScreen.editExpenseMap['details_model']),
               Text(DatabaseUtil.getText('Amount'),
@@ -134,8 +134,6 @@ class ExpenseEditFormThree extends StatelessWidget {
                         textField;
                   }),
               const SizedBox(height: xxTinySpacing),
-              const ExpenseAddedImageCountWidget(),
-              const SizedBox(height: xxTinierSpacing),
               UploadImageMenu(
                   isUpload: true,
                   onUploadImageResponse: (List uploadImageList) {
@@ -144,7 +142,7 @@ class ExpenseEditFormThree extends StatelessWidget {
                             .toString()
                             .replaceAll('[', '')
                             .replaceAll(']', '');
-                  }),
+                  })
             ],
           ),
         ),

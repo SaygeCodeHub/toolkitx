@@ -45,6 +45,8 @@ class WorkOrderDocumentFilterScreen extends StatelessWidget {
                     context
                         .read<WorkOrderTabDetailsBloc>()
                         .add(FetchWorkOrderDocuments());
+                    Navigator.pushReplacementNamed(
+                        context, WorkOrderAssignDocumentScreen.routeName);
                   } else if (state is WorkOrderDocumentDidNotFilter) {
                     ProgressBar.dismiss(context);
                   }

@@ -10,7 +10,9 @@ enum PermitCustomFieldsTitleEnum {
   circuitIdentificationWristlets(
       type: StringConstants.kCircuitIdentificationWristlets),
   singleLineDiagram(type: StringConstants.kSingleLineDiagram),
-  pID(type: StringConstants.kPID);
+  pID(type: StringConstants.kPID),
+  accessKeys(type: StringConstants.kAccessKeys),
+  other(type: StringConstants.kOther);
 
   const PermitCustomFieldsTitleEnum({required this.type});
 

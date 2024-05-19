@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
-import '../../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/incident_details_model.dart';
@@ -32,8 +28,6 @@ class IncidentCommonCommentsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -63,41 +57,9 @@ class IncidentCommonCommentsSection extends StatelessWidget {
                 onTextFieldValue(textValue);
               }),
           const SizedBox(height: xxTinierSpacing),
-          BlocBuilder<PickAndUploadImageBloc, PickAndUploadImageStates>(
-              buildWhen: (previousState, currentState) =>
-                  currentState is ImagePickerLoaded,
-              builder: (context, state) {
-                if (state is ImagePickerLoaded) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(StringConstants.kUploadPhoto,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                      Text(
-                          '${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                    ],
-                  );
-                } else {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(StringConstants.kUploadPhoto,
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                      Text('0/6',
-                          style: Theme.of(context).textTheme.small.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w500)),
-                    ],
-                  );
-                }
-              }),
+          Text(StringConstants.kUploadPhoto,
+              style: Theme.of(context).textTheme.small.copyWith(
+                  color: AppColor.black, fontWeight: FontWeight.w500)),
           const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
             isUpload: true,

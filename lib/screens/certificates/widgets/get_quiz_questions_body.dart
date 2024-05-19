@@ -50,7 +50,6 @@ class GetQuizQuestionsBody extends StatelessWidget {
           itemCount: data.optionlist.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            questionAnswerMap['answer'] = data.optionlist[index].id;
             return CustomCard(
               child: RadioListTile(
                   dense: true,
@@ -60,6 +59,7 @@ class GetQuizQuestionsBody extends StatelessWidget {
                   value: data.optionlist[index].id,
                   groupValue: answerId,
                   onChanged: (value) {
+                    questionAnswerMap['answer'] = data.optionlist[index].id;
                     context.read<StartCourseCertificateBloc>().add(
                         SelectedQuizAnswerEvent(
                             answerId: data.optionlist[index].id,

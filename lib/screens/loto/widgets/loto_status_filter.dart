@@ -31,7 +31,7 @@ class LotoStatusFilter extends StatelessWidget {
           if (state is LotoStatusFilterSelected) {
             lotoFilterMap["status"] = state.selectedIndex;
             return CustomChoiceChip(
-                label: LotoStatusEnum.values[i].name,
+                label: LotoStatusEnum.values[i].status,
                 selected: (lotoFilterMap["status"] == null)
                     ? state.selected
                     : state.selectedIndex == id,

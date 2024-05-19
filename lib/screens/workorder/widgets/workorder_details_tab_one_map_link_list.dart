@@ -33,7 +33,6 @@ class WorkOrderDetailsTabOneMapLinkList extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 softWrap: true,
                 maxLines: 2,
-                textScaleFactor: 1,
                 text: TextSpan(
                   text: "${data.maplinks[index].name} : ",
                   style: DefaultTextStyle.of(context).style,
@@ -46,6 +45,7 @@ class WorkOrderDetailsTabOneMapLinkList extends StatelessWidget {
                             .copyWith(color: AppColor.deepBlue)),
                   ],
                 ),
+                textScaler: const TextScaler.linear(1),
               ));
         });
   }

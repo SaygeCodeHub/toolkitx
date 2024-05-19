@@ -345,10 +345,14 @@ class EquipmentTraceabilityBloc
       FetchMyRequestModel fetchMyRequestModel = await _equipmentTraceabilityRepo
           .fetchMyRequest(event.pageNo, userId, hashCode);
       equipmentWorkOrderList = fetchMyRequestModel.data.workorders!;
-      if (fetchMyRequestModel.status == 200) {
-        emit(MyRequestFetched(
-            fetchMyRequestModel: fetchMyRequestModel,
-            popUpMenuItems: popUpMenuItems));
+      if (fetchMyRequestModel.data.workorders!.isNotEmpty) {
+        if (fetchMyRequestModel.status == 200) {
+          emit(MyRequestFetched(
+              fetchMyRequestModel: fetchMyRequestModel,
+              popUpMenuItems: popUpMenuItems));
+        } else {
+          emit(MyRequestNotFetched(errorMessage: fetchMyRequestModel.message));
+        }
       } else {
         emit(MyRequestNotFetched(errorMessage: fetchMyRequestModel.message));
       }

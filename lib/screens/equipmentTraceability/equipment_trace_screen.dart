@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
@@ -12,10 +11,12 @@ import 'package:toolkit/screens/equipmentTraceability/view_my_request_screen.dar
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/equipment_util.dart';
 import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/equipmentTraceability/equipment_traceability_bloc.dart';
 import '../../widgets/custom_qr_scanner.dart';
+import '../../widgets/progress_bar.dart';
 import 'transfer_equipment_screen.dart';
 
 class EquipmentTraceScreen extends StatelessWidget {
@@ -26,51 +27,46 @@ class EquipmentTraceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const GenericAppBar(title: StringConstants.kTrace),
-      body: Padding(
-        padding: const EdgeInsets.only(
-            left: leftRightMargin,
-            right: leftRightMargin,
-            top: xxTinierSpacing),
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 16 / 9,
-              crossAxisCount: 2,
-              crossAxisSpacing: leftRightMargin,
-              mainAxisSpacing: leftRightMargin),
-          itemCount: equipment.length,
-          itemBuilder: (context, int index) {
-            return InkWell(
-              onTap: () {
-                SearchEquipmentListScreen.isTransferScreen = false;
-                _navigateToEquipmentModule(
-                    equipment[index].equipmentModuleName, context);
-              },
-              child: CustomCard(
-                color: AppColor.blueGrey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(equipment[index].icon, size: kEquipmentModuleIconSize),
-                    const SizedBox(
-                      height: xxTinierSpacing,
-                    ),
-                    Text(
-                      equipment[index].equipmentModuleName,
-                      style: Theme.of(context).textTheme.xSmall.copyWith(
-                            color: AppColor.black,
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
+        appBar: const GenericAppBar(title: StringConstants.kTrace),
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing),
+            child: GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 16 / 9,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: leftRightMargin,
+                    mainAxisSpacing: leftRightMargin),
+                itemCount: equipment.length,
+                itemBuilder: (context, int index) {
+                  return InkWell(
+                      onTap: () {
+                        SearchEquipmentListScreen.isTransferScreen = false;
+                        _navigateToEquipmentModule(
+                            equipment[index].equipmentModuleName, context);
+                      },
+                      child: CustomCard(
+                          color: AppColor.blueGrey,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(equipment[index].icon,
+                                    size: kEquipmentModuleIconSize),
+                                const SizedBox(
+                                  height: xxTinierSpacing,
+                                ),
+                                Text(equipment[index].equipmentModuleName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(
+                                            color: AppColor.black,
+                                            fontWeight: FontWeight.w700))
+                              ])));
+                })));
   }
 
   void _navigateToEquipmentModule(
@@ -78,21 +74,33 @@ class EquipmentTraceScreen extends StatelessWidget {
     String code = '';
     Future<void> scanCode() async {
       await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                CustomQRCodeScanner(onCaptured: (String qrCode) {
-                  code = qrCode;
-                }, onPressed: () {
-                  context
-                      .read<EquipmentTraceabilityBloc>()
-                      .add(FetchEquipmentByCode(code: code));
-                  Timer(const Duration(seconds: 1), () {
-                    Navigator.pushReplacementNamed(
-                        context, SearchEquipmentDetailsScreen.routeName);
-                  });
-                })),
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => BlocListener<EquipmentTraceabilityBloc,
+                      EquipmentTraceabilityState>(
+                  listener: (context, state) {
+                    if (state is EquipmentByCodeFetching) {
+                      ProgressBar.show(context);
+                    }
+                    if (state is EquipmentByCodeFetched) {
+                      ProgressBar.dismiss(context);
+                      Navigator.pushReplacementNamed(
+                          context, SearchEquipmentDetailsScreen.routeName);
+                    }
+                    if (state is EquipmentByCodeNotFetched) {
+                      ProgressBar.dismiss(context);
+                      Navigator.pop(context);
+                      showCustomSnackBar(
+                          context, StringConstants.kInvalidCode, '');
+                    }
+                  },
+                  child: CustomQRCodeScanner(onCaptured: (String qrCode) {
+                    code = qrCode;
+                  }, onPressed: () {
+                    context
+                        .read<EquipmentTraceabilityBloc>()
+                        .add(FetchEquipmentByCode(code: code));
+                  }))));
     }
 
     switch (equipmentModuleName) {

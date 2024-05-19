@@ -21,6 +21,7 @@ class WorkOrderAddPartsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assignPartMap.clear();
     return CustomCard(
         child: Padding(
             padding: const EdgeInsets.only(
@@ -53,7 +54,6 @@ class WorkOrderAddPartsCard extends StatelessWidget {
                     if (assignPartMap['quan'] != null) {
                       context.read<WorkOrderTabDetailsBloc>().add(
                           AssignWorkOrderParts(assignPartMap: assignPartMap));
-                      assignPartMap['quan'] = null;
                     } else {
                       showDialog(
                           context: context,

@@ -15,3 +15,9 @@ class SelectCalendarDate extends CalendarEvents {
   SelectCalendarDate(
       {required this.fetchCalendarEventsModel, required this.selectedDate});
 }
+
+class UpdateSelectedDate extends CalendarEvents {
+  final DateTime selectedDate;
+
+  UpdateSelectedDate({required this.selectedDate});
+}

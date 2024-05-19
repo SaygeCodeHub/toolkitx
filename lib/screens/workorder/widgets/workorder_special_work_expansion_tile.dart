@@ -12,28 +12,36 @@ class WorkOrderSpecialWorkExpansionTile extends StatelessWidget {
   final List data;
   final Map workOrderDetailsMap;
 
-  const WorkOrderSpecialWorkExpansionTile(
+  WorkOrderSpecialWorkExpansionTile(
       {Key? key, required this.data, required this.workOrderDetailsMap})
       : super(key: key);
+  final List selectedIdList = [];
+  final List selectedNameList = [];
+
+  void _checkboxChange(isSelected, workOrderId, workOrderName) {
+    if (isSelected) {
+      selectedIdList.add(workOrderId);
+      selectedNameList.add(workOrderName);
+    } else {
+      selectedIdList.remove(workOrderId);
+      selectedNameList.remove(workOrderName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    List specialIds = [];
-    List specialName = [];
-    specialIds = workOrderDetailsMap['specialwork'].toString().split(',');
-    specialName = workOrderDetailsMap['specialworknames'].toString().split(',');
-    context.read<WorkOrderTabDetailsBloc>().add(SelectSpecialWorkOptions(
-        specialWorkName: '',
-        specialWorkIdList: specialIds,
-        specialWorkId: '',
-        specialWorkNameList: specialName));
+    bool isChecked = true;
+    context
+        .read<WorkOrderTabDetailsBloc>()
+        .add(SelectSpecialWorkOptions(isChecked: isChecked));
     return BlocBuilder<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
         buildWhen: (previousState, currentState) =>
             currentState is SpecialWorkOptionsSelected,
         builder: (context, state) {
           if (state is SpecialWorkOptionsSelected) {
-            workOrderDetailsMap['specialwork'] = state.specialWorkIdList
+            workOrderDetailsMap['specialwork'] = selectedIdList
                 .toString()
+                .replaceAll(' ', '')
                 .replaceAll("[", "")
                 .replaceAll("]", "");
             return Theme(
@@ -42,9 +50,9 @@ class WorkOrderSpecialWorkExpansionTile extends StatelessWidget {
                 child: ExpansionTile(
                     maintainState: true,
                     title: Text(
-                        (specialName.isEmpty)
+                        (selectedIdList.isEmpty)
                             ? StringConstants.kSelect
-                            : specialName
+                            : selectedNameList
                                 .toString()
                                 .replaceAll('[', '')
                                 .replaceAll(']', ''),
@@ -59,19 +67,17 @@ class WorkOrderSpecialWorkExpansionTile extends StatelessWidget {
                                 contentPadding: EdgeInsets.zero,
                                 checkColor: AppColor.white,
                                 activeColor: AppColor.deepBlue,
-                                value: specialIds
-                                    .contains(data[9][index].id.toString()),
+                                value:
+                                    selectedIdList.contains(data[9][index].id),
                                 title: Text(data[9][index].name),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
                                 onChanged: (isChecked) {
+                                  _checkboxChange(isChecked, data[9][index].id,
+                                      data[9][index].name);
                                   context.read<WorkOrderTabDetailsBloc>().add(
                                       SelectSpecialWorkOptions(
-                                          specialWorkName: data[9][index].name,
-                                          specialWorkIdList: specialName,
-                                          specialWorkId:
-                                              data[9][index].id.toString(),
-                                          specialWorkNameList: specialIds));
+                                          isChecked: isChecked!));
                                 });
                           })
                     ]));

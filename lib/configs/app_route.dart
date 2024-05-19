@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
+import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
+import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
+import 'package:toolkit/screens/permit/clear_permit_screen.dart';
+import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
+import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
+import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
+import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
+import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
+import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
+import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
-import '../data/models/expense/fetch_expense_details_model.dart';
 import '../data/models/incident/fetch_incidents_list_model.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -29,6 +40,7 @@ import '../screens/assets/widgets/assets_location_filter_list.dart';
 import '../screens/assets/assets_manage_downtime_screen.dart';
 import '../screens/assets/widgets/assets_report_failure_location_list.dart';
 import '../screens/calendar/calendar_screen.dart';
+import '../screens/certificates/edit_certifcate_feedback_screen.dart';
 import '../screens/certificates/get_certificate_details_screen.dart';
 import '../screens/certificates/get_quiz_questions_screen.dart';
 import '../screens/certificates/get_topics_certificate_screen.dart';
@@ -37,6 +49,7 @@ import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/get_workforce_quiz_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
+
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
 import '../screens/checklist/workforce/workforce_questions_list_screen.dart';
@@ -135,6 +148,10 @@ import '../screens/safetyNotice/safety_notice_history_screen.dart';
 import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
+import '../screens/tickets/tickets_filter_screen.dart';
+import '../screens/tickets/add_ticket_comment_screen.dart';
+import '../screens/tickets/widgets/ticket_application_filter_list.dart';
+import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -142,12 +159,13 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/workorder_add_parts_screen.dart';
-import '../screens/workorder/start_workorder_screen.dart';
+import '../screens/workorder/start_and_complete_workorder_screen.dart';
 import '../screens/workorder/workorder_add_comments_screen.dart';
 import '../screens/workorder/workorder_assign_document_screen.dart';
 import '../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../screens/workorder/workorder_document_filter_screen.dart';
+import '../screens/workorder/workorder_edit_items_screen.dart';
 import '../screens/workorder/workorder_edit_workforce_screen.dart';
 import '../screens/workorder/workorder_form_screen_four.dart';
 import '../screens/workorder/workorder_form_one_screen.dart';
@@ -313,7 +331,7 @@ class AppRoutes {
       case QualityManagementRolesScreen.routeName:
         return _createRoute(const QualityManagementRolesScreen());
       case CalendarScreen.routeName:
-        return _createRoute(CalendarScreen());
+        return _createRoute(const CalendarScreen());
       case QualityManagementAddCommentsScreen.routeName:
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:
@@ -359,13 +377,19 @@ class AppRoutes {
         return _createRoute(GetTopicCertificateScreen(
           courseId: settings.arguments.toString(),
         ));
+      case GetNotesCertificateScreen.routeName:
+        return _createRoute(GetNotesCertificateScreen(
+          getNotesMap: settings.arguments as Map,
+        ));
       case FeedbackCertificateScreen.routeName:
         return _createRoute(FeedbackCertificateScreen(
             getdetailsMap: settings.arguments as Map));
       case WorkOrderAddMisCostScreen.routeName:
         return _createRoute(const WorkOrderAddMisCostScreen());
-      case StartWorkOrderScreen.routeName:
-        return _createRoute(const StartWorkOrderScreen());
+      case StartAndCompleteWorkOrderScreen.routeName:
+        return _createRoute(StartAndCompleteWorkOrderScreen(
+          isFromStart: settings.arguments as bool,
+        ));
       case GetWorkforceScreen.routeName:
         return _createRoute(
             GetWorkforceScreen(workforceQuizMap: settings.arguments as Map));
@@ -509,8 +533,8 @@ class AppRoutes {
         return _createRoute(ExpenseEditItemsScreen(
             expenseItemId: settings.arguments.toString()));
       case ExpenseEditFormTwo.routeName:
-        return _createRoute(ExpenseEditFormTwo(
-            expenseDetailsData: settings.arguments as ExpenseDetailsData));
+        return _createRoute(
+            ExpenseEditFormTwo(arguments: settings.arguments as List));
       case ExpenseEditFormThree.routeName:
         return _createRoute(const ExpenseEditFormThree());
       case EquipmentSaveImages.routeName:
@@ -535,6 +559,51 @@ class AppRoutes {
         return _createRoute(const AddDocumentCommentsScreen());
       case OpenDocumentForReviewScreen.routeName:
         return _createRoute(const OpenDocumentForReviewScreen());
+      case ExpenseRejectScreen.routeName:
+        return _createRoute(const ExpenseRejectScreen());
+      case TicketListScreen.routeName:
+        return _createRoute(
+            TicketListScreen(isFromHome: settings.arguments as bool));
+      case TicketsFilterScreen.routeName:
+        return _createRoute(const TicketsFilterScreen());
+      case TicketApplicationFilterList.routeName:
+        return _createRoute(TicketApplicationFilterList(
+            selectApplicationName: settings.arguments.toString()));
+      case TicketDetailsScreen.routeName:
+        return _createRoute(
+            TicketDetailsScreen(ticketId: settings.arguments.toString()));
+      case AddTicketScreen.routeName:
+        return _createRoute(const AddTicketScreen());
+      case AddTicketCommentScreen.routeName:
+        return _createRoute(const AddTicketCommentScreen());
+      case AddTicketDocumentScreen.routeName:
+        return _createRoute(const AddTicketDocumentScreen());
+      case TicketEDTHoursScreen.routeName:
+        return _createRoute(const TicketEDTHoursScreen());
+      case TicketCompletionDateScreen.routeName:
+        return _createRoute(const TicketCompletionDateScreen());
+      case WorkOrderEditItemsScreen.routeName:
+        return _createRoute(WorkOrderEditItemsScreen(
+          workOrderItemMap: settings.arguments as Map,
+        ));
+      case EditCertificateFeedbackScreen.routeName:
+        return _createRoute(EditCertificateFeedbackScreen(
+            getDetailsMap: settings.arguments as Map));
+      case PreparePermitScreen.routeName:
+        return _createRoute(
+            PreparePermitScreen(permitId: settings.arguments.toString()));
+      case AcceptPermitRequestScreen.routeName:
+        return _createRoute(
+            AcceptPermitRequestScreen(permitId: settings.arguments.toString()));
+      case ClearPermitScreen.routeName:
+        return _createRoute(
+            ClearPermitScreen(permitId: settings.arguments.toString()));
+      case PermitEditSafetyDocumentScreen.routeName:
+        return _createRoute(PermitEditSafetyDocumentScreen(
+            permitId: settings.arguments.toString()));
+      case PermitTransferComponentScreen.routeName:
+        return _createRoute(PermitTransferComponentScreen(
+            permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

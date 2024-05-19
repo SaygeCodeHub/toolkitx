@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -10,6 +11,7 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../home/home_screen.dart';
+import '../location/current_location_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -39,8 +41,8 @@ class _RootScreenState extends State<RootScreen> {
 
   static const List _widgetOptions = [
     HomeScreen(),
-    Text('Index 1: Location'),
-    Text('Index 2: Notification'),
+    CurrentLocationScreen(),
+    NotificationScreen(),
     Text('Index 3: Chat'),
     ProfileScreen()
   ];

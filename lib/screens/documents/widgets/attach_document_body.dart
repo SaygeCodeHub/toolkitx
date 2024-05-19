@@ -51,7 +51,7 @@ class AttachDocumentBody extends StatelessWidget {
             const SizedBox(height: xxTinySpacing),
             TextFieldWidget(
                 readOnly: true,
-                value: DocumentsFilesMenu.documentFileMap['version'],
+                value: DocumentsFilesMenu.documentFileMap['version'] ?? '',
                 onTextFieldChanged: (textField) {})
           ])),
       const SizedBox(height: xxTinySpacing),

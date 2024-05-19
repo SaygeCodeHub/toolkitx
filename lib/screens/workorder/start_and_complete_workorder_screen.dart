@@ -10,17 +10,21 @@ import '../incident/widgets/date_picker.dart';
 import '../incident/widgets/time_picker.dart';
 import 'widgets/start_workorder_button.dart';
 
-class StartWorkOrderScreen extends StatelessWidget {
-  static const routeName = 'StartWorkOrderScreen';
+class StartAndCompleteWorkOrderScreen extends StatelessWidget {
+  static const routeName = 'StartAndCompleteWorkOrderScreen';
 
-  const StartWorkOrderScreen({Key? key}) : super(key: key);
-  static Map startWorkOrderMap = {};
+  const StartAndCompleteWorkOrderScreen({Key? key, required this.isFromStart})
+      : super(key: key);
+  static Map startAndCompleteWorkOrderMap = {};
+  final bool isFromStart;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
-        bottomNavigationBar: const StartWorkOrderButton(),
+        bottomNavigationBar: StartWorkOrderButton(
+          isFromStart: isFromStart,
+        ),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -40,7 +44,7 @@ class StartWorkOrderScreen extends StatelessWidget {
                       DatePickerTextField(
                         hintText: StringConstants.kSelectDate,
                         onDateChanged: (String date) {
-                          startWorkOrderMap['date'] = date;
+                          startAndCompleteWorkOrderMap['date'] = date;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
@@ -53,7 +57,7 @@ class StartWorkOrderScreen extends StatelessWidget {
                       TimePickerTextField(
                         hintText: StringConstants.kSelectTime,
                         onTimeChanged: (String time) {
-                          startWorkOrderMap['time'] = time;
+                          startAndCompleteWorkOrderMap['time'] = time;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
@@ -69,7 +73,8 @@ class StartWorkOrderScreen extends StatelessWidget {
                           maxLines: 2,
                           textInputType: TextInputType.text,
                           onTextFieldChanged: (String textField) {
-                            startWorkOrderMap['comments'] = textField;
+                            startAndCompleteWorkOrderMap['comments'] =
+                                textField;
                           }),
                     ]))));
   }

@@ -459,14 +459,16 @@ class Downtime {
 
 class Item {
   final String id;
+  final String itemid;
   final String item;
   final String type;
   final String code;
-  final int plannedquan;
-  final int? actualquan;
+  final dynamic plannedquan;
+  final dynamic actualquan;
 
   Item({
     required this.id,
+    required this.itemid,
     required this.item,
     required this.type,
     required this.code,
@@ -476,6 +478,7 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
         id: json["id"] ?? '',
+        itemid: json["itemid"] ?? '',
         item: json["item"] ?? '',
         type: json["type"] ?? '',
         code: json["code"] ?? '',
@@ -485,6 +488,7 @@ class Item {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "itemid": itemid,
         "item": item,
         "type": type,
         "code": code,
@@ -544,15 +548,17 @@ class Maplink {
 class Workforce {
   final String id;
   final String workforceid;
+  final String workforceid2;
   final String name;
   final String jobTitle;
   final String certificatecode;
-  final int plannedhrs;
+  final dynamic plannedhrs;
   final dynamic actualhrs;
 
   Workforce({
     required this.id,
     required this.workforceid,
+    required this.workforceid2,
     required this.name,
     required this.jobTitle,
     required this.certificatecode,
@@ -563,16 +569,18 @@ class Workforce {
   factory Workforce.fromJson(Map<String, dynamic> json) => Workforce(
         id: json["id"] ?? '',
         workforceid: json["workforceid"] ?? '',
+        workforceid2: json["workforceid2"] ?? '',
         name: json["name"] ?? '',
         jobTitle: json["job_title"] ?? '',
         certificatecode: json["certificatecode"] ?? '',
-        plannedhrs: json["plannedhrs"],
+        plannedhrs: json["plannedhrs"] ?? '',
         actualhrs: json["actualhrs"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "workforceid": workforceid,
+        "workforceid2": workforceid2,
         "name": name,
         "job_title": jobTitle,
         "certificatecode": certificatecode,

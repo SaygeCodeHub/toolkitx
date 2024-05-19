@@ -50,7 +50,6 @@ class LotoDetailsAssetDocuments extends StatelessWidget {
                         textDirection: TextDirection.rtl,
                         softWrap: true,
                         maxLines: 2,
-                        textScaleFactor: 1,
                         text: TextSpan(
                             text: "${data.assetdocs[index].name} : ",
                             style: DefaultTextStyle.of(context).style,
@@ -63,7 +62,8 @@ class LotoDetailsAssetDocuments extends StatelessWidget {
                                       .copyWith(
                                         color: AppColor.deepBlue,
                                       ))
-                            ])));
+                            ]),
+                        textScaler: const TextScaler.linear(1)));
               }),
           const SizedBox(height: xxxSmallestSpacing),
         ],

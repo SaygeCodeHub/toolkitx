@@ -34,7 +34,7 @@ class ExpenseAddItemCustomFieldUtil {
                         maxLines: 1,
                         maxLength: 250,
                         textInputAction: TextInputAction.done,
-                        value: '',
+                        value: data[index].optiontext,
                         onTextFieldChanged: (String textValue) {
                           expenseCustomFieldList[index]['questionid'] =
                               data[index].id;
@@ -44,6 +44,10 @@ class ExpenseAddItemCustomFieldUtil {
                   ],
                 );
               case 3:
+                CustomQuestionsRadioTile.selectedQuestionId =
+                    data[index].optiontextid;
+                CustomQuestionsRadioTile.selectedQuestionAnswer =
+                    data[index].optiontext;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -54,13 +58,12 @@ class ExpenseAddItemCustomFieldUtil {
                             .copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: xxTinierSpacing),
                     CustomQuestionsRadioTile(
-                      queOption: data[index].queoptions,
-                      expenseCustomFieldCallBack: (String answers) {
-                        expenseCustomFieldList[index]['questionid'] =
-                            data[index].id;
-                        expenseCustomFieldList[index]['answer'] = answers;
-                      },
-                    )
+                        queOption: data[index].queoptions,
+                        expenseCustomFieldCallBack: (String answers) {
+                          expenseCustomFieldList[index]['questionid'] =
+                              data[index].id;
+                          expenseCustomFieldList[index]['answer'] = answers;
+                        })
                   ],
                 );
               default:
@@ -74,6 +77,8 @@ class ExpenseAddItemCustomFieldUtil {
 class CustomQuestionsRadioTile extends StatefulWidget {
   final ExpenseCustomFieldCallBack expenseCustomFieldCallBack;
   final List<QueOption> queOption;
+  static String selectedQuestionId = '';
+  static String selectedQuestionAnswer = '';
 
   const CustomQuestionsRadioTile(
       {super.key,
@@ -86,8 +91,11 @@ class CustomQuestionsRadioTile extends StatefulWidget {
 }
 
 class _CustomQuestionsRadioTileState extends State<CustomQuestionsRadioTile> {
-  String questionId = '';
-  String questionAnswer = StringConstants.kSelect;
+  String questionId = CustomQuestionsRadioTile.selectedQuestionId;
+  String questionAnswer =
+      (CustomQuestionsRadioTile.selectedQuestionAnswer.isNotEmpty)
+          ? CustomQuestionsRadioTile.selectedQuestionAnswer
+          : StringConstants.kSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +124,7 @@ class _CustomQuestionsRadioTileState extends State<CustomQuestionsRadioTile> {
                             widget.queOption[itemIndex].queoptionid.toString();
                         questionAnswer =
                             widget.queOption[itemIndex].queoptiontext;
-                        widget.expenseCustomFieldCallBack(questionAnswer);
+                        widget.expenseCustomFieldCallBack(questionId);
                       });
                     });
               })

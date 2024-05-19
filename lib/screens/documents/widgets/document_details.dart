@@ -23,14 +23,7 @@ class DocumentDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.medium.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: xxTinierSpacing),
-          Text(documentDetailsModel.data.id,
-              style: Theme.of(context).textTheme.small),
-          const SizedBox(height: tinySpacing),
-          Text(DatabaseUtil.getText('Status'),
-              style: Theme.of(context).textTheme.medium.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: xxTinierSpacing),
-          Text(documentDetailsModel.data.status,
+          Text(documentDetailsModel.data.docno,
               style: Theme.of(context).textTheme.small),
           const SizedBox(height: tinySpacing),
           Text(DatabaseUtil.getText('Author'),

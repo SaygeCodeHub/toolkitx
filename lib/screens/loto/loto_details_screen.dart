@@ -40,6 +40,7 @@ class LotoDetailsScreen extends StatelessWidget {
                     return LotoPopupMenuButton(
                       popUpMenuItems: state.lotoPopUpMenuList,
                       fetchLotoDetailsModel: state.fetchLotoDetailsModel,
+                      decryptedLocation: state.decryptedLocation,
                     );
                   } else {
                     return const SizedBox.shrink();

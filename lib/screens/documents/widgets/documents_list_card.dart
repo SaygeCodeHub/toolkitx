@@ -9,7 +9,6 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_list_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../documents_details_screen.dart';
-import '../documents_list_screen.dart';
 
 class DocumentsListCard extends StatelessWidget {
   final DocumentsListDatum documentsListData;
@@ -23,9 +22,12 @@ class DocumentsListCard extends StatelessWidget {
             onTap: () {
               context.read<DocumentsBloc>().documentId = documentsListData.id;
               Navigator.pushNamed(context, DocumentsDetailsScreen.routeName)
-                  .then((_) => context.read<DocumentsBloc>().add(
-                      (GetDocumentsList(
-                          page: DocumentsListScreen.page, isFromHome: false))));
+                  .then((_) {
+                context.read<DocumentsBloc>().documentsListDatum.clear();
+                context
+                    .read<DocumentsBloc>()
+                    .add((GetDocumentsList(page: 1, isFromHome: false)));
+              });
             },
             contentPadding: const EdgeInsets.all(xxTinierSpacing),
             title: Padding(

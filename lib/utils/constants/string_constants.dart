@@ -44,6 +44,8 @@ abstract class StringConstants {
       'Do you want to reissue this notice?'; //
   static const String kSelectCompany = 'Select Company'; //
   static const String kNext = 'NEXT';
+  static const String kPREVIOUS = 'PREVIOUS';
+  static const String kFINISH = 'FINISH';
   static const String kLogin = 'LOGIN';
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
@@ -71,6 +73,7 @@ abstract class StringConstants {
   static const String kNotAccepted = 'Not Accepted';
   static const String kOverdue = 'Overdue';
   static const String kSubmitted = 'Submitted';
+  static const String kApproved = 'Approved';
   static const String kUploadPhoto = 'Upload Photo';
   static const String kAddCommentImage = 'Add Comment/Image';
   static const String kHint = 'Hint';
@@ -134,8 +137,8 @@ abstract class StringConstants {
   static const String kWorkingAt = 'Working at'; //
   static const String kSelectItem = 'Select Item'; //
   static const String kSelectWorkingAtNumber = 'Select Working at Number'; //
-  static const String kExpenseAddItemAmountAndCurrencyValidation =
-      'Amount and Currency are compulsory.'; //
+  static const String kExpenseAddItemValidation =
+      'All fields are mandatory.'; //
   static const String kExpenseAddItemDateAndItemValidation =
       'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
@@ -207,6 +210,7 @@ abstract class StringConstants {
   static const String kDateRange = 'Date Range';
   static const String kName = 'Name';
   static const String kSelectDate = 'Select Date';
+  static const String kPleaseSelectDate = 'Please Select Date';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
   static const String kSelectStatus = 'Select Status';
@@ -218,6 +222,7 @@ abstract class StringConstants {
   static const String kDateOfIncident = 'Date of incident';
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
+  static const String kPleaseSelectTime = 'Please Select Time';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -239,8 +244,11 @@ abstract class StringConstants {
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
+  static const String kPermitFirstQuestion = 'First'; //
+  static const String kPermitSecondQuestion = 'Second'; //
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
+  static const String kNoDataFound = 'No data found!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kSafetyNoticeValidation = 'Please enter notice!'; //
   static const String kSafetyNoticeValidityValidation =
@@ -269,15 +277,66 @@ abstract class StringConstants {
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
   static const String kGeneratePdf = 'Generate PDF';
-  static const String kClosePermit = 'Close Permit';
-  static const String kOpenPermit = 'Open Permit';
+  static const String kClosePermit = 'Cancel Permit';
+  static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
-  static const String kPermitNo = 'Permit No';
-  static const String kKeySafeNo = 'Key Safe No';
-  static const String kKeySafeKeyNo = 'Key Safe Key No';
-  static const String kEarthingScheduleNo = 'Earthing Schedule No';
-  static const String kSelectedPersonReport = 'Selected Person Report';
-  static const String kPortableDrainEarth = 'Portable Drain Earth';
+  static const String kPreparePermit = 'Prepare Permit';
+  static const String kTransferTo = 'Transfer To';
+  static const String kCP = 'CP';
+  static const String kEditSafetyDocument = 'Edit Safety Document';
+  static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kTransferComponentPerson = 'Transfer Component Person';
+  static const String kClearPermitRequest = 'Clear Permit'; //
+  static const String kAllGearPermit =
+      'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
+  static const String kClearPermit = 'Clear Permit'; //
+  static const String kPermitIdentification = '1. IDENTIFICATION'; //
+  static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
+  static const String kPermitEquipmentIdentification =
+      '1.(ii). Equipment Identification'; //
+  static const String kPermitCircuitNumber =
+      '[String/Circuit Number, WTG number and Plant and/or Apparatus to be worked on]'; //
+  static const String kAcceptPermit = 'Accept Permit'; //
+  static const String kPermitWorkDescription = '1.(iii). Work to be done'; //
+  static const String kPermitPrecautions =
+      '1. PRECAUTIONS TAKEN TO ACHIEVE SAFETYFROM THIS SYATEM'; //
+  static const String kPermitNo = 'Permit No'; //
+  static const String kPermitIsolation = '2.(i). Points of isolation'; //
+  static const String kPermitIsolationPanel15 = '3.(i). Points of isolation'; //
+  static const String kPermitEarthingDevice =
+      '2.(ii). Primary Earthing Device'; //
+  static const String kPermitEarthingDevicePanel15 =
+      '3.(ii). Primary Earthing Device'; //
+  static const String kPermitAction =
+      '2.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitActionPanel15 =
+      '3.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitPrecautionsTaken =
+      '2.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kPermitPrecautionsTakenPanel15 =
+      '3.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kKeySafeNo = 'Key Safe No'; //
+  static const String kPermitPrimaryEarthing =
+      '2.(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryEarthingPanel15 =
+      '3.(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryProcedure =
+      '(v). Primary earthing device(s) which may be varied (procedure required)'; //
+  static const String kKeySafeKeyNo = 'Key Safe Key No'; //
+  static const String kPermitLimitOfWork = '4.(i) Limit of Work'; //
+  static const String kPermitLimitOfWorkArea = '4.(ii) Limit of Work area'; //
+  static const String kPermitHazards =
+      '4.(iii) Further precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kPermitSelectLocation = 'Select location'; //
+  static const String kPanel12 = 'panel_12'; //
+  static const String kPanel15 = 'panel_15'; //
+  static const String kPanel16 = 'panel_16'; //
+  static const String kEarthingScheduleNo = 'Earthing Schedule No'; //
+  static const String kSelectedPersonReport = 'Selected Person Report'; //
+  static const String kPortableDrainEarth = 'Portable Drain Earth'; //
+  static const String kAccessKeys = 'Access Keys'; //
+  static const String kAllGearsValidation =
+      'All gear, tools & loose materials have...cannot be empty'; //
   static const String kCircuitIdentificationFlag =
       'Circuit Identification Flag';
   static const String kCircuitIdentificationWristlets =
@@ -285,8 +344,13 @@ abstract class StringConstants {
   static const String kSingleLineDiagram = 'Single Line Diagram';
   static const String kPID = 'P&ID';
   static const String kControlPerson = 'Control Person(s)';
+  static const String kPleaseFillControlPerson =
+      'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
-  static const String kOPENPERMIT = 'OPEN PERMIT';
+  static const String kISSUEPERMIT = 'ISSUE PERMIT';
+  static const String kCANCELPERMIT = 'CANCEL PERMIT'; //
+  static const String kAllFieldsMandatory = 'All fields are mandatory!'; //
+  static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
@@ -371,6 +435,8 @@ abstract class StringConstants {
   static const String kUnauthorizedError = 'oops we got unknown error';
   static const String kYouHaveCoursesToComplete =
       'You have 1 courses to complete this certificate, keep it up!';
+  static const String kPPTWillBriefAbout =
+      'The PPT will brief about process management tool';
   static const String kNoFiles = 'No Files found!';
   static const String kAssetName = "Asset Name";
   static const String kIsDraft = "[Draft]";
@@ -515,4 +581,25 @@ abstract class StringConstants {
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kExpenseReportRejected = "Expense Report Rejected";
+  static const String kExpenseReportComments = 'Please add comment first';
+  static const String kYouFailed = "You've Failed";
+  static const String kYouPassed = "You've Passed";
+  static const String kInvalidCode = "Invalid Code";
+  static const String kCannotUploadImage =
+      "There is an issue while uploading the image. Please try again!";
+  static const String kCannotPickImage = "Can't upload more that 6 images";
+  static const String kPleaseScanRemoveLotoQR =
+      "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kPleaseScanStartLotoQR =
+      "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kPleaseSelectAtle =
+      "To open the Start LOTO page, Please scan the ToolKitx QR code located at ";
+  static const String kOpenPPT = 'Open PPT';
+  static const String kpriority = 'priority';
+  static const String kdocuments = 'documents';
+  static const String kcomments = 'comments';
+  static const String kSelectApplication = 'Select Application';
+  static const String kValid = 'Valid';
+  static const String kAllAnswersRequired = "All answers are required";
 }
