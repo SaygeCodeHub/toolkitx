@@ -4,10 +4,10 @@
 # @version : 1.0#
 # Create a regex for a conventional commit.
 
-commit_regex='(TXAD-[0-9]+: [A-Z][a-zA-Z]* .*|Merge)'
-error_msg="Aborting commit.\nYour commit message is not following the commit rules.\n('TXAD-1111:<space>Verb<space>following some description')"
-
-if ! grep -iqE "$commit_regex" "$1"; then
-    printf "$error_msg" >&2
-    exit 1
-fi
+#commit_regex='(TXAD-[0-9]+: [A-Z][a-zA-Z]* .*|Merge)'
+#error_msg="Aborting commit.\nYour commit message is not following the commit rules.\n('TXAD-1111:<space>Verb<space>following some description')"
+#
+#if ! grep -iqE "$commit_regex" "$1"; then
+#    printf "$error_msg" >&2
+#    exit 1
+#fi

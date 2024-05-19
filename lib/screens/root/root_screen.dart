@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/notification/notification_screen.dart';
+import 'package:toolkit/screens/chat/all_chats_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
+import '../../blocs/permit/permit_bloc.dart';
+import '../../blocs/permit/permit_events.dart';
 import '../../blocs/wifiConnectivity/wifi_connectivity_bloc.dart';
 import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
@@ -15,6 +19,7 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../home/home_screen.dart';
 import '../location/current_location_screen.dart';
+import '../notification/notification_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -28,13 +33,17 @@ class RootScreen extends StatefulWidget {
 }
 
 class _RootScreenState extends State<RootScreen> {
-  static int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     widget.isFromClientList == true ? _selectedIndex = 0 : null;
     _getCurrentUserLocation();
+    // widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
+    if (widget.isFromClientList) {
+      _selectedIndex = 0;
+    }
   }
 
   void _getCurrentUserLocation() {
@@ -52,98 +61,119 @@ class _RootScreenState extends State<RootScreen> {
     });
   }
 
-  static const List _widgetOptions = [
-    HomeScreen(),
-    CurrentLocationScreen(),
-    NotificationScreen(),
-    Text('Index 3: Chat'),
-    ProfileScreen()
+  final List<Widget> _onlineWidgetOptions = [
+    const HomeScreen(),
+    const CurrentLocationScreen(),
+    const NotificationScreen(),
+    const Text('Index 3: Chat'),
+    const ProfileScreen()
+  ];
+  final List<Widget> _offlineWidgetOptions = [
+    const HomeScreen(),
+    const AllChatsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-        bottomNavigationBar:
-            BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-                builder: (context, state) {
-          if (state is NoNetwork) {
-            return _bottomNavigationBar(true);
-          } else {
-            return _bottomNavigationBar(false);
-          }
-        }));
+    return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
+        listener: (context, state) {
+      if (state is NoNetwork) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const RootScreen(isFromClientList: false)),
+            ModalRoute.withName('/'));
+      } else {
+        context.read<ChatBloc>().add(FetchChatMessage());
+        context.read<PermitBloc>().add(PermitInternetActions());
+      }
+    }, builder: (context, state) {
+      final bool hasNetwork = state is! NoNetwork;
+      final List<Widget> currentWidgetOptions =
+          hasNetwork ? _onlineWidgetOptions : _offlineWidgetOptions;
+      if (_selectedIndex >= currentWidgetOptions.length) {
+        _selectedIndex = 0;
+      }
+      final BottomNavigationBar bottomNavigationBar = hasNetwork
+          ? _buildOnlineBottomNavigationBar()
+          : _buildOfflineBottomNavigationBar();
+      return Scaffold(
+          body: Center(child: currentWidgetOptions[_selectedIndex]),
+          bottomNavigationBar: bottomNavigationBar);
+    });
   }
 
-  BottomNavigationBar _bottomNavigationBar(bool isDisabled) {
+  BottomNavigationBar _buildOnlineBottomNavigationBar() {
     return BottomNavigationBar(
         enableFeedback: true,
         type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-              icon: Padding(
-                  padding: EdgeInsets.only(top: xxTiniestSpacing),
-                  child: Icon(Icons.home)),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Padding(
-                  padding: EdgeInsets.only(top: xxTiniestSpacing),
-                  child: Icon(Icons.location_on)),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: Center(
-                child: Stack(alignment: Alignment.topCenter, children: [
-                  const Padding(
-                      padding: EdgeInsets.only(top: xxTiniestSpacing),
-                      child: Icon(Icons.notifications_sharp)),
-                  BlocBuilder<ClientBloc, ClientStates>(
-                      buildWhen: (previousState, currentState) =>
-                          currentState is HomeScreenFetched,
-                      builder: (context, state) {
-                        if (state is HomeScreenFetched) {
-                          if (state.homeScreenModel.data!.badges!.isNotEmpty) {
-                            return Padding(
-                                padding: const EdgeInsets.only(
-                                    left: kNotificationBadgePadding),
-                                child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Container(
-                                          height: kNotificationBadgeSize,
-                                          width: kNotificationBadgeSize,
-                                          decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: AppColor.errorRed)),
-                                      Text(state.badgeCount.toString(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .xxxSmall)
-                                    ]));
-                          } else {
-                            return const SizedBox();
-                          }
-                        } else {
-                          return const SizedBox();
-                        }
-                      }),
-                ]),
-              ),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Padding(
-                  padding: EdgeInsets.only(top: xxTiniestSpacing),
-                  child: Icon(Icons.message)),
-              label: ''),
-          const BottomNavigationBarItem(
-              icon: Padding(
-                  padding: EdgeInsets.only(top: xxTiniestSpacing),
-                  child: Icon(Icons.person)),
-              label: '')
+        items: [
+          _buildBottomNavigationBarItem(Icons.home, ''),
+          _buildBottomNavigationBarItem(Icons.location_on, ''),
+          _buildNotificationBarItem(),
+          _buildBottomNavigationBarItem(Icons.message, ''),
+          _buildBottomNavigationBarItem(Icons.person, '')
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: AppColor.deepBlue,
-        unselectedItemColor:
-            (isDisabled) ? AppColor.lightestGrey : AppColor.grey,
-        onTap: (isDisabled) ? null : _onItemTapped);
+        unselectedItemColor: AppColor.grey,
+        onTap: _onItemTapped);
+  }
+
+  BottomNavigationBar _buildOfflineBottomNavigationBar() {
+    return BottomNavigationBar(
+        enableFeedback: true,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          _buildBottomNavigationBarItem(Icons.home, ''),
+          _buildBottomNavigationBarItem(Icons.message, ''),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: AppColor.deepBlue,
+        unselectedItemColor: AppColor.grey,
+        onTap: _onItemTapped);
+  }
+
+  BottomNavigationBarItem _buildBottomNavigationBarItem(
+      IconData icon, String label) {
+    return BottomNavigationBarItem(
+        icon: Padding(
+            padding: const EdgeInsets.only(top: xxTiniestSpacing),
+            child: Icon(icon)),
+        label: label);
+  }
+
+  BottomNavigationBarItem _buildNotificationBarItem() {
+    return BottomNavigationBarItem(
+        icon: Center(
+            child: Stack(alignment: Alignment.topCenter, children: [
+          const Padding(
+              padding: EdgeInsets.only(top: xxTiniestSpacing),
+              child: Icon(Icons.notifications_sharp)),
+          BlocBuilder<ClientBloc, ClientStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is HomeScreenFetched,
+              builder: (context, state) {
+                if (state is HomeScreenFetched &&
+                    state.homeScreenModel.data?.badges?.isNotEmpty == true) {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: kNotificationBadgePadding),
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                            height: kNotificationBadgeSize,
+                            width: kNotificationBadgeSize,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColor.errorRed)),
+                        Text(state.badgeCount.toString(),
+                            style: Theme.of(context).textTheme.xxxSmall)
+                      ]));
+                }
+                return const SizedBox();
+              })
+        ])),
+        label: '');
   }
 }

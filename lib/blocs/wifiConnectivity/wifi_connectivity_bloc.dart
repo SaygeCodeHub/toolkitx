@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import 'package:toolkit/utils/connectivity_util.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../data/models/currentLocation/current_location.dart';
 import '../../di/app_module.dart';
@@ -31,7 +34,8 @@ class WifiConnectivityBloc
     ConnectivityUtil.observeNetwork();
   }
 
-  void _notifyNetworkStatus(NotifyNetworkStatus event, emit) {
+  FutureOr<void> _notifyNetworkStatus(NotifyNetworkStatus event, emit) {
+    isNetworkEstablished = event.isConnected;
     event.isConnected ? emit(EstablishedNetwork()) : emit(NoNetwork());
   }
 

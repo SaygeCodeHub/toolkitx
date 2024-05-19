@@ -5,6 +5,8 @@ import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
+import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
+import 'package:toolkit/repositories/chatBox/chat_box_repository_impl.dart';
 import 'package:toolkit/repositories/documents/documents_repository.dart';
 import 'package:toolkit/repositories/documents/documents_repository_impl.dart';
 import 'package:toolkit/repositories/equipmentTraceability/equipment_traceability_repo.dart';
@@ -17,6 +19,9 @@ import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
+
+import '../data/cache/customer_cache.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 
 import '../data/cache/customer_cache.dart';
 import '../repositories/LogBook/logbook_repository.dart';
@@ -33,6 +38,8 @@ import '../repositories/client/client_repository.dart';
 import '../repositories/client/client_repository_impl.dart';
 import '../repositories/expense/expense_repository.dart';
 import '../repositories/expense/expense_repository_impl.dart';
+import '../repositories/language/language_repository.dart';
+import '../repositories/language/language_repository_impl.dart';
 import '../repositories/global/global_repository.dart';
 import '../repositories/global/global_repository_impl.dart';
 import '../repositories/language/language_repository.dart';
@@ -61,6 +68,7 @@ import '../repositories/uploadImage/upload_image_repository.dart';
 import '../repositories/uploadImage/upload_image_repository_impl.dart';
 import '../repositories/workorder/workorder_reposiotry.dart';
 import '../repositories/workorder/workorder_repository_impl.dart';
+import '../utils/database/database_util.dart';
 
 final getIt = GetIt.instance;
 
@@ -106,8 +114,10 @@ configurableDependencies() {
       () => DocumentsRepositoryImpl());
   getIt.registerLazySingleton<SafetyNoticeRepository>(
       () => SafetyNoticeRepositoryImpl());
+  getIt.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   getIt.registerLazySingleton<AssetsRepository>(() => AssetsRepositoryImpl());
   getIt.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl());
+  getIt.registerLazySingleton<ChatData>(() => ChatData());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
   getIt.registerLazySingleton<RootRepository>(() => RootRepositoryImpl());
@@ -116,4 +126,6 @@ configurableDependencies() {
   getIt.registerLazySingleton<NotificationRepository>(
       () => NotificationRepositoryImpl());
   getIt.registerLazySingleton<GlobalRepository>(() => GlobalRepositoryImpl());
+  getIt
+      .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
 }
