@@ -620,5 +620,7 @@ abstract class StringConstants {
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =
-      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
+  static const String kPleaseWaitWhileFetchingLocation =
+      'Please wait while we fetch your current location...';
 }

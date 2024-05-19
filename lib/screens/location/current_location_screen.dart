@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 class CurrentLocationScreen extends StatefulWidget {
   const CurrentLocationScreen({super.key});
@@ -17,13 +18,15 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showSnackBar(StringConstants.kPleaseWaitWhileFetchingLocation);
+      _getCurrentLocation();
+    });
   }
 
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
-
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return;
@@ -39,7 +42,6 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
     if (permission == LocationPermission.deniedForever) {
       return;
     }
-
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -57,6 +59,17 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
             size: 48,
           ),
         ));
+  }
+
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 10),
+        ),
+      );
+    }
   }
 
   @override

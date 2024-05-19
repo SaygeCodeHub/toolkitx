@@ -23,7 +23,6 @@ import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
 import '../data/cache/customer_cache.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 
-import '../data/cache/customer_cache.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
@@ -42,8 +41,6 @@ import '../repositories/language/language_repository.dart';
 import '../repositories/language/language_repository_impl.dart';
 import '../repositories/global/global_repository.dart';
 import '../repositories/global/global_repository_impl.dart';
-import '../repositories/language/language_repository.dart';
-import '../repositories/language/language_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/login/login_repository.dart';
