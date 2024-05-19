@@ -13,6 +13,7 @@ import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
+import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
@@ -600,6 +601,9 @@ class AppRoutes {
             ClearPermitScreen(permitId: settings.arguments.toString()));
       case PermitEditSafetyDocumentScreen.routeName:
         return _createRoute(PermitEditSafetyDocumentScreen(
+            permitId: settings.arguments.toString()));
+      case PermitTransferComponentScreen.routeName:
+        return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
       case SurrenderPermitScreen.routeName:
         return _createRoute(

@@ -281,8 +281,11 @@ abstract class StringConstants {
   static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
+  static const String kTransferTo = 'Transfer To';
+  static const String kCP = 'CP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
   static const String kAllGearPermit =
       'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //

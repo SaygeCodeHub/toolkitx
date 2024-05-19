@@ -29,10 +29,14 @@ import '../repositories/checklist/workforce/workforce_repository.dart';
 import '../repositories/checklist/workforce/workforce_repository_impl.dart';
 import '../repositories/expense/expense_repository.dart';
 import '../repositories/expense/expense_repository_impl.dart';
+import '../repositories/global/global_repository.dart';
+import '../repositories/global/global_repository_impl.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository.dart';
 import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.dart';
 import '../repositories/loto/loto_repository.dart';
 import '../repositories/loto/loto_repository_impl.dart';
+import '../repositories/notification/notification_repository.dart';
+import '../repositories/notification/notification_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
 import '../repositories/permit/permit_repository_impl.dart';
 import '../data/cache/customer_cache.dart';
@@ -104,4 +108,7 @@ configurableDependencies() {
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
   getIt.registerLazySingleton<TicketsRepository>(() => TicketsRepositoryImpl());
+  getIt.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl());
+  getIt.registerLazySingleton<GlobalRepository>(() => GlobalRepositoryImpl());
 }

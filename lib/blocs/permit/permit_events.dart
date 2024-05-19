@@ -131,3 +131,36 @@ class SurrenderPermit extends PermitEvents {
 
   SurrenderPermit({required this.permitId});
 }
+
+class FetchDataForChangePermitCP extends PermitEvents {
+  final String permitId;
+
+  FetchDataForChangePermitCP({required this.permitId});
+}
+
+class SelectTransferTo extends PermitEvents {
+  final String transferType;
+  final String transferValue;
+
+  SelectTransferTo({required this.transferType, required this.transferValue});
+}
+
+class SelectTransferCPWorkForce extends PermitEvents {
+  final int id;
+  final String name;
+
+  SelectTransferCPWorkForce({required this.id, required this.name});
+}
+
+class SelectTransferCPSap extends PermitEvents {
+  final int id;
+  final String name;
+
+  SelectTransferCPSap({required this.id, required this.name});
+}
+
+class SelectTransferValue extends PermitEvents {
+  final String value;
+
+  SelectTransferValue({required this.value});
+}

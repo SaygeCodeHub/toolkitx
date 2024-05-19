@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -41,7 +42,7 @@ class _RootScreenState extends State<RootScreen> {
   static const List _widgetOptions = [
     HomeScreen(),
     CurrentLocationScreen(),
-    Text('Index 2: Notification'),
+    NotificationScreen(),
     Text('Index 3: Chat'),
     ProfileScreen()
   ];
