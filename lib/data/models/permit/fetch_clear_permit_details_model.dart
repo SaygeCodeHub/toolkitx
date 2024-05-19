@@ -31,7 +31,7 @@ class FetchClearPermitDetailsModel {
 class ClearPermitData {
   final String clientid;
   final String permitName;
-  final String permitStatus;
+  String permitStatus;
   final String typeOfPermit;
   final String panelSaint;
   final String panelSaint1215;

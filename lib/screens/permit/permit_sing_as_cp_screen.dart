@@ -26,6 +26,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    permitCpSapModel.sapCpMap['user_sign'] = '';
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSignAsCp),
         bottomNavigationBar: Padding(
@@ -45,6 +46,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
                           showCustomSnackBar(context,
                               StringConstants.kDataSavedSuccessfully, '');
                           Future.delayed(const Duration(seconds: 3));
+                          Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Navigator.pushReplacementNamed(

@@ -86,10 +86,10 @@ class SavePermitEditSafetyDocumentButton extends StatelessWidget {
                         showCustomSnackBar(
                             context, StringConstants.kAllFieldsMandatory, '');
                       } else {
-                        editSafetyDocumentMap['permit_id'] = permitId;
                         context.read<PermitBloc>().add(
                             SavePermitEditSafetyDocument(
-                                editSafetyDocumentMap: editSafetyDocumentMap));
+                                editSafetyDocumentMap: editSafetyDocumentMap,
+                                permitId: permitId));
                       }
                     }
                     if (editSafetyDocumentMap['panel_15'] == '1') {
@@ -119,7 +119,8 @@ class SavePermitEditSafetyDocumentButton extends StatelessWidget {
                         editSafetyDocumentMap['permit_id'] = permitId;
                         context.read<PermitBloc>().add(
                             SavePermitEditSafetyDocument(
-                                editSafetyDocumentMap: editSafetyDocumentMap));
+                                editSafetyDocumentMap: editSafetyDocumentMap,
+                                permitId: permitId));
                       }
                     }
                     if (editSafetyDocumentMap['panel_16'] == '1') {
@@ -141,7 +142,8 @@ class SavePermitEditSafetyDocumentButton extends StatelessWidget {
                         editSafetyDocumentMap['permit_id'] = permitId;
                         context.read<PermitBloc>().add(
                             SavePermitEditSafetyDocument(
-                                editSafetyDocumentMap: editSafetyDocumentMap));
+                                editSafetyDocumentMap: editSafetyDocumentMap,
+                                permitId: permitId));
                       }
                     }
                   },

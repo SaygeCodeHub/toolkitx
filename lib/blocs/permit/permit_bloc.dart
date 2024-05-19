@@ -190,6 +190,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: GetOpenPermitData.fromJson(permitHtmlMap));
+        int typeOfPermit =
+            await _databaseHelper.getTypeOfPermit(event.permitId);
+        openPermitDetailsModel.data.permitStatus =
+            getStatusText(typeOfPermit.toString(), statusId.toString());
         if (permitHtmlMap.isNotEmpty) {
           emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
         } else {
@@ -224,6 +228,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 status: 200,
                 message: '',
                 data: GetClosePermitData.fromJson(permitHtmlMap));
+        int typeOfPermit =
+            await _databaseHelper.getTypeOfPermit(event.permitId);
+        closePermitDetailsModel.data.permitStatus =
+            getStatusText(typeOfPermit.toString(), statusId.toString());
         if (permitHtmlMap.isNotEmpty) {
           emit(ClosePermitDetailsFetched(closePermitDetailsModel));
         } else {
@@ -241,9 +249,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
 
-      emit(const FetchingAllPermits());
       if (!listReachedMax) {
         if (isNetworkEstablished) {
+          emit(const FetchingAllPermits());
           if (roleId == '' || event.isFromHome) {
             add(const ClearPermitFilters());
             PermitRolesModel permitRolesModel =
@@ -271,13 +279,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 permitListData: permitListData));
           }
         } else {
-          emit(const FetchingAllPermits());
           List<Map<String, dynamic>> fetchListPageData =
               await _databaseHelper.fetchPermitListOffline();
           AllPermitModel allPermitModel = AllPermitModel.fromJson(
               {'Status': 200, 'Message': '', 'Data': fetchListPageData});
           permitListData.addAll(allPermitModel.data);
-          listReachedMax = true;
+          listReachedMax = allPermitModel.data.isEmpty;
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
               filters: {},
@@ -436,10 +443,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      if (event.openPermitMap['date'] == null ||
-          event.openPermitMap['date'] == '') {
-        emit(const OpenPermitError(StringConstants.kPleaseSelectDate));
-      } else if (event.openPermitMap['time'] == null ||
+      if (event.openPermitMap['time'] == null ||
           event.openPermitMap['time'] == '') {
         emit(const OpenPermitError(StringConstants.kPleaseSelectTime));
       } else {
@@ -807,43 +811,76 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kNoDataFound));
         }
       } else {
+        Map<String, dynamic> populateDataMap = {};
         Map<String, dynamic> permitHtmlMap =
             await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        List populateClearPermitData =
+            await _databaseHelper.populateClearPermitData(event.permitId);
         FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
             FetchClearPermitDetailsModel(
                 status: 200,
                 message: '',
                 data: ClearPermitData.fromJson(permitHtmlMap));
-
-        final List<Map<String, dynamic>> customFields = [
-          {"questionid": 4000010, "answer": ""},
-          {"questionid": 4000001, "answer": ''},
-          {"questionid": 4000002, "answer": ''},
-          {"questionid": 4000003, "answer": ''},
-          {"questionid": 4000004, "answer": ''},
-          {"questionid": 4000005, "answer": ''},
-          {"questionid": 4000006, "answer": ''},
-          {"questionid": 4000007, "answer": ''},
-          {"questionid": 4000008, "answer": ''},
-          {"questionid": 4000013, "answer": ''},
-          {"questionid": 4000014, "answer": ''}
-        ];
-
-        for (var key in permitHtmlMap.keys) {
-          var keyParts = key.split('_');
-          if (keyParts.length == 3 &&
-              keyParts[0] == 'clear' &&
-              keyParts[1] == 'permit') {
-            int questionId = int.tryParse(keyParts[2]) ?? -1;
-
-            for (var field in customFields) {
-              if (field['questionid'] == questionId) {
-                field['answer'] = permitHtmlMap[key] ?? '';
+        fetchClearPermitDetailsModel.data.permitStatus = getStatusText(
+            fetchClearPermitDetailsModel.data.typeOfPermit.toString(),
+            statusId.toString());
+        print('blocccccc listtt $populateClearPermitData');
+        print('blocccccc listtt ${event.permitId}');
+        if (populateClearPermitData.isNotEmpty) {
+          for (var field in populateClearPermitData) {
+            int questionId = field['questionid'];
+            String answer = field['answer'];
+            switch (questionId) {
+              case 3000009:
+                populateDataMap['4000009'] = answer;
                 break;
-              }
+              case 3000001:
+                populateDataMap['4000001'] = answer;
+                break;
+              case 3000002:
+                populateDataMap['4000002'] = answer;
+                break;
+              case 3000003:
+                populateDataMap['4000003'] = answer;
+                break;
+              case 3000004:
+                populateDataMap['4000004'] = answer;
+                break;
+              case 3000005:
+                populateDataMap['4000005'] = answer;
+                break;
+              case 3000006:
+                populateDataMap['4000006'] = answer;
+                break;
+              case 3000007:
+                populateDataMap['4000007'] = answer;
+                break;
+              case 3000008:
+                populateDataMap['4000008'] = answer;
+                break;
+              case 3000013:
+                populateDataMap['40000013'] = answer;
+                break;
+              case 3000014:
+                populateDataMap['40000014'] = answer;
+                break;
             }
           }
         }
+        final List<Map<String, dynamic>> customFields = [
+          {"questionid": 40000010, "answer": ''},
+          {"questionid": 4000001, "answer": populateDataMap['4000001'] ?? ''},
+          {"questionid": 4000002, "answer": populateDataMap['4000002'] ?? ''},
+          {"questionid": 4000003, "answer": populateDataMap['4000003'] ?? ''},
+          {"questionid": 4000004, "answer": populateDataMap['4000004'] ?? ''},
+          {"questionid": 4000005, "answer": populateDataMap['4000005'] ?? ''},
+          {"questionid": 4000006, "answer": populateDataMap['4000006'] ?? ''},
+          {"questionid": 4000007, "answer": populateDataMap['4000007'] ?? ''},
+          {"questionid": 4000008, "answer": populateDataMap['4000008'] ?? ''},
+          {"questionid": 4000013, "answer": populateDataMap['40000013'] ?? ''},
+          {"questionid": 4000014, "answer": populateDataMap['40000014'] ?? ''}
+        ];
+
         if (permitHtmlMap.isNotEmpty) {
           emit(ClearPermitDetailsFetched(
               fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
@@ -909,7 +946,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       Map editSafetyDocumentMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "permitid": event.editSafetyDocumentMap['permit_id'],
+        "permitid": event.permitId,
         "userid": await _customerCache.getUserId(CacheKeys.userId),
         "location": event.editSafetyDocumentMap['location'] ?? '',
         "description": event.editSafetyDocumentMap['permit_id'] ?? '',
@@ -945,12 +982,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
       } else {
         bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-            event.editSafetyDocumentMap['permit_id'],
+            event.permitId,
             'edit_safety_document',
             editSafetyDocumentMap,
-            "sign",
+            "",
             null);
         if (isDataInserted) {
+          await _databaseHelper.updateEquipmentSafetyDoc(
+              event.permitId, event.editSafetyDocumentMap);
           emit(PermitEditSafetyDocumentSaved(
               successMessage: StringConstants.kDataSavedSuccessfully));
         } else {
@@ -1072,20 +1111,27 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     if (permitActions.isNotEmpty) {
       for (var action in permitActions) {
         switch (action['actionText']) {
-          case 'open_permit':
-            add(OpenPermit(jsonDecode(action['actionJson']), action['permitId'],
-                action['id']));
-            break;
-          case 'cancel_permit':
-            add(ClosePermit(
-                permitId: action['permitId'],
-                closePermitMap: jsonDecode(action['actionJson']),
-                offlineActionId: action['id']));
+          case 'edit_safety_document':
+            add(SavePermitEditSafetyDocument(
+                editSafetyDocumentMap: jsonDecode(action['actionJson']),
+                offlineActionId: action['id'],
+                permitId: action['permitId']));
             break;
           case 'prepare_permit':
             add(SaveMarkAsPrepared(
                 permitId: action['permitId'],
                 markAsPreparedMap: jsonDecode(action['actionJson']),
+                offlineActionId: action['id']));
+            break;
+          case 'open_permit':
+            add(OpenPermit(jsonDecode(action['actionJson']), action['permitId'],
+                action['id']));
+            break;
+          case 'accept_permit_request':
+            add(AcceptPermitRequest(
+                permitId: action['permitId'],
+                acceptPermitMap: jsonDecode(action['actionJson']),
+                syncDate: action['actionDateTime'],
                 offlineActionId: action['id']));
             break;
           case 'clear_permit':
@@ -1095,16 +1141,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 syncDate: action['actionDateTime'],
                 offlineActionId: action['id']));
             break;
-          case 'accept_permit_request':
-            add(AcceptPermitRequest(
+          case 'cancel_permit':
+            add(ClosePermit(
                 permitId: action['permitId'],
-                acceptPermitMap: jsonDecode(action['actionJson']),
-                syncDate: action['actionDateTime'],
-                offlineActionId: action['id']));
-            break;
-          case 'edit_safety_document':
-            add(SavePermitEditSafetyDocument(
-                editSafetyDocumentMap: jsonDecode(action['actionJson']),
+                closePermitMap: jsonDecode(action['actionJson']),
                 offlineActionId: action['id']));
             break;
           default:

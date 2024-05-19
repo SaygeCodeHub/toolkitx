@@ -33,7 +33,7 @@ class OpenPermitDetailsModel {
 
 class GetOpenPermitData {
   final String? permitName;
-  final String? permitStatus;
+  String? permitStatus;
   final String? description;
   final String? methodstatement;
   final String? location;

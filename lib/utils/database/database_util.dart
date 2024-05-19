@@ -521,4 +521,55 @@ class DatabaseHelper {
       );
     }
   }
+
+  Future<void> updateEquipmentSafetyDoc(
+      String permitId, Map equipmentMap) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermit',
+      columns: ['html'],
+      where: 'permitId = ?',
+      whereArgs: [permitId],
+    );
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['html'];
+      Map<String, dynamic> equMap = jsonDecode(listPageJson);
+      equMap['location'] = equipmentMap['location'] ?? '';
+      equMap['methodstatement'] = equipmentMap['methodstmt'] ?? '';
+      equMap['description'] = equipmentMap['description'] ?? '';
+      equMap['ptw_isolation'] = equipmentMap['ptw_isolation'] ?? '';
+      equMap['ptw_circuit'] = equipmentMap['ptw_circuit'] ?? '';
+      equMap['ptw_safety'] = equipmentMap['ptw_safety'] ?? '';
+      equMap['ptw_precautions2'] = equipmentMap['ptw_precautions2'] ?? '';
+      equMap['ptw_precautions'] = equipmentMap['ptw_precautions'] ?? '';
+      equMap['st_precautions'] = equipmentMap['st_precautions'] ?? '';
+      equMap['st_safety'] = equipmentMap['st_safety'] ?? '';
+      equMap['ptw_circuit2'] = equipmentMap['ptw_circuit2'] ?? '';
+      equMap['lwc_accessto'] = equipmentMap['lwc_accessto'] ?? '';
+      equMap['lwc_environment'] = equipmentMap['lwc_environment'] ?? '';
+      equMap['lwc_precautions'] = equipmentMap['lwc_precautions'] ?? '';
+      String updatedEquipmentMap = jsonEncode(equMap);
+      await db.update('OfflinePermit', {'html': updatedEquipmentMap},
+          where: 'permitId = ?', whereArgs: [permitId]);
+    }
+  }
+
+  Future<List> populateClearPermitData(String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'open_permit'],
+    );
+    if (result.isNotEmpty) {
+      Map<String, dynamic> populateClearPermitData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(populateClearPermitData['actionJson']);
+      List customFields = actionJson['customfields'];
+      return customFields;
+    } else {
+      return <Map<String, dynamic>>[];
+    }
+  }
 }

@@ -149,9 +149,11 @@ class SaveClearPermit extends PermitEvents {
 class SavePermitEditSafetyDocument extends PermitEvents {
   final Map editSafetyDocumentMap;
   final int? offlineActionId;
+  final String permitId;
 
-  SavePermitEditSafetyDocument(
-      {required this.editSafetyDocumentMap, this.offlineActionId});
+  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap,
+    this.offlineActionId,
+    required this.permitId});
 }
 
 class FetchDataForChangePermitCP extends PermitEvents {
