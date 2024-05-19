@@ -560,6 +560,8 @@ class DatabaseHelper {
       where: 'permitId = ? AND actionText = ?',
       whereArgs: [permitId, 'open_permit'],
     );
+    print('database utilllll $result');
+    print('database utilllll $permitId');
     if (result.isNotEmpty) {
       Map<String, dynamic> populateClearPermitData = result.first;
       Map<String, dynamic> actionJson =

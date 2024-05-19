@@ -443,10 +443,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      if (event.openPermitMap['date'] == null ||
-          event.openPermitMap['date'] == '') {
-        emit(const OpenPermitError(StringConstants.kPleaseSelectDate));
-      } else if (event.openPermitMap['time'] == null ||
+      if (event.openPermitMap['time'] == null ||
           event.openPermitMap['time'] == '') {
         emit(const OpenPermitError(StringConstants.kPleaseSelectTime));
       } else {
@@ -827,6 +824,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         fetchClearPermitDetailsModel.data.permitStatus = getStatusText(
             fetchClearPermitDetailsModel.data.typeOfPermit.toString(),
             statusId.toString());
+        print('blocccccc listtt $populateClearPermitData');
+        print('blocccccc listtt ${event.permitId}');
         if (populateClearPermitData.isNotEmpty) {
           for (var field in populateClearPermitData) {
             int questionId = field['questionid'];
