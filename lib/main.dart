@@ -23,6 +23,7 @@ import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import 'package:toolkit/blocs/trips/trip_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
@@ -228,6 +229,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => TicketsBloc()),
           BlocProvider(lazy: true, create: (context) => NotificationBloc()),
           BlocProvider(lazy: true, create: (context) => GlobalBloc()),
+          BlocProvider(lazy: true, create: (context) => TripBloc()),
         ],
         child: GestureDetector(
             onTap: () {

@@ -10,7 +10,6 @@ import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_ev
 import '../../../blocs/incident/incidentInjuryDetails/incident_injury_details_states.dart';
 import '../../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../../data/models/incident/incident_details_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_snackbar.dart';
@@ -21,19 +20,19 @@ import 'incident_injured_person_list.dart';
 class IncidentInjuredPersonTab extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
   final int initialIndex;
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   final Map injuredPersonDetailMap = {};
 
   IncidentInjuredPersonTab(
       {Key? key,
       required this.incidentDetailsModel,
       required this.initialIndex,
-      required this.incidentListDatum})
+      required this.incidentId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    injuredPersonDetailMap['incidentId'] = incidentListDatum.id;
+    injuredPersonDetailMap['incidentId'] = incidentId;
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:
@@ -71,7 +70,7 @@ class IncidentInjuredPersonTab extends StatelessWidget {
                 ProgressBar.dismiss(context);
                 context.read<IncidentDetailsBloc>().add(
                     FetchIncidentDetailsEvent(
-                        incidentId: incidentListDatum.id,
+                        incidentId: incidentId,
                         role: context.read<IncidentLisAndFilterBloc>().roleId,
                         initialIndex: initialIndex));
               }

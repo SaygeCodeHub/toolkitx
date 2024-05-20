@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
@@ -174,5 +175,13 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/getdataforchangepermitcp?permitid=$permitId&hashcode=$hashCode");
     return FetchDataForChangePermitCpModel.fromJson(response);
+  }
+
+  @override
+  Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}https://api.toolkitx.com/api/permit/changecp",
+        changePermitCPMap);
+    return ChangePermitCpModel.fromJson(response);
   }
 }

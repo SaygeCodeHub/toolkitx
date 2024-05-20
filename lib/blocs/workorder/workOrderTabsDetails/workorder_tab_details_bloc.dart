@@ -39,7 +39,6 @@ import '../../../screens/workorder/assign_workforce_screen.dart';
 import '../../../screens/workorder/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
-import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../../../screens/workorder/workorder_form_one_screen.dart';
 import 'workorder_tab_details_events.dart';
@@ -662,11 +661,8 @@ class WorkOrderTabDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (!assignWorkForceListReachedMax) {
         FetchAssignWorkForceModel fetchAssignWorkForceModel =
-            await _workOrderRepository.fetchAssignWorkForce(
-                event.pageNo,
-                hashCode!,
-                WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-                event.workOrderWorkforceName);
+            await _workOrderRepository.fetchAssignWorkForce(event.pageNo,
+                hashCode!, workOrderId, event.workOrderWorkforceName);
         pageNo = event.pageNo;
         workOrderWorkforceName = event.workOrderWorkforceName;
         assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
@@ -836,7 +832,7 @@ class WorkOrderTabDetailsBloc
           await _workOrderRepository.fetchWorkOrderDocuments(
               1,
               hashCode!,
-              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              workOrderId,
               '',
               jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       WorkOrderAssignDocumentScreen.documentDataList.clear();
@@ -900,7 +896,7 @@ class WorkOrderTabDetailsBloc
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
     Map saveDocumentsMap = {
       "hashcode": hashCode,
-      "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+      "woid": workOrderId,
       "documents":
           WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
       "userid": userId

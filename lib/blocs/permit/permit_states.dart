@@ -352,3 +352,13 @@ class OfflineDataNotSaved extends PermitStates {
 
   OfflineDataNotSaved({required this.errorMessage});
 }
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}

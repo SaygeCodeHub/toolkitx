@@ -13,32 +13,31 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../../utils/constants/string_constants.dart';
 
-class TransferAndCPTiles extends StatefulWidget {
+class TransferAndCPTiles extends StatelessWidget {
   const TransferAndCPTiles({
     super.key,
     required this.data,
+    required this.changePermitCPMap,
   });
 
   final List<List<GetDataForCPDatum>> data;
+  final Map changePermitCPMap;
 
-  @override
-  State<TransferAndCPTiles> createState() => _TransferAndCPTilesState();
-}
-
-class _TransferAndCPTilesState extends State<TransferAndCPTiles> {
   @override
   Widget build(BuildContext context) {
+    changePermitCPMap['npw'] = 1;
     context.read<PermitBloc>().add(SelectTransferValue(value: '1'));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TransferToExpansionTile(
           createdForTransfer: (String value) {
+            changePermitCPMap['npw'] = value;
             context.read<PermitBloc>().add(SelectTransferValue(value: value));
           },
         ),
         const SizedBox(height: xxTinierSpacing),
-        Text(StringConstants.kCP,
+        Text(StringConstants.kSAP,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -48,14 +47,19 @@ class _TransferAndCPTilesState extends State<TransferAndCPTiles> {
           buildWhen: (previous, current) => current is TransferValueSelected,
           builder: (context, state) {
             if (state is TransferValueSelected) {
+              changePermitCPMap['sap'] = '';
               return Visibility(
                 visible: state.value == '1',
                 replacement: TransferCPSapExpansionTile(
-                    createdForTransferCp: (id, name) {},
-                    getDataForCPDatum: widget.data[2]),
+                    createdForTransferCp: (id, name) {
+                      changePermitCPMap['sap'] = id.toString();
+                    },
+                    getDataForCPDatum: data[2]),
                 child: TransferCPWorkForceExpansionTile(
-                    createdForTransferCp: (id, name) {},
-                    getDataForCPDatum: widget.data[1]),
+                    createdForTransferCp: (id, name) {
+                      changePermitCPMap['sap'] = id.toString();
+                    },
+                    getDataForCPDatum: data[1]),
               );
             } else {
               return const SizedBox.shrink();

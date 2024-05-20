@@ -196,6 +196,12 @@ class SelectTransferValue extends PermitEvents {
   SelectTransferValue({required this.value});
 }
 
+class ChangePermitCP extends PermitEvents {
+  final Map changePermitCPMap;
+
+  ChangePermitCP({required this.changePermitCPMap});
+}
+
 class SavePermitOfflineAction extends PermitEvents {
   final Map offlineDataMap;
   final String permitId;

@@ -8,20 +8,17 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../../widgets/primary_button.dart';
-import '../../../widgets/progress_bar.dart';
 
 class TicketEDTHoursScreen extends StatelessWidget {
   const TicketEDTHoursScreen({super.key});
 
   static const routeName = 'TicketEDTHoursScreen';
 
-  static String hours = '';
-
   @override
   Widget build(BuildContext context) {
+    int? hours = 0;
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('AddComments')),
       body: Padding(
@@ -39,7 +36,7 @@ class TicketEDTHoursScreen extends StatelessWidget {
             TextFieldWidget(
               textInputType: TextInputType.number,
               onTextFieldChanged: (textField) {
-                hours = textField;
+                hours = int.tryParse(textField);
               },
             ),
           ],
@@ -47,30 +44,22 @@ class TicketEDTHoursScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: BlocListener<TicketsBloc, TicketsStates>(
-          listener: (context, state) {
-            if (state is TicketStatusUpdating) {
-              ProgressBar.show(context);
-            } else if (state is TicketStatusUpdated) {
-              ProgressBar.dismiss(context);
-              Navigator.pop(context);
-              context.read<TicketsBloc>().add(FetchTicketDetails(
-                  ticketId: context.read<TicketsBloc>().ticketId,
-                  ticketTabIndex: 0));
-            } else if (state is TicketStatusNotUpdated) {
-              ProgressBar.dismiss(context);
-              showCustomSnackBar(context, state.errorMessage, '');
-            }
-          },
-          child: PrimaryButton(
-              onPressed: () {
+        child: PrimaryButton(
+            onPressed: () {
+              if (hours! <= 0) {
                 context.read<TicketsBloc>().add(UpdateTicketStatus(
-                    edtHrs: hours,
+                    edtHrs: hours!,
                     completionDate: '',
                     status: TicketStatusEnum.waitingForDevelopment.value));
-              },
-              textValue: DatabaseUtil.getText('buttonSave')),
-        ),
+              } else {
+                Navigator.pop(context);
+                context.read<TicketsBloc>().add(UpdateTicketStatus(
+                    edtHrs: hours!,
+                    completionDate: '',
+                    status: TicketStatusEnum.waitingForDevelopment.value));
+              }
+            },
+            textValue: DatabaseUtil.getText('buttonSave')),
       ),
     );
   }
