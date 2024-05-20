@@ -1,9 +1,10 @@
-
 import 'dart:convert';
 
-FetchTripDetailsModel fetchTripDetailsModelFromJson(String str) => FetchTripDetailsModel.fromJson(json.decode(str));
+FetchTripDetailsModel fetchTripDetailsModelFromJson(String str) =>
+    FetchTripDetailsModel.fromJson(json.decode(str));
 
-String fetchTripDetailsModelToJson(FetchTripDetailsModel data) => json.encode(data.toJson());
+String fetchTripDetailsModelToJson(FetchTripDetailsModel data) =>
+    json.encode(data.toJson());
 
 class FetchTripDetailsModel {
   final int status;
@@ -16,17 +17,18 @@ class FetchTripDetailsModel {
     required this.data,
   });
 
-  factory FetchTripDetailsModel.fromJson(Map<String, dynamic> json) => FetchTripDetailsModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: TripData.fromJson(json["Data"]),
-  );
+  factory FetchTripDetailsModel.fromJson(Map<String, dynamic> json) =>
+      FetchTripDetailsModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: TripData.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class TripData {
@@ -63,38 +65,41 @@ class TripData {
   });
 
   factory TripData.fromJson(Map<String, dynamic> json) => TripData(
-    id: json["id"],
-    departuredatetime: json["departuredatetime"],
-    arrivaldatetime: json["arrivaldatetime"],
-    actualdeparturedatetime: json["actualdeparturedatetime"],
-    actualarrivaldatetime: json["actualarrivaldatetime"],
-    deplocname: json["deplocname"],
-    arrlocname: json["arrlocname"],
-    remarks: json["remarks"],
-    statustext: json["statustext"],
-    purposetext: json["purposetext"],
-    canaddspecialrequest: json["canaddspecialrequest"],
-    vesselname: json["vesselname"],
-    specialrequests: List<Specialrequest>.from(json["specialrequests"].map((x) => Specialrequest.fromJson(x))),
-    documents: List<Document>.from(json["documents"].map((x) => Document.fromJson(x))),
-  );
+        id: json["id"],
+        departuredatetime: json["departuredatetime"],
+        arrivaldatetime: json["arrivaldatetime"],
+        actualdeparturedatetime: json["actualdeparturedatetime"],
+        actualarrivaldatetime: json["actualarrivaldatetime"],
+        deplocname: json["deplocname"],
+        arrlocname: json["arrlocname"],
+        remarks: json["remarks"],
+        statustext: json["statustext"],
+        purposetext: json["purposetext"],
+        canaddspecialrequest: json["canaddspecialrequest"],
+        vesselname: json["vesselname"],
+        specialrequests: List<Specialrequest>.from(
+            json["specialrequests"].map((x) => Specialrequest.fromJson(x))),
+        documents: List<Document>.from(
+            json["documents"].map((x) => Document.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "departuredatetime": departuredatetime,
-    "arrivaldatetime": arrivaldatetime,
-    "actualdeparturedatetime": actualdeparturedatetime,
-    "actualarrivaldatetime": actualarrivaldatetime,
-    "deplocname": deplocname,
-    "arrlocname": arrlocname,
-    "remarks": remarks,
-    "statustext": statustext,
-    "purposetext": purposetext,
-    "canaddspecialrequest": canaddspecialrequest,
-    "vesselname": vesselname,
-    "specialrequests": List<dynamic>.from(specialrequests.map((x) => x.toJson())),
-    "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
-  };
+        "id": id,
+        "departuredatetime": departuredatetime,
+        "arrivaldatetime": arrivaldatetime,
+        "actualdeparturedatetime": actualdeparturedatetime,
+        "actualarrivaldatetime": actualarrivaldatetime,
+        "deplocname": deplocname,
+        "arrlocname": arrlocname,
+        "remarks": remarks,
+        "statustext": statustext,
+        "purposetext": purposetext,
+        "canaddspecialrequest": canaddspecialrequest,
+        "vesselname": vesselname,
+        "specialrequests":
+            List<dynamic>.from(specialrequests.map((x) => x.toJson())),
+        "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
+      };
 }
 
 class Document {
@@ -111,18 +116,18 @@ class Document {
   });
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
-    id: json["id"],
-    name: json["name"],
-    type: json["type"],
-    files: json["files"],
-  );
+        id: json["id"],
+        name: json["name"],
+        type: json["type"],
+        files: json["files"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "type": type,
-    "files": files,
-  };
+        "id": id,
+        "name": name,
+        "type": type,
+        "files": files,
+      };
 }
 
 class Specialrequest {
@@ -145,22 +150,22 @@ class Specialrequest {
   });
 
   factory Specialrequest.fromJson(Map<String, dynamic> json) => Specialrequest(
-    id: json["id"],
-    specialrequest: json["specialrequest"],
-    specialrequesttypename: json["specialrequesttypename"],
-    processedDate: json["processed_date"],
-    constructionFullName: json["construction_full_name"],
-    processedStatus: json["processed_status"],
-    canedit: json["canedit"],
-  );
+        id: json["id"],
+        specialrequest: json["specialrequest"],
+        specialrequesttypename: json["specialrequesttypename"],
+        processedDate: json["processed_date"],
+        constructionFullName: json["construction_full_name"],
+        processedStatus: json["processed_status"],
+        canedit: json["canedit"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "specialrequest": specialrequest,
-    "specialrequesttypename": specialrequesttypename,
-    "processed_date": processedDate,
-    "construction_full_name": constructionFullName,
-    "processed_status": processedStatus,
-    "canedit": canedit,
-  };
+        "id": id,
+        "specialrequest": specialrequest,
+        "specialrequesttypename": specialrequesttypename,
+        "processed_date": processedDate,
+        "construction_full_name": constructionFullName,
+        "processed_status": processedStatus,
+        "canedit": canedit,
+      };
 }

@@ -61,7 +61,8 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       if (fetchTripDetailsModel.status == 200) {
         emit(TripDetailsFetched(fetchTripDetailsModel: fetchTripDetailsModel));
       } else {
-        emit(TripDetailsNotFetched(errorMessage: fetchTripDetailsModel.message));
+        emit(
+            TripDetailsNotFetched(errorMessage: fetchTripDetailsModel.message));
       }
     } catch (e) {
       emit(TripDetailsNotFetched(errorMessage: e.toString()));

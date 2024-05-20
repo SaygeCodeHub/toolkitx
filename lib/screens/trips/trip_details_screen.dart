@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/trips/trip_details_tab_three.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab.dart';
-import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/screens/trips/widgets/trip_details_tab_two.dart';
 import 'package:toolkit/utils/trips_util.dart';
-import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/trips/trip_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
-import '../../data/models/status_tag_model.dart';
 import '../../utils/constants/string_constants.dart';
-import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_tabbar_view.dart';
-import '../../widgets/status_tag.dart';
 
 class TripsDetailsScreen extends StatelessWidget {
   const TripsDetailsScreen({super.key, required this.tripId});
@@ -26,7 +22,9 @@ class TripsDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<TripBloc>().add(FetchTripsDetails(tripId: tripId, tripTabIndex: 0));
+    context
+        .read<TripBloc>()
+        .add(FetchTripsDetails(tripId: tripId, tripTabIndex: 0));
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(
@@ -36,6 +34,10 @@ class TripsDetailsScreen extends StatelessWidget {
             top: xxTinierSpacing,
             bottom: xxTinierSpacing),
         child: BlocBuilder<TripBloc, TripState>(
+          buildWhen: (previousState, currentState) =>
+              currentState is TripDetailsFetching ||
+              currentState is TripDetailsFetched ||
+              currentState is TripDetailsNotFetched,
           builder: (context, state) {
             if (state is TripDetailsFetching) {
               return const Center(child: CircularProgressIndicator());
@@ -62,13 +64,13 @@ class TripsDetailsScreen extends StatelessWidget {
                       height: kDividerHeight, thickness: kDividerWidth),
                   const SizedBox(height: xxTinierSpacing),
                   CustomTabBarView(
-                      lengthOfTabs: 4,
+                      lengthOfTabs: 3,
                       tabBarViewIcons: TripsUtil().tabBarViewIcons,
                       initialIndex: context.read<TripBloc>().tripTabIndex,
                       tabBarViewWidgets: [
                         TripDetailsTab(tripData: data),
-                        Text("Tab2"),
-                        Text("Tab3")
+                        TripDetailsTabTwo(tripData: data),
+                        TripDetailsTabThree(tripData: data),
                       ])
                 ],
               );

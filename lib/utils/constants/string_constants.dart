@@ -613,4 +613,13 @@ abstract class StringConstants {
       "EDT should be greater than 0 for selected status";
   static const String kPleaseSelectVo = "Please select VO Needed to continue";
   static const String kVoNeeded = "Vo Needed";
+  static const String kPurposeText = "Purpose Text";
+  static const String kVessel = "Vessel";
+  static const String kDepartureDate = "Departure Date";
+  static const String kActualDepartureDate = "Actual Departure Date";
+  static const String kArrivalDate = "Arrival Date";
+  static const String kActualArrivalDate = "Actual Arrival Date";
+  static const String kDeparturePort = "Departure Port";
+  static const String kArrivalPort = "Arrival Port";
+  static const String kNotes = "Notes";
 }

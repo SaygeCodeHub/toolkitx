@@ -19,7 +19,6 @@ class TripsRepositoryImpl extends TripsRepository {
       String tripId, String hashCode, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}trip/gettrip?tripid=$tripId&hashcode=$hashCode&userid=$userId");
-    print("${ApiConstants.baseUrl}trip/gettrip?tripid=$tripId&hashcode=$hashCode&userid=$userId");
     return FetchTripDetailsModel.fromJson(response);
   }
 }
