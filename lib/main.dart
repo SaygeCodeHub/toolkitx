@@ -238,27 +238,24 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: AppRoutes.onGenerateRoutes,
                 theme: appTheme,
-                home: SafeArea(
-                  child:
-                      BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-                          builder: (context, state) {
-                    return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
-                        builder: (context, state) {
-                      if (state is ClientSelected) {
-                        return const RootScreen(isFromClientList: false);
-                      } else if (state is LoggedIn) {
-                        return const ClientListScreen(isFromProfile: false);
-                      } else if (state is LanguageSelected) {
-                        return const SelectTimeZoneScreen();
-                      } else if (state is TimeZoneSelected) {
-                        return const SelectDateFormatScreen();
-                      } else if (state is DateFormatSelected) {
-                        return LoginScreen();
-                      } else {
-                        return const WelcomeScreen();
-                      }
-                    });
-                  }),
-                ))));
+                home: BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
+                    builder: (context, state) {
+                  return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
+                      builder: (context, state) {
+                    if (state is ClientSelected) {
+                      return const RootScreen(isFromClientList: false);
+                    } else if (state is LoggedIn) {
+                      return const ClientListScreen(isFromProfile: false);
+                    } else if (state is LanguageSelected) {
+                      return const SelectTimeZoneScreen();
+                    } else if (state is TimeZoneSelected) {
+                      return const SelectDateFormatScreen();
+                    } else if (state is DateFormatSelected) {
+                      return LoginScreen();
+                    } else {
+                      return const WelcomeScreen();
+                    }
+                  });
+                }))));
   }
 }
