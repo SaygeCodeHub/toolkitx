@@ -7,3 +7,10 @@ class FetchTripsList extends TripEvent {
 
   FetchTripsList({required this.pageNo});
 }
+
+class FetchTripsDetails extends TripEvent {
+  final String tripId;
+  final int tripTabIndex;
+
+  FetchTripsDetails({required this.tripId, required this.tripTabIndex});
+}

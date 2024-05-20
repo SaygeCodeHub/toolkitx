@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -50,6 +51,12 @@ class TripsListScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 vertical: xxTinierSpacing),
                             child: ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    TripsDetailsScreen.routeName,
+                                    arguments: state
+                                        .fetchTripsListModel.data[index].id);
+                              },
                               title: Text(
                                   state.fetchTripsListModel.data[index].vessel,
                                   style: Theme.of(context)
