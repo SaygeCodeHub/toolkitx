@@ -17,6 +17,8 @@ import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
+import 'package:toolkit/repositories/trips/trips_repository.dart';
+import 'package:toolkit/repositories/trips/trips_repository_impl.dart';
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
@@ -111,4 +113,5 @@ configurableDependencies() {
   getIt.registerLazySingleton<NotificationRepository>(
       () => NotificationRepositoryImpl());
   getIt.registerLazySingleton<GlobalRepository>(() => GlobalRepositoryImpl());
+  getIt.registerLazySingleton<TripsRepository>(() => TripsRepositoryImpl());
 }

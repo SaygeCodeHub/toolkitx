@@ -6,6 +6,7 @@ import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
+import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
 import '../../../blocs/client/client_bloc.dart';
@@ -284,6 +285,14 @@ class OnLineModules extends StatelessWidget {
         globalBloc.add(UpdateCount(type: 'tickets'));
         Navigator.pushNamed(context, TicketListScreen.routeName,
                 arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
+        break;
+      case 'hf':
+        Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
+        break;
+      case 'wf_trips':
+        Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
     }
