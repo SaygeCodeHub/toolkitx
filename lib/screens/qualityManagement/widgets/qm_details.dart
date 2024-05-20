@@ -5,7 +5,6 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../../utils/database_utils.dart';
 import 'qm_details_view_network_image.dart';
-import 'qm_map_links_list.dart';
 
 class QualityManagementDetails extends StatelessWidget {
   final QMDetailsData data;
@@ -54,8 +53,6 @@ class QualityManagementDetails extends StatelessWidget {
             ),
             const SizedBox(height: xxTinierSpacing),
             Text(data.locationname, style: Theme.of(context).textTheme.small),
-            const SizedBox(height: xxTinierSpacing),
-            QualityManagementMapLinksList(data: data),
             const SizedBox(height: tinySpacing),
             Text(
               DatabaseUtil.getText('SeverityImpact'),
