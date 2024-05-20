@@ -50,7 +50,7 @@ dependencies:
   flutter_document_picker: ^5.2.3
   flutter_html_to_pdf: ^0.7.0
   searchable_listview:
-  path: ^1.9.0
+  path:
 
 
 dev_dependencies:
