@@ -4,7 +4,6 @@ import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../blocs/location/location_bloc.dart';
 import '../../../blocs/location/location_event.dart';
-import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -37,9 +36,8 @@ class LocationDetailsLoToBody extends StatelessWidget {
               return CustomCard(
                 child: ListTile(
                   onTap: () {
-                    context.read<LotoDetailsBloc>().lotoId =
-                        locationLoTos[index].id;
-                    Navigator.pushNamed(context, LotoDetailsScreen.routeName);
+                    Navigator.pushNamed(context, LotoDetailsScreen.routeName,
+                        arguments: locationLoTos[index].id);
                   },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(

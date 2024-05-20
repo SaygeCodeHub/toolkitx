@@ -39,16 +39,14 @@ class TodoAssignedToMeBody extends StatelessWidget {
                           padding: const EdgeInsets.only(top: tinierSpacing),
                           child: ListTile(
                               onTap: () {
-                                todoMap['todoId'] =
-                                    assignToMeListDatum[index].id;
-                                todoMap['todoName'] =
-                                    assignToMeListDatum[index].todoname;
+                                ToDoDetailsAndDocumentDetailsScreen
+                                    .todoMap['isFromAdd'] = false;
                                 todoMap['isFromAdd'] = false;
                                 Navigator.pushNamed(
                                     context,
                                     ToDoDetailsAndDocumentDetailsScreen
                                         .routeName,
-                                    arguments: todoMap);
+                                    arguments: assignToMeListDatum[index].id);
                               },
                               title: Text(assignToMeListDatum[index].todoname,
                                   style: Theme.of(context)

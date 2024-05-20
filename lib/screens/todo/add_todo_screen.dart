@@ -51,10 +51,12 @@ class AddToDoScreen extends StatelessWidget {
                   ProgressBar.show(context);
                 } else if (state is ToDoAdded) {
                   ProgressBar.dismiss(context);
+                  ToDoDetailsAndDocumentDetailsScreen.todoMap['isFromAdd'] =
+                      true;
                   todoMap['isFromAdd'] = true;
                   Navigator.pushNamed(
                       context, ToDoDetailsAndDocumentDetailsScreen.routeName,
-                      arguments: state.todoMap);
+                      arguments: todoMap['todoId']);
                 } else if (state is ToDoNotAdded) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.todoNotAdded, '');

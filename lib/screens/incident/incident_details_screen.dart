@@ -5,7 +5,6 @@ import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_states.dart';
 import '../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
-import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
@@ -17,16 +16,16 @@ import 'widgets/incident_details_body.dart';
 import 'incident_pop_up_menu_screen.dart';
 
 class IncidentDetailsScreen extends StatelessWidget {
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   static const routeName = 'IncidentDetailsScreen';
 
-  const IncidentDetailsScreen({Key? key, required this.incidentListDatum})
+  const IncidentDetailsScreen({Key? key, required this.incidentId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<IncidentDetailsBloc>().add(FetchIncidentDetailsEvent(
-        incidentId: incidentListDatum.id,
+        incidentId: incidentId,
         role: context.read<IncidentLisAndFilterBloc>().roleId,
         initialIndex: 0));
     return Scaffold(
@@ -41,7 +40,7 @@ class IncidentDetailsScreen extends StatelessWidget {
                     return IncidentDetailsPopUpMenu(
                         incidentDetailsModel: state.incidentDetailsModel,
                         popUpMenuItems: state.incidentPopUpMenu,
-                        incidentListDatum: incidentListDatum,
+                        incidentId: incidentId,
                         incidentDetailsMap: state.editIncidentDetailsMap);
                   } else {
                     return const SizedBox();
@@ -78,7 +77,7 @@ class IncidentDetailsScreen extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is IncidentDetailsFetched) {
                 return IncidentDetailsBody(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: state.incidentDetailsModel,
                     clientId: state.clientId);
               } else if (state is IncidentDetailsNotFetched) {
@@ -87,7 +86,7 @@ class IncidentDetailsScreen extends StatelessWidget {
                         onPressed: () {
                           context.read<IncidentDetailsBloc>().add(
                               FetchIncidentDetailsEvent(
-                                  incidentId: incidentListDatum.id,
+                                  incidentId: incidentId,
                                   role: context
                                       .read<IncidentLisAndFilterBloc>()
                                       .roleId,
