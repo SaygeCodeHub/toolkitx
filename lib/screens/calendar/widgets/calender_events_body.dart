@@ -54,12 +54,9 @@ class CalendarEventsBody extends StatelessWidget {
               ),
               child: ListTile(
                 onTap: () {
-                  WorkOrderDetailsTabScreen.workOrderMap = {
-                    'workOrderId': calendarEventsDatum.events[dataIndex].id,
-                    'workOrderName': calendarEventsDatum.events[dataIndex].name,
-                  };
                   Navigator.pushNamed(
-                      context, WorkOrderDetailsTabScreen.routeName);
+                      context, WorkOrderDetailsTabScreen.routeName,
+                      arguments: calendarEventsDatum.events[dataIndex].id);
                 },
                 dense: true,
                 contentPadding: const EdgeInsets.all(xxTinierSpacing),

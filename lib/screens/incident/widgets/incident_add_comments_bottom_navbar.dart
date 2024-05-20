@@ -10,7 +10,6 @@ import '../../../blocs/uploadImage/upload_image_bloc.dart';
 import '../../../blocs/uploadImage/upload_image_event.dart';
 import '../../../blocs/uploadImage/upload_image_state.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_loading_popup.dart';
@@ -19,12 +18,10 @@ import '../../../widgets/progress_bar.dart';
 
 class IncidentAddCommentsBottomNavbar extends StatelessWidget {
   const IncidentAddCommentsBottomNavbar(
-      {super.key,
-      required this.incidentCommentsMap,
-      required this.incidentListDatum});
+      {super.key, required this.incidentCommentsMap, required this.incidentId});
 
   final Map incidentCommentsMap;
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +59,7 @@ class IncidentAddCommentsBottomNavbar extends StatelessWidget {
               Navigator.pop(context);
               context.read<IncidentDetailsBloc>().add(FetchIncidentDetailsEvent(
                   initialIndex: 0,
-                  incidentId: incidentListDatum.id,
+                  incidentId: incidentId,
                   role: context.read<IncidentLisAndFilterBloc>().roleId));
             } else if (state is IncidentCommentsNotSaved) {
               ProgressBar.dismiss(context);

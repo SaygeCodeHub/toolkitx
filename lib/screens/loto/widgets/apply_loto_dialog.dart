@@ -22,9 +22,9 @@ class ApplyLotoDialog extends StatelessWidget {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, StringConstants.kLotoApplied, '');
             Navigator.pop(context);
-            context
-                .read<LotoDetailsBloc>()
-                .add(FetchLotoDetails(lotoTabIndex: 0));
+            context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                lotoTabIndex: 0,
+                lotoId: context.read<LotoDetailsBloc>().lotoId));
           } else if (state is LotoNotApplied) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.getError, '');
@@ -36,7 +36,8 @@ class ApplyLotoDialog extends StatelessWidget {
             onPrimaryButton: () {
               context.read<LotoDetailsBloc>().add(ApplyLotoEvent());
               context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex));
+                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex,
+                  lotoId: context.read<LotoDetailsBloc>().lotoId));
             }));
   }
 }

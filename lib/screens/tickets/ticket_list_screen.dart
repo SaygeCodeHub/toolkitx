@@ -32,8 +32,9 @@ class TicketListScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, AddTicketScreen.routeName).then(
-                  (_) => context.read<TicketsBloc>().add(
-                      FetchTickets(pageNo: pageNo, isFromHome: isFromHome)));
+                  (_) => Navigator.pushReplacementNamed(
+                      context, TicketListScreen.routeName,
+                      arguments: isFromHome));
             },
             child: const Icon(Icons.add)),
         body: Padding(

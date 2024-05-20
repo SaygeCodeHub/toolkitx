@@ -23,8 +23,8 @@ class SafetyNoticeListCard extends StatelessWidget {
     return CustomCard(
       child: ListTile(
         onTap: () {
-          SafetyNoticeDetailsScreen.safetyNoticeId = noticesDatum.id;
-          Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName)
+          Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName,
+                  arguments: noticesDatum.id)
               .then((value) => context
                   .read<SafetyNoticeBloc>()
                   .add(FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
