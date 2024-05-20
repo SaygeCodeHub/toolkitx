@@ -22,6 +22,12 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is used to show your current position on the map.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is used to show your current position on the map.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is used to show your current position on the map.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -47,15 +53,5 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to select files.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>We need access to your photo library to save files.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>We need access to your camera to take pictures.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>We need access to your microphone to record audio.</string>
-    <key>NSDocumentsFolderUsageDescription</key>
-    <string>We need access to your documents to select files.</string>
 </dict>
 </plist>
