@@ -29,7 +29,10 @@ class NotificationUtil {
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
             'showCount': 0,
-            'isGroup': (message.data['rtype'] == '3') ? true : false
+            'currentSenderId': message.data['sid'] ?? '',
+            'currentReceiverId': message.data['rid'] ?? '',
+            'isGroup': (message.data['rtype'] == '3') ? true : false,
+            'isCurrentUser': true
           }));
         } else {
           ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
@@ -39,7 +42,12 @@ class NotificationUtil {
             'stype': message.data['stype'] ?? '',
             "employee_name": message.data['username'],
             'showCount': 0,
-            'isGroup': (message.data['rtype'] == '3') ? true : false
+            'currentSenderId':
+                ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
+            'currentReceiverId':
+                ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
+            'isGroup': (message.data['rtype'] == '3') ? true : false,
+            'isCurrentUser': false
           }));
         }
       }
@@ -73,6 +81,7 @@ class NotificationUtil {
       'stype': message.data['stype'],
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
+      'msg_status': '1',
       'showCount': 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
@@ -99,7 +108,7 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
   try {
     Map<String, dynamic> messageData = {
       'rid': message.data['rid'],
-      'msg': message.data['chatmsg'],
+      'msg': message.data['chatmsg'] ?? '',
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
       'msg_id': message.data['id'],
@@ -107,8 +116,9 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'quote_msg_id': message.data['quotemsg'] ?? '',
       'sid': message.data['sid'],
       'stype': message.data['stype'],
-      'employee_name': message.data['username'],
+      'employee_name': message.data['username'] ?? '',
       'msg_type': message.data['type'],
+      'msg_status': '1',
       'showCount': 0,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'

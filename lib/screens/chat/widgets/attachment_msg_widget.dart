@@ -34,7 +34,18 @@ class AttachmentMsgWidget extends StatelessWidget {
           left: kModuleImagePadding,
           bottom: kModuleImagePadding),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Text(
+              (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                  ? context.read<ChatBloc>().chatDetailsMap['employee_name'] ??
+                      ''
+                  : '',
+              style: Theme.of(context).textTheme.tinySmall,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1),
+          const SizedBox(height: xxTiniestSpacing),
           (snapShot.data![reversedIndex]['isReceiver'] == 1)
               ? Align(
                   alignment: Alignment.centerLeft,
@@ -43,14 +54,16 @@ class AttachmentMsgWidget extends StatelessWidget {
                           .toString(),
                       context,
                       snapShot.data![reversedIndex]['msg_type'] ?? '',
-                      snapShot.data![reversedIndex]['isReceiver']))
+                      snapShot.data![reversedIndex]['isReceiver'],
+                      snapShot.data![reversedIndex]['msg']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
                       snapShot.data![reversedIndex]['pickedMedia'].toString(),
                       context,
                       snapShot.data![reversedIndex]['msg_type'],
-                      snapShot.data![reversedIndex]['isReceiver'])),
+                      snapShot.data![reversedIndex]['isReceiver'],
+                      snapShot.data![reversedIndex]['msg'])),
           Align(
             alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -90,13 +103,13 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
-      String type, int isReceiver) {
+      String type, int isReceiver, String fileName) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
-            child: AttachementMsgTypeUtil()
-                .renderWidget(type, attachmentPath, context, isReceiver))
+            child: AttachementMsgTypeUtil().renderWidget(
+                type, attachmentPath, context, isReceiver, fileName))
         : Container(
             width: 100,
             height: 100,
@@ -115,11 +128,11 @@ class AttachmentMsgWidget extends StatelessWidget {
                   String url =
                       '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
                   DateTime imageName = DateTime.now();
+                  String attachementExtension = getFileName(
+                      snapShot.data![reversedIndex]['msg'].toString());
                   bool downloadProcessComplete = await downloadFileFromUrl(
                       url,
-                      (snapShot.data![reversedIndex]['msg_type'] == '4')
-                          ? "$imageName.${snapShot.data![reversedIndex]['attachementExtension']}"
-                          : "$imageName.jpg",
+                      "$imageName.$attachementExtension",
                       snapShot.data![reversedIndex]['msg_id'],
                       snapShot.data![reversedIndex]['msg_type']);
                   if (downloadProcessComplete) {
@@ -134,6 +147,11 @@ class AttachmentMsgWidget extends StatelessWidget {
             ),
           );
   }
+}
+
+// check below code
+String getFileName(String filePath) {
+  return filePath.split('/').last;
 }
 
 Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
@@ -162,7 +180,7 @@ Future<bool> downloadFileFromUrl(String url, imageName, msgId, msgType) async {
 
 Future<String> downloadImage(
     String url, String filename, msgId, msgType) async {
-  Directory directory = await getApplicationDocumentsDirectory();
+  Directory directory = await getApplicationCacheDirectory();
   String path = directory.path;
   String filePath = '$path/$filename';
   Dio dio = Dio();
@@ -172,7 +190,6 @@ Future<String> downloadImage(
       if (total != -1) {}
     });
     final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
-
     await databaseHelper.updateLocalImagePath(msgId, filePath);
   } catch (e) {
     rethrow;

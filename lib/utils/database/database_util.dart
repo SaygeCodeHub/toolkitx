@@ -237,25 +237,25 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> getUnreadMessageCount(String currentUserId) async {
+  Future<void> getUnreadMessageCount(
+      String currentUserId,
+      String currentSenderId,
+      String receiverId,
+      String currentReceiverId,
+      bool onChatMessagingScreen) async {
     final Database db = await database;
 
     await db.transaction((txn) async {
       final unreadCount = await txn.rawQuery('''
       SELECT COUNT(*) AS unread_for_recipient
       FROM chat_messages
-      WHERE sid = ? AND showCount = 0;
-    ''', [currentUserId]);
-
-      final unreadRecipientCount =
+       WHERE sid = ? AND rid = ? AND showCount = 0;
+    ''', [currentUserId, receiverId]);
+      int unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
-
       await txn.update(
-        'chat_messages',
-        {'unreadMessageCount': unreadRecipientCount},
-        where: 'sid = ?',
-        whereArgs: [currentUserId],
-      );
+          'chat_messages', {'unreadMessageCount': unreadRecipientCount},
+          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
     });
   }
 
@@ -302,9 +302,11 @@ class DatabaseHelper {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 
-    messages = await db.query('chat_messages',
-        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
+    messages = await db.query(
+      'chat_messages',
+      where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+      whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
+    );
 
     List<Map<String, dynamic>> updatedMessages = [];
 

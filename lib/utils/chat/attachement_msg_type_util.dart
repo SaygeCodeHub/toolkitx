@@ -1,13 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/widgets/attachement_document_widget.dart';
 import 'package:toolkit/screens/chat/widgets/attachement_video_widget.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 
+import '../../configs/app_color.dart';
+
 class AttachementMsgTypeUtil {
-  Widget renderWidget(
-      String type, String mediaPath, BuildContext context, int isReceiver) {
+  Widget renderWidget(String type, String mediaPath, BuildContext context,
+      int isReceiver, String fileName) {
     switch (type) {
       case '2':
         return InkWell(
@@ -15,15 +19,36 @@ class AttachementMsgTypeUtil {
             Navigator.pushNamed(context, ViewAttachedImageWidget.routeName,
                 arguments: mediaPath);
           },
-          child: Image.file(fit: BoxFit.cover, errorBuilder:
-              (BuildContext context, Object exception, StackTrace? stackTrace) {
-            return Text('Failed to load image: $exception');
-          }, File(mediaPath)),
+          child: Container(
+            height: 120,
+            width: 120,
+            decoration: const BoxDecoration(color: AppColor.lightGrey),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: tiniestSpacing),
+                Image.file(fit: BoxFit.fitHeight, height: 50, width: 50,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                  return Text('Failed to load image: $exception');
+                }, File(mediaPath)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(fileName,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.tinySmall),
+                )
+              ],
+            ),
+          ),
         );
       case '3':
-        return AttachementVideoWidget(videoPath: mediaPath);
+        return AttachementVideoWidget(videoPath: mediaPath, fileName: fileName);
       case '4':
-        return AttachementDocumentWidget(docPath: mediaPath);
+        return AttachmentDocumentWidget(docPath: mediaPath, fileName: fileName);
       default:
         return const SizedBox.shrink();
     }
