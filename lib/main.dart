@@ -26,6 +26,7 @@ import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
+
 import 'blocs/checklist/systemUser/approve/sys_user_approve_checklist_bloc.dart';
 import 'blocs/checklist/systemUser/changeRole/sys_user_checklist_change_role_bloc.dart';
 import 'blocs/checklist/systemUser/checkList/sys_user_checklist_bloc.dart';
@@ -237,24 +238,27 @@ class MyApp extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: AppRoutes.onGenerateRoutes,
                 theme: appTheme,
-                home: BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
-                    builder: (context, state) {
-                  return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
-                      builder: (context, state) {
-                    if (state is ClientSelected) {
-                      return const RootScreen(isFromClientList: false);
-                    } else if (state is LoggedIn) {
-                      return const ClientListScreen(isFromProfile: false);
-                    } else if (state is LanguageSelected) {
-                      return const SelectTimeZoneScreen();
-                    } else if (state is TimeZoneSelected) {
-                      return const SelectDateFormatScreen();
-                    } else if (state is DateFormatSelected) {
-                      return LoginScreen();
-                    } else {
-                      return const WelcomeScreen();
-                    }
-                  });
-                }))));
+                home: SafeArea(
+                  child:
+                      BlocBuilder<WifiConnectivityBloc, WifiConnectivityState>(
+                          builder: (context, state) {
+                    return BlocBuilder<OnBoardingBloc, OnBoardingStates>(
+                        builder: (context, state) {
+                      if (state is ClientSelected) {
+                        return const RootScreen(isFromClientList: false);
+                      } else if (state is LoggedIn) {
+                        return const ClientListScreen(isFromProfile: false);
+                      } else if (state is LanguageSelected) {
+                        return const SelectTimeZoneScreen();
+                      } else if (state is TimeZoneSelected) {
+                        return const SelectDateFormatScreen();
+                      } else if (state is DateFormatSelected) {
+                        return LoginScreen();
+                      } else {
+                        return const WelcomeScreen();
+                      }
+                    });
+                  }),
+                ))));
   }
 }
