@@ -13,6 +13,7 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
+import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
 
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
@@ -1294,7 +1295,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   action['permitId'],
                   await _customerCache.getApiKey(CacheKeys.apiKey));
               SyncTransferCpPermitModel syncTransferCpModel =
-              await _permitRepository.syncTransferCp(surrenderMap);
+                  await _permitRepository.syncTransferCp(surrenderMap);
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
 
@@ -1309,7 +1310,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   action['permitId'],
                   await _customerCache.getApiKey(CacheKeys.apiKey));
               SyncTransferCpPermitModel syncTransferCpModel =
-              await _permitRepository.syncTransferCp(transferMap);
+                  await _permitRepository.syncTransferCp(transferMap);
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
 
@@ -1819,69 +1820,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(OfflinePdfGenerated(htmlContent: htmlText));
     } catch (e) {
       log('error in generating pdf: $e');
-    }
-  }
-
-  FutureOr<void> _surrenderPermit(
-      SurrenderPermit event, Emitter<PermitStates> emit) async {
-    try {
-      String hashCode =
-          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-      Map surrenderPermitMap = {
-        "hashcode": hashCode,
-        "permitid": event.permitId,
-      };
-      if (isNetworkEstablished) {
-        emit(SurrenderingPermit());
-        SurrenderPermitModel surrenderPermitModel =
-            await _permitRepository.surrenderPermit(surrenderPermitMap);
-        if (surrenderPermitModel.message == '1') {
-          emit(PermitSurrendered());
-        } else {
-          emit(PermitNotSurrender(
-              errorMessage: StringConstants.kSomethingWentWrong));
-        }
-      } else {
-        Map surrenderPermitOfflineMap = {
-          "npw_id": 0,
-          "npw_name": event.surrenderPermitMap['npw_name'] ?? '',
-          "npw_auth": event.surrenderPermitMap['npw_auth'] ?? '',
-          "npw_sign": event.surrenderPermitMap['user_sign'] ?? '',
-          "date": event.surrenderPermitMap['user_date'] ?? '',
-          "time": event.surrenderPermitMap['user_time'] ?? '',
-        };
-        Map<String, dynamic> fetchSurrenderData = await _databaseHelper
-            .fetchOfflinePermitSurrenderData(event.permitId);
-        if (fetchSurrenderData['surrender'] != [] &&
-            fetchSurrenderData['surrender'] != null) {
-          transferAndSurrenderMap['surrender'] =
-              fetchSurrenderData['surrender'];
-          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
-          transferAndSurrenderMap['issurrender'] = '1';
-          transferAndSurrenderMap['hashcode'] =
-              await _customerCache.getHashCode(CacheKeys.hashcode);
-        } else {
-          if (transferAndSurrenderMap.isEmpty) {
-            transferAndSurrenderMap['surrender'] = [];
-            transferAndSurrenderMap['reciever'] = [];
-          }
-          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
-          transferAndSurrenderMap['issurrender'] = '1';
-          transferAndSurrenderMap['hashcode'] =
-              await _customerCache.getHashCode(CacheKeys.hashcode);
-        }
-
-        add(SavePermitOfflineAction(
-            offlineDataMap: transferAndSurrenderMap,
-            permitId: event.permitId,
-            signature: event.surrenderPermitMap['npw_sign'] ?? '',
-            actionKey: 'surrender_permit',
-            dateTime:
-                '${event.surrenderPermitMap['date']}${event.surrenderPermitMap['time']}'));
-      }
-    } catch (e) {
-      emit(PermitNotSurrender(errorMessage: e.toString()));
-      emit(ErrorGeneratingPdfOffline(errorMessage: e.toString()));
     }
   }
 }

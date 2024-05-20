@@ -90,8 +90,6 @@ class PermitSignAsSapScreen extends StatelessWidget {
                                       previousScreen:
                                           'TransferPermitOfflineScreen'));
                             } else {
-                              print(
-                                  'on screen prepare permit data ${permitCpSapModel.sapCpMap}');
                               SaveOfflineDataUtil().saveData(
                                   permitCpSapModel.previousScreen,
                                   permitCpSapModel.sapCpMap,
