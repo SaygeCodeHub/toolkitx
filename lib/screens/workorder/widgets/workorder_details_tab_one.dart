@@ -4,7 +4,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/database_utils.dart';
-import 'workorder_details_tab_one_map_link_list.dart';
 
 class WorkOrderDetailsTabOne extends StatelessWidget {
   final WorkOrderDetailsData data;
@@ -34,7 +33,7 @@ class WorkOrderDetailsTabOne extends StatelessWidget {
               style: Theme.of(context).textTheme.medium,
             ),
             const SizedBox(height: xxTinierSpacing),
-            WorkOrderDetailsTabOneMapLinkList(data: data),
+            Text(data.locationnames, style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
             Text(DatabaseUtil.getText('OtherLocation'),
                 style: Theme.of(context).textTheme.medium),

@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -16,6 +17,7 @@ import '../../data/models/permit/close_permit_details_model.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
+import '../../data/models/permit/surrender_permit_model.dart';
 
 abstract class PermitRepository {
   Future<AllPermitModel> getAllPermits(
@@ -63,6 +65,10 @@ abstract class PermitRepository {
   Future<SavePermitEditSafetyDocumentModel> saveEditSafetyNoticeDocument(
       Map editSafetyDocumentMap);
 
+  Future<SurrenderPermitModel> surrenderPermit(Map surrenderPermitMap);
+
   Future<FetchDataForChangePermitCpModel> fetchDataForChangePermitCP(
       String permitId, String hashCode);
+
+  Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap);
 }

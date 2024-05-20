@@ -8,10 +8,12 @@ import 'package:toolkit/screens/tickets/add_ticket_comment_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_completion_date_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/imagePickerBloc/image_picker_event.dart';
+import 'open_ticket_screen.dart';
 
 class TicketsDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -43,22 +45,22 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('ticket_estimateedt')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.estimateDT.value));
           }
           if (value ==
               DatabaseUtil.getText('ticket_waitingfordevelopmentapproval')) {
-            fetchTicketDetailsModel.data.isbug == '1'
+            fetchTicketDetailsModel.data.isbug != '1'
                 ? Navigator.pushNamed(context, TicketEDTHoursScreen.routeName)
                 : context.read<TicketsBloc>().add(UpdateTicketStatus(
-                    edtHrs: '0',
+                    edtHrs: 0,
                     completionDate: '',
                     status: TicketStatusEnum.waitingForDevelopment.value));
           }
           if (value == DatabaseUtil.getText('ticket_approvefordevelopment')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: int.tryParse(fetchTicketDetailsModel.data.etd),
                 completionDate: '',
                 status: TicketStatusEnum.approveForDevelopment.value));
           }
@@ -67,35 +69,50 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
           }
           if (value == DatabaseUtil.getText('ticket_testing')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.testing.value));
           }
           if (value == DatabaseUtil.getText('ticket_testing')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.testing.value));
           }
           if (value == DatabaseUtil.getText('approve')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.approved.value));
           }
 
           if (value == DatabaseUtil.getText('ticket_rollout')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.rolledOut.value));
           }
 
           if (value == DatabaseUtil.getText('ticket_close')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
-                edtHrs: '',
+                edtHrs: 0,
                 completionDate: '',
                 status: TicketStatusEnum.closed.value));
+          }
+          if (value == StringConstants.kOpenTicket) {
+            Navigator.pushNamed(context, OpenTicketScreen.routeName);
+          }
+          if (value == StringConstants.kBackToApprove) {
+            context.read<TicketsBloc>().add(UpdateTicketStatus(
+                edtHrs: 0,
+                completionDate: '',
+                status: TicketStatusEnum.backToApprove.value));
+          }
+          if (value == StringConstants.kApproveRolledOut) {
+            context.read<TicketsBloc>().add(UpdateTicketStatus(
+                edtHrs: 0,
+                completionDate: '',
+                status: TicketStatusEnum.approveRolledOut.value));
           }
         },
         position: PopupMenuPosition.under,

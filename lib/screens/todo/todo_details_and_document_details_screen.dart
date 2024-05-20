@@ -18,15 +18,17 @@ import 'widgets/todo_pop_up_menu.dart';
 
 class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
   static const routeName = 'ToDoDetailsAndDocumentDetailsScreen';
-  final Map todoMap;
+  final String todoId;
+  static Map todoMap = {};
 
-  const ToDoDetailsAndDocumentDetailsScreen({Key? key, required this.todoMap})
+  const ToDoDetailsAndDocumentDetailsScreen({Key? key, required this.todoId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<ToDoBloc>().add(FetchToDoDetailsAndDocumentDetails(
-        selectedIndex: 0, todoId: todoMap['todoId']));
+    todoMap['todoid'] = todoId;
+    context.read<ToDoBloc>().add(
+        FetchToDoDetailsAndDocumentDetails(selectedIndex: 0, todoId: todoId));
     return Scaffold(
       appBar: GenericAppBar(
         actions: [ToDoPopUpMenu(todoMap: todoMap)],

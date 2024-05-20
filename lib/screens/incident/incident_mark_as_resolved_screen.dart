@@ -10,7 +10,6 @@ import '../../blocs/uploadImage/upload_image_bloc.dart';
 import '../../blocs/uploadImage/upload_image_event.dart';
 import '../../blocs/uploadImage/upload_image_state.dart';
 import '../../configs/app_spacing.dart';
-import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/incident_details_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
@@ -21,19 +20,17 @@ import '../../widgets/progress_bar.dart';
 import 'widgets/incident_common_comments_section.dart';
 
 class IncidentMarkAsResolvedScreen extends StatelessWidget {
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   final IncidentDetailsModel incidentDetailsModel;
 
   IncidentMarkAsResolvedScreen(
-      {Key? key,
-      required this.incidentListDatum,
-      required this.incidentDetailsModel})
+      {Key? key, required this.incidentId, required this.incidentDetailsModel})
       : super(key: key);
   final Map incidentCommentsMap = {};
 
   @override
   Widget build(BuildContext context) {
-    incidentCommentsMap['incidentId'] = incidentListDatum.id;
+    incidentCommentsMap['incidentId'] = incidentId;
     incidentCommentsMap['status'] =
         IncidentAndQualityManagementStatusEnum.resolved.value;
     return Scaffold(
@@ -75,7 +72,7 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
                 context.read<IncidentDetailsBloc>().add(
                     FetchIncidentDetailsEvent(
                         initialIndex: 0,
-                        incidentId: incidentListDatum.id,
+                        incidentId: incidentId,
                         role: context.read<IncidentLisAndFilterBloc>().roleId));
               } else if (state is IncidentCommentsNotSaved) {
                 ProgressBar.dismiss(context);

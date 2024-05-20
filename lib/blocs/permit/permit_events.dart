@@ -157,6 +157,12 @@ class SavePermitEditSafetyDocument extends PermitEvents {
       required this.permitId});
 }
 
+class SurrenderPermit extends PermitEvents {
+  final String permitId;
+
+  SurrenderPermit({required this.permitId});
+}
+
 class FetchDataForChangePermitCP extends PermitEvents {
   final String permitId;
 
@@ -188,6 +194,12 @@ class SelectTransferValue extends PermitEvents {
   final String value;
 
   SelectTransferValue({required this.value});
+}
+
+class ChangePermitCP extends PermitEvents {
+  final Map changePermitCPMap;
+
+  ChangePermitCP({required this.changePermitCPMap});
 }
 
 class SavePermitOfflineAction extends PermitEvents {

@@ -25,9 +25,10 @@ import 'widgets/safety_notice_tab_one.dart';
 
 class SafetyNoticeDetailsScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeDetailsScreen';
-  static String safetyNoticeId = '';
+  final String safetyNoticeId;
 
-  const SafetyNoticeDetailsScreen({Key? key}) : super(key: key);
+  const SafetyNoticeDetailsScreen({Key? key, required this.safetyNoticeId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

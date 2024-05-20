@@ -8,6 +8,7 @@ import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
+import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
 import '../../../blocs/client/client_bloc.dart';
@@ -181,9 +182,9 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'wf_checklist':
-        globalBloc.add(UpdateCount(type: 'wf_checklist'));
-        Navigator.pushNamed(context, WorkForceListScreen.routeName).then((_) =>
-            clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        globalBloc.add(UpdateCount(type: 'checklist'));
+        Navigator.pushNamed(context, WorkForceListScreen.routeName)
+            .then((_) => clientBloc.add(FetchHomeScreenData()));
         break;
       case 'sl':
         globalBloc.add(UpdateCount(type: 'sl'));
@@ -299,6 +300,14 @@ class OnLineModules extends StatelessWidget {
                 arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'hf':
+        Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'wf_trips':
+        Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
+            .then((_) => clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
     }
   }

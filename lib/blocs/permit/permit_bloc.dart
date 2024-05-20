@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -13,6 +14,7 @@ import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -76,6 +78,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
+    on<ChangePermitCP>(_changePermitCP);
+    on<SurrenderPermit>(_surrenderPermit);
     on<SavePermitOfflineAction>(_saveOfflineData);
     on<PermitInternetActions>(_permitInternetActions);
     on<GenerateOfflinePdf>(_generateOfflinePdf);
@@ -334,6 +338,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         if (permitBasicData?.istransfersafetydocument == '1') {
           permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        } if (permitBasicData?.issurrendercp == '1') {
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
@@ -1047,6 +1053,62 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _selectTransferValue(
       SelectTransferValue event, Emitter<PermitStates> emit) {
     emit(TransferValueSelected(value: event.value));
+  }
+
+  Future<FutureOr<void>> _changePermitCP(
+      ChangePermitCP event, Emitter<PermitStates> emit) async {
+    emit(PermitCPChanging());
+    try {
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      Map changePermitCPMap = {
+        "hashcode": hashCode,
+        "permitid": event.changePermitCPMap['permitId'],
+        "userid": userId,
+        "npw": event.changePermitCPMap['npw'],
+        "sap": event.changePermitCPMap['sap'],
+        "role": roleId,
+        "controlroom": event.changePermitCPMap['controlePerson']
+      };
+      if ((event.changePermitCPMap['sap'] != '' &&
+          event.changePermitCPMap['controlePerson'] != null)) {
+        ChangePermitCpModel changePermitCpModel =
+        await _permitRepository.changePermitCP(changePermitCPMap);
+        if (changePermitCpModel.message == '1') {
+          emit(PermitCPChanged());
+        } else {
+          emit(PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+        }
+      } else {
+        emit(PermitCPNotChanged(
+            errorMessage: "SAP and control person can't be empty"));
+      }
+    } catch (e) {
+      emit(PermitCPNotChanged(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _surrenderPermit(
+      SurrenderPermit event, Emitter<PermitStates> emit) async {
+    emit(SurrenderingPermit());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      Map surrenderPermitMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+      };
+      SurrenderPermitModel surrenderPermitModel =
+      await _permitRepository.surrenderPermit(surrenderPermitMap);
+      if (surrenderPermitModel.message == '1') {
+        emit(PermitSurrendered());
+      } else {
+        emit(PermitNotSurrender(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(PermitNotSurrender(errorMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _saveOfflineData(

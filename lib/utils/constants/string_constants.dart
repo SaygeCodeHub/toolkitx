@@ -290,17 +290,20 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
-  static const String kCP = 'CP';
+  static const String kSAP = 'SAP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kSignAsSap = 'Sign as SAP';
   static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kPermitTransferWarning =
+      'Warning: This Safety Document has not been surrendered by a Competent Person. This must be cleared and cancelled by a suitably authorised person';
   static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
   static const String kAllGearPermit =
       'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
   static const String kClearPermit = 'Clear Permit'; //
   static const String kClearPermitCap = 'CLEAR PERMIT'; //
+  static const String kSurrenderPermit = 'Surrender Permit'; //
   static const String kPermitIdentification = '1. IDENTIFICATION'; //
   static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
   static const String kPermitEquipmentIdentification =
@@ -617,6 +620,16 @@ abstract class StringConstants {
   static const String kSelectApplication = 'Select Application';
   static const String kValid = 'Valid';
   static const String kAllAnswersRequired = "All answers are required";
+  static const String kOpenTicket = "Open Ticket";
+  static const String kApproveOfDev2 = "Approve for Dev2";
+  static const String kBackToApprove = "Back to Approve";
+  static const String kApproveRolledOut = "Approve Rolled Out";
+  static const String kPleaseEnterCompletionDate =
+      "Please enter completion date";
+  static const String kEdtShouldBeGreaterThan0 =
+      "EDT should be greater than 0 for selected status";
+  static const String kPleaseSelectVo = "Please select VO Needed to continue";
+  static const String kVoNeeded = "Vo Needed";
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =

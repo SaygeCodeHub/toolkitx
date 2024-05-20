@@ -288,6 +288,16 @@ class PermitEditSafetyDocumentNotSaved extends PermitStates {
   PermitEditSafetyDocumentNotSaved({required this.errorMessage});
 }
 
+class SurrenderingPermit extends PermitStates {}
+
+class PermitSurrendered extends PermitStates {}
+
+class PermitNotSurrender extends PermitStates {
+  final String errorMessage;
+
+  PermitNotSurrender({required this.errorMessage});
+}
+
 class DataForChangePermitCPFetching extends PermitStates {}
 
 class DataForChangePermitCPFetched extends PermitStates {
@@ -327,6 +337,16 @@ class TransferValueSelected extends PermitStates {
   final String value;
 
   TransferValueSelected({required this.value});
+}
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
 }
 
 class SavingOfflineData extends PermitStates {}
