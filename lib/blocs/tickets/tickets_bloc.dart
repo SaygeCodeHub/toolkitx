@@ -8,10 +8,12 @@ import 'package:toolkit/data/models/tickets/save_ticket_comment_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/data/models/tickets/update_ticket_status_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/tickets/fetch_ticket_details_model.dart';
+import '../../data/models/tickets/open_ticket_model.dart';
 import '../../data/models/tickets/save_ticket_document_model.dart';
 import '../../di/app_module.dart';
 import '../../utils/database_utils.dart';
@@ -41,6 +43,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
     on<SaveTicketComment>(_saveTicketComment);
     on<SaveTicketDocument>(_saveTicketDocument);
     on<UpdateTicketStatus>(_updateTicketStatus);
+    on<SaveOpenTicket>(_saveOpenTicket);
+    on<SelectVoValue>(_selectVoValue);
   }
 
   String selectApplicationName = '';
@@ -136,7 +140,6 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       List popUpMenuItemsList = [
         DatabaseUtil.getText('AddComments'),
         DatabaseUtil.getText('AddDocuments'),
-        DatabaseUtil.getText('ticket_close'),
         DatabaseUtil.getText('Cancel'),
       ];
 
@@ -157,7 +160,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
         popUpMenuItemsList.insert(
             2, DatabaseUtil.getText('ticket_development'));
       }
-      if (fetchTicketDetailsModel.data.canapprovedfordevelopment == '1') {
+      if (fetchTicketDetailsModel.data.canapprovedfordevelopment == '1' ||
+          fetchTicketDetailsModel.data.canapprovedfordevelopmentvo == '1') {
         popUpMenuItemsList.insert(
             3, DatabaseUtil.getText('ticket_approvefordevelopment'));
       }
@@ -174,6 +178,18 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       }
       if (fetchTicketDetailsModel.data.canrolledout == '1') {
         popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
+      }
+      if (fetchTicketDetailsModel.data.canclose == '1') {
+        popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_close'));
+      }
+      if (fetchTicketDetailsModel.data.canopenticket == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kOpenTicket);
+      }
+      if (fetchTicketDetailsModel.data.canbacktoapproved == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kBackToApprove);
+      }
+      if (fetchTicketDetailsModel.data.canapproverolledout == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
       }
 
       if (fetchTicketDetailsModel.status == 200) {
@@ -289,16 +305,58 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
         "completiondate": event.completionDate,
         "hashcode": hashCode
       };
-      UpdateTicketStatusModel updateTicketStatusModel =
-          await _ticketsRepository.updateTicketStatus(updateStatusMap);
-      if (updateTicketStatusModel.message == '1') {
-        emit(TicketStatusUpdated());
-      } else {
+      if (event.status == "11" && event.edtHrs! <= 0) {
         emit(TicketStatusNotUpdated(
-            errorMessage: updateTicketStatusModel.message));
+            errorMessage: StringConstants.kEdtShouldBeGreaterThan0));
+      } else if (event.status == '5' && event.completionDate == '') {
+        emit(TicketStatusNotUpdated(
+            errorMessage: StringConstants.kPleaseEnterCompletionDate));
+      } else {
+        UpdateTicketStatusModel updateTicketStatusModel =
+            await _ticketsRepository.updateTicketStatus(updateStatusMap);
+        if (updateTicketStatusModel.message == '1') {
+          emit(TicketStatusUpdated());
+        } else {
+          emit(TicketStatusNotUpdated(
+              errorMessage: updateTicketStatusModel.message));
+        }
       }
     } catch (e) {
       emit(TicketStatusNotUpdated(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _saveOpenTicket(
+      SaveOpenTicket event, Emitter<TicketsStates> emit) async {
+    emit(OpenTicketSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openTicketMap = {
+        "ticketid": ticketId,
+        "userid": userId,
+        "vo": event.value,
+        "hashcode": hashCode
+      };
+      if (event.value != '') {
+        OpenTicketModel openTicketModel =
+            await _ticketsRepository.openTicket(openTicketMap);
+        if (openTicketModel.message == '1') {
+          emit(OpenTicketSaved());
+        } else {
+          emit(OpenTicketNotSaved(errorMessage: openTicketModel.message));
+        }
+      } else {
+        emit(OpenTicketNotSaved(errorMessage: StringConstants.kPleaseSelectVo));
+      }
+    } catch (e) {
+      emit(OpenTicketNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectVoValue(
+      SelectVoValue event, Emitter<TicketsStates> emit) {
+    emit(VoValueSelected(value: event.value, vo: event.vo));
   }
 }

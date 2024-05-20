@@ -118,14 +118,23 @@ class ClosePermitBody extends StatelessWidget {
                               StringConstants.kPleaseEnterTimeToClosePermit,
                               '');
                         } else {
-                          Navigator.pushNamed(
-                              context, PermitSignAsSapScreen.routeName,
-                              arguments: PermitCpSapModel(sapCpMap: {
-                                'permitId': closePermitMap['permitId'],
-                                'controlPerson':
-                                    closePermitMap['controlPerson'],
-                                'time': closePermitMap['time']
-                              }, previousScreen: ClosePermitScreen.routeName));
+                          if (closePermitMap['controlPerson'] == null ||
+                              closePermitMap['controlPerson'] == '') {
+                            showCustomSnackBar(context,
+                                StringConstants.kPleaseFillControlPerson, '');
+                          } else {
+                            Navigator.pushNamed(
+                                context, PermitSignAsSapScreen.routeName,
+                                arguments: PermitCpSapModel(
+                                    sapCpMap: {
+                                      'permitId': closePermitMap['permitId'],
+                                      'controlPerson':
+                                          closePermitMap['controlPerson'],
+                                      'time': closePermitMap['time']
+                                    },
+                                    previousScreen:
+                                        ClosePermitScreen.routeName));
+                          }
                         }
                       }
                     },

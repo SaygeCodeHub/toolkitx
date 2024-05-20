@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import '../../../blocs/loto/loto_details/loto_details_bloc.dart';
 import '../../../blocs/loto/loto_list/loto_list_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -27,9 +26,8 @@ class LotoListTile extends StatelessWidget {
           children: [
             ListTile(
               onTap: () {
-                context.read<LotoDetailsBloc>().lotoId =
-                    context.read<LotoListBloc>().data[index].id;
-                Navigator.pushNamed(context, LotoDetailsScreen.routeName)
+                Navigator.pushNamed(context, LotoDetailsScreen.routeName,
+                        arguments: context.read<LotoListBloc>().data[index].id)
                     .then((_) => {
                           LotoListScreen.pageNo = 1,
                           context.read<LotoListBloc>().data.clear(),

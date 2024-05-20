@@ -103,7 +103,8 @@ class DatabaseHelper {
           actionText TEXT,
           actionJson TEXT,
           actionDateTime TEXT,
-          sign TEXT
+          sign TEXT,
+          UNIQUE(permitId, actionText)
         );
   ''');
       },
@@ -140,7 +141,8 @@ class DatabaseHelper {
           actionText TEXT,
           actionJson TEXT,
           actionDateTime TEXT,
-          sign TEXT
+          sign TEXT,
+          UNIQUE(permitId, actionText)
         );
   ''');
   }
@@ -157,6 +159,7 @@ class DatabaseHelper {
             'actionJson': jsonEncode(actionJson),
             'actionDateTime':
                 actionDateTime ?? DateTime.now().toUtc().toString(),
+            'sign': sign
           },
           conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -415,9 +418,8 @@ class DatabaseHelper {
       String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
-      [permitId],
-    );
+        'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
+        [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = {
@@ -438,9 +440,7 @@ class DatabaseHelper {
   Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT html FROM OfflinePermit WHERE permitId = ?',
-      [permitId],
-    );
+        'SELECT html FROM OfflinePermit WHERE permitId = ?', [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = jsonDecode(result['html']);
@@ -457,7 +457,7 @@ class DatabaseHelper {
     return results.first['statusId'];
   }
 
-  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction() async {
+  Future<List<Map<String, dynamic>>> fetchAllOfflinePermitAction() async {
     final db = await database;
     final List<Map<String, dynamic>> result =
         await db.rawQuery('SELECT * FROM OfflinePermitAction');
@@ -468,6 +468,28 @@ class DatabaseHelper {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        where: 'permitId = ?', whereArgs: [permitId]);
+    if (result.isEmpty) {
+      return [];
+    } else {
+      List<Map<String, dynamic>> finalResult = [];
+      for (var i = 0; i < result.length; i++) {
+        finalResult.add({
+          'actionJson': jsonDecode(result[i]['actionJson']),
+          'actionText': result[i]['actionText'],
+          'actionDateTime': result[i]['actionDateTime'],
+          'sign': result[i]['sign'],
+          'permitId': result[i]['permitId'],
+        });
+      }
+      return finalResult;
+    }
+  }
+
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
@@ -475,22 +497,14 @@ class DatabaseHelper {
 
   Future<void> updateStatusId(String permitId, int updatedStatus) async {
     final db = await database;
-    await db.update(
-      'OfflinePermit',
-      {'statusId': updatedStatus},
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    await db.update('OfflinePermit', {'statusId': updatedStatus},
+        where: 'permitId = ?', whereArgs: [permitId]);
   }
 
   Future<int> getTypeOfPermit(String permitId) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermit',
-      columns: ['listPage'],
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['listPage'], where: 'permitId = ?', whereArgs: [permitId]);
     if (result.isNotEmpty) {
       String listPageJson = result.first['listPage'];
       Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
@@ -502,23 +516,98 @@ class DatabaseHelper {
 
   Future<void> updateStatus(String permitId, String updatedStatus) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermit',
-      columns: ['listPage'],
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['listPage'], where: 'permitId = ?', whereArgs: [permitId]);
     if (result.isNotEmpty) {
       String listPageJson = result.first['listPage'];
       Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
       listPageMap['status'] = updatedStatus;
       String updatedListPageJson = jsonEncode(listPageMap);
-      await db.update(
-        'OfflinePermit',
-        {'listPage': updatedListPageJson},
-        where: 'permitId = ?',
-        whereArgs: [permitId],
-      );
+      await db.update('OfflinePermit', {'listPage': updatedListPageJson},
+          where: 'permitId = ?', whereArgs: [permitId]);
+    }
+  }
+
+  Future<void> updateEquipmentSafetyDoc(
+      String permitId, Map equipmentMap) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['html'], where: 'permitId = ?', whereArgs: [permitId]);
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['html'];
+      Map<String, dynamic> equMap = jsonDecode(listPageJson);
+      equMap['location'] = equipmentMap['location'] ?? '';
+      equMap['methodstatement'] = equipmentMap['methodstmt'] ?? '';
+      equMap['description'] = equipmentMap['description'] ?? '';
+      equMap['ptw_isolation'] = equipmentMap['ptw_isolation'] ?? '';
+      equMap['ptw_circuit'] = equipmentMap['ptw_circuit'] ?? '';
+      equMap['ptw_safety'] = equipmentMap['ptw_safety'] ?? '';
+      equMap['ptw_precautions2'] = equipmentMap['ptw_precautions2'] ?? '';
+      equMap['ptw_precautions'] = equipmentMap['ptw_precautions'] ?? '';
+      equMap['st_precautions'] = equipmentMap['st_precautions'] ?? '';
+      equMap['st_safety'] = equipmentMap['st_safety'] ?? '';
+      equMap['ptw_circuit2'] = equipmentMap['ptw_circuit2'] ?? '';
+      equMap['lwc_accessto'] = equipmentMap['lwc_accessto'] ?? '';
+      equMap['lwc_environment'] = equipmentMap['lwc_environment'] ?? '';
+      equMap['lwc_precautions'] = equipmentMap['lwc_precautions'] ?? '';
+      String updatedEquipmentMap = jsonEncode(equMap);
+      await db.update('OfflinePermit', {'html': updatedEquipmentMap},
+          where: 'permitId = ?', whereArgs: [permitId]);
+    }
+  }
+
+  Future<List> populateClearPermitData(String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        columns: ['actionJson', 'actionText'],
+        where: 'permitId = ? AND actionText = ?',
+        whereArgs: [permitId, 'open_permit']);
+    if (result.isNotEmpty) {
+      Map<String, dynamic> populateClearPermitData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(populateClearPermitData['actionJson']);
+      List customFields = actionJson['customfields'];
+      return customFields;
+    } else {
+      return <Map<String, dynamic>>[];
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchOfflinePermitSurrenderData(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'surrender_permit'],
+    );
+    if (result.isNotEmpty) {
+      Map<String, dynamic> fetchSurrenderData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(fetchSurrenderData['actionJson']);
+      return actionJson;
+    } else {
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchOfflinePermitTransferData(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'transfer_permit'],
+    );
+    if (result.isNotEmpty) {
+      Map<String, dynamic> fetchSurrenderData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(fetchSurrenderData['actionJson']);
+      return actionJson;
+    } else {
+      return <String, dynamic>{};
     }
   }
 }

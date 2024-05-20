@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -11,7 +13,10 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
+import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
+
 import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -28,6 +33,7 @@ import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/permit/permit_repository.dart';
+import '../../utils/constants/html_constants.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/database_utils.dart';
@@ -46,6 +52,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
   int statusId = 0;
+  Map transferAndSurrenderMap = {};
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -74,8 +81,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
+    on<ChangePermitCP>(_changePermitCP);
+    on<SurrenderPermit>(_surrenderPermit);
     on<SavePermitOfflineAction>(_saveOfflineData);
     on<PermitInternetActions>(_permitInternetActions);
+    on<GenerateOfflinePdf>(_generateOfflinePdf);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -190,6 +200,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: GetOpenPermitData.fromJson(permitHtmlMap));
+        int typeOfPermit =
+            await _databaseHelper.getTypeOfPermit(event.permitId);
+        openPermitDetailsModel.data.permitStatus =
+            getStatusText(typeOfPermit.toString(), statusId.toString());
         if (permitHtmlMap.isNotEmpty) {
           emit(OpenPermitDetailsFetched(openPermitDetailsModel, customFields));
         } else {
@@ -224,6 +238,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 status: 200,
                 message: '',
                 data: GetClosePermitData.fromJson(permitHtmlMap));
+        int typeOfPermit =
+            await _databaseHelper.getTypeOfPermit(event.permitId);
+        closePermitDetailsModel.data.permitStatus =
+            getStatusText(typeOfPermit.toString(), statusId.toString());
         if (permitHtmlMap.isNotEmpty) {
           emit(ClosePermitDetailsFetched(closePermitDetailsModel));
         } else {
@@ -241,9 +259,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
 
-      emit(const FetchingAllPermits());
       if (!listReachedMax) {
         if (isNetworkEstablished) {
+          emit(const FetchingAllPermits());
           if (roleId == '' || event.isFromHome) {
             add(const ClearPermitFilters());
             PermitRolesModel permitRolesModel =
@@ -271,13 +289,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 permitListData: permitListData));
           }
         } else {
-          emit(const FetchingAllPermits());
           List<Map<String, dynamic>> fetchListPageData =
               await _databaseHelper.fetchPermitListOffline();
           AllPermitModel allPermitModel = AllPermitModel.fromJson(
               {'Status': 200, 'Message': '', 'Data': fetchListPageData});
           permitListData.addAll(allPermitModel.data);
-          listReachedMax = true;
+          listReachedMax = allPermitModel.data.isEmpty;
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
               filters: {},
@@ -325,6 +342,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         if (permitBasicData?.istransfersafetydocument == '1') {
           permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
         }
+        if (permitBasicData?.issurrendercp == '1') {
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu));
@@ -341,6 +361,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         if (statusId == 16 || statusId == 7) {
           permitPopUpMenu.add(StringConstants.kOpenPermit);
         }
@@ -436,10 +458,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      if (event.openPermitMap['date'] == null ||
-          event.openPermitMap['date'] == '') {
-        emit(const OpenPermitError(StringConstants.kPleaseSelectDate));
-      } else if (event.openPermitMap['time'] == null ||
+      if (event.openPermitMap['time'] == null ||
           event.openPermitMap['time'] == '') {
         emit(const OpenPermitError(StringConstants.kPleaseSelectTime));
       } else {
@@ -462,10 +481,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.openPermit(openPermitMap);
           if (openClosePermitModel.message == '1') {
-            if (event.offlineActionId != null) {
-              await _databaseHelper
-                  .deleteOfflinePermitAction(event.offlineActionId!);
-            }
             emit(PermitOpened(openClosePermitModel));
           }
         } else {
@@ -475,7 +490,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               signature: event.openPermitMap['user_sign'],
               actionKey: 'open_permit',
               dateTime:
-                  '${event.openPermitMap['user_date']}${event.openPermitMap['user_time']}'));
+                  '${event.openPermitMap['user_date']} ${event.openPermitMap['user_time']}'));
         }
       }
     } catch (e) {
@@ -533,10 +548,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.closePermit(closePermitMap);
           if (openClosePermitModel.message == '1') {
-            if (event.offlineActionId != null) {
-              await _databaseHelper
-                  .deleteOfflinePermitAction(event.offlineActionId!);
-            }
             emit(PermitClosed(openClosePermitModel));
           } else {
             emit(ClosePermitError(
@@ -549,7 +560,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               signature: event.closePermitMap['user_sign'] ?? '',
               actionKey: 'cancel_permit',
               dateTime:
-                  '${event.closePermitMap['user_date']}${event.closePermitMap['user_time']}'));
+                  '${event.closePermitMap['date']} ${event.closePermitMap['time']}'));
         }
       }
     } catch (e) {
@@ -670,10 +681,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           SaveMarkAsPreparedModel saveMarkAsPreparedModel =
               await _permitRepository.saveMarkAsPrepared(saveMarkAsPreparedMap);
           if (saveMarkAsPreparedModel.message == '1') {
-            if (event.offlineActionId != null) {
-              await _databaseHelper
-                  .deleteOfflinePermitAction(event.offlineActionId!);
-            }
             emit(MarkAsPreparedSaved());
           } else {
             emit(MarkAsPreparedNotSaved(
@@ -685,12 +692,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
       } else {
         add(SavePermitOfflineAction(
-            offlineDataMap: event.markAsPreparedMap,
+            offlineDataMap: saveMarkAsPreparedMap,
             permitId: event.permitId,
             signature: event.markAsPreparedMap['user_sign'] ?? '',
             actionKey: 'prepare_permit',
             dateTime:
-                '${event.markAsPreparedMap['user_date']}${event.markAsPreparedMap['user_time']}'));
+                '${event.markAsPreparedMap['user_date']} ${event.markAsPreparedMap['user_time']}'));
       }
     } catch (e) {
       emit(MarkAsPreparedNotSaved(errorMessage: e.toString()));
@@ -713,17 +720,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_company": event.acceptPermitMap['npw_company'] ?? '',
         "npw_email": event.acceptPermitMap['npw_email'] ?? '',
         "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
-        "sync_sign:": event.acceptPermitMap['user_sign'] ?? '',
-        "sync-date": event.syncDate,
+        "sync_sign": event.acceptPermitMap['user_sign'] ?? '',
+        "sync_date":
+            '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}',
       };
       if (isNetworkEstablished) {
         AcceptPermitRequestModel acceptPermitRequestModel =
             await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
         if (acceptPermitRequestModel.message == '1') {
-          if (event.offlineActionId != null) {
-            await _databaseHelper
-                .deleteOfflinePermitAction(event.offlineActionId!);
-          }
           emit(PermitRequestAccepted());
         } else {
           emit(PermitRequestNotAccepted(
@@ -736,7 +740,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             signature: event.acceptPermitMap['user_sign'],
             actionKey: event.acceptPermitMap['action_key'],
             dateTime:
-                '${event.acceptPermitMap['user_date']}${event.acceptPermitMap['user_time']}'));
+                '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}'));
       }
     } catch (e) {
       emit(PermitRequestNotAccepted(errorMessage: e.toString()));
@@ -807,51 +811,125 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kNoDataFound));
         }
       } else {
+        List<Map<String, dynamic>> customFields = [];
+        Map<String, dynamic> populateDataMap = {};
         Map<String, dynamic> permitHtmlMap =
             await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        List populateClearPermitData =
+            await _databaseHelper.populateClearPermitData(event.permitId);
         FetchClearPermitDetailsModel fetchClearPermitDetailsModel =
             FetchClearPermitDetailsModel(
                 status: 200,
                 message: '',
                 data: ClearPermitData.fromJson(permitHtmlMap));
-
-        final List<Map<String, dynamic>> customFields = [
-          {"questionid": 4000010, "answer": ""},
-          {"questionid": 4000001, "answer": ''},
-          {"questionid": 4000002, "answer": ''},
-          {"questionid": 4000003, "answer": ''},
-          {"questionid": 4000004, "answer": ''},
-          {"questionid": 4000005, "answer": ''},
-          {"questionid": 4000006, "answer": ''},
-          {"questionid": 4000007, "answer": ''},
-          {"questionid": 4000008, "answer": ''},
-          {"questionid": 4000013, "answer": ''},
-          {"questionid": 4000014, "answer": ''}
-        ];
-
-        for (var key in permitHtmlMap.keys) {
-          var keyParts = key.split('_');
-          if (keyParts.length == 3 &&
-              keyParts[0] == 'clear' &&
-              keyParts[1] == 'permit') {
-            int questionId = int.tryParse(keyParts[2]) ?? -1;
-
-            for (var field in customFields) {
-              if (field['questionid'] == questionId) {
-                field['answer'] = permitHtmlMap[key] ?? '';
+        fetchClearPermitDetailsModel.data.permitStatus = getStatusText(
+            fetchClearPermitDetailsModel.data.typeOfPermit.toString(),
+            statusId.toString());
+        if (populateClearPermitData.isNotEmpty) {
+          for (var field in populateClearPermitData) {
+            int questionId = field['questionid'];
+            String answer = field['answer'];
+            switch (questionId) {
+              case 3000009:
+                populateDataMap['4000009'] = answer;
                 break;
-              }
+              case 3000001:
+                populateDataMap['4000001'] = answer;
+                break;
+              case 3000002:
+                populateDataMap['4000002'] = answer;
+                break;
+              case 3000003:
+                populateDataMap['4000003'] = answer;
+                break;
+              case 3000004:
+                populateDataMap['4000004'] = answer;
+                break;
+              case 3000005:
+                populateDataMap['4000005'] = answer;
+                break;
+              case 3000006:
+                populateDataMap['4000006'] = answer;
+                break;
+              case 3000007:
+                populateDataMap['4000007'] = answer;
+                break;
+              case 3000008:
+                populateDataMap['4000008'] = answer;
+                break;
+              case 3000013:
+                populateDataMap['40000013'] = answer;
+                break;
+              case 3000014:
+                populateDataMap['40000014'] = answer;
+                break;
             }
           }
-        }
-        if (permitHtmlMap.isNotEmpty) {
-          emit(ClearPermitDetailsFetched(
-              fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
-              customFields: customFields));
+          customFields = [
+            {"questionid": 40000010, "answer": ''},
+            {"questionid": 4000001, "answer": populateDataMap['4000001'] ?? ''},
+            {"questionid": 4000002, "answer": populateDataMap['4000002'] ?? ''},
+            {"questionid": 4000003, "answer": populateDataMap['4000003'] ?? ''},
+            {"questionid": 4000004, "answer": populateDataMap['4000004'] ?? ''},
+            {"questionid": 4000005, "answer": populateDataMap['4000005'] ?? ''},
+            {"questionid": 4000006, "answer": populateDataMap['4000006'] ?? ''},
+            {"questionid": 4000007, "answer": populateDataMap['4000007'] ?? ''},
+            {"questionid": 4000008, "answer": populateDataMap['4000008'] ?? ''},
+            {
+              "questionid": 4000013,
+              "answer": populateDataMap['40000013'] ?? ''
+            },
+            {"questionid": 4000014, "answer": populateDataMap['40000014'] ?? ''}
+          ];
         } else {
-          emit(ClearPermitDetailsCouldNotFetched(
-              errorMessage: StringConstants.kNoDataFound));
+          customFields = [
+            {"questionid": 4000010, "answer": ""},
+            {
+              "questionid": 4000001,
+              "answer": permitHtmlMap['open_permit_3000001'] ?? ''
+            },
+            {
+              "questionid": 4000002,
+              "answer": permitHtmlMap['open_permit_3000002'] ?? ''
+            },
+            {
+              "questionid": 4000003,
+              "answer": permitHtmlMap['open_permit_3000003'] ?? ''
+            },
+            {
+              "questionid": 4000004,
+              "answer": permitHtmlMap['open_permit_3000004'] ?? ''
+            },
+            {
+              "questionid": 4000005,
+              "answer": permitHtmlMap['open_permit_3000005'] ?? ''
+            },
+            {
+              "questionid": 4000006,
+              "answer": permitHtmlMap['open_permit_3000006'] ?? ''
+            },
+            {
+              "questionid": 4000007,
+              "answer": permitHtmlMap['open_permit_3000007'] ?? ''
+            },
+            {
+              "questionid": 4000008,
+              "answer": permitHtmlMap['open_permit_3000008'] ?? ''
+            },
+            {
+              "questionid": 4000013,
+              "answer": permitHtmlMap['open_permit_30000013'] ?? ''
+            },
+            {
+              "questionid": 4000014,
+              "answer": permitHtmlMap['open_permit_30000014'] ?? ''
+            }
+          ];
         }
+
+        emit(ClearPermitDetailsFetched(
+            fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
+            customFields: customFields));
       }
     } catch (e) {
       rethrow;
@@ -875,16 +953,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_email": event.clearPermitMap['npw_email'] ?? '',
         "npw_phone": event.clearPermitMap['npw_phone'] ?? '',
         "sync_sign": event.clearPermitMap['user_sign'] ?? '',
-        "sync-date": event.syncDate,
+        "sync_date": event.clearPermitMap['user_date'] ?? '',
       };
       if (isNetworkEstablished) {
         SaveClearPermitModel saveClearPermitModel =
             await _permitRepository.saveClearPermit(clearPermitMap);
         if (saveClearPermitModel.message == '1') {
-          if (event.offlineActionId != null) {
-            await _databaseHelper
-                .deleteOfflinePermitAction(event.offlineActionId!);
-          }
           emit(ClearPermitSaved());
         } else {
           emit(ClearPermitNotSaved(
@@ -897,7 +971,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             signature: event.clearPermitMap['user_sign'],
             actionKey: event.clearPermitMap['action_key'],
             dateTime:
-                '${event.clearPermitMap['user_date']}${event.clearPermitMap['user_time']}'));
+                '${event.clearPermitMap['user_date']} ${event.clearPermitMap['user_time']}'));
       }
     } catch (e) {
       emit(ClearPermitNotSaved(errorMessage: e.toString()));
@@ -909,10 +983,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       Map editSafetyDocumentMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "permitid": event.editSafetyDocumentMap['permit_id'],
+        "permitid": event.permitId,
         "userid": await _customerCache.getUserId(CacheKeys.userId),
         "location": event.editSafetyDocumentMap['location'] ?? '',
-        "description": event.editSafetyDocumentMap['permit_id'] ?? '',
+        "description": event.editSafetyDocumentMap['description'] ?? '',
         "methodstmt": event.editSafetyDocumentMap['methodstmt'] ?? '',
         "lwc_environment": event.editSafetyDocumentMap['lwc_environment'] ?? '',
         "lwc_precautions": event.editSafetyDocumentMap['lwc_precautions'] ?? '',
@@ -934,10 +1008,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             await _permitRepository
                 .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
         if (savePermitEditSafetyDocumentModel.message == '1') {
-          if (event.offlineActionId != null) {
-            await _databaseHelper
-                .deleteOfflinePermitAction(event.offlineActionId!);
-          }
           emit(PermitEditSafetyDocumentSaved());
         } else {
           emit(PermitEditSafetyDocumentNotSaved(
@@ -945,12 +1015,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
       } else {
         bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-            event.editSafetyDocumentMap['permit_id'],
+            event.permitId,
             'edit_safety_document',
             editSafetyDocumentMap,
-            "sign",
+            "",
             null);
         if (isDataInserted) {
+          await _databaseHelper.updateEquipmentSafetyDoc(
+              event.permitId, event.editSafetyDocumentMap);
           emit(PermitEditSafetyDocumentSaved(
               successMessage: StringConstants.kDataSavedSuccessfully));
         } else {
@@ -1006,6 +1078,102 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     emit(TransferValueSelected(value: event.value));
   }
 
+  Future<FutureOr<void>> _changePermitCP(
+      ChangePermitCP event, Emitter<PermitStates> emit) async {
+    try {
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      Map changePermitCPMap = {
+        "hashcode": hashCode,
+        "permitid": event.changePermitCPMap['permitId'],
+        "userid": userId,
+        "npw": event.changePermitCPMap['npw'],
+        "sap": event.changePermitCPMap['sap'],
+        "role": roleId,
+        "controlroom": event.changePermitCPMap['controlePerson']
+      };
+      if (isNetworkEstablished) {
+        emit(PermitCPChanging());
+        if ((event.changePermitCPMap['sap'] != '' &&
+            event.changePermitCPMap['controlePerson'] != null)) {
+          ChangePermitCpModel changePermitCpModel =
+              await _permitRepository.changePermitCP(changePermitCPMap);
+          if (changePermitCpModel.message == '1') {
+            emit(PermitCPChanged());
+          } else {
+            emit(
+                PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+          }
+        } else {
+          emit(PermitCPNotChanged(
+              errorMessage: "SAP and control person can't be empty"));
+        }
+      } else {
+        Map saveTransferMap = {
+          'npw_id': 0,
+          'npw_name': event.changePermitCPMap['npw_name'] ?? '',
+          'npw_auth': event.changePermitCPMap['npw_auth'] ?? '',
+          'npw_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'date': event.changePermitCPMap['user_date'] ?? '',
+          'time': event.changePermitCPMap['user_time'] ?? '',
+          'user_id': 0,
+          'user_name': event.changePermitCPMap['user_name'] ?? '',
+          'user_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'controlusername': event.changePermitCPMap['controlPerson'] ?? ''
+        };
+        Map<String, dynamic> fetchTransferData = await _databaseHelper
+            .fetchOfflinePermitTransferData(event.permitId);
+        if (fetchTransferData['receiver'] != [] &&
+            fetchTransferData['receiver'] != null) {
+          transferAndSurrenderMap['reciever'] = fetchTransferData['transfer'];
+          transferAndSurrenderMap['reciever'].add(saveTransferMap);
+          transferAndSurrenderMap['isSurrender'] = '0';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        } else {
+          transferAndSurrenderMap['surrender'] = [];
+          transferAndSurrenderMap['reciever'] = [];
+          transferAndSurrenderMap['reciever'].add(saveTransferMap);
+          transferAndSurrenderMap['isSurrender'] = '0';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        }
+        add(SavePermitOfflineAction(
+            offlineDataMap: transferAndSurrenderMap,
+            permitId: event.permitId,
+            signature: event.changePermitCPMap['npw_sign'] ?? '',
+            actionKey: 'transfer_permit',
+            dateTime:
+                '${saveTransferMap['user_date']}${saveTransferMap['user_time']}'));
+      }
+    } catch (e) {
+      emit(PermitCPNotChanged(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _surrenderPermit(
+      SurrenderPermit event, Emitter<PermitStates> emit) async {
+    emit(SurrenderingPermit());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      Map surrenderPermitMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+      };
+      SurrenderPermitModel surrenderPermitModel =
+          await _permitRepository.surrenderPermit(surrenderPermitMap);
+      if (surrenderPermitModel.message == '1') {
+        emit(PermitSurrendered());
+      } else {
+        emit(PermitNotSurrender(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(PermitNotSurrender(errorMessage: e.toString()));
+    }
+  }
+
   FutureOr<void> _saveOfflineData(
       SavePermitOfflineAction event, Emitter<PermitStates> emit) async {
     try {
@@ -1049,8 +1217,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 event.permitId, getStatusText(typeOfPermit.toString(), '0'));
             break;
           default:
-            emit(OfflineDataNotSaved(
-                errorMessage: StringConstants.kFailedToSaveData));
+            '';
             break;
         }
         emit(OfflineDataSaved(
@@ -1067,51 +1234,592 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _permitInternetActions(
       PermitInternetActions event, Emitter<PermitStates> emit) async {
-    List<Map<String, dynamic>> permitActions =
-        await _databaseHelper.fetchOfflinePermitAction();
-    if (permitActions.isNotEmpty) {
-      for (var action in permitActions) {
-        switch (action['actionText']) {
-          case 'open_permit':
-            add(OpenPermit(jsonDecode(action['actionJson']), action['permitId'],
-                action['id']));
-            break;
-          case 'cancel_permit':
-            add(ClosePermit(
-                permitId: action['permitId'],
-                closePermitMap: jsonDecode(action['actionJson']),
-                offlineActionId: action['id']));
-            break;
-          case 'prepare_permit':
-            add(SaveMarkAsPrepared(
-                permitId: action['permitId'],
-                markAsPreparedMap: jsonDecode(action['actionJson']),
-                offlineActionId: action['id']));
-            break;
-          case 'clear_permit':
-            add(SaveClearPermit(
-                permitId: action['permitId'],
-                clearPermitMap: jsonDecode(action['actionJson']),
-                syncDate: action['actionDateTime'],
-                offlineActionId: action['id']));
-            break;
-          case 'accept_permit_request':
-            add(AcceptPermitRequest(
-                permitId: action['permitId'],
-                acceptPermitMap: jsonDecode(action['actionJson']),
-                syncDate: action['actionDateTime'],
-                offlineActionId: action['id']));
-            break;
-          case 'edit_safety_document':
-            add(SavePermitEditSafetyDocument(
-                editSafetyDocumentMap: jsonDecode(action['actionJson']),
-                offlineActionId: action['id']));
-            break;
-          default:
-            null;
-            break;
+    try {
+      List<Map<String, dynamic>> permitActions =
+          await _databaseHelper.fetchAllOfflinePermitAction();
+      if (permitActions.isNotEmpty) {
+        for (var action in permitActions) {
+          switch (action['actionText']) {
+            case 'edit_safety_document':
+              SavePermitEditSafetyDocumentModel
+                  savePermitEditSafetyDocumentModel =
+                  await _permitRepository.saveEditSafetyNoticeDocument(
+                      jsonDecode(action['actionJson']));
+              if (savePermitEditSafetyDocumentModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']!);
+              }
+              break;
+            case 'prepare_permit':
+              SaveMarkAsPreparedModel saveMarkAsPreparedModel =
+                  await _permitRepository
+                      .saveMarkAsPrepared(jsonDecode(action['actionJson']));
+              if (saveMarkAsPreparedModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+              }
+              break;
+            case 'open_permit':
+              OpenClosePermitModel openClosePermitModel =
+                  await _permitRepository
+                      .openPermit(jsonDecode(action['actionJson']));
+              if (openClosePermitModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']!);
+              }
+              break;
+            case 'accept_permit_request':
+              AcceptPermitRequestModel acceptPermitRequestModel =
+                  await _permitRepository
+                      .acceptPermitRequest(jsonDecode(action['actionJson']));
+              if (acceptPermitRequestModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+              }
+              break;
+            case 'clear_permit':
+              SaveClearPermitModel saveClearPermitModel =
+                  await _permitRepository
+                      .saveClearPermit(jsonDecode(action['actionJson']));
+              if (saveClearPermitModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+              }
+              break;
+            case 'cancel_permit':
+              OpenClosePermitModel openClosePermitModel =
+                  await _permitRepository
+                      .closePermit(jsonDecode(action['actionJson']));
+              if (openClosePermitModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+              }
+              break;
+            case 'surrender_permit':
+              Map surrenderMap = jsonDecode(action['actionJson']);
+              surrenderMap['permitid'] = await EncryptData.decryptAESPrivateKey(
+                  action['permitId'],
+                  await _customerCache.getApiKey(CacheKeys.apiKey));
+              SyncTransferCpPermitModel syncTransferCpModel =
+                  await _permitRepository.syncTransferCp(surrenderMap);
+              if (syncTransferCpModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+
+                log('surrender_permit success');
+              } else {
+                log('surrender_permit error');
+              }
+              break;
+            case 'transfer_permit':
+              Map transferMap = jsonDecode(action['actionJson']);
+              transferMap['permitid'] = await EncryptData.decryptAESPrivateKey(
+                  action['permitId'],
+                  await _customerCache.getApiKey(CacheKeys.apiKey));
+              SyncTransferCpPermitModel syncTransferCpModel =
+                  await _permitRepository.syncTransferCp(transferMap);
+              if (syncTransferCpModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+
+                log('surrender_permit success');
+              } else {
+                log('surrender_permit error');
+              }
+              break;
+            default:
+              null;
+              break;
+          }
         }
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _generateOfflinePdf(
+      GenerateOfflinePdf event, Emitter<PermitStates> emit) async {
+    try {
+      emit(GeneratingOfflinePdf());
+      Map<String, dynamic> offlinePermitData =
+          await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+      String htmlText = '';
+      switch (offlinePermitData['tab1']['type_of_permit']) {
+        case 12:
+          htmlText = HTMLOfflineConstants.offlinePermitType12;
+          break;
+        case 15:
+          htmlText = HTMLOfflineConstants.offlinePermitType15;
+          break;
+        case 16:
+          htmlText = HTMLOfflineConstants.offlinePermitType16;
+          break;
+        default:
+          emit(
+              ErrorGeneratingPdfOffline(errorMessage: 'permit type not found'));
+          break;
+      }
+      htmlText = htmlText.replaceAll(
+          '#permitname', offlinePermitData['tab1']['permit']);
+      htmlText = htmlText.replaceAll(
+          '#location', offlinePermitData['tab1']['location']);
+      List<Map<String, dynamic>> permitActionsList =
+          await _databaseHelper.fetchOfflinePermitAction(event.permitId);
+      for (var action in permitActionsList) {
+        if (action.isNotEmpty) {
+          switch (action['actionText']) {
+            case 'prepare_permit':
+              htmlText = htmlText.replaceAll(
+                  '#16_comments', action['actionJson']['controlpersons']);
+              htmlText = htmlText.replaceAll(
+                  '#16_name', action['actionJson']['user_name']);
+              htmlText = htmlText.replaceAll(
+                  '#16_email', (action['actionJson']['user_email']) ?? '');
+              htmlText = htmlText.replaceAll('#16_phone', '');
+              htmlText = htmlText.replaceAll(
+                  '#16_sign', action['actionJson']['user_sign']);
+
+              List dateTime = action['actionDateTime'].split(' ');
+              String d1 = "${dateTime[0]}";
+              var t1 = "${dateTime[1]}";
+
+              htmlText = htmlText.replaceAll('#16_time', t1);
+              htmlText = htmlText.replaceAll('#16_date', d1);
+              break;
+
+            case 'edit_safety_document':
+              htmlText = htmlText.replaceAll('#ptw_isolation',
+                  (action['actionJson']['ptw_isolation'] ?? ''));
+              htmlText = htmlText.replaceAll(
+                  '#ptw_circuit', (action['actionJson']['ptw_circuit'] ?? ''));
+              htmlText = htmlText.replaceAll('#2ptw_circuit',
+                  (action['actionJson']['ptw_circuit2'] ?? ''));
+              htmlText = htmlText.replaceAll(
+                  '#ptw_safety', (action['actionJson']['ptw_safety'] ?? ''));
+              htmlText = htmlText.replaceAll('#ptw_precautions',
+                  (action['actionJson']['ptw_precautions'] ?? ''));
+              htmlText = htmlText.replaceAll('#2ptw_precautions',
+                  (action['actionJson']['ptw_precautions2'] ?? ''));
+
+              htmlText = htmlText.replaceAll(
+                  '#st_circuit', (action['actionJson']['st_circuit'] ?? ''));
+              htmlText = htmlText.replaceAll('#st_precautions',
+                  (action['actionJson']['st_precautions'] ?? ''));
+              htmlText = htmlText.replaceAll(
+                  '#st_safety', (action['actionJson']['st_safety'] ?? ''));
+
+              htmlText = htmlText.replaceAll('#lwc_accessto',
+                  (action['actionJson']['lwc_accessto'] ?? ''));
+              htmlText = htmlText.replaceAll('#lwc_environment',
+                  (action['actionJson']['lwc_environment'] ?? ''));
+              htmlText = htmlText.replaceAll('#lwc_precautions',
+                  (action['actionJson']['lwc_precautions'] ?? ''));
+
+              htmlText = htmlText.replaceAll(
+                  '#methodstmt', action['actionJson']['methodstmt']);
+              htmlText = htmlText.replaceAll(
+                  '#description', action['actionJson']['description']);
+              break;
+
+            case 'open_permit':
+              htmlText = htmlText.replaceAll(
+                  '#2_name', action['actionJson']['user_name']);
+              htmlText = htmlText.replaceAll(
+                  '#2_email', (action['actionJson']['user_email']) ?? '');
+              htmlText = htmlText.replaceAll('#2_phone', '');
+              htmlText = htmlText.replaceAll(
+                  '#2_sign', action['actionJson']['user_sign']);
+
+              List dateTime = action['actionDateTime'].split(' ');
+              String d2 = "${dateTime[0]}";
+              var t2 = "${dateTime[1]}";
+
+              htmlText = htmlText.replaceAll('#2_time', t2);
+              htmlText = htmlText.replaceAll('#2_date', d2);
+
+              if (action['actionJson']['customfields'].isNotEmpty) {
+                for (int i = 0;
+                    i < action['actionJson']['customfields'].length;
+                    i++) {
+                  var f = action['actionJson']['customfields'][i];
+                  switch (f['questionid']) {
+                    case 3000001:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000001', f['answer']);
+                      break;
+                    case 3000002:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000002', f['answer']);
+                      break;
+                    case 3000003:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000003', f['answer']);
+                      break;
+                    case 3000004:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000004', f['answer']);
+                      break;
+                    case 3000005:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000005', f['answer']);
+                      break;
+                    case 3000006:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000006', f['answer']);
+                      break;
+                    case 3000007:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000007', f['answer']);
+                      break;
+                    case 3000008:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000008', f['answer']);
+                      break;
+                    case 3000009:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000009', f['answer']);
+                      break;
+                    case 3000013:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000013', f['answer']);
+                      break;
+                    case 3000014:
+                      htmlText = htmlText.replaceAll(
+                          '#open_permit_3000014', f['answer']);
+                      break;
+                  }
+                }
+              }
+              break;
+
+            case 'accept_permit_request':
+              htmlText = htmlText.replaceAll(
+                  '#32_name', action['actionJson']['npw_name']);
+              htmlText = htmlText.replaceAll(
+                  '#32_authcode', (action['actionJson']['npw_auth']) ?? '');
+              htmlText = htmlText.replaceAll(
+                  '#32_company', (action['actionJson']['npw_company']) ?? '');
+              htmlText = htmlText.replaceAll(
+                  '#32_email', (action['actionJson']['npw_email']) ?? '');
+              htmlText = htmlText.replaceAll('#32_phone', '');
+
+              List dateTime = action['actionDateTime'].split(' ');
+              String d3 = "${dateTime[0]}";
+              var t3 = "${dateTime[1]}";
+
+              htmlText = htmlText.replaceAll('#32_time', t3);
+              htmlText = htmlText.replaceAll('#32_date', d3);
+
+              htmlText = htmlText.replaceAll('#32_sign', action['sign']);
+              break;
+
+            case 'clear_permit':
+              htmlText = htmlText.replaceAll(
+                  '#18_name', action['actionJson']['npw_name']);
+              htmlText = htmlText.replaceAll(
+                  '#18_authcode', action['actionJson']['npw_auth']);
+
+              List dateTime = action['actionDateTime'].split(' ');
+              String d4 = "${dateTime[0]}";
+              var t4 = "${dateTime[1]}";
+
+              htmlText = htmlText.replaceAll('#18_time', t4);
+              htmlText = htmlText.replaceAll('#18_date', d4);
+              htmlText = htmlText.replaceAll('#18_sign', action['sign']);
+
+              if (action['actionJson']['customfields'].isNotEmpty) {
+                for (int i = 0;
+                    i < action['actionJson']['customfields'].length;
+                    i++) {
+                  var f = action['actionJson']['customfields'][i];
+                  switch (f['questionid']) {
+                    case 4000001:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000001', f['answer']);
+                      break;
+                    case 4000002:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000002', f['answer']);
+                      break;
+                    case 4000003:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000003', f['answer']);
+                      break;
+                    case 4000004:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000004', f['answer']);
+                      break;
+                    case 4000005:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000005', f['answer']);
+                      break;
+                    case 4000006:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000006', f['answer']);
+                      break;
+                    case 4000007:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000007', f['answer']);
+                      break;
+                    case 4000008:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000008', f['answer']);
+                      break;
+                    case 4000010:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000010', f['answer']);
+                      break;
+                    case 4000013:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000013', f['answer']);
+                      break;
+                    case 4000014:
+                      htmlText = htmlText.replaceAll(
+                          '#clear_permit_4000014', f['answer']);
+                      break;
+                  }
+                }
+              }
+              break;
+
+            case 'cancel_permit':
+              htmlText = htmlText.replaceAll(
+                  '#3_comments', action['actionJson']['controlpersons']);
+              htmlText = htmlText.replaceAll(
+                  '#3_name', action['actionJson']['user_name']);
+              htmlText = htmlText.replaceAll('#3_email', '');
+              htmlText = htmlText.replaceAll('#3_phone', '');
+              htmlText = htmlText.replaceAll(
+                  '#3_sign', action['actionJson']['user_sign']);
+
+              List dateTime = action['actionDateTime'].split(' ');
+              String d5 = "${dateTime[0]}";
+              var t5 = "${dateTime[1]}";
+
+              htmlText = htmlText.replaceAll('#3_time', t5);
+              htmlText = htmlText.replaceAll('#3_date', d5);
+              break;
+          }
+        }
+      }
+
+      htmlText = htmlText.replaceAll(
+          '#methodstmt', offlinePermitData['html']['methodstmt']);
+      htmlText = htmlText.replaceAll(
+          '#description', offlinePermitData['html']['description']);
+
+      if (offlinePermitData['html']['16_date'].length > 0) {
+        htmlText = htmlText.replaceAll(
+            '#16_comments', offlinePermitData['html']['16_comments']);
+        htmlText = htmlText.replaceAll(
+            '#16_name', offlinePermitData['html']['16_name']);
+        htmlText = htmlText.replaceAll(
+            '#16_email', (offlinePermitData['html']['16_email']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#16_phone', (offlinePermitData['html']['16_phone']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#16_sign', offlinePermitData['html']['16_sign']);
+        htmlText = htmlText.replaceAll(
+            '#16_time', offlinePermitData['html']['16_time']);
+        htmlText = htmlText.replaceAll(
+            '#16_date', offlinePermitData['html']['16_date']);
+      } else {
+        htmlText = htmlText.replaceAll('#16_comments', '');
+        htmlText = htmlText.replaceAll('#16_name', '');
+        htmlText = htmlText.replaceAll('#16_email', '');
+        htmlText = htmlText.replaceAll('#16_phone', '');
+        htmlText = htmlText.replaceAll('#16_sign', '');
+        htmlText = htmlText.replaceAll('#16_time', '');
+        htmlText = htmlText.replaceAll('#16_date', '');
+      }
+      if (offlinePermitData['html']['2_date'].length > 0) {
+        htmlText =
+            htmlText.replaceAll('#2_name', offlinePermitData['html']['2_name']);
+        htmlText = htmlText.replaceAll(
+            '#2_email', (offlinePermitData['html']['2_email']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#2_phone', offlinePermitData['html']['2_phone']);
+        htmlText =
+            htmlText.replaceAll('#2_sign', offlinePermitData['html']['2_sign']);
+        htmlText =
+            htmlText.replaceAll('#2_time', offlinePermitData['html']['2_time']);
+        htmlText =
+            htmlText.replaceAll('#2_date', offlinePermitData['html']['2_date']);
+        htmlText = htmlText.replaceAll('#open_permit_3000001',
+            offlinePermitData['html']['open_permit_3000001']);
+        htmlText = htmlText.replaceAll('#open_permit_3000002',
+            offlinePermitData['html']['open_permit_3000002']);
+        htmlText = htmlText.replaceAll('#open_permit_3000003',
+            offlinePermitData['html']['open_permit_3000003']);
+        htmlText = htmlText.replaceAll('#open_permit_3000004',
+            offlinePermitData['html']['open_permit_3000004']);
+        htmlText = htmlText.replaceAll('#open_permit_3000005',
+            offlinePermitData['html']['open_permit_3000005']);
+        htmlText = htmlText.replaceAll('#open_permit_3000006',
+            offlinePermitData['html']['open_permit_3000006']);
+        htmlText = htmlText.replaceAll('#open_permit_3000007',
+            offlinePermitData['html']['open_permit_3000007']);
+        htmlText = htmlText.replaceAll('#open_permit_3000008',
+            offlinePermitData['html']['open_permit_3000008']);
+        htmlText = htmlText.replaceAll('#open_permit_3000009',
+            offlinePermitData['html']['open_permit_3000009']);
+        htmlText = htmlText.replaceAll('#open_permit_3000013',
+            offlinePermitData['html']['open_permit_3000013']);
+        htmlText = htmlText.replaceAll('#open_permit_3000014',
+            (offlinePermitData['html']['open_permit_3000014']));
+      } else {
+        htmlText = htmlText.replaceAll('#2_name', '');
+        htmlText = htmlText.replaceAll('#2_email', '');
+        htmlText = htmlText.replaceAll('#2_phone', '');
+        htmlText = htmlText.replaceAll('#2_sign', '');
+        htmlText = htmlText.replaceAll('#2_time', '');
+        htmlText = htmlText.replaceAll('#2_date', '');
+
+        htmlText = htmlText.replaceAll('#open_permit_3000001', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000002', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000003', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000004', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000005', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000006', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000007', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000008', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000009', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000013', '');
+        htmlText = htmlText.replaceAll('#open_permit_3000014', '');
+      }
+
+      if (offlinePermitData['html']['32_date'].length > 0) {
+        htmlText = htmlText.replaceAll(
+            '#32_name', offlinePermitData['html']['32_name']);
+        htmlText = htmlText.replaceAll(
+            '#32_authcode', (offlinePermitData['html']['32_authcode']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#32_company', (offlinePermitData['html']['32_company']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#32_email', (offlinePermitData['html']['32_email']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#32_phone', (offlinePermitData['html']['32_phone']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#32_sign', offlinePermitData['html']['32_sign']);
+        htmlText = htmlText.replaceAll(
+            '#32_time', offlinePermitData['html']['32_time']);
+        htmlText = htmlText.replaceAll(
+            '#32_date', offlinePermitData['html']['32_date']);
+      } else {
+        htmlText = htmlText.replaceAll('#32_name', '');
+        htmlText = htmlText.replaceAll('#32_authcode', '');
+        htmlText = htmlText.replaceAll('#32_company', '');
+        htmlText = htmlText.replaceAll('#32_email', '');
+        htmlText = htmlText.replaceAll('#32_phone', '');
+        htmlText = htmlText.replaceAll('#32_sign', '');
+        htmlText = htmlText.replaceAll('#32_time', '');
+        htmlText = htmlText.replaceAll('#32_date', '');
+      }
+
+      if (offlinePermitData['html']['18_date'].length > 0) {
+        htmlText = htmlText.replaceAll(
+            '#18_comments', offlinePermitData['html']['18_comments']);
+        htmlText = htmlText.replaceAll(
+            '#18_name', offlinePermitData['html']['18_name']);
+        htmlText = htmlText.replaceAll(
+            '#18_email', (offlinePermitData['html']['18_email']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#18_phone', (offlinePermitData['html']['18_phone']) ?? '');
+        htmlText = htmlText.replaceAll(
+            '#18_sign', offlinePermitData['html']['18_sign']);
+        htmlText = htmlText.replaceAll(
+            '#18_time', offlinePermitData['html']['18_time']);
+        htmlText = htmlText.replaceAll(
+            '#18_date', offlinePermitData['html']['18_date']);
+        htmlText = htmlText.replaceAll(
+            '#18_authcode', offlinePermitData['html']['18_authcode']);
+
+        htmlText = htmlText.replaceAll('#clear_permit_4000001',
+            offlinePermitData['html']['clear_permit_4000001']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000002',
+            offlinePermitData['html']['clear_permit_4000002']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000003',
+            offlinePermitData['html']['clear_permit_4000003']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000004',
+            offlinePermitData['html']['clear_permit_4000004']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000005',
+            offlinePermitData['html']['clear_permit_4000005']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000006',
+            offlinePermitData['html']['clear_permit_4000006']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000007',
+            offlinePermitData['html']['clear_permit_4000007']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000008',
+            offlinePermitData['html']['clear_permit_4000008']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000010',
+            offlinePermitData['html']['clear_permit_4000010']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000013',
+            offlinePermitData['html']['clear_permit_4000013']);
+        htmlText = htmlText.replaceAll('#clear_permit_4000014',
+            offlinePermitData['html']['clear_permit_4000014']);
+      } else {
+        htmlText = htmlText.replaceAll('#18_name', '');
+        htmlText = htmlText.replaceAll('#18_email', '');
+        htmlText = htmlText.replaceAll('#18_phone', '');
+        htmlText = htmlText.replaceAll('#18_authcode', '');
+        htmlText = htmlText.replaceAll('#18_sign', '');
+        htmlText = htmlText.replaceAll('#18_time', '');
+        htmlText = htmlText.replaceAll('#18_date', '');
+
+        htmlText = htmlText.replaceAll('#clear_permit_4000001', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000002', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000003', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000004', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000005', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000006', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000007', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000008', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000010', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000013', '');
+        htmlText = htmlText.replaceAll('#clear_permit_4000014', '');
+      }
+
+      if (offlinePermitData['html']['3_date'].length > 0) {
+        htmlText = htmlText.replaceAll(
+            '#3_comments', offlinePermitData['html']['3_comments']);
+        htmlText =
+            htmlText.replaceAll('#3_name', offlinePermitData['html']['3_name']);
+        htmlText =
+            htmlText.replaceAll('#3_sign', offlinePermitData['html']['3_sign']);
+        htmlText =
+            htmlText.replaceAll('#3_time', offlinePermitData['html']['3_time']);
+        htmlText =
+            htmlText.replaceAll('#3_date', offlinePermitData['html']['3_date']);
+      } else {
+        htmlText = htmlText.replaceAll('#3_comments', '');
+        htmlText = htmlText.replaceAll('#3_name', '');
+        htmlText = htmlText.replaceAll('#3_sign', '');
+        htmlText = htmlText.replaceAll('#3_time', '');
+        htmlText = htmlText.replaceAll('#3_date', '');
+      }
+
+      htmlText = htmlText.replaceAll(
+          '#ptw_isolation', (offlinePermitData['html']['ptw_isolation'] ?? ''));
+      htmlText = htmlText.replaceAll(
+          '#ptw_circuit', (offlinePermitData['html']['ptw_circuit'] ?? ''));
+      htmlText = htmlText.replaceAll(
+          '#2ptw_circuit', (offlinePermitData['html']['ptw_circuit2'] ?? ''));
+      htmlText = htmlText.replaceAll(
+          '#ptw_safety', (offlinePermitData['html']['ptw_safety'] ?? ''));
+      htmlText = htmlText.replaceAll('#ptw_precautions',
+          (offlinePermitData['html']['ptw_precautions'] ?? ''));
+      htmlText = htmlText.replaceAll('#2ptw_precautions',
+          (offlinePermitData['html']['ptw_precautions2'] ?? ''));
+
+      htmlText = htmlText.replaceAll(
+          '#st_circuit', (offlinePermitData['html']['st_circuit'] ?? ''));
+      htmlText = htmlText.replaceAll('#st_precautions',
+          (offlinePermitData['html']['st_precautions'] ?? ''));
+      htmlText = htmlText.replaceAll(
+          '#st_safety', (offlinePermitData['html']['st_safety'] ?? ''));
+
+      htmlText = htmlText.replaceAll(
+          '#lwc_accessto', (offlinePermitData['html']['lwc_accessto'] ?? ''));
+      htmlText = htmlText.replaceAll('#lwc_environment',
+          (offlinePermitData['html']['lwc_environment'] ?? ''));
+      htmlText = htmlText.replaceAll('#lwc_precautions',
+          (offlinePermitData['html']['lwc_precautions'] ?? ''));
+
+      emit(OfflinePdfGenerated(htmlContent: htmlText));
+    } catch (e) {
+      log('error in generating pdf: $e');
     }
   }
 }

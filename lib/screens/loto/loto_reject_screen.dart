@@ -59,9 +59,9 @@ class LotoRejectScreen extends StatelessWidget {
                         } else if (state is LotoRejected) {
                           ProgressBar.dismiss(context);
                           Navigator.pop(context);
-                          context
-                              .read<LotoDetailsBloc>()
-                              .add(FetchLotoDetails(lotoTabIndex: 0));
+                          context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                              lotoTabIndex: 0,
+                              lotoId: context.read<LotoDetailsBloc>().lotoId));
                           showCustomSnackBar(
                               context, StringConstants.kLotoRejected, '');
                         } else if (state is LotoNotRejected) {

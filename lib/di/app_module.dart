@@ -21,6 +21,8 @@ import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
 
 import '../data/cache/customer_cache.dart';
+import 'package:toolkit/repositories/trips/trips_repository.dart';
+import 'package:toolkit/repositories/trips/trips_repository_impl.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 
 import '../repositories/LogBook/logbook_repository.dart';
@@ -125,4 +127,5 @@ configurableDependencies() {
   getIt.registerLazySingleton<GlobalRepository>(() => GlobalRepositoryImpl());
   getIt
       .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
+  getIt.registerLazySingleton<TripsRepository>(() => TripsRepositoryImpl());
 }

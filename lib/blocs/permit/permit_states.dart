@@ -288,6 +288,16 @@ class PermitEditSafetyDocumentNotSaved extends PermitStates {
   PermitEditSafetyDocumentNotSaved({required this.errorMessage});
 }
 
+class SurrenderingPermit extends PermitStates {}
+
+class PermitSurrendered extends PermitStates {}
+
+class PermitNotSurrender extends PermitStates {
+  final String errorMessage;
+
+  PermitNotSurrender({required this.errorMessage});
+}
+
 class DataForChangePermitCPFetching extends PermitStates {}
 
 class DataForChangePermitCPFetched extends PermitStates {
@@ -329,6 +339,16 @@ class TransferValueSelected extends PermitStates {
   TransferValueSelected({required this.value});
 }
 
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}
+
 class SavingOfflineData extends PermitStates {}
 
 class OfflineDataSaved extends PermitStates {
@@ -341,4 +361,20 @@ class OfflineDataNotSaved extends PermitStates {
   final String errorMessage;
 
   OfflineDataNotSaved({required this.errorMessage});
+}
+
+class GeneratingOfflinePdf extends PermitStates {
+  GeneratingOfflinePdf();
+}
+
+class OfflinePdfGenerated extends PermitStates {
+  final String htmlContent;
+
+  OfflinePdfGenerated({required this.htmlContent});
+}
+
+class ErrorGeneratingPdfOffline extends PermitStates {
+  final String errorMessage;
+
+  ErrorGeneratingPdfOffline({required this.errorMessage});
 }

@@ -7,6 +7,7 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -21,12 +22,12 @@ import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 import '../home/home_screen.dart';
 import '../location/current_location_screen.dart';
-import '../notification/notification_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
   static const routeName = 'RootScreen';
   final bool isFromClientList;
+  static bool onceCall = true;
 
   const RootScreen({super.key, required this.isFromClientList});
 
@@ -110,6 +111,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {
       if (state is NoNetwork) {
+        RootScreen.onceCall = true;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -118,7 +120,16 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
             ModalRoute.withName('/'));
       } else {
         context.read<ChatBloc>().add(FetchChatMessage());
-        context.read<PermitBloc>().add(PermitInternetActions());
+        if (RootScreen.onceCall == true) {
+          context.read<PermitBloc>().add(PermitInternetActions());
+        }
+        RootScreen.onceCall = false;
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const RootScreen(isFromClientList: false)),
+            ModalRoute.withName('/'));
       }
     }, builder: (context, state) {
       final bool hasNetwork = state is! NoNetwork;

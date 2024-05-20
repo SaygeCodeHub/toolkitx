@@ -26,6 +26,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    permitCpSapModel.sapCpMap['user_sign'] = '';
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSignAsCp),
         bottomNavigationBar: Padding(
@@ -42,14 +43,30 @@ class PermitSignAsCpScreen extends StatelessWidget {
                   child: BlocListener<PermitBloc, PermitStates>(
                       listener: (context, state) {
                         if (state is OfflineDataSaved) {
-                          showCustomSnackBar(context,
-                              StringConstants.kDataSavedSuccessfully, '');
-                          Future.delayed(const Duration(seconds: 3));
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pushReplacementNamed(
-                              context, PermitDetailsScreen.routeName,
-                              arguments: permitCpSapModel.sapCpMap['permitid']);
+                          if (permitCpSapModel.previousScreen ==
+                              'TransferPermitOfflineScreen') {
+                            showCustomSnackBar(context,
+                                StringConstants.kDataSavedSuccessfully, '');
+                            Future.delayed(const Duration(seconds: 3));
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, PermitDetailsScreen.routeName,
+                                arguments:
+                                    permitCpSapModel.sapCpMap['permitid']);
+                          } else {
+                            showCustomSnackBar(context,
+                                StringConstants.kDataSavedSuccessfully, '');
+                            Future.delayed(const Duration(seconds: 3));
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                                context, PermitDetailsScreen.routeName,
+                                arguments:
+                                    permitCpSapModel.sapCpMap['permitid']);
+                          }
                         } else if (state is OfflineDataNotSaved) {
                           showCustomSnackBar(
                               context, StringConstants.kFailedToSaveData, '');

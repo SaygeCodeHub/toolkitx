@@ -9,7 +9,7 @@ class SaveOfflineDataUtil {
       case 'ClearPermitScreen':
         context.read<PermitBloc>().add(SaveClearPermit(
             clearPermitMap: saveOfflineDataMap,
-            permitId: saveOfflineDataMap['permitId']));
+            permitId: saveOfflineDataMap['permitid']));
         break;
       case 'AcceptPermitRequestScreen':
         context.read<PermitBloc>().add(AcceptPermitRequest(
@@ -17,8 +17,8 @@ class SaveOfflineDataUtil {
             acceptPermitMap: saveOfflineDataMap));
         break;
       case 'OpenPermitScreen':
-        context.read<PermitBloc>().add(OpenPermit(
-            saveOfflineDataMap, saveOfflineDataMap['permitId'], null));
+        context.read<PermitBloc>().add(
+            OpenPermit(saveOfflineDataMap, saveOfflineDataMap['permitId']));
         break;
       case 'PreparePermitScreen':
         context.read<PermitBloc>().add(SaveMarkAsPrepared(
@@ -29,6 +29,16 @@ class SaveOfflineDataUtil {
         context.read<PermitBloc>().add(ClosePermit(
             closePermitMap: saveOfflineDataMap,
             permitId: saveOfflineDataMap['permitId']));
+        break;
+      case 'SurrenderPermitScreen':
+        context.read<PermitBloc>().add(SurrenderPermit(
+            surrenderPermitMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitid']));
+        break;
+      case 'TransferPermitOfflineScreen':
+        context.read<PermitBloc>().add(ChangePermitCP(
+            changePermitCPMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitid']));
         break;
     }
   }

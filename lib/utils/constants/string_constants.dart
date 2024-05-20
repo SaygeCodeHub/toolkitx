@@ -11,7 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kName = 'Name'; //
   static const String kCompanyName = 'Company Name'; //
-  static const String kAuthNumber = 'Auth/OTCP Number'; //
+  static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
@@ -209,7 +209,7 @@ abstract class StringConstants {
   static const String kLogoutDialogContent =
       'Are you sure you want to log out?';
   static const String kNoInternetMessage =
-      'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
+      "We couldn't connect to the internet. Try checking your connection. Limited features will be available"; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
   static const String kEmailAndPhoneNo = 'Email & Phone';
@@ -290,17 +290,20 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
-  static const String kCP = 'CP';
+  static const String kSAP = 'SAP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kSignAsSap = 'Sign as SAP';
   static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kPermitTransferWarning =
+      'Warning: This Safety Document has not been surrendered by a Competent Person. This must be cleared and cancelled by a suitably authorised person';
   static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
   static const String kAllGearPermit =
       'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
   static const String kClearPermit = 'Clear Permit'; //
   static const String kClearPermitCap = 'CLEAR PERMIT'; //
+  static const String kSurrenderPermit = 'Surrender Permit'; //
   static const String kPermitIdentification = '1. IDENTIFICATION'; //
   static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
   static const String kPermitEquipmentIdentification =
@@ -620,6 +623,17 @@ abstract class StringConstants {
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+  static const String kOpenTicket = "Open Ticket";
+  static const String kApproveOfDev2 = "Approve for Dev2";
+  static const String kBackToApprove = "Back to Approve";
+  static const String kApproveRolledOut = "Approve Rolled Out";
+  static const String kPleaseEnterCompletionDate =
+      "Please enter completion date";
+  static const String kEdtShouldBeGreaterThan0 =
+      "EDT should be greater than 0 for selected status";
+  static const String kPleaseSelectVo = "Please select VO Needed to continue";
+  static const String kVoNeeded = "Vo Needed";
       'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
   static const String kPleaseWaitWhileFetchingLocation =
       'Please wait while we fetch your current location...';

@@ -80,7 +80,7 @@ class SaveTicketDocument extends TicketsEvents {
 }
 
 class UpdateTicketStatus extends TicketsEvents {
-  final String edtHrs;
+  final int? edtHrs;
   final String completionDate;
   final String status;
 
@@ -88,4 +88,17 @@ class UpdateTicketStatus extends TicketsEvents {
       {required this.edtHrs,
       required this.completionDate,
       required this.status});
+}
+
+class SaveOpenTicket extends TicketsEvents {
+  final String value;
+
+  SaveOpenTicket({required this.value});
+}
+
+class SelectVoValue extends TicketsEvents {
+  final String value;
+  final String vo;
+
+  SelectVoValue({required this.value, required this.vo});
 }

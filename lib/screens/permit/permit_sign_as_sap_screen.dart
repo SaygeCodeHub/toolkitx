@@ -7,6 +7,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/screens/profile/widgets/signature.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/offlinePermit/save_offline_data_util.dart';
@@ -25,6 +26,7 @@ class PermitSignAsSapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    permitCpSapModel.sapCpMap['user_sign'] = '';
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSignAsSap),
         bottomNavigationBar: Padding(
@@ -40,15 +42,18 @@ class PermitSignAsSapScreen extends StatelessWidget {
               BlocListener<PermitBloc, PermitStates>(
                 listener: (context, state) {
                   if (state is OfflineDataSaved) {
-                    showCustomSnackBar(
-                        context, StringConstants.kDataSavedSuccessfully, '');
-                    Future.delayed(const Duration(seconds: 3));
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, PermitDetailsScreen.routeName,
-                        arguments: permitCpSapModel.sapCpMap['permitid'] ??
-                            permitCpSapModel.sapCpMap['permitId']);
+                    if (permitCpSapModel.previousScreen !=
+                        'TransferPermitOfflineScreen') {
+                      showCustomSnackBar(
+                          context, StringConstants.kDataSavedSuccessfully, '');
+                      Future.delayed(const Duration(seconds: 3));
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, PermitDetailsScreen.routeName,
+                          arguments: permitCpSapModel.sapCpMap['permitid'] ??
+                              permitCpSapModel.sapCpMap['permitId']);
+                    }
                   } else if (state is OfflineDataNotSaved) {
                     showCustomSnackBar(context, state.errorMessage, '');
                   }
@@ -76,10 +81,20 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             showCustomSnackBar(context,
                                 StringConstants.kPleaseEnterSignature, '');
                           } else {
-                            SaveOfflineDataUtil().saveData(
-                                permitCpSapModel.previousScreen,
-                                permitCpSapModel.sapCpMap,
-                                context);
+                            if (permitCpSapModel.previousScreen ==
+                                'TransferPermitOfflineScreen') {
+                              Navigator.pushNamed(
+                                  context, PermitSignAsCpScreen.routeName,
+                                  arguments: PermitCpSapModel(
+                                      sapCpMap: permitCpSapModel.sapCpMap,
+                                      previousScreen:
+                                          'TransferPermitOfflineScreen'));
+                            } else {
+                              SaveOfflineDataUtil().saveData(
+                                  permitCpSapModel.previousScreen,
+                                  permitCpSapModel.sapCpMap,
+                                  context);
+                            }
                           }
                         },
                         textValue: StringConstants.kSignAsSapCap)),
