@@ -26,7 +26,8 @@ class SurrenderPermitScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PermitBloc>().add(FetchPermitBasicDetails(permitId: permitDetailsModel.data.tab1.id));
+    context.read<PermitBloc>().add(
+        FetchPermitBasicDetails(permitId: permitDetailsModel.data.tab1.id));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSurrenderPermit),
         body: Padding(
@@ -69,9 +70,7 @@ class SurrenderPermitScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: permitDetailsModel.data.tab1
-                                      .permit ??
-                                  '',
+                              value: permitDetailsModel.data.tab1.permit,
                               readOnly: true,
                               onTextFieldChanged: (textField) {}),
                           const SizedBox(height: xxTinierSpacing),
@@ -84,9 +83,7 @@ class SurrenderPermitScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: permitDetailsModel.data.tab1
-                                      .status ??
-                                  '',
+                              value: permitDetailsModel.data.tab1.status,
                               readOnly: true,
                               onTextFieldChanged: (textField) {}),
                         ]);
@@ -101,10 +98,10 @@ class SurrenderPermitScreen extends StatelessWidget {
                 onPressed: () {
                   if (isNetworkEstablished) {
                     context.read<PermitBloc>().add(SurrenderPermit(
-                        permitId: permitDetailsModel.data.tab1.id, surrenderPermitMap: {}));
+                        permitId: permitDetailsModel.data.tab1.id,
+                        surrenderPermitMap: {}));
                   } else {
-                    Navigator.pushNamed(
-                        context, PermitSignAsCpScreen.routeName,
+                    Navigator.pushNamed(context, PermitSignAsCpScreen.routeName,
                         arguments: PermitCpSapModel(sapCpMap: {
                           "permitid": permitDetailsModel.data.tab1.id,
                           "action_key": "surrender_permit"

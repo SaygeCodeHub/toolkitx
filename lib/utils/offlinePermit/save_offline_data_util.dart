@@ -36,6 +36,9 @@ class SaveOfflineDataUtil {
             permitId: saveOfflineDataMap['permitid']));
         break;
       case 'TransferPermitOfflineScreen':
+        context.read<PermitBloc>().add(ChangePermitCP(
+            changePermitCPMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitid']));
         break;
     }
   }

@@ -10,6 +10,7 @@ import 'package:toolkit/data/models/permit/permit_roles_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
+import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -71,4 +72,6 @@ abstract class PermitRepository {
       String permitId, String hashCode);
 
   Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap);
+
+  Future<SyncTransferCpPermitModel> syncTransferCp(Map syncTransferCpMap);
 }

@@ -573,7 +573,8 @@ class DatabaseHelper {
     }
   }
 
-  Future<Map<String, dynamic>> fetchSurrenderData(String permitId) async {
+  Future<Map<String, dynamic>> fetchOfflinePermitSurrenderData(
+      String permitId) async {
     final db = await database;
     List<Map<String, dynamic>> result = await db.query(
       'OfflinePermitAction',
@@ -581,7 +582,25 @@ class DatabaseHelper {
       where: 'permitId = ? AND actionText = ?',
       whereArgs: [permitId, 'surrender_permit'],
     );
-    print('result----> $result');
+    if (result.isNotEmpty) {
+      Map<String, dynamic> fetchSurrenderData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(fetchSurrenderData['actionJson']);
+      return actionJson;
+    } else {
+      return <String, dynamic>{};
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchOfflinePermitTransferData(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'transfer_permit'],
+    );
     if (result.isNotEmpty) {
       Map<String, dynamic> fetchSurrenderData = result.first;
       Map<String, dynamic> actionJson =

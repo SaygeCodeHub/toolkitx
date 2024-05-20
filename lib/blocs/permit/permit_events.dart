@@ -151,9 +151,10 @@ class SavePermitEditSafetyDocument extends PermitEvents {
   final int? offlineActionId;
   final String permitId;
 
-  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap,
-    this.offlineActionId,
-    required this.permitId});
+  SavePermitEditSafetyDocument(
+      {required this.editSafetyDocumentMap,
+      this.offlineActionId,
+      required this.permitId});
 }
 
 class SurrenderPermit extends PermitEvents {
@@ -198,8 +199,9 @@ class SelectTransferValue extends PermitEvents {
 
 class ChangePermitCP extends PermitEvents {
   final Map changePermitCPMap;
+  final String permitId;
 
-  ChangePermitCP({required this.changePermitCPMap});
+  ChangePermitCP({required this.changePermitCPMap, required this.permitId});
 }
 
 class SavePermitOfflineAction extends PermitEvents {

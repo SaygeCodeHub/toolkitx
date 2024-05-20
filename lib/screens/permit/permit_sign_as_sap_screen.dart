@@ -42,15 +42,18 @@ class PermitSignAsSapScreen extends StatelessWidget {
               BlocListener<PermitBloc, PermitStates>(
                 listener: (context, state) {
                   if (state is OfflineDataSaved) {
-                    showCustomSnackBar(
-                        context, StringConstants.kDataSavedSuccessfully, '');
-                    Future.delayed(const Duration(seconds: 3));
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, PermitDetailsScreen.routeName,
-                        arguments: permitCpSapModel.sapCpMap['permitid'] ??
-                            permitCpSapModel.sapCpMap['permitId']);
+                    if (permitCpSapModel.previousScreen !=
+                        'TransferPermitOfflineScreen') {
+                      showCustomSnackBar(
+                          context, StringConstants.kDataSavedSuccessfully, '');
+                      Future.delayed(const Duration(seconds: 3));
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, PermitDetailsScreen.routeName,
+                          arguments: permitCpSapModel.sapCpMap['permitid'] ??
+                              permitCpSapModel.sapCpMap['permitId']);
+                    }
                   } else if (state is OfflineDataNotSaved) {
                     showCustomSnackBar(context, state.errorMessage, '');
                   }

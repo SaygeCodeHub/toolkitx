@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
+import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 
 import '../../data/models/pdf_generation_model.dart';
@@ -179,9 +180,17 @@ class PermitRepositoryImpl extends PermitRepository {
 
   @override
   Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap) async {
-    final response = await DioClient().post(
-        "${ApiConstants.baseUrl}https://api.toolkitx.com/api/permit/changecp",
-        changePermitCPMap);
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}permit/changecp", changePermitCPMap);
     return ChangePermitCpModel.fromJson(response);
+  }
+
+  @override
+  Future<SyncTransferCpPermitModel> syncTransferCp(
+      Map syncTransferCpMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/SyncTransferCPProcess",
+        syncTransferCpMap);
+    return SyncTransferCpPermitModel.fromJson(response);
   }
 }

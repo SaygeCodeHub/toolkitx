@@ -121,10 +121,8 @@ class PermitTransferComponentScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
             onPressed: () {
-              changePermitCPMap['permitId'] = permitId;
-              context
-                  .read<PermitBloc>()
-                  .add(ChangePermitCP(changePermitCPMap: changePermitCPMap));
+              context.read<PermitBloc>().add(ChangePermitCP(
+                  changePermitCPMap: changePermitCPMap, permitId: permitId));
             },
             textValue: StringConstants.kSave),
       ),
