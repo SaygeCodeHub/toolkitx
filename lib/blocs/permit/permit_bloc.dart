@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -338,7 +337,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         if (permitBasicData?.istransfersafetydocument == '1') {
           permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        } if (permitBasicData?.issurrendercp == '1') {
+        }
+        if (permitBasicData?.issurrendercp == '1') {
           permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         }
         emit(PermitDetailsFetched(
@@ -475,14 +475,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.openPermit(openPermitMap);
           if (openClosePermitModel.message == '1') {
-            if (event.offlineActionId != null) {
-              await _databaseHelper
-                  .deleteOfflinePermitAction(event.offlineActionId!);
-            }
             emit(PermitOpened(openClosePermitModel));
           }
         } else {
-          log('offline data map open: $openPermitMap');
           add(SavePermitOfflineAction(
               offlineDataMap: openPermitMap,
               permitId: event.openPermitMap['permitId'],
@@ -547,17 +542,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           OpenClosePermitModel openClosePermitModel =
               await _permitRepository.closePermit(closePermitMap);
           if (openClosePermitModel.message == '1') {
-            if (event.offlineActionId != null) {
-              await _databaseHelper
-                  .deleteOfflinePermitAction(event.offlineActionId!);
-            }
             emit(PermitClosed(openClosePermitModel));
           } else {
             emit(ClosePermitError(
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
           }
         } else {
-          log('offline data map close: $closePermitMap');
           add(SavePermitOfflineAction(
               offlineDataMap: closePermitMap,
               permitId: event.closePermitMap['permitId'],
@@ -695,7 +685,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kPleaseFillControlPerson));
         }
       } else {
-        log('offline data map prepare====>$saveMarkAsPreparedMap');
         add(SavePermitOfflineAction(
             offlineDataMap: saveMarkAsPreparedMap,
             permitId: event.permitId,
@@ -712,50 +701,44 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _acceptPermitRequest(
       AcceptPermitRequest event, Emitter<PermitStates> emit) async {
     emit(PermitRequestAccepting());
-    // try {
-    String hashCode =
-        (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-    String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
-    Map acceptPermitRequestMap = {
-      "hashcode": hashCode,
-      "permitid": event.permitId,
-      "userid": userId,
-      "npw_name": event.acceptPermitMap['npw_name'] ?? '',
-      "npw_auth": event.acceptPermitMap['npw_auth'] ?? '',
-      "npw_company": event.acceptPermitMap['npw_company'] ?? '',
-      "npw_email": event.acceptPermitMap['npw_email'] ?? '',
-      "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
-      "sync_sign:": event.acceptPermitMap['user_sign'] ?? '',
-      "sync_date": event.syncDate,
-    };
-    log('eventmap======>${event.acceptPermitMap}');
-    log('acceptPermitRequestMap======>${acceptPermitRequestMap}');
-    if (isNetworkEstablished) {
-      AcceptPermitRequestModel acceptPermitRequestModel =
-          await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
-      if (acceptPermitRequestModel.message == '1') {
-        if (event.offlineActionId != null) {
-          await _databaseHelper
-              .deleteOfflinePermitAction(event.offlineActionId!);
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
+      Map acceptPermitRequestMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+        "userid": userId,
+        "npw_name": event.acceptPermitMap['npw_name'] ?? '',
+        "npw_auth": event.acceptPermitMap['npw_auth'] ?? '',
+        "npw_company": event.acceptPermitMap['npw_company'] ?? '',
+        "npw_email": event.acceptPermitMap['npw_email'] ?? '',
+        "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
+        "sync_sign": event.acceptPermitMap['user_sign'] ?? '',
+        "sync_date":
+            '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}',
+      };
+      if (isNetworkEstablished) {
+        AcceptPermitRequestModel acceptPermitRequestModel =
+            await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
+        if (acceptPermitRequestModel.message == '1') {
+          emit(PermitRequestAccepted());
+        } else {
+          emit(PermitRequestNotAccepted(
+              errorMessage: acceptPermitRequestModel.message!));
         }
-        emit(PermitRequestAccepted());
       } else {
-        emit(PermitRequestNotAccepted(
-            errorMessage: acceptPermitRequestModel.message!));
+        add(SavePermitOfflineAction(
+            offlineDataMap: acceptPermitRequestMap,
+            permitId: event.permitId,
+            signature: event.acceptPermitMap['user_sign'],
+            actionKey: event.acceptPermitMap['action_key'],
+            dateTime:
+                '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}'));
       }
-    } else {
-      log('offline data map req acc====>$acceptPermitRequestMap');
-      add(SavePermitOfflineAction(
-          offlineDataMap: acceptPermitRequestMap,
-          permitId: event.permitId,
-          signature: event.acceptPermitMap['user_sign'],
-          actionKey: event.acceptPermitMap['action_key'],
-          dateTime:
-              '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}'));
+    } catch (e) {
+      emit(PermitRequestNotAccepted(errorMessage: e.toString()));
     }
-    // } catch (e) {
-    //   emit(PermitRequestNotAccepted(errorMessage: e.toString()));
-    // }
   }
 
   FutureOr<void> _fetchClearPermit(
@@ -927,17 +910,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         SaveClearPermitModel saveClearPermitModel =
             await _permitRepository.saveClearPermit(clearPermitMap);
         if (saveClearPermitModel.message == '1') {
-          if (event.offlineActionId != null) {
-            await _databaseHelper
-                .deleteOfflinePermitAction(event.offlineActionId!);
-          }
           emit(ClearPermitSaved());
         } else {
           emit(ClearPermitNotSaved(
               errorMessage: StringConstants.kSomethingWentWrong));
         }
       } else {
-        log('offlineDataMap clear ==>$clearPermitMap');
         add(SavePermitOfflineAction(
             offlineDataMap: clearPermitMap,
             permitId: event.clearPermitMap['permitid'],
@@ -981,10 +959,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             await _permitRepository
                 .saveEditSafetyNoticeDocument(editSafetyDocumentMap);
         if (savePermitEditSafetyDocumentModel.message == '1') {
-          if (event.offlineActionId != null) {
-            await _databaseHelper
-                .deleteOfflinePermitAction(event.offlineActionId!);
-          }
           emit(PermitEditSafetyDocumentSaved());
         } else {
           emit(PermitEditSafetyDocumentNotSaved(
@@ -1073,7 +1047,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if ((event.changePermitCPMap['sap'] != '' &&
           event.changePermitCPMap['controlePerson'] != null)) {
         ChangePermitCpModel changePermitCpModel =
-        await _permitRepository.changePermitCP(changePermitCPMap);
+            await _permitRepository.changePermitCP(changePermitCPMap);
         if (changePermitCpModel.message == '1') {
           emit(PermitCPChanged());
         } else {
@@ -1099,7 +1073,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "permitid": event.permitId,
       };
       SurrenderPermitModel surrenderPermitModel =
-      await _permitRepository.surrenderPermit(surrenderPermitMap);
+          await _permitRepository.surrenderPermit(surrenderPermitMap);
       if (surrenderPermitModel.message == '1') {
         emit(PermitSurrendered());
       } else {
@@ -1179,99 +1153,52 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         for (var action in permitActions) {
           switch (action['actionText']) {
             case 'edit_safety_document':
-              log("edit_safety_document Started");
-              log("bloody work edit_safety_document --------->${jsonDecode(action['actionJson'])}");
               SavePermitEditSafetyDocumentModel
                   savePermitEditSafetyDocumentModel =
                   await _permitRepository.saveEditSafetyNoticeDocument(
                       jsonDecode(action['actionJson']));
               if (savePermitEditSafetyDocumentModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']!);
-                log("savePermitEditSafetyDocumentModel success");
-              } else {
-                log("savePermitEditSafetyDocumentModel errorrrr");
               }
               break;
             case 'prepare_permit':
-              log("prepare_permit Started");
-              log("bloody work prepare per --------->${jsonDecode(action['actionJson'])}");
               SaveMarkAsPreparedModel saveMarkAsPreparedModel =
                   await _permitRepository
                       .saveMarkAsPrepared(jsonDecode(action['actionJson']));
               if (saveMarkAsPreparedModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log("saveMarkAsPrepared success");
-              } else {
-                log("saveMarkAsPrepared errorrr");
               }
               break;
             case 'open_permit':
-              // add(OpenPermit(jsonDecode(action['actionJson']),
-              //     action['permitId'], action['id']));
-              log("bloody work openPer --------->${jsonDecode(action['actionJson'])}");
               OpenClosePermitModel openClosePermitModel =
                   await _permitRepository
                       .openPermit(jsonDecode(action['actionJson']));
               if (openClosePermitModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']!);
-
-                log('open_permit success');
-              } else {
-                log('open_permit error');
               }
               break;
             case 'accept_permit_request':
-              // add(AcceptPermitRequest(
-              //     permitId: action['permitId'],
-              //     acceptPermitMap: jsonDecode(action['actionJson']),
-              //     syncDate: action['actionDateTime'],
-              //     offlineActionId: action['id']));
-              log("bloody work accept_per_req --------->${jsonDecode(action['actionJson'])}");
               AcceptPermitRequestModel acceptPermitRequestModel =
                   await _permitRepository
                       .acceptPermitRequest(jsonDecode(action['actionJson']));
               if (acceptPermitRequestModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('accept_permit_request success');
-              } else {
-                log('accept_permit_request error');
               }
               break;
             case 'clear_permit':
-              // add(SaveClearPermit(
-              //     permitId: action['permitId'],
-              //     clearPermitMap: jsonDecode(action['actionJson']),
-              //     syncDate: action['actionDateTime'],
-              //     offlineActionId: action['id']));
-              log("bloody work clear_permit --------->${jsonDecode(action['actionJson'])}");
               SaveClearPermitModel saveClearPermitModel =
                   await _permitRepository
                       .saveClearPermit(jsonDecode(action['actionJson']));
               if (saveClearPermitModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('clear_permit success');
-              } else {
-                log('clear_permit success');
               }
               break;
             case 'cancel_permit':
-              // add(ClosePermit(
-              //     permitId: action['permitId'],
-              //     closePermitMap: jsonDecode(action['actionJson']),
-              //     offlineActionId: action['id']));
-              log("bloody work cancel_permit --------->${jsonDecode(action['actionJson'])}");
               OpenClosePermitModel openClosePermitModel =
                   await _permitRepository
                       .closePermit(jsonDecode(action['actionJson']));
               if (openClosePermitModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('cancel_permit success');
-              } else {
-                log('cancel_permit error');
               }
               break;
             default:
@@ -1281,7 +1208,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
       }
     } catch (e) {
-      log('permitInternetActions error===>$e');
+      rethrow;
     }
   }
 
@@ -1367,7 +1294,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   '#methodstmt', action['actionJson']['methodstmt']);
               htmlText = htmlText.replaceAll(
                   '#description', action['actionJson']['description']);
-              log(action['actionJson']['description']);
               break;
 
             case 'open_permit':
@@ -1551,7 +1477,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           }
         }
       }
-      log('permitActionsList=========>$permitActionsList');
 
       htmlText = htmlText.replaceAll(
           '#methodstmt', offlinePermitData['html']['methodstmt']);
@@ -1582,7 +1507,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         htmlText = htmlText.replaceAll('#16_time', '');
         htmlText = htmlText.replaceAll('#16_date', '');
       }
-      log('wtf=======> ${offlinePermitData['html']}');
       if (offlinePermitData['html']['2_date'].length > 0) {
         htmlText =
             htmlText.replaceAll('#2_name', offlinePermitData['html']['2_name']);
@@ -1775,11 +1699,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       htmlText = htmlText.replaceAll('#lwc_precautions',
           (offlinePermitData['html']['lwc_precautions'] ?? ''));
 
-      //emit
-      log('htmlText==========>$htmlText');
       emit(OfflinePdfGenerated(htmlContent: htmlText));
     } catch (e) {
-      log('error in generating pdf: $e');
+      emit(ErrorGeneratingPdfOffline(errorMessage: e.toString()));
     }
   }
 }

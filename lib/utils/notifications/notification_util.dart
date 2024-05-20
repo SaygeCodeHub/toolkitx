@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
@@ -18,7 +16,6 @@ class NotificationUtil {
     await pushNotifications.requestPermission();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      log('Notification title ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message);
         if (_isMessageForCurrentChat(message)) {
@@ -100,7 +97,6 @@ class NotificationUtil {
 }
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  log('Notification background title ${message.data}');
   await _storeBackgroundMessageInDatabase(message);
 }
 
@@ -125,6 +121,6 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
     };
     await DatabaseHelper().insertMessage(messageData);
   } catch (e) {
-    log('Error storing message in database: $e');
+    rethrow;
   }
 }
