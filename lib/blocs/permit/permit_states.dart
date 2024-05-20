@@ -272,6 +272,16 @@ class PermitEditSafetyDocumentNotSaved extends PermitStates {
   PermitEditSafetyDocumentNotSaved({required this.errorMessage});
 }
 
+class SurrenderingPermit extends PermitStates {}
+
+class PermitSurrendered extends PermitStates {}
+
+class PermitNotSurrender extends PermitStates {
+  final String errorMessage;
+
+  PermitNotSurrender({required this.errorMessage});
+}
+
 class DataForChangePermitCPFetching extends PermitStates {}
 
 class DataForChangePermitCPFetched extends PermitStates {

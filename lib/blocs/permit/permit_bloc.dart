@@ -10,6 +10,7 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
+import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -67,6 +68,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SelectTransferCPWorkForce>(_selectTransferCPWorkForce);
     on<SelectTransferCPSap>(_selectTransferCPSap);
     on<SelectTransferValue>(_selectTransferValue);
+    on<SurrenderPermit>(_surrenderPermit);
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -228,6 +230,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
       if (permitBasicData?.istransfersafetydocument == '1') {
         permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
+      if (permitBasicData?.issurrendercp == '1') {
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
       }
       emit(PermitDetailsFetched(
           permitDetailsModel: permitDetailsModel,
@@ -639,5 +644,28 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _selectTransferValue(
       SelectTransferValue event, Emitter<PermitStates> emit) {
     emit(TransferValueSelected(value: event.value));
+  }
+
+  FutureOr<void> _surrenderPermit(
+      SurrenderPermit event, Emitter<PermitStates> emit) async {
+    emit(SurrenderingPermit());
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      Map surrenderPermitMap = {
+        "hashcode": hashCode,
+        "permitid": event.permitId,
+      };
+      SurrenderPermitModel surrenderPermitModel =
+          await _permitRepository.surrenderPermit(surrenderPermitMap);
+      if (surrenderPermitModel.message == '1') {
+        emit(PermitSurrendered());
+      } else {
+        emit(PermitNotSurrender(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(PermitNotSurrender(errorMessage: e.toString()));
+    }
   }
 }
