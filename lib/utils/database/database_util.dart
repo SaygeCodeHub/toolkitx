@@ -159,6 +159,7 @@ class DatabaseHelper {
             'actionJson': jsonEncode(actionJson),
             'actionDateTime':
                 actionDateTime ?? DateTime.now().toUtc().toString(),
+            'sign': sign
           },
           conflictAlgorithm: ConflictAlgorithm.replace);
 
@@ -239,25 +240,25 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> getUnreadMessageCount(String currentUserId) async {
+  Future<void> getUnreadMessageCount(
+      String currentUserId,
+      String currentSenderId,
+      String receiverId,
+      String currentReceiverId,
+      bool onChatMessagingScreen) async {
     final Database db = await database;
 
     await db.transaction((txn) async {
       final unreadCount = await txn.rawQuery('''
       SELECT COUNT(*) AS unread_for_recipient
       FROM chat_messages
-      WHERE sid = ? AND showCount = 0;
-    ''', [currentUserId]);
-
-      final unreadRecipientCount =
+       WHERE sid = ? AND rid = ? AND showCount = 0;
+    ''', [currentUserId, receiverId]);
+      int unreadRecipientCount =
           unreadCount.first['unread_for_recipient'] as int;
-
       await txn.update(
-        'chat_messages',
-        {'unreadMessageCount': unreadRecipientCount},
-        where: 'sid = ?',
-        whereArgs: [currentUserId],
-      );
+          'chat_messages', {'unreadMessageCount': unreadRecipientCount},
+          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
     });
   }
 
@@ -304,9 +305,11 @@ class DatabaseHelper {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 
-    messages = await db.query('chat_messages',
-        where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-        whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA]);
+    messages = await db.query(
+      'chat_messages',
+      where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
+      whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
+    );
 
     List<Map<String, dynamic>> updatedMessages = [];
 
@@ -415,9 +418,8 @@ class DatabaseHelper {
       String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
-      [permitId],
-    );
+        'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
+        [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = {
@@ -438,9 +440,7 @@ class DatabaseHelper {
   Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-      'SELECT html FROM OfflinePermit WHERE permitId = ?',
-      [permitId],
-    );
+        'SELECT html FROM OfflinePermit WHERE permitId = ?', [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = jsonDecode(result['html']);
@@ -457,7 +457,7 @@ class DatabaseHelper {
     return results.first['statusId'];
   }
 
-  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction() async {
+  Future<List<Map<String, dynamic>>> fetchAllOfflinePermitAction() async {
     final db = await database;
     final List<Map<String, dynamic>> result =
         await db.rawQuery('SELECT * FROM OfflinePermitAction');
@@ -468,6 +468,28 @@ class DatabaseHelper {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchOfflinePermitAction(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        where: 'permitId = ?', whereArgs: [permitId]);
+    if (result.isEmpty) {
+      return [];
+    } else {
+      List<Map<String, dynamic>> finalResult = [];
+      for (var i = 0; i < result.length; i++) {
+        finalResult.add({
+          'actionJson': jsonDecode(result[i]['actionJson']),
+          'actionText': result[i]['actionText'],
+          'actionDateTime': result[i]['actionDateTime'],
+          'sign': result[i]['sign'],
+          'permitId': result[i]['permitId'],
+        });
+      }
+      return finalResult;
+    }
+  }
+
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
@@ -475,22 +497,14 @@ class DatabaseHelper {
 
   Future<void> updateStatusId(String permitId, int updatedStatus) async {
     final db = await database;
-    await db.update(
-      'OfflinePermit',
-      {'statusId': updatedStatus},
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    await db.update('OfflinePermit', {'statusId': updatedStatus},
+        where: 'permitId = ?', whereArgs: [permitId]);
   }
 
   Future<int> getTypeOfPermit(String permitId) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermit',
-      columns: ['listPage'],
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['listPage'], where: 'permitId = ?', whereArgs: [permitId]);
     if (result.isNotEmpty) {
       String listPageJson = result.first['listPage'];
       Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
@@ -502,35 +516,23 @@ class DatabaseHelper {
 
   Future<void> updateStatus(String permitId, String updatedStatus) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermit',
-      columns: ['listPage'],
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['listPage'], where: 'permitId = ?', whereArgs: [permitId]);
     if (result.isNotEmpty) {
       String listPageJson = result.first['listPage'];
       Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
       listPageMap['status'] = updatedStatus;
       String updatedListPageJson = jsonEncode(listPageMap);
-      await db.update(
-        'OfflinePermit',
-        {'listPage': updatedListPageJson},
-        where: 'permitId = ?',
-        whereArgs: [permitId],
-      );
+      await db.update('OfflinePermit', {'listPage': updatedListPageJson},
+          where: 'permitId = ?', whereArgs: [permitId]);
     }
   }
 
   Future<void> updateEquipmentSafetyDoc(
       String permitId, Map equipmentMap) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermit',
-      columns: ['html'],
-      where: 'permitId = ?',
-      whereArgs: [permitId],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermit',
+        columns: ['html'], where: 'permitId = ?', whereArgs: [permitId]);
     if (result.isNotEmpty) {
       String listPageJson = result.first['html'];
       Map<String, dynamic> equMap = jsonDecode(listPageJson);
@@ -556,12 +558,10 @@ class DatabaseHelper {
 
   Future<List> populateClearPermitData(String permitId) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermitAction',
-      columns: ['actionJson', 'actionText'],
-      where: 'permitId = ? AND actionText = ?',
-      whereArgs: [permitId, 'open_permit'],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        columns: ['actionJson', 'actionText'],
+        where: 'permitId = ? AND actionText = ?',
+        whereArgs: [permitId, 'open_permit']);
     if (result.isNotEmpty) {
       Map<String, dynamic> populateClearPermitData = result.first;
       Map<String, dynamic> actionJson =

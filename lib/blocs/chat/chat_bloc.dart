@@ -20,8 +20,6 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/utils/constants/api_constants.dart';
-import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 
 import '../../utils/database/database_util.dart';
 
@@ -40,7 +38,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
   String clientId = '';
-  int unreadMsgCount = 0;
   String timeZoneFormat = '';
 
   List<ChatData> chatDetailsList = [];
@@ -163,8 +160,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    await _databaseHelper
-        .getUnreadMessageCount(event.employeeDetailsMap['sid'].toString());
+    await _databaseHelper.getUnreadMessageCount(
+        event.employeeDetailsMap['sid'].toString(),
+        event.employeeDetailsMap['currentSenderId'].toString(),
+        event.employeeDetailsMap['rid'].toString(),
+        event.employeeDetailsMap['currentReceiverId'].toString(),
+        event.employeeDetailsMap['isCurrentUser'] ?? false);
     timeZoneFormat =
         await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
     List<Map<String, dynamic>> messages =
@@ -206,10 +207,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           existingChat.message = message.last['msg'] ?? '';
           existingChat.date = formattedDate(message.last['msg_time']);
           existingChat.time = await formattedTime(message.last['msg_time']);
+          existingChat.dateTime = message.last['msg_time'];
           existingChat.userName = message.last['employee_name'] ?? '';
           existingChat.isReceiver = message.last['isReceiver'] ?? '';
+          existingChat.unreadMsgCount = (_isMessageForCurrentChat(
+                      chatDetailsMap['sid'], message.last['sid'].toString()) ==
+                  true)
+              ? 0
+              : message.last['unreadMessageCount'] ?? 0;
         } else {
-          unreadMsgCount = message.last['unreadMessageCount'] ?? 0;
           ChatData chat = ChatData(
               rId: message.last['rid'].toString(),
               sId: message.last['sid'].toString(),
@@ -220,9 +226,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               message: message.last['msg'] ?? '',
               isGroup: (message.last['isGroup'] == 1) ? true : false,
               date: formattedDate(message.last['msg_time']),
+              dateTime: message.last['msg_time'],
               time: await formattedTime(message.last['msg_time']),
               messageType: message.last['msg_type'] ?? '',
-              unreadMsgCount: message.last['unreadMessageCount'] ?? 0);
+              unreadMsgCount: (_isMessageForCurrentChat(chatDetailsMap['sid'],
+                          message.last['sid'].toString()) ==
+                      true)
+                  ? message.last['unreadMessageCount'] ?? 0
+                  : 0);
           individualChatList.add(chat);
         }
       }
@@ -250,6 +261,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         chat.sId == message['sid'].toString());
   }
 
+  bool _isMessageForCurrentChat(mapId, senderId) {
+    bool isMessageForCurrentChat = senderId == mapId;
+    return isMessageForCurrentChat;
+  }
+
   String formattedDate(String timestamp) {
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('dd.MM.yyyy').format(dateTime);
@@ -270,7 +286,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
       }
     }
-    return DateFormat('H:mm').format(dateTime);
+    return DateFormat('H:mm:ss').format(dateTime);
   }
 
   FutureOr<void> _createChatGroup(
@@ -326,6 +342,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickedFile != null) {
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickedFile.path;
+              int fileSizeInBytes = await pickedFile.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
 
@@ -333,6 +351,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
+                chatDetailsMap['file_size'] = fileSizeInMB;
                 add(RebuildChatMessagingScreen(
                     employeeDetailsMap: chatDetailsMap));
               }
@@ -354,12 +373,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             if (pickVideo != null) {
               chatDetailsMap['isUploadComplete'] = false;
               chatData.fileName = pickVideo.path;
+              int fileSizeInBytes = await pickVideo.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['picked_image'] = chatData.fileName;
               chatDetailsMap['isMedia'] = true;
               if (chatDetailsMap['isMedia'] == true) {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
+                chatDetailsMap['file_size'] = fileSizeInMB;
                 add(RebuildChatMessagingScreen(
                     employeeDetailsMap: chatDetailsMap));
               }
@@ -376,9 +398,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             late File pickedFile;
             FilePickerResult? result = await FilePicker.platform.pickFiles(
                 type: FileType.custom,
-                allowedExtensions: ['pdf', 'doc', 'docx', 'ppt']);
+                allowedExtensions: [
+                  'pdf',
+                  'doc',
+                  'docx',
+                  'ppt',
+                  'pptx',
+                  'xlsx'
+                ]);
             if (result != null) {
               pickedFile = File(result.files.single.path!);
+              int fileSizeInBytes = await pickedFile.length();
+              int fileSizeInMB = fileSizeInBytes ~/ (1024 * 1024);
               chatDetailsMap['attachementExtension'] =
                   result.files.single.extension;
               chatDetailsMap['isUploadComplete'] = false;
@@ -389,6 +420,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 emit(ChatMessagingTextFieldHidden());
               }
               if (chatDetailsMap['isUploadComplete'] == false) {
+                chatDetailsMap['file_size'] = fileSizeInMB;
                 add(RebuildChatMessagingScreen(
                     employeeDetailsMap: chatDetailsMap));
               }
@@ -417,7 +449,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           .uploadImage(File(event.pickedImage), hashCode);
       if (uploadPictureModel.data.isNotEmpty) {
         chatDetailsMap['message'] = uploadPictureModel.data.first;
-        chatDetailsMap['attachement_path'] = chatDetailsMap['message'];
         isUploadComplete = true;
       } else {
         isUploadComplete = false;
@@ -426,13 +457,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         chatDetailsMap['isUploadComplete'] = true;
         Future.delayed(const Duration(seconds: 3));
         if (chatDetailsMap['isUploadComplete'] == true) {
-          if (chatDetailsMap['message_type'] == '4') {
-            chatDetailsMap['attachement_path'] =
-                '${ApiConstants.viewDocBaseUrl}${chatDetailsMap['message']}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}';
-            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
-          } else {
-            add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
-          }
+          add(RebuildChatMessagingScreen(employeeDetailsMap: chatDetailsMap));
+          emit(ChatMessagingTextFieldHidden());
         }
       }
     } catch (e) {

@@ -23,6 +23,7 @@ class ChatData {
   String messageType;
   String pickedMedia;
   int unreadMsgCount;
+  String dateTime;
 
   ChatData(
       {this.rId = '',
@@ -45,7 +46,8 @@ class ChatData {
       this.localImagePath = '',
       this.messageType = '',
       this.pickedMedia = '',
-      this.unreadMsgCount = 0})
+      this.unreadMsgCount = 0,
+      this.dateTime = ''})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -69,7 +71,8 @@ class ChatData {
       'localImagePath': localImagePath,
       'messageType': messageType,
       'pickedMedia': pickedMedia,
-      'unreadMsgCount': unreadMsgCount
+      'unreadMsgCount': unreadMsgCount,
+      'dateTime': dateTime
     };
   }
 

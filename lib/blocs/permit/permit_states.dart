@@ -353,6 +353,22 @@ class OfflineDataNotSaved extends PermitStates {
   OfflineDataNotSaved({required this.errorMessage});
 }
 
+class GeneratingOfflinePdf extends PermitStates {
+  GeneratingOfflinePdf();
+}
+
+class OfflinePdfGenerated extends PermitStates {
+  final String htmlContent;
+
+  OfflinePdfGenerated({required this.htmlContent});
+}
+
+class ErrorGeneratingPdfOffline extends PermitStates {
+  final String errorMessage;
+
+  ErrorGeneratingPdfOffline({required this.errorMessage});
+}
+
 class PermitCPChanging extends PermitStates {}
 
 class PermitCPChanged extends PermitStates {}

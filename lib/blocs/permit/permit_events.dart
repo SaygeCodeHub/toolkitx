@@ -222,3 +222,9 @@ class SavePermitOfflineAction extends PermitEvents {
 class PermitInternetActions extends PermitEvents {
   PermitInternetActions();
 }
+
+class GenerateOfflinePdf extends PermitEvents {
+  final String permitId;
+
+  GenerateOfflinePdf({required this.permitId});
+}

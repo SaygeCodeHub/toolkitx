@@ -9,12 +9,14 @@ import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
 import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/utils/global.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../data/models/permit/permit_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../widgets/view_offline_permit_screen.dart';
 import '../close_permit_screen.dart';
 import '../open_permit_screen.dart';
 
@@ -46,7 +48,12 @@ class PTWActionMenu extends StatelessWidget {
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
           if (popUpMenuItems[value] == StringConstants.kGeneratePdf) {
-            context.read<PermitBloc>().add(GeneratePDF(permitId));
+            if (isNetworkEstablished) {
+              context.read<PermitBloc>().add(GeneratePDF(permitId));
+            } else {
+              Navigator.pushNamed(context, OfflineHtmlViewerScreen.routeName,
+                  arguments: permitId);
+            }
           } else if (popUpMenuItems[value] == StringConstants.kClosePermit) {
             Navigator.pushNamed(context, ClosePermitScreen.routeName,
                     arguments: permitDetailsModel)

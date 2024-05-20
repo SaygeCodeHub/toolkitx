@@ -185,6 +185,7 @@ import '../screens/workorder/workorder_form_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
 import '../widgets/in_app_web_view.dart';
+import '../widgets/view_offline_permit_screen.dart';
 
 class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
@@ -641,6 +642,9 @@ class AppRoutes {
       case PermitSignAsCpScreen.routeName:
         return _createRoute(PermitSignAsCpScreen(
             permitCpSapModel: settings.arguments as PermitCpSapModel));
+      case OfflineHtmlViewerScreen.routeName:
+        return _createRoute(
+            OfflineHtmlViewerScreen(permitId: settings.arguments as String));
       case TransferPermitOfflineScreen.routeName:
         return _createRoute(TransferPermitOfflineScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));

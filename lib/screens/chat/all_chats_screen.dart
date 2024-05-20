@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
-import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -30,7 +30,7 @@ class AllChatsScreen extends StatelessWidget {
         title: const Text('Chats'),
         automaticallyImplyLeading: false,
         titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-        actions: [ChatPopUpMenu()],
+        actions: const [],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -68,7 +68,10 @@ class AllChatsScreen extends StatelessWidget {
                               'isGroup': snapshot.data![index].isGroup
                             };
                             Navigator.pushNamed(
-                                context, ChatMessagingScreen.routeName);
+                                    context, ChatMessagingScreen.routeName)
+                                .then((value) => context
+                                    .read<ChatBloc>()
+                                    .add(FetchChatsList()));
                           },
                           leading: Container(
                               padding: const EdgeInsets.all(tiniestSpacing),
@@ -109,7 +112,7 @@ class AllChatsScreen extends StatelessWidget {
                                       : (snapshot.data![index].sType == '2')
                                           ? 'Workforce'
                                           : 'System User'),
-                                  Text(snapshot.data![index].time,
+                                  Text(time(snapshot.data![index].dateTime),
                                       style: Theme.of(context)
                                           .textTheme
                                           .xxSmall
@@ -170,6 +173,11 @@ class AllChatsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String time(String time) {
+    DateTime formattedTime = DateTime.parse(time);
+    return DateFormat('H:mm').format(formattedTime);
   }
 
   Widget messageText(String message, String type) {

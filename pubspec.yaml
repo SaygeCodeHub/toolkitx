@@ -45,6 +45,10 @@ dependencies:
   webview_flutter:
   flutter_osm_plugin: ^0.70.0
   package_info_plus:
+  open_file: ^3.3.2
+  csv:
+  flutter_document_picker: ^5.2.3
+  flutter_html_to_pdf: ^0.7.0
   searchable_listview:
 
 

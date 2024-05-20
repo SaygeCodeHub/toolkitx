@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -14,14 +15,16 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../di/app_module.dart';
+import '../../utils/database/database_util.dart';
 import '../home/home_screen.dart';
 import '../location/current_location_screen.dart';
-import '../notification/notification_screen.dart';
 import '../profile/profile_screen.dart';
 
 class RootScreen extends StatefulWidget {
   static const routeName = 'RootScreen';
   final bool isFromClientList;
+  static bool onceCall = true;
 
   const RootScreen({super.key, required this.isFromClientList});
 
@@ -29,16 +32,23 @@ class RootScreen extends StatefulWidget {
   State<RootScreen> createState() => _RootScreenState();
 }
 
-class _RootScreenState extends State<RootScreen> {
+class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
+  final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
 
   @override
   void initState() {
-    // widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
     if (widget.isFromClientList) {
       _selectedIndex = 0;
     }
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this); // Unregister the observer
   }
 
   void _onItemTapped(int index) {
@@ -60,10 +70,33 @@ class _RootScreenState extends State<RootScreen> {
   ];
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        context
+            .read<ChatBloc>()
+            .add(RebuildChatMessagingScreen(employeeDetailsMap: {
+              'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
+              'sid': ChatBloc().chatDetailsMap['sid'] ?? ''
+            }));
+        break;
+      case AppLifecycleState.inactive:
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {
       if (state is NoNetwork) {
+        RootScreen.onceCall = true;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -71,8 +104,17 @@ class _RootScreenState extends State<RootScreen> {
                     const RootScreen(isFromClientList: false)),
             ModalRoute.withName('/'));
       } else {
-        context.read<PermitBloc>().add(PermitInternetActions());
         context.read<ChatBloc>().add(FetchChatMessage());
+        if (RootScreen.onceCall == true) {
+          context.read<PermitBloc>().add(PermitInternetActions());
+        }
+        RootScreen.onceCall = false;
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const RootScreen(isFromClientList: false)),
+            ModalRoute.withName('/'));
       }
     }, builder: (context, state) {
       final bool hasNetwork = state is! NoNetwork;

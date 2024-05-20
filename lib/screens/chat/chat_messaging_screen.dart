@@ -80,21 +80,37 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                           .read<ChatBloc>()
                           .chatDetailsMap['isUploadComplete'] ==
                       false) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(),
-                        const SizedBox(height: tiniestSpacing),
-                        Center(
-                            child: Text(
-                                'Uploading attachement....Please wait!!',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .xSmall
-                                    .copyWith(color: AppColor.grey))),
-                      ],
-                    );
+                    if (context.read<ChatBloc>().chatDetailsMap['file_size'] >
+                        20) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Text(
+                                  'Cannot upload attachement more than 20 mb!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(color: AppColor.black))),
+                        ],
+                      );
+                    } else {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: tiniestSpacing),
+                          Center(
+                              child: Text('Uploading attachment, please wait!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(color: AppColor.grey))),
+                        ],
+                      );
+                    }
                   } else {
                     return const AttachmentPreviewScreen();
                   }
@@ -114,46 +130,60 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                 context
                                     .read<ChatBloc>()
                                     .chatDetailsMap['isMedia'] = false;
+                                context
+                                    .read<ChatBloc>()
+                                    .chatDetailsMap['message'] = '';
                                 context.read<ChatBloc>().add(
                                     RebuildChatMessagingScreen(
                                         employeeDetailsMap: context
                                             .read<ChatBloc>()
                                             .chatDetailsMap));
                               },
-                              textValue: 'Remove')),
+                              textValue: (context
+                                          .read<ChatBloc>()
+                                          .chatDetailsMap['isUploadComplete'] ==
+                                      true)
+                                  ? 'Remove'
+                                  : 'Back')),
                       const SizedBox(width: xxTinierSpacing),
                       Expanded(
                           child: PrimaryButton(
-                              onPressed: () {
-                                if (context
-                                            .read<ChatBloc>()
-                                            .chatDetailsMap['message']
-                                            .toString() ==
-                                        '' ||
-                                    context
-                                            .read<ChatBloc>()
-                                            .chatDetailsMap['message'] ==
-                                        null) {
-                                  showCustomSnackBar(
-                                      context,
-                                      'Something went wrong. Please try again later!',
-                                      '');
-                                } else {
-                                  context
-                                      .read<ChatBloc>()
-                                      .chatDetailsMap['isMedia'] = false;
-                                  _handleMessage(
-                                      context
+                              onPressed: (context
                                           .read<ChatBloc>()
-                                          .chatDetailsMap['message']
-                                          .toString(),
-                                      context);
-                                  context.read<ChatBloc>().add(SendChatMessage(
-                                      sendMessageMap: context
-                                          .read<ChatBloc>()
-                                          .chatDetailsMap));
-                                }
-                              },
+                                          .chatDetailsMap['isUploadComplete'] ==
+                                      true)
+                                  ? () {
+                                      if (context
+                                                  .read<ChatBloc>()
+                                                  .chatDetailsMap['message']
+                                                  .toString() ==
+                                              '' ||
+                                          context
+                                                  .read<ChatBloc>()
+                                                  .chatDetailsMap['message'] ==
+                                              null) {
+                                        showCustomSnackBar(
+                                            context,
+                                            'Something went wrong. Please try again later!',
+                                            '');
+                                      } else {
+                                        context
+                                            .read<ChatBloc>()
+                                            .chatDetailsMap['isMedia'] = false;
+                                        _handleMessage(
+                                            context
+                                                .read<ChatBloc>()
+                                                .chatDetailsMap['message']
+                                                .toString(),
+                                            context);
+                                        context.read<ChatBloc>().add(
+                                            SendChatMessage(
+                                                sendMessageMap: context
+                                                    .read<ChatBloc>()
+                                                    .chatDetailsMap));
+                                      }
+                                    }
+                                  : null,
                               textValue: 'Send')),
                     ],
                   ),
