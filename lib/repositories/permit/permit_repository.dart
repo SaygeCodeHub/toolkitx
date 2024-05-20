@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -65,4 +66,6 @@ abstract class PermitRepository {
 
   Future<FetchDataForChangePermitCpModel> fetchDataForChangePermitCP(
       String permitId, String hashCode);
+
+  Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap);
 }

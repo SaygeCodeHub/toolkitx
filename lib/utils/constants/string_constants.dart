@@ -282,9 +282,11 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
-  static const String kCP = 'CP';
+  static const String kSAP = 'SAP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kPermitTransferWarning =
+      'Warning: This Safety Document has not been surrendered by a Competent Person. This must be cleared and cancelled by a suitably authorised person';
   static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
   static const String kAllGearPermit =

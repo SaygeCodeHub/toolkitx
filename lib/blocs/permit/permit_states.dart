@@ -322,3 +322,13 @@ class TransferValueSelected extends PermitStates {
 
   TransferValueSelected({required this.value});
 }
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}
