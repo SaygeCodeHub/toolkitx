@@ -339,6 +339,16 @@ class TransferValueSelected extends PermitStates {
   TransferValueSelected({required this.value});
 }
 
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}
+
 class SavingOfflineData extends PermitStates {}
 
 class OfflineDataSaved extends PermitStates {
@@ -367,14 +377,4 @@ class ErrorGeneratingPdfOffline extends PermitStates {
   final String errorMessage;
 
   ErrorGeneratingPdfOffline({required this.errorMessage});
-}
-
-class PermitCPChanging extends PermitStates {}
-
-class PermitCPChanged extends PermitStates {}
-
-class PermitCPNotChanged extends PermitStates {
-  final String errorMessage;
-
-  PermitCPNotChanged({required this.errorMessage});
 }

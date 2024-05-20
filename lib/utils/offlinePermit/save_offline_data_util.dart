@@ -17,8 +17,8 @@ class SaveOfflineDataUtil {
             acceptPermitMap: saveOfflineDataMap));
         break;
       case 'OpenPermitScreen':
-        context.read<PermitBloc>().add(OpenPermit(
-            saveOfflineDataMap, saveOfflineDataMap['permitId'], null));
+        context.read<PermitBloc>().add(
+            OpenPermit(saveOfflineDataMap, saveOfflineDataMap['permitId']));
         break;
       case 'PreparePermitScreen':
         context.read<PermitBloc>().add(SaveMarkAsPrepared(

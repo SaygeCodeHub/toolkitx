@@ -9,7 +9,7 @@ import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
 import 'package:toolkit/utils/global.dart';
-import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
