@@ -151,9 +151,10 @@ class SavePermitEditSafetyDocument extends PermitEvents {
   final int? offlineActionId;
   final String permitId;
 
-  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap,
-    this.offlineActionId,
-    required this.permitId});
+  SavePermitEditSafetyDocument(
+      {required this.editSafetyDocumentMap,
+      this.offlineActionId,
+      required this.permitId});
 }
 
 class FetchDataForChangePermitCP extends PermitEvents {
@@ -206,4 +207,10 @@ class SavePermitOfflineAction extends PermitEvents {
 
 class PermitInternetActions extends PermitEvents {
   PermitInternetActions();
+}
+
+class GenerateOfflinePdf extends PermitEvents {
+  final String permitId;
+
+  GenerateOfflinePdf({required this.permitId});
 }

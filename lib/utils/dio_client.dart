@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -19,6 +20,8 @@ class DioClient {
   }
 
   Future<dynamic> post(String requestUrl, Map? body) async {
+    log('body===>$body');
+    log('requestUrl===>$requestUrl');
     dynamic jsonResponse;
     try {
       final response =
