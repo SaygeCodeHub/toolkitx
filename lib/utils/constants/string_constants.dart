@@ -634,7 +634,6 @@ abstract class StringConstants {
       "EDT should be greater than 0 for selected status";
   static const String kPleaseSelectVo = "Please select VO Needed to continue";
   static const String kVoNeeded = "Vo Needed";
-      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
   static const String kPleaseWaitWhileFetchingLocation =
       'Please wait while we fetch your current location...';
 }
