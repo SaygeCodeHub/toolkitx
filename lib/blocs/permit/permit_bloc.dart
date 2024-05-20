@@ -47,6 +47,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
   int statusId = 0;
+  Map transferAndSurrenderMap = {};
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -353,6 +354,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         if (statusId == 16 || statusId == 7) {
           permitPopUpMenu.add(StringConstants.kOpenPermit);
         }
@@ -1052,61 +1055,60 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _saveOfflineData(
       SavePermitOfflineAction event, Emitter<PermitStates> emit) async {
-    try {
-      bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-          event.permitId,
-          event.actionKey,
-          event.offlineDataMap,
-          event.signature,
-          event.dateTime);
-      int typeOfPermit = await _databaseHelper.getTypeOfPermit(event.permitId);
-      if (isDataInserted) {
-        switch (event.actionKey) {
-          case 'open_permit':
-            await _databaseHelper.updateStatusId(event.permitId, 2);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '2'));
-            break;
-          case 'cancel_permit':
-            await _databaseHelper.updateStatusId(event.permitId, 3);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '3'));
-            break;
-          case 'prepare_permit':
-            await _databaseHelper.updateStatusId(event.permitId, 16);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '16'));
-            break;
-          case 'clear_permit':
-            await _databaseHelper.updateStatusId(event.permitId, 18);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '18'));
-            break;
-          case 'accept_permit_request':
-            await _databaseHelper.updateStatusId(event.permitId, 17);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '17'));
-            break;
-          case 'edit_safety_document':
-            await _databaseHelper.updateStatusId(event.permitId, 0);
-            await _databaseHelper.updateStatus(
-                event.permitId, getStatusText(typeOfPermit.toString(), '0'));
-            break;
-          default:
-            emit(OfflineDataNotSaved(
-                errorMessage: StringConstants.kFailedToSaveData));
-            break;
-        }
-        emit(OfflineDataSaved(
-            successMessage: StringConstants.kDataSavedSuccessfully));
-      } else {
-        emit(OfflineDataNotSaved(
-            errorMessage: StringConstants.kFailedToSaveData));
+    // try {
+    bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
+        event.permitId,
+        event.actionKey,
+        event.offlineDataMap,
+        event.signature,
+        event.dateTime);
+    int typeOfPermit = await _databaseHelper.getTypeOfPermit(event.permitId);
+    if (isDataInserted) {
+      switch (event.actionKey) {
+        case 'open_permit':
+          await _databaseHelper.updateStatusId(event.permitId, 2);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '2'));
+          break;
+        case 'cancel_permit':
+          await _databaseHelper.updateStatusId(event.permitId, 3);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '3'));
+          break;
+        case 'prepare_permit':
+          await _databaseHelper.updateStatusId(event.permitId, 16);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '16'));
+          break;
+        case 'clear_permit':
+          await _databaseHelper.updateStatusId(event.permitId, 18);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '18'));
+          break;
+        case 'accept_permit_request':
+          await _databaseHelper.updateStatusId(event.permitId, 17);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '17'));
+          break;
+        case 'edit_safety_document':
+          await _databaseHelper.updateStatusId(event.permitId, 0);
+          await _databaseHelper.updateStatus(
+              event.permitId, getStatusText(typeOfPermit.toString(), '0'));
+          break;
+        default:
+          '';
+          break;
       }
-    } catch (e) {
+      emit(OfflineDataSaved(
+          successMessage: StringConstants.kDataSavedSuccessfully));
+    } else {
       emit(
           OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
     }
+    // } catch (e) {
+    //   emit(
+    //       OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
+    // }
   }
 
   FutureOr<void> _permitInternetActions(
@@ -1163,13 +1165,20 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _surrenderPermit(
       SurrenderPermit event, Emitter<PermitStates> emit) async {
     emit(SurrenderingPermit());
-    try {
-      String hashCode =
-          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-      Map surrenderPermitMap = {
-        "hashcode": hashCode,
-        "permitid": event.permitId,
-      };
+    // try {
+    String hashCode =
+        (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+    Map surrenderPermitMap = {
+      "hashcode": hashCode,
+      "permitid": event.permitId,
+      "npw_id": 0,
+      "npw_name": event.surrenderPermitMap['npw_name'] ?? '',
+      "npw_auth": event.surrenderPermitMap['npw_auth'] ?? '',
+      "npw_sign": '',
+      "date": event.surrenderPermitMap['user_date'] ?? '',
+      "time": event.surrenderPermitMap['user_time'] ?? '',
+    };
+    if (isNetworkEstablished) {
       SurrenderPermitModel surrenderPermitModel =
           await _permitRepository.surrenderPermit(surrenderPermitMap);
       if (surrenderPermitModel.message == '1') {
@@ -1178,8 +1187,41 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         emit(PermitNotSurrender(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
-    } catch (e) {
-      emit(PermitNotSurrender(errorMessage: e.toString()));
+    } else {
+
+      Map<String, dynamic> fetchSurrenderData =
+          await _databaseHelper.fetchSurrenderData(event.permitId);
+      if (fetchSurrenderData['surrender'] != [] &&
+          fetchSurrenderData['surrender'] != null) {
+        transferAndSurrenderMap['surrender'] = fetchSurrenderData['surrender'];
+        transferAndSurrenderMap['surrender'].add(surrenderPermitMap);
+        transferAndSurrenderMap['isSurrender'] = '1';
+        print('transfer surrender map $transferAndSurrenderMap');
+        print(
+            'transfer surrender map length ${transferAndSurrenderMap['surrender'].length}');
+      }else{
+        print('bloc fetchSurrenderData $fetchSurrenderData');
+        if (transferAndSurrenderMap.isEmpty) {
+          transferAndSurrenderMap['surrender'] = [];
+          transferAndSurrenderMap['transfer'] = [];
+        }
+        transferAndSurrenderMap['surrender'].add(surrenderPermitMap);
+        transferAndSurrenderMap['isSurrender'] = '1';
+        print('transfer surrender map $transferAndSurrenderMap');
+        print(
+            'transfer surrender map length ${transferAndSurrenderMap['surrender'].length}');
+      }
+
+      add(SavePermitOfflineAction(
+          offlineDataMap: transferAndSurrenderMap,
+          permitId: event.permitId,
+          signature: event.surrenderPermitMap['npw_sign'] ?? '',
+          actionKey: 'surrender_permit',
+          dateTime:
+              '${event.surrenderPermitMap['date']}${event.surrenderPermitMap['time']}'));
     }
+    // } catch (e) {
+    //   emit(PermitNotSurrender(errorMessage: e.toString()));
+    // }
   }
 }

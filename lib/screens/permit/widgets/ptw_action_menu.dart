@@ -7,6 +7,8 @@ import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
+import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
+import 'package:toolkit/utils/global.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
 import '../../../blocs/permit/permit_events.dart';
@@ -79,13 +81,19 @@ class PTWActionMenu extends StatelessWidget {
           }
           if (popUpMenuItems[value] == StringConstants.kSurrenderPermit) {
             Navigator.of(context).pushNamed(SurrenderPermitScreen.routeName,
-                arguments: permitId);
+                arguments: permitDetailsModel);
           }
           if (popUpMenuItems[value] ==
               StringConstants.kTransferComponentPerson) {
-            Navigator.of(context).pushNamed(
-                PermitTransferComponentScreen.routeName,
-                arguments: permitId);
+            if (isNetworkEstablished) {
+              Navigator.of(context).pushNamed(
+                  PermitTransferComponentScreen.routeName,
+                  arguments: permitId);
+            } else {
+              Navigator.of(context).pushNamed(
+                  TransferPermitOfflineScreen.routeName,
+                  arguments: permitDetailsModel);
+            }
           }
         },
         position: PopupMenuPosition.under,

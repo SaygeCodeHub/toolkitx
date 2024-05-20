@@ -6,8 +6,12 @@ import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/permit/permit_details_model.dart';
+import 'package:toolkit/data/models/permit/permit_sap_cp_model.dart';
 import 'package:toolkit/screens/permit/permit_list_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
@@ -16,13 +20,13 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 class SurrenderPermitScreen extends StatelessWidget {
   static const routeName = 'SurrenderPermitScreen';
-  final String permitId;
+  final PermitDetailsModel permitDetailsModel;
 
-  const SurrenderPermitScreen({super.key, required this.permitId});
+  const SurrenderPermitScreen({super.key, required this.permitDetailsModel});
 
   @override
   Widget build(BuildContext context) {
-    context.read<PermitBloc>().add(FetchPermitBasicDetails(permitId: permitId));
+    context.read<PermitBloc>().add(FetchPermitBasicDetails(permitId: permitDetailsModel.data.tab1.id));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSurrenderPermit),
         body: Padding(
@@ -65,8 +69,9 @@ class SurrenderPermitScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: state
-                                  .fetchPermitBasicDetailsModel.data!.permit!,
+                              value: permitDetailsModel.data.tab1
+                                      .permit ??
+                                  '',
                               readOnly: true,
                               onTextFieldChanged: (textField) {}),
                           const SizedBox(height: xxTinierSpacing),
@@ -79,8 +84,9 @@ class SurrenderPermitScreen extends StatelessWidget {
                                       color: AppColor.black)),
                           const SizedBox(height: tiniestSpacing),
                           TextFieldWidget(
-                              value: state
-                                  .fetchPermitBasicDetailsModel.data!.status!,
+                              value: permitDetailsModel.data.tab1
+                                      .status ??
+                                  '',
                               readOnly: true,
                               onTextFieldChanged: (textField) {}),
                         ]);
@@ -91,13 +97,20 @@ class SurrenderPermitScreen extends StatelessWidget {
                 })),
         bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(xxTinierSpacing),
-            child: Expanded(
-                child: PrimaryButton(
-                    onPressed: () {
-                      context
-                          .read<PermitBloc>()
-                          .add(SurrenderPermit(permitId: permitId));
-                    },
-                    textValue: StringConstants.kAcceptPermit))));
+            child: PrimaryButton(
+                onPressed: () {
+                  if (isNetworkEstablished) {
+                    context.read<PermitBloc>().add(SurrenderPermit(
+                        permitId: permitDetailsModel.data.tab1.id, surrenderPermitMap: {}));
+                  } else {
+                    Navigator.pushNamed(
+                        context, PermitSignAsCpScreen.routeName,
+                        arguments: PermitCpSapModel(sapCpMap: {
+                          "permitid": permitDetailsModel.data.tab1.id,
+                          "action_key": "surrender_permit"
+                        }, previousScreen: routeName));
+                  }
+                },
+                textValue: StringConstants.kSurrenderPermit)));
   }
 }

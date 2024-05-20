@@ -158,8 +158,9 @@ class SavePermitEditSafetyDocument extends PermitEvents {
 
 class SurrenderPermit extends PermitEvents {
   final String permitId;
+  final Map surrenderPermitMap;
 
-  SurrenderPermit({required this.permitId});
+  SurrenderPermit({required this.permitId, required this.surrenderPermitMap});
 }
 
 class FetchDataForChangePermitCP extends PermitEvents {

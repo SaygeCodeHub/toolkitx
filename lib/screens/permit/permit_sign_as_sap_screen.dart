@@ -7,6 +7,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/screens/permit/permit_details_screen.dart';
+import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
 import 'package:toolkit/screens/profile/widgets/signature.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/offlinePermit/save_offline_data_util.dart';
@@ -77,10 +78,20 @@ class PermitSignAsSapScreen extends StatelessWidget {
                             showCustomSnackBar(context,
                                 StringConstants.kPleaseEnterSignature, '');
                           } else {
-                            SaveOfflineDataUtil().saveData(
-                                permitCpSapModel.previousScreen,
-                                permitCpSapModel.sapCpMap,
-                                context);
+                            if (permitCpSapModel.previousScreen ==
+                                'TransferPermitOfflineScreen') {
+                              Navigator.pushNamed(
+                                  context, PermitSignAsCpScreen.routeName,
+                                  arguments: PermitCpSapModel(
+                                      sapCpMap: permitCpSapModel.sapCpMap,
+                                      previousScreen:
+                                          'TransferPermitOfflineScreen'));
+                            } else {
+                              SaveOfflineDataUtil().saveData(
+                                  permitCpSapModel.previousScreen,
+                                  permitCpSapModel.sapCpMap,
+                                  context);
+                            }
                           }
                         },
                         textValue: StringConstants.kSignAsSapCap)),

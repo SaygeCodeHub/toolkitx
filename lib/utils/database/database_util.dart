@@ -103,7 +103,8 @@ class DatabaseHelper {
           actionText TEXT,
           actionJson TEXT,
           actionDateTime TEXT,
-          sign TEXT
+          sign TEXT,
+          UNIQUE(permitId, actionText)
         );
   ''');
       },
@@ -140,7 +141,8 @@ class DatabaseHelper {
           actionText TEXT,
           actionJson TEXT,
           actionDateTime TEXT,
-          sign TEXT
+          sign TEXT,
+          UNIQUE(permitId, actionText)
         );
   ''');
   }
@@ -568,6 +570,25 @@ class DatabaseHelper {
       return customFields;
     } else {
       return <Map<String, dynamic>>[];
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchSurrenderData(String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'surrender_permit'],
+    );
+    print('result----> $result');
+    if (result.isNotEmpty) {
+      Map<String, dynamic> fetchSurrenderData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(fetchSurrenderData['actionJson']);
+      return actionJson;
+    } else {
+      return <String, dynamic>{};
     }
   }
 }

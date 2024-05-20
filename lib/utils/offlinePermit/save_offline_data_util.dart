@@ -30,6 +30,13 @@ class SaveOfflineDataUtil {
             closePermitMap: saveOfflineDataMap,
             permitId: saveOfflineDataMap['permitId']));
         break;
+      case 'SurrenderPermitScreen':
+        context.read<PermitBloc>().add(SurrenderPermit(
+            surrenderPermitMap: saveOfflineDataMap,
+            permitId: saveOfflineDataMap['permitid']));
+        break;
+      case 'TransferPermitOfflineScreen':
+        break;
     }
   }
 }
