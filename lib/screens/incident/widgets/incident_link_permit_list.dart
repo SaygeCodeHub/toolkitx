@@ -9,7 +9,6 @@ import '../../../blocs/incident/incidentRemoveLinkedPermit/incident_remove_linke
 import '../../../blocs/incident/incidentRemoveLinkedPermit/incident_remove_linked_permit_states.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../../data/models/incident/incident_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_card.dart';
@@ -20,13 +19,13 @@ import 'permit_selection_list.dart';
 
 class IncidentLinkPermitList extends StatefulWidget {
   final IncidentDetailsModel incidentDetailsModel;
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   final int initialIndex;
 
   const IncidentLinkPermitList(
       {Key? key,
       required this.incidentDetailsModel,
-      required this.incidentListDatum,
+      required this.incidentId,
       required this.initialIndex})
       : super(key: key);
 
@@ -55,8 +54,7 @@ class _IncidentLinkPermitListState extends State<IncidentLinkPermitList> {
                       isList = false;
                       context.read<IncidentDetailsBloc>().add(
                           FetchPermitToLinkList(
-                              incidentId: widget.incidentListDatum.id,
-                              pageNo: 1));
+                              incidentId: widget.incidentId, pageNo: 1));
                     });
                     context.read<IncidentDetailsBloc>().savedList.clear();
                   },
@@ -78,7 +76,7 @@ class _IncidentLinkPermitListState extends State<IncidentLinkPermitList> {
           visible: isList,
           replacement: PermitSelectionList(
             initialIndex: widget.initialIndex,
-            incidentId: widget.incidentListDatum.id,
+            incidentId: widget.incidentId,
             goBack: goBack,
           ),
           child: (widget.incidentDetailsModel.data!.linkedpermits!.isEmpty)
@@ -112,8 +110,7 @@ class _IncidentLinkPermitListState extends State<IncidentLinkPermitList> {
                                   ProgressBar.dismiss(context);
                                   context.read<IncidentDetailsBloc>().add(
                                       FetchIncidentDetailsEvent(
-                                          incidentId:
-                                              widget.incidentListDatum.id,
+                                          incidentId: widget.incidentId,
                                           role: context
                                               .read<IncidentLisAndFilterBloc>()
                                               .roleId,

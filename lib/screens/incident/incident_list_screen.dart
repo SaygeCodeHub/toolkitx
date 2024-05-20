@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/incident/widgets/incident_details_body.dart';
 import 'package:toolkit/screens/incident/widgets/incident_list_subtitle.dart';
 import 'package:toolkit/screens/incident/widgets/incident_list_title.dart';
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
@@ -183,12 +184,17 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
                                               incidentListDatum:
                                                   incidentListData[index]),
                                           onTap: () {
+                                            IncidentDetailsBody.refNo = state
+                                                .fetchIncidentsListModel
+                                                .data![index]
+                                                .refno;
                                             Navigator.pushNamed(
                                                     context,
                                                     IncidentDetailsScreen
                                                         .routeName,
                                                     arguments:
-                                                        incidentListData[index])
+                                                        incidentListData[index]
+                                                            .id)
                                                 .then((_) => context
                                                     .read<
                                                         IncidentLisAndFilterBloc>()

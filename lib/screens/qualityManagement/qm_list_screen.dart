@@ -176,16 +176,15 @@ class _QualityManagementListScreenState
                                               QualityManagementListTileSubtitle(
                                                   data: qmListData[index]),
                                           onTap: () {
-                                            Map qmListMap = {
-                                              'id': qmListData[index].id,
-                                              'refNo': qmListData[index].refno,
-                                              'status': qmListData[index].status
-                                            };
+                                            QualityManagementDetailsScreen
+                                                    .refNo =
+                                                qmListData[index].refno;
                                             Navigator.pushNamed(
                                                     context,
                                                     QualityManagementDetailsScreen
                                                         .routeName,
-                                                    arguments: qmListMap)
+                                                    arguments: qmListData[index]
+                                                        .id)
                                                 .then((_) => context
                                                     .read<
                                                         QualityManagementBloc>()

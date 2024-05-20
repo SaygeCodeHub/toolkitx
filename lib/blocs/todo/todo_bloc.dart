@@ -363,7 +363,7 @@ class ToDoBloc extends Bloc<ToDoEvent, ToDoStates> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
       todoMap = event.todoMap;
       Map submitToDoMap = {
-        "todoid": todoMap['todoId'],
+        "todoid": todoMap['todoid'],
         "userid": userId,
         "hashcode": hashCode
       };

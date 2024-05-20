@@ -104,15 +104,16 @@ class _ToDoHistoryListScreenState extends State<ToDoHistoryListScreen> {
                                   child: ListTile(
                                       onTap: () {
                                         widget.todoMap['isFromHistory'] = true;
-                                        widget.todoMap['todoId'] = state
-                                            .fetchToDoHistoryListModel
-                                            .data[index]
-                                            .id;
+                                        ToDoDetailsAndDocumentDetailsScreen
+                                            .todoMap['isFromHistory'] = true;
                                         Navigator.pushNamed(
                                             context,
                                             ToDoDetailsAndDocumentDetailsScreen
                                                 .routeName,
-                                            arguments: widget.todoMap);
+                                            arguments: state
+                                                .fetchToDoHistoryListModel
+                                                .data[index]
+                                                .id);
                                       },
                                       title: Text(
                                           state.fetchToDoHistoryListModel
