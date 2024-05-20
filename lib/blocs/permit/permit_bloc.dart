@@ -13,6 +13,7 @@ import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
+import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 
@@ -729,11 +730,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       "npw_company": event.acceptPermitMap['npw_company'] ?? '',
       "npw_email": event.acceptPermitMap['npw_email'] ?? '',
       "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
-      "sync_sign:": event.acceptPermitMap['user_sign'] ?? '',
+      "sync_sign": event.acceptPermitMap['user_sign'] ?? '',
       "sync_date": event.syncDate,
     };
     log('eventmap======>${event.acceptPermitMap}');
-    log('acceptPermitRequestMap======>${acceptPermitRequestMap}');
+    log('acceptPermitRequestMap======>$acceptPermitRequestMap');
     if (isNetworkEstablished) {
       AcceptPermitRequestModel acceptPermitRequestModel =
           await _permitRepository.acceptPermitRequest(acceptPermitRequestMap);
@@ -1105,70 +1106,71 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _changePermitCP(
       ChangePermitCP event, Emitter<PermitStates> emit) async {
     try {
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-    Map changePermitCPMap = {
-      "hashcode": hashCode,
-      "permitid": event.changePermitCPMap['permitId'],
-      "userid": userId,
-      "npw": event.changePermitCPMap['npw'],
-      "sap": event.changePermitCPMap['sap'],
-      "role": roleId,
-      "controlroom": event.changePermitCPMap['controlePerson']
-    };
-    if (isNetworkEstablished) {
-      emit(PermitCPChanging());
-      if ((event.changePermitCPMap['sap'] != '' &&
-          event.changePermitCPMap['controlePerson'] != null)) {
-        ChangePermitCpModel changePermitCpModel =
-            await _permitRepository.changePermitCP(changePermitCPMap);
-        if (changePermitCpModel.message == '1') {
-          emit(PermitCPChanged());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      Map changePermitCPMap = {
+        "hashcode": hashCode,
+        "permitid": event.changePermitCPMap['permitId'],
+        "userid": userId,
+        "npw": event.changePermitCPMap['npw'],
+        "sap": event.changePermitCPMap['sap'],
+        "role": roleId,
+        "controlroom": event.changePermitCPMap['controlePerson']
+      };
+      if (isNetworkEstablished) {
+        emit(PermitCPChanging());
+        if ((event.changePermitCPMap['sap'] != '' &&
+            event.changePermitCPMap['controlePerson'] != null)) {
+          ChangePermitCpModel changePermitCpModel =
+              await _permitRepository.changePermitCP(changePermitCPMap);
+          if (changePermitCpModel.message == '1') {
+            emit(PermitCPChanged());
+          } else {
+            emit(
+                PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+          }
         } else {
-          emit(PermitCPNotChanged(errorMessage: changePermitCpModel.message!));
+          emit(PermitCPNotChanged(
+              errorMessage: "SAP and control person can't be empty"));
         }
       } else {
-        emit(PermitCPNotChanged(
-            errorMessage: "SAP and control person can't be empty"));
+        Map saveTransferMap = {
+          'npw_id': 0,
+          'npw_name': event.changePermitCPMap['npw_name'] ?? '',
+          'npw_auth': event.changePermitCPMap['npw_auth'] ?? '',
+          'npw_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'date': event.changePermitCPMap['user_date'] ?? '',
+          'time': event.changePermitCPMap['user_time'] ?? '',
+          'user_id': 0,
+          'user_name': event.changePermitCPMap['user_name'] ?? '',
+          'user_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'controlusername': event.changePermitCPMap['controlPerson'] ?? ''
+        };
+        Map<String, dynamic> fetchTransferData = await _databaseHelper
+            .fetchOfflinePermitTransferData(event.permitId);
+        if (fetchTransferData['receiver'] != [] &&
+            fetchTransferData['receiver'] != null) {
+          transferAndSurrenderMap['reciever'] = fetchTransferData['transfer'];
+          transferAndSurrenderMap['reciever'].add(saveTransferMap);
+          transferAndSurrenderMap['isSurrender'] = '0';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        } else {
+          transferAndSurrenderMap['surrender'] = [];
+          transferAndSurrenderMap['reciever'] = [];
+          transferAndSurrenderMap['reciever'].add(saveTransferMap);
+          transferAndSurrenderMap['isSurrender'] = '0';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        }
+        add(SavePermitOfflineAction(
+            offlineDataMap: transferAndSurrenderMap,
+            permitId: event.permitId,
+            signature: event.changePermitCPMap['npw_sign'] ?? '',
+            actionKey: 'transfer_permit',
+            dateTime:
+                '${saveTransferMap['user_date']}${saveTransferMap['user_time']}'));
       }
-    } else {
-      Map saveTransferMap = {
-        'npw_id': 0,
-        'npw_name': event.changePermitCPMap['npw_name'] ?? '',
-        'npw_auth': event.changePermitCPMap['npw_auth'] ?? '',
-        'npw_sign': event.changePermitCPMap['user_sign'] ?? '',
-        'date': event.changePermitCPMap['user_date'] ?? '',
-        'time': event.changePermitCPMap['user_time'] ?? '',
-        'user_id': 0,
-        'user_name': event.changePermitCPMap['user_name'] ?? '',
-        'user_sign': event.changePermitCPMap['user_sign'] ?? '',
-        'controlusername': event.changePermitCPMap['controlPerson'] ?? ''
-      };
-      Map<String, dynamic> fetchTransferData =
-          await _databaseHelper.fetchOfflinePermitTransferData(event.permitId);
-      if (fetchTransferData['receiver'] != [] &&
-          fetchTransferData['receiver'] != null) {
-        transferAndSurrenderMap['reciever'] = fetchTransferData['transfer'];
-        transferAndSurrenderMap['reciever'].add(saveTransferMap);
-        transferAndSurrenderMap['isSurrender'] = '0';
-        transferAndSurrenderMap['hashcode'] =
-            await _customerCache.getHashCode(CacheKeys.hashcode);
-      } else {
-        transferAndSurrenderMap['surrender'] = [];
-        transferAndSurrenderMap['reciever'] = [];
-        transferAndSurrenderMap['reciever'].add(saveTransferMap);
-        transferAndSurrenderMap['isSurrender'] = '0';
-        transferAndSurrenderMap['hashcode'] =
-            await _customerCache.getHashCode(CacheKeys.hashcode);
-      }
-      add(SavePermitOfflineAction(
-          offlineDataMap: transferAndSurrenderMap,
-          permitId: event.permitId,
-          signature: event.changePermitCPMap['npw_sign'] ?? '',
-          actionKey: 'transfer_permit',
-          dateTime:
-              '${saveTransferMap['user_date']}${saveTransferMap['user_time']}'));
-    }
     } catch (e) {
       emit(PermitCPNotChanged(errorMessage: e.toString()));
     }
@@ -1177,55 +1179,55 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _saveOfflineData(
       SavePermitOfflineAction event, Emitter<PermitStates> emit) async {
     try {
-    bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
-        event.permitId,
-        event.actionKey,
-        event.offlineDataMap,
-        event.signature,
-        event.dateTime);
-    int typeOfPermit = await _databaseHelper.getTypeOfPermit(event.permitId);
-    if (isDataInserted) {
-      switch (event.actionKey) {
-        case 'open_permit':
-          await _databaseHelper.updateStatusId(event.permitId, 2);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '2'));
-          break;
-        case 'cancel_permit':
-          await _databaseHelper.updateStatusId(event.permitId, 3);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '3'));
-          break;
-        case 'prepare_permit':
-          await _databaseHelper.updateStatusId(event.permitId, 16);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '16'));
-          break;
-        case 'clear_permit':
-          await _databaseHelper.updateStatusId(event.permitId, 18);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '18'));
-          break;
-        case 'accept_permit_request':
-          await _databaseHelper.updateStatusId(event.permitId, 17);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '17'));
-          break;
-        case 'edit_safety_document':
-          await _databaseHelper.updateStatusId(event.permitId, 0);
-          await _databaseHelper.updateStatus(
-              event.permitId, getStatusText(typeOfPermit.toString(), '0'));
-          break;
-        default:
-          '';
-          break;
+      bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
+          event.permitId,
+          event.actionKey,
+          event.offlineDataMap,
+          event.signature,
+          event.dateTime);
+      int typeOfPermit = await _databaseHelper.getTypeOfPermit(event.permitId);
+      if (isDataInserted) {
+        switch (event.actionKey) {
+          case 'open_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 2);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '2'));
+            break;
+          case 'cancel_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 3);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '3'));
+            break;
+          case 'prepare_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 16);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '16'));
+            break;
+          case 'clear_permit':
+            await _databaseHelper.updateStatusId(event.permitId, 18);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '18'));
+            break;
+          case 'accept_permit_request':
+            await _databaseHelper.updateStatusId(event.permitId, 17);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '17'));
+            break;
+          case 'edit_safety_document':
+            await _databaseHelper.updateStatusId(event.permitId, 0);
+            await _databaseHelper.updateStatus(
+                event.permitId, getStatusText(typeOfPermit.toString(), '0'));
+            break;
+          default:
+            '';
+            break;
+        }
+        emit(OfflineDataSaved(
+            successMessage: StringConstants.kDataSavedSuccessfully));
+      } else {
+        emit(OfflineDataNotSaved(
+            errorMessage: StringConstants.kFailedToSaveData));
       }
-      emit(OfflineDataSaved(
-          successMessage: StringConstants.kDataSavedSuccessfully));
-    } else {
-      emit(
-          OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
-    }
     } catch (e) {
       emit(
           OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
@@ -1319,20 +1321,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 log('clear_permit success');
               }
               break;
-            case 'surrender_permit':
-              Map surrenderMap = jsonDecode(action['actionJson']);
-              surrenderMap['permitid'] = await EncryptData.decryptAESPrivateKey(
-                  action['permitId'],
-                  await _customerCache.getApiKey(CacheKeys.apiKey));
-              await _permitRepository.syncTransferCp(surrenderMap);
-              break;
-            case 'transfer_permit':
-              Map transferMap = jsonDecode(action['actionJson']);
-              transferMap['permitid'] = await EncryptData.decryptAESPrivateKey(
-                  action['permitId'],
-                  await _customerCache.getApiKey(CacheKeys.apiKey));
-              await _permitRepository.syncTransferCp(transferMap);
-              break;
             case 'cancel_permit':
               // add(ClosePermit(
               //     permitId: action['permitId'],
@@ -1348,6 +1336,36 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 log('cancel_permit success');
               } else {
                 log('cancel_permit error');
+              }
+              break;
+            case 'surrender_permit':
+              Map surrenderMap = jsonDecode(action['actionJson']);
+              surrenderMap['permitid'] = await EncryptData.decryptAESPrivateKey(
+                  action['permitId'],
+                  await _customerCache.getApiKey(CacheKeys.apiKey));
+              SyncTransferCpPermitModel syncTransferCpModel =
+              await _permitRepository.syncTransferCp(surrenderMap);
+              if (syncTransferCpModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+
+                log('surrender_permit success');
+              } else {
+                log('surrender_permit error');
+              }
+              break;
+            case 'transfer_permit':
+              Map transferMap = jsonDecode(action['actionJson']);
+              transferMap['permitid'] = await EncryptData.decryptAESPrivateKey(
+                  action['permitId'],
+                  await _customerCache.getApiKey(CacheKeys.apiKey));
+              SyncTransferCpPermitModel syncTransferCpModel =
+              await _permitRepository.syncTransferCp(transferMap);
+              if (syncTransferCpModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']);
+
+                log('surrender_permit success');
+              } else {
+                log('surrender_permit error');
               }
               break;
             default:

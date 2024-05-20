@@ -94,6 +94,8 @@ class PermitSignAsCpScreen extends StatelessWidget {
                               showCustomSnackBar(context,
                                   StringConstants.kPleaseEnterSignature, '');
                             } else {
+                              print(
+                                  'save as cp map ${permitCpSapModel.sapCpMap}');
                               SaveOfflineDataUtil().saveData(
                                   permitCpSapModel.previousScreen,
                                   permitCpSapModel.sapCpMap,
