@@ -821,6 +821,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kNoDataFound));
         }
       } else {
+        List<Map<String, dynamic>> customFields = [];
         Map<String, dynamic> populateDataMap = {};
         Map<String, dynamic> permitHtmlMap =
             await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
@@ -874,29 +875,71 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 break;
             }
           }
-        }
-        final List<Map<String, dynamic>> customFields = [
-          {"questionid": 40000010, "answer": ''},
-          {"questionid": 4000001, "answer": populateDataMap['4000001'] ?? ''},
-          {"questionid": 4000002, "answer": populateDataMap['4000002'] ?? ''},
-          {"questionid": 4000003, "answer": populateDataMap['4000003'] ?? ''},
-          {"questionid": 4000004, "answer": populateDataMap['4000004'] ?? ''},
-          {"questionid": 4000005, "answer": populateDataMap['4000005'] ?? ''},
-          {"questionid": 4000006, "answer": populateDataMap['4000006'] ?? ''},
-          {"questionid": 4000007, "answer": populateDataMap['4000007'] ?? ''},
-          {"questionid": 4000008, "answer": populateDataMap['4000008'] ?? ''},
-          {"questionid": 4000013, "answer": populateDataMap['40000013'] ?? ''},
-          {"questionid": 4000014, "answer": populateDataMap['40000014'] ?? ''}
-        ];
-
-        if (permitHtmlMap.isNotEmpty) {
-          emit(ClearPermitDetailsFetched(
-              fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
-              customFields: customFields));
+          customFields = [
+            {"questionid": 40000010, "answer": ''},
+            {"questionid": 4000001, "answer": populateDataMap['4000001'] ?? ''},
+            {"questionid": 4000002, "answer": populateDataMap['4000002'] ?? ''},
+            {"questionid": 4000003, "answer": populateDataMap['4000003'] ?? ''},
+            {"questionid": 4000004, "answer": populateDataMap['4000004'] ?? ''},
+            {"questionid": 4000005, "answer": populateDataMap['4000005'] ?? ''},
+            {"questionid": 4000006, "answer": populateDataMap['4000006'] ?? ''},
+            {"questionid": 4000007, "answer": populateDataMap['4000007'] ?? ''},
+            {"questionid": 4000008, "answer": populateDataMap['4000008'] ?? ''},
+            {
+              "questionid": 4000013,
+              "answer": populateDataMap['40000013'] ?? ''
+            },
+            {"questionid": 4000014, "answer": populateDataMap['40000014'] ?? ''}
+          ];
         } else {
-          emit(ClearPermitDetailsCouldNotFetched(
-              errorMessage: StringConstants.kNoDataFound));
+          customFields = [
+            {"questionid": 4000010, "answer": ""},
+            {
+              "questionid": 4000001,
+              "answer": permitHtmlMap['open_permit_3000001'] ?? ''
+            },
+            {
+              "questionid": 4000002,
+              "answer": permitHtmlMap['open_permit_3000002'] ?? ''
+            },
+            {
+              "questionid": 4000003,
+              "answer": permitHtmlMap['open_permit_3000003'] ?? ''
+            },
+            {
+              "questionid": 4000004,
+              "answer": permitHtmlMap['open_permit_3000004'] ?? ''
+            },
+            {
+              "questionid": 4000005,
+              "answer": permitHtmlMap['open_permit_3000005'] ?? ''
+            },
+            {
+              "questionid": 4000006,
+              "answer": permitHtmlMap['open_permit_3000006'] ?? ''
+            },
+            {
+              "questionid": 4000007,
+              "answer": permitHtmlMap['open_permit_3000007'] ?? ''
+            },
+            {
+              "questionid": 4000008,
+              "answer": permitHtmlMap['open_permit_3000008'] ?? ''
+            },
+            {
+              "questionid": 4000013,
+              "answer": permitHtmlMap['open_permit_30000013'] ?? ''
+            },
+            {
+              "questionid": 4000014,
+              "answer": permitHtmlMap['open_permit_30000014'] ?? ''
+            }
+          ];
         }
+
+        emit(ClearPermitDetailsFetched(
+            fetchClearPermitDetailsModel: fetchClearPermitDetailsModel,
+            customFields: customFields));
       }
     } catch (e) {
       rethrow;
@@ -1055,7 +1098,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<FutureOr<void>> _changePermitCP(
       ChangePermitCP event, Emitter<PermitStates> emit) async {
-    // try {
+    try {
     String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
     String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
     Map changePermitCPMap = {
@@ -1120,14 +1163,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           dateTime:
               '${saveTransferMap['user_date']}${saveTransferMap['user_time']}'));
     }
-    // } catch (e) {
-    //   emit(PermitCPNotChanged(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(PermitCPNotChanged(errorMessage: e.toString()));
+    }
   }
 
   FutureOr<void> _saveOfflineData(
       SavePermitOfflineAction event, Emitter<PermitStates> emit) async {
-    // try {
+    try {
     bool isDataInserted = await _databaseHelper.insertOfflinePermitAction(
         event.permitId,
         event.actionKey,
@@ -1177,10 +1220,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       emit(
           OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
     }
-    // } catch (e) {
-    //   emit(
-    //       OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
-    // }
+    } catch (e) {
+      emit(
+          OfflineDataNotSaved(errorMessage: StringConstants.kFailedToSaveData));
+    }
   }
 
   FutureOr<void> _permitInternetActions(
@@ -1255,7 +1298,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
       Map surrenderPermitMap = {
         "hashcode": hashCode,
-        "permitid": event.permitId
+        "permitid": event.permitId,
       };
       if (isNetworkEstablished) {
         emit(SurrenderingPermit());

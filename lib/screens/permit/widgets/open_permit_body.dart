@@ -114,11 +114,7 @@ class OpenPermitBody extends StatelessWidget {
                         context.read<PermitBloc>().add(OpenPermit(
                             openPermitMap, openPermitMap['permitId'], null));
                       } else {
-                        if (openPermitMap['date'] == null ||
-                            openPermitMap['date'] == '') {
-                          showCustomSnackBar(
-                              context, StringConstants.kPleaseSelectDate, '');
-                        } else if (openPermitMap['time'] == null ||
+                        if (openPermitMap['time'] == null ||
                             openPermitMap['time'] == '') {
                           showCustomSnackBar(
                               context, StringConstants.kPleaseSelectTime, '');
