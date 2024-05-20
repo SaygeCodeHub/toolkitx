@@ -21,6 +21,7 @@ import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
+import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -614,6 +615,8 @@ class AppRoutes {
             SurrenderPermitScreen(permitId: settings.arguments.toString()));
       case TripsListScreen.routeName:
         return _createRoute(const TripsListScreen());
+      case OpenTicketScreen.routeName:
+        return _createRoute(const OpenTicketScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
