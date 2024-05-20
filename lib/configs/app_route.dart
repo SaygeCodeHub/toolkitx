@@ -15,6 +15,7 @@ import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
+import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
@@ -604,6 +605,9 @@ class AppRoutes {
       case PermitTransferComponentScreen.routeName:
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
+      case SurrenderPermitScreen.routeName:
+        return _createRoute(
+            SurrenderPermitScreen(permitId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
