@@ -51,6 +51,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
   int statusId = 0;
+  bool showTransferWarning = false;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -1037,18 +1038,39 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _fetchDataForChangePermitCP(
       FetchDataForChangePermitCP event, Emitter<PermitStates> emit) async {
     try {
-      emit(DataForChangePermitCPFetching());
-      String hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
-          await _permitRepository.fetchDataForChangePermitCP(
-              event.permitId, hashCode);
-      if (fetchDataForChangePermitCpModel.status == 200) {
+      if (isNetworkEstablished) {
+        emit(DataForChangePermitCPFetching());
+        String hashCode =
+            await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+        FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+            await _permitRepository.fetchDataForChangePermitCP(
+                event.permitId, hashCode);
+        if (fetchDataForChangePermitCpModel.status == 200) {
+          emit(DataForChangePermitCPFetched(
+              fetchDataForChangePermitCpModel:
+                  fetchDataForChangePermitCpModel));
+        } else {
+          emit(DataForChangePermitCPNotFetched(
+              errorMessage: fetchDataForChangePermitCpModel.message!));
+        }
+      } else {
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        Map<String, dynamic> populateTransferCpPermitData =
+            await _databaseHelper
+                .fetchOfflinePermitTransferData(event.permitId);
+        if (populateTransferCpPermitData.isNotEmpty) {
+          showTransferWarning =
+              (populateTransferCpPermitData['issurrender'] == 0);
+        } else {
+          showTransferWarning = (permitHtmlMap['npw_id'].toString().isNotEmpty);
+        }
+        FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+            FetchDataForChangePermitCpModel(status: 200, message: '', data: [
+          [GetDataForCPDatum.fromJson(permitHtmlMap)]
+        ]);
         emit(DataForChangePermitCPFetched(
             fetchDataForChangePermitCpModel: fetchDataForChangePermitCpModel));
-      } else {
-        emit(DataForChangePermitCPNotFetched(
-            errorMessage: fetchDataForChangePermitCpModel.message!));
       }
     } catch (e) {
       emit(DataForChangePermitCPNotFetched(errorMessage: e.toString()));
@@ -1108,6 +1130,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: "SAP and control person can't be empty"));
         }
       } else {
+        Map<String, dynamic> fetchTransferData = await _databaseHelper
+            .fetchOfflinePermitTransferData(event.permitId);
+
         Map saveTransferMap = {
           'npw_id': 0,
           'npw_name': event.changePermitCPMap['npw_name'] ?? '',
@@ -1121,8 +1146,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           'controlusername': event.changePermitCPMap['controlPerson'] ?? '',
           'company': event.changePermitCPMap['npw_company'] ?? ''
         };
-        Map<String, dynamic> fetchTransferData = await _databaseHelper
-            .fetchOfflinePermitTransferData(event.permitId);
+        Map surrenderPermitOfflineMap = {
+          "npw_id": 0,
+          "npw_name": 'Abnormal Surrender',
+          "npw_auth": '',
+          "npw_sign": '',
+          "date": event.changePermitCPMap['user_date'] ?? '',
+          "time": event.changePermitCPMap['user_time'] ?? '',
+        };
+
+        if (showTransferWarning) {
+          if (fetchTransferData['surrender'] != [] &&
+              fetchTransferData['surrender'] != null) {
+            transferMap['surrender'] = fetchTransferData['surrender'];
+            transferMap['surrender'].add(surrenderPermitOfflineMap);
+          }
+        }
+
         if (fetchTransferData['reciever'] != [] &&
             fetchTransferData['reciever'] != null) {
           transferMap['reciever'] = fetchTransferData['reciever'];
@@ -1132,6 +1172,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
           transferMap['surrender'] = [];
+          if (showTransferWarning) {
+            transferMap['surrender'].add(surrenderPermitOfflineMap);
+          }
           transferMap['reciever'] = [];
           transferMap['reciever'].add(saveTransferMap);
           transferMap['isSurrender'] = '0';
