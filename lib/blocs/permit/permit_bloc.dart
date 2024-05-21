@@ -3,26 +3,19 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
-import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
-import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
-import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
-import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
-import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
-import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
-import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
-import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
-import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
-
-import 'package:toolkit/utils/global.dart';
-import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
+import '../../data/models/permit/accept_permit_request_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
+import '../../data/models/permit/change_permit_cp_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/fetch_clear_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
+import '../../data/models/permit/fetch_data_for_open_permit_model.dart';
+import '../../data/models/permit/fetch_permit_basic_details_model.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
@@ -30,12 +23,18 @@ import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
+import '../../data/models/permit/save_clear_permit_model.dart';
+import '../../data/models/permit/save_mark_as_prepared_model.dart';
+import '../../data/models/permit/save_permit_safety_notice_model.dart';
+import '../../data/models/permit/surrender_permit_model.dart';
+import '../../data/models/permit/sync_transfer_cp_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/permit/permit_repository.dart';
 import '../../utils/constants/html_constants.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/database_utils.dart';
+import '../../utils/global.dart';
 import 'permit_events.dart';
 import 'permit_states.dart';
 
@@ -287,12 +286,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 permitListData: permitListData));
           }
         } else {
-          List<Map<String, dynamic>> fetchListPageData =
+          List<Map<String, dynamic>> result =
               await _databaseHelper.fetchPermitListOffline();
+          final List<Map<String, dynamic>> fetchListPageData = [];
+          for (var data in result) {
+            var listPageJson = jsonDecode(data['listPage']);
+            listPageJson['actionCount'] = data['actionCount'];
+            fetchListPageData.add(listPageJson);
+          }
           AllPermitModel allPermitModel = AllPermitModel.fromJson(
               {'Status': 200, 'Message': '', 'Data': fetchListPageData});
           permitListData.addAll(allPermitModel.data);
-          listReachedMax = allPermitModel.data.isEmpty;
+          listReachedMax = true;
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
               filters: {},
@@ -1386,6 +1391,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           '#permitname', offlinePermitData['tab1']['permit']);
       htmlText = htmlText.replaceAll(
           '#location', offlinePermitData['tab1']['location']);
+      htmlText =
+          htmlText.replaceAll('#enddate', offlinePermitData['html']['enddate']);
 
       List surrenderList = [];
       List receiverList = [];
