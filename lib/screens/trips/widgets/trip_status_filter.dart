@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../configs/app_dimensions.dart';
-import '../../../widgets/custom_choice_chip.dart';
-import '../../blocs/trips/trip_bloc.dart';
-import '../../data/enums/trip_status_enum.dart';
+import '../../../../configs/app_dimensions.dart';
+import '../../../../widgets/custom_choice_chip.dart';
+import '../../../blocs/trips/trip_bloc.dart';
+import '../../../data/enums/trip_status_enum.dart';
 
 class TripStatusFilter extends StatelessWidget {
   const TripStatusFilter({super.key, required this.tripFilterMap});

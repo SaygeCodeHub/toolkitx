@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/trips/trip_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/trips/trip_vessel_filter_list.dart';
+import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
-import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
-import '../../../configs/app_spacing.dart';
+import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
+import '../../../../configs/app_spacing.dart';
 
 class TripVesselFilter extends StatelessWidget {
   const TripVesselFilter({super.key, required this.tripFilterMap});

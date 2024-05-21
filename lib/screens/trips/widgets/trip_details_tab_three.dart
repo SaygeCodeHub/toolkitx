@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
-import '../../../data/models/trips/fetch_trip_details_model.dart';
+import '../../../../data/models/trips/fetch_trip_details_model.dart';
 
 class TripDetailsTabThree extends StatelessWidget {
   const TripDetailsTabThree({

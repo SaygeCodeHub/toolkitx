@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/trips/trip_details_tab_three.dart';
+import 'package:toolkit/screens/trips/widgets/trip_details_tab_three.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab_two.dart';
 import 'package:toolkit/utils/trips_util.dart';

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 
-import '../../blocs/trips/trip_bloc.dart';
-import '../../configs/app_color.dart';
-import '../../configs/app_spacing.dart';
-import '../../widgets/custom_card.dart';
+import '../../../blocs/trips/trip_bloc.dart';
+import '../../../configs/app_color.dart';
+import '../../../configs/app_spacing.dart';
+import '../../../widgets/custom_card.dart';
 
 class TripListBody extends StatelessWidget {
   const TripListBody({super.key, required this.tripListDatum});
@@ -26,6 +27,10 @@ class TripListBody extends StatelessWidget {
                 child: Padding(
               padding: const EdgeInsets.symmetric(vertical: xxTinierSpacing),
               child: ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, TripsDetailsScreen.routeName,
+                      arguments: tripListDatum[index].id);
+                },
                 title: Text(tripListDatum[index].vessel,
                     style: Theme.of(context).textTheme.small.copyWith(
                         fontWeight: FontWeight.w600, color: AppColor.black)),
