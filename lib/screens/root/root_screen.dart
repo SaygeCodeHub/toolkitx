@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
@@ -38,6 +41,9 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    widget.isFromClientList == true ? _selectedIndex = 0 : null;
+    _getCurrentUserLocation();
+    // widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
     if (widget.isFromClientList) {
       _selectedIndex = 0;
@@ -51,6 +57,15 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this); // Unregister the observer
   }
 
+  void _getCurrentUserLocation() {
+    if (!context.read<WifiConnectivityBloc>().isLocationPermissionDenied ||
+        !context.read<WifiConnectivityBloc>().locationPermissionDeniedForever) {
+      Timer.periodic(const Duration(minutes: 5), (Timer timer) {
+        context.read<WifiConnectivityBloc>().add(ObserveUserLocation());
+      });
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -61,7 +76,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     const HomeScreen(),
     const CurrentLocationScreen(),
     const NotificationScreen(),
-    const Text('Index 3: Chat'),
+    const AllChatsScreen(),
     const ProfileScreen()
   ];
   final List<Widget> _offlineWidgetOptions = [
