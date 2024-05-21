@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -52,7 +51,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
   int statusId = 0;
-  Map transferAndSurrenderMap = {};
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -74,7 +72,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
     on<AcceptPermitRequest>(_acceptPermitRequest);
     on<FetchClearPermit>(_fetchClearPermit);
-    on<SaveClearPermit>(saveClearPermit);
+    on<SaveClearPermit>(_saveClearPermit);
     on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
     on<FetchDataForChangePermitCP>(_fetchDataForChangePermitCP);
     on<SelectTransferTo>(_selectTransferTo);
@@ -720,7 +718,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_company": event.acceptPermitMap['npw_company'] ?? '',
         "npw_email": event.acceptPermitMap['npw_email'] ?? '',
         "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
-        "sync_sign": event.acceptPermitMap['user_sign'] ?? '',
+        "sync_sign": event.acceptPermitMap['npw_sign'] ?? '',
         "sync_date":
             '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}',
       };
@@ -737,7 +735,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         add(SavePermitOfflineAction(
             offlineDataMap: acceptPermitRequestMap,
             permitId: event.permitId,
-            signature: event.acceptPermitMap['user_sign'],
+            signature: event.acceptPermitMap['npw_sign'],
             actionKey: event.acceptPermitMap['action_key'],
             dateTime:
                 '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}'));
@@ -936,7 +934,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     }
   }
 
-  FutureOr<void> saveClearPermit(
+  FutureOr<void> _saveClearPermit(
       SaveClearPermit event, Emitter<PermitStates> emit) async {
     try {
       emit(SavingClearPermit());
@@ -952,7 +950,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_company": event.clearPermitMap['npw_company'] ?? '',
         "npw_email": event.clearPermitMap['npw_email'] ?? '',
         "npw_phone": event.clearPermitMap['npw_phone'] ?? '',
-        "sync_sign": event.clearPermitMap['user_sign'] ?? '',
+        "sync_sign": event.clearPermitMap['npw_sign'] ?? '',
         "sync_date": event.clearPermitMap['user_date'] ?? '',
       };
       if (isNetworkEstablished) {
@@ -968,7 +966,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         add(SavePermitOfflineAction(
             offlineDataMap: clearPermitMap,
             permitId: event.clearPermitMap['permitid'],
-            signature: event.clearPermitMap['user_sign'],
+            signature: event.clearPermitMap['npw_sign'],
             actionKey: event.clearPermitMap['action_key'],
             dateTime:
                 '${event.clearPermitMap['user_date']} ${event.clearPermitMap['user_time']}'));
@@ -1081,6 +1079,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _changePermitCP(
       ChangePermitCP event, Emitter<PermitStates> emit) async {
     try {
+      Map transferMap = {};
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       Map changePermitCPMap = {
@@ -1113,33 +1112,34 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           'npw_id': 0,
           'npw_name': event.changePermitCPMap['npw_name'] ?? '',
           'npw_auth': event.changePermitCPMap['npw_auth'] ?? '',
-          'npw_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'npw_sign': event.changePermitCPMap['npw_sign'] ?? '',
           'date': event.changePermitCPMap['user_date'] ?? '',
           'time': event.changePermitCPMap['user_time'] ?? '',
           'user_id': 0,
           'user_name': event.changePermitCPMap['user_name'] ?? '',
           'user_sign': event.changePermitCPMap['user_sign'] ?? '',
-          'controlusername': event.changePermitCPMap['controlPerson'] ?? ''
+          'controlusername': event.changePermitCPMap['controlPerson'] ?? '',
+          'company': event.changePermitCPMap['npw_company'] ?? ''
         };
         Map<String, dynamic> fetchTransferData = await _databaseHelper
             .fetchOfflinePermitTransferData(event.permitId);
-        if (fetchTransferData['receiver'] != [] &&
-            fetchTransferData['receiver'] != null) {
-          transferAndSurrenderMap['reciever'] = fetchTransferData['transfer'];
-          transferAndSurrenderMap['reciever'].add(saveTransferMap);
-          transferAndSurrenderMap['isSurrender'] = '0';
-          transferAndSurrenderMap['hashcode'] =
+        if (fetchTransferData['reciever'] != [] &&
+            fetchTransferData['reciever'] != null) {
+          transferMap['reciever'] = fetchTransferData['reciever'];
+          transferMap['reciever'].add(saveTransferMap);
+          transferMap['isSurrender'] = '0';
+          transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
-          transferAndSurrenderMap['surrender'] = [];
-          transferAndSurrenderMap['reciever'] = [];
-          transferAndSurrenderMap['reciever'].add(saveTransferMap);
-          transferAndSurrenderMap['isSurrender'] = '0';
-          transferAndSurrenderMap['hashcode'] =
+          transferMap['surrender'] = [];
+          transferMap['reciever'] = [];
+          transferMap['reciever'].add(saveTransferMap);
+          transferMap['isSurrender'] = '0';
+          transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         }
         add(SavePermitOfflineAction(
-            offlineDataMap: transferAndSurrenderMap,
+            offlineDataMap: transferMap,
             permitId: event.permitId,
             signature: event.changePermitCPMap['npw_sign'] ?? '',
             actionKey: 'transfer_permit',
@@ -1155,6 +1155,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       SurrenderPermit event, Emitter<PermitStates> emit) async {
     emit(SurrenderingPermit());
     try {
+      Map surrenderMap = {};
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
       Map surrenderPermitMap = {
@@ -1175,7 +1176,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           "npw_id": 0,
           "npw_name": event.surrenderPermitMap['npw_name'] ?? '',
           "npw_auth": event.surrenderPermitMap['npw_auth'] ?? '',
-          "npw_sign": event.surrenderPermitMap['user_sign'] ?? '',
+          "npw_sign": event.surrenderPermitMap['npw_sign'] ?? '',
           "date": event.surrenderPermitMap['user_date'] ?? '',
           "time": event.surrenderPermitMap['user_time'] ?? '',
         };
@@ -1183,24 +1184,22 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             .fetchOfflinePermitSurrenderData(event.permitId);
         if (fetchSurrenderData['surrender'] != [] &&
             fetchSurrenderData['surrender'] != null) {
-          transferAndSurrenderMap['surrender'] =
-              fetchSurrenderData['surrender'];
-          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
-          transferAndSurrenderMap['issurrender'] = '1';
-          transferAndSurrenderMap['hashcode'] =
+          surrenderMap['surrender'] = fetchSurrenderData['surrender'];
+          surrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          surrenderMap['issurrender'] = '1';
+          surrenderMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
-          transferAndSurrenderMap['surrender'] = [];
-          transferAndSurrenderMap['reciever'] = [];
+          surrenderMap['surrender'] = [];
+          surrenderMap['reciever'] = [];
 
-          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
-          transferAndSurrenderMap['issurrender'] = '1';
-          transferAndSurrenderMap['hashcode'] =
+          surrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          surrenderMap['issurrender'] = '1';
+          surrenderMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         }
-
         add(SavePermitOfflineAction(
-            offlineDataMap: transferAndSurrenderMap,
+            offlineDataMap: surrenderMap,
             permitId: event.permitId,
             signature: event.surrenderPermitMap['npw_sign'] ?? '',
             actionKey: 'surrender_permit',
@@ -1336,10 +1335,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   await _permitRepository.syncTransferCp(surrenderMap);
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('surrender_permit success');
-              } else {
-                log('surrender_permit error');
               }
               break;
             case 'transfer_permit':
@@ -1351,10 +1346,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   await _permitRepository.syncTransferCp(transferMap);
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('surrender_permit success');
-              } else {
-                log('surrender_permit error');
               }
               break;
             default:
@@ -1390,12 +1381,49 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               ErrorGeneratingPdfOffline(errorMessage: 'permit type not found'));
           break;
       }
+
       htmlText = htmlText.replaceAll(
           '#permitname', offlinePermitData['tab1']['permit']);
       htmlText = htmlText.replaceAll(
           '#location', offlinePermitData['tab1']['location']);
+
+      List surrenderList = [];
+      List receiverList = [];
+      for (int j = 1; j <= 4; j++) {
+        if (offlinePermitData['html']["201202_${j}_date"].length > 0) {
+          surrenderList.add({
+            "npw_id": 0,
+            "npw_name": offlinePermitData['html']["201202_${j}_name"] ?? "",
+            "npw_auth": offlinePermitData['html']["201202_${j}_authno"] ?? "",
+            "npw_sign": offlinePermitData['html']["201202_${j}_npwsign"] ?? "",
+            "date": offlinePermitData['html']["201202_${j}_date"] ?? "",
+            "time": offlinePermitData['html']["201202_${j}_time"] ?? ""
+          });
+        }
+
+        if (offlinePermitData['html']["203204_${j}_date"].length > 0) {
+          receiverList.add({
+            "npw_id": 0,
+            "npw_name": offlinePermitData['html']["203204_${j}_name"] ?? '',
+            "npw_auth": offlinePermitData['html']["203204_${j}_authno"] ?? '',
+            "npw_sign": offlinePermitData['html']["203204_${j}_npwsign"] ?? '',
+            "date": offlinePermitData['html']["203204_${j}_date"] ?? '',
+            "time": offlinePermitData['html']["203204_${j}_time"] ?? '',
+            "user_id": 0,
+            "user_name":
+                offlinePermitData['html']["203204_${j}_username"] ?? '',
+            "user_sign":
+                offlinePermitData['html']["203204_${j}_usersign"] ?? '',
+            "controlusername":
+                offlinePermitData['html']["203204_${j}_controlusername"] ?? '',
+            "company": offlinePermitData['html']["203204_${j}_company"] ?? ''
+          });
+        }
+      }
+
       List<Map<String, dynamic>> permitActionsList =
           await _databaseHelper.fetchOfflinePermitAction(event.permitId);
+
       for (var action in permitActionsList) {
         if (action.isNotEmpty) {
           switch (action['actionText']) {
@@ -1412,7 +1440,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d1 = "${dateTime[0]}";
-              var t1 = "${dateTime[1]}";
+              String t1 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#16_time', t1);
               htmlText = htmlText.replaceAll('#16_date', d1);
@@ -1463,7 +1491,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d2 = "${dateTime[0]}";
-              var t2 = "${dateTime[1]}";
+              String t2 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#2_time', t2);
               htmlText = htmlText.replaceAll('#2_date', d2);
@@ -1536,7 +1564,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d3 = "${dateTime[0]}";
-              var t3 = "${dateTime[1]}";
+              String t3 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#32_time', t3);
               htmlText = htmlText.replaceAll('#32_date', d3);
@@ -1552,7 +1580,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d4 = "${dateTime[0]}";
-              var t4 = "${dateTime[1]}";
+              String t4 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#18_time', t4);
               htmlText = htmlText.replaceAll('#18_date', d4);
@@ -1625,10 +1653,29 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d5 = "${dateTime[0]}";
-              var t5 = "${dateTime[1]}";
+              String t5 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#3_time', t5);
               htmlText = htmlText.replaceAll('#3_date', d5);
+              break;
+
+            case 'surrender_permit':
+              if (action['actionJson']['surrender'].length > 0) {
+                for (int j = 0;
+                    j < action['actionJson']['surrender'].length;
+                    j++) {
+                  surrenderList.add(action['actionJson']['surrender'][j]);
+                }
+              }
+              break;
+            case 'transfer_permit':
+              if (action['actionJson']['reciever'].length > 0) {
+                for (int j = 0;
+                    j < action['actionJson']['reciever'].length;
+                    j++) {
+                  receiverList.add(action['actionJson']['reciever'][j]);
+                }
+              }
               break;
           }
         }
@@ -1854,10 +1901,75 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           (offlinePermitData['html']['lwc_environment'] ?? ''));
       htmlText = htmlText.replaceAll('#lwc_precautions',
           (offlinePermitData['html']['lwc_precautions'] ?? ''));
+      int ind = 1;
+      for (int sIndex = 0; sIndex < surrenderList.length; sIndex++) {
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_name", surrenderList[sIndex]['npw_name']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_authno", surrenderList[sIndex]['npw_auth']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_date", surrenderList[sIndex]['date']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_time", surrenderList[sIndex]['time']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_npwsign", surrenderList[sIndex]['npw_sign']);
+        ind = ind + 1;
+      }
 
+      for (int sIndex = 1; sIndex <= 4; sIndex++) {
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_name", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_authno", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_date", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_time", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_npwsign", '');
+      }
+
+      int ind2 = 1;
+      for (int temp = 0; temp <= receiverList.length - 1; temp++) {
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_name", receiverList[temp]['npw_name']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_authno", receiverList[temp]['npw_auth']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_date", receiverList[temp]['date']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_time", receiverList[temp]['time']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_npwsign", receiverList[temp]['npw_sign']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_username", receiverList[temp]['user_name']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_usersign", receiverList[temp]['user_sign']);
+        htmlText = htmlText.replaceAll("#203204_${ind2}_controlusername",
+            receiverList[temp]['controlusername']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_company", receiverList[temp]['company']);
+
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_date1", receiverList[temp]['date']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_time1", receiverList[temp]['time']);
+        ind2 = ind2 + 1;
+      }
+
+      for (int rIndex = 1; rIndex <= 4; rIndex++) {
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_name", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_authno", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_date", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_time", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_npwsign", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_username", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_usersign", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_controlusername", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_company", '');
+
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_date1", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_time1", '');
+      }
       emit(OfflinePdfGenerated(htmlContent: htmlText));
     } catch (e) {
-      log('error in generating pdf: $e');
+      emit(ErrorGeneratingPdfOffline(
+          errorMessage: StringConstants.kPDFGenerationError));
     }
   }
 }
