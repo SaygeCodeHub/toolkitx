@@ -588,7 +588,7 @@ class DatabaseHelper {
           jsonDecode(fetchSurrenderData['actionJson']);
       return actionJson;
     } else {
-      return <String, dynamic>{};
+      return {};
     }
   }
 
@@ -607,7 +607,7 @@ class DatabaseHelper {
           jsonDecode(fetchSurrenderData['actionJson']);
       return actionJson;
     } else {
-      return <String, dynamic>{};
+      return {};
     }
   }
 }
