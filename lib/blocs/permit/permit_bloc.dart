@@ -1161,13 +1161,51 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "hashcode": hashCode,
         "permitid": event.permitId,
       };
-      SurrenderPermitModel surrenderPermitModel =
-          await _permitRepository.surrenderPermit(surrenderPermitMap);
-      if (surrenderPermitModel.message == '1') {
-        emit(PermitSurrendered());
+      if (isNetworkEstablished) {
+        SurrenderPermitModel surrenderPermitModel =
+            await _permitRepository.surrenderPermit(surrenderPermitMap);
+        if (surrenderPermitModel.message == '1') {
+          emit(PermitSurrendered());
+        } else {
+          emit(PermitNotSurrender(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       } else {
-        emit(PermitNotSurrender(
-            errorMessage: StringConstants.kSomethingWentWrong));
+        Map surrenderPermitOfflineMap = {
+          "npw_id": 0,
+          "npw_name": event.surrenderPermitMap['npw_name'] ?? '',
+          "npw_auth": event.surrenderPermitMap['npw_auth'] ?? '',
+          "npw_sign": event.surrenderPermitMap['user_sign'] ?? '',
+          "date": event.surrenderPermitMap['user_date'] ?? '',
+          "time": event.surrenderPermitMap['user_time'] ?? '',
+        };
+        Map<String, dynamic> fetchSurrenderData = await _databaseHelper
+            .fetchOfflinePermitSurrenderData(event.permitId);
+        if (fetchSurrenderData['surrender'] != [] &&
+            fetchSurrenderData['surrender'] != null) {
+          transferAndSurrenderMap['surrender'] =
+              fetchSurrenderData['surrender'];
+          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          transferAndSurrenderMap['issurrender'] = '1';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        } else {
+          transferAndSurrenderMap['surrender'] = [];
+          transferAndSurrenderMap['reciever'] = [];
+
+          transferAndSurrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          transferAndSurrenderMap['issurrender'] = '1';
+          transferAndSurrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        }
+
+        add(SavePermitOfflineAction(
+            offlineDataMap: transferAndSurrenderMap,
+            permitId: event.permitId,
+            signature: event.surrenderPermitMap['npw_sign'] ?? '',
+            actionKey: 'surrender_permit',
+            dateTime:
+                '${event.surrenderPermitMap['date']}${event.surrenderPermitMap['time']}'));
       }
     } catch (e) {
       emit(PermitNotSurrender(errorMessage: e.toString()));

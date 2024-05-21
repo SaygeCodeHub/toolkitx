@@ -16,10 +16,10 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-import 'package:toolkit/widgets/custom_icon_button.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
+import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../configs/app_color.dart';
@@ -92,14 +92,36 @@ class UsersScreen extends StatelessWidget {
                     currentState is EmployeesFetched,
                 builder: (context, state) {
                   if (state is EmployeesFetched) {
-                    return TextFormField(
-                        controller: textEditingController,
-                        onChanged: (value) {
-                          textEditingController.text = value;
-                        },
-                        decoration: InputDecoration(
-                            suffix: const SizedBox(),
-                            suffixIcon: CustomIconButton(
+                    return Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.63,
+                          child: TextFormField(
+                              controller: textEditingController,
+                              onChanged: (value) {
+                                textEditingController.text = value;
+                              },
+                              decoration: InputDecoration(
+                                  suffix: const SizedBox(),
+                                  hintStyle: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(color: AppColor.grey),
+                                  hintText: StringConstants.kSearch,
+                                  contentPadding:
+                                      const EdgeInsets.all(xxxTinierSpacing),
+                                  enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lightGrey)),
+                                  focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColor.lightGrey)),
+                                  filled: true,
+                                  fillColor: AppColor.white)),
+                        ),
+                        const SizedBox(width: xxTinierSpacing),
+                        Expanded(
+                          child: PrimaryButton(
                               onPressed: () {
                                 FocusScopeNode currentFocus =
                                     FocusScope.of(context);
@@ -137,26 +159,14 @@ class UsersScreen extends StatelessWidget {
                                   }
                                 }
                               },
-                              icon: (context.read<ChatBloc>().isSearchEnabled ==
-                                      false)
-                                  ? Icons.search
-                                  : Icons.clear,
-                            ),
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .xSmall
-                                .copyWith(color: AppColor.grey),
-                            hintText: StringConstants.kSearch,
-                            contentPadding:
-                                const EdgeInsets.all(xxxTinierSpacing),
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppColor.lightGrey)),
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppColor.lightGrey)),
-                            filled: true,
-                            fillColor: AppColor.white));
+                              textValue:
+                                  (context.read<ChatBloc>().isSearchEnabled ==
+                                          false)
+                                      ? StringConstants.kSearch
+                                      : StringConstants.kClear),
+                        )
+                      ],
+                    );
                   } else {
                     return const SizedBox.shrink();
                   }

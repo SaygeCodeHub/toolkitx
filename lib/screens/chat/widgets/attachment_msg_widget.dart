@@ -54,14 +54,16 @@ class AttachmentMsgWidget extends StatelessWidget {
                           .toString(),
                       context,
                       snapShot.data![reversedIndex]['msg_type'] ?? '',
-                      snapShot.data![reversedIndex]['isReceiver']))
+                      snapShot.data![reversedIndex]['isReceiver'],
+                      snapShot.data![reversedIndex]['msg']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
                       snapShot.data![reversedIndex]['pickedMedia'].toString(),
                       context,
                       snapShot.data![reversedIndex]['msg_type'],
-                      snapShot.data![reversedIndex]['isReceiver'])),
+                      snapShot.data![reversedIndex]['isReceiver'],
+                      snapShot.data![reversedIndex]['msg'])),
           Align(
             alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -101,13 +103,13 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
-      String type, int isReceiver) {
+      String type, int isReceiver, String fileName) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
-            child: AttachementMsgTypeUtil()
-                .renderWidget(type, attachmentPath, context, isReceiver))
+            child: AttachementMsgTypeUtil().renderWidget(
+                type, attachmentPath, context, isReceiver, fileName))
         : Container(
             width: 100,
             height: 100,
