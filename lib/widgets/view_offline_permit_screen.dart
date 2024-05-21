@@ -30,27 +30,29 @@ class OfflineHtmlViewerScreen extends StatelessWidget {
                     url: WebUri.uri(Uri.dataFromString(state.htmlContent,
                         mimeType: 'text/html',
                         encoding: Encoding.getByName('UTF-8')))));
-          } else {
+          } else if (state is ErrorGeneratingPdfOffline) {
             return const Center(child: Text('Generating PDF error'));
+          } else {
+            return const SizedBox();
           }
         }));
   }
 
-  // Future<void> generatePdfFromHtml(String htmlContent) async {
-  //   try {
-  //     Directory appDocDir = await getTemporaryDirectory();
-  //     String appDocPath = appDocDir.path;
-  //
-  //     var targetFileName = "example.pdf";
-  //     var generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-  //       htmlContent,
-  //       appDocPath,
-  //       targetFileName,
-  //     );
-  //
-  //     print("Generated PDF File Path: ${generatedPdfFile.path}");
-  //   } catch (e) {
-  //     print("eeeeeee $e");
-  //   }
-  // }
+// Future<void> generatePdfFromHtml(String htmlContent) async {
+//   try {
+//     Directory appDocDir = await getTemporaryDirectory();
+//     String appDocPath = appDocDir.path;
+//
+//     var targetFileName = "example.pdf";
+//     var generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
+//       htmlContent,
+//       appDocPath,
+//       targetFileName,
+//     );
+//
+//     print("Generated PDF File Path: ${generatedPdfFile.path}");
+//   } catch (e) {
+//     print("eeeeeee $e");
+//   }
+// }
 }
