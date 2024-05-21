@@ -44,77 +44,68 @@ class SelectTimeZoneScreen extends StatelessWidget {
                 return Column(children: [
                   Expanded(
                       child: SearchableList(
-                          initialList: state.getTimeZoneModel.data!,
-                          // ignore: deprecated_member_use
-                          builder: (List<TimeZoneData> dataList, index,
-                              TimeZoneData data) {
-                            return Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: xxTinierSpacing),
-                                child: CustomCard(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(kCardRadius)),
-                                    child: ListTile(
-                                        onTap: () {
-                                          context.read<TimeZoneBloc>().add(
-                                              SelectTimeZone(
-                                                  timeZoneCode: data.code,
-                                                  isFromProfile: isFromProfile,
-                                                  timeZoneName: data.name,
-                                                  timeZoneOffset: data.offset));
-                                          if (isFromProfile == true) {
-                                            Navigator.pop(context);
-                                          } else {
-                                            Navigator.pushNamed(
-                                                context,
-                                                SelectDateFormatScreen
-                                                    .routeName,
-                                                arguments: false);
-                                          }
-                                        },
-                                        horizontalTitleGap: kListTileTitleGap,
-                                        minLeadingWidth:
-                                            kListTileMinLeadingWidth,
-                                        leading: const Padding(
-                                            padding: EdgeInsets.only(
-                                                top: kListTileLeadingPadding,
-                                                bottom:
-                                                    kListTileLeadingPadding),
-                                            child: Icon(Icons.public,
-                                                size: kIconSize)),
-                                        title: Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: xxTiniestSpacing),
-                                            child: Text(data.offset)),
-                                        subtitle: Text(data.name))));
-                          },
-                          emptyWidget:
-                              Text(DatabaseUtil.getText('no_records_found')),
-                          filter: (value) => state.getTimeZoneModel.data!
-                              .where((element) => element.name
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase().trim()))
-                              .toList(),
-                          inputDecoration: InputDecoration(
-                              suffix: const SizedBox(),
-                              suffixIcon: const Icon(Icons.search_sharp,
-                                  size: kIconSize),
-                              hintText: StringConstants.kSearchTimezone,
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(color: AppColor.grey),
-                              contentPadding:
-                                  const EdgeInsets.all(xxxTinierSpacing),
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColor.lightGrey)),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColor.lightGrey)),
-                              filled: true,
-                              fillColor: AppColor.white))),
+                    initialList: state.getTimeZoneModel.data!,
+                    itemBuilder: (TimeZoneData item) {
+                      return Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: xxTinierSpacing),
+                          child: CustomCard(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(kCardRadius)),
+                              child: ListTile(
+                                  onTap: () {
+                                    context.read<TimeZoneBloc>().add(
+                                        SelectTimeZone(
+                                            timeZoneCode: item.code,
+                                            isFromProfile: isFromProfile,
+                                            timeZoneName: item.name,
+                                            timeZoneOffset: item.offset));
+                                    if (isFromProfile == true) {
+                                      Navigator.pop(context);
+                                    } else {
+                                      Navigator.pushNamed(context,
+                                          SelectDateFormatScreen.routeName,
+                                          arguments: false);
+                                    }
+                                  },
+                                  horizontalTitleGap: kListTileTitleGap,
+                                  minLeadingWidth: kListTileMinLeadingWidth,
+                                  leading: const Padding(
+                                      padding: EdgeInsets.only(
+                                          top: kListTileLeadingPadding,
+                                          bottom: kListTileLeadingPadding),
+                                      child:
+                                          Icon(Icons.public, size: kIconSize)),
+                                  title: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: xxTiniestSpacing),
+                                      child: Text(item.offset)),
+                                  subtitle: Text(item.name))));
+                    },
+                    emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
+                    filter: (value) => state.getTimeZoneModel.data!
+                        .where((element) => element.name
+                            .toLowerCase()
+                            .contains(value.toLowerCase().trim()))
+                        .toList(),
+                    inputDecoration: InputDecoration(
+                        suffix: const SizedBox(),
+                        suffixIcon:
+                            const Icon(Icons.search_sharp, size: kIconSize),
+                        hintText: StringConstants.kSearchTimezone,
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .xSmall
+                            .copyWith(color: AppColor.grey),
+                        contentPadding: const EdgeInsets.all(xxxTinierSpacing),
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.lightGrey)),
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.lightGrey)),
+                        filled: true,
+                        fillColor: AppColor.white),
+                  )),
                 ]);
               } else if (state is FetchTimeZoneError) {
                 return Center(

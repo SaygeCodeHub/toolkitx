@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>232104430503-064gdom9b402a1amfts954r11ds0iarr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.232104430503-064gdom9b402a1amfts954r11ds0iarr</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBERAQVKrV__Dg-nZvRA3XZUWVbjgy8svk</string>
+	<string>AIzaSyDqz90m32ETx5m24bPaBw6bDsVUrwFTl7U</string>
 	<key>GCM_SENDER_ID</key>
-	<string>182868027568</string>
+	<string>232104430503</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.toolkitx</string>
+	<string>com.toolkitx.safety.app</string>
 	<key>PROJECT_ID</key>
-	<string>toolkitx-7037f</string>
+	<string>toolkitx-5e9c6</string>
 	<key>STORAGE_BUCKET</key>
-	<string>toolkitx-7037f.appspot.com</string>
+	<string>toolkitx-5e9c6.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:182868027568:ios:7cc58e4a77b4094b97f375</string>
+	<string>1:232104430503:ios:85908ff5332b81c1</string>
+	<key>DATABASE_URL</key>
+	<string>https://toolkitx-5e9c6.firebaseio.com</string>
 </dict>
 </plist>

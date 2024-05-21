@@ -12,11 +12,16 @@ class ConnectivityUtil {
   }
 
   static void observeNetwork() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        WifiConnectivityBloc().add(NotifyNetworkStatus());
-      } else {
-        WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: true));
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> results) {
+      // Iterate through each result in the list
+      for (var result in results) {
+        if (result == ConnectivityResult.none) {
+          WifiConnectivityBloc().add(NotifyNetworkStatus());
+        } else {
+          WifiConnectivityBloc().add(NotifyNetworkStatus(isConnected: true));
+        }
       }
     });
   }
