@@ -83,6 +83,8 @@ PODS:
   - flutter_inappwebview_ios/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_native_splash (0.0.1):
+    - Flutter
   - flutter_osm_plugin (0.0.1):
     - Alamofire
     - Flutter
@@ -181,6 +183,7 @@ DEPENDENCIES:
   - flutter_document_picker (from `.symlinks/plugins/flutter_document_picker/ios`)
   - flutter_html_to_pdf (from `.symlinks/plugins/flutter_html_to_pdf/ios`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_osm_plugin (from `.symlinks/plugins/flutter_osm_plugin/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
@@ -240,6 +243,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_html_to_pdf/ios"
   flutter_inappwebview_ios:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_osm_plugin:
     :path: ".symlinks/plugins/flutter_osm_plugin/ios"
   geolocator_apple:
@@ -291,6 +296,7 @@ SPEC CHECKSUMS:
   flutter_document_picker: 109ba1c4622e6e62bfced17c22ff544a9a3541f4
   flutter_html_to_pdf: 0fd9f8d04f335d68b06a7c4ab5fc85d22e1ef91b
   flutter_inappwebview_ios: 97215cf7d4677db55df76782dbd2930c5e1c1ea0
+  flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_osm_plugin: a661df71d2a3d1698ee410dd2272c8536f9e46f4
   geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
