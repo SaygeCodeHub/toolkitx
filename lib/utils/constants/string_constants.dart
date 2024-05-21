@@ -634,4 +634,5 @@ abstract class StringConstants {
       "EDT should be greater than 0 for selected status";
   static const String kPleaseSelectVo = "Please select VO Needed to continue";
   static const String kVoNeeded = "Vo Needed";
+  static const String kVessel = "Vessel";
 }

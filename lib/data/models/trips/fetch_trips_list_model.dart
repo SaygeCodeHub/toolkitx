@@ -9,7 +9,7 @@ String fetchTripsListModelToJson(FetchTripsListModel data) =>
 class FetchTripsListModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<TripDatum> data;
 
   FetchTripsListModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchTripsListModel {
       FetchTripsListModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<TripDatum>.from(
+            json["Data"].map((x) => TripDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +32,7 @@ class FetchTripsListModel {
       };
 }
 
-class Datum {
+class TripDatum {
   final String id;
   final String departuredatetime;
   final String arrivaldatetime;
@@ -40,7 +41,7 @@ class Datum {
   final String arrlocname;
   final String status;
 
-  Datum({
+  TripDatum({
     required this.id,
     required this.departuredatetime,
     required this.arrivaldatetime,
@@ -50,7 +51,7 @@ class Datum {
     required this.status,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory TripDatum.fromJson(Map<String, dynamic> json) => TripDatum(
         id: json["id"],
         departuredatetime: json["departuredatetime"],
         arrivaldatetime: json["arrivaldatetime"],
