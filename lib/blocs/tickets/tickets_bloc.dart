@@ -213,12 +213,19 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       event.saveTicketMap['userid'] =
           await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      SaveTicketModel saveTicketModel =
-          await _ticketsRepository.saveTicketModel(event.saveTicketMap);
-      if (saveTicketModel.status == 200) {
-        emit(TicketSaved(saveTicketModel: saveTicketModel));
+      if (event.saveTicketMap['header'] != null &&
+          event.saveTicketMap['application'] != null &&
+          event.saveTicketMap['priority'] != null &&
+          event.saveTicketMap['description'] != null) {
+        SaveTicketModel saveTicketModel =
+            await _ticketsRepository.saveTicketModel(event.saveTicketMap);
+        if (saveTicketModel.status == 200) {
+          emit(TicketSaved(saveTicketModel: saveTicketModel));
+        } else {
+          emit(TicketNotSaved(errorMessage: saveTicketModel.message));
+        }
       } else {
-        emit(TicketNotSaved(errorMessage: saveTicketModel.message));
+        emit(TicketNotSaved(errorMessage: StringConstants.kAllFieldsMandatory));
       }
     } catch (e) {
       emit(TicketNotSaved(errorMessage: e.toString()));

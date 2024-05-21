@@ -720,7 +720,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
         "sync_sign": event.acceptPermitMap['npw_sign'] ?? '',
         "sync_date":
-            '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}',
+            '${event.acceptPermitMap['user_date'] ?? ''} ${event.acceptPermitMap['user_time'] ?? ''}',
       };
       if (isNetworkEstablished) {
         AcceptPermitRequestModel acceptPermitRequestModel =
@@ -1084,7 +1084,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       Map changePermitCPMap = {
         "hashcode": hashCode,
-        "permitid": event.changePermitCPMap['permitId'],
+        "permitid": event.permitId,
         "userid": userId,
         "npw": event.changePermitCPMap['npw'],
         "sap": event.changePermitCPMap['sap'],
@@ -1105,7 +1105,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           }
         } else {
           emit(PermitCPNotChanged(
-              errorMessage: "SAP and control person can't be empty"));
+              errorMessage: StringConstants.kAllFieldsMandatory));
         }
       } else {
         Map saveTransferMap = {

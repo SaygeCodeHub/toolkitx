@@ -292,6 +292,7 @@ abstract class StringConstants {
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
   static const String kSAP = 'SAP';
+  static const String kCP = "CP";
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kSignAsSap = 'Sign as SAP';
   static const String kSignAsCp = 'Sign as CP';
