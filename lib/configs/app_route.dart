@@ -631,19 +631,15 @@ class AppRoutes {
         return _createRoute(PermitTransferComponentScreen(
             permitId: settings.arguments.toString()));
       case SurrenderPermitScreen.routeName:
-        return _createRoute(
-            SurrenderPermitScreen(permitId: settings.arguments.toString()));
-      case OpenTicketScreen.routeName:
-        return _createRoute(const OpenTicketScreen());
         return _createRoute(SurrenderPermitScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
+      case OpenTicketScreen.routeName:
+        return _createRoute(const OpenTicketScreen());
       case TripsListScreen.routeName:
         return _createRoute(const TripsListScreen());
       case TripsDetailsScreen.routeName:
         return _createRoute(
             TripsDetailsScreen(tripId: settings.arguments.toString()));
-      case OpenTicketScreen.routeName:
-        return _createRoute(const OpenTicketScreen());
       case PermitSignAsSapScreen.routeName:
         return _createRoute(PermitSignAsSapScreen(
             permitCpSapModel: settings.arguments as PermitCpSapModel));
