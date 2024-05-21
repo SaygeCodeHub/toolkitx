@@ -405,13 +405,9 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
-    final List<Map<String, dynamic>> result =
-        await db.rawQuery('SELECT listPage FROM OfflinePermit');
-    final List<Map<String, dynamic>> permitList = [];
-    for (var data in result) {
-      permitList.add(jsonDecode(data['listPage']));
-    }
-    return permitList;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit');
+    return result;
   }
 
   Future<Map<String, dynamic>> fetchPermitDetailsOffline(

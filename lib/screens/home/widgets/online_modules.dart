@@ -302,11 +302,13 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'hf':
+        globalBloc.add(UpdateCount(type: 'manifest'));
         Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'wf_trips':
+        globalBloc.add(UpdateCount(type: 'manifest'));
         Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));

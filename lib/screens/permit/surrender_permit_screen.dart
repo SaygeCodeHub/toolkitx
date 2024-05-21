@@ -37,15 +37,16 @@ class SurrenderPermitScreen extends StatelessWidget {
                 top: xxTinierSpacing),
             child: BlocConsumer<PermitBloc, PermitStates>(
                 listener: (context, state) {
-                  if (state is PermitRequestAccepting) {
+                  if (state is SurrenderingPermit) {
                     ProgressBar.show(context);
-                  } else if (state is PermitRequestAccepted) {
+                  } else if (state is PermitSurrendered) {
                     ProgressBar.dismiss(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    Navigator.pushNamed(context, PermitListScreen.routeName,
-                        arguments: false);
-                  } else if (state is PermitRequestNotAccepted) {
+                    Navigator.pushReplacementNamed(
+                        context, PermitListScreen.routeName,
+                        arguments: true);
+                  } else if (state is PermitNotSurrender) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.errorMessage, '');
                   }

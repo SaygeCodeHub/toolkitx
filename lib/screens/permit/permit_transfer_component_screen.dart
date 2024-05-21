@@ -65,7 +65,7 @@ class PermitTransferComponentScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Visibility(
-                          visible: data![0][0].showTransferWarning! == '1',
+                          visible: data![0][0].showTransferWarning == '1',
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: AppColor.errorRed)),

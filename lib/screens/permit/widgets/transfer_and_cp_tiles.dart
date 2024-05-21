@@ -37,29 +37,35 @@ class TransferAndCPTiles extends StatelessWidget {
           },
         ),
         const SizedBox(height: xxTinierSpacing),
-        Text(StringConstants.kSAP,
-            style: Theme.of(context)
-                .textTheme
-                .xSmall
-                .copyWith(fontWeight: FontWeight.w500, color: AppColor.black)),
-        const SizedBox(height: tiniestSpacing),
         BlocBuilder<PermitBloc, PermitStates>(
           buildWhen: (previous, current) => current is TransferValueSelected,
           builder: (context, state) {
             if (state is TransferValueSelected) {
               changePermitCPMap['sap'] = '';
-              return Visibility(
-                visible: state.value == '1',
-                replacement: TransferCPSapExpansionTile(
-                    createdForTransferCp: (id, name) {
-                      changePermitCPMap['sap'] = id.toString();
-                    },
-                    getDataForCPDatum: data[2]),
-                child: TransferCPWorkForceExpansionTile(
-                    createdForTransferCp: (id, name) {
-                      changePermitCPMap['sap'] = id.toString();
-                    },
-                    getDataForCPDatum: data[1]),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      state.value == '1'
+                          ? StringConstants.kCP
+                          : StringConstants.kSAP,
+                      style: Theme.of(context).textTheme.xSmall.copyWith(
+                          fontWeight: FontWeight.w500, color: AppColor.black)),
+                  const SizedBox(height: tiniestSpacing),
+                  Visibility(
+                    visible: state.value == '1',
+                    replacement: TransferCPSapExpansionTile(
+                        createdForTransferCp: (id, name) {
+                          changePermitCPMap['sap'] = id.toString();
+                        },
+                        getDataForCPDatum: data[2]),
+                    child: TransferCPWorkForceExpansionTile(
+                        createdForTransferCp: (id, name) {
+                          changePermitCPMap['sap'] = id.toString();
+                        },
+                        getDataForCPDatum: data[1]),
+                  ),
+                ],
               );
             } else {
               return const SizedBox.shrink();

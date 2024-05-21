@@ -31,6 +31,8 @@ import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/screens/trips/trip_details_screen.dart';
+import 'package:toolkit/screens/trips/trip_filter_screen.dart';
+import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
@@ -636,7 +638,8 @@ class AppRoutes {
       case OpenTicketScreen.routeName:
         return _createRoute(const OpenTicketScreen());
       case TripsListScreen.routeName:
-        return _createRoute(const TripsListScreen());
+        return _createRoute(
+            TripsListScreen(isFromHome: settings.arguments as bool));
       case TripsDetailsScreen.routeName:
         return _createRoute(
             TripsDetailsScreen(tripId: settings.arguments.toString()));
@@ -652,6 +655,11 @@ class AppRoutes {
       case TransferPermitOfflineScreen.routeName:
         return _createRoute(TransferPermitOfflineScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
+      case TripsFilterScreen.routeName:
+        return _createRoute(const TripsFilterScreen());
+      case TripVesselFilterList.routeName:
+        return _createRoute(
+            TripVesselFilterList(vesselName: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }
