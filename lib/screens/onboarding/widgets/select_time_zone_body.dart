@@ -65,8 +65,6 @@ class _SelectTimeZoneBodyState extends State<SelectTimeZoneBody> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                suffix: const SizedBox(),
-                suffixIcon: const Icon(Icons.search_sharp, size: kIconSize),
                 hintText: StringConstants.kSearchTimezone,
                 hintStyle: Theme.of(context)
                     .textTheme
