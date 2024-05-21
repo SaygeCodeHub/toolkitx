@@ -569,6 +569,24 @@ class DatabaseHelper {
     }
   }
 
+  Future<Map<String, dynamic>> populateTransferPermitCpData(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        columns: ['actionJson', 'actionText'],
+        where: 'permitId = ? AND actionText = ?',
+        whereArgs: [permitId, 'transfer_permit']);
+    print('result $result');
+    if (result.isNotEmpty) {
+      Map<String, dynamic> populateTransferCpPermitData = result.first;
+      Map<String, dynamic> actionJson =
+          jsonDecode(populateTransferCpPermitData['actionJson']);
+      return actionJson;
+    } else {
+      return {};
+    }
+  }
+
   Future<Map<String, dynamic>> fetchOfflinePermitSurrenderData(
       String permitId) async {
     final db = await database;
