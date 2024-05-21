@@ -249,6 +249,7 @@ abstract class StringConstants {
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
+  static const String kClear = 'Clear'; //
   static const String kPermitFirstQuestion = 'First'; //
   static const String kPermitSecondQuestion = 'Second'; //
   static const String kRefresh = 'Refresh'; //
