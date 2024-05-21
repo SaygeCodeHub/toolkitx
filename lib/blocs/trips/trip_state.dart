@@ -23,6 +23,20 @@ class TripsListNotFetched extends TripState {
   TripsListNotFetched({required this.errorMessage});
 }
 
+class TripDetailsFetching extends TripState {}
+
+class TripDetailsFetched extends TripState {
+  final FetchTripDetailsModel fetchTripDetailsModel;
+
+  TripDetailsFetched({required this.fetchTripDetailsModel});
+}
+
+class TripDetailsNotFetched extends TripState {
+  final String errorMessage;
+
+  TripDetailsNotFetched({required this.errorMessage});
+}
+
 class TripsStatusFilterSelected extends TripState {
   final String selectedIndex;
   final bool selected;

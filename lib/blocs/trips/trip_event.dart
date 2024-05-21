@@ -16,6 +16,13 @@ class SelectTripStatusFilter extends TripEvent {
   SelectTripStatusFilter({required this.selected, required this.selectedIndex});
 }
 
+class FetchTripsDetails extends TripEvent {
+  final String tripId;
+  final int tripTabIndex;
+
+  FetchTripsDetails({required this.tripId, required this.tripTabIndex});
+}
+
 class FetchTripMaster extends TripEvent {}
 
 class SelectTripVesselFilter extends TripEvent {

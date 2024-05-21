@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trip_filter_screen.dart';
 import 'package:toolkit/screens/trips/trip_list_body.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -87,6 +89,65 @@ class TripsListScreen extends StatelessWidget {
                   if (state is TripsListFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is TripsListFetched) {
+                    return ListView.separated(
+                        itemCount: 10,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return CustomCard(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: xxTinierSpacing),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    TripsDetailsScreen.routeName,
+                                    arguments: state
+                                        .fetchTripsListModel.data[index].id);
+                              },
+                              title: Text(
+                                  state.fetchTripsListModel.data[index].vessel,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .small
+                                      .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.black)),
+                              subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: tinierSpacing),
+                                    Text(
+                                        '${state.fetchTripsListModel.data[index].departuredatetime} - ${state.fetchTripsListModel.data[index].arrivaldatetime}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xSmall
+                                            .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColor.grey)),
+                                    const SizedBox(height: tiniestSpacing),
+                                    Text(
+                                        '${state.fetchTripsListModel.data[index].deplocname} - ${state.fetchTripsListModel.data[index].arrlocname}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .xSmall
+                                            .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColor.grey)),
+                                  ]),
+                              trailing: Text(
+                                  state.fetchTripsListModel.data[index].status,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.deepBlue)),
+                            ),
+                          ));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: xxTinierSpacing);
+                        });
                     return TripListBody(tripListDatum: state.tripDatum);
                   } else if (state is TripsListNotFetched) {
                     return Center(child: Text(state.errorMessage));

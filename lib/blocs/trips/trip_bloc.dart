@@ -8,6 +8,7 @@ import 'package:toolkit/repositories/trips/trips_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/trips/fetch_trip_details_model.dart';
 import '../../di/app_module.dart';
 
 part 'trip_event.dart';
@@ -22,12 +23,14 @@ class TripBloc extends Bloc<TripEvent, TripState> {
 
   TripBloc() : super(TripInitial()) {
     on<FetchTripsList>(_fetchTripsList);
+    on<FetchTripsDetails>(_fetchTripsDetails);
     on<FetchTripMaster>(_fetchTripMaster);
     on<SelectTripStatusFilter>(_selectTripStatusFilter);
     on<SelectTripVesselFilter>(_selectTripVesselFilter);
     on<ApplyTripFilter>(_applyTripFilter);
     on<ClearTripFilter>(_clearTripFilter);
   }
+  int tripTabIndex = 0;
 
   bool hasReachedMax = false;
   List<TripDatum> tripDatum = [];
@@ -66,6 +69,29 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     } catch (e) {
       emit(TripsListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchTripsDetails(
+      FetchTripsDetails event, Emitter<TripState> emit) async {
+    tripTabIndex = event.tripTabIndex;
+    emit(TripDetailsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+
+      FetchTripDetailsModel fetchTripDetailsModel = await _tripsRepository
+          .fetchTripDetails(event.tripId, hashCode, userId);
+
+      if (fetchTripDetailsModel.status == 200) {
+        emit(TripDetailsFetched(fetchTripDetailsModel: fetchTripDetailsModel));
+      } else {
+        emit(
+            TripDetailsNotFetched(errorMessage: fetchTripDetailsModel.message));
+      }
+    } catch (e) {
+      emit(TripDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 

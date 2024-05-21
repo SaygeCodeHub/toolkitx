@@ -30,6 +30,7 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trip_filter_screen.dart';
 import 'package:toolkit/screens/trips/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
@@ -634,11 +635,14 @@ class AppRoutes {
       case SurrenderPermitScreen.routeName:
         return _createRoute(SurrenderPermitScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
+      case OpenTicketScreen.routeName:
+        return _createRoute(const OpenTicketScreen());
       case TripsListScreen.routeName:
         return _createRoute(
             TripsListScreen(isFromHome: settings.arguments as bool));
-      case OpenTicketScreen.routeName:
-        return _createRoute(const OpenTicketScreen());
+      case TripsDetailsScreen.routeName:
+        return _createRoute(
+            TripsDetailsScreen(tripId: settings.arguments.toString()));
       case PermitSignAsSapScreen.routeName:
         return _createRoute(PermitSignAsSapScreen(
             permitCpSapModel: settings.arguments as PermitCpSapModel));
