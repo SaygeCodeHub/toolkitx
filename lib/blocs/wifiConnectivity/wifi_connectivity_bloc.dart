@@ -53,8 +53,6 @@ class WifiConnectivityBloc
     try {
       final position = await _getLocation();
       Future.delayed(const Duration(seconds: 5));
-      latitude = position.latitude;
-      longitude = position.longitude;
       updateCurrentLocation(position.latitude, position.longitude);
     } catch (e) {
       rethrow;

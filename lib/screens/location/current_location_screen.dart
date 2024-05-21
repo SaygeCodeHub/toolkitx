@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../utils/global.dart';
+import '../../utils/constants/string_constants.dart';
 
 class CurrentLocationScreen extends StatefulWidget {
   const CurrentLocationScreen({super.key});
@@ -14,14 +14,14 @@ class CurrentLocationScreen extends StatefulWidget {
 class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
   bool fetchingLocation = true;
   MapController mapController = MapController(
-      initPosition: GeoPoint(latitude: latitude, longitude: longitude));
+      initPosition: GeoPoint(latitude: 21.145800, longitude: 79.088158));
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // _showSnackBar(StringConstants.kPleaseWaitWhileFetchingLocation);
-      // _getCurrentLocation();
+      _showSnackBar(StringConstants.kPleaseWaitWhileFetchingLocation);
+      _getCurrentLocation();
     });
   }
 
@@ -67,7 +67,7 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
-          duration: const Duration(seconds: 10),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
