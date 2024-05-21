@@ -14,7 +14,9 @@ dependencies:
   shimmer:
   encrypt:
   equatable:
+  sqflite: ^2.3.2
   flutter_svg:
+  file_picker: ^8.0.0+1
   flutter_bloc:
   hive_flutter:
   url_launcher:
@@ -22,24 +24,33 @@ dependencies:
   path_provider:
   toggle_switch:
   table_calendar:
-  json_annotation: 4.8.1
+  device_info_plus: ^9.1.1
+  json_annotation: ^4.9.0
   cupertino_icons: ^1.0.2
-  package_info_plus: ^4.0.2
   connectivity_plus:
   shared_preferences:
   permission_handler:
-  searchable_listview: ^2.4.0
   cached_network_image:
   signature: ^5.4.0
-  flutter_inappwebview: ^5.7.2+3
-  image_cropper: ^4.0.1
+  flutter_inappwebview: ^6.0.0
+  image_cropper: ^5.0.1
   qr_code_scanner: ^1.0.1
   pod_player:
   video_player:
   flutter_html:
   html_unescape:
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.10
+  document_viewer: ^0.0.1
   webview_flutter:
-  flutter_osm_plugin:
+  flutter_osm_plugin: ^0.70.0
+  package_info_plus:
+  open_file: ^3.3.2
+  csv:
+  flutter_document_picker: ^5.2.3
+  flutter_html_to_pdf: ^0.7.0
+  searchable_listview:
+  path:
 
 
 dev_dependencies:

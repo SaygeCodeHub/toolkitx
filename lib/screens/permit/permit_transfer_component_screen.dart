@@ -9,8 +9,10 @@ import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_text_field.dart';
+import '../../widgets/progress_bar.dart';
 
 class PermitTransferComponentScreen extends StatelessWidget {
   static const routeName = 'PermitTransferComponentScreen';
@@ -21,6 +23,7 @@ class PermitTransferComponentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map changePermitCPMap = {};
     context
         .read<PermitBloc>()
         .add(FetchDataForChangePermitCP(permitId: permitId));
@@ -38,17 +41,18 @@ class PermitTransferComponentScreen extends StatelessWidget {
                 currentState is DataForChangePermitCPFetched ||
                 currentState is DataForChangePermitCPNotFetched,
             listener: (context, state) {
-              // if (state is MarkAsPreparedSaving) {
-              //   ProgressBar.show(context);
-              // } else if (state is MarkAsPreparedSaved) {
-              //   ProgressBar.dismiss(context);
-              //   Navigator.pop(context);
-              //   Navigator.pushNamed(context, PermitDetailsScreen.routeName,
-              //       arguments: permitId);
-              // } else if (state is MarkAsPreparedNotSaved) {
-              //   ProgressBar.dismiss(context);
-              //   showCustomSnackBar(context, state.errorMessage, '');
-              // }
+              if (state is PermitCPChanging) {
+                ProgressBar.show(context);
+              } else if (state is PermitCPChanged) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                context
+                    .read<PermitBloc>()
+                    .add(GetPermitDetails(permitId: permitId));
+              } else if (state is PermitCPNotChanged) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
             },
             builder: (context, state) {
               if (state is DataForChangePermitCPFetching) {
@@ -60,13 +64,29 @@ class PermitTransferComponentScreen extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Visibility(
+                          visible: data![0][0].showTransferWarning! == '1',
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: AppColor.errorRed)),
+                            child: const Padding(
+                              padding: EdgeInsets.all(xxTinierSpacing),
+                              child: Text(
+                                StringConstants.kPermitTransferWarning,
+                                style: TextStyle(color: AppColor.errorRed),
+                                textAlign: TextAlign.justify,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kPermitNo,
                             style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: tiniestSpacing),
                         TextFieldWidget(
-                            value: data![0][0].permitName!,
+                            value: data[0][0].permitName!,
                             readOnly: true,
                             onTextFieldChanged: (textField) {}),
                         const SizedBox(height: xxTinierSpacing),
@@ -75,14 +95,19 @@ class PermitTransferComponentScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: tiniestSpacing),
-                        TransferAndCPTiles(data: data),
+                        TransferAndCPTiles(
+                          data: data,
+                          changePermitCPMap: changePermitCPMap,
+                        ),
                         const SizedBox(height: xxTinierSpacing),
                         Text(StringConstants.kControlPerson,
                             style: Theme.of(context).textTheme.xSmall.copyWith(
                                 fontWeight: FontWeight.w500,
                                 color: AppColor.black)),
                         const SizedBox(height: tiniestSpacing),
-                        TextFieldWidget(onTextFieldChanged: (textField) {}),
+                        TextFieldWidget(onTextFieldChanged: (textField) {
+                          changePermitCPMap['controlePerson'] = textField;
+                        }),
                         const SizedBox(height: xxTinierSpacing),
                       ]),
                 );
@@ -94,8 +119,12 @@ class PermitTransferComponentScreen extends StatelessWidget {
           )),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child:
-            PrimaryButton(onPressed: () {}, textValue: StringConstants.kSave),
+        child: PrimaryButton(
+            onPressed: () {
+              context.read<PermitBloc>().add(ChangePermitCP(
+                  changePermitCPMap: changePermitCPMap, permitId: permitId));
+            },
+            textValue: StringConstants.kSave),
       ),
     );
   }

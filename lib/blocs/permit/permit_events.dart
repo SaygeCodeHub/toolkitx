@@ -65,15 +65,17 @@ class FetchOpenPermitDetails extends PermitEvents {
 }
 
 class ClosePermit extends PermitEvents {
+  final String permitId;
   final Map closePermitMap;
 
-  const ClosePermit(this.closePermitMap);
+  const ClosePermit({required this.closePermitMap, required this.permitId});
 }
 
 class OpenPermit extends PermitEvents {
   final Map openPermitMap;
+  final String permitId;
 
-  const OpenPermit(this.openPermitMap);
+  const OpenPermit(this.openPermitMap, this.permitId);
 }
 
 class RequestPermit extends PermitEvents {
@@ -81,6 +83,8 @@ class RequestPermit extends PermitEvents {
 
   const RequestPermit(this.permitId);
 }
+
+class PreparePermitLocalDatabase extends PermitEvents {}
 
 class FetchDataForOpenPermit extends PermitEvents {
   final String permitId;
@@ -96,16 +100,21 @@ class FetchPermitBasicDetails extends PermitEvents {
 
 class SaveMarkAsPrepared extends PermitEvents {
   final String permitId;
-  final String controlPerson;
+  final Map markAsPreparedMap;
 
   const SaveMarkAsPrepared(
-      {required this.permitId, required this.controlPerson});
+      {required this.permitId, required this.markAsPreparedMap});
 }
 
 class AcceptPermitRequest extends PermitEvents {
   final String permitId;
+  final Map acceptPermitMap;
+  final String syncDate;
 
-  const AcceptPermitRequest({required this.permitId});
+  const AcceptPermitRequest(
+      {required this.permitId,
+      required this.acceptPermitMap,
+      this.syncDate = ""});
 }
 
 class FetchClearPermit extends PermitEvents {
@@ -116,20 +125,28 @@ class FetchClearPermit extends PermitEvents {
 
 class SaveClearPermit extends PermitEvents {
   final Map clearPermitMap;
+  final String syncDate;
+  final String permitId;
 
-  SaveClearPermit({required this.clearPermitMap});
+  SaveClearPermit(
+      {required this.clearPermitMap,
+      this.syncDate = "",
+      required this.permitId});
 }
 
 class SavePermitEditSafetyDocument extends PermitEvents {
   final Map editSafetyDocumentMap;
+  final String permitId;
 
-  SavePermitEditSafetyDocument({required this.editSafetyDocumentMap});
+  SavePermitEditSafetyDocument(
+      {required this.editSafetyDocumentMap, required this.permitId});
 }
 
 class SurrenderPermit extends PermitEvents {
   final String permitId;
+  final Map surrenderPermitMap;
 
-  SurrenderPermit({required this.permitId});
+  SurrenderPermit({required this.permitId, required this.surrenderPermitMap});
 }
 
 class FetchDataForChangePermitCP extends PermitEvents {
@@ -163,4 +180,36 @@ class SelectTransferValue extends PermitEvents {
   final String value;
 
   SelectTransferValue({required this.value});
+}
+
+class ChangePermitCP extends PermitEvents {
+  final Map changePermitCPMap;
+  final String permitId;
+
+  ChangePermitCP({required this.changePermitCPMap, required this.permitId});
+}
+
+class SavePermitOfflineAction extends PermitEvents {
+  final Map offlineDataMap;
+  final String permitId;
+  final String signature;
+  final String actionKey;
+  final String dateTime;
+
+  SavePermitOfflineAction(
+      {required this.offlineDataMap,
+      required this.permitId,
+      required this.signature,
+      required this.actionKey,
+      required this.dateTime});
+}
+
+class PermitInternetActions extends PermitEvents {
+  PermitInternetActions();
+}
+
+class GenerateOfflinePdf extends PermitEvents {
+  final String permitId;
+
+  GenerateOfflinePdf({required this.permitId});
 }

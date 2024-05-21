@@ -1,20 +1,27 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:toolkit/blocs/home/home_events.dart';
 import 'package:toolkit/blocs/home/home_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/client/save_user_device_model.dart';
+import 'package:toolkit/utils/notifications/notification_util.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/enums/date_enum.dart';
 import '../../di/app_module.dart';
+import '../../repositories/client/client_repository.dart';
 
 class HomeBloc extends Bloc<HomeEvents, HomeStates> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final ClientRepository _clientRepository = getIt<ClientRepository>();
 
   HomeBloc() : super(const HomeInitial()) {
     on<SetDateAndTime>(_setDateAndTime);
     on<StartTimer>(_startTimer);
+    on<SaveUserDevice>(_saveUserDevice);
   }
 
   FutureOr<void> _startTimer(StartTimer event, Emitter<HomeStates> emit) {
@@ -57,10 +64,11 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
             .dateFormat;
       }
       emit(DateAndTimeLoaded(
-          dateTime: dateTime,
-          timeZoneName: timeZoneName,
-          image: image!,
-          dateFormat: dateFormat));
+        dateTime: dateTime,
+        timeZoneName: timeZoneName,
+        image: image!,
+        dateFormat: dateFormat,
+      ));
     } catch (e) {
       emit(DateAndTimeLoaded(
           dateTime: DateTime.now(),
@@ -68,5 +76,37 @@ class HomeBloc extends Bloc<HomeEvents, HomeStates> {
           image: '',
           dateFormat: ''));
     }
+  }
+
+  Future<void> _saveUserDevice(
+      SaveUserDevice event, Emitter<HomeStates> emit) async {
+    bool tokenAvailable = await NotificationUtil().ifTokenExists();
+    if (!tokenAvailable) {
+      String hashcode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
+      String newToken = await NotificationUtil().getToken();
+      Map saveUserDeviceMap = {
+        "hashcode": hashcode,
+        "deviceid": await getDeviceId(),
+        "token": newToken
+      };
+      SaveUserDeviceModel saveUserDeviceModel =
+          await _clientRepository.saveUserDevice(saveUserDeviceMap);
+      if (saveUserDeviceModel.status == 200) {
+        _customerCache.setFCMToken(CacheKeys.fcmToken, newToken);
+      }
+    }
+  }
+
+  Future<String?> getDeviceId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isIOS) {
+      var iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    } else if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id;
+    }
+    return null;
   }
 }

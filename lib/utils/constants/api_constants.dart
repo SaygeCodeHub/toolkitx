@@ -5,4 +5,5 @@ class ApiConstants {
   static const baseUrlFlag = 'https://www.toolkitx.com/images/flags/';
   static const baseDocUrl = 'https://api.toolkitx.com/docs/temp/';
   static const viewDocBaseUrl = 'https://toolkitx.com/viewdocument.aspx?file=';
+  static const chatDocBaseUrl = 'common/getimageurl?filename=';
 }

@@ -186,6 +186,18 @@ class ClosePermitDetailsError extends PermitStates {
   const ClosePermitDetailsError();
 }
 
+class PreparingPermitLocalDatabase extends PermitStates {
+  const PreparingPermitLocalDatabase();
+}
+
+class PermitLocalDatabasePrepared extends PermitStates {
+  const PermitLocalDatabasePrepared();
+}
+
+class PreparingPermitLocalDatabaseFailed extends PermitStates {
+  const PreparingPermitLocalDatabaseFailed();
+}
+
 class PermitBasicDetailsFetching extends PermitStates {}
 
 class PermitBasicDetailsFetched extends PermitStates {
@@ -264,7 +276,11 @@ class ClearPermitNotSaved extends PermitStates {
 
 class SavingPermitEditSafetyDocument extends PermitStates {}
 
-class PermitEditSafetyDocumentSaved extends PermitStates {}
+class PermitEditSafetyDocumentSaved extends PermitStates {
+  final String successMessage;
+
+  PermitEditSafetyDocumentSaved({this.successMessage = ''});
+}
 
 class PermitEditSafetyDocumentNotSaved extends PermitStates {
   final String errorMessage;
@@ -321,4 +337,44 @@ class TransferValueSelected extends PermitStates {
   final String value;
 
   TransferValueSelected({required this.value});
+}
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}
+
+class SavingOfflineData extends PermitStates {}
+
+class OfflineDataSaved extends PermitStates {
+  final String successMessage;
+
+  OfflineDataSaved({required this.successMessage});
+}
+
+class OfflineDataNotSaved extends PermitStates {
+  final String errorMessage;
+
+  OfflineDataNotSaved({required this.errorMessage});
+}
+
+class GeneratingOfflinePdf extends PermitStates {
+  GeneratingOfflinePdf();
+}
+
+class OfflinePdfGenerated extends PermitStates {
+  final String htmlContent;
+
+  OfflinePdfGenerated({required this.htmlContent});
+}
+
+class ErrorGeneratingPdfOffline extends PermitStates {
+  final String errorMessage;
+
+  ErrorGeneratingPdfOffline({required this.errorMessage});
 }

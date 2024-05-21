@@ -9,7 +9,7 @@ String acceptPermitRequestModelToJson(AcceptPermitRequestModel data) =>
 class AcceptPermitRequestModel {
   final int? status;
   final String? message;
-  final Data? data;
+  final AcceptPermitRequestData? data;
 
   AcceptPermitRequestModel({
     this.status,
@@ -21,7 +21,9 @@ class AcceptPermitRequestModel {
       AcceptPermitRequestModel(
         status: json["Status"],
         message: json["Message"],
-        data: json["Data"] == null ? null : Data.fromJson(json["Data"]),
+        data: json["Data"] == null
+            ? null
+            : AcceptPermitRequestData.fromJson(json["Data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,10 +33,11 @@ class AcceptPermitRequestModel {
       };
 }
 
-class Data {
-  Data();
+class AcceptPermitRequestData {
+  AcceptPermitRequestData();
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data();
+  factory AcceptPermitRequestData.fromJson(Map<String, dynamic> json) =>
+      AcceptPermitRequestData();
 
   Map<String, dynamic> toJson() => {};
 }

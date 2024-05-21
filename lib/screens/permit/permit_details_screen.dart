@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
+import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/screens/permit/widgets/permit_comments.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/permit_util.dart';
@@ -36,21 +37,30 @@ class PermitDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<PermitBloc>().add(GetPermitDetails(permitId: permitId));
     return Scaffold(
-        appBar: GenericAppBar(actions: [
-          BlocBuilder<PermitBloc, PermitStates>(
-              buildWhen: (previousState, currentState) =>
-                  currentState is PermitDetailsFetched,
-              builder: (context, state) {
-                if (state is PermitDetailsFetched) {
-                  return PTWActionMenu(
-                      permitDetailsModel: state.permitDetailsModel,
-                      popUpMenuItems: state.permitPopUpMenu,
-                      permitId: permitId);
-                } else {
-                  return const SizedBox();
-                }
-              })
-        ]),
+        appBar: GenericAppBar(
+            onPressed: () {
+              PermitListScreen.page = 1;
+              context.read<PermitBloc>().permitListData = [];
+              context
+                  .read<PermitBloc>()
+                  .add(const GetAllPermits(isFromHome: false, page: 1));
+              Navigator.pop(context);
+            },
+            actions: [
+              BlocBuilder<PermitBloc, PermitStates>(
+                  buildWhen: (previousState, currentState) =>
+                      currentState is PermitDetailsFetched,
+                  builder: (context, state) {
+                    if (state is PermitDetailsFetched) {
+                      return PTWActionMenu(
+                          permitDetailsModel: state.permitDetailsModel,
+                          popUpMenuItems: state.permitPopUpMenu,
+                          permitId: permitId);
+                    } else {
+                      return const SizedBox();
+                    }
+                  })
+            ]),
         body: BlocConsumer<PermitBloc, PermitStates>(
             listener: (context, state) {
               if (state is GeneratingPDF) {

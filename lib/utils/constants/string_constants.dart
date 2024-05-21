@@ -9,6 +9,9 @@ abstract class StringConstants {
   static const String kSelectTimeZone = 'Select Your TimeZone';
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
+  static const String kName = 'Name'; //
+  static const String kCompanyName = 'Company Name'; //
+  static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
@@ -189,6 +192,7 @@ abstract class StringConstants {
   static const String kSignature = 'Signature';
   static const String kEditSignature = 'Edit Signature';
   static const String kSignatureNotFound = 'Signature Not Found';
+  static const String kPleaseEnterSignature = 'Please enter signature!';
   static const String kUpload = 'Upload';
   static const String kChecklist = 'Checklist';
   static const String kFilters = 'Filters';
@@ -205,12 +209,12 @@ abstract class StringConstants {
   static const String kLogoutDialogContent =
       'Are you sure you want to log out?';
   static const String kNoInternetMessage =
-      'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
+      "We couldn't connect to the internet. Try checking your connection. Limited features will be available"; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
-  static const String kName = 'Name';
+  static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
-  static const String kPleaseSelectDate = 'Please Select Date';
+  static const String kPleaseSelectDate = 'Please Select Date!';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
   static const String kSelectStatus = 'Select Status';
@@ -222,7 +226,8 @@ abstract class StringConstants {
   static const String kDateOfIncident = 'Date of incident';
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
-  static const String kPleaseSelectTime = 'Please Select Time';
+  static const String kPleaseSelectTime = 'Please Select Time!';
+  static const String kPleaseAddSignature = 'Please add signature!';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -261,6 +266,9 @@ abstract class StringConstants {
   static const String kEventDateValidation = 'Event date cannot be empty.'; //
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
+  static const String kFailedToSaveData = 'Failed to save data!';
+  static const String kNameValidation = 'Please add name!';
+  static const String kDataSavedSuccessfully = 'Data saved successfully!';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //
   static const String kValidatePassword = 'Please enter old password/opt';
@@ -282,14 +290,19 @@ abstract class StringConstants {
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
-  static const String kCP = 'CP';
+  static const String kSAP = 'SAP';
   static const String kEditSafetyDocument = 'Edit Safety Document';
+  static const String kSignAsSap = 'Sign as SAP';
+  static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kPermitTransferWarning =
+      'Warning: This Safety Document has not been surrendered by a Competent Person. This must be cleared and cancelled by a suitably authorised person';
   static const String kTransferComponentPerson = 'Transfer Component Person';
   static const String kClearPermitRequest = 'Clear Permit'; //
   static const String kAllGearPermit =
       'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
   static const String kClearPermit = 'Clear Permit'; //
+  static const String kClearPermitCap = 'CLEAR PERMIT'; //
   static const String kSurrenderPermit = 'Surrender Permit'; //
   static const String kPermitIdentification = '1. IDENTIFICATION'; //
   static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
@@ -360,6 +373,7 @@ abstract class StringConstants {
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
+  static const String kCancelPermit = 'Cancel Permit';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
   static const String kQ = 'Q';
@@ -374,6 +388,8 @@ abstract class StringConstants {
   static const String kFeedback = 'Feedback';
   static const String kSkip = 'Skip';
   static const String kBack = 'Back';
+  static const String kSignAsSapCap = 'SIGN AS SAP';
+  static const String kSignAsCpCap = 'SIGN AS CP';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
   static const String kAnswerSaved = "Answer Saved";
@@ -389,7 +405,7 @@ abstract class StringConstants {
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
-  static const String kNameValidation = 'Please enter name';
+  static const String kEnterNameValidation = 'Please enter name!';
   static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
@@ -568,6 +584,7 @@ abstract class StringConstants {
       'Do you want to delete this entry ?';
   static const String kWarehouse = "Warehouse";
   static const String kEmployee = "Employee";
+  static const String kUsers = "Users";
   static const String kPositions = "Positions";
   static const String kSelectPositions = "Select Positions";
   static const String kSelectWarehouse = "Select Warehouse";
@@ -603,6 +620,10 @@ abstract class StringConstants {
   static const String kSelectApplication = 'Select Application';
   static const String kValid = 'Valid';
   static const String kAllAnswersRequired = "All answers are required";
+  static const String kOfflineDataReady =
+      "You are ready to use the app in offline mode!";
+  static const String kOfflineFailedInDataPreparation =
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
   static const String kOpenTicket = "Open Ticket";
   static const String kApproveOfDev2 = "Approve for Dev2";
   static const String kBackToApprove = "Back to Approve";
