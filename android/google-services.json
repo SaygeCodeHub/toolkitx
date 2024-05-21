@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:182868027568:android:b40334b6108fcb6497f375",
         "android_client_info": {
-          "package_name": "com.example.toolkitx"
+          "package_name": "com.toolkitx.safety.app"
         }
       },
       "oauth_client": [],
