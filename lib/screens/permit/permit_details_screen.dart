@@ -158,7 +158,8 @@ class PermitDetailsScreen extends StatelessWidget {
                             CustomTimeline(
                                 permitDetailsModel: state.permitDetailsModel),
                             PermitAttachments(
-                                permitDetailsModel: state.permitDetailsModel),
+                                permitDetailsModel: state.permitDetailsModel,
+                                clientId: state.clientId),
                             PermitComments(
                                 permitDetailsModel: state.permitDetailsModel)
                           ])

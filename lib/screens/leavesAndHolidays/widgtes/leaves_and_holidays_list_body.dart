@@ -115,13 +115,14 @@ class LeavesAndHolidaysListBody extends StatelessWidget {
                 trailing: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    data.dates[index].status == 1
-                        ? const Text(
-                            StringConstants.kSubmitted,
-                            style: TextStyle(color: AppColor.deepBlue),
-                          )
-                        : const Text(StringConstants.kNotSubmitted,
-                            style: TextStyle(color: AppColor.deepBlue)),
+                    Text(
+                      data.dates[index].status == 2
+                          ? StringConstants.kApproved
+                          : data.dates[index].status == 1
+                              ? StringConstants.kSubmitted
+                              : StringConstants.kNotSubmitted,
+                      style: const TextStyle(color: AppColor.deepBlue),
+                    ),
                     Expanded(
                       child: ((data.dates[index].id != '' &&
                               (data.dates[index].hours != '-' ||

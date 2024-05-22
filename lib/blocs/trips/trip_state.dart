@@ -27,8 +27,10 @@ class TripDetailsFetching extends TripState {}
 
 class TripDetailsFetched extends TripState {
   final FetchTripDetailsModel fetchTripDetailsModel;
+  final String clientId;
 
-  TripDetailsFetched({required this.fetchTripDetailsModel});
+  TripDetailsFetched(
+      {required this.fetchTripDetailsModel, required this.clientId});
 }
 
 class TripDetailsNotFetched extends TripState {

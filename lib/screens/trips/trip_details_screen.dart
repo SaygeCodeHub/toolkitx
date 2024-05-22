@@ -69,7 +69,8 @@ class TripsDetailsScreen extends StatelessWidget {
                       initialIndex: context.read<TripBloc>().tripTabIndex,
                       tabBarViewWidgets: [
                         TripDetailsTab(tripData: data),
-                        TripDetailsTabTwo(tripData: data),
+                        TripDetailsTabTwo(
+                            tripData: data, clientId: state.clientId),
                         TripDetailsTabThree(tripData: data),
                       ])
                 ],

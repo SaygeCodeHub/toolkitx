@@ -80,12 +80,15 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
 
       FetchTripDetailsModel fetchTripDetailsModel = await _tripsRepository
           .fetchTripDetails(event.tripId, hashCode, userId);
 
       if (fetchTripDetailsModel.status == 200) {
-        emit(TripDetailsFetched(fetchTripDetailsModel: fetchTripDetailsModel));
+        emit(TripDetailsFetched(
+            fetchTripDetailsModel: fetchTripDetailsModel, clientId: clientId));
       } else {
         emit(
             TripDetailsNotFetched(errorMessage: fetchTripDetailsModel.message));

@@ -314,6 +314,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
     List permitPopUpMenu = [StringConstants.kGeneratePdf];
+    String? clientId =
+        await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     try {
       if (isNetworkEstablished) {
         add(FetchPermitBasicDetails(permitId: event.permitId));
@@ -352,7 +354,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
-            permitPopUpMenu: permitPopUpMenu));
+            permitPopUpMenu: permitPopUpMenu,
+            clientId: clientId));
       } else {
         emit(const FetchingPermitDetails());
         Map<String, dynamic> permitDetailsMap =
@@ -392,7 +395,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         if (permitDetailsModel.toJson().isNotEmpty) {
           emit(PermitDetailsFetched(
               permitDetailsModel: permitDetailsModel,
-              permitPopUpMenu: permitPopUpMenu));
+              permitPopUpMenu: permitPopUpMenu,
+              clientId: clientId));
         } else {
           emit(const CouldNotFetchPermitDetails());
         }

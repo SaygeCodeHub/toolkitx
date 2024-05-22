@@ -29,11 +29,11 @@ abstract class ModulesUtil {
         offLineSupport: true,
         key: 'ptw',
         notificationKey: 'permit'),
-    ModulesModel(
-        moduleName: 'Accounting',
-        moduleImage: '${kBaseImagePath}accounting.png',
-        key: 'accounting',
-        notificationKey: 'accounting'),
+    // ModulesModel(
+    //     moduleName: 'Accounting',
+    //     moduleImage: '${kBaseImagePath}accounting.png',
+    //     key: 'accounting',
+    //     notificationKey: 'accounting'),
     ModulesModel(
         moduleName: 'TimeVacation',
         moduleImage: '${kBaseImagePath}holiday.png',
@@ -64,11 +64,11 @@ abstract class ModulesUtil {
         moduleImage: '${kBaseImagePath}workOrder.png',
         key: 'workorder',
         notificationKey: 'workorder'),
-    ModulesModel(
-        moduleName: 'meetingRoom',
-        moduleImage: '${kBaseImagePath}briefing.png',
-        key: 'meeting',
-        notificationKey: 'meeting'),
+    // ModulesModel(
+    //     moduleName: 'meetingRoom',
+    //     moduleImage: '${kBaseImagePath}briefing.png',
+    //     key: 'meeting',
+    //     notificationKey: 'meeting'),
     ModulesModel(
         moduleName: 'Assets',
         moduleImage: '${kBaseImagePath}assets.png',
