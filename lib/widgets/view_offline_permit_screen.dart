@@ -6,7 +6,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/blocs/permit/permit_states.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+import 'package:toolkit/widgets/primary_button.dart';
 
 class OfflineHtmlViewerScreen extends StatelessWidget {
   static const routeName = 'OfflineHtmlViewerScreen';
@@ -19,23 +21,32 @@ class OfflineHtmlViewerScreen extends StatelessWidget {
     context.read<PermitBloc>().add(GenerateOfflinePdf(permitId: permitId));
     return Scaffold(
         appBar: const GenericAppBar(),
-        body: BlocBuilder<PermitBloc, PermitStates>(builder: (context, state) {
-          if (state is GeneratingOfflinePdf) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is OfflinePdfGenerated) {
-            // generatePdfFromHtml(state.htmlContent);
-            return InAppWebView(
-                initialUrlRequest: URLRequest(
-                    url: WebUri.uri(Uri.dataFromString(state.htmlContent,
-                        mimeType: 'text/html',
-                        encoding: Encoding.getByName('UTF-8')))));
-          } else if (state is ErrorGeneratingPdfOffline) {
-            return const Center(child: Text('Generating PDF error'));
-          } else {
-            return const SizedBox();
-          }
-        }));
+        bottomNavigationBar: BottomAppBar(
+          child: PrimaryButton(
+              onPressed: () {}, textValue: StringConstants.kGeneratePdf),
+        ),
+        body: BlocBuilder<PermitBloc, PermitStates>(
+            buildWhen: (previousState, currentState) =>
+                currentState is GeneratingOfflinePdf ||
+                currentState is OfflinePdfGenerated ||
+                currentState is ErrorGeneratingPdfOffline,
+            builder: (context, state) {
+              if (state is GeneratingOfflinePdf) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is OfflinePdfGenerated) {
+                // generatePdfFromHtml(state.htmlContent);
+                return InAppWebView(
+                    initialUrlRequest: URLRequest(
+                        url: WebUri.uri(Uri.dataFromString(state.htmlContent,
+                            mimeType: 'text/html',
+                            encoding: Encoding.getByName('UTF-8')))));
+              } else if (state is ErrorGeneratingPdfOffline) {
+                return const Center(child: Text('Generating PDF error'));
+              } else {
+                return const SizedBox();
+              }
+            }));
   }
 
 // Future<void> generatePdfFromHtml(String htmlContent) async {

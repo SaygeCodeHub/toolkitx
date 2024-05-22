@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
@@ -13,7 +11,6 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -47,6 +44,20 @@ class UsersScreen extends StatelessWidget {
     context.read<ChatBloc>().employeeListReachedMax = false;
     context.read<ChatBloc>().isSearchEnabled = false;
     context.read<ChatBloc>().employeeList.clear();
+
+    textEditingController.addListener(() {
+      String text = textEditingController.text.trim();
+      if (text.isEmpty) {
+        pageNo = 1;
+        context.read<ChatBloc>().employeeListReachedMax = false;
+        context.read<ChatBloc>().isSearchEnabled = false;
+        context.read<ChatBloc>().employeeList.clear();
+        context
+            .read<ChatBloc>()
+            .add(FetchEmployees(pageNo: 1, searchedName: ''));
+      }
+    });
+
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kUsers),
       floatingActionButton: (isCreateNewGroup)
@@ -98,9 +109,6 @@ class UsersScreen extends StatelessWidget {
                           width: MediaQuery.sizeOf(context).width * 0.63,
                           child: TextFormField(
                               controller: textEditingController,
-                              onChanged: (value) {
-                                textEditingController.text = value;
-                              },
                               decoration: InputDecoration(
                                   suffix: const SizedBox(),
                                   hintStyle: Theme.of(context)
@@ -128,42 +136,24 @@ class UsersScreen extends StatelessWidget {
                                 if (!currentFocus.hasPrimaryFocus) {
                                   currentFocus.unfocus();
                                 }
-                                if (textEditingController.text != '' ||
-                                    textEditingController.text.trim() != '') {
+                                String searchText =
+                                    textEditingController.text.trim();
+                                if (searchText.isNotEmpty) {
                                   context.read<ChatBloc>().isSearchEnabled =
-                                      !context.read<ChatBloc>().isSearchEnabled;
-                                  if (context
+                                      true;
+                                  pageNo = 1;
+                                  context.read<ChatBloc>().employeeList.clear();
+                                  context
                                       .read<ChatBloc>()
-                                      .isSearchEnabled) {
-                                    pageNo = 1;
-                                    context.read<ChatBloc>().employeeList = [];
-                                    context
-                                        .read<ChatBloc>()
-                                        .employeeListReachedMax = false;
-                                    sendMessageMap['user_name'] =
-                                        textEditingController.text;
-                                    context.read<ChatBloc>().add(FetchEmployees(
-                                        pageNo: pageNo,
-                                        searchedName:
-                                            sendMessageMap['user_name']));
-                                  } else {
-                                    pageNo = 1;
-                                    context.read<ChatBloc>().employeeList = [];
-                                    context
-                                        .read<ChatBloc>()
-                                        .employeeListReachedMax = false;
-                                    textEditingController.clear();
-                                    sendMessageMap['user_name'] = '';
-                                    context.read<ChatBloc>().add(FetchEmployees(
-                                        pageNo: 1, searchedName: ''));
-                                  }
+                                      .employeeListReachedMax = false;
+                                  sendMessageMap['user_name'] = searchText;
+                                  context.read<ChatBloc>().add(FetchEmployees(
+                                      pageNo: pageNo,
+                                      searchedName:
+                                          sendMessageMap['user_name']));
                                 }
                               },
-                              textValue:
-                                  (context.read<ChatBloc>().isSearchEnabled ==
-                                          false)
-                                      ? StringConstants.kSearch
-                                      : StringConstants.kClear),
+                              textValue: StringConstants.kSearch),
                         )
                       ],
                     );
@@ -177,8 +167,7 @@ class UsersScreen extends StatelessWidget {
                 listener: (context, state) {
                   if (state is EmployeesFetched &&
                       context.read<ChatBloc>().employeeListReachedMax) {
-                    showCustomSnackBar(
-                        context, StringConstants.kAllDataLoaded, '');
+                    const Center(child: Text(StringConstants.kNoDataFound));
                   }
                 },
                 buildWhen: (previousState, currentState) =>
@@ -302,8 +291,8 @@ class UsersScreen extends StatelessWidget {
                                   child: CircularProgressIndicator());
                             }
                           } else {
-                            return NoRecordsText(
-                                text: DatabaseUtil.getText('no_records_found'));
+                            return const Center(
+                                child: Text(StringConstants.kNoDataFound));
                           }
                         },
                         separatorBuilder: (BuildContext context, int index) {
@@ -312,9 +301,11 @@ class UsersScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is EmployeesNotFetched) {
-                    return NoRecordsText(text: state.errorMessage);
+                    return const NoRecordsText(
+                        text: StringConstants.kNoDataFound);
                   } else {
-                    return const SizedBox.shrink();
+                    return const Center(
+                        child: Text(StringConstants.kNoDataFound));
                   }
                 })
           ],

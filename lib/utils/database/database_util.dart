@@ -576,7 +576,6 @@ class DatabaseHelper {
         columns: ['actionJson', 'actionText'],
         where: 'permitId = ? AND actionText = ?',
         whereArgs: [permitId, 'transfer_permit']);
-    print('result $result');
     if (result.isNotEmpty) {
       Map<String, dynamic> populateTransferCpPermitData = result.first;
       Map<String, dynamic> actionJson =
@@ -594,7 +593,7 @@ class DatabaseHelper {
       'OfflinePermitAction',
       columns: ['actionJson', 'actionText'],
       where: 'permitId = ? AND actionText = ?',
-      whereArgs: [permitId, 'surrender_permit'],
+      whereArgs: [permitId, 'transfer_permit'],
     );
     if (result.isNotEmpty) {
       Map<String, dynamic> fetchSurrenderData = result.first;
@@ -615,8 +614,10 @@ class DatabaseHelper {
       where: 'permitId = ? AND actionText = ?',
       whereArgs: [permitId, 'transfer_permit'],
     );
+    print('database ${result}');
     if (result.isNotEmpty) {
       Map<String, dynamic> fetchSurrenderData = result.first;
+
       Map<String, dynamic> actionJson =
           jsonDecode(fetchSurrenderData['actionJson']);
       return actionJson;

@@ -41,10 +41,10 @@ class PermitDetailsScreen extends StatelessWidget {
             onPressed: () {
               PermitListScreen.page = 1;
               context.read<PermitBloc>().permitListData = [];
-              context
-                  .read<PermitBloc>()
-                  .add(const GetAllPermits(isFromHome: false, page: 1));
               Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, PermitListScreen.routeName,
+                  arguments: false);
             },
             actions: [
               BlocBuilder<PermitBloc, PermitStates>(

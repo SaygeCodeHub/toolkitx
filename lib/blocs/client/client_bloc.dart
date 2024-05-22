@@ -140,7 +140,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
     try {
       String? newToken = await NotificationUtil().getToken();
       bool hasMoreData = true;
-
       while (hasMoreData) {
         FetchChatMessagesModel fetchChatMessagesModel =
             await _clientRepository.fetchChatMessages({

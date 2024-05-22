@@ -160,113 +160,115 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _rebuildChatMessage(
       RebuildChatMessagingScreen event, Emitter<ChatState> emit) async {
-    await _databaseHelper.getUnreadMessageCount(
+    try {
+      await _databaseHelper.getUnreadMessageCount(
         event.employeeDetailsMap['sid'].toString(),
         event.employeeDetailsMap['currentSenderId'].toString(),
         event.employeeDetailsMap['rid'].toString(),
         event.employeeDetailsMap['currentReceiverId'].toString(),
-        event.employeeDetailsMap['isCurrentUser'] ?? false);
-    timeZoneFormat =
-        await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ?? '';
-    List<Map<String, dynamic>> messages =
-        await _databaseHelper.getMessagesForEmployees(
-            event.employeeDetailsMap['rid'].toString(),
-            event.employeeDetailsMap['sid'].toString());
-    messages = List.from(messages.reversed);
-    messagesList.clear();
-    messagesList.addAll(messages);
-    _chatScreenMessagesStreamController.add(messagesList);
-    if (chatDetailsMap['isMedia'] == false) {
-      emit(ShowChatMessagingTextField());
+        event.employeeDetailsMap['isCurrentUser'] ?? false,
+      );
+
+      timeZoneFormat =
+          await _customerCache.getTimeZoneOffset(CacheKeys.timeZoneOffset) ??
+              '';
+
+      List<Map<String, dynamic>> messages =
+          await _databaseHelper.getMessagesForEmployees(
+        event.employeeDetailsMap['rid'].toString(),
+        event.employeeDetailsMap['sid'].toString(),
+      );
+      messagesList
+        ..clear()
+        ..addAll(messages.reversed);
+      _chatScreenMessagesStreamController.sink.add(messagesList);
+
+      if (chatDetailsMap['isMedia'] == false) {
+        emit(ShowChatMessagingTextField());
+      }
+
+      add(FetchChatsList());
+    } catch (e) {
+      rethrow;
     }
-    add(FetchChatsList());
   }
 
   FutureOr<void> _fetchChatsList(
       FetchChatsList event, Emitter<ChatState> emit) async {
-    List employees = await _databaseHelper.getLatestMessagesForEmployees();
-    List<Map<String, dynamic>> groupChats =
-        await _databaseHelper.getAllGroupsData();
-    List<ChatData> individualChatList = [];
-    List<ChatData> groupChatList = [];
-    groupDataMap['user_id'] =
-        await _customerCache.getUserId2(CacheKeys.userId2);
-    groupDataMap['user_type'] =
-        await _customerCache.getUserType(CacheKeys.userType);
-    groupDataMap['user_name'] =
-        await _customerCache.getUserName(CacheKeys.userName);
-    for (int i = 0; i < employees.length; i++) {
-      List<Map<String, dynamic>> message =
-          await _databaseHelper.getMessagesForEmployees(
-              employees[i]['sid'].toString(), employees[i]['rid'].toString());
-      if (message.isNotEmpty) {
-        int existingChatIndex =
-            findExistingChatIndex(individualChatList, message.last);
-        if (existingChatIndex != -1) {
-          ChatData existingChat = individualChatList[existingChatIndex];
-          existingChat.message = message.last['msg'] ?? '';
-          existingChat.date = formattedDate(message.last['msg_time']);
-          existingChat.time = await formattedTime(message.last['msg_time']);
-          existingChat.dateTime = message.last['msg_time'];
-          existingChat.userName = message.last['employee_name'] ?? '';
-          existingChat.isReceiver = message.last['isReceiver'] ?? '';
-          existingChat.unreadMsgCount = (_isMessageForCurrentChat(
-                      chatDetailsMap['sid'], message.last['sid'].toString()) ==
-                  true)
-              ? 0
-              : message.last['unreadMessageCount'] ?? 0;
-        } else {
-          ChatData chat = ChatData(
-              rId: message.last['rid'].toString(),
-              sId: message.last['sid'].toString(),
-              sType: message.last['stype'].toString(),
-              rType: message.last['rtype'].toString(),
-              isReceiver: message.last['isReceiver'] ?? 0,
-              userName: message.last['employee_name'] ?? '',
-              message: message.last['msg'] ?? '',
-              isGroup: (message.last['isGroup'] == 1) ? true : false,
-              date: formattedDate(message.last['msg_time']),
-              dateTime: message.last['msg_time'],
-              time: await formattedTime(message.last['msg_time']),
-              messageType: message.last['msg_type'] ?? '',
-              unreadMsgCount: (_isMessageForCurrentChat(chatDetailsMap['sid'],
-                          message.last['sid'].toString()) ==
-                      true)
-                  ? message.last['unreadMessageCount'] ?? 0
-                  : 0);
-          individualChatList.add(chat);
-        }
-      }
-    }
-    individualChatList.sort((a, b) => b.time.compareTo(a.time));
-    for (var item in groupChats) {
-      ChatData chat = ChatData(
-          groupName: item['group_name'],
-          groupPurpose: item['purpose'] ?? '',
-          date: item['date'] ?? '',
-          message: '',
-          groupId: item['group_id'],
-          isGroup: true);
-      groupChatList.add(chat);
-    }
+    final List<ChatData> individualChatList = [];
 
-    final chatsList = [...individualChatList, ...groupChatList];
-    _allChatScreenDetailsStreamController.add(chatsList);
+    try {
+      List users = await _databaseHelper.getLatestMessagesForEmployees();
+
+      await Future.wait(users.map((employee) async {
+        List<Map<String, dynamic>> messagesForLastUser =
+            await _databaseHelper.getMessagesForEmployees(
+                employee['sid'].toString(), employee['rid'].toString());
+
+        if (messagesForLastUser.isNotEmpty) {
+          var lastMessage = messagesForLastUser.last;
+
+          int existingChatIndex =
+              await findExistingChatIndex(individualChatList, lastMessage);
+
+          if (existingChatIndex != -1) {
+            ChatData existingChat = individualChatList[existingChatIndex];
+            existingChat
+              ..message = lastMessage['msg'] ?? ''
+              ..date = await formattedDate(lastMessage['msg_time'])
+              ..time = await formattedTime(lastMessage['msg_time'])
+              ..dateTime = lastMessage['msg_time']
+              ..userName = lastMessage['employee_name'] ?? ''
+              ..isReceiver = lastMessage['isReceiver'] ?? ''
+              ..unreadMsgCount = await _isMessageForCurrentChat(
+                      chatDetailsMap['sid'], lastMessage['sid'].toString())
+                  ? 0
+                  : lastMessage['unreadMessageCount'] ?? 0;
+          } else {
+            ChatData chat = ChatData(
+              rId: lastMessage['rid'].toString(),
+              sId: lastMessage['sid'].toString(),
+              sType: lastMessage['stype'].toString(),
+              rType: lastMessage['rtype'].toString(),
+              isReceiver: lastMessage['isReceiver'] ?? 0,
+              userName: lastMessage['employee_name'] ?? '',
+              message: lastMessage['msg'] ?? '',
+              isGroup: (lastMessage['isGroup'] == 1),
+              date: await formattedDate(lastMessage['msg_time']),
+              dateTime: lastMessage['msg_time'],
+              time: await formattedTime(lastMessage['msg_time']),
+              messageType: lastMessage['msg_type'] ?? '',
+              unreadMsgCount: await _isMessageForCurrentChat(
+                      chatDetailsMap['sid'], lastMessage['sid'].toString())
+                  ? lastMessage['unreadMessageCount'] ?? 0
+                  : 0,
+            );
+            individualChatList.add(chat);
+          }
+        }
+      }).toList());
+
+      individualChatList.sort((a, b) => b.time.compareTo(a.time));
+
+      _allChatScreenDetailsStreamController.add(individualChatList);
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  int findExistingChatIndex(
-      List<ChatData> chatList, Map<String, dynamic> message) {
+  Future<int> findExistingChatIndex(
+      List<ChatData> chatList, Map<String, dynamic> message) async {
     return chatList.indexWhere((chat) =>
         chat.rId == message['rid'].toString() &&
         chat.sId == message['sid'].toString());
   }
 
-  bool _isMessageForCurrentChat(mapId, senderId) {
+  Future<bool> _isMessageForCurrentChat(mapId, senderId) async {
     bool isMessageForCurrentChat = senderId == mapId;
     return isMessageForCurrentChat;
   }
 
-  String formattedDate(String timestamp) {
+  Future<String> formattedDate(String timestamp) async {
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('dd.MM.yyyy').format(dateTime);
   }

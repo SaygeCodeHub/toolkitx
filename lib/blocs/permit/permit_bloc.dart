@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -365,8 +366,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         if (statusId == 16 || statusId == 7) {
           permitPopUpMenu.add(StringConstants.kOpenPermit);
         }
@@ -381,10 +380,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         if (statusId == 2) {
           permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
         }
         if (statusId == 17) {
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
           permitPopUpMenu.add(StringConstants.kClearPermit);
         }
+
         if (permitDetailsModel.toJson().isNotEmpty) {
           emit(PermitDetailsFetched(
               permitDetailsModel: permitDetailsModel,
@@ -412,7 +416,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       '0_9': 'Withdraw Permit',
       '0_10': 'Approved',
       '0_16': 'Prepared',
-      '0_17': 'Issued (Accepted)',
+      '0_17': 'Issued (Receipted)',
       '0_18': 'Cleared',
       '19_17': 'Accepted',
       '19_18': 'Request Closure',
@@ -1064,9 +1068,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         Map<String, dynamic> populateTransferCpPermitData =
             await _databaseHelper
                 .fetchOfflinePermitTransferData(event.permitId);
+        log('populateTransferCpPermitData $populateTransferCpPermitData');
         if (populateTransferCpPermitData.isNotEmpty) {
           showTransferWarning =
-              (populateTransferCpPermitData['issurrender'] == 0);
+              (populateTransferCpPermitData['issurrender'] == '0');
         } else {
           showTransferWarning = (permitHtmlMap['npw_id'].toString().isNotEmpty);
         }
@@ -1171,18 +1176,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         if (fetchTransferData['reciever'] != [] &&
             fetchTransferData['reciever'] != null) {
           transferMap['reciever'] = fetchTransferData['reciever'];
+          transferMap['surrender'] = fetchTransferData['surrender'];
           transferMap['reciever'].add(saveTransferMap);
-          transferMap['isSurrender'] = '0';
+          transferMap['issurrender'] = '0';
           transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
-          transferMap['surrender'] = [];
           if (showTransferWarning) {
             transferMap['surrender'].add(surrenderPermitOfflineMap);
           }
+          transferMap['surrender'] = [];
           transferMap['reciever'] = [];
           transferMap['reciever'].add(saveTransferMap);
-          transferMap['isSurrender'] = '0';
+          transferMap['issurrender'] = '0';
           transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         }
@@ -1201,7 +1207,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _surrenderPermit(
       SurrenderPermit event, Emitter<PermitStates> emit) async {
-    emit(SurrenderingPermit());
     try {
       Map surrenderMap = {};
       String hashCode =
@@ -1211,6 +1216,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "permitid": event.permitId,
       };
       if (isNetworkEstablished) {
+        emit(SurrenderingPermit());
         SurrenderPermitModel surrenderPermitModel =
             await _permitRepository.surrenderPermit(surrenderPermitMap);
         if (surrenderPermitModel.message == '1') {
@@ -1250,7 +1256,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             offlineDataMap: surrenderMap,
             permitId: event.permitId,
             signature: event.surrenderPermitMap['npw_sign'] ?? '',
-            actionKey: 'surrender_permit',
+            actionKey: 'transfer_permit',
             dateTime:
                 '${event.surrenderPermitMap['date']}${event.surrenderPermitMap['time']}'));
       }
@@ -1374,22 +1380,12 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
               }
               break;
-            case 'surrender_permit':
-              Map surrenderMap = jsonDecode(action['actionJson']);
-              surrenderMap['permitid'] = await EncryptData.decryptAESPrivateKey(
-                  action['permitId'],
-                  await _customerCache.getApiKey(CacheKeys.apiKey));
-              SyncTransferCpPermitModel syncTransferCpModel =
-                  await _permitRepository.syncTransferCp(surrenderMap);
-              if (syncTransferCpModel.message == '1') {
-                await _databaseHelper.deleteOfflinePermitAction(action['id']);
-              }
-              break;
             case 'transfer_permit':
               Map transferMap = jsonDecode(action['actionJson']);
               transferMap['permitid'] = await EncryptData.decryptAESPrivateKey(
                   action['permitId'],
                   await _customerCache.getApiKey(CacheKeys.apiKey));
+              log('transfer_permit sync ${jsonEncode(transferMap)}');
               SyncTransferCpPermitModel syncTransferCpModel =
                   await _permitRepository.syncTransferCp(transferMap);
               if (syncTransferCpModel.message == '1') {
@@ -1473,7 +1469,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
       List<Map<String, dynamic>> permitActionsList =
           await _databaseHelper.fetchOfflinePermitAction(event.permitId);
-
+      emit(GeneratingOfflinePdf());
       for (var action in permitActionsList) {
         if (action.isNotEmpty) {
           switch (action['actionText']) {
@@ -1708,7 +1704,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               htmlText = htmlText.replaceAll('#3_time', t5);
               htmlText = htmlText.replaceAll('#3_date', d5);
               break;
-
             case 'surrender_permit':
               if (action['actionJson']['surrender'].length > 0) {
                 for (int j = 0;
