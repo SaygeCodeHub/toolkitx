@@ -1,6 +1,6 @@
 name: toolkit
 description: ToolKitX is the latest end-to-end Software as a Service (SaaS) solution for field workforce management. We drive our customer's success by simplifying, automating and digitalizing their environment.
-version: 1.0.0
+version: 3.1.0+1
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
