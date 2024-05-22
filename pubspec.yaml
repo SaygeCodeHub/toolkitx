@@ -52,7 +52,6 @@ dependencies:
   csv:
   flutter_document_picker: ^5.2.3
   flutter_html_to_pdf: ^0.7.0
-  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -62,12 +61,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   json_serializable:
 
-flutter_native_splash:
-  android: true
-  ios: true
-  web: false
-  color: "#ffffff"
-  image: "assets/images/screen.png"
 
 flutter:
   uses-material-design: true
