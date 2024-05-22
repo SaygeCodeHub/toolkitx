@@ -6,6 +6,7 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
 import 'package:toolkit/utils/database/database_util.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
+
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/client/client_list_model.dart';
@@ -137,7 +138,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchChatMessages event, Emitter<ClientStates> emit) async {
     int pageNo = 1;
     try {
-      String newToken = await NotificationUtil().getToken();
+      String? newToken = await NotificationUtil().getToken();
       bool hasMoreData = true;
 
       while (hasMoreData) {
