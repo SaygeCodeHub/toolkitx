@@ -1,6 +1,6 @@
 name: toolkit
 description: ToolKitX is the latest end-to-end Software as a Service (SaaS) solution for field workforce management. We drive our customer's success by simplifying, automating and digitalizing their environment.
-version: 1.0.0
+version: 3.1.0+1
 
 environment:
   sdk: '>=2.19.4 <3.0.0'
@@ -52,7 +52,6 @@ dependencies:
   csv:
   flutter_document_picker: ^5.2.3
   flutter_html_to_pdf: ^0.7.0
-  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -62,12 +61,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   json_serializable:
 
-flutter_native_splash:
-  android: true
-  ios: true
-  web: false
-  color: "#ffffff"
-  image: "assets/images/screen.png"
 
 flutter:
   uses-material-design: true
