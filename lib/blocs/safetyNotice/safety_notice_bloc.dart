@@ -85,7 +85,7 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
             safetyNoticeFilterMap: safetNoticeFilterMap));
       }
     } catch (e) {
-      e.toString();
+      emit(SafetyNoticesNotFetched(errorMessage: e.toString()));
     }
   }
 

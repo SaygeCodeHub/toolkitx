@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../blocs/certificates/cerficatesList/certificate_list_bloc.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../data/models/certificates/certificate_list_model.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -33,6 +35,8 @@ class CertificateButtonRow extends StatelessWidget {
             Navigator.pushNamed(context, GetCertificateDetailsScreen.routeName,
                 arguments: certificateMap);
           } else {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(context, UploadCertificateScreen.routeName,
                 arguments: certificateMap);
           }

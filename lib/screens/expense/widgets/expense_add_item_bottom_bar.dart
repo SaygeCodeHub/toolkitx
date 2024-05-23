@@ -10,7 +10,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
-import '../../../widgets/progress_bar.dart';
+import 'addItemsWidgets/expense_add_save_button.dart';
 import 'addItemsWidgets/expense_item_list.dart';
 import 'expense_details_tab_one.dart';
 
@@ -25,20 +25,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ExpenseBloc, ExpenseStates>(
-      listener: (context, state) {
-        if (state is SavingExpenseItem) {
-          ProgressBar.show(context);
-        } else if (state is ExpenseItemSaved) {
-          ProgressBar.dismiss(context);
-          context.read<ExpenseBloc>().expenseListData.clear();
-          context
-              .read<ExpenseBloc>()
-              .add(FetchExpenseDetails(tabIndex: 0, expenseId: expenseId));
-        } else if (state is ExpenseItemCouldNotSave) {
-          ProgressBar.dismiss(context);
-          showCustomSnackBar(context, state.itemNotSaved, '');
-        }
-      },
+      listener: (context, state) {},
       buildWhen: (previousState, currentState) =>
           currentState is FetchingExpenseItemMaster ||
           currentState is ExpenseItemMasterFetched,
@@ -84,15 +71,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
                             },
                             textValue: DatabaseUtil.getText('nextButtonText')))
                     : Expanded(
-                        child: PrimaryButton(
-                            onPressed: () {
-                              ExpenseDetailsTabOne.manageItemsMap['itemid'] =
-                                  ExpenseItemList.itemId;
-                              context.read<ExpenseBloc>().add(SaveExpenseItem(
-                                  expenseItemMap:
-                                      ExpenseDetailsTabOne.manageItemsMap));
-                            },
-                            textValue: DatabaseUtil.getText('buttonSave')))
+                        child: AddExpenseSaveButton(expenseId: expenseId))
               ]),
             );
           } else {

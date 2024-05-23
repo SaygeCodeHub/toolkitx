@@ -56,11 +56,8 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
           UploadImageMenu(
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {
-                ExpenseDetailsTabOne.manageItemsMap['filenames'] =
-                    uploadImageList
-                        .toString()
-                        .replaceAll('[', '')
-                        .replaceAll(']', '');
+                ExpenseDetailsTabOne.manageItemsMap['pickedImage'] =
+                    uploadImageList;
               }),
         ],
       ),

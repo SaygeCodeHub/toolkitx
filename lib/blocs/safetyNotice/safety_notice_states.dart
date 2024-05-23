@@ -23,6 +23,12 @@ class SafetyNoticesFetched extends SafetyNoticeStates {
       {required this.safetyNoticeFilterMap, required this.noticesDatum});
 }
 
+class SafetyNoticesNotFetched extends SafetyNoticeStates {
+  final String errorMessage;
+
+  SafetyNoticesNotFetched({required this.errorMessage});
+}
+
 class SafetyNoticeStatusSelected extends SafetyNoticeStates {
   final String statusId;
   final String status;

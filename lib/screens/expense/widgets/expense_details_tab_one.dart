@@ -7,6 +7,8 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/expense/expense_bloc.dart';
 import '../../../blocs/expense/expense_event.dart';
 import '../../../blocs/expense/expense_state.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../data/models/expense/fetch_expense_details_model.dart';
@@ -75,6 +77,8 @@ class ExpenseDetailsTabOne extends StatelessWidget {
             currentState is ExpenseItemMasterCouldNotFetch,
         builder: (context, state) {
           if (state is ExpenseItemMasterFetched) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             itemMasterList.addAll(state.fetchItemMasterModel.data);
             if (state.isScreenChange == false) {
               context.read<ExpenseBloc>().expenseWorkingAtMap.clear();
