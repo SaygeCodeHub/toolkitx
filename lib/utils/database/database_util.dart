@@ -614,7 +614,6 @@ class DatabaseHelper {
       where: 'permitId = ? AND actionText = ?',
       whereArgs: [permitId, 'transfer_permit'],
     );
-    print('database ${result}');
     if (result.isNotEmpty) {
       Map<String, dynamic> fetchSurrenderData = result.first;
 

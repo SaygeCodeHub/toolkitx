@@ -40,12 +40,21 @@ class SurrenderPermitScreen extends StatelessWidget {
                   if (state is SurrenderingPermit) {
                     ProgressBar.show(context);
                   } else if (state is PermitSurrendered) {
-                    ProgressBar.dismiss(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, PermitListScreen.routeName,
-                        arguments: true);
+                    if (isNetworkEstablished) {
+                      ProgressBar.dismiss(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, PermitListScreen.routeName,
+                          arguments: true);
+                    } else {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, PermitListScreen.routeName,
+                          arguments: false);
+                    }
                   } else if (state is PermitNotSurrender) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.errorMessage, '');

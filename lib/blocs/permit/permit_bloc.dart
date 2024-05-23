@@ -1186,11 +1186,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
+          transferMap['surrender'] = [];
+          transferMap['reciever'] = [];
           if (showTransferWarning) {
             transferMap['surrender'].add(surrenderPermitOfflineMap);
           }
-          transferMap['surrender'] = [];
-          transferMap['reciever'] = [];
           transferMap['reciever'].add(saveTransferMap);
           transferMap['issurrender'] = '0';
           transferMap['hashcode'] =
@@ -1395,9 +1395,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
               }
-              break;
-            default:
-              null;
               break;
           }
         }
