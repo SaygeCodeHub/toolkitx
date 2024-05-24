@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/expense/widgets/editItemsWidgets/expense_edit_item_currency_list_tile.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
@@ -10,9 +11,13 @@ import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/uploadImage/upload_image_bloc.dart';
 import '../../../../blocs/uploadImage/upload_image_event.dart';
 import '../../../../blocs/uploadImage/upload_image_state.dart';
+import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
+import '../../../../utils/constants/api_constants.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
+import '../../../../utils/generic_alphanumeric_generator_util.dart';
+import '../../../../utils/incident_view_image_util.dart';
 import '../../../../widgets/android_pop_up.dart';
 import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/generic_app_bar.dart';
@@ -38,6 +43,7 @@ class ExpenseEditFormThree extends StatelessWidget {
         ExpenseEditItemsScreen
                 .editExpenseMap['item_details_model'].description ??
             '';
+    String images = ExpenseEditItemsScreen.editExpenseMap['images'];
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEditItem),
       bottomNavigationBar: MultiBlocListener(
@@ -172,6 +178,28 @@ class ExpenseEditFormThree extends StatelessWidget {
                   onTextFieldChanged: (String textField) {
                     ExpenseEditItemsScreen.editExpenseMap['description'] =
                         textField;
+                  }),
+              const SizedBox(height: xxTinySpacing),
+              ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: ViewImageUtil.viewImageList(images).length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                        splashColor: AppColor.transparent,
+                        highlightColor: AppColor.transparent,
+                        onTap: () {
+                          launchUrlString(
+                              '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(images)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(ExpenseEditItemsScreen.editExpenseMap['clientId'])}',
+                              mode: LaunchMode.externalApplication);
+                        },
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: xxxTinierSpacing),
+                          child: Text(
+                              ViewImageUtil.viewImageList(images)[index],
+                              style: const TextStyle(color: AppColor.deepBlue)),
+                        ));
                   }),
               const SizedBox(height: xxTinySpacing),
               UploadImageMenu(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../blocs/todo/todo_bloc.dart';
 import '../../../blocs/todo/todo_event.dart';
 import '../../../blocs/todo/todo_states.dart';
@@ -61,6 +63,8 @@ class ToDoPopUpMenu extends StatelessWidget {
                             )));
                   }
                   if (value == DatabaseUtil.getText('dms_uploaddocuments')) {
+                    context.read<ImagePickerBloc>().pickedImagesList.clear();
+                    context.read<ImagePickerBloc>().add(PickImageInitial());
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ToDoUploadDocumentScreen(
                             todoMap: todoMap,

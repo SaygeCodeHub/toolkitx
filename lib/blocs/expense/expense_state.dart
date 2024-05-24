@@ -245,8 +245,10 @@ class FetchingExpenseItemDetails extends ExpenseStates {}
 
 class ExpenseItemDetailsFetched extends ExpenseStates {
   final FetchExpenseItemDetailsModel fetchExpenseItemDetailsModel;
+  final String clientId;
 
-  ExpenseItemDetailsFetched({required this.fetchExpenseItemDetailsModel});
+  ExpenseItemDetailsFetched(
+      {required this.fetchExpenseItemDetailsModel, required this.clientId});
 }
 
 class ExpenseItemDetailsNotFetched extends ExpenseStates {

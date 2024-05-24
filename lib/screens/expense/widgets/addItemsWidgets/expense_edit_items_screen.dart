@@ -8,6 +8,8 @@ import 'package:toolkit/widgets/generic_no_records_text.dart';
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
 import '../../../../blocs/expense/expense_state.dart';
+import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
@@ -48,6 +50,8 @@ class ExpenseEditItemsScreen extends StatelessWidget {
                     expenseItemId
                   ]);
             } else {
+              context.read<ImagePickerBloc>().pickedImagesList.clear();
+              context.read<ImagePickerBloc>().add(PickImageInitial());
               Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
             }
           },
@@ -66,6 +70,9 @@ class ExpenseEditItemsScreen extends StatelessWidget {
             editExpenseMap['item_details_model'] =
                 state.fetchExpenseItemDetailsModel.data;
             editExpenseMap['id'] = state.fetchExpenseItemDetailsModel.data.id;
+            ExpenseEditItemsScreen.editExpenseMap['images'] =
+                state.fetchExpenseItemDetailsModel.data.filenames;
+            ExpenseEditItemsScreen.editExpenseMap['clientId'] = state.clientId;
             return Padding(
               padding: const EdgeInsets.only(
                   left: leftRightMargin,
