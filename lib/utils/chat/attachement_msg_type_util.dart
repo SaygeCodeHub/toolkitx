@@ -11,7 +11,7 @@ import '../../configs/app_color.dart';
 
 class AttachementMsgTypeUtil {
   Widget renderWidget(String type, String mediaPath, BuildContext context,
-      int isReceiver, String fileName) {
+      int isReceiver, String fileName, String msgStatus) {
     switch (type) {
       case '2':
         return InkWell(
@@ -46,7 +46,10 @@ class AttachementMsgTypeUtil {
                             style: Theme.of(context).textTheme.tinySmall),
                       ),
                       const SizedBox(width: tiniestSpacing),
-                      const Icon(Icons.timer, size: 10, color: AppColor.greyBlack),
+                      (msgStatus != '1')
+                          ? const Icon(Icons.timer,
+                              size: 10, color: AppColor.greyBlack)
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 )
@@ -55,9 +58,11 @@ class AttachementMsgTypeUtil {
           ),
         );
       case '3':
-        return AttachementVideoWidget(videoPath: mediaPath, fileName: fileName);
+        return AttachementVideoWidget(
+            videoPath: mediaPath, fileName: fileName, msgStatus: msgStatus);
       case '4':
-        return AttachmentDocumentWidget(docPath: mediaPath, fileName: fileName);
+        return AttachmentDocumentWidget(
+            docPath: mediaPath, fileName: fileName, msgStatus: msgStatus);
       default:
         return const SizedBox.shrink();
     }

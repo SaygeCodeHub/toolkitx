@@ -9,9 +9,13 @@ import 'document_viewer_screen.dart';
 class AttachmentDocumentWidget extends StatelessWidget {
   final String docPath;
   final String fileName;
+  final String msgStatus;
 
   const AttachmentDocumentWidget(
-      {super.key, required this.docPath, required this.fileName});
+      {super.key,
+      required this.docPath,
+      required this.fileName,
+      required this.msgStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +73,8 @@ class AttachmentDocumentWidget extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: tiniestSpacing),
-                              const Icon(Icons.timer, size: 10, color: AppColor.greyBlack),
+                              const Icon(Icons.timer,
+                                  size: 10, color: AppColor.greyBlack),
                             ],
                           ),
                         ),
@@ -99,7 +104,10 @@ class AttachmentDocumentWidget extends StatelessWidget {
                                 style: Theme.of(context).textTheme.tinySmall),
                           ),
                           const SizedBox(width: tiniestSpacing),
-                          const Icon(Icons.timer, size: 10, color: AppColor.greyBlack),
+                          (msgStatus != '1')
+                              ? const Icon(Icons.timer,
+                                  size: 10, color: AppColor.greyBlack)
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ],

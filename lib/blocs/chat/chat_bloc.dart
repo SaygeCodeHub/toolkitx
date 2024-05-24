@@ -136,8 +136,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
-        'isDownloadedImage': 0,
-        'showCount': 1,
+        'isMessageUnread': 0,
         'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
         'attachementExtension':
             event.sendMessageMap['attachementExtension'] ?? '',
@@ -151,6 +150,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
         await _databaseHelper.updateMessageStatus(sendMessageModel.data.msgId);
+        add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       }
     } catch (e) {
       emit(CouldNotSendMessage(errorMessage: e.toString()));
@@ -177,12 +177,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ..addAll(messages);
 
       _chatScreenMessagesStreamController.sink.add(messagesList);
-
       if (chatDetailsMap['isMedia'] == false) {
         emit(ShowChatMessagingTextField());
       }
+      _databaseHelper.updateUnreadMessageCount(
+          event.employeeDetailsMap['rid'].toString(),
+          event.employeeDetailsMap['rtype'].toString());
 
-      add(FetchChatsList());
+      // add(FetchChatsList());
     } catch (e) {
       rethrow;
     }
@@ -191,22 +193,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   FutureOr<void> _fetchChatsList(
       FetchChatsList event, Emitter<ChatState> emit) async {
     final List<ChatData> individualChatList = [];
-    // try {
-    List<Map<String, dynamic>> usersList =
-        await _databaseHelper.getChatUsersList();
-    String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
-    String userType =
-        await _customerCache.getUserType(CacheKeys.userType) ?? '';
+    try {
+      List<Map<String, dynamic>> usersList =
+          await _databaseHelper.getChatUsersList();
+      String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
 
-    if (usersList.isNotEmpty) {
-      for (var item in usersList) {
-        if (item['rid'].toString() == userId && item['rtype'] == userType) {
-          continue;
-        }
-        DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
-            item['latest_msgTime'],
-            isUtc: true);
-        ChatData chat = ChatData(
+      if (usersList.isNotEmpty) {
+        for (var item in usersList) {
+          if (item['rid'].toString() == userId && item['rtype'] == userType) {
+            continue;
+          }
+
+          bool isFound = isExistingChat(individualChatList,
+              item['rid'].toString(), item['rtype'].toString());
+          if (isFound) {
+            continue;
+          }
+
+          DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
+              item['latest_msgTime'],
+              isUtc: true);
+          ChatData chat = ChatData(
             rId: item['rid'].toString(),
             rType: item['rtype'].toString(),
             userName: item['employee_name'] ?? '',
@@ -215,13 +224,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             dateTime: await formattedDateTime(msgDate),
             latestMsgTime: item['latest_msgTime'],
             messageType: '1',
-            unreadMsgCount: 0);
-        individualChatList.add(chat);
+            unreadMsgCount: item['unreadCount'] ?? 0,
+          );
+          individualChatList.add(chat);
+        }
+      }
+      individualChatList
+          .sort((a, b) => b.latestMsgTime.compareTo(a.latestMsgTime));
+      _allChatScreenDetailsStreamController.add(individualChatList);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  bool isExistingChat(
+      List<ChatData> individualChatList, String rId, String rType) {
+    bool isFound = false;
+    for (ChatData item in individualChatList) {
+      if (item.rId == rId && item.rType == rType) {
+        isFound = true;
+        break;
       }
     }
-    individualChatList
-        .sort((a, b) => b.latestMsgTime.compareTo(a.latestMsgTime));
-    _allChatScreenDetailsStreamController.add(individualChatList);
+    return isFound;
   }
 
   Future<int> findExistingChatIndex(

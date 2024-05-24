@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -26,8 +28,12 @@ class NotificationUtil {
         };
         print('employeeDetailsMap $employeeDetailsMap');
         await _storeMessageInDatabase(message).then((result) {
-          chatBloc.add(RebuildChatMessagingScreen(
-              employeeDetailsMap: employeeDetailsMap));
+          if (chatScreenName == ChatMessagingScreen.routeName) {
+            chatBloc.add(RebuildChatMessagingScreen(
+                employeeDetailsMap: employeeDetailsMap));
+          } else {
+            chatBloc.add(FetchChatsList());
+          }
         }).catchError((error) {
           print('error calling the rebuild chat event $error');
         });
@@ -38,16 +44,6 @@ class NotificationUtil {
     });
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
-
-  // bool _isMessageForCurrentChat(RemoteMessage message) {
-  //   if (message.data.isNotEmpty) {
-  //     String senderId = message.data['sid'];
-  //     bool isMessageForCurrentChat =
-  //         senderId == ChatBloc().chatDetailsMap['sid'];
-  //     return isMessageForCurrentChat;
-  //   }
-  //   return false;
-  // }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
     Map<String, dynamic> messageData = {
@@ -63,7 +59,7 @@ class NotificationUtil {
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
     };
@@ -99,7 +95,7 @@ Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
       'employee_name': message.data['username'] ?? '',
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
     };

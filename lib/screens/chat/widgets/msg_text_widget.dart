@@ -24,9 +24,11 @@ class MsgTextWidget extends StatelessWidget {
         child: Container(
           width: MediaQuery.sizeOf(context).width * 0.23,
           padding: const EdgeInsets.all(8.0),
-          color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-              ? AppColor.blueGrey
-              : Colors.grey[300],
+          decoration: BoxDecoration(
+              color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+                  ? AppColor.blueGrey
+                  : Colors.grey[300],
+              borderRadius: BorderRadius.circular(5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -37,13 +39,17 @@ class MsgTextWidget extends StatelessWidget {
                   child: Text(snapshot.data![reversedIndex]['msg']),
                 ),
                 const SizedBox(width: tiniestSpacing),
-                const Icon(Icons.timer, size: 10),
+                (snapshot.data![reversedIndex]['msg_status'] != '1')
+                    ? const Icon(Icons.timer, size: 13)
+                    : const SizedBox.shrink(),
               ] else ...[
                 Flexible(
                   child: Text(snapshot.data![reversedIndex]['msg']),
                 ),
                 const SizedBox(width: tiniestSpacing),
-                const Icon(Icons.timer, size: 10),
+                (snapshot.data![reversedIndex]['msg_status'] != '1')
+                    ? const Icon(Icons.timer, size: 13)
+                    : const SizedBox.shrink(),
               ],
             ],
           ),
@@ -65,7 +71,7 @@ class MsgTextWidget extends StatelessWidget {
                         (snapshot.data![reversedIndex]['isReceiver'] == 1)
                             ? '${context.read<ChatBloc>().chatDetailsMap['employee_name']} // '
                             : '',
-                        style: Theme.of(context).textTheme.tinySmall,
+                        style: Theme.of(context).textTheme.smallTextBlack,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1),
                     Text(
@@ -73,7 +79,10 @@ class MsgTextWidget extends StatelessWidget {
                             getTimeForUserTimeZone(context,
                                     snapshot.data?[reversedIndex]['msg_time'])
                                 .toString())),
-                        style: Theme.of(context).textTheme.smallTextBlack)
+                        style: Theme.of(context)
+                            .textTheme
+                            .tinySmall
+                            .copyWith(color: AppColor.mediumBlack)),
                   ],
                 )
               : Text(
@@ -81,7 +90,10 @@ class MsgTextWidget extends StatelessWidget {
                       getTimeForUserTimeZone(context,
                               snapshot.data?[reversedIndex]['msg_time'])
                           .toString())),
-                  style: Theme.of(context).textTheme.smallTextBlack),
+                  style: Theme.of(context)
+                      .textTheme
+                      .tinySmall
+                      .copyWith(color: AppColor.mediumBlack)),
         ),
       ),
     );

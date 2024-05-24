@@ -11,6 +11,7 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -217,8 +218,15 @@ class UsersScreen extends StatelessWidget {
                                                 : "1",
                                             'isReceiver': 0
                                           };
+                                          chatScreenName =
+                                              ChatMessagingScreen.routeName;
                                           Navigator.pushNamed(context,
-                                              ChatMessagingScreen.routeName);
+                                                  ChatMessagingScreen.routeName)
+                                              .then((value) {
+                                            context
+                                                .read<ChatBloc>()
+                                                .add(FetchChatsList());
+                                          });
                                         },
                                         leading: const Icon(Icons.person,
                                             color: AppColor.deepBlue),

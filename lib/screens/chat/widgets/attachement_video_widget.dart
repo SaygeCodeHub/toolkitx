@@ -7,9 +7,13 @@ import 'package:toolkit/screens/chat/widgets/chat_video_player_eidget.dart';
 class AttachementVideoWidget extends StatelessWidget {
   final String videoPath;
   final String fileName;
+  final String msgStatus;
 
   const AttachementVideoWidget(
-      {super.key, required this.videoPath, required this.fileName});
+      {super.key,
+      required this.videoPath,
+      required this.fileName,
+      required this.msgStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,10 @@ class AttachementVideoWidget extends StatelessWidget {
                                 style: Theme.of(context).textTheme.tinySmall),
                           ),
                           const SizedBox(width: tiniestSpacing),
-                          const Icon(Icons.timer, size: 10, color: AppColor.greyBlack),
+                          (msgStatus != '1')
+                              ? const Icon(Icons.timer,
+                                  size: 10, color: AppColor.greyBlack)
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     )

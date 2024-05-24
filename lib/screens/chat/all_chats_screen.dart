@@ -11,10 +11,8 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-
-import '../../di/app_module.dart';
-import '../../utils/database/database_util.dart';
 
 class AllChatsScreen extends StatelessWidget {
   static const routeName = 'AllChatsScreen';
@@ -24,7 +22,6 @@ class AllChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ChatBloc>().add(FetchChatsList());
-    final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chats'),
@@ -53,14 +50,12 @@ class AllChatsScreen extends StatelessWidget {
                     return CustomCard(
                       child: ListTile(
                           onTap: () async {
-                            await databaseHelper.updateShowCountForMessages(
-                                snapshot.data![index].rId,
-                                snapshot.data![index].sId);
                             context.read<ChatBloc>().chatDetailsMap = {
                               "employee_name": snapshot.data![index].userName,
-                              'rid':snapshot.data![index].rId,
+                              'rid': snapshot.data![index].rId,
                               'rtype': snapshot.data![index].rType,
                             };
+                            chatScreenName = ChatMessagingScreen.routeName;
                             Navigator.pushNamed(
                                     context, ChatMessagingScreen.routeName)
                                 .then((value) => context
@@ -89,8 +84,8 @@ class AllChatsScreen extends StatelessWidget {
                                       .textTheme
                                       .xxSmall
                                       .copyWith(
-                                      color: AppColor.black,
-                                      fontWeight: FontWeight.w500))
+                                          color: AppColor.black,
+                                          fontWeight: FontWeight.w500))
                             ],
                           ),
                           titleTextStyle: Theme.of(context)
@@ -125,7 +120,7 @@ class AllChatsScreen extends StatelessWidget {
                                           snapshot.data![index].messageType)),
                                   Visibility(
                                     visible:
-                                        snapshot.data![index].unreadMsgCount !=
+                                        snapshot.data![index].unreadMsgCount >
                                             0,
                                     child: Container(
                                         height: 15,
@@ -176,7 +171,7 @@ class AllChatsScreen extends StatelessWidget {
   Widget messageText(String message, String type) {
     switch (type) {
       case '1':
-        return Text(message, maxLines: 1);
+        return Text(message, maxLines: 1, overflow: TextOverflow.ellipsis);
       case '2':
         return const Text('Image');
       case '3':

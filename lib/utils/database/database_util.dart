@@ -45,7 +45,7 @@ class DatabaseHelper {
             localImagePath TEXT,
             pickedMedia TEXT,
             serverImagePath TEXT,
-            showCount INTEGER,
+            isMessageUnread INTEGER,
             unreadMessageCount INTEGER,
             isGroup INTEGER,
             attachementExtension TEXT,
@@ -245,27 +245,27 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> getUnreadMessageCount(
-      String currentUserId,
-      String currentSenderId,
-      String receiverId,
-      String currentReceiverId,
-      bool onChatMessagingScreen) async {
-    final Database db = await database;
-
-    await db.transaction((txn) async {
-      final unreadCount = await txn.rawQuery('''
-      SELECT COUNT(*) AS unread_for_recipient
-      FROM chat_messages
-       WHERE sid = ? AND rid = ? AND showCount = 0;
-    ''', [currentUserId, receiverId]);
-      int unreadRecipientCount =
-          unreadCount.first['unread_for_recipient'] as int;
-      await txn.update(
-          'chat_messages', {'unreadMessageCount': unreadRecipientCount},
-          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
-    });
-  }
+  // Future<void> getUnreadMessageCount(
+  //     String currentUserId,
+  //     String currentSenderId,
+  //     String receiverId,
+  //     String currentReceiverId,
+  //     bool onChatMessagingScreen) async {
+  //   final Database db = await database;
+  //
+  //   await db.transaction((txn) async {
+  //     final unreadCount = await txn.rawQuery('''
+  //     SELECT COUNT(*) AS unread_for_recipient
+  //     FROM chat_messages
+  //      WHERE sid = ? AND rid = ? AND showCount = 0;
+  //   ''', [currentUserId, receiverId]);
+  //     int unreadRecipientCount =
+  //         unreadCount.first['unread_for_recipient'] as int;
+  //     await txn.update(
+  //         'chat_messages', {'unreadMessageCount': unreadRecipientCount},
+  //         where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
+  //   });
+  // }
 
   Future<void> updateShowCountForMessages(
       String recipientId, String senderId) async {
@@ -305,6 +305,13 @@ class DatabaseHelper {
         where: 'msg_id = ?', whereArgs: [msgId]);
   }
 
+  Future<void> updateUnreadMessageCount(String rid, String rtype) async {
+    final Database db = await database;
+    await db.update('chat_messages', {'isMessageUnread': 0},
+        where: 'isMessageUnread = 1 AND sid = ? AND stype = ?',
+        whereArgs: [rid, rtype]);
+  }
+
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
       String sId, String sType, String rId, String rType) async {
     final Database db = await database;
@@ -324,7 +331,8 @@ class DatabaseHelper {
     List<Map<String, dynamic>> messages = [];
 
     messages = await db.rawQuery(
-        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime from chat_messages');
+        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype))) AS unreadCount from chat_messages union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AS unreadCount from chat_messages');
+    log('chat list $messages');
     if (messages.isNotEmpty) {
       return messages;
     } else {

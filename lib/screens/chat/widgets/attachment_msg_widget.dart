@@ -47,7 +47,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                       context,
                       snapShot.data![reversedIndex]['msg_type'] ?? '',
                       snapShot.data![reversedIndex]['isReceiver'],
-                      snapShot.data![reversedIndex]['msg']))
+                      snapShot.data![reversedIndex]['msg'],
+                      snapShot.data![reversedIndex]['msg_status']))
               : Align(
                   alignment: Alignment.centerRight,
                   child: showDownloadedImage(
@@ -55,7 +56,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                       context,
                       snapShot.data![reversedIndex]['msg_type'],
                       snapShot.data![reversedIndex]['isReceiver'],
-                      snapShot.data![reversedIndex]['msg'])),
+                      snapShot.data![reversedIndex]['msg'],
+                      snapShot.data![reversedIndex]['msg_status'])),
           Align(
             alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
                 ? Alignment.centerLeft
@@ -118,13 +120,13 @@ class AttachmentMsgWidget extends StatelessWidget {
   }
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
-      String type, int isReceiver, String fileName) {
+      String type, int isReceiver, String fileName, String msgStatus) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
             width: 100,
             height: 100,
             child: AttachementMsgTypeUtil().renderWidget(
-                type, attachmentPath, context, isReceiver, fileName))
+                type, attachmentPath, context, isReceiver, fileName, msgStatus))
         : Container(
             width: 100,
             height: 100,
@@ -132,7 +134,7 @@ class AttachmentMsgWidget extends StatelessWidget {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
             ),
-            child: Column(
+            child: Stack(
               children: [
                 Center(
                   child: IconButton(
@@ -163,11 +165,15 @@ class AttachmentMsgWidget extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: tiniestSpacing),
-                const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(Icons.timer,
-                        size: 10, color: AppColor.greyBlack)),
+                const Spacer(),
+                Padding(
+                    padding: const EdgeInsets.all(xxTiniestSpacing),
+                    child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: (msgStatus != '1')
+                            ? const Icon(Icons.timer,
+                                size: 10, color: AppColor.greyBlack)
+                            : const SizedBox.shrink())),
               ],
             ),
           );
