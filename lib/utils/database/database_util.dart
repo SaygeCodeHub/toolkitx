@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -47,7 +48,8 @@ class DatabaseHelper {
             showCount INTEGER,
             unreadMessageCount INTEGER,
             isGroup INTEGER,
-            attachementExtension TEXT
+            attachementExtension TEXT,
+            msgTime INTEGER
           )
         ''');
         await db.execute('''
@@ -192,6 +194,9 @@ class DatabaseHelper {
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
     try {
+      DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
+      sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
+      print('sendMessageMap $sendMessageMap');
       await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.ignore);
     } catch (e) {
@@ -301,36 +306,30 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-      String employeeIdA, String employeeIdB) async {
+      String sId, String sType, String rId, String rType) async {
+    final Database db = await database;
+    List<Map<String, dynamic>> messages = [];
+    messages = await db.rawQuery(
+        'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC');
+    log('chat details $messages');
+    if (messages.isNotEmpty) {
+      return messages;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getChatUsersList() async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 
-    messages = await db.query(
-      'chat_messages',
-      where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-      whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
-    );
-
-    List<Map<String, dynamic>> updatedMessages = [];
-
-    for (var message in messages) {
-      updatedMessages.add(Map<String, dynamic>.from(message));
+    messages = await db.rawQuery(
+        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime from chat_messages');
+    if (messages.isNotEmpty) {
+      return messages;
+    } else {
+      return [];
     }
-    for (var i = 0; i < updatedMessages.length; i++) {
-      if (updatedMessages[i]['employee_name'] == null ||
-          updatedMessages[i]['employee_name'].isEmpty) {
-        final nameResult = await db.query(
-          'chat_messages',
-          where: 'sid = ? OR rid = ?',
-          whereArgs: [updatedMessages[i]['sid'], updatedMessages[i]['rid']],
-        );
-        if (nameResult.isNotEmpty) {
-          updatedMessages[i]['employee_name'] =
-              nameResult.first['employee_name'];
-        }
-      }
-    }
-    return updatedMessages;
   }
 
   Future<List> getLatestMessagesForEmployees() async {

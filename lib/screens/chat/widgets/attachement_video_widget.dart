@@ -35,11 +35,20 @@ class AttachementVideoWidget extends StatelessWidget {
                     const Icon(Icons.video_collection),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(fileName,
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.tinySmall),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: Text(fileName,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.tinySmall),
+                          ),
+                          const SizedBox(width: tiniestSpacing),
+                          const Icon(Icons.timer, size: 10, color: AppColor.greyBlack),
+                        ],
+                      ),
                     )
                   ],
                 )),

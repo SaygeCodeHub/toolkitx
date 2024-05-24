@@ -20,27 +20,12 @@ class NotificationUtil {
       print('Notification util ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         var employeeDetailsMap = {
-          'sid': message.data['sid'] ?? '',
-          'rid': message.data['rid'] ?? '',
-          'rtype': message.data['rtype'] ?? '',
-          'stype': message.data['stype'] ?? '',
-          'employee_name': message.data['username'],
-          'isCurrentUser': _isMessageForCurrentChat(message)
+          'rid': message.data['sid'] ?? '',
+          'rtype': message.data['stype'] ?? '',
+          'employee_name': message.data['username']
         };
+        print('employeeDetailsMap $employeeDetailsMap');
         await _storeMessageInDatabase(message).then((result) {
-          if (!_isMessageForCurrentChat(message)) {
-            employeeDetailsMap['sid'] =
-                chatBloc.chatDetailsMap['sid'] ?? message.data['sid'];
-            employeeDetailsMap['rid'] =
-                chatBloc.chatDetailsMap['rid'] ?? message.data['rid'];
-            employeeDetailsMap['employee_name'] =
-                chatBloc.chatDetailsMap['employee_name'] ??
-                    message.data['username'];
-            employeeDetailsMap['isCurrentUser'] = false;
-          }
-        }).catchError((error) {
-          print('error storing message in db $error');
-        }).then((result) {
           chatBloc.add(RebuildChatMessagingScreen(
               employeeDetailsMap: employeeDetailsMap));
         }).catchError((error) {
@@ -54,15 +39,15 @@ class NotificationUtil {
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
   }
 
-  bool _isMessageForCurrentChat(RemoteMessage message) {
-    if (message.data.isNotEmpty) {
-      String senderId = message.data['sid'];
-      bool isMessageForCurrentChat =
-          senderId == ChatBloc().chatDetailsMap['sid'];
-      return isMessageForCurrentChat;
-    }
-    return false;
-  }
+  // bool _isMessageForCurrentChat(RemoteMessage message) {
+  //   if (message.data.isNotEmpty) {
+  //     String senderId = message.data['sid'];
+  //     bool isMessageForCurrentChat =
+  //         senderId == ChatBloc().chatDetailsMap['sid'];
+  //     return isMessageForCurrentChat;
+  //   }
+  //   return false;
+  // }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
     Map<String, dynamic> messageData = {

@@ -21,40 +21,67 @@ class MsgTextWidget extends StatelessWidget {
         alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
             ? Alignment.centerLeft
             : Alignment.centerRight,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+        child: Container(
+          width: MediaQuery.sizeOf(context).width * 0.23,
+          padding: const EdgeInsets.all(8.0),
+          color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+              ? AppColor.blueGrey
+              : Colors.grey[300],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  (snapshot.data![reversedIndex]['isReceiver'] == 1)
-                      ? context
-                              .read<ChatBloc>()
-                              .chatDetailsMap['employee_name'] ??
-                          ''
-                      : '',
-                  style: Theme.of(context).textTheme.tinySmall,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1),
-              const SizedBox(height: xxTiniestSpacing),
-              Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-                      ? AppColor.blueGrey
-                      : Colors.grey[300],
-                  child: Text(snapshot.data![reversedIndex]['msg'])),
-            ]),
+              if (snapshot.data![reversedIndex]['isReceiver'] == 1) ...[
+                Flexible(
+                  child: Text(snapshot.data![reversedIndex]['msg']),
+                ),
+                const SizedBox(width: tiniestSpacing),
+                const Icon(Icons.timer, size: 10),
+              ] else ...[
+                Flexible(
+                  child: Text(snapshot.data![reversedIndex]['msg']),
+                ),
+                const SizedBox(width: tiniestSpacing),
+                const Icon(Icons.timer, size: 10),
+              ],
+            ],
+          ),
+        ),
       ),
       subtitle: Align(
         alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
             ? Alignment.centerLeft
             : Alignment.centerRight,
         child: Padding(
-          padding: const EdgeInsets.all(tiniestSpacing),
-          child: Text(
-              DateFormat('h:mm a').format(DateTime.parse(getTimeForUserTimeZone(
-                      context, snapshot.data?[reversedIndex]['msg_time'])
-                  .toString())),
-              style: Theme.of(context).textTheme.smallTextBlack),
+          padding: const EdgeInsets.symmetric(
+              vertical: tiniestSpacing, horizontal: 0),
+          child: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                        (snapshot.data![reversedIndex]['isReceiver'] == 1)
+                            ? '${context.read<ChatBloc>().chatDetailsMap['employee_name']} // '
+                            : '',
+                        style: Theme.of(context).textTheme.tinySmall,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1),
+                    Text(
+                        DateFormat('HH:mm').format(DateTime.parse(
+                            getTimeForUserTimeZone(context,
+                                    snapshot.data?[reversedIndex]['msg_time'])
+                                .toString())),
+                        style: Theme.of(context).textTheme.smallTextBlack)
+                  ],
+                )
+              : Text(
+                  DateFormat('HH:mm').format(DateTime.parse(
+                      getTimeForUserTimeZone(context,
+                              snapshot.data?[reversedIndex]['msg_time'])
+                          .toString())),
+                  style: Theme.of(context).textTheme.smallTextBlack),
         ),
       ),
     );

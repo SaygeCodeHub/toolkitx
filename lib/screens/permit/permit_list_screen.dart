@@ -28,7 +28,6 @@ class PermitListScreen extends StatelessWidget {
     page = 1;
     context.read<PermitBloc>().listReachedMax = false;
     context.read<PermitBloc>().permitListData = [];
-    print('inside build function');
     context
         .read<PermitBloc>()
         .add(GetAllPermits(isFromHome: isFromHome, page: 1));

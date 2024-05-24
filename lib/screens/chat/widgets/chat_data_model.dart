@@ -24,6 +24,7 @@ class ChatData {
   String pickedMedia;
   int unreadMsgCount;
   String dateTime;
+  int latestMsgTime;
 
   ChatData(
       {this.rId = '',
@@ -47,7 +48,8 @@ class ChatData {
       this.messageType = '',
       this.pickedMedia = '',
       this.unreadMsgCount = 0,
-      this.dateTime = ''})
+      this.dateTime = '',
+      this.latestMsgTime = 0})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {

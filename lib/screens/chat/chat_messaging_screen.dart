@@ -37,6 +37,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('inside build');
     return Scaffold(
       appBar: GenericAppBar(
           title:

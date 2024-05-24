@@ -13,6 +13,7 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
+import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
@@ -37,15 +38,6 @@ class AttachmentMsgWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-              (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                  ? context.read<ChatBloc>().chatDetailsMap['employee_name'] ??
-                      ''
-                  : '',
-              style: Theme.of(context).textTheme.tinySmall,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1),
-          const SizedBox(height: xxTiniestSpacing),
           (snapShot.data![reversedIndex]['isReceiver'] == 1)
               ? Align(
                   alignment: Alignment.centerLeft,
@@ -69,13 +61,36 @@ class AttachmentMsgWidget extends StatelessWidget {
                 ? Alignment.centerLeft
                 : Alignment.centerRight,
             child: Padding(
-              padding: const EdgeInsets.all(tiniestSpacing),
-              child: Text(
-                  DateFormat('h:mm a').format(DateTime.parse(
-                      getTimeForUserTimeZone(context,
-                              snapShot.data?[reversedIndex]['msg_time'])
-                          .toString())),
-                  style: Theme.of(context).textTheme.smallTextBlack),
+              padding: const EdgeInsets.symmetric(
+                  vertical: tiniestSpacing, horizontal: 0),
+              child: (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                            (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                                ? '${context.read<ChatBloc>().chatDetailsMap['employee_name']} // '
+                                : '',
+                            style: Theme.of(context).textTheme.tinySmall,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1),
+                        Text(
+                            DateFormat('HH:mm').format(DateTime.parse(
+                                getTimeForUserTimeZone(
+                                        context,
+                                        snapShot.data?[reversedIndex]
+                                            ['msg_time'])
+                                    .toString())),
+                            style: Theme.of(context).textTheme.smallTextBlack)
+                      ],
+                    )
+                  : Text(
+                      DateFormat('HH:mm').format(DateTime.parse(
+                          getTimeForUserTimeZone(context,
+                                  snapShot.data?[reversedIndex]['msg_time'])
+                              .toString())),
+                      style: Theme.of(context).textTheme.smallTextBlack),
             ),
           ),
         ],
@@ -117,33 +132,43 @@ class AttachmentMsgWidget extends StatelessWidget {
               color: Colors.grey[300],
               borderRadius: BorderRadius.circular(10.0), // Rounded corners
             ),
-            child: Center(
-              child: IconButton(
-                icon: const Center(child: Icon(Icons.download)),
-                onPressed: () async {
-                  ProgressBar.show(context);
-                  final CustomerCache customerCache = getIt<CustomerCache>();
-                  String? hashCode =
-                      await customerCache.getHashCode(CacheKeys.hashcode);
-                  String url =
-                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
-                  DateTime imageName = DateTime.now();
-                  String attachementExtension = getFileName(
-                      snapShot.data![reversedIndex]['msg'].toString());
-                  bool downloadProcessComplete = await downloadFileFromUrl(
-                      url,
-                      "$imageName.$attachementExtension",
-                      snapShot.data![reversedIndex]['msg_id'],
-                      snapShot.data![reversedIndex]['msg_type']);
-                  if (downloadProcessComplete) {
-                    if (!context.mounted) return;
-                    ProgressBar.dismiss(context);
-                    context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-                        employeeDetailsMap:
-                            context.read<ChatBloc>().chatDetailsMap));
-                  }
-                },
-              ),
+            child: Column(
+              children: [
+                Center(
+                  child: IconButton(
+                    icon: const Center(child: Icon(Icons.download)),
+                    onPressed: () async {
+                      ProgressBar.show(context);
+                      final CustomerCache customerCache =
+                          getIt<CustomerCache>();
+                      String? hashCode =
+                          await customerCache.getHashCode(CacheKeys.hashcode);
+                      String url =
+                          '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
+                      DateTime imageName = DateTime.now();
+                      String attachementExtension = getFileName(
+                          snapShot.data![reversedIndex]['msg'].toString());
+                      bool downloadProcessComplete = await downloadFileFromUrl(
+                          url,
+                          "$imageName.$attachementExtension",
+                          snapShot.data![reversedIndex]['msg_id'],
+                          snapShot.data![reversedIndex]['msg_type']);
+                      if (downloadProcessComplete) {
+                        if (!context.mounted) return;
+                        ProgressBar.dismiss(context);
+                        context.read<ChatBloc>().add(RebuildChatMessagingScreen(
+                            employeeDetailsMap:
+                                context.read<ChatBloc>().chatDetailsMap));
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: tiniestSpacing),
+                const Align(
+                    alignment: Alignment.bottomRight,
+                    child: Icon(Icons.timer,
+                        size: 10, color: AppColor.greyBlack)),
+              ],
             ),
           );
   }

@@ -58,14 +58,8 @@ class AllChatsScreen extends StatelessWidget {
                                 snapshot.data![index].sId);
                             context.read<ChatBloc>().chatDetailsMap = {
                               "employee_name": snapshot.data![index].userName,
-                              'rid': (snapshot.data![index].isGroup == true)
-                                  ? snapshot.data![index].groupId
-                                  : snapshot.data![index].rId,
-                              'sid': snapshot.data![index].sId,
-                              'isReceiver': snapshot.data![index].isReceiver,
-                              'stype': snapshot.data![index].sType,
+                              'rid':snapshot.data![index].rId,
                               'rtype': snapshot.data![index].rType,
-                              'isGroup': snapshot.data![index].isGroup
                             };
                             Navigator.pushNamed(
                                     context, ChatMessagingScreen.routeName)
@@ -90,7 +84,13 @@ class AllChatsScreen extends StatelessWidget {
                               Text((snapshot.data![index].isGroup == true)
                                   ? snapshot.data![index].groupName
                                   : snapshot.data![index].userName),
-                              Text(snapshot.data![index].date)
+                              Text(snapshot.data![index].dateTime,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xxSmall
+                                      .copyWith(
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.w500))
                             ],
                           ),
                           titleTextStyle: Theme.of(context)
@@ -111,14 +111,7 @@ class AllChatsScreen extends StatelessWidget {
                                       ? snapshot.data![index].groupPurpose
                                       : (snapshot.data![index].sType == '2')
                                           ? 'Workforce'
-                                          : 'System User'),
-                                  Text(time(snapshot.data![index].dateTime),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .xxSmall
-                                          .copyWith(
-                                              color: AppColor.black,
-                                              fontWeight: FontWeight.w500))
+                                          : 'System User')
                                 ],
                               ),
                               const SizedBox(height: xxTiniestSpacing),

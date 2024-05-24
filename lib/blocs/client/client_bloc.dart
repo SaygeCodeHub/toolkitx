@@ -152,8 +152,9 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
           for (var item in fetchChatMessagesModel.data) {
             await _databaseHelper.insertMessage(item.msgJson.toJson());
             ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-              'rid': item.msgJson.toJson()['rid'],
-              'sid': item.msgJson.toJson()['sid']
+              'rid': item.msgJson.toJson()['sid'],
+              'rtype': item.msgJson.toJson()['stype'],
+              'employee_name': ''
             }));
           }
           if (fetchChatMessagesModel.data.length < 30) {
