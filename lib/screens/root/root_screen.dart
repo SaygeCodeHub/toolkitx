@@ -22,6 +22,7 @@ import '../../configs/app_spacing.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/global.dart';
+import '../chat/widgets/chat_data_model.dart';
 import '../home/home_screen.dart';
 import '../location/current_location_screen.dart';
 import '../profile/profile_screen.dart';
@@ -116,6 +117,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ChatBloc>().add(FetchChatsList());
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {
       if (state is NoNetwork) {
@@ -163,7 +165,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
           _buildBottomNavigationBarItem(Icons.home, ''),
           _buildBottomNavigationBarItem(Icons.location_on, ''),
           _buildNotificationBarItem(),
-          _buildBottomNavigationBarItem(Icons.message, ''),
+          _buildChatMessageBarItem(),
           _buildBottomNavigationBarItem(Icons.person, '')
         ],
         currentIndex: _selectedIndex,
@@ -178,7 +180,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
         type: BottomNavigationBarType.fixed,
         items: [
           _buildBottomNavigationBarItem(Icons.home, ''),
-          _buildBottomNavigationBarItem(Icons.message, ''),
+          _buildChatMessageBarItem(),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: AppColor.deepBlue,
@@ -223,6 +225,42 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
                       ]));
                 }
                 return const SizedBox();
+              })
+        ])),
+        label: '');
+  }
+
+  BottomNavigationBarItem _buildChatMessageBarItem() {
+    return BottomNavigationBarItem(
+        icon: Center(
+            child: Stack(alignment: Alignment.topCenter, children: [
+          const Padding(
+              padding: EdgeInsets.only(top: xxTiniestSpacing),
+              child: Icon(Icons.message)),
+          StreamBuilder<List<ChatData>>(
+              stream: context.read<ChatBloc>().allChatsStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: kNotificationBadgePadding),
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                            height: kNotificationBadgeSize,
+                            width: kNotificationBadgeSize,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColor.errorRed)),
+                        Text(
+                            context
+                                .read<ChatBloc>()
+                                .unreadMessageCount
+                                .toString(),
+                            style: Theme.of(context).textTheme.xxxSmall)
+                      ]));
+                } else {
+                  return const SizedBox.shrink();
+                }
               })
         ])),
         label: '');

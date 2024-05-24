@@ -19,15 +19,25 @@ class NotificationUtil {
     await pushNotifications.requestPermission();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('Notification util ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         var employeeDetailsMap = {
           'rid': message.data['sid'] ?? '',
           'rtype': message.data['stype'] ?? '',
           'employee_name': message.data['username']
         };
-        print('employeeDetailsMap $employeeDetailsMap');
         await _storeMessageInDatabase(message).then((result) {
+          if (!_isMessageForCurrentChat(message)) {
+            employeeDetailsMap['rid'] =
+                chatBloc.chatDetailsMap['rid'] ?? message.data['rid'];
+            employeeDetailsMap['rtype'] =
+                chatBloc.chatDetailsMap['rtype'] ?? message.data['rtype'];
+            employeeDetailsMap['employee_name'] =
+                chatBloc.chatDetailsMap['employee_name'] ??
+                    message.data['username'];
+          }
+        }).catchError((error) {
+          print('error storing message in db $error');
+        }).then((result) {
           if (chatScreenName == ChatMessagingScreen.routeName) {
             chatBloc.add(RebuildChatMessagingScreen(
                 employeeDetailsMap: employeeDetailsMap));
@@ -43,6 +53,19 @@ class NotificationUtil {
       }
     });
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  bool _isMessageForCurrentChat(RemoteMessage message) {
+    if (message.data.isNotEmpty) {
+      String senderId = message.data['rid'];
+      String senderType = message.data['rid'];
+      bool isMessageForCurrentChat =
+          senderId == ChatBloc().chatDetailsMap['rid'] &&
+              senderType == ChatBloc().chatDetailsMap['rid'];
+      print('isMessageForCurrentChat $isMessageForCurrentChat');
+      return isMessageForCurrentChat;
+    }
+    return false;
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {

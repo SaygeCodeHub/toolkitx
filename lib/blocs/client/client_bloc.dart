@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/utils/database/database_util.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
 
@@ -13,6 +14,7 @@ import '../../data/models/client/client_list_model.dart';
 import '../../data/models/client/home_screen_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/client/client_repository.dart';
+import '../../utils/global.dart';
 import '../../utils/modules_util.dart';
 import 'client_events.dart';
 import 'client_states.dart';
@@ -150,12 +152,33 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
 
         if (fetchChatMessagesModel.data.isNotEmpty) {
           for (var item in fetchChatMessagesModel.data) {
-            await _databaseHelper.insertMessage(item.msgJson.toJson());
-            ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-              'rid': item.msgJson.toJson()['sid'],
-              'rtype': item.msgJson.toJson()['stype'],
-              'employee_name': ''
-            }));
+            Map<String, dynamic> chatDetailsMap = {
+              'rid': item.msgJson.toJson()['rid'],
+              'rtype': item.msgJson.toJson()['rtype'],
+              'sid': item.msgJson.toJson()['sid'],
+              'stype': item.msgJson.toJson()['stype'],
+              "msg_id": item.msgJson.toJson()['msg_id'],
+              "quote_msg_id": "",
+              "msg_type": item.msgJson.toJson()['msg_type'],
+              "msg_time": item.msgJson.toJson()['msg_time'],
+              "msg": item.msgJson.toJson()['msg'],
+              "sid_2": "2",
+              "stype_2": "1",
+              "msg_status": '1',
+              "isMessageUnread": 1,
+              "employee_name": item.userName
+            };
+            await _databaseHelper.insertMessage(chatDetailsMap).then((result) {
+              if (chatScreenName == ChatMessagingScreen.routeName) {
+                ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
+                  'rid': item.msgJson.toJson()['sid'].toString(),
+                  'rtype': item.msgJson.toJson()['stype'].toString(),
+                  'employee_name': item.userName
+                }));
+              } else {
+                ChatBloc().add(FetchChatsList());
+              }
+            });
           }
           if (fetchChatMessagesModel.data.length < 30) {
             hasMoreData = false;

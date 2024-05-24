@@ -38,6 +38,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isSearchEnabled = false;
   String clientId = '';
   String timeZoneFormat = '';
+  int unreadMessageCount = 0;
 
   List<ChatData> chatDetailsList = [];
   Map<String, dynamic> employeeDetailsMap = {};
@@ -136,6 +137,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         'employee_name': event.sendMessageMap['employee_name'],
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
+        'isDownloadedImage': 0,
         'isMessageUnread': 0,
         'isGroup': (event.sendMessageMap['isGroup'] == true) ? 1 : 0,
         'attachementExtension':
@@ -183,8 +185,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _databaseHelper.updateUnreadMessageCount(
           event.employeeDetailsMap['rid'].toString(),
           event.employeeDetailsMap['rtype'].toString());
-
-      // add(FetchChatsList());
     } catch (e) {
       rethrow;
     }
@@ -202,6 +202,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       if (usersList.isNotEmpty) {
         for (var item in usersList) {
+          unreadMessageCount = item['unreadCount'] ?? 0;
           if (item['rid'].toString() == userId && item['rtype'] == userType) {
             continue;
           }
