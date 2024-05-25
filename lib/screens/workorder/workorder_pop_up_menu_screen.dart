@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/workorder/workorder_add_parts_screen.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
@@ -171,6 +173,8 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                   WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddComment')) {
+          context.read<ImagePickerBloc>().pickedImagesList.clear();
+          context.read<ImagePickerBloc>().add(PickImageInitial());
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName)

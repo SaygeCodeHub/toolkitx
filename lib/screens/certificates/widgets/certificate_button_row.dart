@@ -49,7 +49,7 @@ class CertificateButtonRow extends StatelessWidget {
         onPressed: data.actualCertificate.isNotEmpty
             ? () {
                 launchUrlString(
-                    '${ApiConstants.baseUrl}${data.actualCertificate}',
+                    '${ApiConstants.viewDocBaseUrl}${data.actualCertificate}',
                     mode: LaunchMode.inAppBrowserView);
               }
             : null,

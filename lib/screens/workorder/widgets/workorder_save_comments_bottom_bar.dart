@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../blocs/uploadImage/upload_image_bloc.dart';
+import '../../../blocs/uploadImage/upload_image_event.dart';
+import '../../../blocs/uploadImage/upload_image_state.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
@@ -8,12 +12,13 @@ import '../../../configs/app_spacing.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_snackbar.dart';
+import '../../../widgets/generic_loading_popup.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
-import '../workorder_add_comments_screen.dart';
 
 class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
-  const WorkOrderSaveCommentsBottomBar({Key? key}) : super(key: key);
+  const WorkOrderSaveCommentsBottomBar({super.key, required this.addCommentsMap});
+  final Map addCommentsMap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,9 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
             textValue: DatabaseUtil.getText('buttonBack'),
           )),
           const SizedBox(width: xxTinierSpacing),
-          BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+          MultiBlocListener(
+  listeners: [
+    BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
               listener: (context, state) {
                 if (state is SavingWorkOrderComments) {
                   ProgressBar.show(context);
@@ -37,22 +44,53 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
                   Navigator.pop(context);
                   context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
                       initialTabIndex: 4,
-                      workOrderId: WorkOrderAddCommentsScreen
-                          .addCommentsMap['workorderId']));
+                      workOrderId: addCommentsMap['workorderId']));
                 } else if (state is WorkOrderCommentsNotSaved) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.commentsNotSaved, '');
                 }
               },
-              child: Expanded(
+              ),
+    BlocListener<UploadImageBloc, UploadImageState>(
+      listener: (context, state) {
+        if (state is UploadingImage) {
+          GenericLoadingPopUp.show(
+              context, StringConstants.kUploadFiles);
+        } else if (state is ImageUploaded) {
+          GenericLoadingPopUp.dismiss(context);
+          addCommentsMap['ImageString'] = state.images
+              .toString()
+              .replaceAll('[', '')
+              .replaceAll(']', '')
+              .replaceAll(' ', '');
+          context
+              .read<WorkOrderTabDetailsBloc>()
+              .add(SaveWorkOrderComments(addCommentsMap: addCommentsMap));
+        } else if (state is ImageCouldNotUpload) {
+          GenericLoadingPopUp.dismiss(context);
+          showCustomSnackBar(context, state.errorMessage, '');
+        }
+      },
+    ),
+  ],
+  child: Expanded(
                 child: PrimaryButton(
                     onPressed: () {
+                      if ( addCommentsMap['pickedImage'] != null &&
+                          addCommentsMap['pickedImage'].isNotEmpty) {
+                        context.read<UploadImageBloc>().add(UploadImage(
+                            images:  addCommentsMap['pickedImage'],
+                            imageLength: context
+                                .read<ImagePickerBloc>()
+                                .lengthOfImageList));
+                      }
                       context
                           .read<WorkOrderTabDetailsBloc>()
-                          .add(SaveWorkOrderComments());
+                          .add(SaveWorkOrderComments(addCommentsMap: addCommentsMap));
                     },
                     textValue: StringConstants.kSave),
-              )),
+              ),
+),
         ],
       ),
     );
