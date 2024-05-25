@@ -72,9 +72,10 @@ class AttachmentDocumentWidget extends StatelessWidget {
                                   style: Theme.of(context).textTheme.tinySmall,
                                 ),
                               ),
-                              const SizedBox(width: tiniestSpacing),
-                              const Icon(Icons.timer,
-                                  size: 10, color: AppColor.greyBlack),
+                              (msgStatus != '1')
+                                  ? const Icon(Icons.timer,
+                                      size: 10, color: AppColor.greyBlack)
+                                  : const SizedBox.shrink(),
                             ],
                           ),
                         ),
