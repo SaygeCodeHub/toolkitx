@@ -165,7 +165,6 @@ class AttachmentMsgWidget extends StatelessWidget {
                     },
                   ),
                 ),
-                const Spacer(),
                 Padding(
                     padding: const EdgeInsets.all(xxTiniestSpacing),
                     child: Align(
