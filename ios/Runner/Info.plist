@@ -57,6 +57,18 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<key>NSCameraUsageDescription</key>
+        <string>We need camera access to take pictures for your profile.</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>We need access to your photo library to upload pictures.</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>We need microphone access to record videos with sound.</string>
+        <key>NSDocumentDirectoryUsageDescription</key>
+        <string>We need access to your documents to upload files.</string>
+        <key>UIFileSharingEnabled</key>
+        <true/>
+        <key>LSSupportsOpeningDocumentsInPlace</key>
+        <true/>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
