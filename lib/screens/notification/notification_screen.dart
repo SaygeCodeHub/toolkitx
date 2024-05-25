@@ -151,7 +151,7 @@ class NotificationScreen extends StatelessWidget {
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
             arguments: true);
         break;
-      case 'safetyNotice':
+      case 'safetynotice':
         Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName,
             arguments: redirectionKey);
         break;

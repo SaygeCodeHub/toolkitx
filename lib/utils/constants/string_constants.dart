@@ -638,6 +638,8 @@ abstract class StringConstants {
   static const String kVoNeeded = "Vo Needed";
   static const String kPleaseWaitWhileFetchingLocation =
       'Please wait while we fetch your current location...';
+  static const String kLocationPermissionNotGranted =
+      'Location permission not granted';
   static const String kPDFGenerationError = 'Error in generating PDF';
   static const String kPurposeText = "Purpose Text";
   static const String kVessel = "Vessel";

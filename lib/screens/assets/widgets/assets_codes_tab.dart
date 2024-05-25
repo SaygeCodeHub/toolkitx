@@ -22,27 +22,42 @@ class AssetsCodesTab extends StatelessWidget {
               .copyWith(fontWeight: FontWeight.bold, color: AppColor.grey)),
       const SizedBox(height: xxxSmallestSpacing),
       Text(DatabaseUtil.getText("CostCente"),
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.costcenter, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kLatitude,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.latitude, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kAccount,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.account, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kDepartment,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.department, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kLongitude,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.longitude, style: Theme.of(context).textTheme.smallTextGrey),
     ]);

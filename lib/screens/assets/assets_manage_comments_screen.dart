@@ -7,6 +7,8 @@ import 'package:toolkit/widgets/custom_grid_images.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/assets/assets_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/custom_card.dart';
@@ -25,6 +27,8 @@ class AssetsManageCommentsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(tinierSpacing),
             child: FloatingActionButton(
               onPressed: () {
+                context.read<ImagePickerBloc>().pickedImagesList.clear();
+                context.read<ImagePickerBloc>().add(PickImageInitial());
                 Navigator.pushNamed(context, AssetsAddCommentScreen.routeName)
                     .then((_) => {
                           context.read<AssetsBloc>().add(FetchAssetsComments())
@@ -108,9 +112,11 @@ class AssetsManageCommentsScreen extends StatelessWidget {
                         separatorBuilder: (context, index) {
                           return const SizedBox(height: tinierSpacing);
                         }));
-              } else {
-                return const SizedBox.shrink();
+              } else if (state is AssetsCommentsError) {
+                return const Center(
+                    child: Text(StringConstants.kNoRecordsFound));
               }
+              return const SizedBox.shrink();
             }));
   }
 }
