@@ -254,7 +254,11 @@ class AssignWorkForce extends WorkOrderTabsDetailsEvent {
 
 class DeleteWorkOrderSingleMiscCost extends WorkOrderTabsDetailsEvent {}
 
-class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {}
+class SaveWorkOrderComments extends WorkOrderTabsDetailsEvent {
+  final Map addCommentsMap;
+
+  SaveWorkOrderComments({required this.addCommentsMap});
+}
 
 class EditWorkOrderWorkForce extends WorkOrderTabsDetailsEvent {
   final Map editWorkOrderWorkForceMap;

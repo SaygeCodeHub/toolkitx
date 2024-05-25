@@ -52,6 +52,8 @@ dependencies:
   csv:
   flutter_document_picker: ^5.2.3
   flutter_html_to_pdf: ^0.7.0
+  webview_flutter_wkwebview: ^3.13.1
+  webview_flutter_android: ^3.16.2
 
 dev_dependencies:
   flutter_test:

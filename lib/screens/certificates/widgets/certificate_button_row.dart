@@ -49,7 +49,7 @@ class CertificateButtonRow extends StatelessWidget {
         onPressed: data.actualCertificate.isNotEmpty
             ? () {
                 launchUrlString(
-                    '${ApiConstants.baseUrl}${data.actualCertificate}',
+                    '${ApiConstants.viewDocBaseUrl}${data.actualCertificate}',
                     mode: LaunchMode.inAppBrowserView);
               }
             : null,
@@ -60,14 +60,17 @@ class CertificateButtonRow extends StatelessWidget {
       )),
       Expanded(
           child: CustomTextButton(
-        onPressed: data.accesscertificate == "1"
-            ? () {
+        onPressed:
+        // data.accesscertificate != "1"
+        //     ?
+            () {
                 String certificateId = data.id;
                 Navigator.pushNamed(
                     context, GetCourseCertificateScreen.routeName,
                     arguments: certificateId);
               }
-            : null,
+            // : null
+            ,
         textValue: StringConstants.kStartCourse,
         textColor:
             data.accesscertificate == "1" ? AppColor.deepBlue : AppColor.grey,
