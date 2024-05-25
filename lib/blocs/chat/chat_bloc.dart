@@ -151,8 +151,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       SendMessageModel sendMessageModel =
           await _chatBoxRepository.sendMessage(sendMessageMap);
       if (sendMessageModel.status == 200) {
-        await _databaseHelper.updateMessageStatus(sendMessageModel.data.msgId);
-        add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
+        await _databaseHelper
+            .updateMessageStatus(sendMessageModel.data.msgId)
+            .then((result) {
+          add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
+        });
       }
     } catch (e) {
       emit(CouldNotSendMessage(errorMessage: e.toString()));

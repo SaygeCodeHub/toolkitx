@@ -166,7 +166,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
               "stype_2": "1",
               "msg_status": '1',
               "isMessageUnread": 1,
-              "employee_name": item.userName
+              "employee_name": item.userName,
+              'isReceiver': 1
             };
             await _databaseHelper.insertMessage(chatDetailsMap).then((result) {
               if (chatScreenName == ChatMessagingScreen.routeName) {
