@@ -23,9 +23,9 @@ class ApproveLotoDialog extends StatelessWidget {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, StringConstants.kLotoAccepted, '');
             Navigator.pop(context);
-            context
-                .read<LotoDetailsBloc>()
-                .add(FetchLotoDetails(lotoTabIndex: 0));
+            context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                lotoTabIndex: 0,
+                lotoId: context.read<LotoDetailsBloc>().lotoId));
           } else if (state is LotoNotAccepted) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.getError, '');
@@ -37,7 +37,8 @@ class ApproveLotoDialog extends StatelessWidget {
             onPrimaryButton: () {
               context.read<LotoDetailsBloc>().add(AcceptLotoEvent());
               context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex));
+                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex,
+                  lotoId: context.read<LotoDetailsBloc>().lotoId));
             }));
   }
 }

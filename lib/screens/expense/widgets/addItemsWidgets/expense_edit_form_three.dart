@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/expense/widgets/editItemsWidgets/expense_edit_item_currency_list_tile.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
 import '../../../../blocs/expense/expense_state.dart';
+import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../../blocs/uploadImage/upload_image_bloc.dart';
+import '../../../../blocs/uploadImage/upload_image_event.dart';
+import '../../../../blocs/uploadImage/upload_image_state.dart';
+import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
+import '../../../../utils/constants/api_constants.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
+import '../../../../utils/generic_alphanumeric_generator_util.dart';
+import '../../../../utils/incident_view_image_util.dart';
 import '../../../../widgets/android_pop_up.dart';
 import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/generic_app_bar.dart';
+import '../../../../widgets/generic_loading_popup.dart';
 import '../../../../widgets/generic_text_field.dart';
 import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
@@ -33,27 +43,52 @@ class ExpenseEditFormThree extends StatelessWidget {
         ExpenseEditItemsScreen
                 .editExpenseMap['item_details_model'].description ??
             '';
+    String images = ExpenseEditItemsScreen.editExpenseMap['images'];
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kEditItem),
-      bottomNavigationBar: BlocListener<ExpenseBloc, ExpenseStates>(
-        listener: (context, state) {
-          if (state is SavingExpenseItem) {
-            ProgressBar.show(context);
-          } else if (state is ExpenseItemSaved) {
-            ProgressBar.dismiss(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            context.read<ExpenseBloc>().expenseListData.clear();
-            Navigator.pushReplacementNamed(
-                context, ExpenseDetailsScreen.routeName,
-                arguments: state.expenseId);
-          } else if (state is ExpenseItemCouldNotSave) {
-            ProgressBar.dismiss(context);
-            showCustomSnackBar(context, state.itemNotSaved, '');
-          }
-        },
+      bottomNavigationBar: MultiBlocListener(
+        listeners: [
+          BlocListener<ExpenseBloc, ExpenseStates>(
+            listener: (context, state) {
+              if (state is SavingExpenseItem) {
+                ProgressBar.show(context);
+              } else if (state is ExpenseItemSaved) {
+                ProgressBar.dismiss(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                context.read<ExpenseBloc>().expenseListData.clear();
+                Navigator.pushReplacementNamed(
+                    context, ExpenseDetailsScreen.routeName,
+                    arguments: state.expenseId);
+              } else if (state is ExpenseItemCouldNotSave) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.itemNotSaved, '');
+              }
+            },
+          ),
+          BlocListener<UploadImageBloc, UploadImageState>(
+            listener: (context, state) {
+              if (state is UploadingImage) {
+                GenericLoadingPopUp.show(context, StringConstants.kUploadFiles);
+              } else if (state is ImageUploaded) {
+                GenericLoadingPopUp.dismiss(context);
+                ExpenseEditItemsScreen.editExpenseMap['filenames'] = state
+                    .images
+                    .toString()
+                    .replaceAll('[', '')
+                    .replaceAll(']', '')
+                    .replaceAll(' ', '');
+                context.read<ExpenseBloc>().add(SaveExpenseItem(
+                    expenseItemMap: ExpenseEditItemsScreen.editExpenseMap));
+              } else if (state is ImageCouldNotUpload) {
+                GenericLoadingPopUp.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
+            },
+          ),
+        ],
         child: BottomAppBar(
           child: PrimaryButton(
             onPressed: () {
@@ -77,8 +112,19 @@ class ExpenseEditFormThree extends StatelessWidget {
                           });
                     });
               } else {
-                context.read<ExpenseBloc>().add(SaveExpenseItem(
-                    expenseItemMap: ExpenseEditItemsScreen.editExpenseMap));
+                if (ExpenseEditItemsScreen.editExpenseMap['pickedImage'] !=
+                        null &&
+                    ExpenseEditItemsScreen
+                        .editExpenseMap['pickedImage'].isNotEmpty) {
+                  context.read<UploadImageBloc>().add(UploadImage(
+                      images:
+                          ExpenseEditItemsScreen.editExpenseMap['pickedImage'],
+                      imageLength:
+                          context.read<ImagePickerBloc>().lengthOfImageList));
+                } else {
+                  context.read<ExpenseBloc>().add(SaveExpenseItem(
+                      expenseItemMap: ExpenseEditItemsScreen.editExpenseMap));
+                }
               }
             },
             textValue: DatabaseUtil.getText('buttonSave'),
@@ -134,14 +180,33 @@ class ExpenseEditFormThree extends StatelessWidget {
                         textField;
                   }),
               const SizedBox(height: xxTinySpacing),
+              ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: ViewImageUtil.viewImageList(images).length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                        splashColor: AppColor.transparent,
+                        highlightColor: AppColor.transparent,
+                        onTap: () {
+                          launchUrlString(
+                              '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(images)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(ExpenseEditItemsScreen.editExpenseMap['clientId'])}',
+                              mode: LaunchMode.externalApplication);
+                        },
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(bottom: xxxTinierSpacing),
+                          child: Text(
+                              ViewImageUtil.viewImageList(images)[index],
+                              style: const TextStyle(color: AppColor.deepBlue)),
+                        ));
+                  }),
+              const SizedBox(height: xxTinySpacing),
               UploadImageMenu(
                   isUpload: true,
                   onUploadImageResponse: (List uploadImageList) {
-                    ExpenseEditItemsScreen.editExpenseMap['filenames'] =
-                        uploadImageList
-                            .toString()
-                            .replaceAll('[', '')
-                            .replaceAll(']', '');
+                    ExpenseEditItemsScreen.editExpenseMap['pickedImage'] =
+                        uploadImageList;
                   })
             ],
           ),

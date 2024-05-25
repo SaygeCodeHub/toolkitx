@@ -36,8 +36,9 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         canAdd: json["can_add"] ?? '',
-        notices:
-            List<Notice>.from(json["notices"].map((x) => Notice.fromJson(x))),
+        notices: json["notices"] == null
+            ? []
+            : List<Notice>.from(json["notices"].map((x) => Notice.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

@@ -4,8 +4,9 @@ abstract class LotoDetailsEvent {}
 
 class FetchLotoDetails extends LotoDetailsEvent {
   final int lotoTabIndex;
+  final String lotoId;
 
-  FetchLotoDetails({required this.lotoTabIndex});
+  FetchLotoDetails({required this.lotoTabIndex, required this.lotoId});
 }
 
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
@@ -54,6 +55,7 @@ class StartRemoveLotoEvent extends LotoDetailsEvent {
 
 class RejectLotoEvent extends LotoDetailsEvent {
   final String remark;
+
   RejectLotoEvent({required this.remark});
 }
 

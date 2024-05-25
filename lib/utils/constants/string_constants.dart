@@ -9,6 +9,9 @@ abstract class StringConstants {
   static const String kSelectTimeZone = 'Select Your TimeZone';
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
+  static const String kName = 'Name'; //
+  static const String kCompanyName = 'Company Name'; //
+  static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
@@ -189,6 +192,7 @@ abstract class StringConstants {
   static const String kSignature = 'Signature';
   static const String kEditSignature = 'Edit Signature';
   static const String kSignatureNotFound = 'Signature Not Found';
+  static const String kPleaseEnterSignature = 'Please enter signature!';
   static const String kUpload = 'Upload';
   static const String kChecklist = 'Checklist';
   static const String kFilters = 'Filters';
@@ -205,11 +209,12 @@ abstract class StringConstants {
   static const String kLogoutDialogContent =
       'Are you sure you want to log out?';
   static const String kNoInternetMessage =
-      'Oops! Please ensure your device is connected to the internet to access rest of the module'; //
+      "We couldn't connect to the internet. Try checking your connection. Limited features will be available"; //
   static const String kReportAnIncident = 'Report an Incident';
   static const String kDateRange = 'Date Range';
-  static const String kName = 'Name';
+  static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
+  static const String kPleaseSelectDate = 'Please Select Date!';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
   static const String kSelectStatus = 'Select Status';
@@ -221,6 +226,8 @@ abstract class StringConstants {
   static const String kDateOfIncident = 'Date of incident';
   static const String kTime = 'Time';
   static const String kSelectTime = 'Select Time';
+  static const String kPleaseSelectTime = 'Please Select Time!';
+  static const String kPleaseAddSignature = 'Please add signature!';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
@@ -242,8 +249,12 @@ abstract class StringConstants {
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
+  static const String kClear = 'Clear'; //
+  static const String kPermitFirstQuestion = 'First'; //
+  static const String kPermitSecondQuestion = 'Second'; //
   static const String kRefresh = 'Refresh'; //
   static const String kNoData = 'No data!'; //
+  static const String kNoDataFound = 'No data found!'; //
   static const String kSubmitTodo = 'Submit TODO'; //
   static const String kSafetyNoticeValidation = 'Please enter notice!'; //
   static const String kSafetyNoticeValidityValidation =
@@ -256,6 +267,9 @@ abstract class StringConstants {
   static const String kEventDateValidation = 'Event date cannot be empty.'; //
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
+  static const String kFailedToSaveData = 'Failed to save data!';
+  static const String kNameValidation = 'Please add name!';
+  static const String kDataSavedSuccessfully = 'Data saved successfully!';
   static const String kNoInternetError =
       'We could not load the information. Please\ncheck the internet connection and refresh\nthis screen so we can synchronize the data.'; //
   static const String kValidatePassword = 'Please enter old password/opt';
@@ -272,15 +286,73 @@ abstract class StringConstants {
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
   static const String kGeneratePdf = 'Generate PDF';
-  static const String kClosePermit = 'Close Permit';
-  static const String kOpenPermit = 'Open Permit';
+  static const String kClosePermit = 'Cancel Permit';
+  static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
-  static const String kPermitNo = 'Permit No';
-  static const String kKeySafeNo = 'Key Safe No';
-  static const String kKeySafeKeyNo = 'Key Safe Key No';
-  static const String kEarthingScheduleNo = 'Earthing Schedule No';
-  static const String kSelectedPersonReport = 'Selected Person Report';
-  static const String kPortableDrainEarth = 'Portable Drain Earth';
+  static const String kPreparePermit = 'Prepare Permit';
+  static const String kTransferTo = 'Transfer To';
+  static const String kSAP = 'SAP';
+  static const String kCP = "CP";
+  static const String kEditSafetyDocument = 'Edit Safety Document';
+  static const String kSignAsSap = 'Sign as SAP';
+  static const String kSignAsCp = 'Sign as CP';
+  static const String kAcceptPermitRequest = 'Accept Permit Request';
+  static const String kPermitTransferWarning =
+      'Warning: This Safety Document has not been surrendered by a Competent Person. This must be cleared and cancelled by a suitably authorised person';
+  static const String kTransferComponentPerson = 'Transfer Component Person';
+  static const String kClearPermitRequest = 'Clear Permit'; //
+  static const String kAllGearPermit =
+      'All gear, tools & loose materials have also have been removed and all covers, guards and access doors have been replaced except for'; //
+  static const String kClearPermit = 'Clear Permit'; //
+  static const String kClearPermitCap = 'CLEAR PERMIT'; //
+  static const String kSurrenderPermit = 'Surrender Permit'; //
+  static const String kPermitIdentification = '1. IDENTIFICATION'; //
+  static const String kPermitPlannedLocation = '1.(i). Planned Location'; //
+  static const String kPermitEquipmentIdentification =
+      '1.(ii). Equipment Identification'; //
+  static const String kPermitCircuitNumber =
+      '[String/Circuit Number, WTG number and Plant and/or Apparatus to be worked on]'; //
+  static const String kAcceptPermit = 'Accept Permit'; //
+  static const String kPermitWorkDescription = '1.(iii). Work to be done'; //
+  static const String kPermitPrecautions =
+      '1. PRECAUTIONS TAKEN TO ACHIEVE SAFETYFROM THIS SYATEM'; //
+  static const String kPermitNo = 'Permit No'; //
+  static const String kPermitIsolation = '2.(i). Points of isolation'; //
+  static const String kPermitIsolationPanel15 = '3.(i). Points of isolation'; //
+  static const String kPermitEarthingDevice =
+      '2.(ii). Primary Earthing Device'; //
+  static const String kPermitEarthingDevicePanel15 =
+      '3.(ii). Primary Earthing Device'; //
+  static const String kPermitAction =
+      '2.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitActionPanel15 =
+      '3.(iii). Action(s) taken ti avoid a longer by draining, venting, purging and containment or dissipation of stored energy'; //
+  static const String kPermitPrecautionsTaken =
+      '2.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kPermitPrecautionsTakenPanel15 =
+      '3.(iv). Precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kKeySafeNo = 'Key Safe No'; //
+  static const String kPermitPrimaryEarthing =
+      '2.(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryEarthingPanel15 =
+      '3.(v). Primary earthing device(s) which may be varied'; //
+  static const String kPermitPrimaryProcedure =
+      '(v). Primary earthing device(s) which may be varied (procedure required)'; //
+  static const String kKeySafeKeyNo = 'Key Safe Key No'; //
+  static const String kPermitLimitOfWork = '4.(i) Limit of Work'; //
+  static const String kPermitLimitOfWorkArea = '4.(ii) Limit of Work area'; //
+  static const String kPermitHazards =
+      '4.(iii) Further precautions to be taken during the course of the work to avoid system derived hazards'; //
+  static const String kPermitSelectLocation = 'Select location'; //
+  static const String kPanel12 = 'panel_12'; //
+  static const String kPanel15 = 'panel_15'; //
+  static const String kPanel16 = 'panel_16'; //
+  static const String kEarthingScheduleNo = 'Earthing Schedule No'; //
+  static const String kSelectedPersonReport = 'Selected Person Report'; //
+  static const String kPortableDrainEarth = 'Portable Drain Earth'; //
+  static const String kAccessKeys = 'Access Keys'; //
+  static const String kAllGearsValidation =
+      'All gear, tools & loose materials have...cannot be empty'; //
   static const String kCircuitIdentificationFlag =
       'Circuit Identification Flag';
   static const String kCircuitIdentificationWristlets =
@@ -288,8 +360,13 @@ abstract class StringConstants {
   static const String kSingleLineDiagram = 'Single Line Diagram';
   static const String kPID = 'P&ID';
   static const String kControlPerson = 'Control Person(s)';
+  static const String kPleaseFillControlPerson =
+      'Please fill Control person field';
   static const String kCLOSEPERMIT = 'CLOSE PERMIT';
-  static const String kOPENPERMIT = 'OPEN PERMIT';
+  static const String kISSUEPERMIT = 'ISSUE PERMIT';
+  static const String kCANCELPERMIT = 'CANCEL PERMIT'; //
+  static const String kAllFieldsMandatory = 'All fields are mandatory!'; //
+  static const String kMarkAsPrepared = 'Mark as Prepared';
   static const String kNoRecordsFilter = 'No records found for these filters';
   static const String kDiscardChanges = 'Discard Changes?';
   static const String kAppVersion = 'App version';
@@ -298,6 +375,7 @@ abstract class StringConstants {
   static const String kWorkforceRemoved = 'Workforce Removed';
   static const String kTeamRemoved = 'Team Removed';
   static const String kCancel = 'Cancel';
+  static const String kCancelPermit = 'Cancel Permit';
   static const String kDiscard = 'Discard';
   static const String k1 = '1';
   static const String kQ = 'Q';
@@ -312,6 +390,8 @@ abstract class StringConstants {
   static const String kFeedback = 'Feedback';
   static const String kSkip = 'Skip';
   static const String kBack = 'Back';
+  static const String kSignAsSapCap = 'SIGN AS SAP';
+  static const String kSignAsCpCap = 'SIGN AS CP';
   static const String kSaveAndNext = 'Save and Next';
   static const String kSaveAnswer = 'Save Answer';
   static const String kAnswerSaved = "Answer Saved";
@@ -327,7 +407,7 @@ abstract class StringConstants {
   static const String kMarks = 'Marks';
   static const String kPagesInside = 'Pages inside';
   static const String kQuestionsInside = 'Questions inside';
-  static const String kNameValidation = 'Please enter name';
+  static const String kEnterNameValidation = 'Please enter name!';
   static const String kSelectPermits = 'Link Permits';
   static const String kAddLinkToPermit = 'Add Link To Permit';
   static const String kSignInHere = 'Sign in here';
@@ -506,6 +586,7 @@ abstract class StringConstants {
       'Do you want to delete this entry ?';
   static const String kWarehouse = "Warehouse";
   static const String kEmployee = "Employee";
+  static const String kUsers = "Users";
   static const String kPositions = "Positions";
   static const String kSelectPositions = "Select Positions";
   static const String kSelectWarehouse = "Select Warehouse";
@@ -540,4 +621,33 @@ abstract class StringConstants {
   static const String kcomments = 'comments';
   static const String kSelectApplication = 'Select Application';
   static const String kValid = 'Valid';
+  static const String kAllAnswersRequired = "All answers are required";
+  static const String kOfflineDataReady =
+      "You are ready to use the app in offline mode!";
+  static const String kOfflineFailedInDataPreparation =
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+  static const String kOpenTicket = "Open Ticket";
+  static const String kApproveOfDev2 = "Approve for Dev2";
+  static const String kBackToApprove = "Back to Approve";
+  static const String kApproveRolledOut = "Approve Rolled Out";
+  static const String kPleaseEnterCompletionDate =
+      "Please enter completion date";
+  static const String kEdtShouldBeGreaterThan0 =
+      "EDT should be greater than 0 for selected status";
+  static const String kPleaseSelectVo = "Please select VO Needed to continue";
+  static const String kVoNeeded = "Vo Needed";
+  static const String kPleaseWaitWhileFetchingLocation =
+      'Please wait while we fetch your current location...';
+  static const String kLocationPermissionNotGranted =
+      'Location permission not granted';
+  static const String kPDFGenerationError = 'Error in generating PDF';
+  static const String kPurposeText = "Purpose Text";
+  static const String kVessel = "Vessel";
+  static const String kDepartureDate = "Departure Date";
+  static const String kActualDepartureDate = "Actual Departure Date";
+  static const String kArrivalDate = "Arrival Date";
+  static const String kActualArrivalDate = "Actual Arrival Date";
+  static const String kDeparturePort = "Departure Port";
+  static const String kArrivalPort = "Arrival Port";
+  static const String kNotes = "Notes";
 }

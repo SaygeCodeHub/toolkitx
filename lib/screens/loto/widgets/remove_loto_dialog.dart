@@ -23,9 +23,9 @@ class RemoveLotoDialog extends StatelessWidget {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, StringConstants.kLotoRemoved, '');
             Navigator.pop(context);
-            context
-                .read<LotoDetailsBloc>()
-                .add(FetchLotoDetails(lotoTabIndex: 0));
+            context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                lotoTabIndex: 0,
+                lotoId: context.read<LotoDetailsBloc>().lotoId));
           } else if (state is LotoNotRemoved) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.getError, '');
@@ -37,7 +37,8 @@ class RemoveLotoDialog extends StatelessWidget {
             onPrimaryButton: () {
               context.read<LotoDetailsBloc>().add(RemoveLotoEvent());
               context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex));
+                  lotoTabIndex: context.read<LotoDetailsBloc>().lotoTabIndex,
+                  lotoId: context.read<LotoDetailsBloc>().lotoId));
             }));
   }
 }

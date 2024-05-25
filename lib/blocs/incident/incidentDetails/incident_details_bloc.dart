@@ -119,11 +119,12 @@ class IncidentDetailsBloc
         }
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
         emit(IncidentDetailsFetched(
-            incidentDetailsModel: incidentDetailsModel,
-            clientId: hashKey!,
-            editIncidentDetailsMap: editIncidentDetailsMap,
-            incidentPopUpMenu: popUpMenuItems,
-            showPopUpMenu: true));
+          incidentDetailsModel: incidentDetailsModel,
+          clientId: hashKey!,
+          editIncidentDetailsMap: editIncidentDetailsMap,
+          incidentPopUpMenu: popUpMenuItems,
+          showPopUpMenu: true,
+        ));
       }
     } catch (e) {
       emit(const IncidentDetailsNotFetched());

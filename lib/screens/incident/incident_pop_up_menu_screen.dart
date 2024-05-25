@@ -9,7 +9,6 @@ import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../configs/app_dimensions.dart';
-import '../../data/models/incident/fetch_incidents_list_model.dart';
 import 'category_screen.dart';
 import 'widgets/incident_contractor_list_tile.dart';
 import 'incident_add_comments_screen.dart';
@@ -18,14 +17,14 @@ import 'incident_status_screen.dart';
 
 class IncidentDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   final Map incidentDetailsMap;
   final IncidentDetailsModel incidentDetailsModel;
 
   const IncidentDetailsPopUpMenu(
       {Key? key,
       required this.popUpMenuItems,
-      required this.incidentListDatum,
+      required this.incidentId,
       required this.incidentDetailsMap,
       required this.incidentDetailsModel})
       : super(key: key);
@@ -50,7 +49,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
           if (value == DatabaseUtil.getText('AddComments')) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentAddCommentsScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('EditIncident')) {
@@ -69,7 +68,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('Acknowledge')) {
@@ -77,7 +76,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('DefineMitigation')) {
@@ -85,7 +84,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('ApproveMitigation')) {
@@ -93,7 +92,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('ImplementMitigation')) {
@@ -101,7 +100,7 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentStatusScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('Markasresolved')) {
@@ -109,13 +108,13 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentMarkAsResolvedScreen(
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel)));
           }
           if (value == DatabaseUtil.getText('GenerateReport')) {
             context
                 .read<IncidentDetailsBloc>()
-                .add(GenerateIncidentPDF(incidentListDatum.id));
+                .add(GenerateIncidentPDF(incidentId));
           }
         },
         position: PopupMenuPosition.under,

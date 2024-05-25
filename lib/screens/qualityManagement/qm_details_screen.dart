@@ -26,15 +26,17 @@ import 'widgets/qm_details.dart';
 
 class QualityManagementDetailsScreen extends StatelessWidget {
   static const routeName = 'QualityManagementDetailsScreen';
-  final Map qmListMap;
+  final String qmId;
+  static String refNo = '';
 
-  const QualityManagementDetailsScreen({Key? key, required this.qmListMap})
+  const QualityManagementDetailsScreen({Key? key, required this.qmId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    context.read<QualityManagementBloc>().add(
-        FetchQualityManagementDetails(qmId: qmListMap['id'], initialIndex: 0));
+    context
+        .read<QualityManagementBloc>()
+        .add(FetchQualityManagementDetails(qmId: qmId, initialIndex: 0));
     return Scaffold(
       appBar: GenericAppBar(
         actions: [
@@ -50,7 +52,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                       fetchQualityManagementDetailsModel:
                           state.fetchQualityManagementDetailsModel,
                       editQMDetailsMap: state.editQMDetailsMap,
-                      qmId: qmListMap['id'],
+                      qmId: qmId,
                     );
                   } else {
                     return const SizedBox.shrink();
@@ -101,7 +103,10 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(qmListMap['refNo'],
+                                      Text(
+                                          refNo == ''
+                                              ? "#QA${state.fetchQualityManagementDetailsModel.data.id}"
+                                              : refNo,
                                           style: Theme.of(context)
                                               .textTheme
                                               .medium),
@@ -150,7 +155,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                     onPressed: () {
                       context.read<QualityManagementBloc>().add(
                           FetchQualityManagementDetails(
-                              qmId: qmListMap['id'], initialIndex: 0));
+                              qmId: qmId, initialIndex: 0));
                     },
                     textValue: StringConstants.kReload),
               );

@@ -31,7 +31,10 @@ class TicketListScreen extends StatelessWidget {
         appBar: GenericAppBar(title: DatabaseUtil.getText('Ticket')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, AddTicketScreen.routeName);
+              Navigator.pushNamed(context, AddTicketScreen.routeName).then(
+                  (_) => Navigator.pushReplacementNamed(
+                      context, TicketListScreen.routeName,
+                      arguments: isFromHome));
             },
             child: const Icon(Icons.add)),
         body: Padding(

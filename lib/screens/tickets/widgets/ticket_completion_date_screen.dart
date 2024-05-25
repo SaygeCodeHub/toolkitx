@@ -8,9 +8,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/primary_button.dart';
-import '../../../widgets/progress_bar.dart';
 import '../../incident/widgets/date_picker.dart';
 
 class TicketCompletionDateScreen extends StatelessWidget {
@@ -46,30 +44,22 @@ class TicketCompletionDateScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: BlocListener<TicketsBloc, TicketsStates>(
-          listener: (context, state) {
-            if (state is TicketStatusUpdating) {
-              ProgressBar.show(context);
-            } else if (state is TicketStatusUpdated) {
-              ProgressBar.dismiss(context);
-              Navigator.pop(context);
-              context.read<TicketsBloc>().add(FetchTicketDetails(
-                  ticketId: context.read<TicketsBloc>().ticketId,
-                  ticketTabIndex: 0));
-            } else if (state is TicketStatusNotUpdated) {
-              ProgressBar.dismiss(context);
-              showCustomSnackBar(context, state.errorMessage, '');
-            }
-          },
-          child: PrimaryButton(
-              onPressed: () {
+        child: PrimaryButton(
+            onPressed: () {
+              if (completionDate == '') {
                 context.read<TicketsBloc>().add(UpdateTicketStatus(
-                    edtHrs: '',
+                    edtHrs: 0,
                     completionDate: completionDate,
                     status: TicketStatusEnum.development.value));
-              },
-              textValue: DatabaseUtil.getText('buttonSave')),
-        ),
+              } else {
+                Navigator.pop(context);
+                context.read<TicketsBloc>().add(UpdateTicketStatus(
+                    edtHrs: 0,
+                    completionDate: completionDate,
+                    status: TicketStatusEnum.development.value));
+              }
+            },
+            textValue: DatabaseUtil.getText('buttonSave')),
       ),
     );
   }

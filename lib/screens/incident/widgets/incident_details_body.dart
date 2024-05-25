@@ -6,7 +6,6 @@ import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
-import '../../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../../data/models/incident/incident_details_model.dart';
 import '../../../data/models/status_tag_model.dart';
 import '../../../utils/incident_util.dart';
@@ -20,13 +19,14 @@ import 'incident_injured_person_tab.dart';
 import 'incident_link_permit_list.dart';
 
 class IncidentDetailsBody extends StatelessWidget {
-  final IncidentListDatum incidentListDatum;
+  final String incidentId;
   final IncidentDetailsModel incidentDetailsModel;
   final String clientId;
+  static String refNo = '';
 
   const IncidentDetailsBody(
       {super.key,
-      required this.incidentListDatum,
+      required this.incidentId,
       required this.incidentDetailsModel,
       required this.clientId});
 
@@ -48,7 +48,10 @@ class IncidentDetailsBody extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(incidentListDatum.refno,
+                            Text(
+                                refNo == ''
+                                    ? '#RI${incidentDetailsModel.data!.id}'
+                                    : refNo,
                                 style: Theme.of(context).textTheme.medium),
                             StatusTag(tags: [
                               StatusTagModel(
@@ -78,13 +81,13 @@ class IncidentDetailsBody extends StatelessWidget {
                 IncidentInjuredPersonTab(
                     incidentDetailsModel: incidentDetailsModel,
                     initialIndex: 3,
-                    incidentListDatum: incidentListDatum),
+                    incidentId: incidentId),
                 IncidentCustomTimeLine(
                     incidentDetailsModel: incidentDetailsModel,
                     initialIndex: 4),
                 IncidentLinkPermitList(
                     incidentDetailsModel: incidentDetailsModel,
-                    incidentListDatum: incidentListDatum,
+                    incidentId: incidentId,
                     initialIndex: 5)
               ])
         ]));

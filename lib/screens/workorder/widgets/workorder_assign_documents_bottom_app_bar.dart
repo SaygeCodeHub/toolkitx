@@ -11,7 +11,6 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
 import '../workorder_assign_document_screen.dart';
-import '../workorder_details_tab_screen.dart';
 
 class WorkOrderAssignDocumentsBottomAppBar extends StatelessWidget {
   const WorkOrderAssignDocumentsBottomAppBar({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class WorkOrderAssignDocumentsBottomAppBar extends StatelessWidget {
             context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
                 initialTabIndex: 0,
                 workOrderId:
-                    WorkOrderDetailsTabScreen.workOrderMap['workOrderId']));
+                    context.read<WorkOrderTabDetailsBloc>().workOrderId));
           } else if (state is WorkOrderDocumentsNotSaved) {
             ProgressBar.dismiss(context);
             showCustomSnackBar(context, state.documentsNotSaved, '');

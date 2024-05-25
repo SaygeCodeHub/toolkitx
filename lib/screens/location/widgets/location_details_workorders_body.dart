@@ -36,14 +36,9 @@ class LocationDetailsWorkOrdersBody extends StatelessWidget {
               return CustomCard(
                 child: ListTile(
                   onTap: () {
-                    WorkOrderDetailsTabScreen.workOrderMap['workOrderId'] =
-                        workOrderLocations[index].id;
-                    WorkOrderDetailsTabScreen.workOrderMap['workOrderName'] =
-                        workOrderLocations[index].woname;
-                    WorkOrderDetailsTabScreen.workOrderMap['status'] =
-                        workOrderLocations[index].status;
                     Navigator.pushNamed(
-                        context, WorkOrderDetailsTabScreen.routeName);
+                        context, WorkOrderDetailsTabScreen.routeName,
+                        arguments: workOrderLocations[index].id);
                   },
                   contentPadding: const EdgeInsets.all(xxTinierSpacing),
                   title: Padding(

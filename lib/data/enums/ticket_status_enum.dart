@@ -8,7 +8,9 @@ enum TicketStatusEnum {
   rolledOut(status: 'Rolled Out', value: '7'),
   closed(status: 'Closed', value: '8'),
   estimateDT(status: 'Estimate DT', value: '10'),
-  waitingForDevelopment(status: 'Waiting For Development', value: '11');
+  waitingForDevelopment(status: 'Waiting For Development', value: '11'),
+  backToApprove(status: 'Back to Approve', value: '6'),
+  approveRolledOut(status: 'Approve Rolled out', value: '19');
 
   const TicketStatusEnum({required this.status, required this.value});
 

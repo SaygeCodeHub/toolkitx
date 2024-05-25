@@ -45,6 +45,7 @@ class AllPermitDatum {
   final dynamic npwStatus;
   final String? startdate;
   final String? enddate;
+  final int actionCount;
 
   AllPermitDatum(
       {this.id,
@@ -61,7 +62,8 @@ class AllPermitDatum {
       this.npiStatus,
       this.npwStatus,
       this.startdate,
-      this.enddate});
+      this.enddate,
+      this.actionCount = 0});
 
   factory AllPermitDatum.fromJson(Map<String, dynamic> json) => AllPermitDatum(
       id: json["id"],
@@ -78,7 +80,8 @@ class AllPermitDatum {
       npiStatus: json["npi_status"],
       npwStatus: json["npw_status"],
       startdate: json["startdate"],
-      enddate: json["enddate"]);
+      enddate: json["enddate"],
+      actionCount: json["actionCount"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -95,6 +98,7 @@ class AllPermitDatum {
         "npi_status": npiStatus,
         "npw_status": npwStatus,
         "startdate": startdate,
-        "enddate": enddate
+        "enddate": enddate,
+        "actionCount": actionCount
       };
 }

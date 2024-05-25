@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../blocs/client/client_bloc.dart';
-import '../../blocs/client/client_events.dart';
 import '../../blocs/home/home_bloc.dart';
 import '../../blocs/home/home_events.dart';
 import '../../configs/app_dimensions.dart';
@@ -16,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<HomeBloc>().add(const StartTimer());
-    context.read<ClientBloc>().add(FetchHomeScreenData());
+    context.read<HomeBloc>().add(const SaveUserDevice());
     return Scaffold(
         body: Padding(
             padding: const EdgeInsets.all(kBodyMargin),

@@ -66,10 +66,9 @@ class SafetyNoticeHistoryScreen extends StatelessWidget {
                         return CustomCard(
                           child: ListTile(
                             onTap: () {
-                              SafetyNoticeDetailsScreen.safetyNoticeId =
-                                  state.historyDatum[index].id;
                               Navigator.pushNamed(context,
-                                      SafetyNoticeDetailsScreen.routeName)
+                                      SafetyNoticeDetailsScreen.routeName,
+                                      arguments: state.historyDatum[index].id)
                                   .then((value) =>
                                       Navigator.pushReplacementNamed(context,
                                           SafetyNoticeHistoryScreen.routeName));

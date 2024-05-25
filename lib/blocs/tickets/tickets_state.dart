@@ -132,3 +132,20 @@ class TicketStatusNotUpdated extends TicketsStates {
 
   TicketStatusNotUpdated({required this.errorMessage});
 }
+
+class OpenTicketSaving extends TicketsStates {}
+
+class OpenTicketSaved extends TicketsStates {}
+
+class OpenTicketNotSaved extends TicketsStates {
+  final String errorMessage;
+
+  OpenTicketNotSaved({required this.errorMessage});
+}
+
+class VoValueSelected extends TicketsStates {
+  final String value;
+  final String vo;
+
+  VoValueSelected({required this.value, required this.vo});
+}

@@ -16,3 +16,13 @@ class FeedbackCertificateError extends FeedbackCertificateState {
   final String feedbackError;
   FeedbackCertificateError(this.feedbackError);
 }
+
+class CertificateFeedbackSaving extends FeedbackCertificateState {}
+
+class CertificateFeedbackSaved extends FeedbackCertificateState {}
+
+class CertificateFeedbackNotSaved extends FeedbackCertificateState {
+  final String getError;
+
+  CertificateFeedbackNotSaved({required this.getError});
+}

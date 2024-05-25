@@ -26,7 +26,7 @@ class ClosePermitDetailsModel {
 
 class GetClosePermitData {
   final String? permitName;
-  final String? permitStatus;
+  String? permitStatus;
   final String? panelSaint;
   final String? showComment;
 

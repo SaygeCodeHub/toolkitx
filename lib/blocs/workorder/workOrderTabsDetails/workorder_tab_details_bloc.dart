@@ -39,7 +39,6 @@ import '../../../screens/workorder/assign_workforce_screen.dart';
 import '../../../screens/workorder/workorder_add_parts_screen.dart';
 import '../../../screens/workorder/workorder_add_mis_cost_screen.dart';
 import '../../../screens/workorder/workorder_assign_document_screen.dart';
-import '../../../screens/workorder/workorder_details_tab_screen.dart';
 import '../../../screens/workorder/workorder_add_and_edit_down_time_screen.dart';
 import '../../../screens/workorder/workorder_form_one_screen.dart';
 import 'workorder_tab_details_events.dart';
@@ -122,98 +121,97 @@ class WorkOrderTabDetailsBloc
   FutureOr _fetchWorkOrderDetails(
       WorkOrderDetails event, Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(FetchingWorkOrderTabDetails());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      String? getClientId =
-          await _customerCache.getClientId(CacheKeys.clientId);
-      clientId = getClientId!;
-      popUpMenuItemsList = [
-        DatabaseUtil.getText('Edit'),
-        DatabaseUtil.getText('CreateSimillar'),
-        DatabaseUtil.getText('AddParts'),
-        DatabaseUtil.getText('AddDocuments'),
-        DatabaseUtil.getText('AddMiscCost'),
-        DatabaseUtil.getText('AddDowntime'),
-        DatabaseUtil.getText('AddComment')
-      ];
-      FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
-          await _workOrderRepository.fetchWorkOrderDetails(
-              hashCode!, event.workOrderId);
-      workOrderId = event.workOrderId;
-      tabIndex = event.initialTabIndex;
-      if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
-        popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
-        popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
-        popUpMenuItemsList.insert(9, DatabaseUtil.getText('Reject'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isstart == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
-      }
-      if (fetchWorkOrderDetailsModel.data.ishold == '1') {
-        popUpMenuItemsList.insert(5, DatabaseUtil.getText('Hold'));
-      }
-      if (fetchWorkOrderDetailsModel.data.iscomplete == '1') {
-        popUpMenuItemsList.insert(6, DatabaseUtil.getText('Complete'));
-      }
-      List customFieldList = [];
-      for (int i = 0;
-          i < fetchWorkOrderDetailsModel.data.customfields.length;
-          i++) {
-        customFieldList.add({
-          'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
-          'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
-        });
-      }
-      workOrderDetailsMap = {
-        'companyid': fetchWorkOrderDetailsModel.data.companyid,
-        'locationid': fetchWorkOrderDetailsModel.data.locationid,
-        'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
-        'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
-        'type': fetchWorkOrderDetailsModel.data.type,
-        'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
-        'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
-        'category': fetchWorkOrderDetailsModel.data.category,
-        'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
-        'origination': fetchWorkOrderDetailsModel.data.origination,
-        'originationid': fetchWorkOrderDetailsModel.data.originationid,
-        'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
-        'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
-        'subject': fetchWorkOrderDetailsModel.data.subject,
-        'description': fetchWorkOrderDetailsModel.data.description,
-        'workorderId': fetchWorkOrderDetailsModel.data.id,
-        'customfields': customFieldList,
-        "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
-        "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
-        "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
-        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime,
-        "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
-        "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
-        "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
-        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
-        "service": fetchWorkOrderDetailsModel.data.service,
-        "vendor": fetchWorkOrderDetailsModel.data.vendorname,
-        "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
-      };
-      emit(WorkOrderTabDetailsFetched(
-          fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
-          tabInitialIndex: tabIndex,
-          clientId: clientId,
-          popUpMenuList: popUpMenuItemsList,
-          workOrderDetailsMap: workOrderDetailsMap));
-      add(WorkOrderToggleSwitchIndex(
-          fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
-          tabInitialIndex: tabIndex,
-          toggleIndex: 0));
-    } catch (e) {
-      emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    String? getClientId = await _customerCache.getClientId(CacheKeys.clientId);
+    clientId = getClientId!;
+    popUpMenuItemsList = [
+      DatabaseUtil.getText('Edit'),
+      DatabaseUtil.getText('CreateSimillar'),
+      DatabaseUtil.getText('AddParts'),
+      DatabaseUtil.getText('AddDocuments'),
+      DatabaseUtil.getText('AddMiscCost'),
+      DatabaseUtil.getText('AddDowntime'),
+      DatabaseUtil.getText('AddComment')
+    ];
+    FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
+        await _workOrderRepository.fetchWorkOrderDetails(
+            hashCode!, event.workOrderId);
+    workOrderId = event.workOrderId;
+    tabIndex = event.initialTabIndex;
+    if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
+      popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
     }
+    if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
+      popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
+    }
+    if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+      popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
+    }
+    if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+      popUpMenuItemsList.insert(9, DatabaseUtil.getText('Reject'));
+    }
+    if (fetchWorkOrderDetailsModel.data.isstart == '1') {
+      popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
+    }
+    if (fetchWorkOrderDetailsModel.data.ishold == '1') {
+      popUpMenuItemsList.insert(5, DatabaseUtil.getText('Hold'));
+    }
+    if (fetchWorkOrderDetailsModel.data.iscomplete == '1') {
+      popUpMenuItemsList.insert(6, DatabaseUtil.getText('Complete'));
+    }
+    List customFieldList = [];
+    for (int i = 0;
+        i < fetchWorkOrderDetailsModel.data.customfields.length;
+        i++) {
+      customFieldList.add({
+        'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
+        'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
+      });
+    }
+    workOrderDetailsMap = {
+      'companyid': fetchWorkOrderDetailsModel.data.companyid,
+      'locationid': fetchWorkOrderDetailsModel.data.locationid,
+      'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
+      'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
+      'type': fetchWorkOrderDetailsModel.data.type,
+      'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
+      'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
+      'category': fetchWorkOrderDetailsModel.data.category,
+      'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
+      'origination': fetchWorkOrderDetailsModel.data.origination,
+      'originationid': fetchWorkOrderDetailsModel.data.originationid,
+      'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
+      'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
+      'subject': fetchWorkOrderDetailsModel.data.subject,
+      'description': fetchWorkOrderDetailsModel.data.description,
+      'workorderId': fetchWorkOrderDetailsModel.data.id,
+      'customfields': customFieldList,
+      "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
+      "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
+      "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
+      "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime,
+      "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
+      "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
+      "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
+      "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
+      "service": fetchWorkOrderDetailsModel.data.service,
+      "vendor": fetchWorkOrderDetailsModel.data.vendorname,
+      "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
+    };
+    emit(WorkOrderTabDetailsFetched(
+        fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
+        tabInitialIndex: tabIndex,
+        clientId: clientId,
+        popUpMenuList: popUpMenuItemsList,
+        workOrderDetailsMap: workOrderDetailsMap));
+    add(WorkOrderToggleSwitchIndex(
+        fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
+        tabInitialIndex: tabIndex,
+        toggleIndex: 0));
+    // } catch (e) {
+    //   emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
+    // }
   }
 
   _toggleSwitchIndexChanged(WorkOrderToggleSwitchIndex event,
@@ -662,11 +660,8 @@ class WorkOrderTabDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       if (!assignWorkForceListReachedMax) {
         FetchAssignWorkForceModel fetchAssignWorkForceModel =
-            await _workOrderRepository.fetchAssignWorkForce(
-                event.pageNo,
-                hashCode!,
-                WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
-                event.workOrderWorkforceName);
+            await _workOrderRepository.fetchAssignWorkForce(event.pageNo,
+                hashCode!, workOrderId, event.workOrderWorkforceName);
         pageNo = event.pageNo;
         workOrderWorkforceName = event.workOrderWorkforceName;
         assignWorkForceDatum.addAll(fetchAssignWorkForceModel.data);
@@ -836,7 +831,7 @@ class WorkOrderTabDetailsBloc
           await _workOrderRepository.fetchWorkOrderDocuments(
               1,
               hashCode!,
-              WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+              workOrderId,
               '',
               jsonEncode(WorkOrderAssignDocumentScreen.documentFilterMap));
       WorkOrderAssignDocumentScreen.documentDataList.clear();
@@ -900,7 +895,7 @@ class WorkOrderTabDetailsBloc
     String? userId = await _customerCache.getUserId(CacheKeys.userId);
     Map saveDocumentsMap = {
       "hashcode": hashCode,
-      "woid": WorkOrderDetailsTabScreen.workOrderMap['workOrderId'],
+      "woid": workOrderId,
       "documents":
           WorkOrderAssignDocumentScreen.workOrderDocumentMap['documents'] ?? '',
       "userid": userId

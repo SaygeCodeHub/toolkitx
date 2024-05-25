@@ -22,12 +22,15 @@ import '../../widgets/status_tag.dart';
 
 class LotoDetailsScreen extends StatelessWidget {
   static const routeName = 'LotoDetailsScreen';
+  final String lotoId;
 
-  const LotoDetailsScreen({super.key});
+  const LotoDetailsScreen({super.key, required this.lotoId});
 
   @override
   Widget build(BuildContext context) {
-    context.read<LotoDetailsBloc>().add(FetchLotoDetails(lotoTabIndex: 0));
+    context
+        .read<LotoDetailsBloc>()
+        .add(FetchLotoDetails(lotoTabIndex: 0, lotoId: lotoId));
     return Scaffold(
         appBar: GenericAppBar(actions: [
           BlocBuilder<LotoDetailsBloc, LotoDetailsState>(

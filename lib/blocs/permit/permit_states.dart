@@ -1,9 +1,15 @@
+import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
+import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
+import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
 
@@ -41,9 +47,12 @@ class FetchingPermitDetails extends PermitStates {
 class PermitDetailsFetched extends PermitStates {
   final PermitDetailsModel permitDetailsModel;
   final List permitPopUpMenu;
+  final String clientId;
 
   const PermitDetailsFetched(
-      {required this.permitDetailsModel, required this.permitPopUpMenu});
+      {required this.permitDetailsModel,
+      required this.permitPopUpMenu,
+      required this.clientId});
 }
 
 class CouldNotFetchPermitDetails extends PermitStates {
@@ -178,4 +187,197 @@ class ClosePermitDetailsFetched extends PermitStates {
 
 class ClosePermitDetailsError extends PermitStates {
   const ClosePermitDetailsError();
+}
+
+class PreparingPermitLocalDatabase extends PermitStates {
+  const PreparingPermitLocalDatabase();
+}
+
+class PermitLocalDatabasePrepared extends PermitStates {
+  const PermitLocalDatabasePrepared();
+}
+
+class PreparingPermitLocalDatabaseFailed extends PermitStates {
+  const PreparingPermitLocalDatabaseFailed();
+}
+
+class PermitBasicDetailsFetching extends PermitStates {}
+
+class PermitBasicDetailsFetched extends PermitStates {
+  final FetchPermitBasicDetailsModel fetchPermitBasicDetailsModel;
+
+  const PermitBasicDetailsFetched({required this.fetchPermitBasicDetailsModel});
+}
+
+class PermitBasicDetailsNotFetched extends PermitStates {
+  final String errorMessage;
+
+  const PermitBasicDetailsNotFetched({required this.errorMessage});
+}
+
+class DataForOpenPermitFetching extends PermitStates {}
+
+class DataForOpenPermitFetched extends PermitStates {
+  final FetchDataForOpenPermitModel fetchDataForOpenPermitModel;
+  final List<Question> questions;
+
+  const DataForOpenPermitFetched(
+      {required this.questions, required this.fetchDataForOpenPermitModel});
+}
+
+class DataForOpenPermitNotFetched extends PermitStates {
+  final String errorMessage;
+
+  const DataForOpenPermitNotFetched({required this.errorMessage});
+}
+
+class MarkAsPreparedSaving extends PermitStates {}
+
+class MarkAsPreparedSaved extends PermitStates {}
+
+class MarkAsPreparedNotSaved extends PermitStates {
+  final String errorMessage;
+
+  const MarkAsPreparedNotSaved({required this.errorMessage});
+}
+
+class PermitRequestAccepting extends PermitStates {}
+
+class PermitRequestAccepted extends PermitStates {}
+
+class PermitRequestNotAccepted extends PermitStates {
+  final String errorMessage;
+
+  const PermitRequestNotAccepted({required this.errorMessage});
+}
+
+class FetchingClearPermitDetails extends PermitStates {}
+
+class ClearPermitDetailsFetched extends PermitStates {
+  final FetchClearPermitDetailsModel fetchClearPermitDetailsModel;
+  final List<Map<String, dynamic>> customFields;
+
+  ClearPermitDetailsFetched(
+      {required this.fetchClearPermitDetailsModel, required this.customFields});
+}
+
+class ClearPermitDetailsCouldNotFetched extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitDetailsCouldNotFetched({required this.errorMessage});
+}
+
+class SavingClearPermit extends PermitStates {}
+
+class ClearPermitSaved extends PermitStates {}
+
+class ClearPermitNotSaved extends PermitStates {
+  final String errorMessage;
+
+  ClearPermitNotSaved({required this.errorMessage});
+}
+
+class SavingPermitEditSafetyDocument extends PermitStates {}
+
+class PermitEditSafetyDocumentSaved extends PermitStates {
+  final String successMessage;
+
+  PermitEditSafetyDocumentSaved({this.successMessage = ''});
+}
+
+class PermitEditSafetyDocumentNotSaved extends PermitStates {
+  final String errorMessage;
+
+  PermitEditSafetyDocumentNotSaved({required this.errorMessage});
+}
+
+class SurrenderingPermit extends PermitStates {}
+
+class PermitSurrendered extends PermitStates {}
+
+class PermitNotSurrender extends PermitStates {
+  final String errorMessage;
+
+  PermitNotSurrender({required this.errorMessage});
+}
+
+class DataForChangePermitCPFetching extends PermitStates {}
+
+class DataForChangePermitCPFetched extends PermitStates {
+  final FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel;
+
+  DataForChangePermitCPFetched({required this.fetchDataForChangePermitCpModel});
+}
+
+class DataForChangePermitCPNotFetched extends PermitStates {
+  final String errorMessage;
+
+  DataForChangePermitCPNotFetched({required this.errorMessage});
+}
+
+class TransferToSelected extends PermitStates {
+  final String transferType;
+  final String transferValue;
+
+  TransferToSelected({required this.transferType, required this.transferValue});
+}
+
+class TransferCPWorkforceSelected extends PermitStates {
+  final int id;
+  final String name;
+
+  TransferCPWorkforceSelected({required this.id, required this.name});
+}
+
+class TransferCPSapSelected extends PermitStates {
+  final int id;
+  final String name;
+
+  TransferCPSapSelected({required this.id, required this.name});
+}
+
+class TransferValueSelected extends PermitStates {
+  final String value;
+
+  TransferValueSelected({required this.value});
+}
+
+class PermitCPChanging extends PermitStates {}
+
+class PermitCPChanged extends PermitStates {}
+
+class PermitCPNotChanged extends PermitStates {
+  final String errorMessage;
+
+  PermitCPNotChanged({required this.errorMessage});
+}
+
+class SavingOfflineData extends PermitStates {}
+
+class OfflineDataSaved extends PermitStates {
+  final String successMessage;
+
+  OfflineDataSaved({required this.successMessage});
+}
+
+class OfflineDataNotSaved extends PermitStates {
+  final String errorMessage;
+
+  OfflineDataNotSaved({required this.errorMessage});
+}
+
+class GeneratingOfflinePdf extends PermitStates {
+  GeneratingOfflinePdf();
+}
+
+class OfflinePdfGenerated extends PermitStates {
+  final String htmlContent;
+
+  OfflinePdfGenerated({required this.htmlContent});
+}
+
+class ErrorGeneratingPdfOffline extends PermitStates {
+  final String errorMessage;
+
+  ErrorGeneratingPdfOffline({required this.errorMessage});
 }

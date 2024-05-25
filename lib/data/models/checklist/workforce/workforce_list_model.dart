@@ -61,17 +61,17 @@ class GetChecklistData {
 
   factory GetChecklistData.fromJson(Map<String, dynamic> json) =>
       GetChecklistData(
-        id: json["id"],
-        scheduleid: json["scheduleid"],
-        name: json["name"],
-        submitdate: json["submitdate"],
-        overduedate: json["overduedate"],
-        isdraft: json["isdraft"],
-        isoverdue: json["isoverdue"],
-        categoryname: json["categoryname"],
-        subcategoryname: json["subcategoryname"],
-        location: json["location"],
-        isrejected: json["isrejected"],
+        id: json["id"] ?? '',
+        scheduleid: json["scheduleid"] ?? '',
+        name: json["name"] ?? '',
+        submitdate: json["submitdate"] ?? '',
+        overduedate: json["overduedate"] ?? '',
+        isdraft: json["isdraft"] ?? '',
+        isoverdue: json["isoverdue"] ?? '',
+        categoryname: json["categoryname"] ?? '',
+        subcategoryname: json["subcategoryname"] ?? '',
+        location: json["location"] ?? '',
+        isrejected: json["isrejected"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

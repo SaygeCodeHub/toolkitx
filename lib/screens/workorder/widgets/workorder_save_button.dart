@@ -9,7 +9,6 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_even
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
-import '../workorder_details_tab_screen.dart';
 import '../workorder_form_one_screen.dart';
 import '../workorder_form_screen_four.dart';
 import '../workorder_list_screen.dart';
@@ -47,8 +46,9 @@ class WorkOrderSaveButton extends StatelessWidget {
                     context.read<WorkOrderTabDetailsBloc>().add(
                         WorkOrderDetails(
                             initialTabIndex: 0,
-                            workOrderId: WorkOrderDetailsTabScreen
-                                .workOrderMap['workOrderId']));
+                            workOrderId: context
+                                .read<WorkOrderTabDetailsBloc>()
+                                .workOrderId));
                   } else {
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -72,8 +72,8 @@ class WorkOrderSaveButton extends StatelessWidget {
                   Navigator.pop(context);
                   context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
                       initialTabIndex: 0,
-                      workOrderId: WorkOrderDetailsTabScreen
-                          .workOrderMap['workOrderId']));
+                      workOrderId:
+                          context.read<WorkOrderTabDetailsBloc>().workOrderId));
                 } else if (state is WorkOrderDetailsCouldNotUpdate) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.detailsNotFetched, '');

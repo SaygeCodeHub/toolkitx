@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../blocs/expense/expense_bloc.dart';
 import '../../../../blocs/expense/expense_event.dart';
 import '../../../../blocs/expense/expense_state.dart';
+import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../utils/database_utils.dart';
@@ -31,6 +33,8 @@ class ExpenseEditFormTwo extends StatelessWidget {
         bottomNavigationBar: BottomAppBar(
           child: PrimaryButton(
               onPressed: () {
+                context.read<ImagePickerBloc>().pickedImagesList.clear();
+                context.read<ImagePickerBloc>().add(PickImageInitial());
                 Navigator.pushNamed(context, ExpenseEditFormThree.routeName);
               },
               textValue: DatabaseUtil.getText('nextButtonText')),

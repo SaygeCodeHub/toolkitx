@@ -29,11 +29,11 @@ abstract class ModulesUtil {
         offLineSupport: true,
         key: 'ptw',
         notificationKey: 'permit'),
-    ModulesModel(
-        moduleName: 'Accounting',
-        moduleImage: '${kBaseImagePath}accounting.png',
-        key: 'accounting',
-        notificationKey: 'accounting'),
+    // ModulesModel(
+    //     moduleName: 'Accounting',
+    //     moduleImage: '${kBaseImagePath}accounting.png',
+    //     key: 'accounting',
+    //     notificationKey: 'accounting'),
     ModulesModel(
         moduleName: 'TimeVacation',
         moduleImage: '${kBaseImagePath}holiday.png',
@@ -64,11 +64,11 @@ abstract class ModulesUtil {
         moduleImage: '${kBaseImagePath}workOrder.png',
         key: 'workorder',
         notificationKey: 'workorder'),
-    ModulesModel(
-        moduleName: 'meetingRoom',
-        moduleImage: '${kBaseImagePath}briefing.png',
-        key: 'meeting',
-        notificationKey: 'meeting'),
+    // ModulesModel(
+    //     moduleName: 'meetingRoom',
+    //     moduleImage: '${kBaseImagePath}briefing.png',
+    //     key: 'meeting',
+    //     notificationKey: 'meeting'),
     ModulesModel(
         moduleName: 'Assets',
         moduleImage: '${kBaseImagePath}assets.png',
@@ -126,17 +126,17 @@ abstract class ModulesUtil {
         notificationKey: 'tickets'),
     ModulesModel(
         moduleName: 'Trips',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}trip.png',
         key: 'hf',
         notificationKey: ''),
     ModulesModel(
         moduleName: 'Trips',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}trip.png',
         key: 'wf_trips',
         notificationKey: ''),
     ModulesModel(
         moduleName: 'Signout',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}sign_in_qr.png',
         key: 'tracking',
         notificationKey: ''),
   ];

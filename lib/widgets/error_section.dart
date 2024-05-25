@@ -7,15 +7,14 @@ class GenericReloadButton extends StatelessWidget {
   final String textValue;
 
   const GenericReloadButton(
-      {Key? key, required this.onPressed, required this.textValue})
-      : super(key: key);
+      {super.key, required this.onPressed, required this.textValue});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: onPressed,
         style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-            minimumSize: const MaterialStatePropertyAll(
+            minimumSize: const WidgetStatePropertyAll(
                 Size(kErrorButtonWidth, kErrorButtonHeight))),
         child: Text(textValue));
   }

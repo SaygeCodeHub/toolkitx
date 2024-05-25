@@ -96,7 +96,8 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
       String? clientId = await _customerCache.getClientId(CacheKeys.clientId);
       String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey);
       FetchLotoDetailsModel fetchLotoDetailsModel =
-          await _lotoRepository.fetchLotoDetailsRepo(hashCode!, lotoId);
+          await _lotoRepository.fetchLotoDetailsRepo(hashCode!, event.lotoId);
+      lotoId = event.lotoId;
       if (fetchLotoDetailsModel.data.isstart == '1') {
         popUpMenuItemsList.insert(0, DatabaseUtil.getText('Start'));
       }

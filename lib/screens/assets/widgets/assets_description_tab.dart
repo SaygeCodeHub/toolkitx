@@ -20,17 +20,26 @@ class AssetsDescriptionTab extends StatelessWidget {
               .copyWith(fontWeight: FontWeight.bold, color: AppColor.grey)),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kScAsset,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.scasset, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kChildPattern,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.childpattern, style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kDescription,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.description, style: Theme.of(context).textTheme.smallTextGrey),
     ]);

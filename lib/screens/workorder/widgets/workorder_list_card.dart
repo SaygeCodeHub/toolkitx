@@ -18,13 +18,8 @@ class WorkOrderListCard extends StatelessWidget {
     return CustomCard(
       child: ListTile(
         onTap: () {
-          Map workOrderMap = {
-            'workOrderId': data.id,
-            'status': data.status,
-            'workOrderName': data.woname
-          };
-          WorkOrderDetailsTabScreen.workOrderMap = workOrderMap;
-          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName)
+          Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
+                  arguments: data.id)
               .then((value) => Navigator.pushReplacementNamed(
                   context, WorkOrderListScreen.routeName,
                   arguments: false));

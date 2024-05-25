@@ -58,7 +58,7 @@ class DocumentDetailsComments extends StatelessWidget {
                                             .xxSmall
                                             .copyWith(
                                                 color: AppColor.deepBlue)),
-                                    const SizedBox(height: xxTiniestSpacing),
+                                    const SizedBox(height: xxTinierSpacing),
                                     CustomGridImages(
                                         files: documentDetailsModel
                                             .data.comments[index].files,

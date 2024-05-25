@@ -56,6 +56,9 @@ class TicketData {
   final String invoice;
   final String commentscount;
   final String doccount;
+  final String canaddcomments;
+  final String canadddocuments;
+  final String canopenticket;
   final String candeferred;
   final String canestimateedt;
   final String canapprovedfordevelopment;
@@ -64,9 +67,11 @@ class TicketData {
   final String candevelopment;
   final String cantesting;
   final String canapproved;
+  final String canbacktoapproved;
   final String canrolledout;
-  final String canaddcomments;
-  final String canadddocuments;
+  final String canapproverolledout;
+  final String canapprovedfordevelopmentvo;
+  final String canapprovedfordevelopmentvo2;
   final String id;
   final List<Ment> comments;
   final List<Ment> documents;
@@ -97,6 +102,9 @@ class TicketData {
     required this.invoice,
     required this.commentscount,
     required this.doccount,
+    required this.canaddcomments,
+    required this.canadddocuments,
+    required this.canopenticket,
     required this.candeferred,
     required this.canestimateedt,
     required this.canapprovedfordevelopment,
@@ -105,9 +113,11 @@ class TicketData {
     required this.candevelopment,
     required this.cantesting,
     required this.canapproved,
+    required this.canbacktoapproved,
     required this.canrolledout,
-    required this.canaddcomments,
-    required this.canadddocuments,
+    required this.canapproverolledout,
+    required this.canapprovedfordevelopmentvo,
+    required this.canapprovedfordevelopmentvo2,
     required this.id,
     required this.comments,
     required this.documents,
@@ -139,6 +149,9 @@ class TicketData {
         invoice: json["invoice"],
         commentscount: json["commentscount"],
         doccount: json["doccount"],
+        canaddcomments: json["canaddcomments"],
+        canadddocuments: json["canadddocuments"],
+        canopenticket: json["canopenticket"],
         candeferred: json["candeferred"],
         canestimateedt: json["canestimateedt"],
         canapprovedfordevelopment: json["canapprovedfordevelopment"],
@@ -148,9 +161,11 @@ class TicketData {
         candevelopment: json["candevelopment"],
         cantesting: json["cantesting"],
         canapproved: json["canapproved"],
+        canbacktoapproved: json["canbacktoapproved"],
         canrolledout: json["canrolledout"],
-        canaddcomments: json["canaddcomments"],
-        canadddocuments: json["canadddocuments"],
+        canapproverolledout: json["canapproverolledout"],
+        canapprovedfordevelopmentvo: json["canapprovedfordevelopmentvo"],
+        canapprovedfordevelopmentvo2: json["canapprovedfordevelopmentvo2"],
         id: json["id"],
         comments:
             List<Ment>.from(json["comments"].map((x) => Ment.fromJson(x))),
@@ -184,6 +199,9 @@ class TicketData {
         "invoice": invoice,
         "commentscount": commentscount,
         "doccount": doccount,
+        "canaddcomments": canaddcomments,
+        "canadddocuments": canadddocuments,
+        "canopenticket": canopenticket,
         "candeferred": candeferred,
         "canestimateedt": canestimateedt,
         "canapprovedfordevelopment": canapprovedfordevelopment,
@@ -192,9 +210,11 @@ class TicketData {
         "candevelopment": candevelopment,
         "cantesting": cantesting,
         "canapproved": canapproved,
+        "canbacktoapproved": canbacktoapproved,
         "canrolledout": canrolledout,
-        "canaddcomments": canaddcomments,
-        "canadddocuments": canadddocuments,
+        "canapproverolledout": canapproverolledout,
+        "canapprovedfordevelopmentvo": canapprovedfordevelopmentvo,
+        "canapprovedfordevelopmentvo2": canapprovedfordevelopmentvo2,
         "id": id,
         "comments": List<dynamic>.from(comments.map((x) => x.toJson())),
         "documents": List<dynamic>.from(documents.map((x) => x.toJson())),

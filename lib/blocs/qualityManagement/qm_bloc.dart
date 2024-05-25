@@ -270,7 +270,7 @@ class QualityManagementBloc
               saveIncidentAndQMCommentsFilesModel:
                   saveIncidentAndQMCommentsFilesModel,
               qmId: encryptQmId));
-          if (saveCommentMap['filenames'] != null) {
+          if (saveCommentMap['ImageString'] != null) {
             add(SaveQualityManagementCommentsFiles(
                 saveCommentsMap: saveCommentMap,
                 saveIncidentAndQMCommentsModel:
@@ -297,7 +297,7 @@ class QualityManagementBloc
         "userid": userid,
         "incidentid": encryptQmId,
         "commentid": commentId,
-        "filenames": saveFilesMap['filenames'],
+        "filenames": saveFilesMap['ImageString'],
         "hashcode": hashCode,
       };
       SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel =

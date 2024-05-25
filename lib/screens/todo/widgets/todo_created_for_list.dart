@@ -3,6 +3,7 @@ import 'package:searchable_listview/searchable_listview.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -17,10 +18,9 @@ class ToDoCreatedForList extends StatefulWidget {
   final CreatedForListCallBack onCreatedForChanged;
 
   const ToDoCreatedForList(
-      {Key? key,
+      {super.key,
       required this.todoMasterDatum,
-      required this.onCreatedForChanged})
-      : super(key: key);
+      required this.onCreatedForChanged});
 
   @override
   State<ToDoCreatedForList> createState() => _ToDoCreatedForListState();
@@ -60,45 +60,42 @@ class _ToDoCreatedForListState extends State<ToDoCreatedForList> {
               right: leftRightMargin,
               top: xxTinierSpacing),
           child: SearchableList(
-              autoFocusOnSearch: false,
-              initialList: widget.todoMasterDatum,
-              builder: (List<ToDoMasterDatum> todoDatumList, index,
-                  ToDoMasterDatum todoMasterDatum) {
-                return CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    activeColor: AppColor.deepBlue,
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    title: Text(todoMasterDatum.name),
-                    value:
-                        selectedCreatedForIdList.contains(todoMasterDatum.id),
-                    onChanged: (isChecked) {
-                      setState(() {
-                        checkBoxChange(isChecked!, todoMasterDatum.id,
-                            todoMasterDatum.name);
-                      });
+            initialList: widget.todoMasterDatum,
+            itemBuilder: (ToDoMasterDatum item) {
+              return CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  activeColor: AppColor.deepBlue,
+                  controlAffinity: ListTileControlAffinity.trailing,
+                  title: Text(item.name),
+                  value: selectedCreatedForIdList.contains(item.id),
+                  onChanged: (isChecked) {
+                    setState(() {
+                      checkBoxChange(isChecked!, item.id, item.name);
                     });
-              },
-              emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
-              filter: (value) => widget.todoMasterDatum
-                  .where((element) => element.name
-                      .toLowerCase()
-                      .contains(value.toLowerCase().trim()))
-                  .toList(),
-              inputDecoration: InputDecoration(
-                  suffix: const SizedBox(),
-                  suffixIcon: const Icon(Icons.search_sharp, size: kIconSize),
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .xSmall
-                      .copyWith(color: AppColor.grey),
-                  hintText: StringConstants.kSearch,
-                  contentPadding: const EdgeInsets.all(xxxTinierSpacing),
-                  enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightGrey)),
-                  focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.lightGrey)),
-                  filled: true,
-                  fillColor: AppColor.white)),
+                  });
+            },
+            emptyWidget: Text(DatabaseUtil.getText('no_records_found')),
+            filter: (value) => widget.todoMasterDatum
+                .where((element) => element.name
+                    .toLowerCase()
+                    .contains(value.toLowerCase().trim()))
+                .toList(),
+            inputDecoration: InputDecoration(
+                suffix: const SizedBox(),
+                suffixIcon: const Icon(Icons.search_sharp, size: kIconSize),
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .xSmall
+                    .copyWith(color: AppColor.grey),
+                hintText: StringConstants.kSearch,
+                contentPadding: const EdgeInsets.all(xxxTinierSpacing),
+                enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightGrey)),
+                focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.lightGrey)),
+                filled: true,
+                fillColor: AppColor.white),
+          ),
         ));
   }
 }

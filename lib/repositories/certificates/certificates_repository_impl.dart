@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/certificates/get_quiz_questions_model.dart';
 import 'package:toolkit/data/models/certificates/get_quiz_report_model.dart';
 import 'package:toolkit/data/models/certificates/get_topic_certificate_model.dart';
 import 'package:toolkit/data/models/certificates/reattempt_certificate_quiz_model.dart';
+import 'package:toolkit/data/models/certificates/save_certificate_feedback_model.dart';
 import 'package:toolkit/data/models/certificates/update_user_track_model.dart';
 import 'package:toolkit/data/models/certificates/get_workforce_quiz_model.dart';
 import 'package:toolkit/data/models/certificates/save_question_answer.dart';
@@ -139,5 +140,14 @@ class CertificateRepositoryImpl extends CertificateRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}certificate/RetakeQuiz", reattemptQuizMap);
     return ReattemptCertificateQuizModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveCertificateFeedbackModel> saveCertificateFeedback(
+      Map saveFeedbackMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}certificate/SaveFeedbackQuestions",
+        saveFeedbackMap);
+    return SaveCertificateFeedbackModel.fromJson(response);
   }
 }

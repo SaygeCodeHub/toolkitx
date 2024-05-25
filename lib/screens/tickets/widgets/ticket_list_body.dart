@@ -32,7 +32,7 @@ class TicketListBody extends StatelessWidget {
                           arguments: ticketListDatum[index].id)
                       .then((_) => Navigator.pushReplacementNamed(
                           context, TicketListScreen.routeName,
-                          arguments: false));
+                          arguments: true));
                 },
                 title: Text(ticketListDatum[index].ticketNo,
                     style: Theme.of(context).textTheme.small.copyWith(
