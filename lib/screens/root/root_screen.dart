@@ -19,6 +19,7 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/global.dart';
@@ -41,6 +42,7 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
+  final CustomerCache customerCache = getIt<CustomerCache>();
 
   @override
   void initState() {
@@ -92,17 +94,17 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
+        Map<String, dynamic> lastChatMessage =
+            await databaseHelper.getLastMessage();
         if (chatScreenName == ChatMessagingScreen.routeName) {
-          context
-              .read<ChatBloc>()
-              .add(RebuildChatMessagingScreen(employeeDetailsMap: {
-                'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
-                'rtype': ChatBloc().chatDetailsMap['rtype'] ?? ''
-              }));
+          context.read<ChatBloc>().add(RebuildChatMessagingScreen(
+                  employeeDetailsMap: {
+                    'rid': lastChatMessage['sid'],
+                    'rtype': lastChatMessage['stype']
+                  }));
         } else {
           context.read<ChatBloc>().add(FetchChatsList());
         }
-
         break;
       case AppLifecycleState.inactive:
         break;

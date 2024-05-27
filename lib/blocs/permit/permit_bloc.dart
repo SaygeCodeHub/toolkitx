@@ -1122,15 +1122,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "hashcode": hashCode,
         "permitid": event.permitId,
         "userid": userId,
-        "npw": event.changePermitCPMap['npw'],
-        "sap": event.changePermitCPMap['sap'],
+        "npw": event.changePermitCPMap['npw'] ?? '',
+        "sap": event.changePermitCPMap['sap'] ?? '',
         "role": roleId,
         "controlroom": event.changePermitCPMap['controlePerson']
       };
       if (isNetworkEstablished) {
         emit(PermitCPChanging());
-        if ((event.changePermitCPMap['sap'] != '' &&
-            event.changePermitCPMap['controlePerson'] != null)) {
+        if (event.changePermitCPMap['controlePerson'] != null ||
+            event.changePermitCPMap['controlePerson'] != '') {
           ChangePermitCpModel changePermitCpModel =
               await _permitRepository.changePermitCP(changePermitCPMap);
           if (changePermitCpModel.message == '1') {
