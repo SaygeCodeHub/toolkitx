@@ -9,7 +9,12 @@ import '../../../data/models/loto/fetch_loto_assign_workforce_model.dart';
 import '../../../widgets/custom_card.dart';
 
 class LotoAssignWorkforceCard extends StatelessWidget {
-  const LotoAssignWorkforceCard({super.key, required this.workForceDatum});
+  const LotoAssignWorkforceCard(
+      {super.key,
+      required this.workForceDatum,
+      required this.isRemoveOperation});
+
+  final String isRemoveOperation;
 
   final LotoWorkforceDatum workForceDatum;
 
@@ -25,8 +30,7 @@ class LotoAssignWorkforceCard extends StatelessWidget {
                     fontWeight: FontWeight.w500, color: AppColor.grey)),
             trailing: InkWell(
                 onTap: () {
-                  if (context.read<LotoDetailsBloc>().isWorkforceRemove ==
-                      "1") {
+                  if (isRemoveOperation == "1") {
                     context.read<LotoDetailsBloc>().add(
                         RemoveAssignWorkforce(peopleId: workForceDatum.id));
                   } else {

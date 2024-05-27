@@ -17,7 +17,8 @@ import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
 
 class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
-  const WorkOrderSaveCommentsBottomBar({super.key, required this.addCommentsMap});
+  const WorkOrderSaveCommentsBottomBar(
+      {super.key, required this.addCommentsMap});
   final Map addCommentsMap;
 
   @override

@@ -24,7 +24,8 @@ class ReportNewQA extends StatelessWidget {
   static const routeName = 'ReportNewQA';
   static bool isFromEdit = false;
 
-  const ReportNewQA({Key? key}) : super(key: key);
+  const ReportNewQA({super.key});
+
   static Map reportAndEditQMMap = {};
   static String eventDate = '';
 
@@ -153,11 +154,8 @@ class ReportNewQA extends StatelessWidget {
                                     .split(","),
                                 isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
-                                  reportAndEditQMMap['filenames'] =
-                                      uploadImageList
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
+                                  reportAndEditQMMap['pickedImage'] =
+                                      uploadImageList;
                                 },
                               ),
                               const SizedBox(height: xxTinySpacing),

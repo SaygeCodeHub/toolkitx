@@ -435,7 +435,8 @@ class AppRoutes {
       case DocumentFilterScreen.routeName:
         return _createRoute(const DocumentFilterScreen());
       case LotoAssignTeamScreen.routeName:
-        return _createRoute(const LotoAssignTeamScreen());
+        return _createRoute(LotoAssignTeamScreen(
+            isRemoveOperation: settings.arguments.toString()));
       case WorkOrderAddCommentsScreen.routeName:
         return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
@@ -447,7 +448,8 @@ class AppRoutes {
         return _createRoute(
             SafetyNoticeScreen(isFromHomeScreen: settings.arguments as bool));
       case LotoAssignWorkforceScreen.routeName:
-        return _createRoute(const LotoAssignWorkforceScreen());
+        return _createRoute(LotoAssignWorkforceScreen(
+            isRemoveOperation: settings.arguments.toString()));
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
       case LotoUploadPhotosScreen.routeName:

@@ -26,7 +26,8 @@ class StartLotoScreen extends StatelessWidget {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     context.read<LotoDetailsBloc>().isFromFirst = true;
-    context.read<LotoDetailsBloc>().add(FetchLotoChecklistQuestions());
+    context.read<LotoDetailsBloc>().add(FetchLotoChecklistQuestions(
+        isRemoveOperation: isFromStartRemoveLoto ? "1" : "0"));
     context.read<LotoDetailsBloc>().answerList = [];
     startLotoMap = {};
     return Scaffold(
