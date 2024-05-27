@@ -526,7 +526,7 @@ class QualityManagementBloc
             qualityManagementNotSavedMessage:
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
-      (reportNewQAMap['filenames'] != null)
+      (reportNewQAMap['ImageString'] != null)
           ? add(SaveReportNewQualityManagementPhotos(
               reportNewQAMap: reportNewQAMap))
           : null;
@@ -548,7 +548,7 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveQMPhotosMap = {
         "incidentid": newQmId,
-        "filenames": reportNewQAMap['filenames'],
+        "filenames": reportNewQAMap['ImageString'],
         "hashcode": hashCode
       };
       SaveQualityManagementPhotos saveQualityManagementPhotos =
@@ -588,7 +588,7 @@ class QualityManagementBloc
           await _qualityManagementRepository
               .updateQualityManagementDetails(updateQMDetailsMap);
       if (updateQualityManagementDetailsModel.status == 200) {
-        (event.editQMDetailsMap['filenames'] != null)
+        (event.editQMDetailsMap['ImageString'] != null)
             ? add(SaveReportNewQualityManagementPhotos(
                 reportNewQAMap: event.editQMDetailsMap))
             : null;

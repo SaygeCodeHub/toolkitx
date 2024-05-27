@@ -23,8 +23,8 @@ class ReportNewIncidentScreen extends StatelessWidget {
   static int imageIndex = 0;
   static String clientId = '';
 
-  const ReportNewIncidentScreen({Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+  const ReportNewIncidentScreen(
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,8 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       UploadImageMenu(
                         isUpload: true,
                         onUploadImageResponse: (List uploadImageList) {
-                          addAndEditIncidentMap['filenames'] = uploadImageList;
+                          addAndEditIncidentMap['pickedImage'] =
+                              uploadImageList;
                         },
                       ),
                       const SizedBox(height: xxTinySpacing),
