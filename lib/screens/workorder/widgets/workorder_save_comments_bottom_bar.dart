@@ -17,7 +17,8 @@ import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
 
 class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
-  const WorkOrderSaveCommentsBottomBar({super.key, required this.addCommentsMap});
+  const WorkOrderSaveCommentsBottomBar(
+      {super.key, required this.addCommentsMap});
   final Map addCommentsMap;
 
   @override
@@ -34,63 +35,62 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
           )),
           const SizedBox(width: xxTinierSpacing),
           MultiBlocListener(
-  listeners: [
-    BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
-              listener: (context, state) {
-                if (state is SavingWorkOrderComments) {
-                  ProgressBar.show(context);
-                } else if (state is WorkOrderCommentsSaved) {
-                  ProgressBar.dismiss(context);
-                  Navigator.pop(context);
-                  context.read<WorkOrderTabDetailsBloc>().add(WorkOrderDetails(
-                      initialTabIndex: 4,
-                      workOrderId: addCommentsMap['workorderId']));
-                } else if (state is WorkOrderCommentsNotSaved) {
-                  ProgressBar.dismiss(context);
-                  showCustomSnackBar(context, state.commentsNotSaved, '');
-                }
-              },
+            listeners: [
+              BlocListener<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
+                listener: (context, state) {
+                  if (state is SavingWorkOrderComments) {
+                    ProgressBar.show(context);
+                  } else if (state is WorkOrderCommentsSaved) {
+                    ProgressBar.dismiss(context);
+                    Navigator.pop(context);
+                    context.read<WorkOrderTabDetailsBloc>().add(
+                        WorkOrderDetails(
+                            initialTabIndex: 4,
+                            workOrderId: addCommentsMap['workorderId']));
+                  } else if (state is WorkOrderCommentsNotSaved) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(context, state.commentsNotSaved, '');
+                  }
+                },
               ),
-    BlocListener<UploadImageBloc, UploadImageState>(
-      listener: (context, state) {
-        if (state is UploadingImage) {
-          GenericLoadingPopUp.show(
-              context, StringConstants.kUploadFiles);
-        } else if (state is ImageUploaded) {
-          GenericLoadingPopUp.dismiss(context);
-          addCommentsMap['ImageString'] = state.images
-              .toString()
-              .replaceAll('[', '')
-              .replaceAll(']', '')
-              .replaceAll(' ', '');
-          context
-              .read<WorkOrderTabDetailsBloc>()
-              .add(SaveWorkOrderComments(addCommentsMap: addCommentsMap));
-        } else if (state is ImageCouldNotUpload) {
-          GenericLoadingPopUp.dismiss(context);
-          showCustomSnackBar(context, state.errorMessage, '');
-        }
-      },
-    ),
-  ],
-  child: Expanded(
-                child: PrimaryButton(
-                    onPressed: () {
-                      if ( addCommentsMap['pickedImage'] != null &&
-                          addCommentsMap['pickedImage'].isNotEmpty) {
-                        context.read<UploadImageBloc>().add(UploadImage(
-                            images:  addCommentsMap['pickedImage'],
-                            imageLength: context
-                                .read<ImagePickerBloc>()
-                                .lengthOfImageList));
-                      }
-                      context
-                          .read<WorkOrderTabDetailsBloc>()
-                          .add(SaveWorkOrderComments(addCommentsMap: addCommentsMap));
-                    },
-                    textValue: StringConstants.kSave),
+              BlocListener<UploadImageBloc, UploadImageState>(
+                listener: (context, state) {
+                  if (state is UploadingImage) {
+                    GenericLoadingPopUp.show(
+                        context, StringConstants.kUploadFiles);
+                  } else if (state is ImageUploaded) {
+                    GenericLoadingPopUp.dismiss(context);
+                    addCommentsMap['ImageString'] = state.images
+                        .toString()
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .replaceAll(' ', '');
+                    context.read<WorkOrderTabDetailsBloc>().add(
+                        SaveWorkOrderComments(addCommentsMap: addCommentsMap));
+                  } else if (state is ImageCouldNotUpload) {
+                    GenericLoadingPopUp.dismiss(context);
+                    showCustomSnackBar(context, state.errorMessage, '');
+                  }
+                },
               ),
-),
+            ],
+            child: Expanded(
+              child: PrimaryButton(
+                  onPressed: () {
+                    if (addCommentsMap['pickedImage'] != null &&
+                        addCommentsMap['pickedImage'].isNotEmpty) {
+                      context.read<UploadImageBloc>().add(UploadImage(
+                          images: addCommentsMap['pickedImage'],
+                          imageLength: context
+                              .read<ImagePickerBloc>()
+                              .lengthOfImageList));
+                    }
+                    context.read<WorkOrderTabDetailsBloc>().add(
+                        SaveWorkOrderComments(addCommentsMap: addCommentsMap));
+                  },
+                  textValue: StringConstants.kSave),
+            ),
+          ),
         ],
       ),
     );

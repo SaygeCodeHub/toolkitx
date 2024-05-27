@@ -61,16 +61,15 @@ class CertificateButtonRow extends StatelessWidget {
       Expanded(
           child: CustomTextButton(
         onPressed:
-        // data.accesscertificate != "1"
-        //     ?
+            // data.accesscertificate != "1"
+            //     ?
             () {
-                String certificateId = data.id;
-                Navigator.pushNamed(
-                    context, GetCourseCertificateScreen.routeName,
-                    arguments: certificateId);
-              }
-            // : null
-            ,
+          String certificateId = data.id;
+          Navigator.pushNamed(context, GetCourseCertificateScreen.routeName,
+              arguments: certificateId);
+        }
+        // : null
+        ,
         textValue: StringConstants.kStartCourse,
         textColor:
             data.accesscertificate == "1" ? AppColor.deepBlue : AppColor.grey,

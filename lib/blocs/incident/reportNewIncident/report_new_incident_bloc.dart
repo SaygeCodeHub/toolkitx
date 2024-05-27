@@ -273,7 +273,7 @@ class ReportNewIncidentBloc
             incidentNotSavedMessage:
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
-      (reportNewIncidentMap['filenames'] != null)
+      (reportNewIncidentMap['ImageString'] != null)
           ? add(SaveReportNewIncidentPhotos(
               reportNewIncidentMap: reportNewIncidentMap))
           : null;
@@ -293,7 +293,7 @@ class ReportNewIncidentBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveIncidentPhotosMap = {
         "incidentid": incidentId,
-        "filenames": reportNewIncidentMap['filenames'],
+        "filenames": reportNewIncidentMap['ImageString'],
         "hashcode": hashCode
       };
       SaveReportNewIncidentPhotosModel saveReportNewIncidentPhotosModel =

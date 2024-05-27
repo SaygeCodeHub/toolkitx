@@ -25,7 +25,7 @@ class LotoViewChecklistTab extends StatelessWidget {
     return Column(
       children: [
         Visibility(
-          visible: data.isremove == '1' ? false : true,
+          visible: true,
           child: BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
             buildWhen: (previousState, currentState) =>
                 currentState is LotoAssignedChecklistFetching ||

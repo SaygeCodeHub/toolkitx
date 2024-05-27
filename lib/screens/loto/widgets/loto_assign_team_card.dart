@@ -13,9 +13,11 @@ class LotoAssignTeamCard extends StatelessWidget {
   const LotoAssignTeamCard({
     super.key,
     required this.lotoAssignTeamDatum,
+    required this.isRemoveOperation,
   });
 
   final LotoAssignTeamDatum lotoAssignTeamDatum;
+  final String isRemoveOperation;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class LotoAssignTeamCard extends StatelessWidget {
                     fontWeight: FontWeight.w500, color: AppColor.grey)),
             trailing: InkWell(
                 onTap: () {
-                  context.read<LotoDetailsBloc>().isWorkforceRemove != "1"
+                  isRemoveOperation != "1"
                       ? context.read<LotoDetailsBloc>().add(
                           SaveLotoAssignTeam(teamId: lotoAssignTeamDatum.id))
                       : context.read<LotoDetailsBloc>().add(

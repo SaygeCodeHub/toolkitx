@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:pod_player/pod_player.dart';
@@ -8,7 +7,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import '../../utils/constants/api_constants.dart';
-
 
 class GetNotesCertificateBody extends StatefulWidget {
   const GetNotesCertificateBody(
@@ -44,7 +42,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
       params = const PlatformWebViewControllerCreationParams();
     }
     final WebViewController controller =
-    WebViewController.fromPlatformCreationParams(params);
+        WebViewController.fromPlatformCreationParams(params);
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)

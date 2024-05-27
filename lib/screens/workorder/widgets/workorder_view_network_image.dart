@@ -31,12 +31,11 @@ class WorkOrderViewNetworkImage extends StatelessWidget {
                     mode: LaunchMode.inAppWebView);
               },
               child: Padding(
-                padding: const EdgeInsets.only(
-                    bottom: xxxTinierSpacing),
+                padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
                 child: Text(
-                    ViewImageUtil.viewImageList(comment.files.toString())[index],
-                    style: const TextStyle(
-                        color: AppColor.deepBlue)),
+                    ViewImageUtil.viewImageList(
+                        comment.files.toString())[index],
+                    style: const TextStyle(color: AppColor.deepBlue)),
               ));
         });
   }

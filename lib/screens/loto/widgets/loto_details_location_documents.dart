@@ -37,7 +37,6 @@ class LotoDetailsLocationDocuments extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: data.locdocs.length,
               shrinkWrap: true,
-
               itemBuilder: (context, index) {
                 String files = data.locdocs[index].filename;
                 return InkWell(
@@ -49,12 +48,9 @@ class LotoDetailsLocationDocuments extends StatelessWidget {
                           mode: LaunchMode.inAppWebView);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: xxxTinierSpacing),
-                      child: Text(
-                          ViewImageUtil.viewImageList(files)[index],
-                          style: const TextStyle(
-                              color: AppColor.deepBlue)),
+                      padding: const EdgeInsets.only(bottom: xxxTinierSpacing),
+                      child: Text(ViewImageUtil.viewImageList(files)[index],
+                          style: const TextStyle(color: AppColor.deepBlue)),
                     ));
               }),
         ],

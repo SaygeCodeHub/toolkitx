@@ -95,7 +95,7 @@ class LotoPopupMenuButton extends StatelessWidget {
             context.read<LotoDetailsBloc>().lotoWorkforceReachedMax = false;
             LotoAssignWorkforceScreen.pageNo = 1;
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
-                    arguments: fetchLotoDetailsModel.data.id)
+                    arguments: "0")
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
                           lotoTabIndex:
@@ -138,7 +138,8 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value ==
               DatabaseUtil.getText('assign_workforce_for_remove_loto')) {
-            Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName)
+            Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
+                    arguments: "1")
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
                           lotoTabIndex: 0,
