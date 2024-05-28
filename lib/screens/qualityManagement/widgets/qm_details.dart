@@ -68,7 +68,7 @@ class QualityManagementDetails extends StatelessWidget {
             ),
             const SizedBox(height: xxTinierSpacing),
             Visibility(
-                visible: data.files.isNotEmpty,
+                visible: data.files!.isNotEmpty,
                 child: QualityManagementViewNetworkImage(
                     clientId: clientId, data: data)),
             const SizedBox(height: tinySpacing)

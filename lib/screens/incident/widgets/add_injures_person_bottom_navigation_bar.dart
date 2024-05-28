@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/incident/incident_details_screen.dart';
 
 import '../../../blocs/incident/editIncidentDetails/edit_incident_details_bloc.dart';
 import '../../../blocs/incident/editIncidentDetails/edit_incident_details_events.dart';
 import '../../../blocs/incident/editIncidentDetails/edit_incident_details_states.dart';
 import '../../../blocs/incident/incidentDetails/incident_details_bloc.dart';
-import '../../../blocs/incident/incidentDetails/incident_details_event.dart';
 import '../../../blocs/incident/incidentListAndFilter/incident_list_and_filter_bloc.dart';
 import '../../../blocs/incident/incidentListAndFilter/incident_list_and_filter_event.dart';
 import '../../../blocs/incident/reportNewIncident/report_new_incident_bloc.dart';
@@ -74,14 +74,10 @@ class AddInjuredPersonBottomNavBar extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    context
-                        .read<IncidentDetailsBloc>()
-                        .add(FetchIncidentDetailsEvent(
-                          initialIndex: 0,
-                          incidentId:
-                              context.read<IncidentDetailsBloc>().incidentId,
-                          role: context.read<IncidentLisAndFilterBloc>().roleId,
-                        ));
+                    Navigator.pushReplacementNamed(
+                        context, IncidentDetailsScreen.routeName,
+                        arguments:
+                            context.read<IncidentDetailsBloc>().incidentId);
                   } else if (state is IncidentDetailsNotEdited) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.incidentNotEdited, '');
