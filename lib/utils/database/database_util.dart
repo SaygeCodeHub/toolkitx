@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -196,9 +197,10 @@ class DatabaseHelper {
     try {
       DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
       sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
-      print('insertMessage db $sendMessageMap');
-      await db.insert('chat_messages', sendMessageMap,
+      // print('insertMessage db $sendMessageMap');
+      int temp = await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.ignore);
+      print('insertMessage db $temp');
     } catch (e) {
       rethrow;
     }
@@ -308,7 +310,6 @@ class DatabaseHelper {
     List<Map<String, dynamic>> messages = [];
     messages = await db.rawQuery(
         'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC');
-    log('chat details $messages');
     if (messages.isNotEmpty) {
       return messages;
     } else {

@@ -171,11 +171,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             };
             await _databaseHelper.insertMessage(chatDetailsMap).then((result) {
               if (chatScreenName == ChatMessagingScreen.routeName) {
-                ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-                  'rid': item.msgJson.toJson()['sid'].toString(),
-                  'rtype': item.msgJson.toJson()['stype'].toString(),
-                  'employee_name': item.userName
-                }));
+                ChatBloc().add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: ChatBloc().chatDetailsMap));
               } else {
                 ChatBloc().add(FetchChatsList());
               }

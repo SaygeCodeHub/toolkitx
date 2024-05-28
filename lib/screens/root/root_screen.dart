@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/client/client_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
@@ -94,18 +96,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        Future.delayed(const Duration(seconds: 5));
-        Map<String, dynamic> lastChatMessage =
-            await databaseHelper.getLastMessage();
-        if (chatScreenName == ChatMessagingScreen.routeName) {
-          context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-                  employeeDetailsMap: {
-                    'rid': lastChatMessage['sid'],
-                    'rtype': lastChatMessage['stype']
-                  }));
-        } else {
-          context.read<ChatBloc>().add(FetchChatsList());
-        }
+        context.read<ClientBloc>().add(FetchChatMessages());
         break;
       case AppLifecycleState.inactive:
         break;
