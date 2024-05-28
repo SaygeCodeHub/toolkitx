@@ -94,6 +94,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
+        Future.delayed(const Duration(seconds: 5));
         Map<String, dynamic> lastChatMessage =
             await databaseHelper.getLastMessage();
         if (chatScreenName == ChatMessagingScreen.routeName) {

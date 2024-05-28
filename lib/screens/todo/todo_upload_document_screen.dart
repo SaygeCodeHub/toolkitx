@@ -125,12 +125,6 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
                           todoMap: todoMap,
                           todoFilterMap: todoFilterMap ?? {}),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('UploadPhotos'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
                       UploadImageMenu(
                           onUploadImageResponse: (List uploadImageList) {
                         todoMap['pickedImage'] = uploadImageList;

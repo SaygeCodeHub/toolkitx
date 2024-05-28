@@ -117,6 +117,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
       'attachementExtension': 'pdf'
     };
+    Future.delayed(const Duration(seconds: 5));
     await DatabaseHelper().insertMessage(messageData);
   }
 }
