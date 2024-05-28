@@ -8,9 +8,7 @@ import 'package:toolkit/blocs/client/client_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
-import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../blocs/client/client_bloc.dart';
 import '../../blocs/client/client_states.dart';
