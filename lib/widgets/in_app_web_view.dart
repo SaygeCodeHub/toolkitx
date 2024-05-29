@@ -25,8 +25,8 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                 isLoading = false;
               });
             },
-            initialUrlRequest: URLRequest(
-                url: WebUri.uri(Uri.parse(widget.url))), // Updated line
+            initialUrlRequest:
+                URLRequest(url: Uri.parse(widget.url)), // Updated line
           ),
           Visibility(
               visible: isLoading,

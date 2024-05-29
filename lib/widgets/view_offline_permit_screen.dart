@@ -38,9 +38,9 @@ class OfflineHtmlViewerScreen extends StatelessWidget {
                 // generatePdfFromHtml(state.htmlContent);
                 return InAppWebView(
                     initialUrlRequest: URLRequest(
-                        url: WebUri.uri(Uri.dataFromString(state.htmlContent,
+                        url: Uri.dataFromString(state.htmlContent,
                             mimeType: 'text/html',
-                            encoding: Encoding.getByName('UTF-8')))));
+                            encoding: Encoding.getByName('UTF-8'))));
               } else if (state is ErrorGeneratingPdfOffline) {
                 return const Center(child: Text('Generating PDF error'));
               } else {
