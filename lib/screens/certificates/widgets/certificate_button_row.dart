@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../data/models/certificates/certificate_list_model.dart';
 import '../../../utils/constants/api_constants.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/generic_alphanumeric_generator_util.dart';
 import '../../../widgets/text_button.dart';
 import '../edit_certifcate_feedback_screen.dart';
 import '../feedback_certificate_screen.dart';
@@ -20,9 +21,11 @@ class CertificateButtonRow extends StatelessWidget {
   const CertificateButtonRow({
     super.key,
     required this.data,
+    required this.clientId,
   });
 
   final CertificateListDatum data;
+  final String clientId;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class CertificateButtonRow extends StatelessWidget {
         onPressed: data.actualCertificate.isNotEmpty
             ? () {
                 launchUrlString(
-                    '${ApiConstants.viewDocBaseUrl}${data.actualCertificate}',
+                    '${ApiConstants.viewDocBaseUrl}${data.actualCertificate}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                     mode: LaunchMode.inAppBrowserView);
               }
             : null,
@@ -60,16 +63,14 @@ class CertificateButtonRow extends StatelessWidget {
       )),
       Expanded(
           child: CustomTextButton(
-        onPressed:
-            // data.accesscertificate != "1"
-            //     ?
-            () {
-          String certificateId = data.id;
-          Navigator.pushNamed(context, GetCourseCertificateScreen.routeName,
-              arguments: certificateId);
-        }
-        // : null
-        ,
+        onPressed: data.accesscertificate == "1"
+            ? () {
+                String certificateId = data.id;
+                Navigator.pushNamed(
+                    context, GetCourseCertificateScreen.routeName,
+                    arguments: certificateId);
+              }
+            : null,
         textValue: StringConstants.kStartCourse,
         textColor:
             data.accesscertificate == "1" ? AppColor.deepBlue : AppColor.grey,

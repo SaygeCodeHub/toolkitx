@@ -64,17 +64,17 @@ class CertificateListDatum {
 
   factory CertificateListDatum.fromJson(Map<String, dynamic> json) =>
       CertificateListDatum(
-        id: json["id"],
-        name: json["name"],
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
         actualDates: json["actual_dates"] ?? '',
         newDates: json["new_dates"] ?? '',
-        actualCertificate: json["actual_certificate"],
-        newCertificate: json["new_certificate"],
+        actualCertificate: json["actual_certificate"] ?? '',
+        newCertificate: json["new_certificate"] ?? '',
         status: json["status"] ?? '',
-        expired: json["expired"],
-        accesscertificate: json["accesscertificate"],
-        accessfeedback: json["accessfeedback"],
-        accessfeedbackedit: json["accessfeedbackedit"],
+        expired: json["expired"] ?? '',
+        accesscertificate: json["accesscertificate"] ?? '',
+        accessfeedback: json["accessfeedback"] ?? '',
+        accessfeedbackedit: json["accessfeedbackedit"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
