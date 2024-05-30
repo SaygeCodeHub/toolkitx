@@ -313,7 +313,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
-    List permitPopUpMenu = [StringConstants.kGeneratePdf];
+    List permitPopUpMenu = [StringConstants.kPrintPermit];
     String? clientId =
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     try {
