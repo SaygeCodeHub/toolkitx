@@ -285,7 +285,7 @@ abstract class StringConstants {
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
-  static const String kGeneratePdf = 'Generate PDF';
+  static const String kPrintPermit = 'Print Permit';
   static const String kClosePermit = 'Cancel Permit';
   static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';

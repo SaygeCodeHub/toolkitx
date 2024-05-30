@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/qualityManagement/qm_details_screen.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
@@ -123,12 +124,10 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  context.read<QualityManagementBloc>().add(
-                      FetchQualityManagementDetails(
-                          initialIndex: 0,
-                          qmId: context
-                              .read<QualityManagementBloc>()
-                              .encryptQmId));
+                  Navigator.pushReplacementNamed(
+                      context, QualityManagementDetailsScreen.routeName,
+                      arguments:
+                          context.read<QualityManagementBloc>().encryptQmId);
                 } else if (state is QualityManagementDetailsNotUpdated) {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.editDetailsNotUpdated, '');

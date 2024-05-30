@@ -22,36 +22,40 @@ class MsgTextWidget extends StatelessWidget {
             ? Alignment.centerLeft
             : Alignment.centerRight,
         child: Container(
-          width: MediaQuery.sizeOf(context).width * 0.23,
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
+          margin: (snapshot.data![reversedIndex]['isReceiver'] == 1)
+              ? const EdgeInsets.only(right: 34.0)
+              : const EdgeInsets.only(left: 34.0),
           decoration: BoxDecoration(
               color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
                   ? AppColor.blueGrey
                   : Colors.grey[300],
               borderRadius: BorderRadius.circular(5)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (snapshot.data![reversedIndex]['isReceiver'] == 1) ...[
-                Flexible(
-                  child: Text(snapshot.data![reversedIndex]['msg']),
-                ),
-                const SizedBox(width: tiniestSpacing),
-                (snapshot.data![reversedIndex]['msg_status'] != '1')
-                    ? const Icon(Icons.timer, size: 13)
-                    : const SizedBox.shrink(),
-              ] else ...[
-                Flexible(
-                  child: Text(snapshot.data![reversedIndex]['msg']),
-                ),
-                const SizedBox(width: tiniestSpacing),
-                (snapshot.data![reversedIndex]['msg_status'] != '1')
-                    ? const Icon(Icons.timer, size: 13)
-                    : const SizedBox.shrink(),
+          child: SelectionArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (snapshot.data![reversedIndex]['isReceiver'] == 1) ...[
+                  Flexible(
+                    child: Text(snapshot.data![reversedIndex]['msg']),
+                  ),
+                  const SizedBox(height: tiniestSpacing),
+                  (snapshot.data![reversedIndex]['msg_status'] != '1')
+                      ? const Icon(Icons.timer, size: 13)
+                      : const SizedBox.shrink(),
+                ] else ...[
+                  Flexible(
+                    child: Text(snapshot.data![reversedIndex]['msg']),
+                  ),
+                  const SizedBox(height: tiniestSpacing),
+                  (snapshot.data![reversedIndex]['msg_status'] != '1')
+                      ? const Icon(Icons.timer, size: 13)
+                      : const SizedBox.shrink(),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

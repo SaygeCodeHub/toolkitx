@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/incident/widgets/incident_contractor_list_tile.dart';
 import 'package:toolkit/screens/incident/widgets/incident_report_anonymously_expansion_tile.dart';
 import 'package:toolkit/screens/incident/widgets/time_picker.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
+import 'package:toolkit/utils/incident_view_image_util.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
@@ -28,6 +33,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('edit incident map $addAndEditIncidentMap');
     List dateTimeList = addAndEditIncidentMap['eventdatetime']
         .toString()
         .replaceAll(' ', ',')
@@ -119,12 +125,45 @@ class ReportNewIncidentScreen extends StatelessWidget {
                             addAndEditIncidentMap['description'] = textField;
                           }),
                       const SizedBox(height: xxTinySpacing),
-                      Text(StringConstants.kUploadPhoto,
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
+                      Visibility(
+                        visible: CategoryScreen.isFromEdit == true,
+                        child: Text(DatabaseUtil.getText('viewimage'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .xSmall
+                                .copyWith(fontWeight: FontWeight.w600)),
+                      ),
                       const SizedBox(height: xxxTinierSpacing),
+                      Visibility(
+                        visible: addAndEditIncidentMap['files'] != null,
+                        child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: ViewImageUtil.viewImageList(
+                                    addAndEditIncidentMap['files'] ?? '')
+                                .length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                  splashColor: AppColor.transparent,
+                                  highlightColor: AppColor.transparent,
+                                  onTap: () {
+                                    launchUrlString(
+                                        '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(addAndEditIncidentMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(ReportNewIncidentScreen.clientId)}',
+                                        mode: LaunchMode.externalApplication);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: xxxTinierSpacing),
+                                    child: Text(
+                                        ViewImageUtil.viewImageList(
+                                            addAndEditIncidentMap['files'] ??
+                                                '')[index],
+                                        style: const TextStyle(
+                                            color: AppColor.deepBlue)),
+                                  ));
+                            }),
+                      ),
+                      const SizedBox(height: xxTinySpacing),
                       UploadImageMenu(
                         isUpload: true,
                         onUploadImageResponse: (List uploadImageList) {

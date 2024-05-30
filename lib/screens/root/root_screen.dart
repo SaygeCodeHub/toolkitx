@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/client/client_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
-import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
 
 import '../../blocs/client/client_bloc.dart';
@@ -19,6 +19,7 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/global.dart';
@@ -41,6 +42,7 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
+  final CustomerCache customerCache = getIt<CustomerCache>();
 
   @override
   void initState() {
@@ -92,17 +94,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (chatScreenName == ChatMessagingScreen.routeName) {
-          context
-              .read<ChatBloc>()
-              .add(RebuildChatMessagingScreen(employeeDetailsMap: {
-                'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
-                'rtype': ChatBloc().chatDetailsMap['rtype'] ?? ''
-              }));
-        } else {
-          context.read<ChatBloc>().add(FetchChatsList());
-        }
-
+        context.read<ClientBloc>().add(FetchChatMessages());
         break;
       case AppLifecycleState.inactive:
         break;

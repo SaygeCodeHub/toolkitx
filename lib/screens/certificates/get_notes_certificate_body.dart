@@ -42,7 +42,7 @@ class _GetNotesCertificateBodyState extends State<GetNotesCertificateBody> {
       params = const PlatformWebViewControllerCreationParams();
     }
     final WebViewController controller =
-    WebViewController.fromPlatformCreationParams(params);
+        WebViewController.fromPlatformCreationParams(params);
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)

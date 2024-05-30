@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -196,11 +194,24 @@ class DatabaseHelper {
     try {
       DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
       sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
-      print('sendMessageMap $sendMessageMap');
-      await db.insert('chat_messages', sendMessageMap,
+      // print('insertMessage db $sendMessageMap');
+      int temp = await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.ignore);
+      print('insertMessage db $temp');
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getLastMessage() async {
+    final Database db = await database;
+    List<Map<String, dynamic>> result =
+        await db.query('chat_messages', orderBy: 'msgTime DESC', limit: 1);
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return {};
     }
   }
 
@@ -244,28 +255,6 @@ class DatabaseHelper {
           where: 'msg_id = ?', whereArgs: [messageId]);
     });
   }
-
-  // Future<void> getUnreadMessageCount(
-  //     String currentUserId,
-  //     String currentSenderId,
-  //     String receiverId,
-  //     String currentReceiverId,
-  //     bool onChatMessagingScreen) async {
-  //   final Database db = await database;
-  //
-  //   await db.transaction((txn) async {
-  //     final unreadCount = await txn.rawQuery('''
-  //     SELECT COUNT(*) AS unread_for_recipient
-  //     FROM chat_messages
-  //      WHERE sid = ? AND rid = ? AND showCount = 0;
-  //   ''', [currentUserId, receiverId]);
-  //     int unreadRecipientCount =
-  //         unreadCount.first['unread_for_recipient'] as int;
-  //     await txn.update(
-  //         'chat_messages', {'unreadMessageCount': unreadRecipientCount},
-  //         where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
-  //   });
-  // }
 
   Future<void> updateShowCountForMessages(
       String recipientId, String senderId) async {
@@ -318,7 +307,6 @@ class DatabaseHelper {
     List<Map<String, dynamic>> messages = [];
     messages = await db.rawQuery(
         'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC');
-    log('chat details $messages');
     if (messages.isNotEmpty) {
       return messages;
     } else {
@@ -332,7 +320,6 @@ class DatabaseHelper {
 
     messages = await db.rawQuery(
         'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype))) AS unreadCount from chat_messages union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AS unreadCount from chat_messages');
-    log('chat list $messages');
     if (messages.isNotEmpty) {
       return messages;
     } else {

@@ -25,14 +25,12 @@ class TransferAndCPTiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    changePermitCPMap['npw'] = 1;
     context.read<PermitBloc>().add(SelectTransferValue(value: '1'));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TransferToExpansionTile(
           createdForTransfer: (String value) {
-            changePermitCPMap['npw'] = value;
             context.read<PermitBloc>().add(SelectTransferValue(value: value));
           },
         ),
@@ -61,7 +59,7 @@ class TransferAndCPTiles extends StatelessWidget {
                         getDataForCPDatum: data[2]),
                     child: TransferCPWorkForceExpansionTile(
                         createdForTransferCp: (id, name) {
-                          changePermitCPMap['sap'] = id.toString();
+                          changePermitCPMap['npw'] = id.toString();
                         },
                         getDataForCPDatum: data[1]),
                   ),

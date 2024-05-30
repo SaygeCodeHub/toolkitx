@@ -60,7 +60,7 @@ class QMDetailsData {
   final String nextStatus;
   final String canEdit;
   final String canResolve;
-  final String files;
+  final String? files;
   final String createdby;
   final List<Maplink> maplinks;
   final List<Commentslist> commentslist;

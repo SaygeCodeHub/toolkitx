@@ -42,6 +42,7 @@ class QualityManagementBloc
   String nextStatus = '';
   String encryptQmId = '';
   int imageNumber = 0;
+  String qaId = '';
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -145,8 +146,9 @@ class QualityManagementBloc
                 .data.customfields[i].fieldvalue
           });
         }
-        imageNumber = fetchQualityManagementDetailsModel.data.files.length;
+        imageNumber = fetchQualityManagementDetailsModel.data.files!.length;
         Map editQMDetailsMap = {
+          "id": fetchQualityManagementDetailsModel.data.id,
           "description": fetchQualityManagementDetailsModel.data.description,
           "responsible_person": "",
           "site": fetchQualityManagementDetailsModel.data.site,
@@ -158,7 +160,7 @@ class QualityManagementBloc
           "companyid": fetchQualityManagementDetailsModel.data.companyid,
           "customfields": customFields,
           "incidentid": encryptQmId,
-          "files": fetchQualityManagementDetailsModel.data.files,
+          "files": fetchQualityManagementDetailsModel.data.files ?? '',
           "eventdatetime":
               fetchQualityManagementDetailsModel.data.eventdatetime,
           "severityname": fetchQualityManagementDetailsModel.data.severityname,
@@ -547,7 +549,7 @@ class QualityManagementBloc
       reportNewQAMap = event.reportNewQAMap;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveQMPhotosMap = {
-        "incidentid": newQmId,
+        "incidentid": newQmId == '' ? qaId : newQmId,
         "filenames": reportNewQAMap['ImageString'],
         "hashcode": hashCode
       };
@@ -584,6 +586,7 @@ class QualityManagementBloc
         "incidentid": encryptQmId,
         "hashcode": hashCode
       };
+      qaId = event.editQMDetailsMap['id'];
       UpdateQualityManagementDetailsModel updateQualityManagementDetailsModel =
           await _qualityManagementRepository
               .updateQualityManagementDetails(updateQMDetailsMap);
