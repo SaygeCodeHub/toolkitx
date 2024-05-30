@@ -10,7 +10,8 @@ import '../../../widgets/custom_card.dart';
 import 'certificate_button_row.dart';
 
 class CertificateListCard extends StatelessWidget {
-  const CertificateListCard({super.key, required this.data, required this.clientId});
+  const CertificateListCard(
+      {super.key, required this.data, required this.clientId});
 
   final CertificateListDatum data;
   final String clientId;
@@ -68,7 +69,10 @@ class CertificateListCard extends StatelessWidget {
                     height: kImageHeight, width: kImageWidth),
               ),
               const Divider(color: AppColor.lightestGrey),
-              CertificateButtonRow(data: data, clientId: clientId,)
+              CertificateButtonRow(
+                data: data,
+                clientId: clientId,
+              )
             ])));
   }
 

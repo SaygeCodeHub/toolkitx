@@ -31,18 +31,19 @@ class CertificateListBloc
   Future<FutureOr<void>> _fetchCertificateList(
       FetchCertificateList event, Emitter<CertificateListState> emit) async {
     emit(FetchingCertificateList());
-    // try {
+    try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      String? clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       FetchCertificatesModel fetchCertificatesModel =
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
       emit(FetchedCertificateList(
           fetchCertificatesModel: fetchCertificatesModel, clientId: clientId));
-    // } catch (e) {
-    //   emit(CertificateListError(errorMsg: e.toString()));
-    // }
+    } catch (e) {
+      emit(CertificateListError(errorMsg: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _fetchCertificateDetails(

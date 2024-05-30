@@ -25,7 +25,6 @@ class CertificateRepositoryImpl extends CertificateRepository {
       int pageNo, String hashCode, String userId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}certificate/get?pageno=$pageNo&hashcode=$hashCode&workforceid=$userId");
-    print("${ApiConstants.baseUrl}certificate/get?pageno=$pageNo&hashcode=$hashCode&workforceid=$userId");
     return FetchCertificatesModel.fromJson(response);
   }
 
