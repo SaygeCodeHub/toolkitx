@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/loto/add_loto_comment_model.dart';
 import 'package:toolkit/data/models/loto/assign_team_for_remove_model.dart';
@@ -75,6 +76,7 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
     on<LotoUploadPhotos>(_lotoUploadPhotos);
     on<FetchLotoChecklistQuestions>(_fetchLotoChecklistQuestions);
     on<SelectAnswer>(_selectAnswer);
+    on<SelectOption>(_selectOption);
     on<SaveLotoChecklist>(_saveLotoChecklist);
     on<FetchLotoAssignedChecklists>(_fetchLotoAssignedChecklists);
     on<RemoveAssignTeam>(_removeAssignTeam);
@@ -657,5 +659,9 @@ class LotoDetailsBloc extends Bloc<LotoDetailsEvent, LotoDetailsState> {
   FutureOr<void> _selectLotoChecklistMultiAnswer(
       SelectLotoChecklistMultiAnswer event, Emitter<LotoDetailsState> emit) {
     emit(LotoMultiCheckListAnswerSelected(isChecked: event.isChecked));
+  }
+
+  FutureOr<void> _selectOption(SelectOption event, Emitter<LotoDetailsState> emit) {
+    emit(OptionSelected(id: event.id, text: event.text));
   }
 }

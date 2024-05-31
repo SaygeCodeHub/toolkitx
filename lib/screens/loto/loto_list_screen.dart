@@ -20,6 +20,8 @@ class LotoListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
+    context.read<LotoListBloc>().hasReachedMax = false;
+    context.read<LotoListBloc>().data.clear();
     context
         .read<LotoListBloc>()
         .add(FetchLotoList(pageNo: pageNo, isFromHome: isFromHome));

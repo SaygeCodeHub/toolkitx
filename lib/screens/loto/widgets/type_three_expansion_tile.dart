@@ -6,16 +6,16 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/loto/fetch_loto_checklist_questions_model.dart';
 
-class AnswerOptionExpansionTile extends StatelessWidget {
+class TypeThreeExpansionTile extends StatelessWidget {
   final Map startLotoMap;
   final List answerList;
 
-  const AnswerOptionExpansionTile(
+  const TypeThreeExpansionTile(
       {super.key,
-      required this.queOptionList,
-      required this.startLotoMap,
-      required this.questionId,
-      required this.answerList});
+        required this.queOptionList,
+        required this.startLotoMap,
+        required this.questionId,
+        required this.answerList});
 
   final List<QueOption> queOptionList;
   final String questionId;
@@ -25,12 +25,12 @@ class AnswerOptionExpansionTile extends StatelessWidget {
     String selectedValue = "";
     context
         .read<LotoDetailsBloc>()
-        .add(SelectAnswer(id: startLotoMap['option'] ?? 0, text: ''));
+        .add(SelectOption(id: startLotoMap['optionid'] ?? 0, text: ''));
     return BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
         buildWhen: (previousState, currentState) =>
-            currentState is AnswerSelected,
+        currentState is OptionSelected,
         builder: (context, state) {
-          if (state is AnswerSelected) {
+          if (state is OptionSelected) {
             return Theme(
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
@@ -54,7 +54,7 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                     title: Text(
                                         queOptionList[listIndex].queoptiontext),
                                     onTap: () {
-                                      startLotoMap['option'] =
+                                      startLotoMap['optionid'] =
                                           queOptionList[listIndex].queoptionid;
                                       startLotoMap['optiontext'] =
                                           queOptionList[listIndex]
@@ -62,15 +62,15 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                       selectedValue = queOptionList[listIndex]
                                           .queoptiontext;
                                       context.read<LotoDetailsBloc>().add(
-                                          SelectAnswer(
-                                              id: startLotoMap['option'],
+                                          SelectOption(
+                                              id: startLotoMap['optionid'],
                                               text: queOptionList[listIndex]
                                                   .queoptiontext));
                                       answerList[listIndex]["questionid"] =
                                           questionId;
                                       answerList[listIndex]["answer"] =
-                                          startLotoMap['option'];
-                                      print('answerListType4===========>$answerList');
+                                      startLotoMap['optionid'];
+                                      print('answerListTypeThree===========>$answerList');
                                     });
                               }))
                     ]));
