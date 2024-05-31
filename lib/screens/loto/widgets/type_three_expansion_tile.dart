@@ -12,10 +12,10 @@ class TypeThreeExpansionTile extends StatelessWidget {
 
   const TypeThreeExpansionTile(
       {super.key,
-        required this.queOptionList,
-        required this.startLotoMap,
-        required this.questionId,
-        required this.answerList});
+      required this.queOptionList,
+      required this.startLotoMap,
+      required this.questionId,
+      required this.answerList});
 
   final List<QueOption> queOptionList;
   final String questionId;
@@ -28,7 +28,7 @@ class TypeThreeExpansionTile extends StatelessWidget {
         .add(SelectOption(id: startLotoMap['optionid'] ?? 0, text: ''));
     return BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
         buildWhen: (previousState, currentState) =>
-        currentState is OptionSelected,
+            currentState is OptionSelected,
         builder: (context, state) {
           if (state is OptionSelected) {
             return Theme(
@@ -69,8 +69,7 @@ class TypeThreeExpansionTile extends StatelessWidget {
                                       answerList[listIndex]["questionid"] =
                                           questionId;
                                       answerList[listIndex]["answer"] =
-                                      startLotoMap['optionid'];
-                                      print('answerListTypeThree===========>$answerList');
+                                          startLotoMap['optionid'];
                                     });
                               }))
                     ]));

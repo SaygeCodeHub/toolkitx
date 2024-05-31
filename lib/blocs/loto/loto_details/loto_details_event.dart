@@ -112,6 +112,7 @@ class SelectOption extends LotoDetailsEvent {
 
   SelectOption({required this.id, required this.text});
 }
+
 class SaveLotoChecklist extends LotoDetailsEvent {}
 
 class FetchLotoAssignedChecklists extends LotoDetailsEvent {

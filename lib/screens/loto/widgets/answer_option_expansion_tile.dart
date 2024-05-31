@@ -70,7 +70,6 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                           questionId;
                                       answerList[listIndex]["answer"] =
                                           startLotoMap['option'];
-                                      print('answerListType4===========>$answerList');
                                     });
                               }))
                     ]));

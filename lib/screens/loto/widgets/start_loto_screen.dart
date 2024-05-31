@@ -100,13 +100,14 @@ class StartLotoScreen extends StatelessWidget {
                                     .replaceAll('[', '')
                                     .replaceAll(']', '')
                                     .replaceAll(' ', '');
+                                context.read<LotoDetailsBloc>().answerList.add({
+                                  "questionid": startLotoMap['questionid'],
+                                  "answer": startLotoMap['ImageString'],
+                                });
                                 context
                                     .read<LotoDetailsBloc>()
-                                    .answerList.add({
-                                  "questionid" : startLotoMap['questionid'],
-                                  "answer" : startLotoMap['ImageString'],
-                                });
-                                context.read<LotoDetailsBloc>().answerList.removeWhere((map) => map.isEmpty);
+                                    .answerList
+                                    .removeWhere((map) => map.isEmpty);
 
                                 context
                                                 .read<LotoDetailsBloc>()
@@ -137,7 +138,10 @@ class StartLotoScreen extends StatelessWidget {
                                   width: xxSizedBoxWidth,
                                   child: PrimaryButton(
                                       onPressed: () {
-                                        context.read<LotoDetailsBloc>().answerList.removeWhere((map) => map.isEmpty);
+                                        context
+                                            .read<LotoDetailsBloc>()
+                                            .answerList
+                                            .removeWhere((map) => map.isEmpty);
                                         context
                                             .read<LotoDetailsBloc>()
                                             .add(StartRemoveLotoEvent());
