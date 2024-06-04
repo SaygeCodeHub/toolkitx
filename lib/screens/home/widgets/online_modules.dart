@@ -7,6 +7,7 @@ import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
+import 'package:toolkit/screens/signInQRCode/nfc_reading_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
@@ -234,7 +235,8 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'tracking':
-        Navigator.pushNamed(context, SignInListScreen.routeName);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => NFCReadingScreen()));
+        // Navigator.pushNamed(context, SignInListScreen.routeName);
         break;
       case 'calendar':
       case 'wf_calendar':

@@ -51,6 +51,7 @@ dependencies:
   open_file: ^3.3.2
   csv:
   flutter_document_picker: ^5.2.3
+  nfc_manager: ^3.5.0
 
 dev_dependencies:
   flutter_test:
