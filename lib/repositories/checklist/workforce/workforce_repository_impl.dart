@@ -22,6 +22,8 @@ class WorkforceChecklistRepositoryImpl extends WorkForceRepository {
   @override
   Future<GetQuestionListModel> fetchQuestionsList(
       String scheduleId, String userId, String hashCode) async {
+    print(
+        'repo ${"${ApiConstants.baseUrl}checklist/getquestions?scheduleid=$scheduleId&userid=$userId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}checklist/getquestions?scheduleid=$scheduleId&userid=$userId&hashcode=$hashCode");
     return GetQuestionListModel.fromJson(response);

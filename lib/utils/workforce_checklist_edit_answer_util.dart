@@ -190,7 +190,21 @@ class EditAnswerUtil {
 }
 
 Widget tableControl(index, answerModelList, answerList, context) {
-  Map tableData = jsonDecode(answerList[index]["answer"]);
+  Map tableData = {};
+  if (answerList[index]["answer"].isNotEmpty) {
+    tableData = jsonDecode(answerList[index]["answer"]);
+  } else {
+    List rows = [];
+    for (int j = 0; j < answerModelList[index].matrixrowcount; j++) {
+      List cols = [];
+      for (int i = 0; i < answerModelList[index].matrixcols.length; i++) {
+        cols.add('');
+      }
+      rows.add(cols);
+    }
+    tableData = {'data': rows};
+  }
+
   return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -219,10 +233,7 @@ Widget tableControl(index, answerModelList, answerList, context) {
                             height: xMediumSpacing,
                             width: kDataCellWidth,
                             child: TextFieldWidget(
-                                value: (tableData.toString() == "{}" &&
-                                        answerModelList[index].type == 8)
-                                    ? ""
-                                    : tableData["data"][j][k],
+                                value: tableData["data"][j][k],
                                 onTextFieldChanged: (String textField) {
                                   tableData["data"][j][k] = textField;
                                   answerList[index]["answer"] =
