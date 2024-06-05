@@ -51,8 +51,10 @@ class SubmitAnswerSignaturePadSection extends StatelessWidget {
                                       right: xxTinySpacing,
                                       bottom: tiniestSpacing),
                                   title: SizedBox(
-                                    width: MediaQuery.sizeOf(context).width * 0.25,
-                                    height: MediaQuery.sizeOf(context).width * 0.75,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.25,
+                                    height:
+                                        MediaQuery.sizeOf(context).width * 0.75,
                                     child: SignaturePad(
                                         map: checklistDataMap,
                                         mapKey: 'sign_text'),
