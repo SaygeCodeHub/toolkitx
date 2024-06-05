@@ -72,7 +72,8 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
         emit(SafetyNoticesFetched(
             noticesDatum: noticesDatum,
-            safetyNoticeFilterMap: safetNoticeFilterMap));
+            safetyNoticeFilterMap: safetNoticeFilterMap,
+            canAdd: fetchSafetyNoticesModel.data.canAdd));
       } else {
         FetchSafetyNoticesModel fetchSafetyNoticesModel =
             await _safetyNoticeRepository.fetchSafetyNotices(event.pageNo,
@@ -82,7 +83,8 @@ class SafetyNoticeBloc extends Bloc<SafetyNoticeEvent, SafetyNoticeStates> {
         noticesDatum.addAll(fetchSafetyNoticesModel.data.notices);
         emit(SafetyNoticesFetched(
             noticesDatum: noticesDatum,
-            safetyNoticeFilterMap: safetNoticeFilterMap));
+            safetyNoticeFilterMap: safetNoticeFilterMap,
+            canAdd: fetchSafetyNoticesModel.data.canAdd));
       }
     } catch (e) {
       emit(SafetyNoticesNotFetched(errorMessage: e.toString()));

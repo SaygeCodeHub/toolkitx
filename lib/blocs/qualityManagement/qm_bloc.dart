@@ -500,6 +500,9 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userType = await _customerCache.getUserType(CacheKeys.userType);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (reportNewQAMap['responsible_person'] == '1') {
+        userId = '-1';
+      }
       Map saveReportNewQMMap = {
         "eventdatetime": reportNewQAMap['eventdatetime'],
         "description": reportNewQAMap['description'],

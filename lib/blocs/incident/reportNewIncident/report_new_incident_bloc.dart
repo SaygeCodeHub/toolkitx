@@ -232,6 +232,9 @@ class ReportNewIncidentBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userType = await _customerCache.getUserType(CacheKeys.userType);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (reportNewIncidentMap['responsible_person'] == '1') {
+        userId = '-1';
+      }
       Map addNewIncidentMap = {
         "eventdatetime": reportNewIncidentMap['eventdatetime'],
         "description": reportNewIncidentMap['description'],

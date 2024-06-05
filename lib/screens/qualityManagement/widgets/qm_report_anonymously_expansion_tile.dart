@@ -33,52 +33,51 @@ class ReportAnonymouslyExpansionTile extends StatelessWidget {
                 data: Theme.of(context)
                     .copyWith(dividerColor: AppColor.transparent),
                 child: ExpansionTile(
-                    collapsedShape:
-                        ExpansionTileBorder().buildOutlineInputBorder(),
-                    collapsedBackgroundColor: AppColor.white,
-                    backgroundColor: AppColor.white,
-                    shape: ExpansionTileBorder().buildOutlineInputBorder(),
-                    maintainState: true,
-                    key: GlobalKey(),
-                    title: Text(
-                        (anonymousName == '')
-                            ? DatabaseUtil.getText('No')
-                            : anonymousName,
-                        style: Theme.of(context).textTheme.xSmall),
-                    children: [
-                      ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: ReportAnonymouslyEnum.values.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return RadioListTile(
-                                contentPadding: const EdgeInsets.only(
-                                    left: xxxTinierSpacing),
-                                activeColor: AppColor.deepBlue,
-                                title: Text(
-                                    ReportAnonymouslyEnum.values
-                                        .elementAt(index)
-                                        .status,
-                                    style: Theme.of(context).textTheme.xSmall),
-                                controlAffinity:
-                                    ListTileControlAffinity.trailing,
-                                value: ReportAnonymouslyEnum.values
+                  collapsedShape:
+                      ExpansionTileBorder().buildOutlineInputBorder(),
+                  collapsedBackgroundColor: AppColor.white,
+                  backgroundColor: AppColor.white,
+                  shape: ExpansionTileBorder().buildOutlineInputBorder(),
+                  maintainState: true,
+                  key: GlobalKey(),
+                  title: Text(
+                      (anonymousName == '')
+                          ? DatabaseUtil.getText('No')
+                          : anonymousName,
+                      style: Theme.of(context).textTheme.xSmall),
+                  children: [
+                    ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: ReportAnonymouslyEnum.values.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RadioListTile(
+                              contentPadding:
+                                  const EdgeInsets.only(left: xxxTinierSpacing),
+                              activeColor: AppColor.deepBlue,
+                              title: Text(
+                                  ReportAnonymouslyEnum.values
+                                      .elementAt(index)
+                                      .status,
+                                  style: Theme.of(context).textTheme.xSmall),
+                              controlAffinity: ListTileControlAffinity.trailing,
+                              value: ReportAnonymouslyEnum.values
+                                  .elementAt(index)
+                                  .value,
+                              groupValue: state.anonymousId,
+                              onChanged: (value) {
+                                value = ReportAnonymouslyEnum.values
                                     .elementAt(index)
-                                    .value,
-                                groupValue: state.anonymousId,
-                                onChanged: (value) {
-                                  value = ReportAnonymouslyEnum.values
-                                      .elementAt(index)
-                                      .value;
-                                  anonymousName = ReportAnonymouslyEnum.values
-                                      .elementAt(index)
-                                      .status;
-                                  context.read<QualityManagementBloc>().add(
-                                      ReportNewQAAnonymously(
-                                          anonymousId: value));
-                                });
-                          })
-                    ]));
+                                    .value;
+                                anonymousName = ReportAnonymouslyEnum.values
+                                    .elementAt(index)
+                                    .status;
+                                context.read<QualityManagementBloc>().add(
+                                    ReportNewQAAnonymously(anonymousId: value));
+                              });
+                        })
+                  ],
+                ));
           } else {
             return const SizedBox();
           }

@@ -11,6 +11,7 @@ abstract class StringConstants {
   static const String kPassword = 'Password'; //
   static const String kName = 'Name'; //
   static const String kCompanyName = 'Company Name'; //
+  static const String kViewDocument = 'View Document'; //
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kNoChecklist = 'No checklist!'; //
