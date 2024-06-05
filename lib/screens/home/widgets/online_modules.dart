@@ -235,8 +235,7 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'tracking':
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NFCReadingScreen()));
-        // Navigator.pushNamed(context, SignInListScreen.routeName);
+        Navigator.pushNamed(context, SignInListScreen.routeName);
         break;
       case 'calendar':
       case 'wf_calendar':

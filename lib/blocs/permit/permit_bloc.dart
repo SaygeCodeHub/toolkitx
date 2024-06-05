@@ -313,6 +313,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
+    var nfc = '1';
     List permitPopUpMenu = [StringConstants.kPrintPermit];
     String? clientId =
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
@@ -351,6 +352,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         if (permitBasicData?.issurrendercp == '1') {
           permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        }
+        if (nfc == '1') {
+          permitPopUpMenu.add("NFC");
         }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,

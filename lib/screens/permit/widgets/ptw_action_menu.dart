@@ -8,6 +8,7 @@ import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
+import 'package:toolkit/screens/signInQRCode/nfc_reading_screen.dart';
 import 'package:toolkit/utils/global.dart';
 import '../../../../../configs/app_spacing.dart';
 import '../../../blocs/permit/permit_bloc.dart';
@@ -100,6 +101,9 @@ class PTWActionMenu extends StatelessWidget {
                   TransferPermitOfflineScreen.routeName,
                   arguments: permitDetailsModel);
             }
+          }
+          if (popUpMenuItems[value]== 'NFC') {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const NFCReadingScreen()));
           }
         },
         position: PopupMenuPosition.under,
