@@ -49,6 +49,11 @@ class LotoPopupMenuButton extends StatelessWidget {
                     },
                     onPressed: () {
                       if (code == decryptedLocation) {
+                        context
+                            .read<ImagePickerBloc>()
+                            .pickedImagesList
+                            .clear();
+                        context.read<ImagePickerBloc>().add(PickImageInitial());
                         StartLotoScreen.isFromStartRemoveLoto = isFromRemove;
                         Navigator.pushReplacementNamed(
                                 context, StartLotoScreen.routeName)
@@ -77,6 +82,8 @@ class LotoPopupMenuButton extends StatelessWidget {
                     },
                   )));
     } else {
+      context.read<ImagePickerBloc>().pickedImagesList.clear();
+      context.read<ImagePickerBloc>().add(PickImageInitial());
       StartLotoScreen.isFromStartRemoveLoto = isFromRemove;
       Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) => {
             context.read<LotoDetailsBloc>().add(FetchLotoDetails(

@@ -242,6 +242,16 @@ class AnswerSelected extends LotoDetailsState {
   });
 }
 
+class OptionSelected extends LotoDetailsState {
+  final int id;
+  final String text;
+
+  OptionSelected({
+    required this.id,
+    required this.text,
+  });
+}
+
 class LotoChecklistSaving extends LotoDetailsState {}
 
 class LotoChecklistSaved extends LotoDetailsState {

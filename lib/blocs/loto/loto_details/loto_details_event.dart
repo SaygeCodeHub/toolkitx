@@ -106,6 +106,13 @@ class SelectAnswer extends LotoDetailsEvent {
   SelectAnswer({required this.id, required this.text});
 }
 
+class SelectOption extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectOption({required this.id, required this.text});
+}
+
 class SaveLotoChecklist extends LotoDetailsEvent {}
 
 class FetchLotoAssignedChecklists extends LotoDetailsEvent {
