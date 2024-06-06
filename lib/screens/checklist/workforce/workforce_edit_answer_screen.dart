@@ -16,6 +16,7 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../utils/workforce_checklist_edit_answer_util.dart';
 import '../../../widgets/custom_card.dart';
+import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import 'add_image_and_comments_screen.dart';
 
 class EditAnswerListScreen extends StatelessWidget {
@@ -181,7 +182,12 @@ class EditAnswerListScreen extends StatelessWidget {
                                                         width: tiniestSpacing),
                                                     Expanded(
                                                         child: SecondaryButton(
-                                                            onPressed: () {},
+                                                            onPressed: () {
+                                                              Navigator.pushNamed(
+                                                                  context,
+                                                                  TodoAssignedByMeAndToMeListScreen
+                                                                      .routeName);
+                                                            },
                                                             textValue:
                                                                 StringConstants
                                                                     .kAddTodo))

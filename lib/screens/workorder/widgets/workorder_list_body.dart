@@ -18,12 +18,9 @@ class WorkOrderListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<WorkOrderBloc>().hasReachedMax = false;
-    context.read<WorkOrderBloc>().data.clear();
     return BlocConsumer<WorkOrderBloc, WorkOrderStates>(
         buildWhen: (previousState, currentState) =>
-            ((currentState is WorkOrdersFetched &&
-                    context.read<WorkOrderBloc>().hasReachedMax == false) ||
+            ((currentState is WorkOrdersFetched) ||
                 (currentState is FetchingWorkOrders &&
                     WorkOrderListScreen.pageNo == 1)),
         listener: (context, state) {
@@ -80,19 +77,16 @@ class WorkOrderListBody extends StatelessWidget {
                       }));
             } else if (state.fetchWorkOrdersModel.status == 204 &&
                 context.read<WorkOrderBloc>().data.isEmpty) {
-              if (state.filterMap.isEmpty) {
+              if (state.filterMap.isNotEmpty) {
                 return const NoRecordsText(
                     text: StringConstants.kNoRecordsFilter);
               } else {
                 return NoRecordsText(
                     text: DatabaseUtil.getText('no_records_found'));
               }
-            } else {
-              return const SizedBox.shrink();
             }
-          } else {
-            return const SizedBox.shrink();
           }
+          return const SizedBox.shrink();
         });
   }
 }

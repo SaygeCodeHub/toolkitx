@@ -33,7 +33,6 @@ class ReportNewIncidentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('edit incident map $addAndEditIncidentMap');
     List dateTimeList = addAndEditIncidentMap['eventdatetime']
         .toString()
         .replaceAll(' ', ',')

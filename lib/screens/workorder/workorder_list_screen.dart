@@ -15,12 +15,15 @@ class WorkOrderListScreen extends StatelessWidget {
   static const routeName = 'WorkOrderListScreen';
   final bool isFromHome;
 
-  WorkOrderListScreen({Key? key, this.isFromHome = false}) : super(key: key);
+  WorkOrderListScreen({super.key, this.isFromHome = false});
   static int pageNo = 1;
   final addWorkOrderMap = {};
 
   @override
   Widget build(BuildContext context) {
+    pageNo = 1;
+    context.read<WorkOrderBloc>().hasReachedMax = false;
+    context.read<WorkOrderBloc>().data.clear();
     context
         .read<WorkOrderBloc>()
         .add(FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));

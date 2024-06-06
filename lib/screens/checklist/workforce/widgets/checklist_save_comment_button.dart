@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../blocs/checklist/workforce/comments/workforce_checklist_comments_bloc.dart';
 import '../../../../blocs/checklist/workforce/comments/workforce_checklist_comments_events.dart';
 import '../../../../blocs/checklist/workforce/comments/workforce_checklist_comments_states.dart';
-import '../../../../blocs/checklist/workforce/getQuestionsList/workforce_checklist_get_questions_list_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/uploadImage/upload_image_bloc.dart';
 import '../../../../blocs/uploadImage/upload_image_event.dart';
@@ -14,7 +13,6 @@ import '../../../../widgets/custom_snackbar.dart';
 import '../../../../widgets/generic_loading_popup.dart';
 import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
-import '../workforce_questions_list_screen.dart';
 
 class ChecklistSaveCommentButton extends StatelessWidget {
   const ChecklistSaveCommentButton({
@@ -36,11 +34,6 @@ class ChecklistSaveCommentButton extends StatelessWidget {
             } else if (state is CheckListCommentSaved) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, WorkForceQuestionsScreen.routeName,
-                  arguments: context
-                      .read<WorkForceQuestionsListBloc>()
-                      .allDataForChecklistMap);
             } else if (state is CheckListCommentNotSaved) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.message, StringConstants.kOk);

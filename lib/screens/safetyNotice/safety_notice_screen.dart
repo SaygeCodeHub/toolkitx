@@ -20,8 +20,7 @@ class SafetyNoticeScreen extends StatelessWidget {
   static int pageNo = 1;
   final bool isFromHomeScreen;
 
-  const SafetyNoticeScreen({Key? key, this.isFromHomeScreen = false})
-      : super(key: key);
+  const SafetyNoticeScreen({super.key, this.isFromHomeScreen = false});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +78,9 @@ class SafetyNoticeScreen extends StatelessWidget {
                       secondaryOnPress: () {
                         Navigator.pushNamed(
                                 context, SafetyNoticeHistoryScreen.routeName)
-                            .then((value) => context
-                                .read<SafetyNoticeBloc>()
-                                .add(FetchSafetyNotices(
-                                    pageNo: 1, isFromHomeScreen: false)));
+                            .then((value) => Navigator.pushReplacementNamed(
+                                context, SafetyNoticeScreen.routeName,
+                                arguments: false));
                       },
                       secondaryIcon: Icons.history,
                       clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&

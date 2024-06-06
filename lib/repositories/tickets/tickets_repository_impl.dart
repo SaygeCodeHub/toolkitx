@@ -30,8 +30,6 @@ class TicketsRepositoryImpl extends TicketsRepository {
   @override
   Future<FetchTicketDetailsModel> fetchTicketDetails(
       String hashCode, String ticketId, String userId) async {
-    print(
-        'details ${"${ApiConstants.baseUrl}ticket/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}ticket/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId");
     return FetchTicketDetailsModel.fromJson(response);

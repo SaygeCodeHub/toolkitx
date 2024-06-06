@@ -117,13 +117,12 @@ class SafetyNoticeHistoryScreen extends StatelessWidget {
                       return const SizedBox(height: xxTinySpacing);
                     }),
               );
-            } else {
+            } else if (state is SafetyNoticeHistoryListNotFetched) {
               return NoRecordsText(
                   text: DatabaseUtil.getText('no_records_found'));
             }
-          } else {
-            return const SizedBox.shrink();
           }
+          return const SizedBox.shrink();
         },
       ),
     );
