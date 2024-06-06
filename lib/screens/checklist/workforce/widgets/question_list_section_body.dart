@@ -13,6 +13,7 @@ import '../../../../data/models/checklist/workforce/workforce_questions_list_mod
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/custom_card.dart';
 import '../../../../widgets/secondary_button.dart';
+import '../../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../add_image_and_comments_screen.dart';
 import 'question_list_title_section.dart';
 
@@ -138,7 +139,11 @@ class QuestionListSectionBody extends StatelessWidget {
                 const SizedBox(width: tiniestSpacing),
                 Expanded(
                   child: SecondaryButton(
-                      onPressed: () {}, textValue: StringConstants.kAddTodo),
+                      onPressed: () {
+                        Navigator.pushNamed(context,
+                            TodoAssignedByMeAndToMeListScreen.routeName);
+                      },
+                      textValue: StringConstants.kAddTodo),
                 )
               ]),
             ]),
