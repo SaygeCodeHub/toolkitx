@@ -86,6 +86,7 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen>
     GeoPoint currentLocation =
         GeoPoint(latitude: position.latitude, longitude: position.longitude);
     mapController.changeLocation(currentLocation);
+    mapController.setZoom(zoomLevel: 15);
     setState(() {
       fetchingLocation = false;
       locationFetched = true;
@@ -122,11 +123,7 @@ class _CurrentLocationScreenState extends State<CurrentLocationScreen>
               unFollowUser: false,
             ),
             zoomOption: const ZoomOption(
-              initZoom: 15,
-              minZoomLevel: 9,
-              maxZoomLevel: 19,
-              stepZoom: 1.0,
-            ),
+                minZoomLevel: 2, maxZoomLevel: 19, stepZoom: 1.0),
             userLocationMarker: UserLocationMaker(
               personMarker: const MarkerIcon(
                 icon: Icon(

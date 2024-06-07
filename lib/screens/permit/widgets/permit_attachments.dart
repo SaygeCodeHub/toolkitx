@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -24,9 +25,13 @@ import '../../chat/widgets/view_attached_image_widget.dart';
 class PermitAttachments extends StatelessWidget {
   final PermitDetailsModel permitDetailsModel;
   final String clientId;
+  final String userType;
 
   const PermitAttachments(
-      {super.key, required this.permitDetailsModel, required this.clientId});
+      {super.key,
+      required this.permitDetailsModel,
+      required this.clientId,
+      required this.userType});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +94,10 @@ class PermitAttachments extends StatelessWidget {
                                                       .endsWith('.jpeg') ||
                                                   filename
                                                       .toLowerCase()
-                                                      .endsWith('.bmp')) {
+                                                      .endsWith('.bmp') ||
+                                                  filename
+                                                      .toLowerCase()
+                                                      .endsWith('.gif')) {
                                                 Navigator.pushNamed(
                                                     context,
                                                     ViewAttachedImageWidget
@@ -123,22 +131,25 @@ class PermitAttachments extends StatelessWidget {
                                     }),
                                 const SizedBox(height: xxTiniestSpacing)
                               ])),
-                      trailing: InkWell(
-                          onTap: () {
-                            List file = files.split(',').toList();
-                            for (int i = 0; i < file.length; i++) {
-                              fileDownload(file[i]);
-                            }
-                          },
-                          child: const Icon(Icons.attach_file,
-                              size: kIconSize)))));
+                      trailing: (isNetworkEstablished && userType == '1')
+                          ? InkWell(
+                              onTap: () {
+                                List file = files.split(',').toList();
+                                for (int i = 0; i < file.length; i++) {
+                                  fileDownload(file[i], context);
+                                }
+                              },
+                              child: const Icon(Icons.attach_file,
+                                  size: kIconSize))
+                          : null)));
         },
         separatorBuilder: (context, index) {
           return const SizedBox(height: xxTinierSpacing);
         });
   }
 
-  Future<String> downloadImage(String url, String filename) async {
+  Future<String> downloadImage(
+      String url, String filename, BuildContext context) async {
     Directory directory = await getApplicationCacheDirectory();
     String path = directory.path;
     String filePath = '$path/$filename';
@@ -146,7 +157,8 @@ class PermitAttachments extends StatelessWidget {
 
     try {
       await dio.download(url, filePath, onReceiveProgress: (received, total) {
-        if (total != -1) {}
+        if (total != -1) {
+        } else {}
       });
     } catch (e) {
       rethrow;
@@ -154,7 +166,7 @@ class PermitAttachments extends StatelessWidget {
     return filePath;
   }
 
-  Future<void> fileDownload(String filename) async {
+  Future<void> fileDownload(String filename, BuildContext context) async {
     final CustomerCache customerCache = getIt<CustomerCache>();
     String? hashCode = await customerCache.getHashCode(CacheKeys.hashcode);
     String url =
@@ -169,7 +181,8 @@ class PermitAttachments extends StatelessWidget {
         if (messageValue is String) {
           String downloadUrl = messageValue;
           String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
-          await downloadImage(finalUrl, filename);
+          showCustomSnackBar(context, 'File downloaded successfully', '');
+          await downloadImage(finalUrl, filename, context);
         } else {
           throw Exception('Invalid message value: $messageValue');
         }

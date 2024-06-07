@@ -48,11 +48,13 @@ class PermitDetailsFetched extends PermitStates {
   final PermitDetailsModel permitDetailsModel;
   final List permitPopUpMenu;
   final String clientId;
+  final String userType;
 
   const PermitDetailsFetched(
       {required this.permitDetailsModel,
       required this.permitPopUpMenu,
-      required this.clientId});
+      required this.clientId,
+      required this.userType});
 }
 
 class CouldNotFetchPermitDetails extends PermitStates {
