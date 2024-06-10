@@ -32,6 +32,7 @@ import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trip_filter_screen.dart';
+import 'package:toolkit/screens/trips/widgets/add_special_report_screen.dart';
 import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -662,6 +663,9 @@ class AppRoutes {
       case TripVesselFilterList.routeName:
         return _createRoute(
             TripVesselFilterList(vesselName: settings.arguments.toString()));
+      case AddSpecialReportScreen.routeName:
+        return _createRoute(
+            AddSpecialReportScreen(tripId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

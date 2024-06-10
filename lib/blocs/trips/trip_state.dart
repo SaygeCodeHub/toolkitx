@@ -28,9 +28,14 @@ class TripDetailsFetching extends TripState {}
 class TripDetailsFetched extends TripState {
   final FetchTripDetailsModel fetchTripDetailsModel;
   final String clientId;
+  final bool showPopUpMenu;
+  final List tripPopUpMenuList;
 
   TripDetailsFetched(
-      {required this.fetchTripDetailsModel, required this.clientId});
+      {required this.fetchTripDetailsModel,
+      required this.showPopUpMenu,
+      required this.tripPopUpMenuList,
+      required this.clientId});
 }
 
 class TripDetailsNotFetched extends TripState {
@@ -65,4 +70,18 @@ class TripsVesselFilterSelected extends TripState {
   final String selectVessel;
 
   TripsVesselFilterSelected({required this.selectVessel});
+}
+
+class PassengerCrewListFetching extends TripState {}
+
+class PassengerCrewListFetched extends TripState {
+  final FetchTripPassengersCrewListModel fetchTripPassengersCrewListModel;
+
+  PassengerCrewListFetched({required this.fetchTripPassengersCrewListModel});
+}
+
+class PassengerCrewListNotFetched extends TripState {
+  final String errorMessage;
+
+  PassengerCrewListNotFetched({required this.errorMessage});
 }

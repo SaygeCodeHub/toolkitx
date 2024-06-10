@@ -38,3 +38,9 @@ class ApplyTripFilter extends TripEvent {
 }
 
 class ClearTripFilter extends TripEvent {}
+
+class FetchPassengerCrewList extends TripEvent {
+  final String tripId;
+
+  FetchPassengerCrewList({required this.tripId});
+}

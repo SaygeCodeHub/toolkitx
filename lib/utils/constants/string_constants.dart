@@ -650,4 +650,11 @@ abstract class StringConstants {
   static const String kDeparturePort = "Departure Port";
   static const String kArrivalPort = "Arrival Port";
   static const String kNotes = "Notes";
+  static const String kAddSpecialRequest = "Add Special Request";
+  static const String kEditSpecialRequest = "Edit Special Request";
+  static const String kDeleteSpecialRequest = "Delete Special Request";
+  static const String kCreatedFor = "Created For";
+  static const String kSpecialRequestType = "Special Request Type";
+  static const String kSpecialRequest = "Special Request";
+  static const String kManageSpecialRequest = "Manage Special Request";
 }

@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
+import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 
 import '../../data/models/trips/fetch_trip_details_model.dart';
@@ -11,4 +12,7 @@ abstract class TripsRepository {
       String tripId, String hashCode, String userId);
 
   Future<FetchTripMasterModel> fetchTripMaster(String hashCode);
+
+  Future<FetchTripPassengersCrewListModel> fetchTripPassengersCrewList(
+      String hashCode, String tripId);
 }

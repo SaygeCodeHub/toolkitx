@@ -9,7 +9,7 @@ String fetchTripMasterModelToJson(FetchTripMasterModel data) =>
 class FetchTripMasterModel {
   final int status;
   final String message;
-  final List<List<Datum>> data;
+  final List<List<MasterDatum>> data;
 
   FetchTripMasterModel({
     required this.status,
@@ -21,8 +21,8 @@ class FetchTripMasterModel {
       FetchTripMasterModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<List<Datum>>.from(json["Data"]
-            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+        data: List<List<MasterDatum>>.from(json["Data"].map((x) =>
+            List<MasterDatum>.from(x.map((x) => MasterDatum.fromJson(x))))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,7 +33,7 @@ class FetchTripMasterModel {
       };
 }
 
-class Datum {
+class MasterDatum {
   final dynamic id;
   final String vessel;
   final String name;
@@ -41,7 +41,7 @@ class Datum {
   final dynamic matrix2;
   final String matrix3;
 
-  Datum({
+  MasterDatum({
     required this.id,
     required this.vessel,
     required this.name,
@@ -50,7 +50,7 @@ class Datum {
     required this.matrix3,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory MasterDatum.fromJson(Map<String, dynamic> json) => MasterDatum(
         id: json["id"] ?? '',
         vessel: json["vessel"] ?? '',
         name: json["name"] ?? '',

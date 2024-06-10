@@ -3,13 +3,16 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
+import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/trips/fetch_trip_details_model.dart';
 import '../../di/app_module.dart';
+import '../../utils/database_utils.dart';
 
 part 'trip_event.dart';
 
@@ -29,7 +32,9 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<SelectTripVesselFilter>(_selectTripVesselFilter);
     on<ApplyTripFilter>(_applyTripFilter);
     on<ClearTripFilter>(_clearTripFilter);
+    on<FetchPassengerCrewList>(_fetchPassengerCrewList);
   }
+
   int tripTabIndex = 0;
 
   bool hasReachedMax = false;
@@ -76,6 +81,12 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       FetchTripsDetails event, Emitter<TripState> emit) async {
     tripTabIndex = event.tripTabIndex;
     emit(TripDetailsFetching());
+    List popUpMenuItemsList = [
+      StringConstants.kEditSpecialRequest,
+      StringConstants.kDeleteSpecialRequest,
+      DatabaseUtil.getText('Cancel'),
+    ];
+
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
@@ -86,9 +97,19 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       FetchTripDetailsModel fetchTripDetailsModel = await _tripsRepository
           .fetchTripDetails(event.tripId, hashCode, userId);
 
+      if (fetchTripDetailsModel.data.canaddspecialrequest == '1') {
+        popUpMenuItemsList.insert(
+          0,
+          StringConstants.kAddSpecialRequest,
+        );
+      }
+
       if (fetchTripDetailsModel.status == 200) {
         emit(TripDetailsFetched(
-            fetchTripDetailsModel: fetchTripDetailsModel, clientId: clientId));
+            fetchTripDetailsModel: fetchTripDetailsModel,
+            clientId: clientId,
+            showPopUpMenu: true,
+            tripPopUpMenuList: popUpMenuItemsList));
       } else {
         emit(
             TripDetailsNotFetched(errorMessage: fetchTripDetailsModel.message));
@@ -136,5 +157,28 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   FutureOr<void> _clearTripFilter(
       ClearTripFilter event, Emitter<TripState> emit) {
     filters = {};
+  }
+
+  Future<FutureOr<void>> _fetchPassengerCrewList(
+      FetchPassengerCrewList event, Emitter<TripState> emit) async {
+    emit(PassengerCrewListFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+
+      FetchTripPassengersCrewListModel fetchTripPassengersCrewListModel =
+          await _tripsRepository.fetchTripPassengersCrewList(
+              hashCode, event.tripId);
+      if (fetchTripPassengersCrewListModel.status == 200) {
+        emit(PassengerCrewListFetched(
+            fetchTripPassengersCrewListModel:
+                fetchTripPassengersCrewListModel));
+      } else {
+        emit(PassengerCrewListNotFetched(
+            errorMessage: fetchTripPassengersCrewListModel.message));
+      }
+    } catch (e) {
+      emit(PassengerCrewListNotFetched(errorMessage: e.toString()));
+    }
   }
 }

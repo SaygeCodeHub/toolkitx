@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_details_model.dart';
+import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
 
@@ -28,5 +29,13 @@ class TripsRepositoryImpl extends TripsRepository {
     final response = await DioClient()
         .get("${ApiConstants.baseUrl}trip/getmaster?hashcode=$hashCode");
     return FetchTripMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchTripPassengersCrewListModel> fetchTripPassengersCrewList(
+      String hashCode, String tripId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}trip/getpassengerscrewlist?hashcode=$hashCode&tripid=$tripId");
+    return FetchTripPassengersCrewListModel.fromJson(response);
   }
 }
