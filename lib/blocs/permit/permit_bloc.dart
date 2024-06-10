@@ -1709,16 +1709,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               htmlText = htmlText.replaceAll('#3_time', t5);
               htmlText = htmlText.replaceAll('#3_date', d5);
               break;
-            case 'surrender_permit':
+
+            case 'transfer_permit':
               if (action['actionJson']['surrender'].length > 0) {
                 for (int j = 0;
-                    j < action['actionJson']['surrender'].length;
-                    j++) {
+                j < action['actionJson']['surrender'].length;
+                j++) {
                   surrenderList.add(action['actionJson']['surrender'][j]);
                 }
               }
-              break;
-            case 'transfer_permit':
               if (action['actionJson']['reciever'].length > 0) {
                 for (int j = 0;
                     j < action['actionJson']['reciever'].length;

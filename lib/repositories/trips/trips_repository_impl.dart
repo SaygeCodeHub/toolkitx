@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_details_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
+import 'package:toolkit/data/models/trips/fetch_trip_special_request_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/data/models/trips/trip_add_special_request_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
@@ -46,5 +47,13 @@ class TripsRepositoryImpl extends TripsRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}trip/addspecialrequest", addSpecialRequestMap);
     return TripAddSpecialRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchTripSpecialRequestModel> fetchTripSpecialRequest(
+      String hashCode, String requestId, String tripId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}trip/getspecialrequest?hashcode=$hashCode&requestid=$requestId&tripid=$tripId");
+    return FetchTripSpecialRequestModel.fromJson(response);
   }
 }
