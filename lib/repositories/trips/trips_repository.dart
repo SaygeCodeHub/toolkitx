@@ -17,5 +17,6 @@ abstract class TripsRepository {
   Future<FetchTripPassengersCrewListModel> fetchTripPassengersCrewList(
       String hashCode, String tripId);
 
-  Future<TripAddSpecialRequestModel> tripAddSpecialRequest(Map addSpecialRequestMap);
+  Future<TripAddSpecialRequestModel> tripAddSpecialRequest(
+      Map addSpecialRequestMap);
 }

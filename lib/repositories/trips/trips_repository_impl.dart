@@ -41,9 +41,10 @@ class TripsRepositoryImpl extends TripsRepository {
   }
 
   @override
-  Future<TripAddSpecialRequestModel> tripAddSpecialRequest(Map addSpecialRequestMap) async {
+  Future<TripAddSpecialRequestModel> tripAddSpecialRequest(
+      Map addSpecialRequestMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}trip/addspecialrequest",addSpecialRequestMap);
+        "${ApiConstants.baseUrl}trip/addspecialrequest", addSpecialRequestMap);
     return TripAddSpecialRequestModel.fromJson(response);
   }
 }

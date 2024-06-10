@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -91,14 +90,12 @@ class AddSpecialReportScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: BlocListener<TripBloc, TripState>(
           listener: (context, state) {
-            if(state is TripSpecialRequestAdding){
+            if (state is TripSpecialRequestAdding) {
               ProgressBar.show(context);
-            }
-            else if(state is TripSpecialRequestAdded){
+            } else if (state is TripSpecialRequestAdded) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-            }
-            else if(state is TripSpecialRequestNotAdded){
+            } else if (state is TripSpecialRequestNotAdded) {
               ProgressBar.dismiss(context);
             }
           },
