@@ -1713,8 +1713,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             case 'transfer_permit':
               if (action['actionJson']['surrender'].length > 0) {
                 for (int j = 0;
-                j < action['actionJson']['surrender'].length;
-                j++) {
+                    j < action['actionJson']['surrender'].length;
+                    j++) {
                   surrenderList.add(action['actionJson']['surrender'][j]);
                 }
               }

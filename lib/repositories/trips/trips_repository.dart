@@ -22,5 +22,5 @@ abstract class TripsRepository {
       Map addSpecialRequestMap);
 
   Future<FetchTripSpecialRequestModel> fetchTripSpecialRequest(
-      String hashCode,String requestId, String tripId);
+      String hashCode, String requestId, String tripId);
 }
