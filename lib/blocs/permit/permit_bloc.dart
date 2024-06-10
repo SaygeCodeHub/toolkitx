@@ -316,6 +316,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     List permitPopUpMenu = [StringConstants.kPrintPermit];
     String? clientId =
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+    String? userType =
+        await _customerCache.getUserType(CacheKeys.userType) ?? '';
     try {
       if (isNetworkEstablished) {
         add(FetchPermitBasicDetails(permitId: event.permitId));
@@ -355,7 +357,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu,
-            clientId: clientId));
+            clientId: clientId,
+            userType: userType));
       } else {
         emit(const FetchingPermitDetails());
         Map<String, dynamic> permitDetailsMap =
@@ -396,7 +399,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           emit(PermitDetailsFetched(
               permitDetailsModel: permitDetailsModel,
               permitPopUpMenu: permitPopUpMenu,
-              clientId: clientId));
+              clientId: clientId,
+              userType: userType));
         } else {
           emit(const CouldNotFetchPermitDetails());
         }

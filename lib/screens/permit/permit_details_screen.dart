@@ -159,7 +159,8 @@ class PermitDetailsScreen extends StatelessWidget {
                                 permitDetailsModel: state.permitDetailsModel),
                             PermitAttachments(
                                 permitDetailsModel: state.permitDetailsModel,
-                                clientId: state.clientId),
+                                clientId: state.clientId,
+                                userType: state.userType),
                             PermitComments(
                                 permitDetailsModel: state.permitDetailsModel)
                           ])
