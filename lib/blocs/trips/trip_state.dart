@@ -85,3 +85,13 @@ class PassengerCrewListNotFetched extends TripState {
 
   PassengerCrewListNotFetched({required this.errorMessage});
 }
+
+class TripSpecialRequestAdding extends TripState {}
+
+class TripSpecialRequestAdded extends TripState {}
+
+class TripSpecialRequestNotAdded extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotAdded({required this.errorMessage});
+}

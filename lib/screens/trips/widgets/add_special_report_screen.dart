@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -7,6 +8,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../../blocs/trips/trip_bloc.dart';
 import '../../../configs/app_color.dart';
@@ -87,8 +89,26 @@ class AddSpecialReportScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child:
-            PrimaryButton(onPressed: () {}, textValue: StringConstants.kSave),
+        child: BlocListener<TripBloc, TripState>(
+          listener: (context, state) {
+            if(state is TripSpecialRequestAdding){
+              ProgressBar.show(context);
+            }
+            else if(state is TripSpecialRequestAdded){
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+            }
+            else if(state is TripSpecialRequestNotAdded){
+              ProgressBar.dismiss(context);
+            }
+          },
+          child: PrimaryButton(
+              onPressed: () {
+                context.read<TripBloc>().add(TripAddSpecialRequest(
+                    tripId: tripId, addSpecialRequestMap: specialReportMap));
+              },
+              textValue: StringConstants.kSave),
+        ),
       ),
     );
   }

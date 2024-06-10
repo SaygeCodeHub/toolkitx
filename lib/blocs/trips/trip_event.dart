@@ -44,3 +44,11 @@ class FetchPassengerCrewList extends TripEvent {
 
   FetchPassengerCrewList({required this.tripId});
 }
+
+class TripAddSpecialRequest extends TripEvent {
+  final String tripId;
+  final Map addSpecialRequestMap;
+
+  TripAddSpecialRequest(
+      {required this.tripId, required this.addSpecialRequestMap});
+}

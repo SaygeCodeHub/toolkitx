@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
+import 'package:toolkit/data/models/trips/trip_add_special_request_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -33,6 +34,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<ApplyTripFilter>(_applyTripFilter);
     on<ClearTripFilter>(_clearTripFilter);
     on<FetchPassengerCrewList>(_fetchPassengerCrewList);
+    on<TripAddSpecialRequest>(_tripAddSpecialRequest);
   }
 
   int tripTabIndex = 0;
@@ -179,6 +181,31 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     } catch (e) {
       emit(PassengerCrewListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _tripAddSpecialRequest(
+      TripAddSpecialRequest event, Emitter<TripState> emit) async {
+    emit(TripSpecialRequestAdding());
+    try {
+      Map addSpecialRequestMap = {
+        "tripid": event.tripId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+        "createdfor": event.addSpecialRequestMap['createdfor'],
+        "specialrequest": event.addSpecialRequestMap['specialrequest'],
+        "specialrequesttype": event.addSpecialRequestMap['specialrequesttype']
+      };
+      TripAddSpecialRequestModel tripAddSpecialRequestModel =
+          await _tripsRepository.tripAddSpecialRequest(addSpecialRequestMap);
+      if (tripAddSpecialRequestModel.status == 200) {
+        emit(TripSpecialRequestAdded());
+      } else {
+        emit(TripSpecialRequestNotAdded(
+            errorMessage: tripAddSpecialRequestModel.message));
+      }
+    } catch (e) {
+      emit(TripSpecialRequestNotAdded(errorMessage: e.toString()));
     }
   }
 }
