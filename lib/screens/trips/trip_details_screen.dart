@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab_three.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab.dart';
 import 'package:toolkit/screens/trips/widgets/trip_details_tab_two.dart';
-import 'package:toolkit/screens/trips/widgets/trip_popupmenu_button.dart';
 import 'package:toolkit/utils/trips_util.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -27,26 +26,7 @@ class TripsDetailsScreen extends StatelessWidget {
         .read<TripBloc>()
         .add(FetchTripsDetails(tripId: tripId, tripTabIndex: 0));
     return Scaffold(
-      appBar: GenericAppBar(actions: [
-        BlocBuilder<TripBloc, TripState>(
-            buildWhen: (previousState, currentState) =>
-                currentState is TripDetailsFetching ||
-                currentState is TripDetailsFetched,
-            builder: (context, state) {
-              if (state is TripDetailsFetched) {
-                if (state.showPopUpMenu == true) {
-                  return TripsPopupMenuButton(
-                    popUpMenuItems: state.tripPopUpMenuList,
-                    tripId: tripId,
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              } else {
-                return const SizedBox.shrink();
-              }
-            })
-      ]),
+      appBar: GenericAppBar(),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
