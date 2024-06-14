@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
+import 'package:toolkit/data/models/trips/fetch_trip_special_request_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/data/models/trips/trip_add_special_request_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
@@ -35,6 +36,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<ClearTripFilter>(_clearTripFilter);
     on<FetchPassengerCrewList>(_fetchPassengerCrewList);
     on<TripAddSpecialRequest>(_tripAddSpecialRequest);
+    on<FetchTripSpecialRequest>(_fetchTripSpecialRequest);
   }
 
   int tripTabIndex = 0;
@@ -43,6 +45,8 @@ class TripBloc extends Bloc<TripEvent, TripState> {
   List<TripDatum> tripDatum = [];
   Map filters = {};
   String vesselName = '';
+  List<PassengerCrewDatum> passengerCrewDatum = [];
+  List<MasterDatum> masterDatumSecondList = [];
 
   Future<FutureOr<void>> _fetchTripsList(
       FetchTripsList event, Emitter<TripState> emit) async {
@@ -84,8 +88,6 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     tripTabIndex = event.tripTabIndex;
     emit(TripDetailsFetching());
     List popUpMenuItemsList = [
-      StringConstants.kEditSpecialRequest,
-      StringConstants.kDeleteSpecialRequest,
       DatabaseUtil.getText('Cancel'),
     ];
 
@@ -137,6 +139,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       FetchTripMasterModel fetchTripMasterModel =
           await _tripsRepository.fetchTripMaster(hashCode);
       if (fetchTripMasterModel.status == 200) {
+        masterDatumSecondList = fetchTripMasterModel.data[1];
         emit(TripMasterFetched(fetchTripMasterModel: fetchTripMasterModel));
       } else {
         emit(TripMasterNotFetched(errorMessage: fetchTripMasterModel.message));
@@ -172,6 +175,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
           await _tripsRepository.fetchTripPassengersCrewList(
               hashCode, event.tripId);
       if (fetchTripPassengersCrewListModel.status == 200) {
+        passengerCrewDatum = fetchTripPassengersCrewListModel.data;
         emit(PassengerCrewListFetched(
             fetchTripPassengersCrewListModel:
                 fetchTripPassengersCrewListModel));
@@ -206,6 +210,50 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     } catch (e) {
       emit(TripSpecialRequestNotAdded(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchTripSpecialRequest(
+      FetchTripSpecialRequest event, Emitter<TripState> emit) async {
+    emit(TripSpecialRequestFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+
+      await _addEventAndWait(
+          () => add(FetchPassengerCrewList(tripId: event.tripId)),
+          PassengerCrewListFetched,
+          stream);
+      await _addEventAndWait(
+          () => add(FetchTripMaster()), TripMasterFetched, stream);
+
+      if (passengerCrewDatum.isNotEmpty && masterDatumSecondList.isNotEmpty) {
+        FetchTripSpecialRequestModel fetchTripSpecialRequestModel =
+            await _tripsRepository.fetchTripSpecialRequest(
+                hashCode, event.requestId, event.tripId);
+        if (fetchTripSpecialRequestModel.status == 200) {
+          emit(TripSpecialRequestFetched(
+              fetchTripSpecialRequestModel: fetchTripSpecialRequestModel,
+              passengerCrewDatum: passengerCrewDatum,
+              masterDatum: masterDatumSecondList));
+        } else {
+          emit(TripSpecialRequestNotFetched(
+              errorMessage: fetchTripSpecialRequestModel.message));
+        }
+      } else {
+        emit(TripSpecialRequestNotFetched(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      emit(TripSpecialRequestNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> _addEventAndWait<T extends TripState>(
+      Function() addEvent, Type stateType, Stream<TripState> stream) async {
+    addEvent();
+    await for (final state in stream) {
+      if (state.runtimeType == stateType) break;
     }
   }
 }

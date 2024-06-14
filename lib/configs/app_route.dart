@@ -32,7 +32,7 @@ import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trip_filter_screen.dart';
-import 'package:toolkit/screens/trips/widgets/add_special_report_screen.dart';
+import 'package:toolkit/screens/trips/add_special_request_screen.dart';
 import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import '../data/models/documents/documents_details_models.dart';
@@ -171,6 +171,7 @@ import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/trips/edit_special_request_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
 import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_and_complete_workorder_screen.dart';
@@ -663,9 +664,13 @@ class AppRoutes {
       case TripVesselFilterList.routeName:
         return _createRoute(
             TripVesselFilterList(vesselName: settings.arguments.toString()));
-      case AddSpecialReportScreen.routeName:
+      case AddSpecialRequestScreen.routeName:
         return _createRoute(
-            AddSpecialReportScreen(tripId: settings.arguments.toString()));
+            AddSpecialRequestScreen(tripId: settings.arguments.toString()));
+      case EditSpecialRequestScreen.routeName:
+        List args = settings.arguments as List<String>;
+        return _createRoute(
+            EditSpecialRequestScreen(tripId: args[0], requestId: args[1]));
       default:
         return _createRoute(const WelcomeScreen());
     }
