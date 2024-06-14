@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.
 import 'package:toolkit/data/models/trips/fetch_trip_special_request_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/data/models/trips/trip_add_special_request_model.dart';
+import 'package:toolkit/data/models/trips/update_trip_special_request_model.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -37,6 +38,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<FetchPassengerCrewList>(_fetchPassengerCrewList);
     on<TripAddSpecialRequest>(_tripAddSpecialRequest);
     on<FetchTripSpecialRequest>(_fetchTripSpecialRequest);
+    on<UpdateTripSpecialRequest>(_updateTripSpecialRequest);
   }
 
   int tripTabIndex = 0;
@@ -254,6 +256,30 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     addEvent();
     await for (final state in stream) {
       if (state.runtimeType == stateType) break;
+    }
+  }
+
+  Future<FutureOr<void>> _updateTripSpecialRequest(
+      UpdateTripSpecialRequest event, Emitter<TripState> emit) async {
+    emit(TripSpecialRequestUpdating());
+    try {
+      Map updateSpecialRequestMap = {
+        "id": event.requestId,
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+        "createdfor": event.updateSpecialRequestMap['createdfor'],
+        "specialrequest": event.updateSpecialRequestMap['specialrequest']
+      };
+      UpdateTripSpecialRequestModel updateTripSpecialRequestModel =
+          await _tripsRepository
+              .updateTripSpecialRequest(updateSpecialRequestMap);
+      if (updateTripSpecialRequestModel.status == 200) {
+        emit(TripSpecialRequestUpdated());
+      } else {
+        emit(TripSpecialRequestNotUpdated(
+            errorMessage: updateTripSpecialRequestModel.message));
+      }
+    } catch (e) {
+      emit(TripSpecialRequestNotUpdated(errorMessage: e.toString()));
     }
   }
 }

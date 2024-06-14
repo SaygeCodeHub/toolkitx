@@ -88,7 +88,7 @@ class EditSpecialRequestScreen extends StatelessWidget {
                     ),
                   ]);
             } else if (state is TripSpecialRequestNotFetched) {
-              return const Center(child: Text('SpecialReportFetchFailed'));
+              return Center(child: Text(state.errorMessage));
             }
             return const SizedBox.shrink();
           },
@@ -98,20 +98,25 @@ class EditSpecialRequestScreen extends StatelessWidget {
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: BlocListener<TripBloc, TripState>(
           listener: (context, state) {
-            if (state is TripSpecialRequestAdding) {
+            if (state is TripSpecialRequestUpdating) {
               ProgressBar.show(context);
-            } else if (state is TripSpecialRequestAdded) {
+            } else if (state is TripSpecialRequestUpdated) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               Navigator.pushReplacementNamed(
                   context, TripsDetailsScreen.routeName,
                   arguments: tripId);
-            } else if (state is TripSpecialRequestNotAdded) {
+            } else if (state is TripSpecialRequestNotUpdated) {
               ProgressBar.dismiss(context);
             }
           },
-          child:
-              PrimaryButton(onPressed: () {}, textValue: StringConstants.kSave),
+          child: PrimaryButton(
+              onPressed: () {
+                context.read<TripBloc>().add(UpdateTripSpecialRequest(
+                    requestId: requestId,
+                    updateSpecialRequestMap: editSpecialRequestMap));
+              },
+              textValue: StringConstants.kSave),
         ),
       ),
     );

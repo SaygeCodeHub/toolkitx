@@ -114,3 +114,13 @@ class TripSpecialRequestNotFetched extends TripState {
 
   TripSpecialRequestNotFetched({required this.errorMessage});
 }
+
+class TripSpecialRequestUpdating extends TripState {}
+
+class TripSpecialRequestUpdated extends TripState {}
+
+class TripSpecialRequestNotUpdated extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotUpdated({required this.errorMessage});
+}

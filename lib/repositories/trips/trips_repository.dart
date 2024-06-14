@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.
 import 'package:toolkit/data/models/trips/fetch_trip_special_request_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trips_list_model.dart';
 import 'package:toolkit/data/models/trips/trip_add_special_request_model.dart';
+import 'package:toolkit/data/models/trips/update_trip_special_request_model.dart';
 
 import '../../data/models/trips/fetch_trip_details_model.dart';
 
@@ -23,4 +24,7 @@ abstract class TripsRepository {
 
   Future<FetchTripSpecialRequestModel> fetchTripSpecialRequest(
       String hashCode, String requestId, String tripId);
+
+  Future<UpdateTripSpecialRequestModel> updateTripSpecialRequest(
+      Map updateSpecialRequestMap);
 }

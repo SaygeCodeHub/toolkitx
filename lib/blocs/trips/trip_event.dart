@@ -59,3 +59,11 @@ class FetchTripSpecialRequest extends TripEvent {
 
   FetchTripSpecialRequest({required this.tripId, required this.requestId});
 }
+
+class UpdateTripSpecialRequest extends TripEvent {
+  final String requestId;
+  final Map updateSpecialRequestMap;
+
+  UpdateTripSpecialRequest(
+      {required this.requestId, required this.updateSpecialRequestMap});
+}
