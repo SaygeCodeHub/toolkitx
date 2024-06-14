@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/trips/delete_trip_special_request.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_details_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
@@ -65,5 +66,14 @@ class TripsRepositoryImpl extends TripsRepository {
         "${ApiConstants.baseUrl}trip/updatespecialrequest",
         updateSpecialRequestMap);
     return UpdateTripSpecialRequestModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteTripSpecialRequestModel> deleteTripSpecialRequest(
+      Map deleteSpecialRequestMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}trip/deletespecialrequest",
+        deleteSpecialRequestMap);
+    return DeleteTripSpecialRequestModel.fromJson(response);
   }
 }

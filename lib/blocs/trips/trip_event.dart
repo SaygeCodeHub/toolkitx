@@ -67,3 +67,11 @@ class UpdateTripSpecialRequest extends TripEvent {
   UpdateTripSpecialRequest(
       {required this.requestId, required this.updateSpecialRequestMap});
 }
+
+class DeleteTripSpecialRequest extends TripEvent {
+  final String requestId;
+
+  DeleteTripSpecialRequest({
+    required this.requestId,
+  });
+}

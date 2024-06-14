@@ -13,6 +13,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/trips/delete_trip_special_request.dart';
 import '../../data/models/trips/fetch_trip_details_model.dart';
 import '../../di/app_module.dart';
 import '../../utils/database_utils.dart';
@@ -39,6 +40,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
     on<TripAddSpecialRequest>(_tripAddSpecialRequest);
     on<FetchTripSpecialRequest>(_fetchTripSpecialRequest);
     on<UpdateTripSpecialRequest>(_updateTripSpecialRequest);
+    on<DeleteTripSpecialRequest>(_deleteTripSpecialRequest);
   }
 
   int tripTabIndex = 0;
@@ -272,7 +274,7 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       UpdateTripSpecialRequestModel updateTripSpecialRequestModel =
           await _tripsRepository
               .updateTripSpecialRequest(updateSpecialRequestMap);
-      if (updateTripSpecialRequestModel.status == 200) {
+      if (updateTripSpecialRequestModel.message == '1') {
         emit(TripSpecialRequestUpdated());
       } else {
         emit(TripSpecialRequestNotUpdated(
@@ -280,6 +282,28 @@ class TripBloc extends Bloc<TripEvent, TripState> {
       }
     } catch (e) {
       emit(TripSpecialRequestNotUpdated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteTripSpecialRequest(
+      DeleteTripSpecialRequest event, Emitter<TripState> emit) async {
+    emit(TripSpecialRequestDeleting());
+    try {
+      Map deleteSpecialRequestMap = {
+        "id": event.requestId,
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+      };
+      DeleteTripSpecialRequestModel deleteTripSpecialRequestModel =
+          await _tripsRepository
+              .deleteTripSpecialRequest(deleteSpecialRequestMap);
+      if (deleteTripSpecialRequestModel.message == '1') {
+        emit(TripSpecialRequestDeleted());
+      } else {
+        emit(TripSpecialRequestNotDeleted(
+            errorMessage: deleteTripSpecialRequestModel.message));
+      }
+    } catch (e) {
+      emit(TripSpecialRequestNotDeleted(errorMessage: e.toString()));
     }
   }
 }

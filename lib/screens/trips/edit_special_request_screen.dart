@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/widgets/trip_created_for_expansion_tile.dart';
 import 'package:toolkit/screens/trips/widgets/trip_special_request_type_expansion_tile.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -103,9 +101,9 @@ class EditSpecialRequestScreen extends StatelessWidget {
             } else if (state is TripSpecialRequestUpdated) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-              Navigator.pushReplacementNamed(
-                  context, TripsDetailsScreen.routeName,
-                  arguments: tripId);
+              context
+                  .read<TripBloc>()
+                  .add(FetchTripsDetails(tripId: tripId, tripTabIndex: 2));
             } else if (state is TripSpecialRequestNotUpdated) {
               ProgressBar.dismiss(context);
             }

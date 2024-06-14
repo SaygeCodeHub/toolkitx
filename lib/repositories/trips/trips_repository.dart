@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/trips/delete_trip_special_request.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_master_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_passengers_crew_list_model.dart';
 import 'package:toolkit/data/models/trips/fetch_trip_special_request_model.dart';
@@ -27,4 +28,7 @@ abstract class TripsRepository {
 
   Future<UpdateTripSpecialRequestModel> updateTripSpecialRequest(
       Map updateSpecialRequestMap);
+
+  Future<DeleteTripSpecialRequestModel> deleteTripSpecialRequest(
+      Map deleteSpecialRequestMap);
 }

@@ -124,3 +124,13 @@ class TripSpecialRequestNotUpdated extends TripState {
 
   TripSpecialRequestNotUpdated({required this.errorMessage});
 }
+
+class TripSpecialRequestDeleting extends TripState {}
+
+class TripSpecialRequestDeleted extends TripState {}
+
+class TripSpecialRequestNotDeleted extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotDeleted({required this.errorMessage});
+}
