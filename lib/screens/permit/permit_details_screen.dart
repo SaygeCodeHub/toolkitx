@@ -96,6 +96,15 @@ class PermitDetailsScreen extends StatelessWidget {
                 showCustomSnackBar(
                     context, DatabaseUtil.getText('something_went_wrong'), '');
               }
+
+              if (state is GeneratingTextFile) {
+                ProgressBar.show(context);
+              } else if (state is TextFileGenerated) {
+                ProgressBar.dismiss(context);
+              } else if (state is FailedToGenerateTextFile) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingPermitDetails ||

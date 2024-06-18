@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -52,6 +57,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   PermitBasicData? permitBasicData;
   int statusId = 0;
   bool showTransferWarning = false;
+  String permitId = '';
+  late File pickedFile;
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -85,6 +92,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SavePermitOfflineAction>(_saveOfflineData);
     on<PermitInternetActions>(_permitInternetActions);
     on<GenerateOfflinePdf>(_generateOfflinePdf);
+    on<GenerateTextFile>(_generateTextFile);
+    on<PickFileFromStorage>(_fetchFileFromStorage);
+    on<PickFileFromStorageInitialEvent>(_fetchFileFromStorageInitial);
+    on<SaveFileData>(_saveFileData);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -313,7 +324,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
-    List permitPopUpMenu = [StringConstants.kPrintPermit];
+    List permitPopUpMenu = [
+      StringConstants.kPrintPermit,
+      'Generate File',
+      'Save File'
+    ];
     String? clientId =
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     String? userType =
@@ -364,6 +379,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         Map<String, dynamic> permitDetailsMap =
             await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
         statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
+        permitId = event.permitId;
         PermitDetailsData permitDerailsData =
             PermitDetailsData.fromJson(permitDetailsMap);
         permitDerailsData.tab1.status = getStatusText(
@@ -2019,6 +2035,152 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(ErrorGeneratingPdfOffline(
           errorMessage: StringConstants.kPDFGenerationError));
+    }
+  }
+
+  FutureOr<void> _generateTextFile(
+      GenerateTextFile event, Emitter<PermitStates> emit) async {
+    Map<String, dynamic> fetchOfflinePermitData = {};
+    // try {
+    emit(GeneratingTextFile());
+    Map<String, dynamic>? fetchOfflinePermits =
+        await _databaseHelper.fetchOfflinePermit(permitId);
+    if (fetchOfflinePermits != null) {
+      // for (var data in fetchOfflinePermits) {
+      fetchOfflinePermitData.addAll(fetchOfflinePermits);
+      // }
+      await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
+          .then((_) {
+        emit(TextFileGenerated());
+      }).catchError((_) {
+        emit(FailedToGenerateTextFile(
+            errorMessage: 'Could not generate file. Please try again!'));
+      });
+    }
+    // } catch (e) {
+    //   rethrow;
+    // }
+  }
+
+  Future<void> writeOfflinePermitDataToFile(String jsonData) async {
+    try {
+      final directory = await getTemporaryDirectory();
+      final file = File('${directory.path}/$permitId.txt');
+      await file.writeAsString(jsonData).then((_) async {
+        await OpenFile.open(file.path);
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchFileFromStorage(
+      PickFileFromStorage event, Emitter<PermitStates> emit) async {
+    try {
+      final permissionStatus = await _requestPermission();
+
+      if (permissionStatus == PermissionStatus.denied) {
+        emit(FileFromStorageFailedToPick(
+            errorMessage:
+                "Looks like you denied permission to access the camera/storage. To choose an image, you'll need to grant permission in your app settings. Tap 'Open Settings' below and enable Camera/Storage access"));
+        return;
+      } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
+        emit(FileFromStorageFailedToPick(
+            errorMessage:
+                "Looks like you denied permission to access the camera/storage. To choose an image, you'll need to grant permission in your app settings. Tap 'Open Settings' below and enable Camera/Storage access"));
+        return;
+      }
+
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
+      if (result != null) {
+        if (result.files.single.path != null) {
+          pickedFile = File(result.files.single.path!);
+          emit(FileFromStoragePicked(filePath: pickedFile.path));
+        } else {
+          emit(FileFromStorageFailedToPick(
+              errorMessage: 'Could not pick file. Please try again!'));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<PermissionStatus> _requestPermission() async {
+    const permission = Permission.storage;
+    return await permission.request();
+  }
+
+  FutureOr<void> _fetchFileFromStorageInitial(
+      PickFileFromStorageInitialEvent event, Emitter<PermitStates> emit) async {
+    try {
+      emit(PickFileFromStorageInitial());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _saveFileData(
+      SaveFileData event, Emitter<PermitStates> emit) async {
+    emit(SavingFileData());
+    try {
+      final file = File(pickedFile.path);
+      String contents = await file.readAsString();
+      Map<String, dynamic> jsonData = await jsonDecode(contents);
+      if (jsonData.containsKey('listPage')) {
+        jsonData['listPage'] = jsonDecode(jsonData['listPage']);
+      }
+      if (jsonData.containsKey('tab1')) {
+        jsonData['tab1'] = jsonDecode(jsonData['tab1']);
+      }
+      if (jsonData.containsKey('tab2')) {
+        jsonData['tab2'] = jsonDecode(jsonData['tab2']);
+      }
+      if (jsonData.containsKey('tab3')) {
+        jsonData['tab3'] = jsonDecode(jsonData['tab3']);
+      }
+      if (jsonData.containsKey('tab4')) {
+        jsonData['tab4'] = jsonDecode(jsonData['tab4']);
+      }
+      if (jsonData.containsKey('tab5')) {
+        jsonData['tab5'] = jsonDecode(jsonData['tab5']);
+      }
+      if (jsonData.containsKey('tab6')) {
+        jsonData['tab6'] = jsonDecode(jsonData['tab6']);
+      }
+      if (jsonData.containsKey('html')) {
+        jsonData['html'] = jsonDecode(jsonData['html']);
+      }
+
+      log('JSON data: $jsonData');
+
+      if (jsonData.isNotEmpty) {
+        jsonData.remove('id');
+        OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
+          'permitId': jsonData['permitId'] ?? '',
+          'listpage': jsonData['listPage'] ?? {},
+          'tab1': jsonData['tab1'],
+          'tab2': jsonData['tab2'],
+          'tab3': jsonData['tab3'],
+          'tab4': jsonData['tab4'],
+          'tab5': jsonData['tab5'],
+          'tab6': jsonData['tab6'],
+          'html': jsonData['html'],
+          'statusId': jsonData['statusId'] ?? ''
+        });
+        if (offlinePermitDatum.toJson().isNotEmpty) {
+          await _databaseHelper
+              .insertOfflinePermit(offlinePermitDatum)
+              .then((_) {
+            emit(FileDataSaved());
+          });
+        } else {
+          emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));
+        }
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

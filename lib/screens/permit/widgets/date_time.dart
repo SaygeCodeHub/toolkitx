@@ -23,9 +23,9 @@ class DateTimeRow extends StatelessWidget {
                 Image.asset('assets/icons/calendar.png',
                     height: kImageHeight, width: kImageWidth),
                 const SizedBox(width: tiniestSpacing),
-                Text((allPermitDatum.enddate == '')
-                    ? DateUtil.splitDateTime(allPermitDatum.startdate!)[0]
-                    : '${DateUtil.splitDateTime(allPermitDatum.startdate!)[0]} - ${DateUtil.splitDateTime(allPermitDatum.enddate!)[0]}')
+                // Text((allPermitDatum.enddate == '')
+                //     ? DateUtil.splitDateTime(allPermitDatum.startdate!)[0]
+                //     : '${DateUtil.splitDateTime(allPermitDatum.startdate!)[0]} - ${DateUtil.splitDateTime(allPermitDatum.enddate!)[0]}')
               ]),
           Row(
               crossAxisAlignment: CrossAxisAlignment.center,

@@ -213,3 +213,11 @@ class GenerateOfflinePdf extends PermitEvents {
 
   GenerateOfflinePdf({required this.permitId});
 }
+
+class GenerateTextFile extends PermitEvents {}
+
+class PickFileFromStorageInitialEvent extends PermitEvents {}
+
+class PickFileFromStorage extends PermitEvents {}
+
+class SaveFileData extends PermitEvents {}

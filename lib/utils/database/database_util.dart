@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -113,11 +114,9 @@ class DatabaseHelper {
 
   Future<void> recreateOfflinePermitTable() async {
     final Database db = await database;
-    // Drop the table if it exists
     await db.execute('DROP TABLE IF EXISTS OfflinePermit');
     await db.execute('DROP TABLE IF EXISTS OfflinePermitAction');
 
-    // Create the table again
     await db.execute('''
     CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
@@ -189,12 +188,28 @@ class DatabaseHelper {
     );
   }
 
+  Future<Map<String, dynamic>?> fetchOfflinePermit(String permitId) async {
+    final Database db = await database;
+    try {
+      List<Map<String, dynamic>> fetchOfflinePermits = await db.rawQuery(
+        'SELECT * FROM OfflinePermit WHERE permitId = ?',
+        [permitId],
+      );
+      if (fetchOfflinePermits.isNotEmpty) {
+        return fetchOfflinePermits.first; // Return the first (and only) result
+      } else {
+        return null; // Return null if no data is found
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
     try {
       DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
       sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
-      // print('insertMessage db $sendMessageMap');
       int temp = await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.ignore);
       print('insertMessage db $temp');
@@ -401,6 +416,7 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> result = await db.rawQuery(
         'SELECT listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit');
+    log('result $result');
     return result;
   }
 

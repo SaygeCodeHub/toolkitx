@@ -383,3 +383,39 @@ class ErrorGeneratingPdfOffline extends PermitStates {
 
   ErrorGeneratingPdfOffline({required this.errorMessage});
 }
+
+class GeneratingTextFile extends PermitStates {}
+
+class TextFileGenerated extends PermitStates {}
+
+class FailedToGenerateTextFile extends PermitStates {
+  final String errorMessage;
+
+  FailedToGenerateTextFile({required this.errorMessage});
+}
+
+class PickFileFromStorageInitial extends PermitStates {}
+
+class PickingFileFromStorage extends PermitStates {}
+
+class FileFromStoragePicked extends PermitStates {
+  final String filePath;
+
+  FileFromStoragePicked({required this.filePath});
+}
+
+class FileFromStorageFailedToPick extends PermitStates {
+  final String errorMessage;
+
+  FileFromStorageFailedToPick({required this.errorMessage});
+}
+
+class SavingFileData extends PermitStates {}
+
+class FileDataSaved extends PermitStates {}
+
+class FailedToSaveFileData extends PermitStates {
+  final String errorMessage;
+
+  FailedToSaveFileData({required this.errorMessage});
+}

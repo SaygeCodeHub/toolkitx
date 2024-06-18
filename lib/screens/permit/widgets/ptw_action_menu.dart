@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
+import 'package:toolkit/screens/permit/permit_select_file_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
@@ -46,7 +47,12 @@ class PTWActionMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
-          if (popUpMenuItems[value] == StringConstants.kPrintPermit) {
+          if (popUpMenuItems[value] == 'Save File') {
+            Navigator.pushNamed(context, PermitSelectFileScreen.routeName);
+          }
+          if (popUpMenuItems[value] == 'Generate File') {
+            context.read<PermitBloc>().add(GenerateTextFile());
+          } else if (popUpMenuItems[value] == StringConstants.kPrintPermit) {
             if (isNetworkEstablished) {
               context.read<PermitBloc>().add(GeneratePDF(permitId));
             } else {
