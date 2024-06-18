@@ -672,7 +672,6 @@ class AppRoutes {
         List args = settings.arguments as List<String>;
         return _createRoute(
             EditSpecialRequestScreen(tripId: args[0], requestId: args[1]));
-            AddSpecialReportScreen(tripId: settings.arguments.toString()));
       case PermitSelectFileScreen.routeName:
         return _createRoute(const PermitSelectFileScreen());
       default:
