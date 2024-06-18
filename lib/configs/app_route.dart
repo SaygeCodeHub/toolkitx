@@ -14,6 +14,7 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
@@ -671,6 +672,8 @@ class AppRoutes {
         List args = settings.arguments as List<String>;
         return _createRoute(
             EditSpecialRequestScreen(tripId: args[0], requestId: args[1]));
+      case MyMeetingsScreen.routeName:
+        return _createRoute(const MyMeetingsScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

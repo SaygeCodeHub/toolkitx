@@ -657,4 +657,5 @@ abstract class StringConstants {
   static const String kSpecialRequestType = "Special Request Type";
   static const String kSpecialRequest = "Special Request";
   static const String kManageSpecialRequest = "Manage Special Request";
+  static const String kNoMeetingsToday = "No Meetings today";
 }
