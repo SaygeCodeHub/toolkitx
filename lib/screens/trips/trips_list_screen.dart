@@ -27,6 +27,7 @@ class TripsListScreen extends StatelessWidget {
     context
         .read<TripBloc>()
         .add(FetchTripsList(pageNo: 1, isFromHome: isFromHome));
+
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('TripOverview')),
       body: Padding(
@@ -84,6 +85,7 @@ class TripsListScreen extends StatelessWidget {
                   }
                 },
                 builder: (context, state) {
+                  print('State===============>$state');
                   if (state is TripsListFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is TripsListFetched) {
