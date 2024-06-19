@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/meetingRoom/meeting_room_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_date_picker.dart';
+import 'package:toolkit/screens/meetingRoom/widgets/meeting_floating_button.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -24,6 +26,11 @@ class MyMeetingsScreen extends StatelessWidget {
         FetchMyMeetingRoom(date: DateFormat.yMMMd().format(DateTime.now())));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('mymeetings')),
+      floatingActionButton: const Padding(
+        padding:
+            EdgeInsets.only(right: xxTinierSpacing, bottom: xxxSmallestSpacing),
+        child: MeetingFloatingButton(),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -44,6 +51,10 @@ class MyMeetingsScreen extends StatelessWidget {
                 color: AppColor.blueGrey, thickness: xxxTiniestSpacing),
             Expanded(
               child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is MyMeetingRoomFetching ||
+                    currentState is MyMeetingRoomFetched ||
+                    currentState is MyMeetingRoomNotFetched,
                 builder: (context, state) {
                   if (state is MyMeetingRoomFetching) {
                     return const Center(child: CircularProgressIndicator());
@@ -63,6 +74,11 @@ class MyMeetingsScreen extends StatelessWidget {
                               child: Padding(
                             padding: const EdgeInsets.all(xxTinierSpacing),
                             child: ListTile(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, MeetingDetailsScreen.routeName,
+                                      arguments: data[index].bookingid);
+                                },
                                 title: Text(data[index].roomname,
                                     style: Theme.of(context)
                                         .textTheme
