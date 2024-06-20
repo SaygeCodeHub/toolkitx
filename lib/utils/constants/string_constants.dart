@@ -659,6 +659,7 @@ abstract class StringConstants {
   static const String kManageSpecialRequest = "Manage Special Request";
   static const String kNoMeetingsToday = "No Meetings today";
   static const String kBusinessRoom = "Business Room";
+  static const String kSearchRoom = "Search Room";
   static const String kShortAgenda = 'Short Agenda';
   static const String kLongAgenda = "Long Agenda";
   static const String kOwner = "Owner";

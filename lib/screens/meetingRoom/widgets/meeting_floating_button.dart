@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 
 class MeetingFloatingButton extends StatelessWidget {
   const MeetingFloatingButton({
@@ -61,7 +62,7 @@ class MeetingFloatingButton extends StatelessWidget {
         Navigator.pop(context);
         break;
       case "Book Meeting":
-        Navigator.pop(context);
+        Navigator.pushNamed(context, SearchRoomsScreen.routeName);
         break;
     }
   }

@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchMeetingMasterModel fetchMeetingMasterModelFromJson(String str) => FetchMeetingMasterModel.fromJson(json.decode(str));
+FetchMeetingMasterModel fetchMeetingMasterModelFromJson(String str) =>
+    FetchMeetingMasterModel.fromJson(json.decode(str));
 
-String fetchMeetingMasterModelToJson(FetchMeetingMasterModel data) => json.encode(data.toJson());
+String fetchMeetingMasterModelToJson(FetchMeetingMasterModel data) =>
+    json.encode(data.toJson());
 
 class FetchMeetingMasterModel {
   final int status;
@@ -15,17 +17,20 @@ class FetchMeetingMasterModel {
     required this.data,
   });
 
-  factory FetchMeetingMasterModel.fromJson(Map<String, dynamic> json) => FetchMeetingMasterModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<List<Datum>>.from(json["Data"].map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
-  );
+  factory FetchMeetingMasterModel.fromJson(Map<String, dynamic> json) =>
+      FetchMeetingMasterModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<List<Datum>>.from(json["Data"]
+            .map((x) => List<Datum>.from(x.map((x) => Datum.fromJson(x))))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(
+            data.map((x) => List<dynamic>.from(x.map((x) => x.toJson())))),
+      };
 }
 
 class Datum {
@@ -42,16 +47,16 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    emailAddress: json["email_address"],
-    facility: json["facility"],
-  );
+        id: json["id"] ?? '',
+        name: json["name"] ?? '',
+        emailAddress: json["email_address"] ?? '',
+        facility: json["facility"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "email_address": emailAddress,
-    "facility": facility,
-  };
+        "id": id,
+        "name": name,
+        "email_address": emailAddress,
+        "facility": facility,
+      };
 }

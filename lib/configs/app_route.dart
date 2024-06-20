@@ -16,6 +16,7 @@ import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart'
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
 import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
+import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
@@ -132,6 +133,7 @@ import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
 import '../screens/loto/loto_reject_screen.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
+import '../screens/meetingRoom/view_available_rooms_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -678,6 +680,11 @@ class AppRoutes {
       case MeetingDetailsScreen.routeName:
         return _createRoute(
             MeetingDetailsScreen(bookingId: settings.arguments.toString()));
+      case SearchRoomsScreen.routeName:
+        return _createRoute(const SearchRoomsScreen());
+      case ViewAvailableRoomsScreen.routeName:
+        return _createRoute(ViewAvailableRoomsScreen(
+            searchRoomsMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

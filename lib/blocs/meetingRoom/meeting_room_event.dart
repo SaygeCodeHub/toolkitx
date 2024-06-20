@@ -17,7 +17,7 @@ class FetchMeetingDetails extends MeetingRoomEvent {
 class FetchMeetingMaster extends MeetingRoomEvent {}
 
 class FetchMeetingBuildingFloor extends MeetingRoomEvent {
-  final String buildingId;
+  final int buildingId;
 
   FetchMeetingBuildingFloor({required this.buildingId});
 }
