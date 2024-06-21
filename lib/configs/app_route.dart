@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -684,7 +685,8 @@ class AppRoutes {
         return _createRoute(const SearchRoomsScreen());
       case ViewAvailableRoomsScreen.routeName:
         return _createRoute(ViewAvailableRoomsScreen(
-            searchRoomsMap: settings.arguments as Map));
+            searchForRoomsDatum:
+                settings.arguments as List<SearchForRoomsDatum>));
       default:
         return _createRoute(const WelcomeScreen());
     }

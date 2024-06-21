@@ -10,7 +10,6 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import 'package:toolkit/widgets/generic_no_records_text.dart';
 
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -129,8 +128,9 @@ class MyMeetingsScreen extends StatelessWidget {
                           return const SizedBox(height: xxTinierSpacing);
                         });
                   } else if (state is MyMeetingRoomNotFetched) {
-                    return const NoRecordsText(
-                        text: StringConstants.kNoMeetingsToday);
+                    return const Center(
+                      child: Text(StringConstants.kNoMeetingsToday),
+                    );
                   }
                   return const SizedBox.shrink();
                 },

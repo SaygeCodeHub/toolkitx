@@ -21,3 +21,9 @@ class FetchMeetingBuildingFloor extends MeetingRoomEvent {
 
   FetchMeetingBuildingFloor({required this.buildingId});
 }
+
+class FetchSearchForRooms extends MeetingRoomEvent {
+  final Map searchForRoomsMap;
+
+  FetchSearchForRooms({required this.searchForRoomsMap});
+}

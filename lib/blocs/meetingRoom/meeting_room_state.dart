@@ -59,3 +59,17 @@ class MeetingBuildingFloorNotFetched extends MeetingRoomState {
 
   MeetingBuildingFloorNotFetched({required this.errorMessage});
 }
+
+class SearchForRoomsFetching extends MeetingRoomState {}
+
+class SearchForRoomsFetched extends MeetingRoomState {
+  final FetchSearchForRoomsModel fetchSearchForRoomsModel;
+
+  SearchForRoomsFetched({required this.fetchSearchForRoomsModel});
+}
+
+class SearchForRoomsNotFetched extends MeetingRoomState {
+  final String errorMessage;
+
+  SearchForRoomsNotFetched({required this.errorMessage});
+}

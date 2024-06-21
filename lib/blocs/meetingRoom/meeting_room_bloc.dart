@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -27,6 +29,7 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<FetchMeetingDetails>(_fetchMeetingDetails);
     on<FetchMeetingMaster>(_fetchMeetingMaster);
     on<FetchMeetingBuildingFloor>(_fetchMeetingBuildingFloor);
+    on<FetchSearchForRooms>(_fetchSearchForRooms);
   }
 
   Future<FutureOr<void>> _fetchMyMeetingRoom(
@@ -110,6 +113,37 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(MeetingBuildingFloorNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchSearchForRooms(
+      FetchSearchForRooms event, Emitter<MeetingRoomState> emit) async {
+    emit(SearchForRoomsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map filterMap = {
+        "buildingid": event.searchForRoomsMap['buildingid'] ?? '',
+        "floorid": event.searchForRoomsMap['floorid'] ?? '',
+        "capacity": event.searchForRoomsMap['capacity'] ?? '',
+        "facility": event.searchForRoomsMap['facility'] ?? ''
+      };
+      FetchSearchForRoomsModel fetchSearchForRoomsModel =
+          await _meetingRoomRepository.fetchSearchForRooms(
+              hashCode,
+              event.searchForRoomsMap['date'] ?? '',
+              event.searchForRoomsMap['st'] ?? '',
+              event.searchForRoomsMap['et'] ?? '',
+              jsonEncode(filterMap));
+      if (fetchSearchForRoomsModel.status == 200) {
+        emit(SearchForRoomsFetched(
+            fetchSearchForRoomsModel: fetchSearchForRoomsModel));
+      } else {
+        emit(SearchForRoomsNotFetched(
+            errorMessage: fetchSearchForRoomsModel.message));
+      }
+    } catch (e) {
+      emit(SearchForRoomsNotFetched(errorMessage: e.toString()));
     }
   }
 }

@@ -10,23 +10,23 @@ import 'package:toolkit/screens/meetingRoom/widgets/meeting_facility_expansion_t
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_floor_widget.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_min_capacity_expansion_tile.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/meetingRoom/meeting_room_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/generic_app_bar.dart';
-import '../../widgets/generic_no_records_text.dart';
 
 class SearchRoomsScreen extends StatelessWidget {
   static const routeName = 'SearchRoomsScreen';
-
+  static Map searchRoomMap = {};
   const SearchRoomsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Map searchRoomMap = {};
     searchRoomMap['date'] = DateFormat('dd.MM.yyyy').format(DateTime.now());
     context.read<MeetingRoomBloc>().add(FetchMeetingMaster());
     return Scaffold(
@@ -69,7 +69,7 @@ class SearchRoomsScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: tiniestSpacing),
                       TimePickerTextField(onTimeChanged: (time) {
-                        searchRoomMap['starttime'] = time;
+                        searchRoomMap['st'] = time;
                       }),
                       const SizedBox(height: xxxSmallestSpacing),
                       Text(DatabaseUtil.getText('endTimePlaceHolder'),
@@ -78,7 +78,7 @@ class SearchRoomsScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: tiniestSpacing),
                       TimePickerTextField(onTimeChanged: (time) {
-                        searchRoomMap['endtime'] = time;
+                        searchRoomMap['et'] = time;
                       }),
                       const SizedBox(height: xxxSmallestSpacing),
                       Text(DatabaseUtil.getText('Building'),
@@ -113,7 +113,7 @@ class SearchRoomsScreen extends StatelessWidget {
               );
             } else if (state is MeetingMasterNotFetched) {
               return const Center(
-                child: NoRecordsText(text: StringConstants.kNoRecordsFound),
+                child: Text(StringConstants.kNoRecordsFound),
               );
             }
             return const SizedBox.shrink();
@@ -122,12 +122,28 @@ class SearchRoomsScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: PrimaryButton(
-            onPressed: () {
+        child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
+          listener: (context, state) {
+            if (state is SearchForRoomsFetching) {
+              ProgressBar.show(context);
+            } else if (state is SearchForRoomsFetched) {
+              ProgressBar.dismiss(context);
               Navigator.pushNamed(context, ViewAvailableRoomsScreen.routeName,
-                  arguments: searchRoomMap);
-            },
-            textValue: DatabaseUtil.getText('searchforRoom')),
+                  arguments: state.fetchSearchForRoomsModel.data);
+            }
+            if (state is SearchForRoomsNotFetched) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.errorMessage, '');
+            }
+          },
+          child: PrimaryButton(
+              onPressed: () {
+                context
+                    .read<MeetingRoomBloc>()
+                    .add(FetchSearchForRooms(searchForRoomsMap: searchRoomMap));
+              },
+              textValue: DatabaseUtil.getText('searchforRoom')),
+        ),
       ),
     );
   }

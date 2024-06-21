@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 
 import '../../utils/constants/api_constants.dart';
@@ -37,5 +38,13 @@ class MeetingRoomRepositoryImpl extends MeetingRoomRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}meeting/GetBuilidingFloors?hashcode=$hashCode&buildingid=$buildingId");
     return FetchMeetingBuildingFloorModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchSearchForRoomsModel> fetchSearchForRooms(String hashCode,
+      String date, String startTime, String endTime, String filter) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}meeting/SearchForRooms?hashcode=$hashCode&date=$date&startime=$startTime&endtime=$endTime&filter=$filter");
+    return FetchSearchForRoomsModel.fromJson(response);
   }
 }
