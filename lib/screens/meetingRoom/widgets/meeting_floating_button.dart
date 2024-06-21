@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
+import 'package:toolkit/utils/meeting_room_util.dart';
 
 class MeetingFloatingButton extends StatelessWidget {
   const MeetingFloatingButton({
@@ -17,7 +18,6 @@ class MeetingFloatingButton extends StatelessWidget {
   }
 
   void _showOptions(BuildContext context) {
-    List meetingButtons = ["Month View", "View Availability", "Book Meeting"];
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -31,9 +31,11 @@ class MeetingFloatingButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: Card(
                   child: ListTile(
-                    title: Center(child: Text(meetingButtons[index])),
+                    title: Center(
+                        child: Text(MeetingRoomUtil().meetingButtons[index])),
                     onTap: () {
-                      navigateToModule(meetingButtons[index], context);
+                      navigateToModule(
+                          MeetingRoomUtil().meetingButtons[index], context);
                     },
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
@@ -46,5 +47,12 @@ class MeetingRoomRepositoryImpl extends MeetingRoomRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}meeting/SearchForRooms?hashcode=$hashCode&date=$date&startime=$startTime&endtime=$endTime&filter=$filter");
     return FetchSearchForRoomsModel.fromJson(response);
+  }
+
+  @override
+  Future<BookMeetingRoomModel> bookMeetingRoom(Map bookMeetingMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}meeting/BookMeetingRoom", bookMeetingMap);
+    return BookMeetingRoomModel.fromJson(response);
   }
 }

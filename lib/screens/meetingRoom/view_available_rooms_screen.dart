@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_view_room_checkbox_tile.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import '../../data/models/ meetingRoom/fetch_search_for_rooms_model.dart';
@@ -17,6 +19,7 @@ class ViewAvailableRoomsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map viewRoomMap = {};
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('viewRoomAvailable')),
       body: Padding(
@@ -32,7 +35,8 @@ class ViewAvailableRoomsScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(xxTinierSpacing),
                     child: MeetingViewRoomCheckboxTile(
-                        searchForRoomsDatum: searchForRoomsDatum[index]),
+                        searchForRoomsDatum: searchForRoomsDatum[index],
+                        viewRoomMap: viewRoomMap),
                   ),
                 );
               },
@@ -52,7 +56,17 @@ class ViewAvailableRoomsScreen extends StatelessWidget {
             const SizedBox(width: xxxSmallestSpacing),
             Expanded(
               child: PrimaryButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (viewRoomMap['roomid'] != '' &&
+                        viewRoomMap['roomid'] != null) {
+                      Navigator.pushNamed(
+                          context, BookMeetingRoomScreen.routeName,
+                          arguments: viewRoomMap);
+                    } else {
+                      showCustomSnackBar(
+                          context, 'Please select a room to proceed', '');
+                    }
+                  },
                   textValue: DatabaseUtil.getText('continue')),
             )
           ],

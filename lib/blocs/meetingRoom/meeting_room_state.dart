@@ -73,3 +73,19 @@ class SearchForRoomsNotFetched extends MeetingRoomState {
 
   SearchForRoomsNotFetched({required this.errorMessage});
 }
+
+class RepeatValueSelected extends MeetingRoomState {
+  final String repeat;
+
+  RepeatValueSelected({required this.repeat});
+}
+
+class MeetingRoomBooking extends MeetingRoomState {}
+
+class MeetingRoomBooked extends MeetingRoomState {}
+
+class MeetingRoomNotBooked extends MeetingRoomState {
+  final String errorMessage;
+
+  MeetingRoomNotBooked({required this.errorMessage});
+}

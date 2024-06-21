@@ -15,6 +15,7 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
 import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
 import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
@@ -687,6 +688,9 @@ class AppRoutes {
         return _createRoute(ViewAvailableRoomsScreen(
             searchForRoomsDatum:
                 settings.arguments as List<SearchForRoomsDatum>));
+      case BookMeetingRoomScreen.routeName:
+        return _createRoute(
+            BookMeetingRoomScreen(bookRoomMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

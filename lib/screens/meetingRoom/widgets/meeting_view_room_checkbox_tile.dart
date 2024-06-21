@@ -7,9 +7,12 @@ import '../../../configs/app_spacing.dart';
 
 class MeetingViewRoomCheckboxTile extends StatefulWidget {
   const MeetingViewRoomCheckboxTile(
-      {super.key, required this.searchForRoomsDatum});
+      {super.key,
+      required this.searchForRoomsDatum,
+      required this.viewRoomMap});
 
   final SearchForRoomsDatum searchForRoomsDatum;
+  final Map viewRoomMap;
 
   @override
   State<MeetingViewRoomCheckboxTile> createState() =>
@@ -18,15 +21,8 @@ class MeetingViewRoomCheckboxTile extends StatefulWidget {
 
 class _MeetingViewRoomCheckboxTileState
     extends State<MeetingViewRoomCheckboxTile> {
-  List selectedCreatedForIdList = [];
-
-  void _checkboxChange(isSelected, documentId) {
-    if (isSelected) {
-      selectedCreatedForIdList.add(documentId);
-    } else {
-      selectedCreatedForIdList.remove(documentId);
-    }
-  }
+  String selectedValue = '';
+  bool isCheck = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +53,16 @@ class _MeetingViewRoomCheckboxTileState
             const SizedBox(height: tiniestSpacing),
           ],
         ),
-        value: selectedCreatedForIdList
-            .contains(widget.searchForRoomsDatum.roomid),
+        value: isCheck,
         onChanged: (isChecked) {
           setState(() {
-            isChecked = isChecked!;
-            _checkboxChange(isChecked, widget.searchForRoomsDatum.roomid);
+            isCheck = isChecked!;
+            widget.viewRoomMap['location'] =
+                widget.searchForRoomsDatum.location;
+            widget.viewRoomMap['roomname'] =
+                widget.searchForRoomsDatum.roomname;
+            selectedValue = widget.searchForRoomsDatum.roomid;
+            widget.viewRoomMap['roomid'] = widget.searchForRoomsDatum.roomid;
           });
         });
   }

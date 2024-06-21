@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
@@ -30,6 +31,8 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<FetchMeetingMaster>(_fetchMeetingMaster);
     on<FetchMeetingBuildingFloor>(_fetchMeetingBuildingFloor);
     on<FetchSearchForRooms>(_fetchSearchForRooms);
+    on<SelectRepeatValue>(_selectRepeatValue);
+    on<BookMeetingRoom>(_bookMeetingRoom);
   }
 
   Future<FutureOr<void>> _fetchMyMeetingRoom(
@@ -144,6 +147,44 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(SearchForRoomsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectRepeatValue(
+      SelectRepeatValue event, Emitter<MeetingRoomState> emit) {
+    emit(RepeatValueSelected(repeat: event.repeat));
+  }
+
+  Future<FutureOr<void>> _bookMeetingRoom(
+      BookMeetingRoom event, Emitter<MeetingRoomState> emit) async {
+    emit(MeetingRoomBooking());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map bookMeetingMap = {
+        "idm": "",
+        "roomid": event.bookMeetingMap['roomid'],
+        "startdate": event.bookMeetingMap['startdate'],
+        "enddate": event.bookMeetingMap['enddate'],
+        "repeat": event.bookMeetingMap['repeat'],
+        "endson": event.bookMeetingMap['endson'],
+        "shortagenda": event.bookMeetingMap['shortagenda'],
+        "longagenda": event.bookMeetingMap['longagenda'],
+        "userid": userId,
+        "participant": event.bookMeetingMap['participant'],
+        "externalusers": event.bookMeetingMap['externalusers'] ?? '',
+        "hashcode": hashCode
+      };
+      BookMeetingRoomModel bookMeetingRoomModel =
+          await _meetingRoomRepository.bookMeetingRoom(bookMeetingMap);
+      if (bookMeetingRoomModel.status == 200) {
+        emit(MeetingRoomBooked());
+      } else {
+        emit(MeetingRoomNotBooked(errorMessage: bookMeetingRoomModel.message));
+      }
+    } catch (e) {
+      emit(MeetingRoomNotBooked(errorMessage: e.toString()));
     }
   }
 }

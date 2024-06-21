@@ -23,11 +23,12 @@ import '../../widgets/generic_app_bar.dart';
 class SearchRoomsScreen extends StatelessWidget {
   static const routeName = 'SearchRoomsScreen';
   static Map searchRoomMap = {};
+
   const SearchRoomsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    searchRoomMap['date'] = DateFormat('dd.MM.yyyy').format(DateTime.now());
+    _initialDateTime();
     context.read<MeetingRoomBloc>().add(FetchMeetingMaster());
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kSearchRoom),
@@ -68,18 +69,22 @@ class SearchRoomsScreen extends StatelessWidget {
                               color: AppColor.black,
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: tiniestSpacing),
-                      TimePickerTextField(onTimeChanged: (time) {
-                        searchRoomMap['st'] = time;
-                      }),
+                      TimePickerTextField(
+                          editTime: searchRoomMap['st'],
+                          onTimeChanged: (time) {
+                            searchRoomMap['st'] = time;
+                          }),
                       const SizedBox(height: xxxSmallestSpacing),
                       Text(DatabaseUtil.getText('endTimePlaceHolder'),
                           style: Theme.of(context).textTheme.xSmall.copyWith(
                               color: AppColor.black,
                               fontWeight: FontWeight.bold)),
                       const SizedBox(height: tiniestSpacing),
-                      TimePickerTextField(onTimeChanged: (time) {
-                        searchRoomMap['et'] = time;
-                      }),
+                      TimePickerTextField(
+                          editTime: searchRoomMap['et'],
+                          onTimeChanged: (time) {
+                            searchRoomMap['et'] = time;
+                          }),
                       const SizedBox(height: xxxSmallestSpacing),
                       Text(DatabaseUtil.getText('Building'),
                           style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -146,5 +151,18 @@ class SearchRoomsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _initialDateTime() {
+    const nineAm = TimeOfDay(hour: 9, minute: 0);
+    const tenAm = TimeOfDay(hour: 10, minute: 0);
+    final now = DateTime.now();
+    searchRoomMap['date'] = DateFormat('dd.MM.yyyy').format(now);
+    final startTime =
+        DateTime(now.year, now.month, now.day, nineAm.hour, nineAm.minute);
+    searchRoomMap['st'] = DateFormat.Hm().format(startTime);
+    final endTime =
+        DateTime(now.year, now.month, now.day, tenAm.hour, tenAm.minute);
+    searchRoomMap['et'] = DateFormat.Hm().format(endTime);
   }
 }
