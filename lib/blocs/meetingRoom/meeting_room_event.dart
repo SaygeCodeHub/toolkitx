@@ -45,3 +45,16 @@ class FetchMonthlySchedule extends MeetingRoomEvent {
 
   FetchMonthlySchedule({required this.date});
 }
+
+class FetchMeetingAllRooms extends MeetingRoomEvent {
+  final String date;
+
+  FetchMeetingAllRooms({required this.date});
+}
+
+class FetchRoomAvailability extends MeetingRoomEvent {
+  final String date;
+  final String roomId;
+
+  FetchRoomAvailability({required this.roomId, required this.date});
+}

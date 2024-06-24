@@ -1,9 +1,11 @@
 import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_all_rooms_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_monthly_schedule_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_room_availability_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 
@@ -63,5 +65,21 @@ class MeetingRoomRepositoryImpl extends MeetingRoomRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}meeting/GetMonthlySchedule?hashcode=$hashCode&userid=$userId&date=$date");
     return FetchMonthlyScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchMeetingAllRoomsModel> fetchMeetingAllRooms(
+      String hashCode, String date) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}meeting/GetAllRooms?hashcode=$hashCode&date=$date");
+    return FetchMeetingAllRoomsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchRoomAvailabilityModel> fetchRoomAvailability(
+      String hashCode, String date, String roomId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}meeting/GetRoomAvailability?hashcode=$hashCode&date=$date&roomid=$roomId");
+    return FetchRoomAvailabilityModel.fromJson(response);
   }
 }

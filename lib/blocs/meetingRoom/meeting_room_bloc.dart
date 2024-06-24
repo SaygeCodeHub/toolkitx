@@ -13,6 +13,8 @@ import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/ meetingRoom/fetch_meeting_all_rooms_model.dart';
+import '../../data/models/ meetingRoom/fetch_room_availability_model.dart';
 import '../../di/app_module.dart';
 
 part 'meeting_room_event.dart';
@@ -35,6 +37,8 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<SelectRepeatValue>(_selectRepeatValue);
     on<BookMeetingRoom>(_bookMeetingRoom);
     on<FetchMonthlySchedule>(_fetchMonthlySchedule);
+    on<FetchMeetingAllRooms>(_fetchMeetingAllRooms);
+    on<FetchRoomAvailability>(_fetchRoomAvailability);
   }
 
   Future<FutureOr<void>> _fetchMyMeetingRoom(
@@ -209,6 +213,50 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(MonthlyScheduleNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchMeetingAllRooms(
+      FetchMeetingAllRooms event, Emitter<MeetingRoomState> emit) async {
+    emit(MeetingAllRoomsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchMeetingAllRoomsModel fetchMeetingAllRoomsModel =
+          await _meetingRoomRepository.fetchMeetingAllRooms(
+              hashCode, event.date);
+
+      if (fetchMeetingAllRoomsModel.status == 200) {
+        emit(MeetingAllRoomsFetched(
+            fetchMeetingAllRoomsModel: fetchMeetingAllRoomsModel));
+      } else {
+        emit(MeetingAllRoomsNotFetched(
+            errorMessage: fetchMeetingAllRoomsModel.message));
+      }
+    } catch (e) {
+      emit(MeetingAllRoomsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchRoomAvailability(
+      FetchRoomAvailability event, Emitter<MeetingRoomState> emit) async {
+    emit(RoomAvailabilityFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchRoomAvailabilityModel fetchRoomAvailabilityModel =
+          await _meetingRoomRepository.fetchRoomAvailability(
+              hashCode, event.date, event.roomId);
+
+      if (fetchRoomAvailabilityModel.status == 200) {
+        emit(RoomAvailabilityFetched(
+            fetchRoomAvailabilityModel: fetchRoomAvailabilityModel));
+      } else {
+        emit(RoomAvailabilityNotFetched(
+            errorMessage: fetchRoomAvailabilityModel.message));
+      }
+    } catch (e) {
+      emit(RoomAvailabilityNotFetched(errorMessage: e.toString()));
     }
   }
 }

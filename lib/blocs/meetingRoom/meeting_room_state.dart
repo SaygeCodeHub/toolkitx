@@ -103,3 +103,31 @@ class MonthlyScheduleNotFetched extends MeetingRoomState {
 
   MonthlyScheduleNotFetched({required this.errorMessage});
 }
+
+class MeetingAllRoomsFetching extends MeetingRoomState {}
+
+class MeetingAllRoomsFetched extends MeetingRoomState {
+  final FetchMeetingAllRoomsModel fetchMeetingAllRoomsModel;
+
+  MeetingAllRoomsFetched({required this.fetchMeetingAllRoomsModel});
+}
+
+class MeetingAllRoomsNotFetched extends MeetingRoomState {
+  final String errorMessage;
+
+  MeetingAllRoomsNotFetched({required this.errorMessage});
+}
+
+class RoomAvailabilityFetching extends MeetingRoomState {}
+
+class RoomAvailabilityFetched extends MeetingRoomState {
+  final FetchRoomAvailabilityModel fetchRoomAvailabilityModel;
+
+  RoomAvailabilityFetched({required this.fetchRoomAvailabilityModel});
+}
+
+class RoomAvailabilityNotFetched extends MeetingRoomState {
+  final String errorMessage;
+
+  RoomAvailabilityNotFetched({required this.errorMessage});
+}

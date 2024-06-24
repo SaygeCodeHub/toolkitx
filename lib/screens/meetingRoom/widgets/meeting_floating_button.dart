@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_view_availability_screen.dart';
 import 'package:toolkit/screens/meetingRoom/month_view_screen.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/utils/meeting_room_util.dart';
@@ -64,6 +65,7 @@ class MeetingFloatingButton extends StatelessWidget {
         break;
       case "View Availability":
         Navigator.pop(context);
+        Navigator.pushNamed(context, MeetingViewAvailabilityScreen.routeName);
         break;
       case "Book Meeting":
         Navigator.pop(context);
