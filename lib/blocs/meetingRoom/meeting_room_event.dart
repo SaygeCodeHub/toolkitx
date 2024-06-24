@@ -39,3 +39,9 @@ class BookMeetingRoom extends MeetingRoomEvent {
 
   BookMeetingRoom({required this.bookMeetingMap});
 }
+
+class FetchMonthlySchedule extends MeetingRoomEvent {
+  final String date;
+
+  FetchMonthlySchedule({required this.date});
+}

@@ -89,3 +89,17 @@ class MeetingRoomNotBooked extends MeetingRoomState {
 
   MeetingRoomNotBooked({required this.errorMessage});
 }
+
+class MonthlyScheduleFetching extends MeetingRoomState {}
+
+class MonthlyScheduleFetched extends MeetingRoomState {
+  final FetchMonthlyScheduleModel fetchMonthlyScheduleModel;
+
+  MonthlyScheduleFetched({required this.fetchMonthlyScheduleModel});
+}
+
+class MonthlyScheduleNotFetched extends MeetingRoomState {
+  final String errorMessage;
+
+  MonthlyScheduleNotFetched({required this.errorMessage});
+}

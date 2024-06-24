@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart'
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_monthly_schedule_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 
@@ -21,4 +22,7 @@ abstract class MeetingRoomRepository {
       String date, String startTime, String endTime, String filter);
 
   Future<BookMeetingRoomModel> bookMeetingRoom(Map bookMeetingMap);
+
+  Future<FetchMonthlyScheduleModel> fetchMonthlySchedule(
+      String hashCode, String userId, String date);
 }

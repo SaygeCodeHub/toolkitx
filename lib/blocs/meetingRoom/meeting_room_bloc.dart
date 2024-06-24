@@ -6,6 +6,7 @@ import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart'
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_monthly_schedule_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
@@ -33,6 +34,7 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<FetchSearchForRooms>(_fetchSearchForRooms);
     on<SelectRepeatValue>(_selectRepeatValue);
     on<BookMeetingRoom>(_bookMeetingRoom);
+    on<FetchMonthlySchedule>(_fetchMonthlySchedule);
   }
 
   Future<FutureOr<void>> _fetchMyMeetingRoom(
@@ -185,6 +187,28 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(MeetingRoomNotBooked(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchMonthlySchedule(
+      FetchMonthlySchedule event, Emitter<MeetingRoomState> emit) async {
+    emit(MonthlyScheduleFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchMonthlyScheduleModel fetchMonthlyScheduleModel =
+          await _meetingRoomRepository.fetchMonthlySchedule(
+              hashCode, userId, event.date);
+      if (fetchMonthlyScheduleModel.status == 200) {
+        emit(MonthlyScheduleFetched(
+            fetchMonthlyScheduleModel: fetchMonthlyScheduleModel));
+      } else {
+        emit(MonthlyScheduleNotFetched(
+            errorMessage: fetchMonthlyScheduleModel.message));
+      }
+    } catch (e) {
+      emit(MonthlyScheduleNotFetched(errorMessage: e.toString()));
     }
   }
 }

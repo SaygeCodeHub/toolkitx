@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/blocs/meetingRoom/meeting_room_bloc.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -9,7 +11,7 @@ import '../../../widgets/text_button.dart';
 
 typedef StringCallBack = Function(String date);
 
-class MeetingDatePicker extends StatefulWidget {
+class MeetingMonthPicker extends StatefulWidget {
   final DateTime? initialDate;
   final StringCallBack onDateChanged;
   final DateTime? maxDate;
@@ -19,7 +21,7 @@ class MeetingDatePicker extends StatefulWidget {
   static List<String> dateList = [];
   static dynamic indexOf = 1;
 
-  const MeetingDatePicker({
+  const MeetingMonthPicker({
     super.key,
     this.initialDate,
     this.maxDate,
@@ -30,10 +32,10 @@ class MeetingDatePicker extends StatefulWidget {
   });
 
   @override
-  State<MeetingDatePicker> createState() => _MeetingDatePickerState();
+  State<MeetingMonthPicker> createState() => _MeetingMonthPickerState();
 }
 
-class _MeetingDatePickerState extends State<MeetingDatePicker> {
+class _MeetingMonthPickerState extends State<MeetingMonthPicker> {
   String dateInput = "";
   String month = '';
   String year = '';
@@ -58,43 +60,43 @@ class _MeetingDatePickerState extends State<MeetingDatePicker> {
                     SizedBox(
                         height: kDateTimePickerHeight,
                         child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.date,
-                            initialDateTime: (isFirstTime != false)
-                                ? widget.initialDate
-                                : DateFormat.yMMMd().parse(dateInput),
-                            onDateTimeChanged: (value) {
-                              setState(() {
-                                String formattedDate =
-                                    DateFormat.yMMMd().format(value);
-                                dateInput = formattedDate;
-                                month = DateFormat('M').format(value);
-                                year = DateFormat('yyyy').format(value);
-                                widget.onDateChanged(
-                                    DateFormat.yMMMd().format(value));
-                                isFirstTime = false;
-                              });
-                            },
-                            maximumDate:
-                                DateTime.now().add(const Duration(days: 180)))),
+                          mode: CupertinoDatePickerMode.date,
+                          initialDateTime: (isFirstTime != false)
+                              ? widget.initialDate
+                              : DateFormat.yMMM().parse(dateInput),
+                          onDateTimeChanged: (value) {
+                            setState(() {
+                              String formattedDate =
+                                  DateFormat.yMMM().format(value);
+                              dateInput = formattedDate;
+                              widget.onDateChanged(
+                                  DateFormat.yMMM().format(value));
+                              isFirstTime = false;
+                              context
+                                  .read<MeetingRoomBloc>()
+                                  .add(FetchMonthlySchedule(date: dateInput));
+                            });
+                          },
+                        )),
                     CustomTextButton(
                         onPressed: () {
                           if (isFirstTime != false) {
                             if (widget.initialDate == null) {
                               dateInput =
-                                  DateFormat.yMMMd().format(DateTime.now());
+                                  DateFormat.yMMM().format(DateTime.now());
                               widget.onDateChanged(
-                                  DateFormat.yMMMd().format(DateTime.now()));
+                                  DateFormat.yMMM().format(DateTime.now()));
                             } else {
-                              dateInput = DateFormat.yMMMd()
-                                  .format(widget.initialDate!);
+                              dateInput =
+                                  DateFormat.yMMM().format(widget.initialDate!);
 
                               setState(() {
-                                widget.onDateChanged(DateFormat.yMMMd()
+                                widget.onDateChanged(DateFormat.yMMM()
                                     .format(widget.initialDate!));
                               });
                             }
                           }
-                          MeetingDatePicker.dateList = dateInput.split(" ");
+                          // MeetingMonthPicker.dateList = dateInput.split(" ");
                           Navigator.pop(context);
                         },
                         textValue: DatabaseUtil.getText('buttonDone')),
@@ -113,7 +115,7 @@ class _MeetingDatePickerState extends State<MeetingDatePicker> {
           children: <Widget>[
             dateInput.isEmpty
                 ? Text(
-                    DateFormat.yMMMd().format(DateTime.now()),
+                    DateFormat.yMMM().format(DateTime.now()),
                     style: const TextStyle(
                         fontSize: kDatePickerTextSize, color: AppColor.black),
                   )
