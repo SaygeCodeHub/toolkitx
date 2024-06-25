@@ -4,43 +4,140 @@ abstract class ModulesUtil {
   static String kBaseImagePath = 'assets/icons/';
   static List<ModulesModel> listModulesMode = [
     ModulesModel(
-        moduleName: 'Log Book', moduleImage: '${kBaseImagePath}logbook.png'),
+        moduleName: 'LogBook',
+        moduleImage: '${kBaseImagePath}logbook.png',
+        key: 'sl',
+        notificationKey: ''),
     ModulesModel(
-        moduleName: 'Calendar', moduleImage: '${kBaseImagePath}calendar.png'),
+        moduleName: 'Calendar',
+        moduleImage: '${kBaseImagePath}calendar.png',
+        key: 'wf_calendar',
+        notificationKey: ''),
     ModulesModel(
-        moduleName: 'Quality Management',
-        moduleImage: '${kBaseImagePath}quality_service.png'),
+        moduleName: 'Calendar',
+        moduleImage: '${kBaseImagePath}calendar.png',
+        key: 'calendar',
+        notificationKey: ''),
     ModulesModel(
-        moduleName: 'Hazard', moduleImage: '${kBaseImagePath}hazard.png'),
+        moduleName: 'QualityManagement',
+        moduleImage: '${kBaseImagePath}quality_service.png',
+        key: 'qareport',
+        notificationKey: 'qa'),
     ModulesModel(
-        moduleName: 'Permit', moduleImage: '${kBaseImagePath}permit.png'),
+        moduleName: 'Permit',
+        moduleImage: '${kBaseImagePath}permit.png',
+        offLineSupport: true,
+        key: 'ptw',
+        notificationKey: 'permit'),
+    // ModulesModel(
+    //     moduleName: 'Accounting',
+    //     moduleImage: '${kBaseImagePath}accounting.png',
+    //     key: 'accounting',
+    //     notificationKey: 'accounting'),
     ModulesModel(
-        moduleName: 'Time & Vacation',
-        moduleImage: '${kBaseImagePath}holiday.png'),
+        moduleName: 'TimeVacation',
+        moduleImage: '${kBaseImagePath}holiday.png',
+        key: 'timesheet',
+        notificationKey: ''),
     ModulesModel(
-        moduleName: 'Incident', moduleImage: '${kBaseImagePath}logbook.png'),
-    ModulesModel(moduleName: 'ToDo', moduleImage: '${kBaseImagePath}to_do.png'),
+        moduleName: 'TimeVacation',
+        moduleImage: '${kBaseImagePath}holiday.png',
+        key: 'wf_timesheet',
+        notificationKey: ''),
     ModulesModel(
-        moduleName: 'Safety Notice',
-        moduleImage: '${kBaseImagePath}shield.png'),
+        moduleName: 'Incident',
+        moduleImage: '${kBaseImagePath}incident.png',
+        key: 'hse',
+        notificationKey: 'incident'),
     ModulesModel(
-        moduleName: 'Work Order', moduleImage: '${kBaseImagePath}logbook.png'),
+        moduleName: 'ToDo',
+        moduleImage: '${kBaseImagePath}to_do.png',
+        key: 'todo',
+        notificationKey: 'todo'),
     ModulesModel(
-        moduleName: 'Meeting Room',
-        moduleImage: '${kBaseImagePath}briefing.png'),
+        moduleName: 'SafetyNotice',
+        moduleImage: '${kBaseImagePath}shield.png',
+        key: 'safetyNotice',
+        notificationKey: 'safetynotice'),
+    ModulesModel(
+        moduleName: 'WorkOrder',
+        moduleImage: '${kBaseImagePath}workOrder.png',
+        key: 'workorder',
+        notificationKey: 'workorder'),
+    // ModulesModel(
+    //     moduleName: 'meetingRoom',
+    //     moduleImage: '${kBaseImagePath}briefing.png',
+    //     key: 'meeting',
+    //     notificationKey: 'meeting'),
+    ModulesModel(
+        moduleName: 'Assets',
+        moduleImage: '${kBaseImagePath}assets.png',
+        key: 'eam',
+        notificationKey: 'eam'),
+    ModulesModel(
+        moduleName: 'Expense',
+        moduleImage: '${kBaseImagePath}expenses.png',
+        key: 'timesheet',
+        notificationKey: 'expensereport'),
+    ModulesModel(
+        moduleName: 'Expense',
+        moduleImage: '${kBaseImagePath}expenses.png',
+        key: 'wf_timesheet',
+        notificationKey: 'expensereport'),
+    ModulesModel(
+        moduleName: 'Location',
+        moduleImage: '${kBaseImagePath}location.png',
+        key: 'eam',
+        notificationKey: 'eam'),
     ModulesModel(
         moduleName: 'Certificates',
-        moduleImage: '${kBaseImagePath}certificate.png'),
+        moduleImage: '${kBaseImagePath}certificate.png',
+        key: 'certificates',
+        notificationKey: 'certificate'),
     ModulesModel(
-        moduleName: 'Expense', moduleImage: '${kBaseImagePath}expenses.png'),
+        moduleName: 'Checklist',
+        moduleImage: '${kBaseImagePath}checklist.png',
+        key: 'checklist',
+        notificationKey: 'checklist'),
     ModulesModel(
-        moduleName: 'Checklist', moduleImage: '${kBaseImagePath}checklist.png'),
+        moduleName: 'Checklist',
+        moduleImage: '${kBaseImagePath}checklist.png',
+        key: 'wf_checklist',
+        notificationKey: 'checklist'),
     ModulesModel(
-        moduleName: 'Documents', moduleImage: '${kBaseImagePath}documents.png'),
+        moduleName: 'Documents',
+        moduleImage: '${kBaseImagePath}documents.png',
+        key: 'dms',
+        notificationKey: 'dms'),
     ModulesModel(
-        moduleName: 'Equipment Traceability',
-        moduleImage: '${kBaseImagePath}mechanic.png'),
+        moduleName: 'EquipmentTraceability',
+        moduleImage: '${kBaseImagePath}mechanic.png',
+        key: 'trace',
+        notificationKey: 'et'),
     ModulesModel(
-        moduleName: 'LOTO', moduleImage: '${kBaseImagePath}lottery.png'),
+        moduleName: 'LOTO',
+        moduleImage: '${kBaseImagePath}lottery.png',
+        key: 'loto',
+        notificationKey: 'loto'),
+    ModulesModel(
+        moduleName: 'Ticket',
+        moduleImage: '${kBaseImagePath}ticket.png',
+        key: 'tickets',
+        notificationKey: 'tickets'),
+    ModulesModel(
+        moduleName: 'Trips',
+        moduleImage: '${kBaseImagePath}trip.png',
+        key: 'hf',
+        notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Trips',
+        moduleImage: '${kBaseImagePath}trip.png',
+        key: 'wf_trips',
+        notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Signout',
+        moduleImage: '${kBaseImagePath}sign_in_qr.png',
+        key: 'tracking',
+        notificationKey: ''),
   ];
 }

@@ -1,0 +1,74 @@
+name: ToolKitX QA Workflow
+
+on:
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  checks:
+    name: ToolKitX QA pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Setup Flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.5'
+          channel: 'stable'
+
+      - name: Run Flutter doctor
+        run: flutter doctor
+
+      - name: Run Flutter dependencies
+        run: flutter pub get
+
+      - name: Check for formatting in the code
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze Static code
+        run: flutter analyze .
+
+      - name: Generate Build Number
+        id: increment-version
+        run: |
+          echo "Generating build number"
+          build_number=$(date +'%m%d%y%H%M')
+          echo "::set-output name=version::$build_number"
+
+      - name: Build Android app
+        run: |
+          echo "Building APK with build number: ${{ steps.increment-version.outputs.version }}"
+          flutter build apk --release --build-number=${{ steps.increment-version.outputs.version }}
+
+      - name: Rename build number
+        run: |
+          build_number=${{ steps.increment-version.outputs.version }}
+          echo "Rename build number"
+          mv build/app/outputs/apk/release/app-release.apk build/app/outputs/apk/release/${{ steps.increment-version.outputs.version }}.apk
+
+
+      - name: Firebase APK Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: internal-testers
+          file: build/app/outputs/apk/release/${{ steps.increment-version.outputs.version }}.apk
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.increment-version.outputs.version }}.apk
+          path: build/app/outputs/apk/release/${{ steps.increment-version.outputs.version }}.apk
+
+
+
+
+

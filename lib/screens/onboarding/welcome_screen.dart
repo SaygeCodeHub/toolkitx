@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/onboarding/widgets/circle_avatar.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import '../../configs/app_color.dart';
+import 'package:toolkit/widgets/circle_avatar.dart';
+
 import '../../widgets/primary_button.dart';
-import 'selectLanguage/select_language_screen.dart';
+import 'select_language_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const routeName = 'WelcomeScreen';
@@ -15,6 +15,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         body: Padding(
             padding: EdgeInsets.only(
                 left: leftRightMargin,
@@ -23,28 +24,23 @@ class WelcomeScreen extends StatelessWidget {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const CircleAvatarWidget(
-                    backgroundImage:
-                        AssetImage("assets/icons/avatar-icon.png"),
-                  ),
-                  const SizedBox(height: largeSpacing),
+                  const CircleAvatarWidget(imagePath: 'mechanic_person.png'),
+                  const SizedBox(height: xxxMediumSpacing),
                   Text(StringConstants.kWelcomeToToolkitX,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xxLarge
-                          .copyWith(color: AppColor.mediumBlack)),
-                  const SizedBox(height: tinySpacing),
+                      style: Theme.of(context).textTheme.xxLarge),
+                  const SizedBox(height: xxTinySpacing),
                   Text(StringConstants.kAppIntroductionNoSpacing,
                       style: Theme.of(context)
                           .textTheme
-                          .largeTitle
+                          .medium
                           .copyWith(fontWeight: FontWeight.normal),
                       textAlign: TextAlign.center),
-                  const SizedBox(height: extraLargeSpacing),
+                  const SizedBox(height: xxLargerSpacing),
                   PrimaryButton(
                       onPressed: () {
                         Navigator.pushNamed(
-                            context, SelectLanguageScreen.routeName);
+                            context, SelectLanguageScreen.routeName,
+                            arguments: false);
                       },
                       textValue: StringConstants.kStartNow)
                 ])));

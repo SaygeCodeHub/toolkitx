@@ -1,0 +1,119 @@
+{
+  "project_info": {
+    "project_number": "232104430503",
+    "firebase_url": "https://toolkitx-5e9c6.firebaseio.com",
+    "project_id": "toolkitx-5e9c6",
+    "storage_bucket": "toolkitx-5e9c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232104430503:android:dcec206266c4bfc1",
+        "android_client_info": {
+          "package_name": "com.toolKitX.safety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR2LeO8KKW9UJXvXNDhBciqR0hGhL1J6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "232104430503-064gdom9b402a1amfts954r11ds0iarr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.toolkitx.safety.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232104430503:android:cbc9b390b6882a78",
+        "android_client_info": {
+          "package_name": "com.toolKitX.safety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR2LeO8KKW9UJXvXNDhBciqR0hGhL1J6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "232104430503-064gdom9b402a1amfts954r11ds0iarr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.toolkitx.safety.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232104430503:android:85908ff5332b81c1",
+        "android_client_info": {
+          "package_name": "com.toolKitX.safety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR2LeO8KKW9UJXvXNDhBciqR0hGhL1J6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232104430503-arh6fcklld879crja6npa8lvrcrgn13s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "232104430503-064gdom9b402a1amfts954r11ds0iarr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.toolkitx.safety.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

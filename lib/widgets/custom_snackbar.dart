@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../configs/app_color.dart';
+
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showCustomSnackBar(
-    BuildContext context, String? text, String label) {
+    BuildContext context, String text, String label) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       behavior: SnackBarBehavior.fixed,
       duration: const Duration(seconds: 2),
@@ -18,7 +20,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showCustomSnackBar(
                   Radius.circular(MediaQuery.of(context).size.width * 0.0))),
       action: SnackBarAction(label: label, onPressed: () {}),
       content: Text(
-        text!,
-        style: const TextStyle(color: Colors.white),
+        text,
+        style: const TextStyle(color: AppColor.white),
       )));
 }
