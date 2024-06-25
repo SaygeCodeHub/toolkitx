@@ -19,6 +19,7 @@ class NotificationUtil {
     await pushNotifications.requestPermission();
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('received message====> $message');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message).then((result) {
           if (chatScreenName == ChatMessagingScreen.routeName) {
@@ -38,6 +39,7 @@ class NotificationUtil {
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
+    print('_storeMessageInDatabase message: ${message.data}');
     Map<String, dynamic> messageData = {
       'rid': message.data['rid'],
       'msg': message.data['chatmsg'],
@@ -53,8 +55,10 @@ class NotificationUtil {
       'msg_status': '1',
       'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
     };
+    print('_storeMessageInDatabase insertMessage: $messageData');
     await _databaseHelper.insertMessage(messageData);
   }
 
@@ -69,6 +73,7 @@ class NotificationUtil {
 }
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  print('handleBackgroundMessage message: ${message.data}');
   if (message.data['ischatmsg'] == '1') {
     Map<String, dynamic> messageData = {
       'rid': message.data['rid'] ?? '',
@@ -85,8 +90,10 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
       'msg_status': '1',
       'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
     };
+    print('handleBackgroundMessage insertMessage: $messageData');
     await DatabaseHelper().insertMessage(messageData);
   }
 }

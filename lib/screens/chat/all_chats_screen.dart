@@ -11,6 +11,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -24,11 +25,10 @@ class AllChatsScreen extends StatelessWidget {
     context.read<ChatBloc>().add(FetchChatsList());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chats'),
-        automaticallyImplyLeading: false,
-        titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-        actions: const [],
-      ),
+          title: const Text('Chats'),
+          automaticallyImplyLeading: false,
+          titleTextStyle: Theme.of(context).textTheme.mediumLarge,
+          actions: [ChatPopUpMenu()]),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(context, UsersScreen.routeName,
@@ -103,7 +103,7 @@ class AllChatsScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text((snapshot.data![index].isGroup == true)
-                                      ? snapshot.data![index].groupPurpose
+                                      ? 'Group'
                                       : (snapshot.data![index].sType == '2')
                                           ? 'Workforce'
                                           : 'System User')

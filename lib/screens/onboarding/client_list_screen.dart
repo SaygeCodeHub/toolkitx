@@ -77,6 +77,7 @@ class ClientListScreen extends StatelessWidget {
                                 return CustomCard(
                                     child: InkWell(
                                         onTap: () {
+                                          print('here====OnTap(SelectClient)');
                                           context.read<ClientBloc>().add(
                                               SelectClient(
                                                   hashKey: state.clientListModel

@@ -6,10 +6,12 @@ class DioClient {
   final Dio dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 75)));
 
   Future<dynamic> get(String requestUrl, [Map? body]) async {
+    print('get requestUrl: $requestUrl');
     dynamic jsonResponse;
     try {
       final response = await dio.get(requestUrl, options: Options());
       jsonResponse = (response.data);
+      print('get response: $jsonResponse');
     } on DioException catch (e) {
       throw Exception(e.toString());
     }
@@ -17,11 +19,13 @@ class DioClient {
   }
 
   Future<dynamic> post(String requestUrl, Map? body) async {
+    print('post requestUrl: $requestUrl');
     dynamic jsonResponse;
     try {
       final response =
           await dio.post(requestUrl, data: body, options: Options());
       jsonResponse = (response.data);
+      print('post response: $jsonResponse');
     } on DioException catch (e) {
       if (e.response != null) {
         e.response!.statusCode;

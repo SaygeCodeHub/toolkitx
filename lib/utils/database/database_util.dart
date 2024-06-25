@@ -47,7 +47,8 @@ class DatabaseHelper {
             unreadMessageCount INTEGER,
             isGroup INTEGER,
             attachementExtension TEXT,
-            msgTime INTEGER
+            msgTime INTEGER,
+            sender_name TEXT
           )
         ''');
         await db.execute('''
@@ -194,10 +195,8 @@ class DatabaseHelper {
     try {
       DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
       sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
-      // print('insertMessage db $sendMessageMap');
-      int temp = await db.insert('chat_messages', sendMessageMap,
+      await db.insert('chat_messages', sendMessageMap,
           conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('insertMessage db $temp');
     } catch (e) {
       rethrow;
     }
@@ -296,17 +295,28 @@ class DatabaseHelper {
 
   Future<void> updateUnreadMessageCount(String rid, String rtype) async {
     final Database db = await database;
-    await db.update('chat_messages', {'isMessageUnread': 0},
-        where: 'isMessageUnread = 1 AND sid = ? AND stype = ?',
-        whereArgs: [rid, rtype]);
+    if (rtype == '3') {
+      await db.update('chat_messages', {'isMessageUnread': 0},
+          where: 'isMessageUnread = 1 AND rid = ? AND rtype = 3',
+          whereArgs: [rid]);
+    } else {
+      await db.update('chat_messages', {'isMessageUnread': 0},
+          where: 'isMessageUnread = 1 AND sid = ? AND stype = ?',
+          whereArgs: [rid, rtype]);
+    }
   }
 
   Future<List<Map<String, dynamic>>> getMessagesForEmployees(
       String sId, String sType, String rId, String rType) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
-    messages = await db.rawQuery(
-        'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC');
+    var query =
+        'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC';
+    if (rType == '3') {
+      query =
+          'select * from chat_messages where (rid = $rId AND rtype = $rType) ORDER BY msgTime DESC';
+    }
+    messages = await db.rawQuery(query);
     if (messages.isNotEmpty) {
       return messages;
     } else {
@@ -319,7 +329,7 @@ class DatabaseHelper {
     List<Map<String, dynamic>> messages = [];
 
     messages = await db.rawQuery(
-        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype))) AS unreadCount from chat_messages union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AS unreadCount from chat_messages');
+        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype))  AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)))  AND c.rtype in (1,2)) AS unreadCount from chat_messages where rtype in (1,2) union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AND c.rtype in (1,2)) AS unreadCount from chat_messages where rtype in (1,2)   union select distinct rid, rtype, employee_name, (select msg from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3))) AS unreadCount from chat_messages where rtype=3');
     if (messages.isNotEmpty) {
       return messages;
     } else {
@@ -387,6 +397,17 @@ class DatabaseHelper {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('groups');
     return maps;
+  }
+
+  Future<Map<String, dynamic>> getGroupData(String groupId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('groups', where: 'group_id = ?', whereArgs: [groupId]);
+    if (maps.isNotEmpty) {
+      return maps.first;
+    } else {
+      return {};
+    }
   }
 
   Future<List<Map<String, dynamic>>> getMessagesWithStatusZero() async {

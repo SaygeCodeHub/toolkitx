@@ -72,9 +72,9 @@ class AttachmentMsgWidget extends StatelessWidget {
                       children: [
                         Text(
                             (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                                ? '${context.read<ChatBloc>().chatDetailsMap['employee_name']} // '
+                                ? '${snapShot.data![reversedIndex]['sender_name']} // '
                                 : '',
-                            style: Theme.of(context).textTheme.tinySmall,
+                            style: Theme.of(context).textTheme.smallTextBlack,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1),
                         Text(
@@ -84,7 +84,7 @@ class AttachmentMsgWidget extends StatelessWidget {
                                         snapShot.data?[reversedIndex]
                                             ['msg_time'])
                                     .toString())),
-                            style: Theme.of(context).textTheme.smallTextBlack)
+                            style:Theme.of(context).textTheme.tinySmall)
                       ],
                     )
                   : Text(

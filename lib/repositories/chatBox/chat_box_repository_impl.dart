@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
+import 'package:toolkit/data/models/chatBox/fetch_all_groups_chat_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
@@ -35,5 +36,13 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=${groupInfoMap['hashcode']}&groupid=${groupInfoMap['group_id']}");
     return FetchGroupInfoModel.fromJson(response);
+  }
+
+  @override
+  Future<AllGroupChatList> fetchAllGroupChatList(
+      String hashCode, String userId, String userType) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}chat/GetAllMyGroups?hashcode=$hashCode&userid=1&usertype=$userType");
+    return AllGroupChatList.fromJson(response);
   }
 }

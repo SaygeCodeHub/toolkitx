@@ -34,25 +34,29 @@ class FetchChatMessagesDatum {
   final int rid;
   final int rType;
   final String userName;
+  final String senderName;
 
   FetchChatMessagesDatum(
       {required this.rid,
       required this.rType,
       required this.userName,
-      required this.msgJson});
+      required this.msgJson,
+      required this.senderName});
 
   factory FetchChatMessagesDatum.fromJson(Map<String, dynamic> json) =>
       FetchChatMessagesDatum(
           msgJson: MsgJson.fromJson(json["msg_json"]),
           rid: json['rid'] ?? 0,
           rType: json['rtype'] ?? 0,
-          userName: json['username'] ?? '');
+          userName: json['username'] ?? '',
+          senderName: json['sendername'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "msg_json": msgJson.toJson(),
         'rid': rid,
         'rtype': rType,
-        'username': userName
+        'username': userName,
+        'senderName': senderName
       };
 }
 

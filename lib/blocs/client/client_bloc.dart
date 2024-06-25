@@ -96,9 +96,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
-        if (event.isFirstTime == true) {
-          add(FetchChatMessages());
-        }
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
@@ -121,13 +118,17 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             badgeCount = badgeCount + homeScreenModel.data!.badges![i].count;
           }
         }
-
+        if (event.isFirstTime == true) {
+          ChatBloc().add(FetchAllGroupChats());
+          add(FetchChatMessages());
+        }
         emit(HomeScreenFetched(
             homeScreenModel: homeScreenModel,
             image: clientImage,
             availableModules: availableModules,
             badgeCount: badgeCount,
             unreadMessageCount: 0));
+
       } else {
         emit(FetchHomeScreenError());
       }
@@ -149,7 +150,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
           'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
           'token': newToken
         });
-
         if (fetchChatMessagesModel.data.isNotEmpty) {
           for (var item in fetchChatMessagesModel.data) {
             Map<String, dynamic> chatDetailsMap = {
@@ -167,6 +167,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
               "msg_status": '1',
               "isMessageUnread": 1,
               "employee_name": item.userName,
+              "sender_name": item.senderName,
               'isReceiver': 1
             };
             await _databaseHelper.insertMessage(chatDetailsMap).then((result) {

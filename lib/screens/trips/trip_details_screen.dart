@@ -26,7 +26,7 @@ class TripsDetailsScreen extends StatelessWidget {
         .read<TripBloc>()
         .add(FetchTripsDetails(tripId: tripId, tripTabIndex: 0));
     return Scaffold(
-      appBar: GenericAppBar(),
+      appBar: const GenericAppBar(),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,

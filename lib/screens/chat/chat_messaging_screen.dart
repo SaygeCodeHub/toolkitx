@@ -29,109 +29,110 @@ class ChatMessagingScreen extends StatefulWidget {
 }
 
 class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
+  String replyToMessage = '';
+
   @override
   void initState() {
+    replyToMessage = '';
     context.read<ChatBloc>().chatDetailsMap['isMedia'] = false;
     context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-        employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap));
+        employeeDetailsMap: context.read<ChatBloc>().chatDetailsMap,
+        replyToMessage: ''));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (pop) {
-        chatScreenName = AllChatsScreen.routeName;
-      },
-      child: Scaffold(
-        appBar: GenericAppBar(
-            title:
-                context.read<ChatBloc>().chatDetailsMap['employee_name'] ?? ''),
-        body: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: context.read<ChatBloc>().messageStream,
-                  builder: (context, snapshot) {
-                    if (context.read<ChatBloc>().chatDetailsMap['isMedia'] ==
-                        false) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          reverse: true,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final bool needDateDivider =
-                                index == snapshot.data!.length - 1 ||
-                                    _needDateDivider(index, snapshot);
+        onPopInvoked: (pop) {
+          chatScreenName = AllChatsScreen.routeName;
+        },
+        child: Scaffold(
+            appBar: GenericAppBar(
+                title:
+                    context.read<ChatBloc>().chatDetailsMap['employee_name'] ??
+                        ''),
+            body: Column(children: [
+              Expanded(
+                  child: StreamBuilder<List<Map<String, dynamic>>>(
+                      stream: context.read<ChatBloc>().messageStream,
+                      builder: (context, snapshot) {
+                        if (context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['isMedia'] ==
+                            false) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                reverse: true,
+                                shrinkWrap: true,
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final bool needDateDivider =
+                                      index == snapshot.data!.length - 1 ||
+                                          _needDateDivider(index, snapshot);
+                                  return Column(children: <Widget>[
+                                    if (needDateDivider)
+                                      Center(
+                                        child: DateDividerWidget(
+                                            snapshot: snapshot,
+                                            reversedIndex: index),
+                                      ),
+                                    getWidgetBasedOnString(
+                                        snapshot.data![index]['msg_type'],
+                                        snapshot,
+                                        index)
+                                  ]);
+                                });
+                          } else {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        } else if (context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['isUploadComplete'] ==
+                            false) {
+                          if (context
+                                  .read<ChatBloc>()
+                                  .chatDetailsMap['file_size'] >
+                              20) {
                             return Column(
-                              children: <Widget>[
-                                if (needDateDivider)
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
                                   Center(
-                                    child: DateDividerWidget(
-                                        snapshot: snapshot,
-                                        reversedIndex: index),
-                                  ),
-                                getWidgetBasedOnString(
-                                    snapshot.data![index]['msg_type'],
-                                    snapshot,
-                                    index)
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    } else if (context
-                            .read<ChatBloc>()
-                            .chatDetailsMap['isUploadComplete'] ==
-                        false) {
-                      if (context.read<ChatBloc>().chatDetailsMap['file_size'] >
-                          20) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                                child: Text(
-                                    'Cannot upload attachement more than 20 mb!',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(color: AppColor.black))),
-                          ],
-                        );
-                      } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CircularProgressIndicator(),
-                            const SizedBox(height: tiniestSpacing),
-                            Center(
-                                child: Text(
-                                    'Uploading attachment, please wait!',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(color: AppColor.grey))),
-                          ],
-                        );
-                      }
-                    } else {
-                      return const AttachmentPreviewScreen();
-                    }
-                  }),
-            ),
-            const Divider(height: kChatScreenDividerHeight),
-            BlocBuilder<ChatBloc, ChatState>(
-              builder: (context, state) {
+                                      child: Text(
+                                          'Cannot upload attachement more than 20 mb!',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(color: AppColor.black)))
+                                ]);
+                          } else {
+                            return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  const SizedBox(height: tiniestSpacing),
+                                  Center(
+                                      child: Text(
+                                          'Uploading attachment, please wait!',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .xSmall
+                                              .copyWith(color: AppColor.grey)))
+                                ]);
+                          }
+                        } else {
+                          return const AttachmentPreviewScreen();
+                        }
+                      })),
+              const Divider(height: kChatScreenDividerHeight),
+              BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
                 if (state is ChatMessagingTextFieldHidden) {
                   return Padding(
-                    padding: const EdgeInsets.all(xxTinierSpacing),
-                    child: Row(
-                      children: [
+                      padding: const EdgeInsets.all(xxTinierSpacing),
+                      child: Row(children: [
                         Expanded(
                             child: PrimaryButton(
                                 onPressed: () {
@@ -145,7 +146,8 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                       RebuildChatMessagingScreen(
                                           employeeDetailsMap: context
                                               .read<ChatBloc>()
-                                              .chatDetailsMap));
+                                              .chatDetailsMap,
+                                          replyToMessage: ''));
                                 },
                                 textValue:
                                     (context.read<ChatBloc>().chatDetailsMap[
@@ -195,35 +197,45 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                         }
                                       }
                                     : null,
-                                textValue: 'Send')),
-                      ],
-                    ),
-                  );
+                                textValue: 'Send'))
+                      ]));
                 } else if (state is ShowChatMessagingTextField) {
                   return Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                       ),
-                      child: const ChatBoxTextFieldWidget());
+                      child: ChatBoxTextFieldWidget(
+                          replyToMessage: state.replyToMessage,
+                          focusNode:
+                              state.replyToMessage != '' ? FocusNode() : null));
                 } else {
                   return Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                      ),
-                      child: const ChatBoxTextFieldWidget());
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).cardColor),
+                      child: ChatBoxTextFieldWidget(
+                          replyToMessage: replyToMessage,
+                          focusNode:
+                              replyToMessage != '' ? FocusNode() : null));
                 }
-              },
-            )
-          ],
-        ),
-      ),
-    );
+              })
+            ])));
   }
 
   Widget getWidgetBasedOnString(msgType, snapshot, reversedIndex) {
     switch (msgType) {
       case '1':
-        return MsgTextWidget(snapshot: snapshot, reversedIndex: reversedIndex);
+        return MsgTextWidget(
+          snapshot: snapshot,
+          reversedIndex: reversedIndex,
+          onReply: (message) {
+            setState(() {
+              context
+                  .read<ChatBloc>()
+                  .add(ReplyToMessage(replyToMessage: message));
+              replyToMessage = message;
+            });
+          },
+        );
       default:
         return AttachmentMsgWidget(
             snapShot: snapshot, reversedIndex: reversedIndex);

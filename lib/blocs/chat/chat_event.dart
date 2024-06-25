@@ -15,11 +15,15 @@ class SendChatMessage extends ChatEvent {
 
 class RebuildChatMessagingScreen extends ChatEvent {
   final Map employeeDetailsMap;
+  final String replyToMessage;
 
-  RebuildChatMessagingScreen({required this.employeeDetailsMap});
+  RebuildChatMessagingScreen(
+      {this.replyToMessage = '', required this.employeeDetailsMap});
 }
 
 class FetchChatsList extends ChatEvent {}
+
+class FetchGroupsList extends ChatEvent {}
 
 class CreateChatGroup extends ChatEvent {}
 
@@ -49,3 +53,12 @@ class FetchGroupInfo extends ChatEvent {
 }
 
 class FetchChatMessage extends ChatEvent {}
+
+class InitializeGroupChatMembers extends ChatEvent {}
+class FetchAllGroupChats extends ChatEvent {}
+
+class ReplyToMessage extends ChatEvent {
+  String replyToMessage;
+
+  ReplyToMessage({this.replyToMessage = ''});
+}
