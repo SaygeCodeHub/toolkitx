@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/delete_booking_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_all_rooms_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
@@ -90,5 +91,13 @@ class MeetingRoomRepositoryImpl extends MeetingRoomRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}meeting/UpdateBooking", editDetailsMap);
     return UpdateBookingDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteBookingDetailsModel> deleteBookingDetails(
+      Map deleteDetailsMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}meeting/DeleteBooking", deleteDetailsMap);
+    return DeleteBookingDetailsModel.fromJson(response);
   }
 }

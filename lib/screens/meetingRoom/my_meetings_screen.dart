@@ -25,33 +25,32 @@ class MyMeetingsScreen extends StatelessWidget {
         FetchMyMeetingRoom(date: DateFormat.yMMMd().format(DateTime.now())));
     String initialDate = '';
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('mymeetings')),
-      floatingActionButton: const Padding(
-        padding:
-            EdgeInsets.only(right: xxTinierSpacing, bottom: xxxSmallestSpacing),
-        child: MeetingFloatingButton(),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-            left: leftRightMargin,
-            right: leftRightMargin,
-            top: xxTinierSpacing,
-            bottom: xxTinierSpacing),
-        child: Column(
-          children: [
-            MeetingDatePicker(
-                onDateChanged: (String date) {
-                  context
-                      .read<MeetingRoomBloc>()
-                      .add(FetchMyMeetingRoom(date: date));
-                  initialDate = date;
-                },
-                maxDate: DateTime.now()),
-            const SizedBox(height: tiniestSpacing),
-            const Divider(
-                color: AppColor.blueGrey, thickness: xxxTiniestSpacing),
-            Expanded(
-              child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+        appBar: GenericAppBar(title: DatabaseUtil.getText('mymeetings')),
+        floatingActionButton: const Padding(
+          padding: EdgeInsets.only(
+              right: xxTinierSpacing, bottom: xxxSmallestSpacing),
+          child: MeetingFloatingButton(),
+        ),
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing,
+                bottom: xxTinierSpacing),
+            child: Column(children: [
+              MeetingDatePicker(
+                  onDateChanged: (String date) {
+                    context
+                        .read<MeetingRoomBloc>()
+                        .add(FetchMyMeetingRoom(date: date));
+                    initialDate = date;
+                  },
+                  maxDate: DateTime.now()),
+              const SizedBox(height: tiniestSpacing),
+              const Divider(
+                  color: AppColor.blueGrey, thickness: xxxTiniestSpacing),
+              Expanded(
+                  child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
                 buildWhen: (previousState, currentState) =>
                     currentState is MyMeetingRoomFetching ||
                     currentState is MyMeetingRoomFetched ||
@@ -145,11 +144,7 @@ class MyMeetingsScreen extends StatelessWidget {
                   }
                   return const SizedBox.shrink();
                 },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+              ))
+            ])));
   }
 }

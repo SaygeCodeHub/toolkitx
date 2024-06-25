@@ -69,6 +69,7 @@ class MeetingFloatingButton extends StatelessWidget {
         break;
       case "Book Meeting":
         Navigator.pop(context);
+        SearchRoomsScreen.isFromViewAvailable = false;
         Navigator.pushNamed(context, SearchRoomsScreen.routeName);
         break;
     }

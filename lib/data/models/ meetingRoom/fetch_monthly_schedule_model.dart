@@ -54,23 +54,27 @@ class Datum {
 
 class Booking {
   final String bookingid;
+  final String roomname;
   final String startdatetime;
   final String enddatetime;
 
   Booking({
     required this.bookingid,
+    required this.roomname,
     required this.startdatetime,
     required this.enddatetime,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         bookingid: json["bookingid"],
+        roomname: json["roomname"],
         startdatetime: json["startdatetime"],
         enddatetime: json["enddatetime"],
       );
 
   Map<String, dynamic> toJson() => {
         "bookingid": bookingid,
+        "roomname": roomname,
         "startdatetime": startdatetime,
         "enddatetime": enddatetime,
       };

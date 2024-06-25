@@ -99,3 +99,5 @@ const double kDatePickerTextSize = 22;
 const double kMessageIconSize = 30;
 const double kMediaContainerBorderRadius = 10;
 const double kMeetingExpansionTilesHeight = 120;
+const double kViewAvailabilityCardHeight = 200;
+const double kMonthViewCardWidth = 90;

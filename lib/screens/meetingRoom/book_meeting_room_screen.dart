@@ -24,53 +24,54 @@ class BookMeetingRoomScreen extends StatelessWidget {
     context.read<MeetingRoomBloc>().add(FetchMeetingMaster());
     bookRoomMap['endson'] = '';
     bookRoomMap['repeat'] = '0';
+    bookRoomMap['startdate'] =
+        '${SearchRoomsScreen.searchRoomMap['date']} ${SearchRoomsScreen.searchRoomMap['st']}';
+    bookRoomMap['enddate'] =
+        '${SearchRoomsScreen.searchRoomMap['date']} ${SearchRoomsScreen.searchRoomMap['et']}';
     return Scaffold(
-      appBar: GenericAppBar(title: DatabaseUtil.getText('BookMeetingRoom')),
-      body: Padding(
-        padding: const EdgeInsets.only(
-            left: leftRightMargin,
-            right: leftRightMargin,
-            top: xxTinierSpacing,
-            bottom: xxTinierSpacing),
-        child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
-          buildWhen: (previousState, currentState) =>
-              currentState is MeetingMasterFetching ||
-              currentState is MeetingMasterFetched ||
-              currentState is MeetingMasterNotFetched,
-          builder: (context, state) {
-            if (state is MeetingMasterFetching) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MeetingMasterFetched) {
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: BookMeetingRoomBody(
-                  bookRoomMap: bookRoomMap,
-                  participantList: state.fetchMeetingMasterModel.data[0],
-                ),
-              );
-            } else if (state is MeetingMasterNotFetched) {
-              return const Center(
-                child: Text(StringConstants.kNoRecordsFound),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(xxTinierSpacing),
-        child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: DatabaseUtil.getText('buttonBack')),
-            ),
-            const SizedBox(width: xxxSmallestSpacing),
-            Expanded(
-              child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
+        appBar: GenericAppBar(title: DatabaseUtil.getText('BookMeetingRoom')),
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                top: xxTinierSpacing,
+                bottom: xxTinierSpacing),
+            child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is MeetingMasterFetching ||
+                    currentState is MeetingMasterFetched ||
+                    currentState is MeetingMasterNotFetched,
+                builder: (context, state) {
+                  if (state is MeetingMasterFetching) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is MeetingMasterFetched) {
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: BookMeetingRoomBody(
+                        bookRoomMap: bookRoomMap,
+                        participantList: state.fetchMeetingMasterModel.data[0],
+                      ),
+                    );
+                  } else if (state is MeetingMasterNotFetched) {
+                    return const Center(
+                      child: Text(StringConstants.kNoRecordsFound),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                })),
+        bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(xxTinierSpacing),
+            child: Row(children: [
+              Expanded(
+                child: PrimaryButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    textValue: DatabaseUtil.getText('buttonBack')),
+              ),
+              const SizedBox(width: xxxSmallestSpacing),
+              Expanded(
+                  child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
                 listener: (context, state) {
                   if (state is MeetingRoomBooking) {
                     ProgressBar.show(context);
@@ -79,6 +80,9 @@ class BookMeetingRoomScreen extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    if (SearchRoomsScreen.isFromViewAvailable == true) {
+                      Navigator.pop(context);
+                    }
                     Navigator.pushReplacementNamed(
                         context, MyMeetingsScreen.routeName);
                   }
@@ -89,20 +93,12 @@ class BookMeetingRoomScreen extends StatelessWidget {
                 },
                 child: PrimaryButton(
                     onPressed: () {
-                      bookRoomMap['startdate'] =
-                          SearchRoomsScreen.searchRoomMap['st'];
-                      bookRoomMap['enddate'] =
-                          SearchRoomsScreen.searchRoomMap['et'];
                       context
                           .read<MeetingRoomBloc>()
                           .add(BookMeetingRoom(bookMeetingMap: bookRoomMap));
                     },
                     textValue: DatabaseUtil.getText('buttonSave')),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+              ))
+            ])));
   }
 }

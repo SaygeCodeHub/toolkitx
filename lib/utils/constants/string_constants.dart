@@ -663,4 +663,8 @@ abstract class StringConstants {
   static const String kLongAgenda = "Long Agenda";
   static const String kOwner = "Owner";
   static const String kParticipants = "Participants";
+  static const String kLoading = "Loading...";
+  static const String kShortLongAgendaParticipantMandatory =
+      'Short agenda, Long agenda, Participants are Mandatory';
+  static const String kEndsOnMandatory = "Ends on field is mandatory";
 }

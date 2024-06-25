@@ -85,6 +85,12 @@ class RepeatValueSelected extends MeetingRoomState {
   RepeatValueSelected({required this.repeat});
 }
 
+class RoomIdSelected extends MeetingRoomState {
+  final String roomId;
+
+  RoomIdSelected({required this.roomId});
+}
+
 class MeetingRoomBooking extends MeetingRoomState {}
 
 class MeetingRoomBooked extends MeetingRoomState {}
@@ -145,4 +151,14 @@ class BookingDetailsNotUpdated extends MeetingRoomState {
   final String errorMessage;
 
   BookingDetailsNotUpdated({required this.errorMessage});
+}
+
+class BookingDetailsDeleting extends MeetingRoomState {}
+
+class BookingDetailsDeleted extends MeetingRoomState {}
+
+class BookingDetailsNotDeleted extends MeetingRoomState {
+  final String errorMessage;
+
+  BookingDetailsNotDeleted({required this.errorMessage});
 }

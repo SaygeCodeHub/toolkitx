@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/data/models/%20meetingRoom/book_meeting_room_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/delete_booking_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_building_floor_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_details_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.dart';
@@ -15,9 +15,11 @@ import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/models/ meetingRoom/book_meeting_room_model.dart';
 import '../../data/models/ meetingRoom/fetch_meeting_all_rooms_model.dart';
 import '../../data/models/ meetingRoom/fetch_room_availability_model.dart';
 import '../../di/app_module.dart';
+import '../../utils/constants/string_constants.dart';
 
 part 'meeting_room_event.dart';
 
@@ -37,11 +39,13 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<FetchMeetingBuildingFloor>(_fetchMeetingBuildingFloor);
     on<FetchSearchForRooms>(_fetchSearchForRooms);
     on<SelectRepeatValue>(_selectRepeatValue);
+    on<SelectRoomId>(_selectRoomId);
     on<BookMeetingRoom>(_bookMeetingRoom);
     on<FetchMonthlySchedule>(_fetchMonthlySchedule);
     on<FetchMeetingAllRooms>(_fetchMeetingAllRooms);
     on<FetchRoomAvailability>(_fetchRoomAvailability);
     on<UpdateBookingDetails>(_updateBookingDetails);
+    on<DeleteBookingDetails>(_deleteBookingDetails);
   }
 
   String bookingId = '';
@@ -186,6 +190,11 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     emit(RepeatValueSelected(repeat: event.repeat));
   }
 
+  FutureOr<void> _selectRoomId(
+      SelectRoomId event, Emitter<MeetingRoomState> emit) {
+    emit(RoomIdSelected(roomId: event.roomId));
+  }
+
   Future<FutureOr<void>> _bookMeetingRoom(
       BookMeetingRoom event, Emitter<MeetingRoomState> emit) async {
     emit(MeetingRoomBooking());
@@ -207,12 +216,29 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
         "externalusers": event.bookMeetingMap['externalusers'] ?? '',
         "hashcode": hashCode
       };
-      BookMeetingRoomModel bookMeetingRoomModel =
-          await _meetingRoomRepository.bookMeetingRoom(bookMeetingMap);
-      if (bookMeetingRoomModel.status == 200) {
-        emit(MeetingRoomBooked());
+      if ((event.bookMeetingMap['repeat'] == '0' &&
+              event.bookMeetingMap['endson'] == '') ||
+          (event.bookMeetingMap['repeat'] != '0' &&
+              event.bookMeetingMap['endson'] != '')) {
+        if (event.bookMeetingMap['shortagenda'] != null &&
+            event.bookMeetingMap['longagenda'] != null &&
+            event.bookMeetingMap['participant'] != null) {
+          BookMeetingRoomModel bookMeetingRoomModel =
+              await _meetingRoomRepository.bookMeetingRoom(bookMeetingMap);
+          if (bookMeetingRoomModel.status == 200) {
+            emit(MeetingRoomBooked());
+          } else {
+            emit(MeetingRoomNotBooked(
+                errorMessage: bookMeetingRoomModel.message));
+          }
+        } else {
+          emit(MeetingRoomNotBooked(
+              errorMessage:
+                  StringConstants.kShortLongAgendaParticipantMandatory));
+        }
       } else {
-        emit(MeetingRoomNotBooked(errorMessage: bookMeetingRoomModel.message));
+        emit(MeetingRoomNotBooked(
+            errorMessage: StringConstants.kEndsOnMandatory));
       }
     } catch (e) {
       emit(MeetingRoomNotBooked(errorMessage: e.toString()));
@@ -303,7 +329,7 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       };
       UpdateBookingDetailsModel updateBookingDetailsModel =
           await _meetingRoomRepository.updateBookingDetails(editDetailsMap);
-      if (updateBookingDetailsModel.status == 200) {
+      if (updateBookingDetailsModel.message == '1') {
         emit(BookingDetailsUpdated());
       } else {
         emit(BookingDetailsNotUpdated(
@@ -311,6 +337,29 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(BookingDetailsNotUpdated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deleteBookingDetails(
+      DeleteBookingDetails event, Emitter<MeetingRoomState> emit) async {
+    emit((BookingDetailsDeleting()));
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map deleteDetailsMap = {
+        "Bookingid": bookingId,
+        "hashcode": hashCode,
+      };
+      DeleteBookingDetailsModel deleteBookingDetailsModel =
+          await _meetingRoomRepository.deleteBookingDetails(deleteDetailsMap);
+      if (deleteBookingDetailsModel.message == '1') {
+        emit(BookingDetailsDeleted());
+      } else {
+        emit(BookingDetailsNotDeleted(
+            errorMessage: deleteBookingDetailsModel.message));
+      }
+    } catch (e) {
+      emit(BookingDetailsNotDeleted(errorMessage: e.toString()));
     }
   }
 }

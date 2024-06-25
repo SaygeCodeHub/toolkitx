@@ -29,26 +29,29 @@ class MonthViewScreen extends StatelessWidget {
             right: leftRightMargin,
             top: xxTinierSpacing,
             bottom: xxTinierSpacing),
-        child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
-          buildWhen: (previousState, currentState) =>
-              currentState is MonthlyScheduleFetching ||
-              currentState is MonthlyScheduleFetched ||
-              currentState is MonthlyScheduleNotFetched,
-          builder: (context, state) {
-            if (state is MonthlyScheduleFetching) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is MonthlyScheduleFetched) {
-              var data = state.fetchMonthlyScheduleModel.data;
-              return Column(children: [
-                MeetingMonthPicker(onDateChanged: (String date) {
-                  context
-                      .read<MeetingRoomBloc>()
-                      .add(FetchMonthlySchedule(date: date));
-                }),
-                const SizedBox(height: tiniestSpacing),
-                const Divider(
-                    color: AppColor.blueGrey, thickness: xxxTiniestSpacing),
-                Expanded(
+        child: Column(children: [
+          MeetingMonthPicker(onDateChanged: (String date) {
+            context
+                .read<MeetingRoomBloc>()
+                .add(FetchMonthlySchedule(date: date));
+          }),
+          const SizedBox(height: tiniestSpacing),
+          const Divider(color: AppColor.blueGrey, thickness: xxxTiniestSpacing),
+          BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+            buildWhen: (previousState, currentState) =>
+                currentState is MonthlyScheduleFetching ||
+                currentState is MonthlyScheduleFetched ||
+                currentState is MonthlyScheduleNotFetched,
+            builder: (context, state) {
+              if (state is MonthlyScheduleFetching) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 2.5),
+                  child: const CircularProgressIndicator(),
+                );
+              } else if (state is MonthlyScheduleFetched) {
+                var data = state.fetchMonthlyScheduleModel.data;
+                return Expanded(
                   child: ListView.separated(
                     shrinkWrap: true,
                     itemCount: data.length,
@@ -61,7 +64,7 @@ class MonthViewScreen extends StatelessWidget {
                             vertical: xxxTinierSpacing),
                         child: ListTile(
                           leading: SizedBox(
-                            width: 50,
+                            width: xxLargeSpacing,
                             child: Text(
                                 state
                                     .fetchMonthlyScheduleModel.data[index].date,
@@ -73,7 +76,7 @@ class MonthViewScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w400)),
                           ),
                           title: SizedBox(
-                            height: 30.0,
+                            height: smallerSpacing,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: data[index].bookings.length,
@@ -82,6 +85,8 @@ class MonthViewScreen extends StatelessWidget {
                                   width: 90,
                                   child: InkWell(
                                     onTap: () {
+                                      MeetingDetailsScreen.roomName =
+                                          bookings[index].roomname;
                                       Navigator.pushNamed(context,
                                           MeetingDetailsScreen.routeName,
                                           arguments: bookings[index].bookingid);
@@ -115,14 +120,18 @@ class MonthViewScreen extends StatelessWidget {
                       return const SizedBox(height: xxTinierSpacing);
                     },
                   ),
-                ),
-              ]);
-            } else if (state is MonthlyScheduleNotFetched) {
-              return const Center(child: Text(StringConstants.kNoRecordsFound));
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+                );
+              } else if (state is MonthlyScheduleNotFetched) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 2.5),
+                  child: const Text(StringConstants.kNoRecordsFound),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ]),
       ),
     );
   }

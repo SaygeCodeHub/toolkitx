@@ -28,6 +28,12 @@ class FetchSearchForRooms extends MeetingRoomEvent {
   FetchSearchForRooms({required this.searchForRoomsMap});
 }
 
+class SelectRoomId extends MeetingRoomEvent {
+  final String roomId;
+
+  SelectRoomId({required this.roomId});
+}
+
 class SelectRepeatValue extends MeetingRoomEvent {
   final String repeat;
 
@@ -64,3 +70,5 @@ class UpdateBookingDetails extends MeetingRoomEvent {
 
   UpdateBookingDetails({required this.editDetailsMap});
 }
+
+class DeleteBookingDetails extends MeetingRoomEvent {}

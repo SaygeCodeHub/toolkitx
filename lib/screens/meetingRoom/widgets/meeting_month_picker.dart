@@ -60,7 +60,7 @@ class _MeetingMonthPickerState extends State<MeetingMonthPicker> {
                     SizedBox(
                         height: kDateTimePickerHeight,
                         child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.date,
+                          mode: CupertinoDatePickerMode.monthYear,
                           initialDateTime: (isFirstTime != false)
                               ? widget.initialDate
                               : DateFormat.yMMM().parse(dateInput),
