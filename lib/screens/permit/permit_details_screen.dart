@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/screens/permit/widgets/permit_comments.dart';
+import 'package:toolkit/screens/permit/widgets/permit_switching_schedule_tab.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/permit_util.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -146,7 +147,7 @@ class PermitDetailsScreen extends StatelessWidget {
                           height: kDividerHeight, thickness: kDividerWidth),
                       const SizedBox(height: xxTinierSpacing),
                       CustomTabBarView(
-                          lengthOfTabs: 6,
+                          lengthOfTabs: 7,
                           tabBarViewIcons: PermitUtil().tabBarViewIcons,
                           tabBarViewWidgets: [
                             PermitDetails(
@@ -162,6 +163,8 @@ class PermitDetailsScreen extends StatelessWidget {
                                 clientId: state.clientId,
                                 userType: state.userType),
                             PermitComments(
+                                permitDetailsModel: state.permitDetailsModel),
+                            PermitSwitchingScheduleTab(
                                 permitDetailsModel: state.permitDetailsModel)
                           ])
                     ]));
