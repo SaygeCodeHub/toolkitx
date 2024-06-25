@@ -213,3 +213,9 @@ class GenerateOfflinePdf extends PermitEvents {
 
   GenerateOfflinePdf({required this.permitId});
 }
+
+class FetchSwitchingScheduleInstructions extends PermitEvents {
+  final String scheduleId;
+
+  FetchSwitchingScheduleInstructions({required this.scheduleId});
+}
