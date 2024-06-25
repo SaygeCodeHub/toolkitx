@@ -40,7 +40,6 @@ class ChatGroupCannotCreate extends ChatState {
   ChatGroupCannotCreate({required this.errorMessage});
 }
 
-
 class EmployeesListSearched extends ChatState {
   final bool isSearchedEnabled;
 
@@ -49,9 +48,7 @@ class EmployeesListSearched extends ChatState {
 
 class ChatMessagingTextFieldHidden extends ChatState {}
 
-
-
 class ShowChatMessagingTextField extends ChatState {
   String replyToMessage;
-  ShowChatMessagingTextField({ this.replyToMessage=''});
+  ShowChatMessagingTextField({this.replyToMessage = ''});
 }

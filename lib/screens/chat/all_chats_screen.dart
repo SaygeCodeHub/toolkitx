@@ -15,6 +15,8 @@ import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
+import '../../configs/app_dimensions.dart';
+
 class AllChatsScreen extends StatelessWidget {
   static const routeName = 'AllChatsScreen';
 
@@ -24,143 +26,154 @@ class AllChatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ChatBloc>().add(FetchChatsList());
     return Scaffold(
-      appBar: AppBar(
-          title: const Text('Chats'),
-          automaticallyImplyLeading: false,
-          titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-          actions: [ChatPopUpMenu()]),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, UsersScreen.routeName,
-                arguments: false);
-          },
-          child: const Icon(Icons.add)),
-      body: StreamBuilder<List<ChatData>>(
-        stream: context.read<ChatBloc>().allChatsStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: leftRightMargin, horizontal: leftRightMargin),
-                child: ListView.separated(
-                  itemCount: snapshot.data!.length,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return CustomCard(
-                      child: ListTile(
-                          onTap: () async {
-                            context.read<ChatBloc>().chatDetailsMap = {
-                              "employee_name": snapshot.data![index].userName,
-                              'rid': snapshot.data![index].rId,
-                              'rtype': snapshot.data![index].rType,
-                            };
-                            chatScreenName = ChatMessagingScreen.routeName;
-                            Navigator.pushNamed(
-                                    context, ChatMessagingScreen.routeName)
-                                .then((value) => context
-                                    .read<ChatBloc>()
-                                    .add(FetchChatsList()));
-                          },
-                          leading: Container(
-                              padding: const EdgeInsets.all(tiniestSpacing),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: AppColor.deepBlue),
-                              child: Icon(
-                                  (snapshot.data![index].isGroup == true)
-                                      ? Icons.people
-                                      : Icons.person,
-                                  color: AppColor.ghostWhite,
-                                  size: 20)),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text((snapshot.data![index].isGroup == true)
-                                  ? snapshot.data![index].groupName
-                                  : snapshot.data![index].userName),
-                              Text(snapshot.data![index].dateTime,
-                                  style: Theme.of(context)
+        appBar: AppBar(
+            title: const Text('Chats'),
+            automaticallyImplyLeading: false,
+            titleTextStyle: Theme.of(context).textTheme.mediumLarge,
+            actions: [ChatPopUpMenu()]),
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, UsersScreen.routeName,
+                  arguments: false);
+            },
+            child: const Icon(Icons.add)),
+        body: StreamBuilder<List<ChatData>>(
+            stream: context.read<ChatBloc>().allChatsStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: leftRightMargin, horizontal: leftRightMargin),
+                    child: ListView.separated(
+                        itemCount: snapshot.data!.length,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return CustomCard(
+                              child: ListTile(
+                                  onTap: () async {
+                                    context.read<ChatBloc>().chatDetailsMap = {
+                                      "employee_name":
+                                          snapshot.data![index].userName,
+                                      'rid': snapshot.data![index].rId,
+                                      'rtype': snapshot.data![index].rType,
+                                    };
+                                    chatScreenName =
+                                        ChatMessagingScreen.routeName;
+                                    Navigator.pushNamed(context,
+                                            ChatMessagingScreen.routeName)
+                                        .then((value) => context
+                                            .read<ChatBloc>()
+                                            .add(FetchChatsList()));
+                                  },
+                                  leading: Container(
+                                      padding:
+                                          const EdgeInsets.all(tiniestSpacing),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: AppColor.deepBlue),
+                                      child: Icon(
+                                          (snapshot.data![index].isGroup ==
+                                                  true)
+                                              ? Icons.people
+                                              : Icons.person,
+                                          color: AppColor.ghostWhite,
+                                          size: 20)),
+                                  title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text((snapshot.data![index].isGroup ==
+                                                true)
+                                            ? snapshot.data![index].groupName
+                                            : snapshot.data![index].userName),
+                                        Text(snapshot.data![index].dateTime,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .xxSmall
+                                                .copyWith(
+                                                    color: AppColor.black,
+                                                    fontWeight:
+                                                        FontWeight.w500))
+                                      ]),
+                                  titleTextStyle: Theme.of(context)
                                       .textTheme
-                                      .xxSmall
+                                      .small
                                       .copyWith(
                                           color: AppColor.black,
-                                          fontWeight: FontWeight.w500))
-                            ],
-                          ),
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .small
-                              .copyWith(
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w500),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: xxTiniestSpacing),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text((snapshot.data![index].isGroup == true)
-                                      ? 'Group'
-                                      : (snapshot.data![index].sType == '2')
-                                          ? 'Workforce'
-                                          : 'System User')
-                                ],
-                              ),
-                              const SizedBox(height: xxTiniestSpacing),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                      child: messageText(
-                                          snapshot.data![index].message,
-                                          snapshot.data![index].messageType)),
-                                  Visibility(
-                                    visible:
-                                        snapshot.data![index].unreadMsgCount >
-                                            0,
-                                    child: Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(
-                                            color: AppColor.green,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Center(
-                                            child: Text(
-                                                snapshot
-                                                    .data![index].unreadMsgCount
-                                                    .toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .xxSmall
-                                                    .copyWith(
-                                                        color: AppColor.black,
-                                                        fontWeight:
-                                                            FontWeight.w500)))),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: xxTiniestSpacing),
-                            ],
-                          ),
-                          subtitleTextStyle:
-                              Theme.of(context).textTheme.xSmall),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: xxTinierSpacing);
-                  },
-                ));
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-      ),
-    );
+                                          fontWeight: FontWeight.w500),
+                                  subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                            height: xxTiniestSpacing),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text((snapshot.data![index]
+                                                          .isGroup ==
+                                                      true)
+                                                  ? 'Group'
+                                                  : (snapshot.data![index]
+                                                              .sType ==
+                                                          '2')
+                                                      ? 'Workforce'
+                                                      : 'System User')
+                                            ]),
+                                        const SizedBox(
+                                            height: xxTiniestSpacing),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                  child: messageText(
+                                                      snapshot
+                                                          .data![index].message,
+                                                      snapshot.data![index]
+                                                          .messageType)),
+                                              Visibility(
+                                                  visible: snapshot.data![index]
+                                                          .unreadMsgCount >
+                                                      0,
+                                                  child: Container(
+                                                      height:
+                                                          kChatUnreadMsgCountSize,
+                                                      width:
+                                                          kChatUnreadMsgCountSize,
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.green,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  kChatUnreadMsgCountRadius)),
+                                                      child: Center(
+                                                          child: Text(
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .unreadMsgCount
+                                                                  .toString(),
+                                                              style: Theme.of(context)
+                                                                  .textTheme
+                                                                  .xxSmall
+                                                                  .copyWith(
+                                                                      color: AppColor.black,
+                                                                      fontWeight: FontWeight.w500)))))
+                                            ]),
+                                        const SizedBox(height: xxTiniestSpacing)
+                                      ]),
+                                  subtitleTextStyle:
+                                      Theme.of(context).textTheme.xSmall));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: xxTinierSpacing);
+                        }));
+              } else {
+                return const SizedBox.shrink();
+              }
+            }));
   }
 
   String time(String time) {

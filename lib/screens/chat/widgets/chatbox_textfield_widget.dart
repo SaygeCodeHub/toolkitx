@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/screens/chat/widgets/choose_media_widget.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
@@ -81,7 +82,7 @@ class _ChatBoxTextFieldWidgetState extends State<ChatBoxTextFieldWidget> {
                                   .chatDetailsMap['message'] = text.trim();
                             },
                             decoration: const InputDecoration.collapsed(
-                                hintText: 'Send a message')))),
+                                hintText: StringConstants.kSendMessage)))),
                 ChooseMediaWidget(),
                 IconButton(
                     icon: const Icon(Icons.send_rounded),

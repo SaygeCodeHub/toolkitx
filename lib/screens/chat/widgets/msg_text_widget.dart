@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../configs/app_color.dart';
 
@@ -26,7 +27,7 @@ class MsgTextWidget extends StatelessWidget {
           Clipboard.setData(
               ClipboardData(text: snapshot.data![reversedIndex]['msg']));
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Message copied to clipboard')),
+            const SnackBar(content: Text(StringConstants.kMsgCopyToClipboard)),
           );
         },
         onHorizontalDragEnd: (details) {

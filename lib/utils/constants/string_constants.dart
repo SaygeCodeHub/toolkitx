@@ -657,4 +657,18 @@ abstract class StringConstants {
   static const String kSpecialRequestType = "Special Request Type";
   static const String kSpecialRequest = "Special Request";
   static const String kManageSpecialRequest = "Manage Special Request";
+  static const String kSelectMembers = "Click to select members";
+  static const String kEnterGroupName = 'Please enter group name!';
+  static const String kGroupName = 'Name of Group';
+  static const String kGroupPurpose = "Purpose of the Group";
+  static const String kAddNewGroup = "Add New Group";
+  static const String kAttachmentLimit =
+      "Cannot upload attachement more than 20 mb!";
+  static const String kUploadingAttachment =
+      "Uploading attachment, please wait!";
+  static const String kUploadingAttachmentError =
+      "Something went wrong. Please try again later!";
+  static const String kSend = "Send";
+  static const String kMsgCopyToClipboard = "Message copied to clipboard";
+  static const String kSendMessage = "Send a message";
 }

@@ -8,6 +8,7 @@ import 'package:toolkit/screens/chat/widgets/attachment_preview_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chatbox_textfield_widget.dart';
 import 'package:toolkit/screens/chat/widgets/date_divider_widget.dart';
 import 'package:toolkit/screens/chat/widgets/msg_text_widget.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -70,13 +71,12 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                   final bool needDateDivider =
                                       index == snapshot.data!.length - 1 ||
                                           _needDateDivider(index, snapshot);
-                                  return Column(children: <Widget>[
+                                  return Column(children: [
                                     if (needDateDivider)
                                       Center(
-                                        child: DateDividerWidget(
-                                            snapshot: snapshot,
-                                            reversedIndex: index),
-                                      ),
+                                          child: DateDividerWidget(
+                                              snapshot: snapshot,
+                                              reversedIndex: index)),
                                     getWidgetBasedOnString(
                                         snapshot.data![index]['msg_type'],
                                         snapshot,
@@ -101,7 +101,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                 children: [
                                   Center(
                                       child: Text(
-                                          'Cannot upload attachement more than 20 mb!',
+                                          StringConstants.kAttachmentLimit,
                                           style: Theme.of(context)
                                               .textTheme
                                               .xSmall
@@ -116,7 +116,7 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                   const SizedBox(height: tiniestSpacing),
                                   Center(
                                       child: Text(
-                                          'Uploading attachment, please wait!',
+                                          StringConstants.kUploadingAttachment,
                                           style: Theme.of(context)
                                               .textTheme
                                               .xSmall
@@ -153,8 +153,8 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                     (context.read<ChatBloc>().chatDetailsMap[
                                                 'isUploadComplete'] ==
                                             true)
-                                        ? 'Remove'
-                                        : 'Back')),
+                                        ? StringConstants.kRemove
+                                        : StringConstants.kBack)),
                         const SizedBox(width: xxTinierSpacing),
                         Expanded(
                             child: PrimaryButton(
@@ -176,7 +176,8 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                                 null) {
                                           showCustomSnackBar(
                                               context,
-                                              'Something went wrong. Please try again later!',
+                                              StringConstants
+                                                  .kUploadingAttachmentError,
                                               '');
                                         } else {
                                           context
@@ -197,13 +198,13 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                                         }
                                       }
                                     : null,
-                                textValue: 'Send'))
+                                textValue: StringConstants.kSend))
                       ]));
                 } else if (state is ShowChatMessagingTextField) {
+                  replyToMessage = state.replyToMessage;
                   return Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                      ),
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).cardColor),
                       child: ChatBoxTextFieldWidget(
                           replyToMessage: state.replyToMessage,
                           focusNode:
@@ -225,17 +226,16 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
     switch (msgType) {
       case '1':
         return MsgTextWidget(
-          snapshot: snapshot,
-          reversedIndex: reversedIndex,
-          onReply: (message) {
-            setState(() {
-              context
-                  .read<ChatBloc>()
-                  .add(ReplyToMessage(replyToMessage: message));
-              replyToMessage = message;
+            snapshot: snapshot,
+            reversedIndex: reversedIndex,
+            onReply: (message) {
+              setState(() {
+                context
+                    .read<ChatBloc>()
+                    .add(ReplyToMessage(replyToMessage: message));
+                replyToMessage = message;
+              });
             });
-          },
-        );
       default:
         return AttachmentMsgWidget(
             snapShot: snapshot, reversedIndex: reversedIndex);

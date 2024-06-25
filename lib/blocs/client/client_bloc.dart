@@ -128,7 +128,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             availableModules: availableModules,
             badgeCount: badgeCount,
             unreadMessageCount: 0));
-
       } else {
         emit(FetchHomeScreenError());
       }

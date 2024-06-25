@@ -30,74 +30,78 @@ class AttachmentMsgWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          right: kModuleImagePadding,
-          left: kModuleImagePadding,
-          bottom: kModuleImagePadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          (snapShot.data![reversedIndex]['isReceiver'] == 1)
-              ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: showDownloadedImage(
-                      snapShot.data![reversedIndex]['localImagePath']
-                          .toString(),
-                      context,
-                      snapShot.data![reversedIndex]['msg_type'] ?? '',
-                      snapShot.data![reversedIndex]['isReceiver'],
-                      snapShot.data![reversedIndex]['msg'],
-                      snapShot.data![reversedIndex]['msg_status']))
-              : Align(
-                  alignment: Alignment.centerRight,
-                  child: showDownloadedImage(
-                      snapShot.data![reversedIndex]['pickedMedia'].toString(),
-                      context,
-                      snapShot.data![reversedIndex]['msg_type'],
-                      snapShot.data![reversedIndex]['isReceiver'],
-                      snapShot.data![reversedIndex]['msg'],
-                      snapShot.data![reversedIndex]['msg_status'])),
-          Align(
-            alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                ? Alignment.centerLeft
-                : Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: tiniestSpacing, horizontal: 0),
-              child: (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                            (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                                ? '${snapShot.data![reversedIndex]['sender_name']} // '
-                                : '',
-                            style: Theme.of(context).textTheme.smallTextBlack,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1),
-                        Text(
-                            DateFormat('HH:mm').format(DateTime.parse(
-                                getTimeForUserTimeZone(
-                                        context,
-                                        snapShot.data?[reversedIndex]
-                                            ['msg_time'])
-                                    .toString())),
-                            style:Theme.of(context).textTheme.tinySmall)
-                      ],
-                    )
-                  : Text(
-                      DateFormat('HH:mm').format(DateTime.parse(
-                          getTimeForUserTimeZone(context,
-                                  snapShot.data?[reversedIndex]['msg_time'])
-                              .toString())),
-                      style: Theme.of(context).textTheme.smallTextBlack),
-            ),
-          ),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.only(
+            right: kModuleImagePadding,
+            left: kModuleImagePadding,
+            bottom: kModuleImagePadding),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: showDownloadedImage(
+                          snapShot.data![reversedIndex]['localImagePath']
+                              .toString(),
+                          context,
+                          snapShot.data![reversedIndex]['msg_type'] ?? '',
+                          snapShot.data![reversedIndex]['isReceiver'],
+                          snapShot.data![reversedIndex]['msg'],
+                          snapShot.data![reversedIndex]['msg_status']))
+                  : Align(
+                      alignment: Alignment.centerRight,
+                      child: showDownloadedImage(
+                          snapShot.data![reversedIndex]['pickedMedia']
+                              .toString(),
+                          context,
+                          snapShot.data![reversedIndex]['msg_type'],
+                          snapShot.data![reversedIndex]['isReceiver'],
+                          snapShot.data![reversedIndex]['msg'],
+                          snapShot.data![reversedIndex]['msg_status'])),
+              Align(
+                  alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: tiniestSpacing),
+                      child: (snapShot.data![reversedIndex]['isReceiver'] == 1)
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text(
+                                      (snapShot.data![reversedIndex]
+                                                  ['isReceiver'] ==
+                                              1)
+                                          ? '${snapShot.data![reversedIndex]['sender_name']} // '
+                                          : '',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .smallTextBlack,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1),
+                                  Text(
+                                      DateFormat('HH:mm').format(DateTime.parse(
+                                          getTimeForUserTimeZone(
+                                                  context,
+                                                  snapShot.data?[reversedIndex]
+                                                      ['msg_time'])
+                                              .toString())),
+                                      style:
+                                          Theme.of(context).textTheme.tinySmall)
+                                ])
+                          : Text(
+                              DateFormat('HH:mm').format(DateTime.parse(
+                                  getTimeForUserTimeZone(
+                                          context,
+                                          snapShot.data?[reversedIndex]
+                                              ['msg_time'])
+                                      .toString())),
+                              style:
+                                  Theme.of(context).textTheme.smallTextBlack)))
+            ]));
   }
 
   DateTime getTimeForUserTimeZone(BuildContext context, String time) {
@@ -123,63 +127,59 @@ class AttachmentMsgWidget extends StatelessWidget {
       String type, int isReceiver, String fileName, String msgStatus) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
-            width: 100,
-            height: 100,
+            width: kChatImageSize,
+            height: kChatImageSize,
             child: AttachementMsgTypeUtil().renderWidget(
                 type, attachmentPath, context, isReceiver, fileName, msgStatus))
         : Container(
-            width: 100,
-            height: 100,
+            width: kChatImageSize,
+            height: kChatImageSize,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
-            ),
-            child: Stack(
-              children: [
-                Center(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(kRadius)),
+            child: Stack(children: [
+              Center(
                   child: IconButton(
-                    icon: const Center(child: Icon(Icons.download)),
-                    onPressed: () async {
-                      ProgressBar.show(context);
-                      final CustomerCache customerCache =
-                          getIt<CustomerCache>();
-                      String? hashCode =
-                          await customerCache.getHashCode(CacheKeys.hashcode);
-                      String url =
-                          '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
-                      DateTime imageName = DateTime.now();
-                      String attachementExtension = getFileName(
-                          snapShot.data![reversedIndex]['msg'].toString());
-                      bool downloadProcessComplete = await downloadFileFromUrl(
-                          url,
-                          "$imageName.$attachementExtension",
-                          snapShot.data![reversedIndex]['msg_id'],
-                          snapShot.data![reversedIndex]['msg_type']);
-                      if (downloadProcessComplete) {
-                        if (!context.mounted) return;
-                        ProgressBar.dismiss(context);
-                        context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-                            employeeDetailsMap:
-                                context.read<ChatBloc>().chatDetailsMap));
-                      }
-                    },
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(xxTiniestSpacing),
-                    child: Align(
-                        alignment: Alignment.bottomRight,
-                        child: (msgStatus != '1')
-                            ? const Icon(Icons.timer,
-                                size: 10, color: AppColor.greyBlack)
-                            : const SizedBox.shrink())),
-              ],
-            ),
-          );
+                      icon: const Center(child: Icon(Icons.download)),
+                      onPressed: () async {
+                        ProgressBar.show(context);
+                        final CustomerCache customerCache =
+                            getIt<CustomerCache>();
+                        String? hashCode =
+                            await customerCache.getHashCode(CacheKeys.hashcode);
+                        String url =
+                            '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
+                        DateTime imageName = DateTime.now();
+                        String attachementExtension = getFileName(
+                            snapShot.data![reversedIndex]['msg'].toString());
+                        bool downloadProcessComplete =
+                            await downloadFileFromUrl(
+                                url,
+                                "$imageName.$attachementExtension",
+                                snapShot.data![reversedIndex]['msg_id'],
+                                snapShot.data![reversedIndex]['msg_type']);
+                        if (downloadProcessComplete) {
+                          if (!context.mounted) return;
+                          ProgressBar.dismiss(context);
+                          context.read<ChatBloc>().add(
+                              RebuildChatMessagingScreen(
+                                  employeeDetailsMap:
+                                      context.read<ChatBloc>().chatDetailsMap));
+                        }
+                      })),
+              Padding(
+                  padding: const EdgeInsets.all(xxTiniestSpacing),
+                  child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: (msgStatus != '1')
+                          ? const Icon(Icons.timer,
+                              size: kDownloadImageIconSize,
+                              color: AppColor.greyBlack)
+                          : const SizedBox.shrink()))
+            ]));
   }
 }
 
-// check below code
 String getFileName(String filePath) {
   return filePath.split('/').last;
 }

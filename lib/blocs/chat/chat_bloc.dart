@@ -364,19 +364,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               rId: item['rid'].toString(),
               rType: item['rtype'].toString(),
               groupName: item['group_name'] ?? '',
-              message: item['latest_msg'] ?? '',
               isGroup: true,
               dateTime: await formattedDateTime(msgDate),
-              messageType: '1',
-              unreadMsgCount: item['unreadCount'] ?? 0,
               groupId: item['group_id'] ?? 0,
               groupPurpose: item['purpose'] ?? '');
           individualChatList.add(chat);
         }
         print('individualChatList--->${individualChatList.length}');
       }
-      individualChatList
-          .sort((a, b) => b.latestMsgTime.compareTo(a.latestMsgTime));
+      individualChatList.sort((a, b) =>
+          a.groupName.toLowerCase().compareTo(b.groupName.toLowerCase()));
       _allGroupChatScreenDetailsStreamController.add(individualChatList);
     } catch (e) {
       rethrow;
