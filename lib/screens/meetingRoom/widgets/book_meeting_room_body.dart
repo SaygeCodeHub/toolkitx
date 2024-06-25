@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/meetingRoom/meeting_room_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_participant_expansion_tile.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_repeat_expansion_tile.dart';
@@ -63,11 +64,11 @@ class BookMeetingRoomBody extends StatelessWidget {
                       style: Theme.of(context).textTheme.xSmall.copyWith(
                           color: AppColor.black, fontWeight: FontWeight.bold)),
                   const SizedBox(height: tiniestSpacing),
-                  TextFieldWidget(
-                    onTextFieldChanged: (textField) {
-                      bookRoomMap['endson'] = textField;
+                  DatePickerTextField(
+                    onDateChanged: (date) {
+                      bookRoomMap['endson'] = date;
                     },
-                  ),
+                  )
                 ],
               ),
             );

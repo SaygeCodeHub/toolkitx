@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/meetingRoom/widgets/meeting_pop_up_menu.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
-import 'package:toolkit/widgets/generic_no_records_text.dart';
-
 import '../../blocs/meetingRoom/meeting_room_bloc.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
@@ -14,6 +13,7 @@ class MeetingDetailsScreen extends StatelessWidget {
 
   const MeetingDetailsScreen({super.key, required this.bookingId});
 
+  static String roomName = '';
   final String bookingId;
 
   @override
@@ -22,8 +22,27 @@ class MeetingDetailsScreen extends StatelessWidget {
         .read<MeetingRoomBloc>()
         .add(FetchMeetingDetails(bookingId: bookingId));
     return Scaffold(
-      appBar: const GenericAppBar(
-        title: StringConstants.kBusinessRoom,
+      appBar: GenericAppBar(
+        title: roomName,
+        actions: [
+          BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+            buildWhen: (previousState, currentState) =>
+                currentState is MeetingDetailsFetched,
+            builder: (context, state) {
+              if (state is MeetingDetailsFetched) {
+                if (state.showPopUpMenu == true) {
+                  return MeetingPopupMenuButton(
+                      popUpMenuItems: state.meetingPopUpMenuList,
+                      fetchMeetingDetailsModel: state.fetchMeetingDetailsModel);
+                } else {
+                  return const SizedBox.shrink();
+                }
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -32,6 +51,10 @@ class MeetingDetailsScreen extends StatelessWidget {
             top: xxTinierSpacing,
             bottom: xxTinierSpacing),
         child: BlocBuilder<MeetingRoomBloc, MeetingRoomState>(
+          buildWhen: (previousState, currentState) =>
+              currentState is MeetingDetailsFetching ||
+              currentState is MeetingDetailsFetched ||
+              currentState is MeetingDetailsNotFetched,
           builder: (context, state) {
             if (state is MeetingDetailsFetching) {
               return const Center(child: CircularProgressIndicator());
@@ -79,7 +102,7 @@ class MeetingDetailsScreen extends StatelessWidget {
                   ]);
             } else if (state is MeetingDetailsNotFetched) {
               return const Center(
-                child: NoRecordsText(text: StringConstants.kNoRecordsFound),
+                child: Text(StringConstants.kNoRecordsFound),
               );
             }
             return const SizedBox.shrink();

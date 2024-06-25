@@ -22,7 +22,7 @@ class MeetingViewAvailabilityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<MeetingRoomBloc>().add(
         FetchMeetingAllRooms(date: DateFormat.yMMMd().format(DateTime.now())));
-    String date = '';
+    String initialDate = '';
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('viewAvaibility')),
       body: Padding(
@@ -37,7 +37,7 @@ class MeetingViewAvailabilityScreen extends StatelessWidget {
               context
                   .read<MeetingRoomBloc>()
                   .add(FetchMeetingAllRooms(date: date));
-              date = date;
+              initialDate = date;
             },
           ),
           const SizedBox(height: tiniestSpacing),
@@ -70,9 +70,10 @@ class MeetingViewAvailabilityScreen extends StatelessWidget {
                                         fontWeight: FontWeight.w600)),
                             subtitle: ViewAvailabilityDetails(
                                 roomId: data[index].roomid,
-                                date: date == ''
-                                    ? DateFormat.yMMMd().format(DateTime.now())
-                                    : date),
+                                date: initialDate != ''
+                                    ? initialDate
+                                    : DateFormat.yMMMd()
+                                        .format(DateTime.now())),
                           ),
                         ),
                       );

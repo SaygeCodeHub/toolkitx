@@ -32,30 +32,25 @@ class _ViewAvailabilityDetailsState extends State<ViewAvailabilityDetails> {
           if (state is RoomAvailabilityFetched) {
             var data = state.fetchRoomAvailabilityModel.data;
             return SizedBox(
-              height: 100.0, // Adjust the height as needed
+              height: 100.0,
               child: GridView.builder(
-                // scrollDirection: Axis.horizontal,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   mainAxisSpacing: tiniestSpacing,
                   crossAxisSpacing: tiniestSpacing,
-                  childAspectRatio: 2, // Adjust the aspect ratio as needed
+                  childAspectRatio: 2,
                 ),
                 itemCount: data.length,
                 itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {},
-                    child: Card(
-                      color: data[index].status == '1'
-                          ? AppColor.errorRed
-                          : AppColor.green,
-                      child: Center(
-                        child: Text(
-                          data[index].slots,
-                          style: Theme.of(context).textTheme.xSmall.copyWith(
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w400),
-                        ),
+                  return Card(
+                    color: data[index].status == '1'
+                        ? AppColor.errorRed
+                        : AppColor.green,
+                    child: Center(
+                      child: Text(
+                        data[index].slots,
+                        style: Theme.of(context).textTheme.xSmall.copyWith(
+                            color: AppColor.black, fontWeight: FontWeight.w500),
                       ),
                     ),
                   );
@@ -63,7 +58,7 @@ class _ViewAvailabilityDetailsState extends State<ViewAvailabilityDetails> {
               ),
             );
           } else {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
         },
       ),

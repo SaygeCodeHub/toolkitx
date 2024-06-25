@@ -59,64 +59,48 @@ class BookMeetingRoomScreen extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
-          listener: (context, state) {
-            if (state is SearchForRoomsFetching) {
-              ProgressBar.show(context);
-            } else if (state is SearchForRoomsFetched) {
-              ProgressBar.dismiss(context);
-              // Navigator.pushNamed(context, ViewAvailableRoomsScreen.routeName,
-              //     arguments: state.fetchSearchForRoomsModel.data);
-            }
-            if (state is SearchForRoomsNotFetched) {
-              ProgressBar.dismiss(context);
-              showCustomSnackBar(context, state.errorMessage, '');
-            }
-          },
-          child: Row(
-            children: [
-              Expanded(
+        child: Row(
+          children: [
+            Expanded(
+              child: PrimaryButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  textValue: DatabaseUtil.getText('buttonBack')),
+            ),
+            const SizedBox(width: xxxSmallestSpacing),
+            Expanded(
+              child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
+                listener: (context, state) {
+                  if (state is MeetingRoomBooking) {
+                    ProgressBar.show(context);
+                  } else if (state is MeetingRoomBooked) {
+                    ProgressBar.dismiss(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(
+                        context, MyMeetingsScreen.routeName);
+                  }
+                  if (state is MeetingRoomNotBooked) {
+                    ProgressBar.dismiss(context);
+                    showCustomSnackBar(context, state.errorMessage, '');
+                  }
+                },
                 child: PrimaryButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      bookRoomMap['startdate'] =
+                          SearchRoomsScreen.searchRoomMap['st'];
+                      bookRoomMap['enddate'] =
+                          SearchRoomsScreen.searchRoomMap['et'];
+                      context
+                          .read<MeetingRoomBloc>()
+                          .add(BookMeetingRoom(bookMeetingMap: bookRoomMap));
                     },
-                    textValue: DatabaseUtil.getText('buttonBack')),
+                    textValue: DatabaseUtil.getText('buttonSave')),
               ),
-              const SizedBox(width: xxxSmallestSpacing),
-              Expanded(
-                child: BlocListener<MeetingRoomBloc, MeetingRoomState>(
-                  listener: (context, state) {
-                    if (state is MeetingRoomBooking) {
-                      ProgressBar.show(context);
-                    } else if (state is MeetingRoomBooked) {
-                      ProgressBar.dismiss(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.pushReplacementNamed(
-                          context, MyMeetingsScreen.routeName);
-                    }
-                    if (state is MeetingRoomNotBooked) {
-                      ProgressBar.dismiss(context);
-                      showCustomSnackBar(context, state.errorMessage, '');
-                    }
-                  },
-                  child: PrimaryButton(
-                      onPressed: () {
-                        bookRoomMap['startdate'] =
-                            SearchRoomsScreen.searchRoomMap['st'];
-                        bookRoomMap['enddate'] =
-                            SearchRoomsScreen.searchRoomMap['et'];
-                        print('bookRoomMap=============>$bookRoomMap');
-                        context
-                            .read<MeetingRoomBloc>()
-                            .add(BookMeetingRoom(bookMeetingMap: bookRoomMap));
-                      },
-                      textValue: DatabaseUtil.getText('buttonSave')),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

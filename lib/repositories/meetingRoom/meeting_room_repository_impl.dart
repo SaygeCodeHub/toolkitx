@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/%20meetingRoom/fetch_monthly_schedule_model.
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_room_availability_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/update_booking_details_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 
 import '../../utils/constants/api_constants.dart';
@@ -81,5 +82,13 @@ class MeetingRoomRepositoryImpl extends MeetingRoomRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}meeting/GetRoomAvailability?hashcode=$hashCode&date=$date&roomid=$roomId");
     return FetchRoomAvailabilityModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdateBookingDetailsModel> updateBookingDetails(
+      Map editDetailsMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}meeting/UpdateBooking", editDetailsMap);
+    return UpdateBookingDetailsModel.fromJson(response);
   }
 }

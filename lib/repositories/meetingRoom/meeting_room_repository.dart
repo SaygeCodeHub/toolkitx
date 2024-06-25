@@ -8,6 +8,8 @@ import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart'
 import 'package:toolkit/data/models/%20meetingRoom/fetch_room_availability_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 
+import '../../data/models/ meetingRoom/update_booking_details_model.dart';
+
 abstract class MeetingRoomRepository {
   Future<FetchMyMeetingsModel> fetchMyMeetings(
       String hashCode, String userId, String date);
@@ -33,4 +35,6 @@ abstract class MeetingRoomRepository {
 
   Future<FetchRoomAvailabilityModel> fetchRoomAvailability(
       String hashCode, String date, String roomId);
+
+  Future<UpdateBookingDetailsModel> updateBookingDetails(Map editDetailsMap);
 }

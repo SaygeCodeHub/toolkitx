@@ -23,6 +23,7 @@ class MyMeetingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<MeetingRoomBloc>().add(
         FetchMyMeetingRoom(date: DateFormat.yMMMd().format(DateTime.now())));
+    String initialDate = '';
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('mymeetings')),
       floatingActionButton: const Padding(
@@ -43,6 +44,7 @@ class MyMeetingsScreen extends StatelessWidget {
                   context
                       .read<MeetingRoomBloc>()
                       .add(FetchMyMeetingRoom(date: date));
+                  initialDate = date;
                 },
                 maxDate: DateTime.now()),
             const SizedBox(height: tiniestSpacing),
@@ -74,9 +76,18 @@ class MyMeetingsScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(xxTinierSpacing),
                             child: ListTile(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, MeetingDetailsScreen.routeName,
-                                      arguments: data[index].bookingid);
+                                  MeetingDetailsScreen.roomName =
+                                      data[index].roomname;
+                                  Navigator.pushNamed(context,
+                                          MeetingDetailsScreen.routeName,
+                                          arguments: data[index].bookingid)
+                                      .then((_) => context
+                                          .read<MeetingRoomBloc>()
+                                          .add(FetchMyMeetingRoom(
+                                              date: initialDate == ''
+                                                  ? DateFormat.yMMMd()
+                                                      .format(DateTime.now())
+                                                  : initialDate)));
                                 },
                                 title: Text(data[index].roomname,
                                     style: Theme.of(context)

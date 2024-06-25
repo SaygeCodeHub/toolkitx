@@ -58,3 +58,9 @@ class FetchRoomAvailability extends MeetingRoomEvent {
 
   FetchRoomAvailability({required this.roomId, required this.date});
 }
+
+class UpdateBookingDetails extends MeetingRoomEvent {
+  final Map editDetailsMap;
+
+  UpdateBookingDetails({required this.editDetailsMap});
+}

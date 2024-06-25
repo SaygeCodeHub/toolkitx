@@ -16,6 +16,7 @@ import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
 import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
+import 'package:toolkit/screens/meetingRoom/edit_meeting_details_screen.dart';
 import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
 import 'package:toolkit/screens/meetingRoom/meeting_view_availability_screen.dart';
 import 'package:toolkit/screens/meetingRoom/month_view_screen.dart';
@@ -42,6 +43,7 @@ import 'package:toolkit/screens/trips/trip_filter_screen.dart';
 import 'package:toolkit/screens/trips/add_special_request_screen.dart';
 import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
+import '../data/models/ meetingRoom/fetch_meeting_details_model.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
@@ -697,6 +699,9 @@ class AppRoutes {
         return _createRoute(const MonthViewScreen());
       case MeetingViewAvailabilityScreen.routeName:
         return _createRoute(const MeetingViewAvailabilityScreen());
+      case EditMeetingDetailsScreen.routeName:
+        return _createRoute(EditMeetingDetailsScreen(
+            meetingDetailsData: settings.arguments as MeetingDetailsData));
       default:
         return _createRoute(const WelcomeScreen());
     }

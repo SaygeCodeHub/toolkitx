@@ -73,9 +73,7 @@ class _MeetingDatePickerState extends State<MeetingDatePicker> {
                                     DateFormat.yMMMd().format(value));
                                 isFirstTime = false;
                               });
-                            },
-                            maximumDate:
-                                DateTime.now().add(const Duration(days: 180)))),
+                            })),
                     CustomTextButton(
                         onPressed: () {
                           if (isFirstTime != false) {

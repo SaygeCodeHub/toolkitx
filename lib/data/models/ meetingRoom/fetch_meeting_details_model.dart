@@ -9,7 +9,7 @@ String fetchMeetingDetailsModelToJson(FetchMeetingDetailsModel data) =>
 class FetchMeetingDetailsModel {
   final int status;
   final String message;
-  final Data data;
+  final MeetingDetailsData data;
 
   FetchMeetingDetailsModel({
     required this.status,
@@ -21,7 +21,7 @@ class FetchMeetingDetailsModel {
       FetchMeetingDetailsModel(
         status: json["Status"],
         message: json["Message"],
-        data: Data.fromJson(json["Data"]),
+        data: MeetingDetailsData.fromJson(json["Data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +31,7 @@ class FetchMeetingDetailsModel {
       };
 }
 
-class Data {
+class MeetingDetailsData {
   final String roomid;
   final String startdatetime;
   final String enddatetime;
@@ -54,7 +54,7 @@ class Data {
   final String canedit;
   final String candelete;
 
-  Data({
+  MeetingDetailsData({
     required this.roomid,
     required this.startdatetime,
     required this.enddatetime,
@@ -78,7 +78,8 @@ class Data {
     required this.candelete,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory MeetingDetailsData.fromJson(Map<String, dynamic> json) =>
+      MeetingDetailsData(
         roomid: json["roomid"],
         startdatetime: json["startdatetime"],
         enddatetime: json["enddatetime"],

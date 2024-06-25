@@ -9,7 +9,9 @@ import 'package:toolkit/data/models/%20meetingRoom/fetch_meeting_master_model.da
 import 'package:toolkit/data/models/%20meetingRoom/fetch_monthly_schedule_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_my_meetings_model.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
+import 'package:toolkit/data/models/%20meetingRoom/update_booking_details_model.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
+import 'package:toolkit/utils/database_utils.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -39,7 +41,10 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
     on<FetchMonthlySchedule>(_fetchMonthlySchedule);
     on<FetchMeetingAllRooms>(_fetchMeetingAllRooms);
     on<FetchRoomAvailability>(_fetchRoomAvailability);
+    on<UpdateBookingDetails>(_updateBookingDetails);
   }
+
+  String bookingId = '';
 
   Future<FutureOr<void>> _fetchMyMeetingRoom(
       FetchMyMeetingRoom event, Emitter<MeetingRoomState> emit) async {
@@ -64,6 +69,9 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
 
   Future<FutureOr<void>> _fetchMeetingDetails(
       FetchMeetingDetails event, Emitter<MeetingRoomState> emit) async {
+    List popUpMenuItemsList = [
+      DatabaseUtil.getText('Cancel'),
+    ];
     emit(MeetingDetailsFetching());
     try {
       String? hashCode =
@@ -72,9 +80,26 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       FetchMeetingDetailsModel fetchMeetingDetailsModel =
           await _meetingRoomRepository.fetchMeetingDetails(
               hashCode, userId, event.bookingId);
+      bookingId = event.bookingId;
+      if (fetchMeetingDetailsModel.data.canedit == '1') {
+        popUpMenuItemsList.insert(
+          0,
+          DatabaseUtil.getText('Edit'),
+        );
+      }
+      if (fetchMeetingDetailsModel.data.candelete == '1') {
+        popUpMenuItemsList.insert(
+          1,
+          DatabaseUtil.getText('Delete'),
+        );
+      }
+
       if (fetchMeetingDetailsModel.status == 200) {
         emit(MeetingDetailsFetched(
-            fetchMeetingDetailsModel: fetchMeetingDetailsModel));
+            fetchMeetingDetailsModel: fetchMeetingDetailsModel,
+            meetingPopUpMenuList: popUpMenuItemsList,
+            showPopUpMenu:
+                fetchMeetingDetailsModel.data.canedit == '1' ? true : false));
       } else {
         emit(MeetingDetailsNotFetched(
             errorMessage: fetchMeetingDetailsModel.message));
@@ -257,6 +282,35 @@ class MeetingRoomBloc extends Bloc<MeetingRoomEvent, MeetingRoomState> {
       }
     } catch (e) {
       emit(RoomAvailabilityNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _updateBookingDetails(
+      UpdateBookingDetails event, Emitter<MeetingRoomState> emit) async {
+    emit((BookingDetailsUpdating()));
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map editDetailsMap = {
+        "roomid": event.editDetailsMap['roomid'],
+        "shortagenda": event.editDetailsMap['shortagenda'],
+        "longagenda": event.editDetailsMap['longagenda'],
+        "participant": event.editDetailsMap['participant'],
+        "hashcode": hashCode,
+        "userid": userId,
+        "bookingid": bookingId
+      };
+      UpdateBookingDetailsModel updateBookingDetailsModel =
+          await _meetingRoomRepository.updateBookingDetails(editDetailsMap);
+      if (updateBookingDetailsModel.status == 200) {
+        emit(BookingDetailsUpdated());
+      } else {
+        emit(BookingDetailsNotUpdated(
+            errorMessage: updateBookingDetailsModel.message));
+      }
+    } catch (e) {
+      emit(BookingDetailsNotUpdated(errorMessage: e.toString()));
     }
   }
 }

@@ -22,8 +22,13 @@ class MeetingDetailsFetching extends MeetingRoomState {}
 
 class MeetingDetailsFetched extends MeetingRoomState {
   final FetchMeetingDetailsModel fetchMeetingDetailsModel;
+  final bool showPopUpMenu;
+  final List meetingPopUpMenuList;
 
-  MeetingDetailsFetched({required this.fetchMeetingDetailsModel});
+  MeetingDetailsFetched(
+      {required this.fetchMeetingDetailsModel,
+      required this.meetingPopUpMenuList,
+      required this.showPopUpMenu});
 }
 
 class MeetingDetailsNotFetched extends MeetingRoomState {
@@ -130,4 +135,14 @@ class RoomAvailabilityNotFetched extends MeetingRoomState {
   final String errorMessage;
 
   RoomAvailabilityNotFetched({required this.errorMessage});
+}
+
+class BookingDetailsUpdating extends MeetingRoomState {}
+
+class BookingDetailsUpdated extends MeetingRoomState {}
+
+class BookingDetailsNotUpdated extends MeetingRoomState {
+  final String errorMessage;
+
+  BookingDetailsNotUpdated({required this.errorMessage});
 }
