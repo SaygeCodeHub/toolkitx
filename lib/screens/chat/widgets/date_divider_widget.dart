@@ -4,12 +4,9 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_spacing.dart';
 
 class DateDividerWidget extends StatelessWidget {
-
   final String msgTime;
 
-  const DateDividerWidget(
-      {super.key,
-      required this.msgTime});
+  const DateDividerWidget({super.key, required this.msgTime});
 
   @override
   Widget build(BuildContext context) {

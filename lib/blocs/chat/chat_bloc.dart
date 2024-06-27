@@ -242,7 +242,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               userId,
               userType,
               event.employeeDetailsMap['rid'].toString(),
-              event.employeeDetailsMap['rtype'].toString(),chatDetailsMap['clientid'] );
+              event.employeeDetailsMap['rtype'].toString(),
+              chatDetailsMap['clientid']);
       messagesList
         ..clear()
         ..addAll(messages);
@@ -263,7 +264,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       FetchChatsList event, Emitter<ChatState> emit) async {
     final List<ChatData> individualChatList = [];
     try {
-      String clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       List<Map<String, dynamic>> usersList =
           await _databaseHelper.getChatUsersList(clientId);
       String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';

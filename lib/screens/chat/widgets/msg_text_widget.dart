@@ -18,7 +18,8 @@ class MsgTextWidget extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       double margin = 0;
       if (messageData['quotemsg'] != "") {
-        double textWidth = getTextWidth(context,
+        double textWidth = getTextWidth(
+            context,
             (messageData['quotemsg'].toString().length >
                     messageData['msg'].toString().length)
                 ? messageData['quotemsg'].toString()
@@ -133,7 +134,7 @@ class MsgTextWidget extends StatelessWidget {
     TextPainter textPainter = TextPainter();
     if (text.length < 35) {
       textPainter = TextPainter(
-          text: TextSpan(text: text, style:  Theme.of(context).textTheme.small),
+          text: TextSpan(text: text, style: Theme.of(context).textTheme.small),
           textDirection: ui.TextDirection.ltr);
     } else {
       textPainter = TextPainter(

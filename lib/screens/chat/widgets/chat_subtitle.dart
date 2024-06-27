@@ -22,8 +22,7 @@ class ChatSubtitle extends StatelessWidget {
             ? Alignment.centerLeft
             : Alignment.centerRight,
         child: Padding(
-            padding: const EdgeInsets.symmetric(
-                vertical: tiniestSpacing),
+            padding: const EdgeInsets.symmetric(vertical: tiniestSpacing),
             child: (messageData['isReceiver'] == 1)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.start,
