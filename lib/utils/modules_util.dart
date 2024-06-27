@@ -64,11 +64,11 @@ abstract class ModulesUtil {
         moduleImage: '${kBaseImagePath}workOrder.png',
         key: 'workorder',
         notificationKey: 'workorder'),
-    // ModulesModel(
-    //     moduleName: 'meetingRoom',
-    //     moduleImage: '${kBaseImagePath}briefing.png',
-    //     key: 'meeting',
-    //     notificationKey: 'meeting'),
+    ModulesModel(
+        moduleName: 'meetingRoom',
+        moduleImage: '${kBaseImagePath}briefing.png',
+        key: 'meeting',
+        notificationKey: 'meeting'),
     ModulesModel(
         moduleName: 'Assets',
         moduleImage: '${kBaseImagePath}assets.png',

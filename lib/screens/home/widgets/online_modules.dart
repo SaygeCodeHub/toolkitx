@@ -7,6 +7,7 @@ import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
+import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
@@ -292,9 +293,9 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, EquipmentTraceScreen.routeName).then((_) =>
             clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
-      case 'meetingRoom':
-        globalBloc.add(UpdateCount(type: 'meetingroom'));
-
+      case 'meeting':
+        globalBloc.add(UpdateCount(type: 'meeting'));
+        Navigator.pushNamed(context, MyMeetingsScreen.routeName);
         break;
       case 'tickets':
         globalBloc.add(UpdateCount(type: 'tickets'));

@@ -659,4 +659,15 @@ abstract class StringConstants {
   static const String kManageSpecialRequest = "Manage Special Request";
   static const String kMarkAsComplete = "Mark as Complete";
   static const String kGeneratePdf = "Generate Pdf";
+  static const String kNoMeetingsToday = "No Meetings today";
+  static const String kSearchRoom = "Search Room";
+  static const String kShortAgenda = 'Short Agenda';
+  static const String kLongAgenda = "Long Agenda";
+  static const String kOwner = "Owner";
+  static const String kParticipants = "Participants";
+  static const String kLoading = "Loading...";
+  static const String kShortLongAgendaParticipantMandatory =
+      'Short agenda, Long agenda, Participants are Mandatory';
+  static const String kEndsOnMandatory = "Ends on field is mandatory";
+  static const String kPleaseSelectRoom = 'Please select a room to proceed';
 }

@@ -16,6 +16,7 @@ import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
+import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
@@ -48,6 +49,7 @@ import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.da
 import '../repositories/login/login_repository.dart';
 import '../repositories/loto/loto_repository.dart';
 import '../repositories/loto/loto_repository_impl.dart';
+import '../repositories/meetingRoom/meeting_room_repository_impl.dart';
 import '../repositories/notification/notification_repository.dart';
 import '../repositories/notification/notification_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
@@ -128,4 +130,6 @@ configurableDependencies() {
   getIt
       .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
   getIt.registerLazySingleton<TripsRepository>(() => TripsRepositoryImpl());
+  getIt.registerLazySingleton<MeetingRoomRepository>(
+      () => MeetingRoomRepositoryImpl());
 }
