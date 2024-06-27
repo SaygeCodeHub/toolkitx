@@ -15,11 +15,13 @@ import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/data/models/uploadImage/upload_image_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import '../../data/models/chatBox/fetch_all_groups_chat_model.dart';
 import '../../utils/database/database_util.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -36,7 +38,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isCameraImage = false;
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
-  String clientId = '';
   String timeZoneFormat = '';
   int unreadMessageCount = 0;
 
@@ -49,9 +50,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _chatScreenMessagesStreamController.stream;
   final _allChatScreenDetailsStreamController =
       StreamController<List<ChatData>>.broadcast();
+  final _allGroupChatScreenDetailsStreamController =
+      StreamController<List<ChatData>>.broadcast();
 
   Stream<List<ChatData>> get allChatsStream =>
       _allChatScreenDetailsStreamController.stream;
+
+  Stream<List<ChatData>> get allGroupChatsStream =>
+      _allGroupChatScreenDetailsStreamController.stream;
   int groupId = 0;
   List<EmployeesDatum> employeeList = [];
   bool employeeListReachedMax = false;
@@ -61,11 +67,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendChatMessage>(_sendMessage);
     on<RebuildChatMessagingScreen>(_rebuildChatMessage);
     on<FetchChatsList>(_fetchChatsList);
+    on<FetchGroupsList>(_fetchGroupsList);
+    on<FetchAllGroupChats>(_fetchAllGroupChats);
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
     on<UploadChatImage>(_uploadImage);
     on<FetchGroupInfo>(_fetchGroupInfo);
     on<FetchChatMessage>(_fetchChatMessages);
+    on<InitializeGroupChatMembers>(_initializeGroupChatMembers);
+    on<ReplyToMessage>(_replyToMessage);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -76,7 +86,34 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> close() {
     _chatScreenMessagesStreamController.close();
     _allChatScreenDetailsStreamController.close();
+    _allGroupChatScreenDetailsStreamController.close();
     return super.close();
+  }
+
+  FutureOr<void> _replyToMessage(
+      ReplyToMessage event, Emitter<ChatState> emit) async {
+    chatDetailsMap['quote_msg_id'] = event.quoteMessageId;
+    emit(ShowChatMessagingTextField(replyToMessage: event.replyToMessage));
+  }
+
+  FutureOr<void> _fetchAllGroupChats(
+      FetchAllGroupChats event, Emitter<ChatState> emit) async {
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
+      AllGroupChatList allGroupChatList = await _chatBoxRepository
+          .fetchAllGroupChatList(hashCode, userId, userType);
+      if (allGroupChatList.status == 200 && allGroupChatList.data.isNotEmpty) {
+        for (var item in allGroupChatList.data) {
+          add(FetchGroupInfo(groupId: item.id.toString()));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   FutureOr<void> _fetchEmployees(
@@ -101,6 +138,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
+  FutureOr<void> _initializeGroupChatMembers(
+      InitializeGroupChatMembers event, Emitter<ChatState> emit) async {
+    String type = await _customerCache.getUserType(CacheKeys.userType) ?? '';
+    String uId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    String id = await EncryptData.decryptAESPrivateKey(
+        uId, await _customerCache.getApiKey(CacheKeys.apiKey));
+    String userName =
+        await _customerCache.getUserName(CacheKeys.userName) ?? '';
+    groupDataMap['members'] = <Map<String, dynamic>>[
+      {
+        'id': int.parse(id),
+        'type': int.parse(type),
+        'name': userName,
+        'isowner': 1
+      }
+    ];
+  }
+
   FutureOr<void> _sendMessage(
       SendChatMessage event, Emitter<ChatState> emit) async {
     try {
@@ -108,9 +163,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Random random = Random();
       int randomValue = random.nextInt(100000);
       String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
+      // String msg = EncryptData.encryptValue
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
-        "quote_msg_id": "",
+        "quote_msg_id": event.sendMessageMap['quote_msg_id'] ?? '',
         "sid": await _customerCache.getUserId2(CacheKeys.userId2),
         "stype": (await _customerCache.getUserType(CacheKeys.userType) == "2")
             ? "2"
@@ -130,11 +186,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
-        "stype_2": "3"
+        "stype_2": "3",
+        "clientid": event.sendMessageMap['clientid']
       };
       sendMessageMap['isReceiver'] = 0;
       await _databaseHelper.insertMessage({
         'employee_name': event.sendMessageMap['employee_name'],
+        'sender_name': 'You',
         'messageType': event.sendMessageMap['mediaType'],
         'pickedMedia': event.sendMessageMap['picked_image'],
         'isDownloadedImage': 0,
@@ -145,7 +203,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
-      clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
       SendMessageModel sendMessageModel =
@@ -171,19 +228,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
       String userType =
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
+      event.employeeDetailsMap['sid'] =
+          await _customerCache.getUserId2(CacheKeys.userId2);
+      event.employeeDetailsMap['stype'] =
+          (await _customerCache.getUserType(CacheKeys.userType) == "2")
+              ? "2"
+              : "1";
+      event.employeeDetailsMap['clientid'] =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      chatDetailsMap['clientid'] = event.employeeDetailsMap['clientid'];
       List<Map<String, dynamic>> messages =
           await _databaseHelper.getMessagesForEmployees(
               userId,
               userType,
               event.employeeDetailsMap['rid'].toString(),
-              event.employeeDetailsMap['rtype'].toString());
+              event.employeeDetailsMap['rtype'].toString(),
+              chatDetailsMap['clientid']);
       messagesList
         ..clear()
         ..addAll(messages);
 
       _chatScreenMessagesStreamController.sink.add(messagesList);
       if (chatDetailsMap['isMedia'] == false) {
-        emit(ShowChatMessagingTextField());
+        emit(ShowChatMessagingTextField(replyToMessage: ''));
       }
       _databaseHelper.updateUnreadMessageCount(
           event.employeeDetailsMap['rid'].toString(),
@@ -197,8 +264,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       FetchChatsList event, Emitter<ChatState> emit) async {
     final List<ChatData> individualChatList = [];
     try {
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       List<Map<String, dynamic>> usersList =
-          await _databaseHelper.getChatUsersList();
+          await _databaseHelper.getChatUsersList(clientId);
       String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
       String userType =
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
@@ -215,27 +284,94 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           if (isFound) {
             continue;
           }
-
-          DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
-              item['latest_msgTime'],
-              isUtc: true);
-          ChatData chat = ChatData(
-            rId: item['rid'].toString(),
-            rType: item['rtype'].toString(),
-            userName: item['employee_name'] ?? '',
-            message: item['latest_msg'] ?? '',
-            isGroup: false,
-            dateTime: await formattedDateTime(msgDate),
-            latestMsgTime: item['latest_msgTime'],
-            messageType: '1',
-            unreadMsgCount: item['unreadCount'] ?? 0,
-          );
-          individualChatList.add(chat);
+          if (item['rtype'].toString() == '3') {
+            Map<String, dynamic> groupData =
+                await _databaseHelper.getGroupData(item['rid'].toString());
+            DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
+                item['latest_msgTime'],
+                isUtc: true);
+            ChatData chat = ChatData(
+                rId: item['rid'].toString(),
+                rType: item['rtype'].toString(),
+                userName: item['employee_name'] ?? '',
+                message: item['latest_msg'] ?? '',
+                isGroup: true,
+                dateTime: await formattedDateTime(msgDate),
+                latestMsgTime: item['latest_msgTime'],
+                messageType: '1',
+                unreadMsgCount: item['unreadCount'] ?? 0,
+                groupName: groupData['group_name'] ?? '',
+                groupId: groupData['group_id'] ?? '',
+                groupPurpose: groupData['purpose'] ?? '');
+            individualChatList.add(chat);
+          } else {
+            DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
+                item['latest_msgTime'],
+                isUtc: true);
+            ChatData chat = ChatData(
+                rId: item['rid'].toString(),
+                rType: item['rtype'].toString(),
+                userName: item['employee_name'] ?? '',
+                message: item['latest_msg'] ?? '',
+                isGroup: false,
+                dateTime: await formattedDateTime(msgDate),
+                latestMsgTime: item['latest_msgTime'],
+                messageType: '1',
+                unreadMsgCount: item['unreadCount'] ?? 0,
+                groupName: item['group_name'] ?? '',
+                groupId: item['group_id'] ?? '',
+                groupPurpose: item['purpose'] ?? '');
+            individualChatList.add(chat);
+          }
         }
       }
+
       individualChatList
           .sort((a, b) => b.latestMsgTime.compareTo(a.latestMsgTime));
       _allChatScreenDetailsStreamController.add(individualChatList);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchGroupsList(
+      FetchGroupsList event, Emitter<ChatState> emit) async {
+    final List<ChatData> individualChatList = [];
+    try {
+      List<Map<String, dynamic>> groupList =
+          await _databaseHelper.getAllGroupsData();
+      String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
+
+      if (groupList.isNotEmpty) {
+        for (var item in groupList) {
+          unreadMessageCount = item['unreadCount'] ?? 0;
+          if (item['rid'].toString() == userId && item['rtype'] == userType) {
+            continue;
+          }
+          bool isFound = isExistingChat(individualChatList,
+              item['group_id'].toString(), item['rtype'].toString());
+          if (isFound) {
+            continue;
+          }
+          DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
+              DateTime.now().millisecondsSinceEpoch,
+              isUtc: true);
+          ChatData chat = ChatData(
+              rId: item['rid'].toString(),
+              rType: item['rtype'].toString(),
+              groupName: item['group_name'] ?? '',
+              isGroup: true,
+              dateTime: await formattedDateTime(msgDate),
+              groupId: item['group_id'] ?? 0,
+              groupPurpose: item['purpose'] ?? '');
+          individualChatList.add(chat);
+        }
+      }
+      individualChatList.sort((a, b) =>
+          a.groupName.toLowerCase().compareTo(b.groupName.toLowerCase()));
+      _allGroupChatScreenDetailsStreamController.add(individualChatList);
     } catch (e) {
       rethrow;
     }
@@ -318,6 +454,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           'group_name': groupDataMap['group_name'],
           'purpose': groupDataMap['group_purpose']
         }, groupDataMap['members']);
+        add(FetchGroupsList());
         emit(ChatGroupCreated());
       } else {
         emit(ChatGroupCannotCreate(errorMessage: 'Error!'));

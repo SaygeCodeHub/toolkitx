@@ -48,4 +48,7 @@ class EmployeesListSearched extends ChatState {
 
 class ChatMessagingTextFieldHidden extends ChatState {}
 
-class ShowChatMessagingTextField extends ChatState {}
+class ShowChatMessagingTextField extends ChatState {
+  String replyToMessage;
+  ShowChatMessagingTextField({this.replyToMessage = ''});
+}

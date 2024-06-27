@@ -1,4 +1,4 @@
-package com.toolkitx.safety.app
+package com.toolKitX.safety
 
 import io.flutter.embedding.android.FlutterActivity
 

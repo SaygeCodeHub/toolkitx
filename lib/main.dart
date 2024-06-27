@@ -93,6 +93,7 @@ void main() async {
   await _initDependencies();
   await _initFirebase();
   runApp(const MyApp());
+  ClientBloc().callOnce = true;
 }
 
 _initApp() async {
