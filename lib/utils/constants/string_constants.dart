@@ -671,4 +671,6 @@ abstract class StringConstants {
   static const String kSend = "Send";
   static const String kMsgCopyToClipboard = "Message copied to clipboard";
   static const String kSendMessage = "Send a message";
+  static const String kMarkAsComplete = "Mark as Complete";
+  static const String kGeneratePdf = "Generate Pdf";
 }
