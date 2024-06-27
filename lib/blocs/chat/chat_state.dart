@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/chatBox/fetch_all_groups_chat_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
+import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
 
 abstract class ChatState {}
 
@@ -67,4 +68,18 @@ class AllGroupsNotFetched extends ChatState {
   final String errorMessage;
 
   AllGroupsNotFetched({required this.errorMessage});
+}
+
+class GroupDetailsFetching extends ChatState {}
+
+class GroupDetailsFetched extends ChatState {
+  final FetchGroupInfoModel fetchGroupInfoModel;
+
+  GroupDetailsFetched({required this.fetchGroupInfoModel});
+}
+
+class GroupDetailsNotFetched extends ChatState {
+  final String errorMessage;
+
+  GroupDetailsNotFetched({required this.errorMessage});
 }

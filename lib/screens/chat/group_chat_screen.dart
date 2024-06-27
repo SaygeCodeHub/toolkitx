@@ -6,6 +6,7 @@ import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chat/group_details_screen.dart';
 import 'package:toolkit/screens/chat/widgets/create_group_button.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -94,7 +95,14 @@ class GroupChatScreen extends StatelessWidget {
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .xxSmall),
-                                                    onTap: () {}),
+                                                    onTap: () {
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          GroupDetailsScreen
+                                                              .routeName,
+                                                          arguments:
+                                                              data[index].id);
+                                                    }),
                                               ];
                                             })));
                               },

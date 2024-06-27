@@ -4,6 +4,7 @@ import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/group_details_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
@@ -708,6 +709,9 @@ class AppRoutes {
         return _createRoute(const GroupChatListScreen());
       case GroupChatScreen.routeName:
         return _createRoute(const GroupChatScreen());
+      case GroupDetailsScreen.routeName:
+        return _createRoute(
+            GroupDetailsScreen(groupId: settings.arguments.toString()));
 
       default:
         return _createRoute(const WelcomeScreen());

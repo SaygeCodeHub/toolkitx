@@ -54,6 +54,12 @@ class FetchGroupInfo extends ChatEvent {
   FetchGroupInfo({required this.groupId});
 }
 
+class FetchGroupDetails extends ChatEvent {
+  final String groupId;
+
+  FetchGroupDetails({required this.groupId});
+}
+
 class FetchChatMessage extends ChatEvent {}
 
 class InitializeGroupChatMembers extends ChatEvent {}

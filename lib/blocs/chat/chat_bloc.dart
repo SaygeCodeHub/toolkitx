@@ -77,6 +77,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<FetchChatMessage>(_fetchChatMessages);
     on<InitializeGroupChatMembers>(_initializeGroupChatMembers);
     on<ReplyToMessage>(_replyToMessage);
+    on<FetchGroupDetails>(_fetchGroupDetails);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -702,6 +703,24 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } catch (e) {
       emit(AllGroupsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchGroupDetails(
+      FetchGroupDetails event, Emitter<ChatState> emit) async {
+    emit(GroupDetailsFetching());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchGroupInfoModel fetchGroupInfoModel =
+          await _chatBoxRepository.fetchGroupDetails(hashCode, event.groupId);
+      if (fetchGroupInfoModel.status == 200) {
+        emit(GroupDetailsFetched(fetchGroupInfoModel: fetchGroupInfoModel));
+      } else {
+        emit(GroupDetailsNotFetched(errorMessage: fetchGroupInfoModel.message));
+      }
+    } catch (e) {
+      emit(GroupDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 }

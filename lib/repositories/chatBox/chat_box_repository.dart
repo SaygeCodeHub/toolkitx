@@ -14,8 +14,13 @@ abstract class ChatBoxRepository {
   Future<CreateChatGroupModel> createChatGroup(Map createChatGroupMap);
 
   Future<FetchGroupInfoModel> fetchGroupInfo(Map groupInfoMap);
+
+  Future<FetchGroupInfoModel> fetchGroupDetails(
+      String hashCode, String groupId);
+
   Future<AllGroupChatListModel> fetchAllGroupChatList(
       String hashCode, String userId, String userType);
+
   Future<AllGroupChatListModel> fetchAllGroup(
       String hashCode, String userId, String userType);
 }
