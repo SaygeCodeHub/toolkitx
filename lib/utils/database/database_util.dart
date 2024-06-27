@@ -48,7 +48,8 @@ class DatabaseHelper {
             isGroup INTEGER,
             attachementExtension TEXT,
             msgTime INTEGER,
-            sender_name TEXT
+            sender_name TEXT,
+            clientid INTEGER
           )
         ''');
         await db.execute('''
@@ -214,17 +215,6 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getAllMessages() async {
-    final Database db = await database;
-    try {
-      List<Map<String, dynamic>> allMessagesList =
-          await db.query('chat_messages');
-      return allMessagesList;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<void> updateMessage(Map<String, dynamic> message) async {
     final Database db = await database;
     try {
@@ -306,15 +296,15 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-      String sId, String sType, String rId, String rType) async {
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String sId,
+      String sType, String rId, String rType, String clientId) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
     var query =
-        'select * from chat_messages where ((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) ORDER BY msgTime DESC';
+        'select *,  ifnull((Select msg from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quotemsg,  ifnull((Select sender_name from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quote_sender from chat_messages where (((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) and clientid=$clientId) ORDER BY msgTime DESC';
     if (rType == '3') {
       query =
-          'select * from chat_messages where (rid = $rId AND rtype = $rType) ORDER BY msgTime DESC';
+          'select *, ifnull((Select msg from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quotemsg,  ifnull((Select sender_name from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quote_sender from chat_messages where ((rid = $rId AND rtype = $rType) and clientid=$clientId) ORDER BY msgTime DESC';
     }
     messages = await db.rawQuery(query);
     if (messages.isNotEmpty) {
@@ -324,12 +314,12 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getChatUsersList() async {
+  Future<List<Map<String, dynamic>>> getChatUsersList(String clientId) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
 
     messages = await db.rawQuery(
-        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype))  AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)))  AND c.rtype in (1,2)) AS unreadCount from chat_messages where rtype in (1,2) union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AND c.rtype in (1,2)) AS unreadCount from chat_messages where rtype in (1,2)   union select distinct rid, rtype, employee_name, (select msg from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3)) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3))) AS unreadCount from chat_messages where rtype=3');
+        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)))  AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId  union select distinct rid, rtype, employee_name, (select msg from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId)) AS unreadCount from chat_messages where rtype=3  and clientid = $clientId');
     if (messages.isNotEmpty) {
       return messages;
     } else {

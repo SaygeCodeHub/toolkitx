@@ -92,6 +92,7 @@ void main() async {
   await _initDependencies();
   await _initFirebase();
   runApp(const MyApp());
+  ClientBloc().callOnce=true;
 }
 
 _initApp() async {
@@ -100,6 +101,7 @@ _initApp() async {
   await Hive.initFlutter();
   DatabaseUtil.box = await Hive.openBox('languages_box');
   ProfileUtil.packageInfo = await PackageInfo.fromPlatform();
+
 }
 
 _initFirebase() async {

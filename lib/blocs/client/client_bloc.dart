@@ -23,6 +23,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
   final ClientRepository _clientRepository = getIt<ClientRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
+  bool callOnce = false;
 
   ClientStates get initialState => ClientInitial();
 
@@ -37,6 +38,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchClientList event, Emitter<ClientStates> emit) async {
     emit(ClientListFetching());
     try {
+      callOnce = true;
       String clientDataKey =
           (await _customerCache.getClientDataKey(CacheKeys.clientDataKey))!;
       String userType = (await _customerCache.getUserType(CacheKeys.userType))!;
@@ -118,8 +120,11 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             badgeCount = badgeCount + homeScreenModel.data!.badges![i].count;
           }
         }
-        if (event.isFirstTime == true) {
+        if (callOnce) {
           ChatBloc().add(FetchAllGroupChats());
+          callOnce = false;
+        }
+        if (event.isFirstTime == true) {
           add(FetchChatMessages());
         }
         emit(HomeScreenFetched(

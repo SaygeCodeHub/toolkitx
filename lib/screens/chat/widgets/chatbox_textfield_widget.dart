@@ -44,67 +44,68 @@ class _ChatBoxTextFieldWidgetState extends State<ChatBoxTextFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return IconTheme(
-        data: const IconThemeData(color: AppColor.deepBlue),
-        child: Column(children: [
-          if (widget.replyToMessage.isNotEmpty)
-            Container(
-                padding: const EdgeInsets.all(tiniestSpacing),
-                color: Colors.grey[200],
-                child: Row(children: [
-                  const Icon(Icons.reply, size: kMessageReplyIconSize),
-                  const SizedBox(width: xxxTinierSpacing),
-                  Expanded(
-                      child: Text(widget.replyToMessage,
-                          overflow: TextOverflow.ellipsis)),
-                  IconButton(
-                      icon: const Icon(Icons.close,
-                          size: kCancelMessageReplyIconSize),
-                      onPressed: () {
-                        context
-                            .read<ChatBloc>()
-                            .add(ReplyToMessage(replyToMessage: ''));
-                      })
-                ])),
-          Container(
-              margin: const EdgeInsets.symmetric(horizontal: xxxTinierSpacing),
-              child: Row(children: [
-                Flexible(
-                    child: Padding(
-                        padding: const EdgeInsets.all(xxTinierSpacing),
-                        child: TextField(
-                            focusNode: widget.focusNode,
-                            controller: textEditingController,
-                            maxLines: 2,
-                            onChanged: (String text) {
-                              context
-                                  .read<ChatBloc>()
-                                  .chatDetailsMap['message'] = text.trim();
-                            },
-                            decoration: const InputDecoration.collapsed(
-                                hintText: StringConstants.kSendMessage)))),
-                ChooseMediaWidget(),
-                IconButton(
-                    icon: const Icon(Icons.send_rounded),
-                    onPressed: () {
-                      if (textEditingController.text.trim().isNotEmpty) {
-                        _handleMessage(
-                            textEditingController.text.trim(), context);
-                        context
-                            .read<ChatBloc>()
-                            .chatDetailsMap['message_type'] = '1';
-                        context.read<ChatBloc>().add(SendChatMessage(
-                              sendMessageMap:
-                                  context.read<ChatBloc>().chatDetailsMap,
-                            ));
-                      }
-                      textEditingController.clear();
-                      context
-                          .read<ChatBloc>()
-                          .add(ReplyToMessage(replyToMessage: ''));
-                    })
-              ]))
-        ]));
+    return Container(
+        decoration: BoxDecoration(color: Theme.of(context).cardColor),
+        child: IconTheme(
+            data: const IconThemeData(color: AppColor.deepBlue),
+            child: Column(children: [
+              if (widget.replyToMessage.isNotEmpty)
+                Container(
+                    padding: const EdgeInsets.all(tiniestSpacing),
+                    color: Colors.grey[200],
+                    child: Row(children: [
+                      const Icon(Icons.reply, size: kMessageReplyIconSize),
+                      const SizedBox(width: xxxTinierSpacing),
+                      Expanded(
+                          child: Text(widget.replyToMessage,
+                              overflow: TextOverflow.ellipsis)),
+                      IconButton(
+                          icon: const Icon(Icons.close,
+                              size: kCancelMessageReplyIconSize),
+                          onPressed: () {
+                            context.read<ChatBloc>().add(ReplyToMessage(
+                                replyToMessage: '', quoteMessageId: ''));
+                          })
+                    ])),
+              Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: xxxTinierSpacing),
+                  child: Row(children: [
+                    Flexible(
+                        child: Padding(
+                            padding: const EdgeInsets.all(xxTinierSpacing),
+                            child: TextField(
+                                focusNode: widget.focusNode,
+                                controller: textEditingController,
+                                maxLines: 2,
+                                onChanged: (String text) {
+                                  context
+                                      .read<ChatBloc>()
+                                      .chatDetailsMap['message'] = text.trim();
+                                },
+                                decoration: const InputDecoration.collapsed(
+                                    hintText: StringConstants.kSendMessage)))),
+                    ChooseMediaWidget(),
+                    IconButton(
+                        icon: const Icon(Icons.send_rounded),
+                        onPressed: () {
+                          if (textEditingController.text.trim().isNotEmpty) {
+                            _handleMessage(
+                                textEditingController.text.trim(), context);
+                            context
+                                .read<ChatBloc>()
+                                .chatDetailsMap['message_type'] = '1';
+
+                            context.read<ChatBloc>().add(SendChatMessage(
+                                sendMessageMap:
+                                    context.read<ChatBloc>().chatDetailsMap));
+                          }
+                          textEditingController.clear();
+                          context.read<ChatBloc>().add(ReplyToMessage(
+                              replyToMessage: '', quoteMessageId: ''));
+                        })
+                  ]))
+            ])));
   }
 
   void _handleMessage(String text, BuildContext context) {

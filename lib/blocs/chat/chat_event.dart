@@ -60,6 +60,7 @@ class FetchAllGroupChats extends ChatEvent {}
 
 class ReplyToMessage extends ChatEvent {
   String replyToMessage;
+  String quoteMessageId;
 
-  ReplyToMessage({this.replyToMessage = ''});
+  ReplyToMessage({this.replyToMessage = '', required this.quoteMessageId});
 }

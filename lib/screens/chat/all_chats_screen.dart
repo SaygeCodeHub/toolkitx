@@ -11,7 +11,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/screens/chat/widgets/chat_pop_up_menu.dart';
+import 'package:toolkit/screens/chat/widgets/all_chat_pop_up_menu.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -30,11 +30,14 @@ class AllChatsScreen extends StatelessWidget {
             title: const Text('Chats'),
             automaticallyImplyLeading: false,
             titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-            actions: [ChatPopUpMenu()]),
+            actions: [AllChatPopUpMenu()]),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(context, UsersScreen.routeName,
-                  arguments: false);
+                      arguments: false)
+                  .whenComplete(() {
+                context.read<ChatBloc>().add(FetchChatsList());
+              });
             },
             child: const Icon(Icons.add)),
         body: StreamBuilder<List<ChatData>>(
@@ -62,7 +65,7 @@ class AllChatsScreen extends StatelessWidget {
                                         ChatMessagingScreen.routeName;
                                     Navigator.pushNamed(context,
                                             ChatMessagingScreen.routeName)
-                                        .then((value) => context
+                                        .whenComplete(() => context
                                             .read<ChatBloc>()
                                             .add(FetchChatsList()));
                                   },
@@ -70,8 +73,8 @@ class AllChatsScreen extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.all(tiniestSpacing),
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          borderRadius: BorderRadius.circular(
+                                              kChatIconRadius),
                                           color: AppColor.deepBlue),
                                       child: Icon(
                                           (snapshot.data![index].isGroup ==
@@ -79,7 +82,7 @@ class AllChatsScreen extends StatelessWidget {
                                               ? Icons.people
                                               : Icons.person,
                                           color: AppColor.ghostWhite,
-                                          size: 20)),
+                                          size: kChatIconSize)),
                                   title: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,

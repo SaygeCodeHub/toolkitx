@@ -38,7 +38,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   bool isCameraImage = false;
   bool isCameraVideo = false;
   bool isSearchEnabled = false;
-  String clientId = '';
   String timeZoneFormat = '';
   int unreadMessageCount = 0;
 
@@ -93,13 +92,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   FutureOr<void> _replyToMessage(
       ReplyToMessage event, Emitter<ChatState> emit) async {
+    chatDetailsMap['quote_msg_id'] = event.quoteMessageId;
     emit(ShowChatMessagingTextField(replyToMessage: event.replyToMessage));
   }
 
   FutureOr<void> _fetchAllGroupChats(
       FetchAllGroupChats event, Emitter<ChatState> emit) async {
     try {
-      print('_fetchAllGroupChats');
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
@@ -107,7 +106,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
       AllGroupChatList allGroupChatList = await _chatBoxRepository
           .fetchAllGroupChatList(hashCode, userId, userType);
-      print("result???==========> ${allGroupChatList.toJson()}");
       if (allGroupChatList.status == 200 && allGroupChatList.data.isNotEmpty) {
         for (var item in allGroupChatList.data) {
           add(FetchGroupInfo(groupId: item.id.toString()));
@@ -165,9 +163,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Random random = Random();
       int randomValue = random.nextInt(100000);
       String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
+      // String msg = EncryptData.encryptValue
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
-        "quote_msg_id": "",
+        "quote_msg_id": event.sendMessageMap['quote_msg_id'] ?? '',
         "sid": await _customerCache.getUserId2(CacheKeys.userId2),
         "stype": (await _customerCache.getUserType(CacheKeys.userType) == "2")
             ? "2"
@@ -188,6 +187,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
         "stype_2": "3",
+        "clientid": event.sendMessageMap['clientid']
       };
       sendMessageMap['isReceiver'] = 0;
       await _databaseHelper.insertMessage({
@@ -203,7 +203,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ...sendMessageMap
       });
       event.sendMessageMap['isMedia'] = false;
-      clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       add(RebuildChatMessagingScreen(employeeDetailsMap: sendMessageMap));
       sendMessageMap.remove('isReceiver');
       SendMessageModel sendMessageModel =
@@ -235,12 +234,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           (await _customerCache.getUserType(CacheKeys.userType) == "2")
               ? "2"
               : "1";
+      event.employeeDetailsMap['clientid'] =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      chatDetailsMap['clientid'] = event.employeeDetailsMap['clientid'];
       List<Map<String, dynamic>> messages =
           await _databaseHelper.getMessagesForEmployees(
               userId,
               userType,
               event.employeeDetailsMap['rid'].toString(),
-              event.employeeDetailsMap['rtype'].toString());
+              event.employeeDetailsMap['rtype'].toString(),chatDetailsMap['clientid'] );
       messagesList
         ..clear()
         ..addAll(messages);
@@ -261,8 +263,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       FetchChatsList event, Emitter<ChatState> emit) async {
     final List<ChatData> individualChatList = [];
     try {
+      String clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       List<Map<String, dynamic>> usersList =
-          await _databaseHelper.getChatUsersList();
+          await _databaseHelper.getChatUsersList(clientId);
       String userId = await _customerCache.getUserId2(CacheKeys.userId2) ?? '';
       String userType =
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
@@ -279,7 +282,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           if (isFound) {
             continue;
           }
-          print('usersList item--->$item');
           if (item['rtype'].toString() == '3') {
             Map<String, dynamic> groupData =
                 await _databaseHelper.getGroupData(item['rid'].toString());
@@ -300,7 +302,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 groupId: groupData['group_id'] ?? '',
                 groupPurpose: groupData['purpose'] ?? '');
             individualChatList.add(chat);
-            print('individualChatList--->${chat.toMap()}');
           } else {
             DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
                 item['latest_msgTime'],
@@ -319,7 +320,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 groupId: item['group_id'] ?? '',
                 groupPurpose: item['purpose'] ?? '');
             individualChatList.add(chat);
-            print('individualChatList--->${chat.toMap()}');
           }
         }
       }
@@ -343,20 +343,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
 
       if (groupList.isNotEmpty) {
-        print('groupList--->$groupList');
         for (var item in groupList) {
-          print('item--->$item');
           unreadMessageCount = item['unreadCount'] ?? 0;
           if (item['rid'].toString() == userId && item['rtype'] == userType) {
             continue;
           }
-
           bool isFound = isExistingChat(individualChatList,
               item['group_id'].toString(), item['rtype'].toString());
           if (isFound) {
             continue;
           }
-
           DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
               DateTime.now().millisecondsSinceEpoch,
               isUtc: true);
@@ -370,7 +366,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               groupPurpose: item['purpose'] ?? '');
           individualChatList.add(chat);
         }
-        print('individualChatList--->${individualChatList.length}');
       }
       individualChatList.sort((a, b) =>
           a.groupName.toLowerCase().compareTo(b.groupName.toLowerCase()));
@@ -451,19 +446,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         "members": groupDataMap['members']
       });
       if (chatGroupModel.status == 200) {
-        print('group created successfully');
         groupId = chatGroupModel.data.groupId;
         await _databaseHelper.insertGroup({
           'group_id': groupId,
           'group_name': groupDataMap['group_name'],
           'purpose': groupDataMap['group_purpose']
         }, groupDataMap['members']);
-        var result = await _databaseHelper.getAllGroupsData();
-        print("result----->$result");
         add(FetchGroupsList());
         emit(ChatGroupCreated());
       } else {
-        print('group creation failed');
         emit(ChatGroupCannotCreate(errorMessage: 'Error!'));
       }
     } catch (e) {
@@ -652,9 +643,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           'date': finalDate
         }, membersList);
         add(FetchChatsList());
-        List<Map<String, dynamic>> groupList =
-            await _databaseHelper.getAllGroupsData();
-        print('GroupChatList--->$groupList');
       }
     } catch (e) {
       rethrow;

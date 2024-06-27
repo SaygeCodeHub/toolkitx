@@ -206,8 +206,7 @@ class UsersScreen extends StatelessWidget {
                                                       'rtype': state
                                                           .employeeList[index]
                                                           .type
-                                                          .toString(),
-                                                      'isReceiver': 0
+                                                          .toString()
                                                     };
                                                     chatScreenName =
                                                         ChatMessagingScreen
@@ -216,7 +215,7 @@ class UsersScreen extends StatelessWidget {
                                                             context,
                                                             ChatMessagingScreen
                                                                 .routeName)
-                                                        .then((value) {
+                                                        .whenComplete(() {
                                                       context
                                                           .read<ChatBloc>()
                                                           .add(
