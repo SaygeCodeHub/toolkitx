@@ -7,12 +7,16 @@ import '../../../widgets/expansion_tile_border.dart';
 class TripSpecialRequestTypeExpansionTile extends StatefulWidget {
   const TripSpecialRequestTypeExpansionTile({
     super.key,
-    required this.specialReportMap,
+    required this.specialRequestMap,
     required this.masterDatum,
+    required this.editName,
+    required this.editValue,
   });
 
-  final Map specialReportMap;
+  final Map specialRequestMap;
   final List<MasterDatum> masterDatum;
+  final String editName;
+  final String editValue;
 
   @override
   State<TripSpecialRequestTypeExpansionTile> createState() =>
@@ -22,6 +26,13 @@ class TripSpecialRequestTypeExpansionTile extends StatefulWidget {
 class _TripSpecialRequestTypeExpansionTileState
     extends State<TripSpecialRequestTypeExpansionTile> {
   String selectedValue = '';
+
+  @override
+  void initState() {
+    selectedValue = widget.editName;
+    widget.specialRequestMap['specialrequesttype'] = widget.editValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +59,7 @@ class _TripSpecialRequestTypeExpansionTileState
                             onTap: () {
                               setState(() {
                                 selectedValue = widget.masterDatum[index].name;
-                                widget.specialReportMap['specialrequesttype'] =
+                                widget.specialRequestMap['specialrequesttype'] =
                                     widget.masterDatum[index].id;
                               });
                             });

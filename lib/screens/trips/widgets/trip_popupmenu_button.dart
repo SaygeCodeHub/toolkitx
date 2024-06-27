@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/trips/widgets/add_special_report_screen.dart';
+import 'package:toolkit/screens/trips/add_special_request_screen.dart';
 
 import '../../../utils/constants/string_constants.dart';
 
@@ -23,7 +23,7 @@ class TripsPopupMenuButton extends StatelessWidget {
     return PopupMenuButton(
         onSelected: (value) {
           if (value == StringConstants.kAddSpecialRequest) {
-            Navigator.pushNamed(context, AddSpecialReportScreen.routeName,
+            Navigator.pushNamed(context, AddSpecialRequestScreen.routeName,
                 arguments: tripId);
           }
         },

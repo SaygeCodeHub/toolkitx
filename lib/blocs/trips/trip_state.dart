@@ -95,3 +95,42 @@ class TripSpecialRequestNotAdded extends TripState {
 
   TripSpecialRequestNotAdded({required this.errorMessage});
 }
+
+class TripSpecialRequestFetching extends TripState {}
+
+class TripSpecialRequestFetched extends TripState {
+  final FetchTripSpecialRequestModel fetchTripSpecialRequestModel;
+  final List<PassengerCrewDatum> passengerCrewDatum;
+  final List<MasterDatum> masterDatum;
+
+  TripSpecialRequestFetched(
+      {required this.fetchTripSpecialRequestModel,
+      required this.passengerCrewDatum,
+      required this.masterDatum});
+}
+
+class TripSpecialRequestNotFetched extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotFetched({required this.errorMessage});
+}
+
+class TripSpecialRequestUpdating extends TripState {}
+
+class TripSpecialRequestUpdated extends TripState {}
+
+class TripSpecialRequestNotUpdated extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotUpdated({required this.errorMessage});
+}
+
+class TripSpecialRequestDeleting extends TripState {}
+
+class TripSpecialRequestDeleted extends TripState {}
+
+class TripSpecialRequestNotDeleted extends TripState {
+  final String errorMessage;
+
+  TripSpecialRequestNotDeleted({required this.errorMessage});
+}

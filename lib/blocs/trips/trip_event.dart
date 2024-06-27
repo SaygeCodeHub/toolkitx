@@ -52,3 +52,26 @@ class TripAddSpecialRequest extends TripEvent {
   TripAddSpecialRequest(
       {required this.tripId, required this.addSpecialRequestMap});
 }
+
+class FetchTripSpecialRequest extends TripEvent {
+  final String tripId;
+  final String requestId;
+
+  FetchTripSpecialRequest({required this.tripId, required this.requestId});
+}
+
+class UpdateTripSpecialRequest extends TripEvent {
+  final String requestId;
+  final Map updateSpecialRequestMap;
+
+  UpdateTripSpecialRequest(
+      {required this.requestId, required this.updateSpecialRequestMap});
+}
+
+class DeleteTripSpecialRequest extends TripEvent {
+  final String requestId;
+
+  DeleteTripSpecialRequest({
+    required this.requestId,
+  });
+}
