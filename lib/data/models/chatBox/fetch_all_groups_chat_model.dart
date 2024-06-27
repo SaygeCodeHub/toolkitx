@@ -1,24 +1,24 @@
 import 'dart:convert';
 
-AllGroupChatList allGroupChatListFromJson(String str) =>
-    AllGroupChatList.fromJson(json.decode(str));
+AllGroupChatListModel allGroupChatListFromJson(String str) =>
+    AllGroupChatListModel.fromJson(json.decode(str));
 
-String allGroupChatListToJson(AllGroupChatList data) =>
+String allGroupChatListToJson(AllGroupChatListModel data) =>
     json.encode(data.toJson());
 
-class AllGroupChatList {
+class AllGroupChatListModel {
   final int status;
   final String message;
   final List<AllGroupChatListData> data;
 
-  AllGroupChatList({
+  AllGroupChatListModel({
     required this.status,
     required this.message,
     required this.data,
   });
 
-  factory AllGroupChatList.fromJson(Map<String, dynamic> json) =>
-      AllGroupChatList(
+  factory AllGroupChatListModel.fromJson(Map<String, dynamic> json) =>
+      AllGroupChatListModel(
         status: json["Status"],
         message: json["Message"],
         data: List<AllGroupChatListData>.from(

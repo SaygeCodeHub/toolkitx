@@ -68,6 +68,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<RebuildChatMessagingScreen>(_rebuildChatMessage);
     on<FetchChatsList>(_fetchChatsList);
     on<FetchGroupsList>(_fetchGroupsList);
+    on<FetchAllGroups>(_fetchAllGroups);
     on<FetchAllGroupChats>(_fetchAllGroupChats);
     on<CreateChatGroup>(_createChatGroup);
     on<PickMedia>(_pickMedia);
@@ -104,7 +105,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       String userType =
           await _customerCache.getUserType(CacheKeys.userType) ?? '';
-      AllGroupChatList allGroupChatList = await _chatBoxRepository
+      AllGroupChatListModel allGroupChatList = await _chatBoxRepository
           .fetchAllGroupChatList(hashCode, userId, userType);
       if (allGroupChatList.status == 200 && allGroupChatList.data.isNotEmpty) {
         for (var item in allGroupChatList.data) {
@@ -680,6 +681,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<FutureOr<void>> _fetchAllGroups(
+      FetchAllGroups event, Emitter<ChatState> emit) async {
+    emit(AllGroupsFetching());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
+      AllGroupChatListModel allGroupChatListModel =
+          await _chatBoxRepository.fetchAllGroup(hashCode, userId, userType);
+      if (allGroupChatListModel.status == 200) {
+        emit(AllGroupsFetched(allGroupChatListModel: allGroupChatListModel));
+      } else {
+        emit(AllGroupsNotFetched(errorMessage: allGroupChatListModel.message));
+      }
+    } catch (e) {
+      emit(AllGroupsNotFetched(errorMessage: e.toString()));
     }
   }
 }

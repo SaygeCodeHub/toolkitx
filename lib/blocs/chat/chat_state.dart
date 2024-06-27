@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/chatBox/fetch_all_groups_chat_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 
 abstract class ChatState {}
@@ -50,5 +51,20 @@ class ChatMessagingTextFieldHidden extends ChatState {}
 
 class ShowChatMessagingTextField extends ChatState {
   String replyToMessage;
+
   ShowChatMessagingTextField({this.replyToMessage = ''});
+}
+
+class AllGroupsFetching extends ChatState {}
+
+class AllGroupsFetched extends ChatState {
+  final AllGroupChatListModel allGroupChatListModel;
+
+  AllGroupsFetched({required this.allGroupChatListModel});
+}
+
+class AllGroupsNotFetched extends ChatState {
+  final String errorMessage;
+
+  AllGroupsNotFetched({required this.errorMessage});
 }

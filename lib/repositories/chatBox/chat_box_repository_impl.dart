@@ -39,10 +39,18 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   }
 
   @override
-  Future<AllGroupChatList> fetchAllGroupChatList(
+  Future<AllGroupChatListModel> fetchAllGroupChatList(
       String hashCode, String userId, String userType) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}chat/GetAllMyGroups?hashcode=$hashCode&userid=$userId&usertype=$userType");
-    return AllGroupChatList.fromJson(response);
+    return AllGroupChatListModel.fromJson(response);
+  }
+
+  @override
+  Future<AllGroupChatListModel> fetchAllGroup(
+      String hashCode, String userId, String userType) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}chat/GetAllMyGroups?hashcode=$hashCode&userid=$userId&usertype=$userType");
+    return AllGroupChatListModel.fromJson(response);
   }
 }

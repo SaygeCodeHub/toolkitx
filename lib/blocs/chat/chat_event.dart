@@ -25,6 +25,8 @@ class FetchChatsList extends ChatEvent {}
 
 class FetchGroupsList extends ChatEvent {}
 
+class FetchAllGroups extends ChatEvent {}
+
 class CreateChatGroup extends ChatEvent {}
 
 class PickMedia extends ChatEvent {
