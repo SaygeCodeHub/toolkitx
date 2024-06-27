@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
 import 'package:toolkit/screens/meetingRoom/widgets/meeting_view_room_checkbox_tile.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -64,7 +65,7 @@ class ViewAvailableRoomsScreen extends StatelessWidget {
                           arguments: viewRoomMap);
                     } else {
                       showCustomSnackBar(
-                          context, 'Please select a room to proceed', '');
+                          context, StringConstants.kPleaseSelectRoom, '');
                     }
                   },
                   textValue: DatabaseUtil.getText('continue')),

@@ -101,3 +101,4 @@ const double kMediaContainerBorderRadius = 10;
 const double kMeetingExpansionTilesHeight = 120;
 const double kViewAvailabilityCardHeight = 200;
 const double kMonthViewCardWidth = 90;
+const double kParticipantExpansionTileHeight = 170;

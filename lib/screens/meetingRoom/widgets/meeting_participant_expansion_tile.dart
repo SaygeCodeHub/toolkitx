@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/configs/app_dimensions.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/expansion_tile_border.dart';
@@ -55,7 +56,7 @@ class MeetingParticipantExpansionTileState
                 .replaceAll(']', '')),
             children: [
               SizedBox(
-                height: 170,
+                height: kParticipantExpansionTileHeight,
                 child: MediaQuery(
                     data: MediaQuery.of(context).removePadding(removeTop: true),
                     child: ListView.builder(

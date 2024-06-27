@@ -96,7 +96,6 @@ class _MeetingMonthPickerState extends State<MeetingMonthPicker> {
                               });
                             }
                           }
-                          // MeetingMonthPicker.dateList = dateInput.split(" ");
                           Navigator.pop(context);
                         },
                         textValue: DatabaseUtil.getText('buttonDone')),
