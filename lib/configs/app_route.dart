@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -25,6 +26,7 @@ import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
+import 'package:toolkit/screens/permit/edit_switching_instruction_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
@@ -716,7 +718,10 @@ class AppRoutes {
       case GroupDetailsScreen.routeName:
         return _createRoute(
             GroupDetailsScreen(groupId: settings.arguments.toString()));
-
+      case EditSwitchingInstructionScreen.routeName:
+        return _createRoute(EditSwitchingInstructionScreen(
+            permitSwithcingScheduleInstructionDatum:
+                settings.arguments as PermitSwithcingScheduleInstructionDatum));
       default:
         return _createRoute(const WelcomeScreen());
     }

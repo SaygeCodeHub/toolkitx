@@ -77,7 +77,10 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                         showModalBottomSheet(
                                             context: context,
                                             builder: (context) {
-                                              return const PermitScheduleInstructionBottomSheet();
+                                              return PermitScheduleInstructionBottomSheet(
+                                                  permitSwithcingScheduleInstructionDatum:
+                                                      state.scheduleInstructionDatum[
+                                                          index]);
                                             });
                                       },
                                       child: const Text(
