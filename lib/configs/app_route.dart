@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/group_details_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
@@ -14,6 +16,13 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
+import 'package:toolkit/screens/meetingRoom/edit_meeting_details_screen.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_view_availability_screen.dart';
+import 'package:toolkit/screens/meetingRoom/month_view_screen.dart';
+import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
+import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
@@ -36,6 +45,7 @@ import 'package:toolkit/screens/trips/trip_filter_screen.dart';
 import 'package:toolkit/screens/trips/add_special_request_screen.dart';
 import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
+import '../data/models/ meetingRoom/fetch_meeting_details_model.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
@@ -63,6 +73,8 @@ import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/get_workforce_quiz_screen.dart';
+import '../screens/chat/group_chat_list_screen.dart';
+import '../screens/chat/group_chat_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
 
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
@@ -131,6 +143,7 @@ import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
 import '../screens/loto/loto_reject_screen.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
+import '../screens/meetingRoom/view_available_rooms_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -675,6 +688,35 @@ class AppRoutes {
         List args = settings.arguments as List<String>;
         return _createRoute(
             EditSpecialRequestScreen(tripId: args[0], requestId: args[1]));
+      case MyMeetingsScreen.routeName:
+        return _createRoute(const MyMeetingsScreen());
+      case MeetingDetailsScreen.routeName:
+        return _createRoute(
+            MeetingDetailsScreen(bookingId: settings.arguments.toString()));
+      case SearchRoomsScreen.routeName:
+        return _createRoute(const SearchRoomsScreen());
+      case ViewAvailableRoomsScreen.routeName:
+        return _createRoute(ViewAvailableRoomsScreen(
+            searchForRoomsDatum:
+                settings.arguments as List<SearchForRoomsDatum>));
+      case BookMeetingRoomScreen.routeName:
+        return _createRoute(
+            BookMeetingRoomScreen(bookRoomMap: settings.arguments as Map));
+      case MonthViewScreen.routeName:
+        return _createRoute(const MonthViewScreen());
+      case MeetingViewAvailabilityScreen.routeName:
+        return _createRoute(const MeetingViewAvailabilityScreen());
+      case EditMeetingDetailsScreen.routeName:
+        return _createRoute(EditMeetingDetailsScreen(
+            meetingDetailsData: settings.arguments as MeetingDetailsData));
+      case GroupChatListScreen.routeName:
+        return _createRoute(const GroupChatListScreen());
+      case GroupChatScreen.routeName:
+        return _createRoute(const GroupChatScreen());
+      case GroupDetailsScreen.routeName:
+        return _createRoute(
+            GroupDetailsScreen(groupId: settings.arguments.toString()));
+
       default:
         return _createRoute(const WelcomeScreen());
     }

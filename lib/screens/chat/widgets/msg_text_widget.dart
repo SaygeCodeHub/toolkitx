@@ -1,124 +1,149 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'dart:ui' as ui;
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chat/widgets/quote_message_reply_container.dart';
 
 import '../../../configs/app_color.dart';
+import '../../../configs/app_dimensions.dart';
+import 'chat_subtitle.dart';
 
 class MsgTextWidget extends StatelessWidget {
-  final dynamic snapshot;
-  final int reversedIndex;
+  final Map messageData;
 
-  const MsgTextWidget(
-      {super.key, required this.snapshot, required this.reversedIndex});
+  const MsgTextWidget({super.key, required this.messageData});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Align(
-        alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-            ? Alignment.centerLeft
-            : Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          margin: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-              ? const EdgeInsets.only(right: 34.0)
-              : const EdgeInsets.only(left: 34.0),
-          decoration: BoxDecoration(
-              color: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-                  ? AppColor.blueGrey
-                  : Colors.grey[300],
-              borderRadius: BorderRadius.circular(5)),
-          child: SelectionArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (snapshot.data![reversedIndex]['isReceiver'] == 1) ...[
-                  Flexible(
-                    child: Text(snapshot.data![reversedIndex]['msg']),
-                  ),
-                  const SizedBox(height: tiniestSpacing),
-                  (snapshot.data![reversedIndex]['msg_status'] != '1')
-                      ? const Icon(Icons.timer, size: 13)
-                      : const SizedBox.shrink(),
-                ] else ...[
-                  Flexible(
-                    child: Text(snapshot.data![reversedIndex]['msg']),
-                  ),
-                  const SizedBox(height: tiniestSpacing),
-                  (snapshot.data![reversedIndex]['msg_status'] != '1')
-                      ? const Icon(Icons.timer, size: 13)
-                      : const SizedBox.shrink(),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-      subtitle: Align(
-        alignment: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-            ? Alignment.centerLeft
-            : Alignment.centerRight,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: tiniestSpacing, horizontal: 0),
-          child: (snapshot.data![reversedIndex]['isReceiver'] == 1)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                        (snapshot.data![reversedIndex]['isReceiver'] == 1)
-                            ? '${context.read<ChatBloc>().chatDetailsMap['employee_name']} // '
-                            : '',
-                        style: Theme.of(context).textTheme.smallTextBlack,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1),
-                    Text(
-                        DateFormat('HH:mm').format(DateTime.parse(
-                            getTimeForUserTimeZone(context,
-                                    snapshot.data?[reversedIndex]['msg_time'])
-                                .toString())),
-                        style: Theme.of(context)
-                            .textTheme
-                            .tinySmall
-                            .copyWith(color: AppColor.mediumBlack)),
-                  ],
-                )
-              : Text(
-                  DateFormat('HH:mm').format(DateTime.parse(
-                      getTimeForUserTimeZone(context,
-                              snapshot.data?[reversedIndex]['msg_time'])
-                          .toString())),
-                  style: Theme.of(context)
-                      .textTheme
-                      .tinySmall
-                      .copyWith(color: AppColor.mediumBlack)),
-        ),
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      double margin = 0;
+      if (messageData['quotemsg'] != "") {
+        double textWidth = getTextWidth(
+            context,
+            (messageData['quotemsg'].toString().length >
+                    messageData['msg'].toString().length)
+                ? messageData['quotemsg'].toString()
+                : messageData['msg'].toString());
+        margin = (constraints.maxWidth - textWidth) / 2;
+      }
+      return Visibility(
+          visible: (messageData['quotemsg'] != ""),
+          replacement: ListTile(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: kMessageTilePadding),
+              title: Align(
+                  alignment: (messageData['isReceiver'] == 1)
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: Container(
+                      padding: const EdgeInsets.all(xxxTinierSpacing),
+                      margin: (messageData['isReceiver'] == 1)
+                          ? const EdgeInsets.only(right: xxSmallSpacing)
+                          : const EdgeInsets.only(left: xxSmallSpacing),
+                      decoration: BoxDecoration(
+                          color: (messageData['isReceiver'] == 1)
+                              ? AppColor.blueGrey
+                              : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(kCardRadius)),
+                      child: SelectionArea(
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                            if (messageData['isReceiver'] == 1) ...[
+                              Flexible(child: Text(messageData['msg'])),
+                              const SizedBox(height: tiniestSpacing),
+                              (messageData['msg_status'] != '1')
+                                  ? const Icon(Icons.timer,
+                                      size: kMessageTimerIconSize)
+                                  : const SizedBox.shrink()
+                            ] else ...[
+                              Flexible(child: Text(messageData['msg'])),
+                              const SizedBox(height: tiniestSpacing),
+                              (messageData['msg_status'] != '1')
+                                  ? const Icon(Icons.timer,
+                                      size: kMessageTimerIconSize)
+                                  : const SizedBox.shrink()
+                            ]
+                          ])))),
+              subtitle: ChatSubtitle(messageData: messageData)),
+          child: ListTile(
+              title: Align(
+                  alignment: (messageData['isReceiver'] == 1)
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: (messageData['isReceiver'] == 1)
+                              ? AppColor.blueGrey
+                              : Colors.grey[300],
+                          borderRadius:
+                              BorderRadius.circular(xxxTinierSpacing)),
+                      margin: (messageData['isReceiver'] == 1)
+                          ? EdgeInsets.only(right: margin)
+                          : EdgeInsets.only(left: margin),
+                      child: Column(children: [
+                        QuoteMessageReplyContainer(messageData: messageData),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: xxxTinierSpacing,
+                                vertical: kQuoteMessageTilePadding),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: SelectionArea(
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                      if (messageData['isReceiver'] == 1) ...[
+                                        Flexible(
+                                            child: Text(messageData['msg'])),
+                                        const SizedBox(height: tiniestSpacing),
+                                        (messageData['msg_status'] != '1')
+                                            ? const Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Icon(Icons.timer,
+                                                    size:
+                                                        kMessageTimerIconSize))
+                                            : const SizedBox.shrink()
+                                      ] else ...[
+                                        Flexible(
+                                            child: Text(messageData['msg'])),
+                                        const SizedBox(height: tiniestSpacing),
+                                        (messageData['msg_status'] != '1')
+                                            ? const Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Icon(Icons.timer,
+                                                    size:
+                                                        kMessageTimerIconSize))
+                                            : const SizedBox.shrink()
+                                      ]
+                                    ]))))
+                      ]))),
+              subtitle: ChatSubtitle(messageData: messageData)));
+    });
   }
-}
 
-DateTime getTimeForUserTimeZone(BuildContext context, String time) {
-  DateTime dateTime = DateTime.parse(time);
-  List offset = context
-      .read<ChatBloc>()
-      .timeZoneFormat
-      .replaceAll('+', '')
-      .replaceAll('-', '')
-      .split(':');
-  if (context.read<ChatBloc>().timeZoneFormat.contains('+')) {
-    dateTime = dateTime.toUtc().add(Duration(
-        hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
-    return dateTime;
-  } else {
-    dateTime = dateTime.toUtc().subtract(Duration(
-        hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
-    return dateTime;
+  double getTextWidth(BuildContext context, String text) {
+    TextPainter textPainter = TextPainter();
+    if (text.length < 35) {
+      textPainter = TextPainter(
+          text: TextSpan(text: text, style: Theme.of(context).textTheme.small),
+          textDirection: ui.TextDirection.ltr);
+    } else {
+      textPainter = TextPainter(
+          text: TextSpan(
+              text: text.substring(0, 35),
+              style: Theme.of(context).textTheme.small),
+          textDirection: ui.TextDirection.ltr);
+    }
+    textPainter.layout();
+    return textPainter.width;
   }
 }

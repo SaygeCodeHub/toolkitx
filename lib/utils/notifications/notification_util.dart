@@ -27,9 +27,7 @@ class NotificationUtil {
           } else {
             chatBloc.add(FetchChatsList());
           }
-        }).catchError((error) {
-          print('error calling the rebuild chat event $error');
-        });
+        }).catchError((error) {});
       }
       if (message.data['ischatgrouprequest'] == '1') {
         chatBloc.add(FetchGroupInfo(groupId: message.data['group_id']));
@@ -53,7 +51,9 @@ class NotificationUtil {
       'msg_status': '1',
       'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
+      'clientid': message.data['clientid']
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -85,7 +85,9 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
       'msg_status': '1',
       'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
+      'clientid': message.data['clientid']
     };
     await DatabaseHelper().insertMessage(messageData);
   }
