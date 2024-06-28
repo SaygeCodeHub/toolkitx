@@ -28,6 +28,7 @@ import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
+import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
@@ -680,6 +681,9 @@ class AppRoutes {
       case AddSpecialRequestScreen.routeName:
         return _createRoute(
             AddSpecialRequestScreen(tripId: settings.arguments.toString()));
+      case PermitSwitchingScheduleTableScreen.routeName:
+        return _createRoute(PermitSwitchingScheduleTableScreen(
+            scheduleId: settings.arguments.toString()));
       case EditSpecialRequestScreen.routeName:
         List args = settings.arguments as List<String>;
         return _createRoute(

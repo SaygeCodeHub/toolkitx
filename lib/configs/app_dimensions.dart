@@ -120,3 +120,5 @@ const double kQuoteMessageDividerHeight = 1;
 const double kMessageTilePadding = 15;
 const double kQuoteMessageTilePadding = 5;
 const double kMessageTimerIconSize = 13;
+const double kPermitScheduleInstIconSize = 16;
+const double kPermitScheduleInstBottomSheetHeight = 220;

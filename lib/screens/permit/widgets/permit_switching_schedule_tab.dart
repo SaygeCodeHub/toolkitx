@@ -3,6 +3,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/permit_details_model.dart';
+import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -23,7 +24,11 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(top: xxTinierSpacing),
                   child: ListTile(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context,
+                            PermitSwitchingScheduleTableScreen.routeName,
+                            arguments: permitDetailsModel.data.tab7[index].id);
+                      },
                       title: Text(permitDetailsModel.data.tab7[index].number,
                           style: Theme.of(context).textTheme.small.copyWith(
                               fontWeight: FontWeight.w700,
