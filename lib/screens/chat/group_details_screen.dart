@@ -20,7 +20,6 @@ class GroupDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('idd==============>$groupId');
     context.read<ChatBloc>().add(FetchGroupDetails(groupId: groupId));
     return Scaffold(
       appBar: const GenericAppBar(),
@@ -49,7 +48,10 @@ class GroupDetailsScreen extends StatelessWidget {
                   const SizedBox(height: tiniestSpacing),
                   Text(data.purpose),
                   const SizedBox(height: xxxSmallestSpacing),
-                  Center(child: AddNewChatMemberButton(groupId: groupId)),
+                  Visibility(
+                      visible: data.isgroupowner == "1",
+                      child: Center(
+                          child: AddNewChatMemberButton(groupId: groupId))),
                   const SizedBox(height: xxxSmallestSpacing),
                   Expanded(
                       child: ListView.separated(
@@ -83,8 +85,17 @@ class GroupDetailsScreen extends StatelessWidget {
                                     subtitle: Text(data.members[index].type == 1
                                         ? StringConstants.kSystemUser
                                         : StringConstants.kWorkforce),
-                                    trailing: GroupDetailsPopupMenu(
-                                        groupId: groupId)));
+                                    trailing: Visibility(
+                                      visible: data.isgroupowner == "1",
+                                      child: GroupDetailsPopupMenu(
+                                        groupId: groupId,
+                                        memberId:
+                                            data.members[index].id.toString(),
+                                        apiKey: state.apiKey,
+                                        memberType:
+                                            data.members[index].type.toString(),
+                                      ),
+                                    )));
                           },
                           separatorBuilder: (context, index) {
                             return const SizedBox(height: xxTinierSpacing);

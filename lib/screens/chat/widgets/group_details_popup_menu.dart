@@ -7,9 +7,17 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
 class GroupDetailsPopupMenu extends StatelessWidget {
-  const GroupDetailsPopupMenu({super.key, required this.groupId});
+  const GroupDetailsPopupMenu(
+      {super.key,
+      required this.groupId,
+      required this.memberId,
+      required this.apiKey,
+      required this.memberType});
 
   final String groupId;
+  final String memberId;
+  final String memberType;
+  final String apiKey;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +74,8 @@ class GroupDetailsPopupMenu extends StatelessWidget {
           popUpMenuItems.length,
           (int index) => MenuItemButton(
             onPressed: () {
-              callFunction(popUpMenuItems[index], context, chatBloc);
+              callFunction(popUpMenuItems[index], context, chatBloc, memberId,
+                  memberType);
             },
             child: Text(popUpMenuItems[index]),
           ),
@@ -75,16 +84,19 @@ class GroupDetailsPopupMenu extends StatelessWidget {
     );
   }
 
-  callFunction(buttonName, context, chatBloc) {
+  callFunction(buttonName, context, chatBloc, memberId, memberType) {
     switch (buttonName) {
       case "Remove Member":
-        chatBloc.add(RemoveChatMember(groupId: groupId));
+        chatBloc.add(RemoveChatMember(
+            groupId: groupId, memberId: memberId, memberType: memberType));
         break;
       case "Set as Admin":
-        chatBloc.add(SetChatMemberAsAdmin(groupId: groupId));
+        chatBloc.add(SetChatMemberAsAdmin(
+            groupId: groupId, memberId: memberId, memberType: memberType));
         break;
       case "Dismiss as Admin":
-        chatBloc.add(DismissChatMemberAsAdmin(groupId: groupId));
+        chatBloc.add(DismissChatMemberAsAdmin(
+            groupId: groupId, memberId: memberId, memberType: memberType));
         break;
     }
   }

@@ -75,20 +75,35 @@ class ReplyToMessage extends ChatEvent {
 
 class RemoveChatMember extends ChatEvent {
   final String groupId;
+  final String memberId;
+  final String memberType;
 
-  RemoveChatMember({required this.groupId});
+  RemoveChatMember(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType});
 }
 
 class SetChatMemberAsAdmin extends ChatEvent {
   final String groupId;
+  final String memberId;
+  final String memberType;
 
-  SetChatMemberAsAdmin({required this.groupId});
+  SetChatMemberAsAdmin(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType});
 }
 
 class DismissChatMemberAsAdmin extends ChatEvent {
   final String groupId;
+  final String memberId;
+  final String memberType;
 
-  DismissChatMemberAsAdmin({required this.groupId});
+  DismissChatMemberAsAdmin(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType});
 }
 
 class AddChatMember extends ChatEvent {

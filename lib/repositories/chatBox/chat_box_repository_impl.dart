@@ -60,9 +60,9 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
 
   @override
   Future<FetchGroupInfoModel> fetchGroupDetails(
-      String hashCode, String groupId) async {
+      String hashCode, String groupId, String userId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId");
+        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId&userid=$userId");
     return FetchGroupInfoModel.fromJson(response);
   }
 
@@ -72,7 +72,6 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}chat/DismissChatMemberAsAdmin",
         dismissChatMemberAsAdminMap);
-    print('dismissResponse==============>$response');
     return DismissChatMemberAsAdminModel.fromJson(response);
   }
 
@@ -80,9 +79,7 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   Future<RemoveChatMemberModel> removeChatMember(
       Map removeChatMemberMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}chat/SetChatMemberAsAdmin",
-        removeChatMemberMap);
-    print('RemoveResponse==============>$response');
+        "${ApiConstants.baseUrl}chat/RemoveChatMember", removeChatMemberMap);
     return RemoveChatMemberModel.fromJson(response);
   }
 
@@ -90,9 +87,8 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
   Future<SetChatMemberAsAdminModel> setChatMemberAsAdmin(
       Map setChatMemberAsAdminMap) async {
     final response = await DioClient().post(
-        "${ApiConstants.baseUrl}chat/RemoveChatMember",
+        "${ApiConstants.baseUrl}chat/SetChatMemberAsAdmin",
         setChatMemberAsAdminMap);
-    print('SetResponse==============>$response');
     return SetChatMemberAsAdminModel.fromJson(response);
   }
 

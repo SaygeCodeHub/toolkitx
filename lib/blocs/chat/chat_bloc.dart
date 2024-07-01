@@ -459,11 +459,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       });
       if (chatGroupModel.status == 200) {
         groupId = chatGroupModel.data.groupId;
-        await _databaseHelper.insertGroup({
-          'group_id': groupId,
-          'group_name': groupDataMap['group_name'],
-          'purpose': groupDataMap['group_purpose']
-        }, groupDataMap['members']);
         add(FetchGroupsList());
         emit(ChatGroupCreated());
       } else {
@@ -720,10 +715,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchGroupInfoModel fetchGroupInfoModel =
-          await _chatBoxRepository.fetchGroupDetails(hashCode, event.groupId);
+      String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchGroupInfoModel fetchGroupInfoModel = await _chatBoxRepository
+          .fetchGroupDetails(hashCode, event.groupId, userId);
       if (fetchGroupInfoModel.status == 200) {
-        emit(GroupDetailsFetched(fetchGroupInfoModel: fetchGroupInfoModel));
+        emit(GroupDetailsFetched(
+            fetchGroupInfoModel: fetchGroupInfoModel, apiKey: apiKey));
       } else {
         emit(GroupDetailsNotFetched(errorMessage: fetchGroupInfoModel.message));
       }
@@ -738,13 +736,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      String userType =
-          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       Map removeChatMemberMap = {
         "groupid": event.groupId,
-        "userid": userId,
-        "usertype": userType,
+        "userid": event.memberId,
+        "usertype": event.memberType,
         "hashcode": hashCode
       };
       RemoveChatMemberModel removeChatMemberModel =
@@ -765,13 +760,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      String userType =
-          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       Map setChatMemberAsAdminMap = {
         "groupid": event.groupId,
-        "userid": userId,
-        "usertype": userType,
+        "userid": event.memberId,
+        "usertype": event.memberType,
         "hashcode": hashCode
       };
       SetChatMemberAsAdminModel setChatMemberAsAdminModel =
@@ -794,15 +786,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      String userType =
-          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       Map dismissChatMemberAsAdminMap = {
         "groupid": event.groupId,
-        "userid": userId,
-        "usertype": userType,
+        "userid": event.memberId,
+        "usertype": event.memberType,
         "hashcode": hashCode
       };
+
       DismissChatMemberAsAdminModel dismissChatMemberAsAdminModel =
           await _chatBoxRepository
               .dismissChatMemberAsAdmin(dismissChatMemberAsAdminMap);

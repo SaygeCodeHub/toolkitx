@@ -72,10 +72,8 @@ import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/get_workforce_quiz_screen.dart';
-import '../screens/chat/group_chat_list_screen.dart';
 import '../screens/chat/group_chat_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
-
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
 import '../screens/checklist/workforce/workforce_questions_list_screen.dart';
@@ -705,8 +703,6 @@ class AppRoutes {
       case EditMeetingDetailsScreen.routeName:
         return _createRoute(EditMeetingDetailsScreen(
             meetingDetailsData: settings.arguments as MeetingDetailsData));
-      case GroupChatListScreen.routeName:
-        return _createRoute(const GroupChatListScreen());
       case GroupChatScreen.routeName:
         return _createRoute(const GroupChatScreen());
       case GroupDetailsScreen.routeName:

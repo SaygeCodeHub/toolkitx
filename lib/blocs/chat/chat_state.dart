@@ -74,8 +74,10 @@ class GroupDetailsFetching extends ChatState {}
 
 class GroupDetailsFetched extends ChatState {
   final FetchGroupInfoModel fetchGroupInfoModel;
+  final String apiKey;
 
-  GroupDetailsFetched({required this.fetchGroupInfoModel});
+  GroupDetailsFetched(
+      {required this.fetchGroupInfoModel, required this.apiKey});
 }
 
 class GroupDetailsNotFetched extends ChatState {
