@@ -1,7 +1,11 @@
+import 'package:toolkit/data/models/chatBox/add_chat_member_model.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
+import 'package:toolkit/data/models/chatBox/dismiss_chat_member_as_admin_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_all_groups_chat_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
+import 'package:toolkit/data/models/chatBox/remove_chat_member_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
+import 'package:toolkit/data/models/chatBox/set_chat_member_as_admin_model.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/dio_client.dart';
@@ -56,9 +60,42 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
 
   @override
   Future<FetchGroupInfoModel> fetchGroupDetails(
-      String hashCode, String groupId) async {
+      String hashCode, String groupId, String userId) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId");
+        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId&userid=$userId");
     return FetchGroupInfoModel.fromJson(response);
+  }
+
+  @override
+  Future<DismissChatMemberAsAdminModel> dismissChatMemberAsAdmin(
+      Map dismissChatMemberAsAdminMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}chat/DismissChatMemberAsAdmin",
+        dismissChatMemberAsAdminMap);
+    return DismissChatMemberAsAdminModel.fromJson(response);
+  }
+
+  @override
+  Future<RemoveChatMemberModel> removeChatMember(
+      Map removeChatMemberMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}chat/RemoveChatMember", removeChatMemberMap);
+    return RemoveChatMemberModel.fromJson(response);
+  }
+
+  @override
+  Future<SetChatMemberAsAdminModel> setChatMemberAsAdmin(
+      Map setChatMemberAsAdminMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}chat/SetChatMemberAsAdmin",
+        setChatMemberAsAdminMap);
+    return SetChatMemberAsAdminModel.fromJson(response);
+  }
+
+  @override
+  Future<AddChatMemberModel> addChatMember(Map addChatMemberMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}chat/AddChatMember", addChatMemberMap);
+    return AddChatMemberModel.fromJson(response);
   }
 }

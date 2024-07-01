@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-FetchGroupInfoModel fetchGroupInfoFromJson(String str) =>
+FetchGroupInfoModel fetchGroupInfoModelFromJson(String str) =>
     FetchGroupInfoModel.fromJson(json.decode(str));
 
-String fetchGroupInfoToJson(FetchGroupInfoModel data) =>
+String fetchGroupInfoModelToJson(FetchGroupInfoModel data) =>
     json.encode(data.toJson());
 
 class FetchGroupInfoModel {
@@ -11,8 +11,11 @@ class FetchGroupInfoModel {
   final String message;
   final Data data;
 
-  FetchGroupInfoModel(
-      {required this.status, required this.message, required this.data});
+  FetchGroupInfoModel({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
 
   factory FetchGroupInfoModel.fromJson(Map<String, dynamic> json) =>
       FetchGroupInfoModel(
@@ -32,18 +35,22 @@ class Data {
   final String name;
   final String purpose;
   final String date;
+  final String isgroupowner;
   final List<Member> members;
 
-  Data(
-      {required this.name,
-      required this.purpose,
-      required this.date,
-      required this.members});
+  Data({
+    required this.name,
+    required this.purpose,
+    required this.date,
+    required this.isgroupowner,
+    required this.members,
+  });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         name: json["name"] ?? '',
         purpose: json["purpose"] ?? '',
         date: json["date"] ?? '',
+        isgroupowner: json["isgroupowner"] ?? '',
         members:
             List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
       );
@@ -52,6 +59,7 @@ class Data {
         "name": name,
         "purpose": purpose,
         "date": date,
+        "isgroupowner": isgroupowner,
         "members": List<dynamic>.from(members.map((x) => x.toJson())),
       };
 }
@@ -63,12 +71,13 @@ class Member {
   final String date;
   final String username;
 
-  Member(
-      {required this.id,
-      required this.type,
-      required this.isowner,
-      required this.date,
-      required this.username});
+  Member({
+    required this.id,
+    required this.type,
+    required this.isowner,
+    required this.date,
+    required this.username,
+  });
 
   factory Member.fromJson(Map<String, dynamic> json) => Member(
         id: json["id"],
@@ -83,6 +92,6 @@ class Member {
         "type": type,
         "isowner": isowner,
         "date": date,
-        "username": username
+        "username": username,
       };
 }
