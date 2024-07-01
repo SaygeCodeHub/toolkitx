@@ -91,9 +91,8 @@ class GroupChatScreen extends StatelessWidget {
                                       );
                                     },
                                     alignmentOffset: const Offset(-40.0, 0.0),
-                                    menuChildren: List<MenuItemButton>.generate(
-                                      1,
-                                          (int index) => MenuItemButton(
+                                    menuChildren: [
+                                      MenuItemButton(
                                         onPressed: () {
                                           Navigator.pushNamed(context,
                                               GroupDetailsScreen.routeName,
@@ -101,8 +100,8 @@ class GroupChatScreen extends StatelessWidget {
                                         },
                                         child: Text(
                                             DatabaseUtil.getText('viewDetail')),
-                                      ),
-                                    ),
+                                      )
+                                    ],
                                   ),
                                 ));
                               },

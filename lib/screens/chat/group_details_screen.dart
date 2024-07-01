@@ -6,7 +6,7 @@ import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/chat/widgets/create_group_button.dart';
+import 'package:toolkit/screens/chat/widgets/add_new_chat_member_button.dart';
 import 'package:toolkit/screens/chat/widgets/group_details_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -20,6 +20,7 @@ class GroupDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('idd==============>$groupId');
     context.read<ChatBloc>().add(FetchGroupDetails(groupId: groupId));
     return Scaffold(
       appBar: const GenericAppBar(),
@@ -48,7 +49,7 @@ class GroupDetailsScreen extends StatelessWidget {
                   const SizedBox(height: tiniestSpacing),
                   Text(data.purpose),
                   const SizedBox(height: xxxSmallestSpacing),
-                  const Center(child: CreateGroupButton()),
+                  Center(child: AddNewChatMemberButton(groupId: groupId)),
                   const SizedBox(height: xxxSmallestSpacing),
                   Expanded(
                       child: ListView.separated(
@@ -58,17 +59,32 @@ class GroupDetailsScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return CustomCard(
                                 child: ListTile(
-                                    title: Text(data.members[index].username,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                color: AppColor.black,
-                                                fontWeight: FontWeight.w500)),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(data.members[index].username,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .xSmall
+                                                .copyWith(
+                                                    color: AppColor.black,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                        Visibility(
+                                            visible:
+                                                data.members[index].isowner ==
+                                                    1,
+                                            child: const Text("Group Admin",
+                                                style: TextStyle(
+                                                    color: AppColor.green))),
+                                      ],
+                                    ),
                                     subtitle: Text(data.members[index].type == 1
                                         ? StringConstants.kSystemUser
                                         : StringConstants.kWorkforce),
-                                    trailing: const GroupDetailsPopupMenu()));
+                                    trailing: GroupDetailsPopupMenu(
+                                        groupId: groupId)));
                           },
                           separatorBuilder: (context, index) {
                             return const SizedBox(height: xxTinierSpacing);

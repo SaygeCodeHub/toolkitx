@@ -83,3 +83,43 @@ class GroupDetailsNotFetched extends ChatState {
 
   GroupDetailsNotFetched({required this.errorMessage});
 }
+
+class ChatMemberRemoving extends ChatState {}
+
+class ChatMemberRemoved extends ChatState {}
+
+class ChatMemberNotRemoved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotRemoved({required this.errorMessage});
+}
+
+class SavingChatMemberAsAdmin extends ChatState {}
+
+class ChatMemberAsAdminSaved extends ChatState {}
+
+class ChatMemberAsAdminNotSaved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotSaved({required this.errorMessage});
+}
+
+class ChatMemberAsAdminDismissing extends ChatState {}
+
+class ChatMemberAsAdminDismissed extends ChatState {}
+
+class ChatMemberAsAdminNotDismissed extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotDismissed({required this.errorMessage});
+}
+
+class ChatMemberAdding extends ChatState {}
+
+class ChatMemberAdded extends ChatState {}
+
+class ChatMemberNotAdded extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotAdded({required this.errorMessage});
+}
