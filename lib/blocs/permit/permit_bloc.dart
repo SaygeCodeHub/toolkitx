@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -85,6 +86,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SavePermitOfflineAction>(_saveOfflineData);
     on<PermitInternetActions>(_permitInternetActions);
     on<GenerateOfflinePdf>(_generateOfflinePdf);
+    on<FetchSwitchingScheduleInstructions>(_fetchSwitchingScheduleInstructions);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -2019,6 +2021,27 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(ErrorGeneratingPdfOffline(
           errorMessage: StringConstants.kPDFGenerationError));
+    }
+  }
+
+  FutureOr<void> _fetchSwitchingScheduleInstructions(
+      FetchSwitchingScheduleInstructions event,
+      Emitter<PermitStates> emit) async {
+    emit(FetchingSwitchingScheduleInstructions());
+    try {
+      FetchSwitchingScheduleInstructionsModel
+          fetchSwitchingScheduleInstructionsModel = await _permitRepository
+              .fetchSwitchingScheduleInstructions(event.scheduleId);
+      if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
+        emit(SwitchingScheduleInstructionsFetched(
+            scheduleInstructionDatum:
+                fetchSwitchingScheduleInstructionsModel.data));
+      } else {
+        emit(SwitchingScheduleInstructionsNotFetched(
+            errorMessage: StringConstants.kNoDataFound));
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

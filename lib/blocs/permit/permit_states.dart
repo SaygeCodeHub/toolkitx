@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -382,4 +383,19 @@ class ErrorGeneratingPdfOffline extends PermitStates {
   final String errorMessage;
 
   ErrorGeneratingPdfOffline({required this.errorMessage});
+}
+
+class FetchingSwitchingScheduleInstructions extends PermitStates {}
+
+class SwitchingScheduleInstructionsFetched extends PermitStates {
+  final List<PermitSwithcingScheduleInstructionDatum> scheduleInstructionDatum;
+
+  SwitchingScheduleInstructionsFetched(
+      {required this.scheduleInstructionDatum});
+}
+
+class SwitchingScheduleInstructionsNotFetched extends PermitStates {
+  final String errorMessage;
+
+  SwitchingScheduleInstructionsNotFetched({required this.errorMessage});
 }

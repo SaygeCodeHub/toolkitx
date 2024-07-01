@@ -10,6 +10,11 @@ abstract class StringConstants {
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
   static const String kName = 'Name'; //
+  static const String kSrNo = 'SrNo'; //
+  static const String kViewOptions = 'View Options'; //
+  static const String kEdit = 'Edit'; //
+  static const String kMoveUp = 'Move Up'; //
+  static const String kMoveDown = 'Move Down'; //
   static const String kCompanyName = 'Company Name'; //
   static const String kViewDocument = 'View Document'; //
   static const String kAuthNumber = 'Auth/ØTCP Number'; //

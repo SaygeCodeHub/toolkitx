@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/data/models/permit/open_close_permit_model.dart';
 import 'package:toolkit/data/models/permit/open_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/permit_roles_model.dart';
@@ -74,4 +75,7 @@ abstract class PermitRepository {
   Future<ChangePermitCpModel> changePermitCP(Map changePermitCPMap);
 
   Future<SyncTransferCpPermitModel> syncTransferCp(Map syncTransferCpMap);
+
+  Future<FetchSwitchingScheduleInstructionsModel>
+      fetchSwitchingScheduleInstructions(String scheduleId);
 }
