@@ -67,24 +67,7 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.xSmall.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.bold)),
               const SizedBox(height: tiniestSpacing),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerTextField(
-                      editDate:
-                          DateFormat("dd MMM yyyy").format(DateTime.now()),
-                      onDateChanged: (date) {},
-                    ),
-                  ),
-                  const SizedBox(width: xxxSmallestSpacing),
-                  Expanded(
-                    child: TimePickerTextField(
-                      editTime: DateFormat("HH:mm").format(DateTime.now()),
-                      onTimeChanged: (time) {},
-                    ),
-                  ),
-                ],
-              ),
+              InstructedDateTimeFields(),
               const SizedBox(height: xxxSmallestSpacing),
               Text(StringConstants.kControlEngineer,
                   style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -112,6 +95,9 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                       onTimeChanged: (time) {},
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.watch_later_outlined))
                 ],
               ),
               const SizedBox(height: xxxSmallestSpacing),
@@ -135,6 +121,9 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                       onTimeChanged: (time) {},
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.watch_later_outlined))
                 ],
               ),
               const SizedBox(height: xxxSmallestSpacing),
@@ -152,6 +141,49 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
         child: PrimaryButton(
             onPressed: () {}, textValue: DatabaseUtil.getText('buttonSave')),
       ),
+    );
+  }
+}
+
+class InstructedDateTimeFields extends StatefulWidget {
+  const InstructedDateTimeFields({super.key});
+
+  @override
+  State<InstructedDateTimeFields> createState() =>
+      _InstructedDateTimeFieldsState();
+}
+
+class _InstructedDateTimeFieldsState extends State<InstructedDateTimeFields> {
+  bool showInstructedDateTime = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: DatePickerTextField(
+            editDate: showInstructedDateTime == true
+                ? DateFormat("dd MMM yyyy").format(DateTime.now())
+                : '',
+            onDateChanged: (date) {},
+          ),
+        ),
+        const SizedBox(width: xxxSmallestSpacing),
+        Expanded(
+          child: TimePickerTextField(
+            editTime: DateFormat("HH:mm").format(DateTime.now()),
+            onTimeChanged: (time) {},
+          ),
+        ),
+        // const SizedBox(width: xxTinierSpacing),
+        IconButton(
+            onPressed: () {
+              setState(() {
+                showInstructedDateTime = true;
+              });
+            },
+            icon: const Icon(Icons.watch_later_outlined))
+      ],
     );
   }
 }
