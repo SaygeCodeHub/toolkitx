@@ -717,8 +717,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       FetchGroupInfoModel fetchGroupInfoModel = await _chatBoxRepository
-          .fetchGroupDetails(hashCode, event.groupId, userId);
+          .fetchGroupDetails(hashCode, event.groupId, userId, userType);
       if (fetchGroupInfoModel.status == 200) {
         emit(GroupDetailsFetched(
             fetchGroupInfoModel: fetchGroupInfoModel, apiKey: apiKey));
@@ -736,10 +738,15 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      userId = await EncryptData.decryptAESPrivateKey(
+          userId, await _customerCache.getApiKey(CacheKeys.apiKey));
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
       Map removeChatMemberMap = {
         "groupid": event.groupId,
-        "userid": event.memberId,
-        "usertype": event.memberType,
+        "userid": event.isExitGroup == true ? userId : event.memberId,
+        "usertype": event.isExitGroup == true ? userType : event.memberType,
         "hashcode": hashCode
       };
       RemoveChatMemberModel removeChatMemberModel =

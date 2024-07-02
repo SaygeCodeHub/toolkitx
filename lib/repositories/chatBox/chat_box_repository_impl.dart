@@ -60,9 +60,9 @@ class CheckBoxRepositoryImpl extends ChatBoxRepository {
 
   @override
   Future<FetchGroupInfoModel> fetchGroupDetails(
-      String hashCode, String groupId, String userId) async {
+      String hashCode, String groupId, String userId, String userType) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId&userid=$userId");
+        "${ApiConstants.baseUrl}chat/GetGroupInfo?hashcode=$hashCode&groupid=$groupId&userid=$userId&usertype=$userType");
     return FetchGroupInfoModel.fromJson(response);
   }
 
