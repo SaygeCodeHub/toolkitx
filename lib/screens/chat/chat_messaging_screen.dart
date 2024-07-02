@@ -56,7 +56,13 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
                   chatScreenName = AllChatsScreen.routeName;
                   Navigator.pop(context);
                 },
-                actions: const [ChatDetailsPopUpMenu()]),
+                actions: [
+                  Visibility(
+                      visible:
+                          context.read<ChatBloc>().chatDetailsMap['rtype'] ==
+                              '3',
+                      child: const ChatDetailsPopUpMenu())
+                ]),
             body: Column(children: [
               Expanded(
                   child: StreamBuilder<List<Map<String, dynamic>>>(

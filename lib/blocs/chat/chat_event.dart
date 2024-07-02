@@ -77,11 +77,13 @@ class RemoveChatMember extends ChatEvent {
   final String groupId;
   final String memberId;
   final String memberType;
+  final bool isExitGroup;
 
   RemoveChatMember(
       {required this.groupId,
       required this.memberId,
-      required this.memberType});
+      required this.memberType,
+      required this.isExitGroup});
 }
 
 class SetChatMemberAsAdmin extends ChatEvent {

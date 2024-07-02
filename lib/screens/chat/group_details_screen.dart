@@ -7,6 +7,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/widgets/add_new_chat_member_button.dart';
+import 'package:toolkit/screens/chat/widgets/group_details_list_popup_menu.dart';
 import 'package:toolkit/screens/chat/widgets/group_details_popup_menu.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -22,7 +23,7 @@ class GroupDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ChatBloc>().add(FetchGroupDetails(groupId: groupId));
     return Scaffold(
-      appBar: const GenericAppBar(),
+      appBar: GenericAppBar(actions: [GroupDetailsPopupMenu(groupId: groupId)]),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -86,8 +87,10 @@ class GroupDetailsScreen extends StatelessWidget {
                                         ? StringConstants.kSystemUser
                                         : StringConstants.kWorkforce),
                                     trailing: Visibility(
-                                      visible: data.isgroupowner == "1",
-                                      child: GroupDetailsPopupMenu(
+                                      visible: (data.isgroupowner == "1" &&
+                                          data.members[index].iscurrentuser ==
+                                              '0'),
+                                      child: GroupDetailsListPopupMenu(
                                         groupId: groupId,
                                         memberId:
                                             data.members[index].id.toString(),

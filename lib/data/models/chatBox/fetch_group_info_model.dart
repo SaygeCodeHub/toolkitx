@@ -47,10 +47,10 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        name: json["name"] ?? '',
-        purpose: json["purpose"] ?? '',
-        date: json["date"] ?? '',
-        isgroupowner: json["isgroupowner"] ?? '',
+        name: json["name"],
+        purpose: json["purpose"],
+        date: json["date"],
+        isgroupowner: json["isgroupowner"],
         members:
             List<Member>.from(json["members"].map((x) => Member.fromJson(x))),
       );
@@ -70,6 +70,7 @@ class Member {
   final int isowner;
   final String date;
   final String username;
+  final String iscurrentuser;
 
   Member({
     required this.id,
@@ -77,6 +78,7 @@ class Member {
     required this.isowner,
     required this.date,
     required this.username,
+    required this.iscurrentuser,
   });
 
   factory Member.fromJson(Map<String, dynamic> json) => Member(
@@ -85,6 +87,7 @@ class Member {
         isowner: json["isowner"],
         date: json["date"],
         username: json["username"],
+        iscurrentuser: json["iscurrentuser"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,5 +96,6 @@ class Member {
         "isowner": isowner,
         "date": date,
         "username": username,
+        "iscurrentuser": iscurrentuser,
       };
 }

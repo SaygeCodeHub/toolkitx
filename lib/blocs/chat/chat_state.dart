@@ -88,7 +88,11 @@ class GroupDetailsNotFetched extends ChatState {
 
 class ChatMemberRemoving extends ChatState {}
 
-class ChatMemberRemoved extends ChatState {}
+class ChatMemberRemoved extends ChatState {
+  final bool isExitGroup;
+
+  ChatMemberRemoved({required this.isExitGroup});
+}
 
 class ChatMemberNotRemoved extends ChatState {
   final String errorMessage;
