@@ -66,6 +66,7 @@ class UsersScreen extends StatelessWidget {
                   } else if (state is ChatGroupCreated) {
                     ProgressBar.dismiss(context);
                     Navigator.pop(context);
+                    context.read<ChatBloc>().add(FetchAllGroups());
                   } else if (state is ChatGroupCannotCreate) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.errorMessage, '');

@@ -408,6 +408,12 @@ class DatabaseHelper {
     return messages;
   }
 
+  Future<void> deleteGroupChat(String rid) async {
+    final db = await database;
+    await db.delete('chat_messages',
+        where: 'rid = ? and rtype = 3', whereArgs: [rid]);
+  }
+
   Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
     final List<Map<String, dynamic>> result = await db.rawQuery(

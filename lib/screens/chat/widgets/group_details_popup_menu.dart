@@ -30,8 +30,10 @@ class GroupDetailsPopupMenu extends StatelessWidget {
           ProgressBar.show(context);
         } else if (state is ChatMemberRemoved) {
           ProgressBar.dismiss(context);
-          Navigator.pop(context);
-          Navigator.pushReplacementNamed(context, GroupChatScreen.routeName);
+          if (state.isExitGroup == true) {
+            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, GroupChatScreen.routeName);
+          }
         } else if (state is ChatMemberNotRemoved) {
           ProgressBar.dismiss(context);
           showCustomSnackBar(context, state.errorMessage, '');

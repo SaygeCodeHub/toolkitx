@@ -752,7 +752,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       RemoveChatMemberModel removeChatMemberModel =
           await _chatBoxRepository.removeChatMember(removeChatMemberMap);
       if (removeChatMemberModel.message == '1') {
-        emit(ChatMemberRemoved());
+        if (event.isExitGroup) {
+          await _databaseHelper.deleteGroupChat(event.groupId);
+        }
+        emit(ChatMemberRemoved(isExitGroup: event.isExitGroup));
       } else {
         emit(ChatMemberNotRemoved(errorMessage: removeChatMemberModel.message));
       }

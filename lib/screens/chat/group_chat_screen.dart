@@ -70,7 +70,7 @@ class GroupChatScreen extends StatelessWidget {
                                         .whenComplete(() {
                                       context
                                           .read<ChatBloc>()
-                                          .add(FetchChatsList());
+                                          .add(FetchAllGroups());
                                     });
                                   },
                                   leading: Container(
@@ -128,6 +128,8 @@ class GroupChatScreen extends StatelessWidget {
                                             'employee_name': data[index].name,
                                             'rtype': '3'
                                           };
+                                          print(
+                                              'chatDetailsMap=============>${context.read<ChatBloc>().chatDetailsMap}');
                                           chatScreenName =
                                               ChatMessagingScreen.routeName;
                                           Navigator.pushNamed(context,

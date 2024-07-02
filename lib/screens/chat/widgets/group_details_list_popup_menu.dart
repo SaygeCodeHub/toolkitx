@@ -29,7 +29,9 @@ class GroupDetailsListPopupMenu extends StatelessWidget {
           ProgressBar.show(context);
         } else if (state is ChatMemberRemoved) {
           ProgressBar.dismiss(context);
-          context.read<ChatBloc>().add(FetchGroupDetails(groupId: groupId));
+          if (state.isExitGroup == false) {
+            context.read<ChatBloc>().add(FetchGroupDetails(groupId: groupId));
+          }
         } else if (state is ChatMemberNotRemoved) {
           ProgressBar.dismiss(context);
           showCustomSnackBar(context, state.errorMessage, '');
