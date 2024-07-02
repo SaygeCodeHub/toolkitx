@@ -87,6 +87,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<PermitInternetActions>(_permitInternetActions);
     on<GenerateOfflinePdf>(_generateOfflinePdf);
     on<FetchSwitchingScheduleInstructions>(_fetchSwitchingScheduleInstructions);
+    on<UpdatePermitSwitchingSchedule>(_updatePermitSwitchingSchedule);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -2043,5 +2044,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<FutureOr<void>> _updatePermitSwitchingSchedule(UpdatePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleUpdating());
+    Map editSwitchingScheduleMap = {
+      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+      "instructionid": '',
+      "userid": await _customerCache.getUserId(CacheKeys.userId),
+      "instructionreceivedby": "8",
+      "controlengineer": "",
+      "instructiondate": "18.06.2024",
+      "instructiontime": "11:18",
+      "carriedoutdate": "",
+      "carriedouttime": "",
+      "carriedoutconfirmeddate": "",
+      "carriedoutconfirmedtime": "",
+      "safetykeynumber": "KEY"
+    };
   }
 }

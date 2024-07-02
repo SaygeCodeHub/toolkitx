@@ -6,8 +6,11 @@ import '../../../widgets/expansion_tile_border.dart';
 class InstructionReceivedExpansionTile extends StatefulWidget {
   const InstructionReceivedExpansionTile({
     super.key,
+    required this.instructionList, required this.editSwitchingScheduleMap,
   });
 
+  final List instructionList;
+  final Map editSwitchingScheduleMap;
 
   @override
   State<InstructionReceivedExpansionTile> createState() =>
@@ -30,20 +33,28 @@ class InstructionReceivedExpansionTileState
             key: GlobalKey(),
             title: Text(selectedValue),
             children: [
-              MediaQuery(
-                  data: MediaQuery.of(context).removePadding(removeTop: true),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 0,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                            contentPadding:
-                                const EdgeInsets.only(left: xxTinierSpacing),
-                            title: Text(''),
-                            onTap: () {
-                              setState(() {});
-                            });
-                      }))
+              SizedBox(
+                height: 120,
+                child: MediaQuery(
+                    data: MediaQuery.of(context).removePadding(removeTop: true),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: widget.instructionList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                              contentPadding:
+                                  const EdgeInsets.only(left: xxTinierSpacing),
+                              title: Text(
+                                  widget.instructionList[index].userFullName),
+                              onTap: () {
+                                setState(() {
+                                  selectedValue = widget
+                                      .instructionList[index].userFullName;
+                                  widget.editSwitchingScheduleMap['instructionreceivedby'] = widget.instructionList[index].userId;
+                                });
+                              });
+                        })),
+              )
             ]));
   }
 }
