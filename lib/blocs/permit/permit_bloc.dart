@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -2046,21 +2047,54 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     }
   }
 
-  Future<FutureOr<void>> _updatePermitSwitchingSchedule(UpdatePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+  Future<FutureOr<void>> _updatePermitSwitchingSchedule(
+      UpdatePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleUpdating());
-    Map editSwitchingScheduleMap = {
-      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-      "instructionid": '',
-      "userid": await _customerCache.getUserId(CacheKeys.userId),
-      "instructionreceivedby": "8",
-      "controlengineer": "",
-      "instructiondate": "18.06.2024",
-      "instructiontime": "11:18",
-      "carriedoutdate": "",
-      "carriedouttime": "",
-      "carriedoutconfirmeddate": "",
-      "carriedoutconfirmedtime": "",
-      "safetykeynumber": "KEY"
-    };
+    try {
+      Map editSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.editSwitchingScheduleMap['instructionid'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "instructionreceivedby":
+            event.editSwitchingScheduleMap['instructionreceivedby'] ?? '',
+        "controlengineer":
+            event.editSwitchingScheduleMap['controlengineer'] ?? '',
+        "instructiondate":
+            event.editSwitchingScheduleMap['instructiondate'] ?? '',
+        "instructiontime":
+            event.editSwitchingScheduleMap['instructiontime'] ?? '',
+        "carriedoutdate":
+            event.editSwitchingScheduleMap['carriedoutdate'] ?? '',
+        "carriedouttime":
+            event.editSwitchingScheduleMap['carriedouttime'] ?? '',
+        "carriedoutconfirmeddate":
+            event.editSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+        "carriedoutconfirmedtime":
+            event.editSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+        "safetykeynumber":
+            event.editSwitchingScheduleMap['safetykeynumber'] ?? ''
+      };
+
+      if (event.editSwitchingScheduleMap['carriedoutdate'] ==
+              event.editSwitchingScheduleMap['carriedoutconfirmeddate'] &&
+          event.editSwitchingScheduleMap['carriedouttime'] ==
+              event.editSwitchingScheduleMap['carriedoutconfirmedtime']) {
+        UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
+            await _permitRepository
+                .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
+        if (updatePermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleUpdated());
+        } else {
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage: updatePermitSwitchingScheduleModel.message));
+        }
+      } else {
+        emit(PermitSwitchingScheduleNotUpdated(
+            errorMessage:
+                'Carriedout DateTime not equal to Carriedout Confirmed DateTime'));
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotUpdated(errorMessage: e.toString()));
+    }
   }
 }

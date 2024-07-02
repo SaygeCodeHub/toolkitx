@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
@@ -10,9 +9,11 @@ import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.d
 import 'package:toolkit/screens/permit/widgets/instructed_date_time_fields.dart';
 import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
@@ -43,6 +44,10 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: BlocBuilder<PermitBloc, PermitStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is FetchingPermitMaster ||
+                  currentState is PermitMasterFetched ||
+                  currentState is CouldNotFetchPermitMaster,
               builder: (context, state) {
                 if (state is FetchingPermitMaster) {
                   return Center(
@@ -85,6 +90,8 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         InstructionReceivedExpansionTile(
                           instructionList: state.permitGetMasterModel.data[3],
                           editSwitchingScheduleMap: editSwitchingScheduleMap,
+                          editName: permitSwithcingScheduleInstructionDatum
+                              .instructionreceivedbyname,
                         ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kInstructedDateTime,
@@ -108,6 +115,8 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                           controlEngineerList:
                               state.permitGetMasterModel.data[3],
                           editSwitchingScheduleMap: editSwitchingScheduleMap,
+                          editValue: permitSwithcingScheduleInstructionDatum
+                              .controlengineername,
                         ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kCarriedoutDateTime,
@@ -130,6 +139,7 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         PermitSwitchingDateTimeFields(
                             callBackFunctionForDateTime:
                                 (String date, String time) {
+                          print('date==========>$date');
                           editSwitchingScheduleMap["carriedoutconfirmeddate"] =
                               date;
                           editSwitchingScheduleMap["carriedoutconfirmedtime"] =
@@ -142,6 +152,8 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: tiniestSpacing),
                         TextFieldWidget(
+                          value: permitSwithcingScheduleInstructionDatum
+                              .safetykeynumber,
                           onTextFieldChanged: (textField) {
                             editSwitchingScheduleMap['safetykeynumber'] =
                                 textField;
@@ -158,11 +170,27 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
           )),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
-        child: PrimaryButton(
-            onPressed: () {
-              print('map=============>$editSwitchingScheduleMap');
-            },
-            textValue: DatabaseUtil.getText('buttonSave')),
+        child: BlocListener<PermitBloc, PermitStates>(
+          listener: (context, state) {
+            if (state is PermitSwitchingScheduleUpdating) {
+              ProgressBar.show(context);
+            } else if (state is PermitSwitchingScheduleUpdated) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+            } else if (state is PermitSwitchingScheduleNotUpdated) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.errorMessage, '');
+            }
+          },
+          child: PrimaryButton(
+              onPressed: () {
+                editSwitchingScheduleMap['instructionid'] =
+                    permitSwithcingScheduleInstructionDatum.id;
+                context.read<PermitBloc>().add(UpdatePermitSwitchingSchedule(
+                    editSwitchingScheduleMap: editSwitchingScheduleMap));
+              },
+              textValue: DatabaseUtil.getText('buttonSave')),
+        ),
       ),
     );
   }

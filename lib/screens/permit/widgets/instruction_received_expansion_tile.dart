@@ -6,11 +6,14 @@ import '../../../widgets/expansion_tile_border.dart';
 class InstructionReceivedExpansionTile extends StatefulWidget {
   const InstructionReceivedExpansionTile({
     super.key,
-    required this.instructionList, required this.editSwitchingScheduleMap,
+    required this.instructionList,
+    required this.editSwitchingScheduleMap,
+    required this.editName,
   });
 
   final List instructionList;
   final Map editSwitchingScheduleMap;
+  final String editName;
 
   @override
   State<InstructionReceivedExpansionTile> createState() =>
@@ -20,6 +23,12 @@ class InstructionReceivedExpansionTile extends StatefulWidget {
 class InstructionReceivedExpansionTileState
     extends State<InstructionReceivedExpansionTile> {
   String selectedValue = '';
+
+  @override
+  void initState() {
+    selectedValue = widget.editName;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +59,9 @@ class InstructionReceivedExpansionTileState
                                 setState(() {
                                   selectedValue = widget
                                       .instructionList[index].userFullName;
-                                  widget.editSwitchingScheduleMap['instructionreceivedby'] = widget.instructionList[index].userId;
+                                  widget.editSwitchingScheduleMap[
+                                          'instructionreceivedby'] =
+                                      widget.instructionList[index].userId;
                                 });
                               });
                         })),

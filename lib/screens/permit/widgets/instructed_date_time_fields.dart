@@ -32,7 +32,8 @@ class _PermitSwitchingDateTimeFieldsState
             hintText: selectedDate ?? '',
             onDateChanged: (date) {
               selectedDate = date;
-              widget.callBackFunctionForDateTime(selectedDate!, selectedTime!);
+              widget.callBackFunctionForDateTime(
+                  selectedDate ?? '', selectedTime ?? '');
             },
           ),
         ),
@@ -42,7 +43,8 @@ class _PermitSwitchingDateTimeFieldsState
             hintText: selectedTime ?? '',
             onTimeChanged: (time) {
               selectedTime = time;
-              widget.callBackFunctionForDateTime(selectedDate!, selectedTime!);
+              widget.callBackFunctionForDateTime(
+                  selectedDate ?? '', selectedTime ?? '');
             },
           ),
         ),
@@ -53,7 +55,8 @@ class _PermitSwitchingDateTimeFieldsState
                 selectedTime = DateFormat("HH:mm").format(DateTime.now());
                 String formatDate =
                     DateFormat('dd.MM.yyyy').format(DateTime.now());
-                widget.callBackFunctionForDateTime(formatDate, selectedTime!);
+                widget.callBackFunctionForDateTime(
+                    formatDate, selectedTime ?? '');
               });
             },
             icon: const Icon(Icons.watch_later_outlined))

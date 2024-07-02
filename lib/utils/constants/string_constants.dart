@@ -695,6 +695,7 @@ abstract class StringConstants {
   static const String kInstructedDateTime = "Instructed DateTime :";
   static const String kControlEngineer = "Control Engineer :";
   static const String kCarriedoutDateTime = "Carriedout DateTime :";
-  static const String kCarriedoutConfirmedDateTime = "Carriedout Confirmed DateTime:";
+  static const String kCarriedoutConfirmedDateTime =
+      "Carriedout Confirmed DateTime:";
   static const String kSafetyKeyNumber = "Safety Key Number:";
 }

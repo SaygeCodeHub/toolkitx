@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -8,8 +11,11 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 class PermitScheduleInstructionBottomSheet extends StatelessWidget {
   const PermitScheduleInstructionBottomSheet(
-      {super.key, required this.permitSwithcingScheduleInstructionDatum});
+      {super.key,
+      required this.permitSwithcingScheduleInstructionDatum,
+      required this.scheduleId});
 
+  final String scheduleId;
   final PermitSwithcingScheduleInstructionDatum
       permitSwithcingScheduleInstructionDatum;
 
@@ -26,25 +32,39 @@ class PermitScheduleInstructionBottomSheet extends StatelessWidget {
                 children: [
                   ListTile(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, EditSwitchingInstructionScreen.routeName,
-                            arguments: permitSwithcingScheduleInstructionDatum);
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context,
+                                EditSwitchingInstructionScreen.routeName,
+                                arguments:
+                                    permitSwithcingScheduleInstructionDatum)
+                            .then((_) => context.read<PermitBloc>().add(
+                                FetchSwitchingScheduleInstructions(
+                                    scheduleId: scheduleId)));
                       },
                       leading: const Icon(Icons.edit,
                           size: kPermitScheduleInstIconSize),
                       title: Text(StringConstants.kEdit,
                           style: Theme.of(context).textTheme.xSmall)),
                   ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       leading: const Icon(Icons.arrow_upward,
                           size: kPermitScheduleInstIconSize),
                       title: Text(StringConstants.kMoveUp,
                           style: Theme.of(context).textTheme.xSmall)),
                   ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       leading: const Icon(Icons.arrow_downward,
                           size: kPermitScheduleInstIconSize),
                       title: Text(StringConstants.kMoveDown,
                           style: Theme.of(context).textTheme.xSmall)),
                   ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       leading: const Icon(Icons.delete,
                           size: kPermitScheduleInstIconSize),
                       title: Text(StringConstants.kDelete,

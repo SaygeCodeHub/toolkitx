@@ -8,10 +8,12 @@ class ControlEngineerExpansionTile extends StatefulWidget {
     super.key,
     required this.controlEngineerList,
     required this.editSwitchingScheduleMap,
+    required this.editValue,
   });
 
   final List controlEngineerList;
   final Map editSwitchingScheduleMap;
+  final String editValue;
 
   @override
   State<ControlEngineerExpansionTile> createState() =>
@@ -21,6 +23,12 @@ class ControlEngineerExpansionTile extends StatefulWidget {
 class ControlEngineerExpansionTileState
     extends State<ControlEngineerExpansionTile> {
   String selectedValue = '';
+
+  @override
+  void initState() {
+    selectedValue = widget.editValue;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +53,8 @@ class ControlEngineerExpansionTileState
                           return ListTile(
                               contentPadding:
                                   const EdgeInsets.only(left: xxTinierSpacing),
-                              title: Text(
-                                  widget.controlEngineerList[index].userFullName),
+                              title: Text(widget
+                                  .controlEngineerList[index].userFullName),
                               onTap: () {
                                 setState(() {
                                   selectedValue = widget
