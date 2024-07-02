@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
-import 'package:toolkit/screens/incident/widgets/date_picker.dart';
-import 'package:toolkit/screens/incident/widgets/time_picker.dart';
 import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.dart';
+import 'package:toolkit/screens/permit/widgets/instructed_date_time_fields.dart';
 import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -27,6 +25,7 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map editSwitchingScheduleMap = {};
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(
@@ -67,7 +66,11 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.xSmall.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.bold)),
               const SizedBox(height: tiniestSpacing),
-              InstructedDateTimeFields(),
+              PermitSwitchingDateTimeFields(
+                  callBackFunctionForDateTime: (String date, String time) {
+                editSwitchingScheduleMap["instructiondate"] = date;
+                editSwitchingScheduleMap["instructiontime"] = time;
+              }),
               const SizedBox(height: xxxSmallestSpacing),
               Text(StringConstants.kControlEngineer,
                   style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -79,53 +82,21 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.xSmall.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.bold)),
               const SizedBox(height: tiniestSpacing),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerTextField(
-                      editDate:
-                          DateFormat("dd MMM yyyy").format(DateTime.now()),
-                      onDateChanged: (date) {},
-                    ),
-                  ),
-                  const SizedBox(width: xxxSmallestSpacing),
-                  Expanded(
-                    child: TimePickerTextField(
-                      editTime: DateFormat("HH:mm").format(DateTime.now()),
-                      onTimeChanged: (time) {},
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.watch_later_outlined))
-                ],
-              ),
+              PermitSwitchingDateTimeFields(
+                  callBackFunctionForDateTime: (String date, String time) {
+                editSwitchingScheduleMap["carriedoutdate"] = date;
+                editSwitchingScheduleMap["carriedouttime"] = time;
+              }),
               const SizedBox(height: xxxSmallestSpacing),
               Text(StringConstants.kCarriedoutConfirmedDateTime,
                   style: Theme.of(context).textTheme.xSmall.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.bold)),
               const SizedBox(height: tiniestSpacing),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerTextField(
-                      editDate:
-                          DateFormat("dd MMM yyyy").format(DateTime.now()),
-                      onDateChanged: (date) {},
-                    ),
-                  ),
-                  const SizedBox(width: xxxSmallestSpacing),
-                  Expanded(
-                    child: TimePickerTextField(
-                      editTime: DateFormat("HH:mm").format(DateTime.now()),
-                      onTimeChanged: (time) {},
-                    ),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.watch_later_outlined))
-                ],
-              ),
+              PermitSwitchingDateTimeFields(
+                  callBackFunctionForDateTime: (String date, String time) {
+                editSwitchingScheduleMap["carriedoutconfirmeddate"] = date;
+                editSwitchingScheduleMap["carriedoutconfirmedtime"] = time;
+              }),
               const SizedBox(height: xxxSmallestSpacing),
               Text(StringConstants.kSafetyKeyNumber,
                   style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -139,51 +110,11 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
         child: PrimaryButton(
-            onPressed: () {}, textValue: DatabaseUtil.getText('buttonSave')),
-      ),
-    );
-  }
-}
-
-class InstructedDateTimeFields extends StatefulWidget {
-  const InstructedDateTimeFields({super.key});
-
-  @override
-  State<InstructedDateTimeFields> createState() =>
-      _InstructedDateTimeFieldsState();
-}
-
-class _InstructedDateTimeFieldsState extends State<InstructedDateTimeFields> {
-  bool showInstructedDateTime = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: DatePickerTextField(
-            editDate: showInstructedDateTime == true
-                ? DateFormat("dd MMM yyyy").format(DateTime.now())
-                : '',
-            onDateChanged: (date) {},
-          ),
-        ),
-        const SizedBox(width: xxxSmallestSpacing),
-        Expanded(
-          child: TimePickerTextField(
-            editTime: DateFormat("HH:mm").format(DateTime.now()),
-            onTimeChanged: (time) {},
-          ),
-        ),
-        // const SizedBox(width: xxTinierSpacing),
-        IconButton(
             onPressed: () {
-              setState(() {
-                showInstructedDateTime = true;
-              });
+              print('map=============>$editSwitchingScheduleMap');
             },
-            icon: const Icon(Icons.watch_later_outlined))
-      ],
+            textValue: DatabaseUtil.getText('buttonSave')),
+      ),
     );
   }
 }
