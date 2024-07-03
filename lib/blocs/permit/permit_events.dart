@@ -231,3 +231,15 @@ class AddPermitSwitchingSchedule extends PermitEvents {
 
   AddPermitSwitchingSchedule({required this.addSwitchingScheduleMap});
 }
+
+class MoveDownPermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  MoveDownPermitSwitchingSchedule({required this.instructionId});
+}
+
+class MoveUpPermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  MoveUpPermitSwitchingSchedule({required this.instructionId});
+}

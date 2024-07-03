@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
 
 import '../../data/cache/cache_keys.dart';
@@ -91,6 +93,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<FetchSwitchingScheduleInstructions>(_fetchSwitchingScheduleInstructions);
     on<UpdatePermitSwitchingSchedule>(_updatePermitSwitchingSchedule);
     on<AddPermitSwitchingSchedule>(_addPermitSwitchingSchedule);
+    on<MoveDownPermitSwitchingSchedule>(_moveDownPermitSwitchingSchedule);
+    on<MoveUpPermitSwitchingSchedule>(_moveUpPermitSwitchingSchedule);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -2156,6 +2160,52 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _moveDownPermitSwitchingSchedule(
+      MoveDownPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleMovingDown());
+    try {
+      Map moveDownSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      MoveDownPermitSwitchingScheduleModel
+          moveDownPermitSwitchingScheduleModel = await _permitRepository
+              .moveDownPermitSwitchingSchedule(moveDownSwitchingScheduleMap);
+      if (moveDownPermitSwitchingScheduleModel.message == '1') {
+        emit(PermitSwitchingScheduleMovedDown());
+      } else {
+        emit(PermitSwitchingScheduleNotMovedDown(
+            errorMessage: moveDownPermitSwitchingScheduleModel.message));
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _moveUpPermitSwitchingSchedule(
+      MoveUpPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleMovingUp());
+    try {
+      Map moveUpSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      MoveUpPermitSwitchingScheduleModel moveUpPermitSwitchingScheduleModel =
+          await _permitRepository
+              .moveUpPermitSwitchingSchedule(moveUpSwitchingScheduleMap);
+      if (moveUpPermitSwitchingScheduleModel.message == '1') {
+        emit(PermitSwitchingScheduleMovedUp());
+      } else {
+        emit(PermitSwitchingScheduleNotMovedUp(
+            errorMessage: moveUpPermitSwitchingScheduleModel.message));
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotMovedUp(errorMessage: e.toString()));
     }
   }
 }

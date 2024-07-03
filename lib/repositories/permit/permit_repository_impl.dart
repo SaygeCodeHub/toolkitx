@@ -6,6 +6,8 @@ import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
 import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
@@ -228,5 +230,23 @@ class PermitRepositoryImpl extends PermitRepository {
         "${ApiConstants.baseUrl}permit/AddPermitSwitchingScheduleInstruction",
         addSwitchingScheduleMap);
     return AddPermitSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<MoveDownPermitSwitchingScheduleModel> moveDownPermitSwitchingSchedule(
+      Map moveDownSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/MovePermitSwitchingScheduleInstructionDown",
+        moveDownSwitchingScheduleMap);
+    return MoveDownPermitSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<MoveUpPermitSwitchingScheduleModel> moveUpPermitSwitchingSchedule(
+      Map moveUpSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/MovePermitSwitchingScheduleInstructionUp",
+        moveUpSwitchingScheduleMap);
+    return MoveUpPermitSwitchingScheduleModel.fromJson(response);
   }
 }
