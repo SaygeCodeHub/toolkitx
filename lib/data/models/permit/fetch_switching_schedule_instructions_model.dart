@@ -72,7 +72,7 @@ class PermitSwithcingScheduleInstructionDatum {
           controlengineername: json["controlengineername"] ?? '',
           carriedoutdate: json["carriedoutdate"] ?? '',
           carriedoutconfirmeddate: json["carriedoutconfirmeddate"] ?? '',
-          safetykeynumber: json["safetykeynumber"]);
+          safetykeynumber: json["safetykeynumber"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,

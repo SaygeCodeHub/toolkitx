@@ -219,3 +219,15 @@ class FetchSwitchingScheduleInstructions extends PermitEvents {
 
   FetchSwitchingScheduleInstructions({required this.scheduleId});
 }
+
+class UpdatePermitSwitchingSchedule extends PermitEvents {
+  final Map editSwitchingScheduleMap;
+
+  UpdatePermitSwitchingSchedule({required this.editSwitchingScheduleMap});
+}
+
+class AddPermitSwitchingSchedule extends PermitEvents {
+  final Map addSwitchingScheduleMap;
+
+  AddPermitSwitchingSchedule({required this.addSwitchingScheduleMap});
+}

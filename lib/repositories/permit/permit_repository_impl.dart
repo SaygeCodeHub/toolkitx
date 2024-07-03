@@ -1,5 +1,6 @@
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -10,6 +11,7 @@ import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
 import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
 import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
 import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
+import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 
@@ -208,5 +210,23 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/GetSwitchingScheduleInstructions?switchingscheduleid=$scheduleId&hashcode=$hashCode");
     return FetchSwitchingScheduleInstructionsModel.fromJson(response);
+  }
+
+  @override
+  Future<UpdatePermitSwitchingScheduleModel> updatePermitSwitchingSchedule(
+      Map editSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/UpdatePermitSwitchingScheduleInstruction",
+        editSwitchingScheduleMap);
+    return UpdatePermitSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<AddPermitSwitchingScheduleModel> addPermitSwitchingSchedule(
+      Map addSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/AddPermitSwitchingScheduleInstruction",
+        addSwitchingScheduleMap);
+    return AddPermitSwitchingScheduleModel.fromJson(response);
   }
 }

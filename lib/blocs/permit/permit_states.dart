@@ -399,3 +399,23 @@ class SwitchingScheduleInstructionsNotFetched extends PermitStates {
 
   SwitchingScheduleInstructionsNotFetched({required this.errorMessage});
 }
+
+class PermitSwitchingScheduleUpdating extends PermitStates {}
+
+class PermitSwitchingScheduleUpdated extends PermitStates {}
+
+class PermitSwitchingScheduleNotUpdated extends PermitStates {
+  final String errorMessage;
+
+  PermitSwitchingScheduleNotUpdated({required this.errorMessage});
+}
+
+class PermitSwitchingScheduleAdding extends PermitStates {}
+
+class PermitSwitchingScheduleAdded extends PermitStates {}
+
+class PermitSwitchingScheduleNotAdded extends PermitStates {
+  final String errorMessage;
+
+  PermitSwitchingScheduleNotAdded({required this.errorMessage});
+}

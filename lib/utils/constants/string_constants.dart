@@ -690,4 +690,20 @@ abstract class StringConstants {
   static const String kEndsOnMandatory = "Ends on field is mandatory";
   static const String kPleaseSelectRoom = 'Please select a room to proceed';
   static const String kGroupAdmin = "Group Admin";
+  static const String kEquipmentUIN = "Equipment UIN";
+  static const String kOperation = "Operation";
+  static const String kInstructionReceivedBy = "Instruction Received By :";
+  static const String kInstructedDateTime = "Instructed DateTime :";
+  static const String kControlEngineer = "Control Engineer :";
+  static const String kCarriedoutDateTime = "Carriedout DateTime :";
+  static const String kCarriedoutConfirmedDateTime =
+      "Carriedout Confirmed DateTime:";
+  static const String kSafetyKeyNumber = "Safety Key Number:";
+  static const String kCarriedoutNotSimilarToCarriedoutConfirmed =
+      "Carriedout DateTime not equal to Carriedout Confirmed DateTime";
+  static const String kAdd = "Add";
+  static const String kLocationEquipmentOperationMandatory =
+      "Location, Equipment UIN and Operation fields are Mandatory";
+  static const String kIncludingVoltageLevel =
+      "Including voltage level if appropriate";
 }
