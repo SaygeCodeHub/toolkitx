@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
 
@@ -89,6 +90,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<GenerateOfflinePdf>(_generateOfflinePdf);
     on<FetchSwitchingScheduleInstructions>(_fetchSwitchingScheduleInstructions);
     on<UpdatePermitSwitchingSchedule>(_updatePermitSwitchingSchedule);
+    on<AddPermitSwitchingSchedule>(_addPermitSwitchingSchedule);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -2091,10 +2093,69 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       } else {
         emit(PermitSwitchingScheduleNotUpdated(
             errorMessage:
-                'Carriedout DateTime not equal to Carriedout Confirmed DateTime'));
+                StringConstants.kCarriedoutNotSimilarToCarriedoutConfirmed));
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotUpdated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addPermitSwitchingSchedule(
+      AddPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleAdding());
+    try {
+      Map addSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.addSwitchingScheduleMap['instructionid'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "location": event.addSwitchingScheduleMap['location'],
+        "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'],
+        "operation": event.addSwitchingScheduleMap['operation'],
+        "instructionreceivedby":
+            event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
+        "controlengineer":
+            event.addSwitchingScheduleMap['controlengineer'] ?? '',
+        "instructiondate":
+            event.addSwitchingScheduleMap['instructiondate'] ?? '',
+        "instructiontime":
+            event.addSwitchingScheduleMap['instructiontime'] ?? '',
+        "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
+        "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
+        "carriedoutconfirmeddate":
+            event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+        "carriedoutconfirmedtime":
+            event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+        "safetykeynumber":
+            event.addSwitchingScheduleMap['safetykeynumber'] ?? ''
+      };
+      if (event.addSwitchingScheduleMap['carriedoutdate'] ==
+              event.addSwitchingScheduleMap['carriedoutconfirmeddate'] &&
+          event.addSwitchingScheduleMap['carriedouttime'] ==
+              event.addSwitchingScheduleMap['carriedoutconfirmedtime']) {
+        if (event.addSwitchingScheduleMap['location'] != null &&
+            event.addSwitchingScheduleMap['equipmentuid'] != null &&
+            event.addSwitchingScheduleMap['operation'] != null) {
+          AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
+              await _permitRepository
+                  .addPermitSwitchingSchedule(addSwitchingScheduleMap);
+          if (addPermitSwitchingScheduleModel.message == '1') {
+            emit(PermitSwitchingScheduleAdded());
+          } else {
+            emit(PermitSwitchingScheduleNotAdded(
+                errorMessage: addPermitSwitchingScheduleModel.message));
+          }
+        } else {
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage:
+                  StringConstants.kLocationEquipmentOperationMandatory));
+        }
+      } else {
+        emit(PermitSwitchingScheduleNotUpdated(
+            errorMessage:
+                StringConstants.kCarriedoutNotSimilarToCarriedoutConfirmed));
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
     }
   }
 }

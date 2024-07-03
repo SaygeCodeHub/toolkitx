@@ -225,3 +225,9 @@ class UpdatePermitSwitchingSchedule extends PermitEvents {
 
   UpdatePermitSwitchingSchedule({required this.editSwitchingScheduleMap});
 }
+
+class AddPermitSwitchingSchedule extends PermitEvents {
+  final Map addSwitchingScheduleMap;
+
+  AddPermitSwitchingSchedule({required this.addSwitchingScheduleMap});
+}

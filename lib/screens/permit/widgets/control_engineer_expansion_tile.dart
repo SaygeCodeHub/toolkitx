@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/configs/app_dimensions.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/expansion_tile_border.dart';
@@ -43,7 +44,7 @@ class ControlEngineerExpansionTileState
             title: Text(selectedValue),
             children: [
               SizedBox(
-                height: 120,
+                height: kPermitEditSwitchingExpansionTileHeight,
                 child: MediaQuery(
                     data: MediaQuery.of(context).removePadding(removeTop: true),
                     child: ListView.builder(

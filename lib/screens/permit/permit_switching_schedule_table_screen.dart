@@ -81,7 +81,7 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                                 permitSwithcingScheduleInstructionDatum:
                                                     state.scheduleInstructionDatum[
                                                         index],
-                                                scheduleId: '',
+                                                scheduleId: scheduleId,
                                               );
                                             });
                                       },

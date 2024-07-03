@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
-import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -719,9 +718,12 @@ class AppRoutes {
         return _createRoute(
             GroupDetailsScreen(groupId: settings.arguments.toString()));
       case EditSwitchingInstructionScreen.routeName:
+        List args = settings.arguments as List;
         return _createRoute(EditSwitchingInstructionScreen(
-            permitSwithcingScheduleInstructionDatum:
-                settings.arguments as PermitSwithcingScheduleInstructionDatum));
+          permitSwithcingScheduleInstructionDatum: args[0],
+          isFromEdit: args[1],
+          scheduleId: args[2],
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }

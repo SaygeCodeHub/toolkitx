@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.dart';
 import 'package:toolkit/screens/permit/widgets/instructed_date_time_fields.dart';
 import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
@@ -24,15 +25,19 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
   const EditSwitchingInstructionScreen({
     super.key,
     required this.permitSwithcingScheduleInstructionDatum,
+    required this.isFromEdit,
+    required this.scheduleId,
   });
 
   final PermitSwithcingScheduleInstructionDatum
       permitSwithcingScheduleInstructionDatum;
+  final bool isFromEdit;
+  final String scheduleId;
 
   @override
   Widget build(BuildContext context) {
     context.read<PermitBloc>().add(const FetchPermitMaster());
-    Map editSwitchingScheduleMap = {};
+    Map switchingScheduleMap = {};
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(
@@ -65,22 +70,54 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                                 color: AppColor.black,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: tiniestSpacing),
-                        Text(permitSwithcingScheduleInstructionDatum.location),
+                        isFromEdit == true
+                            ? Text(permitSwithcingScheduleInstructionDatum
+                                .location)
+                            : TextFieldWidget(
+                                onTextFieldChanged: (textField) {
+                                  switchingScheduleMap['location'] = textField;
+                                },
+                              ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kEquipmentUIN,
                             style: Theme.of(context).textTheme.xSmall.copyWith(
                                 color: AppColor.black,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: tiniestSpacing),
-                        Text(permitSwithcingScheduleInstructionDatum
-                            .equipmentuid),
+                        isFromEdit == true
+                            ? Text(permitSwithcingScheduleInstructionDatum
+                                .equipmentuid)
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextFieldWidget(
+                                    maxLines: 5,
+                                    onTextFieldChanged: (textField) {
+                                      switchingScheduleMap['equipmentuid'] =
+                                          textField;
+                                    },
+                                  ),
+                                  const SizedBox(height: tiniestSpacing),
+                                  const Text(
+                                      StringConstants.kIncludingVoltageLevel,
+                                      style:
+                                          TextStyle(color: AppColor.deepBlue))
+                                ],
+                              ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kOperation,
                             style: Theme.of(context).textTheme.xSmall.copyWith(
                                 color: AppColor.black,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: tiniestSpacing),
-                        Text(permitSwithcingScheduleInstructionDatum.operation),
+                        isFromEdit == true
+                            ? Text(permitSwithcingScheduleInstructionDatum
+                                .operation)
+                            : TextFieldWidget(
+                                onTextFieldChanged: (textField) {
+                                  switchingScheduleMap['operation'] = textField;
+                                },
+                              ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kInstructionReceivedBy,
                             style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -89,9 +126,11 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         const SizedBox(height: tiniestSpacing),
                         InstructionReceivedExpansionTile(
                           instructionList: state.permitGetMasterModel.data[3],
-                          editSwitchingScheduleMap: editSwitchingScheduleMap,
-                          editName: permitSwithcingScheduleInstructionDatum
-                              .instructionreceivedbyname,
+                          editSwitchingScheduleMap: switchingScheduleMap,
+                          editName: isFromEdit == true
+                              ? permitSwithcingScheduleInstructionDatum
+                                  .instructionreceivedbyname
+                              : '',
                         ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kInstructedDateTime,
@@ -102,8 +141,8 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         PermitSwitchingDateTimeFields(
                             callBackFunctionForDateTime:
                                 (String date, String time) {
-                          editSwitchingScheduleMap["instructiondate"] = date;
-                          editSwitchingScheduleMap["instructiontime"] = time;
+                          switchingScheduleMap["instructiondate"] = date;
+                          switchingScheduleMap["instructiontime"] = time;
                         }),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kControlEngineer,
@@ -114,9 +153,11 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         ControlEngineerExpansionTile(
                           controlEngineerList:
                               state.permitGetMasterModel.data[3],
-                          editSwitchingScheduleMap: editSwitchingScheduleMap,
-                          editValue: permitSwithcingScheduleInstructionDatum
-                              .controlengineername,
+                          editSwitchingScheduleMap: switchingScheduleMap,
+                          editValue: isFromEdit == true
+                              ? permitSwithcingScheduleInstructionDatum
+                                  .controlengineername
+                              : '',
                         ),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kCarriedoutDateTime,
@@ -127,8 +168,8 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         PermitSwitchingDateTimeFields(
                             callBackFunctionForDateTime:
                                 (String date, String time) {
-                          editSwitchingScheduleMap["carriedoutdate"] = date;
-                          editSwitchingScheduleMap["carriedouttime"] = time;
+                          switchingScheduleMap["carriedoutdate"] = date;
+                          switchingScheduleMap["carriedouttime"] = time;
                         }),
                         const SizedBox(height: xxxSmallestSpacing),
                         Text(StringConstants.kCarriedoutConfirmedDateTime,
@@ -139,10 +180,9 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                         PermitSwitchingDateTimeFields(
                             callBackFunctionForDateTime:
                                 (String date, String time) {
-                          print('date==========>$date');
-                          editSwitchingScheduleMap["carriedoutconfirmeddate"] =
+                          switchingScheduleMap["carriedoutconfirmeddate"] =
                               date;
-                          editSwitchingScheduleMap["carriedoutconfirmedtime"] =
+                          switchingScheduleMap["carriedoutconfirmedtime"] =
                               time;
                         }),
                         const SizedBox(height: xxxSmallestSpacing),
@@ -152,11 +192,12 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: tiniestSpacing),
                         TextFieldWidget(
-                          value: permitSwithcingScheduleInstructionDatum
-                              .safetykeynumber,
+                          value: isFromEdit == true
+                              ? permitSwithcingScheduleInstructionDatum
+                                  .safetykeynumber
+                              : '',
                           onTextFieldChanged: (textField) {
-                            editSwitchingScheduleMap['safetykeynumber'] =
-                                textField;
+                            switchingScheduleMap['safetykeynumber'] = textField;
                           },
                         ),
                       ]);
@@ -177,17 +218,37 @@ class EditSwitchingInstructionScreen extends StatelessWidget {
             } else if (state is PermitSwitchingScheduleUpdated) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, PermitSwitchingScheduleTableScreen.routeName,
+                  arguments: scheduleId);
             } else if (state is PermitSwitchingScheduleNotUpdated) {
+              ProgressBar.dismiss(context);
+              showCustomSnackBar(context, state.errorMessage, '');
+            }
+
+            if (state is PermitSwitchingScheduleAdding) {
+              ProgressBar.show(context);
+            } else if (state is PermitSwitchingScheduleAdded) {
+              ProgressBar.dismiss(context);
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, PermitSwitchingScheduleTableScreen.routeName,
+                  arguments: scheduleId);
+            } else if (state is PermitSwitchingScheduleNotAdded) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');
             }
           },
           child: PrimaryButton(
               onPressed: () {
-                editSwitchingScheduleMap['instructionid'] =
+                switchingScheduleMap['instructionid'] =
                     permitSwithcingScheduleInstructionDatum.id;
-                context.read<PermitBloc>().add(UpdatePermitSwitchingSchedule(
-                    editSwitchingScheduleMap: editSwitchingScheduleMap));
+                isFromEdit == true
+                    ? context.read<PermitBloc>().add(
+                        UpdatePermitSwitchingSchedule(
+                            editSwitchingScheduleMap: switchingScheduleMap))
+                    : context.read<PermitBloc>().add(AddPermitSwitchingSchedule(
+                        addSwitchingScheduleMap: switchingScheduleMap));
               },
               textValue: DatabaseUtil.getText('buttonSave')),
         ),

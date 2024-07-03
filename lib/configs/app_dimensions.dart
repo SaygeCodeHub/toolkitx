@@ -121,5 +121,6 @@ const double kMessageTilePadding = 15;
 const double kQuoteMessageTilePadding = 5;
 const double kMessageTimerIconSize = 13;
 const double kPermitScheduleInstIconSize = 16;
-const double kPermitScheduleInstBottomSheetHeight = 220;
+const double kPermitScheduleInstBottomSheetHeight = 260;
 const double kPermitDatePickerFontSize = 16;
+const double kPermitEditSwitchingExpansionTileHeight = 120;

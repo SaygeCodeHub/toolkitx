@@ -1,5 +1,6 @@
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
+import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -218,5 +219,14 @@ class PermitRepositoryImpl extends PermitRepository {
         "${ApiConstants.baseUrl}permit/UpdatePermitSwitchingScheduleInstruction",
         editSwitchingScheduleMap);
     return UpdatePermitSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<AddPermitSwitchingScheduleModel> addPermitSwitchingSchedule(
+      Map addSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/AddPermitSwitchingScheduleInstruction",
+        addSwitchingScheduleMap);
+    return AddPermitSwitchingScheduleModel.fromJson(response);
   }
 }

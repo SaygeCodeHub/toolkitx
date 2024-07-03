@@ -698,4 +698,11 @@ abstract class StringConstants {
   static const String kCarriedoutConfirmedDateTime =
       "Carriedout Confirmed DateTime:";
   static const String kSafetyKeyNumber = "Safety Key Number:";
+  static const String kCarriedoutNotSimilarToCarriedoutConfirmed =
+      "Carriedout DateTime not equal to Carriedout Confirmed DateTime";
+  static const String kAdd = "Add";
+  static const String kLocationEquipmentOperationMandatory =
+      "Location, Equipment UIN and Operation fields are Mandatory";
+  static const String kIncludingVoltageLevel =
+      "Including voltage level if appropriate";
 }

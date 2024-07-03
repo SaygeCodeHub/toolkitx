@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/permit/permit_bloc.dart';
-import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -33,13 +30,28 @@ class PermitScheduleInstructionBottomSheet extends StatelessWidget {
                   ListTile(
                       onTap: () {
                         Navigator.pop(context);
-                        Navigator.pushNamed(context,
-                                EditSwitchingInstructionScreen.routeName,
-                                arguments:
-                                    permitSwithcingScheduleInstructionDatum)
-                            .then((_) => context.read<PermitBloc>().add(
-                                FetchSwitchingScheduleInstructions(
-                                    scheduleId: scheduleId)));
+                        Navigator.pushNamed(
+                            context, EditSwitchingInstructionScreen.routeName,
+                            arguments: [
+                              permitSwithcingScheduleInstructionDatum,
+                              false,
+                              scheduleId
+                            ]);
+                      },
+                      leading: const Icon(Icons.add,
+                          size: kPermitScheduleInstIconSize),
+                      title: Text(StringConstants.kAdd,
+                          style: Theme.of(context).textTheme.xSmall)),
+                  ListTile(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(
+                            context, EditSwitchingInstructionScreen.routeName,
+                            arguments: [
+                              permitSwithcingScheduleInstructionDatum,
+                              true,
+                              scheduleId
+                            ]);
                       },
                       leading: const Icon(Icons.edit,
                           size: kPermitScheduleInstIconSize),
