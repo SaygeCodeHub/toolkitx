@@ -35,87 +35,83 @@ class WorkForceViewDocumentsScreen extends StatelessWidget {
             right: leftRightMargin,
             top: topBottomPadding),
         child: BlocBuilder<WorkForceCheckListSaveRejectBloc,
-            WorkForceCheckListRejectReasonStates>(
-          builder: (context, state) {
-            if (state is ChecklistWorkforceDocumentsFetching) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is ChecklistWorkforceDocumentsFetched) {
-              var data = state.fetchChecklistWorkforceDocumentsModel.data;
-              return ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    String files = state.fetchChecklistWorkforceDocumentsModel
-                        .data[index].files;
-                    return CustomCard(
-                        child: Padding(
-                            padding: const EdgeInsets.all(xxTinierSpacing),
-                            child: ListTile(
-                                title: Text(data[index].name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .small
-                                        .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: AppColor.mediumBlack)),
-                                subtitle: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: xxTinierSpacing),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(data[index].type),
-                                          const SizedBox(
-                                              height: xxTinierSpacing),
-                                          ListView.builder(
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  ViewImageUtil.viewImageList(
-                                                          files)
-                                                      .length,
-                                              itemBuilder: (context, index) {
-                                                return InkWell(
-                                                    splashColor:
-                                                        AppColor.transparent,
-                                                    highlightColor:
-                                                        AppColor.transparent,
-                                                    onTap: () async {
-                                                      launchUrlString(
-                                                          '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(state.clientId)}',
-                                                          mode: LaunchMode
-                                                              .externalApplication);
-                                                    },
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .only(
-                                                          bottom:
-                                                              xxxTinierSpacing),
-                                                      child: Text(
-                                                          ViewImageUtil
-                                                              .viewImageList(
-                                                                  files)[index],
-                                                          style: const TextStyle(
-                                                              color: AppColor
-                                                                  .deepBlue)),
-                                                    ));
-                                              }),
-                                          const SizedBox(
-                                              height: xxTiniestSpacing)
-                                        ])))));
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: xxTinierSpacing);
-                  });
-            } else if (state is ChecklistWorkforceDocumentsNotFetched) {
-              return const Center(child: Text(StringConstants.kNoRecordsFound));
-            }
-            return const SizedBox.shrink();
-          },
-        ),
+            WorkForceCheckListRejectReasonStates>(builder: (context, state) {
+          if (state is ChecklistWorkforceDocumentsFetching) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ChecklistWorkforceDocumentsFetched) {
+            var data = state.fetchChecklistWorkforceDocumentsModel.data;
+            return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  String files = state
+                      .fetchChecklistWorkforceDocumentsModel.data[index].files;
+                  return CustomCard(
+                      child: Padding(
+                          padding: const EdgeInsets.all(xxTinierSpacing),
+                          child: ListTile(
+                              title: Text(data[index].name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .small
+                                      .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColor.mediumBlack)),
+                              subtitle: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: xxTinierSpacing),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(data[index].type),
+                                        const SizedBox(height: xxTinierSpacing),
+                                        ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                ViewImageUtil.viewImageList(
+                                                        files)
+                                                    .length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                  splashColor:
+                                                      AppColor.transparent,
+                                                  highlightColor:
+                                                      AppColor.transparent,
+                                                  onTap: () async {
+                                                    launchUrlString(
+                                                        '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(state.clientId)}',
+                                                        mode: LaunchMode
+                                                            .externalApplication);
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .only(
+                                                        bottom:
+                                                            xxxTinierSpacing),
+                                                    child: Text(
+                                                        ViewImageUtil
+                                                            .viewImageList(
+                                                                files)[index],
+                                                        style: const TextStyle(
+                                                            color: AppColor
+                                                                .deepBlue)),
+                                                  ));
+                                            }),
+                                        const SizedBox(height: xxTiniestSpacing)
+                                      ])))));
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: xxTinierSpacing);
+                });
+          } else if (state is ChecklistWorkforceDocumentsNotFetched) {
+            return const Center(child: Text(StringConstants.kNoRecordsFound));
+          }
+          return const SizedBox.shrink();
+        }),
       ),
     );
   }
