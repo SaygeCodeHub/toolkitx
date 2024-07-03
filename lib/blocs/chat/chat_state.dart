@@ -74,12 +74,58 @@ class GroupDetailsFetching extends ChatState {}
 
 class GroupDetailsFetched extends ChatState {
   final FetchGroupInfoModel fetchGroupInfoModel;
+  final String apiKey;
 
-  GroupDetailsFetched({required this.fetchGroupInfoModel});
+  GroupDetailsFetched(
+      {required this.fetchGroupInfoModel, required this.apiKey});
 }
 
 class GroupDetailsNotFetched extends ChatState {
   final String errorMessage;
 
   GroupDetailsNotFetched({required this.errorMessage});
+}
+
+class ChatMemberRemoving extends ChatState {}
+
+class ChatMemberRemoved extends ChatState {
+  final bool isExitGroup;
+
+  ChatMemberRemoved({required this.isExitGroup});
+}
+
+class ChatMemberNotRemoved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotRemoved({required this.errorMessage});
+}
+
+class SavingChatMemberAsAdmin extends ChatState {}
+
+class ChatMemberAsAdminSaved extends ChatState {}
+
+class ChatMemberAsAdminNotSaved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotSaved({required this.errorMessage});
+}
+
+class ChatMemberAsAdminDismissing extends ChatState {}
+
+class ChatMemberAsAdminDismissed extends ChatState {}
+
+class ChatMemberAsAdminNotDismissed extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotDismissed({required this.errorMessage});
+}
+
+class ChatMemberAdding extends ChatState {}
+
+class ChatMemberAdded extends ChatState {}
+
+class ChatMemberNotAdded extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotAdded({required this.errorMessage});
 }

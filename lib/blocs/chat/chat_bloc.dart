@@ -11,10 +11,14 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/chat/chat_state.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
+import 'package:toolkit/data/models/chatBox/add_chat_member_model.dart';
 import 'package:toolkit/data/models/chatBox/create_chat_group_model.dart';
+import 'package:toolkit/data/models/chatBox/dismiss_chat_member_as_admin_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
+import 'package:toolkit/data/models/chatBox/remove_chat_member_model.dart';
 import 'package:toolkit/data/models/chatBox/send_message_model.dart';
+import 'package:toolkit/data/models/chatBox/set_chat_member_as_admin_model.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/data/models/uploadImage/upload_image_model.dart';
 import 'package:toolkit/di/app_module.dart';
@@ -78,6 +82,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<InitializeGroupChatMembers>(_initializeGroupChatMembers);
     on<ReplyToMessage>(_replyToMessage);
     on<FetchGroupDetails>(_fetchGroupDetails);
+    on<RemoveChatMember>(_removeChatMember);
+    on<SetChatMemberAsAdmin>(_setChatMemberAsAdmin);
+    on<DismissChatMemberAsAdmin>(_dismissChatMemberAsAdmin);
+    on<AddChatMember>(_addChatMember);
   }
 
   static final ChatBloc _instance = ChatBloc._();
@@ -451,11 +459,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       });
       if (chatGroupModel.status == 200) {
         groupId = chatGroupModel.data.groupId;
-        await _databaseHelper.insertGroup({
-          'group_id': groupId,
-          'group_name': groupDataMap['group_name'],
-          'purpose': groupDataMap['group_purpose']
-        }, groupDataMap['members']);
         add(FetchGroupsList());
         emit(ChatGroupCreated());
       } else {
@@ -712,15 +715,133 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       String hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchGroupInfoModel fetchGroupInfoModel =
-          await _chatBoxRepository.fetchGroupDetails(hashCode, event.groupId);
+      String apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
+      FetchGroupInfoModel fetchGroupInfoModel = await _chatBoxRepository
+          .fetchGroupDetails(hashCode, event.groupId, userId, userType);
       if (fetchGroupInfoModel.status == 200) {
-        emit(GroupDetailsFetched(fetchGroupInfoModel: fetchGroupInfoModel));
+        emit(GroupDetailsFetched(
+            fetchGroupInfoModel: fetchGroupInfoModel, apiKey: apiKey));
       } else {
         emit(GroupDetailsNotFetched(errorMessage: fetchGroupInfoModel.message));
       }
     } catch (e) {
       emit(GroupDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _removeChatMember(
+      RemoveChatMember event, Emitter<ChatState> emit) async {
+    emit(ChatMemberRemoving());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      userId = await EncryptData.decryptAESPrivateKey(
+          userId, await _customerCache.getApiKey(CacheKeys.apiKey));
+      String userType =
+          await _customerCache.getUserType(CacheKeys.userType) ?? '';
+      Map removeChatMemberMap = {
+        "groupid": event.groupId,
+        "userid": event.isExitGroup == true ? userId : event.memberId,
+        "usertype": event.isExitGroup == true ? userType : event.memberType,
+        "hashcode": hashCode
+      };
+      RemoveChatMemberModel removeChatMemberModel =
+          await _chatBoxRepository.removeChatMember(removeChatMemberMap);
+      if (removeChatMemberModel.message == '1') {
+        if (event.isExitGroup) {
+          await _databaseHelper.deleteGroupChat(event.groupId);
+        }
+        emit(ChatMemberRemoved(isExitGroup: event.isExitGroup));
+      } else {
+        emit(ChatMemberNotRemoved(errorMessage: removeChatMemberModel.message));
+      }
+    } catch (e) {
+      emit(ChatMemberNotRemoved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _setChatMemberAsAdmin(
+      SetChatMemberAsAdmin event, Emitter<ChatState> emit) async {
+    emit(SavingChatMemberAsAdmin());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map setChatMemberAsAdminMap = {
+        "groupid": event.groupId,
+        "userid": event.memberId,
+        "usertype": event.memberType,
+        "hashcode": hashCode
+      };
+      SetChatMemberAsAdminModel setChatMemberAsAdminModel =
+          await _chatBoxRepository
+              .setChatMemberAsAdmin(setChatMemberAsAdminMap);
+      if (setChatMemberAsAdminModel.message == '1') {
+        emit(ChatMemberAsAdminSaved());
+      } else {
+        emit(ChatMemberAsAdminNotSaved(
+            errorMessage: setChatMemberAsAdminModel.message));
+      }
+    } catch (e) {
+      emit(ChatMemberAsAdminNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _dismissChatMemberAsAdmin(
+      DismissChatMemberAsAdmin event, Emitter<ChatState> emit) async {
+    emit(ChatMemberAsAdminDismissing());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      Map dismissChatMemberAsAdminMap = {
+        "groupid": event.groupId,
+        "userid": event.memberId,
+        "usertype": event.memberType,
+        "hashcode": hashCode
+      };
+
+      DismissChatMemberAsAdminModel dismissChatMemberAsAdminModel =
+          await _chatBoxRepository
+              .dismissChatMemberAsAdmin(dismissChatMemberAsAdminMap);
+      if (dismissChatMemberAsAdminModel.message == '1') {
+        emit(ChatMemberAsAdminDismissed());
+      } else {
+        emit(ChatMemberAsAdminNotDismissed(
+            errorMessage: dismissChatMemberAsAdminModel.message));
+      }
+    } catch (e) {
+      emit(ChatMemberAsAdminNotDismissed(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addChatMember(
+      AddChatMember event, Emitter<ChatState> emit) async {
+    emit(ChatMemberAdding());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (event.membersList.isNotEmpty) {
+        Map addChatMemberMap = {
+          "hashcode": hashCode,
+          "groupid": event.groupId,
+          "members": event.membersList
+        };
+        AddChatMemberModel addChatMemberModel =
+            await _chatBoxRepository.addChatMember(addChatMemberMap);
+        if (addChatMemberModel.message == '1') {
+          emit(ChatMemberAdded());
+        } else {
+          emit(ChatMemberNotAdded(errorMessage: addChatMemberModel.message));
+        }
+      } else {
+        emit(ChatMemberNotAdded(
+            errorMessage: 'You must select at least one member to continue'));
+      }
+    } catch (e) {
+      emit(ChatMemberNotAdded(errorMessage: e.toString()));
     }
   }
 }

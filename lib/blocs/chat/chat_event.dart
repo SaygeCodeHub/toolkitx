@@ -72,3 +72,45 @@ class ReplyToMessage extends ChatEvent {
 
   ReplyToMessage({this.replyToMessage = '', required this.quoteMessageId});
 }
+
+class RemoveChatMember extends ChatEvent {
+  final String groupId;
+  final String memberId;
+  final String memberType;
+  final bool isExitGroup;
+
+  RemoveChatMember(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType,
+      required this.isExitGroup});
+}
+
+class SetChatMemberAsAdmin extends ChatEvent {
+  final String groupId;
+  final String memberId;
+  final String memberType;
+
+  SetChatMemberAsAdmin(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType});
+}
+
+class DismissChatMemberAsAdmin extends ChatEvent {
+  final String groupId;
+  final String memberId;
+  final String memberType;
+
+  DismissChatMemberAsAdmin(
+      {required this.groupId,
+      required this.memberId,
+      required this.memberType});
+}
+
+class AddChatMember extends ChatEvent {
+  final String groupId;
+  final List membersList;
+
+  AddChatMember({required this.groupId, required this.membersList});
+}

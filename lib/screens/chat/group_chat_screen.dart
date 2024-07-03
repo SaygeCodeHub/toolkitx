@@ -10,9 +10,11 @@ import 'package:toolkit/screens/chat/group_details_screen.dart';
 import 'package:toolkit/screens/chat/widgets/create_group_button.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
 import '../../configs/app_dimensions.dart';
+import 'chat_messaging_screen.dart';
 
 class GroupChatScreen extends StatelessWidget {
   static const routeName = 'GroupChatScreen';
@@ -55,56 +57,94 @@ class GroupChatScreen extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return CustomCard(
                                     child: ListTile(
-                                        leading: Container(
-                                            padding: const EdgeInsets.all(
-                                                tiniestSpacing),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        kChatIconRadius),
-                                                color: AppColor.deepBlue),
-                                            child: const Icon(Icons.people,
-                                                color: AppColor.ghostWhite,
-                                                size: kChatIconSize)),
-                                        title: Text(data[index].name),
-                                        titleTextStyle: Theme.of(context)
-                                            .textTheme
-                                            .small
-                                            .copyWith(
-                                                color: AppColor.black,
-                                                fontWeight: FontWeight.w500),
-                                        subtitle: Text(data[index].purpose),
-                                        subtitleTextStyle:
-                                            Theme.of(context).textTheme.xSmall,
-                                        trailing: PopupMenuButton(
-                                            offset: const Offset(0, 40),
-                                            shape: ShapeBorder.lerp(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            kCardRadius)),
-                                                RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(kCardRadius)),
-                                                1),
-                                            itemBuilder: (context) {
-                                              return [
-                                                PopupMenuItem(
-                                                    child: Text(
-                                                        DatabaseUtil.getText(
-                                                            'viewDetail'),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .xxSmall),
-                                                    onTap: () {
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          GroupDetailsScreen
-                                                              .routeName,
-                                                          arguments:
-                                                              data[index].id);
-                                                    }),
-                                              ];
-                                            })));
+                                  onTap: () {
+                                    context.read<ChatBloc>().chatDetailsMap = {
+                                      'rid': data[index].id.toString(),
+                                      'employee_name': data[index].name,
+                                      'rtype': '3'
+                                    };
+                                    chatScreenName =
+                                        ChatMessagingScreen.routeName;
+                                    Navigator.pushNamed(context,
+                                            ChatMessagingScreen.routeName)
+                                        .whenComplete(() {
+                                      context
+                                          .read<ChatBloc>()
+                                          .add(FetchAllGroups());
+                                    });
+                                  },
+                                  leading: Container(
+                                      padding:
+                                          const EdgeInsets.all(tiniestSpacing),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              kChatIconRadius),
+                                          color: AppColor.deepBlue),
+                                      child: const Icon(Icons.people,
+                                          color: AppColor.ghostWhite,
+                                          size: kChatIconSize)),
+                                  title: Text(data[index].name),
+                                  titleTextStyle: Theme.of(context)
+                                      .textTheme
+                                      .small
+                                      .copyWith(
+                                          color: AppColor.black,
+                                          fontWeight: FontWeight.w500),
+                                  subtitle: Text(data[index].purpose),
+                                  subtitleTextStyle:
+                                      Theme.of(context).textTheme.xSmall,
+                                  trailing: MenuAnchor(
+                                    builder: (BuildContext context,
+                                        MenuController controller,
+                                        Widget? child) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          if (controller.isOpen) {
+                                            controller.close();
+                                          } else {
+                                            controller.open();
+                                          }
+                                        },
+                                        icon: const Icon(Icons.more_horiz),
+                                      );
+                                    },
+                                    alignmentOffset: const Offset(-80.0, 0.0),
+                                    menuChildren: [
+                                      MenuItemButton(
+                                        onPressed: () {
+                                          Navigator.pushNamed(context,
+                                              GroupDetailsScreen.routeName,
+                                              arguments: data[index].id);
+                                        },
+                                        child: Text(
+                                            DatabaseUtil.getText('viewDetail')),
+                                      ),
+                                      MenuItemButton(
+                                        onPressed: () {
+                                          context
+                                              .read<ChatBloc>()
+                                              .chatDetailsMap = {
+                                            'rid': data[index].id.toString(),
+                                            'employee_name': data[index].name,
+                                            'rtype': '3'
+                                          };
+                                          print(
+                                              'chatDetailsMap=============>${context.read<ChatBloc>().chatDetailsMap}');
+                                          chatScreenName =
+                                              ChatMessagingScreen.routeName;
+                                          Navigator.pushNamed(context,
+                                                  ChatMessagingScreen.routeName)
+                                              .whenComplete(() {
+                                            context
+                                                .read<ChatBloc>()
+                                                .add(FetchChatsList());
+                                          });
+                                        },
+                                        child: Text('Send Message'),
+                                      )
+                                    ],
+                                  ),
+                                ));
                               },
                               separatorBuilder: (context, index) {
                                 return const SizedBox(height: xxTinierSpacing);

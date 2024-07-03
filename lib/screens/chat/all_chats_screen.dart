@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,9 +7,8 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
-import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
-import 'package:toolkit/screens/chat/widgets/all_chat_pop_up_menu.dart';
+import 'package:toolkit/screens/chat/widgets/all_chat_floating_button.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -29,17 +26,8 @@ class AllChatsScreen extends StatelessWidget {
         appBar: AppBar(
             title: const Text('Chats'),
             automaticallyImplyLeading: false,
-            titleTextStyle: Theme.of(context).textTheme.mediumLarge,
-            actions: [AllChatPopUpMenu()]),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, UsersScreen.routeName,
-                      arguments: false)
-                  .whenComplete(() {
-                context.read<ChatBloc>().add(FetchChatsList());
-              });
-            },
-            child: const Icon(Icons.add)),
+            titleTextStyle: Theme.of(context).textTheme.mediumLarge),
+        floatingActionButton: const AllChatFloatingButton(),
         body: StreamBuilder<List<ChatData>>(
             stream: context.read<ChatBloc>().allChatsStream,
             builder: (context, snapshot) {

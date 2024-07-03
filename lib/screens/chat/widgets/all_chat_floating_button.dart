@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/blocs/chat/chat_bloc.dart';
+import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/screens/meetingRoom/meeting_view_availability_screen.dart';
-import 'package:toolkit/screens/meetingRoom/month_view_screen.dart';
-import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
-import 'package:toolkit/utils/meeting_room_util.dart';
+import 'package:toolkit/screens/chat/group_chat_screen.dart';
+import 'package:toolkit/screens/chat/users_screen.dart';
 
-class MeetingFloatingButton extends StatelessWidget {
-  const MeetingFloatingButton({
+class AllChatFloatingButton extends StatelessWidget {
+  const AllChatFloatingButton({
     super.key,
   });
 
@@ -17,28 +17,27 @@ class MeetingFloatingButton extends StatelessWidget {
         onPressed: () {
           _showOptions(context);
         },
-        child: const Icon(Icons.menu));
+        child: const Icon(Icons.add));
   }
 
   void _showOptions(BuildContext context) {
+    List chatItemList = ['New Chat', 'New Group'];
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return SizedBox(
-          height: kMeetingBottomSheetHeight,
+          height: kChatBottomSheetHeight,
           child: ListView.separated(
             shrinkWrap: true,
-            itemCount: MeetingRoomUtil().meetingButtons.length,
+            itemCount: chatItemList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: tinySpacing),
                 child: Card(
                   child: ListTile(
-                    title: Center(
-                        child: Text(MeetingRoomUtil().meetingButtons[index])),
+                    title: Center(child: Text(chatItemList[index])),
                     onTap: () {
-                      navigateToModule(
-                          MeetingRoomUtil().meetingButtons[index], context);
+                      navigateToModule(chatItemList[index], context);
                     },
                   ),
                 ),
@@ -60,18 +59,16 @@ class MeetingFloatingButton extends StatelessWidget {
     context,
   ) {
     switch (buttonName) {
-      case "Month View":
+      case "New Chat":
         Navigator.pop(context);
-        Navigator.pushNamed(context, MonthViewScreen.routeName);
+        Navigator.pushNamed(context, UsersScreen.routeName, arguments: false)
+            .whenComplete(() {
+          context.read<ChatBloc>().add(FetchChatsList());
+        });
         break;
-      case "View Availability":
+      case "New Group":
         Navigator.pop(context);
-        Navigator.pushNamed(context, MeetingViewAvailabilityScreen.routeName);
-        break;
-      case "Book Meeting":
-        Navigator.pop(context);
-        SearchRoomsScreen.isFromViewAvailable = false;
-        Navigator.pushNamed(context, SearchRoomsScreen.routeName);
+        Navigator.pushNamed(context, GroupChatScreen.routeName);
         break;
     }
   }

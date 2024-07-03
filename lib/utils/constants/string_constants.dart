@@ -689,6 +689,7 @@ abstract class StringConstants {
       'Short agenda, Long agenda, Participants are Mandatory';
   static const String kEndsOnMandatory = "Ends on field is mandatory";
   static const String kPleaseSelectRoom = 'Please select a room to proceed';
+  static const String kGroupAdmin = "Group Admin";
   static const String kEquipmentUIN = "Equipment UIN";
   static const String kOperation = "Operation";
   static const String kInstructionReceivedBy = "Instruction Received By :";
