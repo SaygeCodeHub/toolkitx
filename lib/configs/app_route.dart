@@ -25,7 +25,7 @@ import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
 import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
-import 'package:toolkit/screens/permit/edit_switching_instruction_screen.dart';
+import 'package:toolkit/screens/permit/add_and_edit_switching_instruction_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
@@ -713,9 +713,9 @@ class AppRoutes {
       case GroupDetailsScreen.routeName:
         return _createRoute(
             GroupDetailsScreen(groupId: settings.arguments.toString()));
-      case EditSwitchingInstructionScreen.routeName:
+      case AddAndEditSwitchingInstructionScreen.routeName:
         List args = settings.arguments as List;
-        return _createRoute(EditSwitchingInstructionScreen(
+        return _createRoute(AddAndEditSwitchingInstructionScreen(
           permitSwithcingScheduleInstructionDatum: args[0],
           isFromEdit: args[1],
           scheduleId: args[2],
