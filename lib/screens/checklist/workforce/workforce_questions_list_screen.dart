@@ -29,7 +29,6 @@ class WorkForceQuestionsScreen extends StatelessWidget {
                 state.allChecklistDataMap["name"] =
                     state.getQuestionListModel.data!.name.toString();
                 checklistDataMap['name'] = state.allChecklistDataMap["name"];
-                print('checklistname============>${checklistDataMap['name']}');
                 return Text(state.getQuestionListModel.data!.name.toString());
               } else {
                 return const SizedBox();
