@@ -9,6 +9,7 @@ import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/checklist/workforce/workforce_view_documents_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
@@ -720,6 +721,9 @@ class AppRoutes {
           isFromEdit: args[1],
           scheduleId: args[2],
         ));
+      case WorkForceViewDocumentsScreen.routeName:
+        return _createRoute(WorkForceViewDocumentsScreen(
+            checklistDataMap: settings.arguments as Map));
       default:
         return _createRoute(const WelcomeScreen());
     }

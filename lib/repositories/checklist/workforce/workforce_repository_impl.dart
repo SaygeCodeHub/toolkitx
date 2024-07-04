@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/checklist/workforce/fetch_checklist_workforce_documents_model.dart';
 import 'package:toolkit/repositories/checklist/workforce/workforce_repository.dart';
 
 import '../../../data/models/checklist/workforce/workforce_checklist_save_reject_reason_model.dart';
@@ -66,5 +67,13 @@ class WorkforceChecklistRepositoryImpl extends WorkForceRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}checklist/save", submitAnswerMap);
     return SubmitQuestionModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchChecklistWorkforceDocumentsModel> fetchChecklistViewDocuments(
+      String checklistId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}checklist/getdocuments?checklistid=$checklistId&hashcode=$hashCode");
+    return FetchChecklistWorkforceDocumentsModel.fromJson(response);
   }
 }
