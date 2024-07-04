@@ -1,9 +1,12 @@
-
 import 'dart:convert';
 
-FetchChecklistWorkforceDocumentsModel fetchChecklistViewDocumentsModelFromJson(String str) => FetchChecklistWorkforceDocumentsModel.fromJson(json.decode(str));
+FetchChecklistWorkforceDocumentsModel fetchChecklistViewDocumentsModelFromJson(
+        String str) =>
+    FetchChecklistWorkforceDocumentsModel.fromJson(json.decode(str));
 
-String fetchChecklistViewDocumentsModelToJson(FetchChecklistWorkforceDocumentsModel data) => json.encode(data.toJson());
+String fetchChecklistViewDocumentsModelToJson(
+        FetchChecklistWorkforceDocumentsModel data) =>
+    json.encode(data.toJson());
 
 class FetchChecklistWorkforceDocumentsModel {
   final int status;
@@ -16,17 +19,19 @@ class FetchChecklistWorkforceDocumentsModel {
     required this.data,
   });
 
-  factory FetchChecklistWorkforceDocumentsModel.fromJson(Map<String, dynamic> json) => FetchChecklistWorkforceDocumentsModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-  );
+  factory FetchChecklistWorkforceDocumentsModel.fromJson(
+          Map<String, dynamic> json) =>
+      FetchChecklistWorkforceDocumentsModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -43,16 +48,16 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    name: json["name"],
-    type: json["type"],
-    files: json["files"],
-  );
+        id: json["id"],
+        name: json["name"],
+        type: json["type"],
+        files: json["files"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "type": type,
-    "files": files,
-  };
+        "id": id,
+        "name": name,
+        "type": type,
+        "files": files,
+      };
 }

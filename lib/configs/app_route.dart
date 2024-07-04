@@ -27,6 +27,7 @@ import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
 import 'package:toolkit/screens/permit/add_and_edit_switching_instruction_screen.dart';
+import 'package:toolkit/screens/permit/edit_multiselect_switching_schedule_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
@@ -724,6 +725,12 @@ class AppRoutes {
       case WorkForceViewDocumentsScreen.routeName:
         return _createRoute(WorkForceViewDocumentsScreen(
             checklistDataMap: settings.arguments as Map));
+      case EditMultiSelectSwitchingScheduleScreen.routeName:
+        List args = settings.arguments as List;
+        return _createRoute(EditMultiSelectSwitchingScheduleScreen(
+          scheduleId: args[0],
+          instructionIds: args[1],
+        ));
       default:
         return _createRoute(const WelcomeScreen());
     }
