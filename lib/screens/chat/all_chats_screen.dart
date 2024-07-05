@@ -40,6 +40,8 @@ class AllChatsScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          print(
+                              'group name ${snapshot.data![index].groupName}');
                           return CustomCard(
                               child: ListTile(
                                   onTap: () async {
@@ -75,10 +77,7 @@ class AllChatsScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text((snapshot.data![index].isGroup ==
-                                                true)
-                                            ? snapshot.data![index].groupName
-                                            : snapshot.data![index].userName),
+                                        Text(snapshot.data![index].userName),
                                         Text(snapshot.data![index].dateTime,
                                             style: Theme.of(context)
                                                 .textTheme
