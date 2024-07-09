@@ -27,16 +27,19 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     customInfoFieldList.clear();
-    context
-        .read<QualityManagementBloc>()
-        .add(ReportNewQualityManagementFetchCustomInfoField());
+    context.read<QualityManagementBloc>().add(FetchCustomFieldsByKey(
+        categoryId: reportNewQAMap['categoryid'].toString()));
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kReportNewIncident),
       body: BlocBuilder<QualityManagementBloc, QualityManagementStates>(
           buildWhen: (previousState, currentState) =>
-              currentState is ReportNewQualityManagementCustomFieldFetched,
+              currentState is CustomFieldsByKeyFetching ||
+              currentState is CustomFieldsByKeyFetched ||
+              currentState is CustomFieldsByKeyNotFetched,
           builder: (context, state) {
-            if (state is ReportNewQualityManagementCustomFieldFetched) {
+            if (state is CustomFieldsByKeyFetching) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is CustomFieldsByKeyFetched) {
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Padding(
@@ -50,15 +53,15 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                         ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: state.fetchQualityManagementMasterModel
-                                .data![4].length,
+                            itemCount:
+                                state.fetchCustomFieldsByKeyModel.data.length,
                             itemBuilder: (context, index) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      state.fetchQualityManagementMasterModel
-                                          .data![4][index].title!,
+                                      state.fetchCustomFieldsByKeyModel
+                                          .data[index].title,
                                       style: Theme.of(context)
                                           .textTheme
                                           .xSmall
@@ -69,8 +72,7 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                                       .addCustomFieldsCaseWidget(
                                           index,
                                           state
-                                              .fetchQualityManagementMasterModel
-                                              .data![4],
+                                              .fetchCustomFieldsByKeyModel.data,
                                           customInfoFieldList,
                                           reportNewQAMap),
                                   const SizedBox(height: xxTinySpacing),
@@ -80,9 +82,10 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
                       ]),
                 ),
               );
-            } else {
-              return const SizedBox();
+            } else if (state is CustomFieldsByKeyNotFetched) {
+              return const Center(child: Text(StringConstants.kNoRecordsFound));
             }
+            return const SizedBox();
           }),
       bottomNavigationBar: BottomAppBar(
           child: Row(

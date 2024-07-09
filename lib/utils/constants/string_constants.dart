@@ -606,6 +606,8 @@ abstract class StringConstants {
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kCategoryDateTimeDescriptionContractorIsNotEmpty =
+      'Category,Incident date, time, description, contractor cannot be empty.';
   static const String kExpenseReportRejected = "Expense Report Rejected";
   static const String kExpenseReportComments = 'Please add comment first';
   static const String kYouFailed = "You've Failed";
@@ -706,4 +708,5 @@ abstract class StringConstants {
       "Location, Equipment UIN and Operation fields are Mandatory";
   static const String kIncludingVoltageLevel =
       "Including voltage level if appropriate";
+  static const String kCategoryName = "Category Name";
 }
