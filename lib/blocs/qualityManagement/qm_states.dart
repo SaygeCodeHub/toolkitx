@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
+
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/pdf_generation_model.dart';
@@ -179,12 +181,10 @@ class ReportNewQualityManagementCustomFieldFetched
 
 class ReportNewQualityManagementCustomFieldSelected
     extends QualityManagementStates {
-  final FetchQualityManagementMasterModel fetchQualityManagementMasterModel;
   final String reportQMCustomInfoOptionId;
 
   ReportNewQualityManagementCustomFieldSelected(
-      {required this.fetchQualityManagementMasterModel,
-      required this.reportQMCustomInfoOptionId});
+      {required this.reportQMCustomInfoOptionId});
 }
 
 class ReportNewQualityManagementSaving extends QualityManagementStates {}
@@ -299,4 +299,18 @@ class QualityManagementClassificationValueNotFetched
 
   QualityManagementClassificationValueNotFetched(
       {required this.classificationNotFetched});
+}
+
+class CustomFieldsByKeyFetching extends QualityManagementStates {}
+
+class CustomFieldsByKeyFetched extends QualityManagementStates {
+  final FetchCustomFieldsByKeyModel fetchCustomFieldsByKeyModel;
+
+  CustomFieldsByKeyFetched({required this.fetchCustomFieldsByKeyModel});
+}
+
+class CustomFieldsByKeyNotFetched extends QualityManagementStates {
+  final String errorMessage;
+
+  CustomFieldsByKeyNotFetched({required this.errorMessage});
 }

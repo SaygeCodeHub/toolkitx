@@ -167,3 +167,9 @@ class QualityManagementClearFilter extends QualityManagementEvent {}
 
 class FetchQualityManagementClassificationValue
     extends QualityManagementEvent {}
+
+class FetchCustomFieldsByKey extends QualityManagementEvent {
+  final String categoryId;
+
+  FetchCustomFieldsByKey({required this.categoryId});
+}

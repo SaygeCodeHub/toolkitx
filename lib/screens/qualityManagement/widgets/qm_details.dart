@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/qualityManagement/fetch_qm_details_model.dart';
@@ -39,6 +41,13 @@ class QualityManagementDetails extends StatelessWidget {
             ),
             const SizedBox(height: xxTinierSpacing),
             Text(data.eventdatetime, style: Theme.of(context).textTheme.small),
+            const SizedBox(height: tinySpacing),
+            Text(
+              StringConstants.kCategoryName,
+              style: Theme.of(context).textTheme.medium,
+            ),
+            const SizedBox(height: xxTinierSpacing),
+            Text(data.categoryname, style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
             Text(
               DatabaseUtil.getText('IncidentDetails'),

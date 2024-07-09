@@ -56,6 +56,8 @@ class QMDetailsData {
   final String impactname;
   final String companyname;
   final String sessionid;
+  final String categoryid;
+  final String categoryname;
   final String statusText;
   final String nextStatus;
   final String canEdit;
@@ -90,6 +92,8 @@ class QMDetailsData {
     required this.impactname,
     required this.companyname,
     required this.sessionid,
+    required this.categoryid,
+    required this.categoryname,
     required this.statusText,
     required this.nextStatus,
     required this.canEdit,
@@ -123,6 +127,8 @@ class QMDetailsData {
         impactname: json["impactname"] ?? '',
         companyname: json["companyname"] ?? '',
         sessionid: json["sessionid"] ?? '',
+        categoryid: json["categoryid"] ?? '',
+        categoryname: json["categoryname"] ?? '',
         statusText: json["status_text"] ?? '',
         nextStatus: json["next_status"] ?? '',
         canEdit: json["can_edit"] ?? '',
@@ -168,6 +174,8 @@ class QMDetailsData {
         "impactname": impactname,
         "companyname": companyname,
         "sessionid": sessionid,
+        "categoryid": categoryid,
+        "categoryname": categoryname,
         "status_text": statusText,
         "next_status": nextStatus,
         "can_edit": canEdit,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../../data/cache/customer_cache.dart';
@@ -76,6 +77,7 @@ class QualityManagementBloc
     on<FetchQualityManagementClassificationValue>(_fetchClassification);
     on<QualityManagementClearFilter>(_clearFilter);
     on<QualityManagementApplyFilter>(_applyFilter);
+    on<FetchCustomFieldsByKey>(_fetchCustomFieldsByKey);
   }
 
   _applyFilter(QualityManagementApplyFilter event,
@@ -164,7 +166,9 @@ class QualityManagementBloc
           "eventdatetime":
               fetchQualityManagementDetailsModel.data.eventdatetime,
           "severityname": fetchQualityManagementDetailsModel.data.severityname,
-          "impactname": fetchQualityManagementDetailsModel.data.impactname
+          "impactname": fetchQualityManagementDetailsModel.data.impactname,
+          "categoryid": fetchQualityManagementDetailsModel.data.categoryid,
+          "categoryname": fetchQualityManagementDetailsModel.data.categoryname
         };
 
         nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
@@ -423,12 +427,13 @@ class QualityManagementBloc
       ReportNewQualityManagementDateTimeDescriptionValidation event,
       Emitter<QualityManagementStates> emit) {
     reportNewQAMap = event.reportNewQAMap;
-    if (reportNewQAMap['eventdatetime'] == null ||
+    if (reportNewQAMap['categoryid'] == null ||
+        reportNewQAMap['eventdatetime'] == null ||
         reportNewQAMap['description'] == null ||
         reportNewQAMap['companyid'] == '') {
       emit(ReportNewQualityManagementDateTimeDescValidated(
-          dateTimeDescValidationMessage:
-              StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
+          dateTimeDescValidationMessage: StringConstants
+              .kCategoryDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewQualityManagementDateTimeDescValidationComplete());
     }
@@ -487,7 +492,6 @@ class QualityManagementBloc
       ReportNewQualityManagementCustomInfoFiledExpansionChange event,
       Emitter<QualityManagementStates> emit) {
     emit(ReportNewQualityManagementCustomFieldSelected(
-        fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
         reportQMCustomInfoOptionId: event.reportQMCustomInfoOptionId!));
   }
 
@@ -518,6 +522,7 @@ class QualityManagementBloc
         "customfields": reportNewQAMap['customfields'] ?? '',
         "createduserby": (userType == '1') ? userId : '0',
         "createdworkforceby": (userType == '2') ? userId : '0',
+        "categoryid": reportNewQAMap['categoryid'].toString(),
         "hashcode": hashCode
       };
       SaveNewQualityManagementReportingModel
@@ -609,6 +614,28 @@ class QualityManagementBloc
     } catch (e) {
       emit(QualityManagementDetailsNotUpdated(
           editDetailsNotUpdated: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchCustomFieldsByKey(FetchCustomFieldsByKey event,
+      Emitter<QualityManagementStates> emit) async {
+    emit(CustomFieldsByKeyFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchCustomFieldsByKeyModel fetchCustomFieldsByKeyModel =
+          await _qualityManagementRepository.fetchCustomFieldsByKey(
+              "qareport", event.categoryId, hashCode);
+
+      if (fetchCustomFieldsByKeyModel.status == 200) {
+        emit(CustomFieldsByKeyFetched(
+            fetchCustomFieldsByKeyModel: fetchCustomFieldsByKeyModel));
+      } else {
+        emit(CustomFieldsByKeyNotFetched(
+            errorMessage: fetchCustomFieldsByKeyModel.message));
+      }
+    } catch (e) {
+      emit(CustomFieldsByKeyNotFetched(errorMessage: e.toString()));
     }
   }
 }

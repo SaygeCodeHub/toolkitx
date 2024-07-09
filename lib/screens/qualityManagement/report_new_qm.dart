@@ -6,6 +6,7 @@ import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.da
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/qualityManagement/widgets/qm_category_expansion_tile.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
@@ -63,6 +64,28 @@ class ReportNewQA extends StatelessWidget {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(DatabaseUtil.getText('Category'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(fontWeight: FontWeight.w600)),
+                              const SizedBox(height: xxxTinierSpacing),
+                              Visibility(
+                                  visible: ReportNewQA.isFromEdit != true &&
+                                      reportAndEditQMMap['categoryname'] ==
+                                          null,
+                                  replacement: Text(
+                                      (reportAndEditQMMap['categoryname'] ==
+                                              null)
+                                          ? ""
+                                          : reportAndEditQMMap['categoryname']
+                                              .toString()),
+                                  child: QMCategoryExpansionTile(
+                                      categoryList: state
+                                          .fetchQualityManagementMasterModel
+                                          .data![4],
+                                      categoryMap: reportAndEditQMMap)),
+                              const SizedBox(height: xxTinySpacing),
                               Text(DatabaseUtil.getText('HideMyIdentity'),
                                   style: Theme.of(context)
                                       .textTheme

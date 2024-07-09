@@ -39,6 +39,7 @@ class QMListDatum {
   final String refno;
   final String eventdatetime;
   final String location;
+  final String categoryname;
   final String description;
   final String status;
 
@@ -47,6 +48,7 @@ class QMListDatum {
     required this.refno,
     required this.eventdatetime,
     required this.location,
+    required this.categoryname,
     required this.description,
     required this.status,
   });
@@ -56,6 +58,7 @@ class QMListDatum {
         refno: json["refno"],
         eventdatetime: json["eventdatetime"],
         location: json["location"],
+        categoryname: json["categoryname"],
         description: json["description"],
         status: json["status"],
       );
@@ -65,6 +68,7 @@ class QMListDatum {
         "refno": refno,
         "eventdatetime": eventdatetime,
         "location": location,
+        "categoryname": categoryname,
         "description": description,
         "status": status,
       };

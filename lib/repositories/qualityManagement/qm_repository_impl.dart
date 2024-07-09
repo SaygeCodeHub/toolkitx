@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
 import 'package:toolkit/data/models/pdf_generation_model.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_details_model.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_list_model.dart';
 import 'package:toolkit/data/models/qualityManagement/fetch_qm_master_model.dart';
@@ -101,5 +102,13 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}qaincident/getroles?hashcode=$hashCode&userid=$userId");
     return FetchQualityManagementRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchCustomFieldsByKeyModel> fetchCustomFieldsByKey(
+      String moduleName, String categoryId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}common/GetCustomFieldsByKey?modulename=$moduleName&key=$categoryId&hashcode=$hashCode");
+    return FetchCustomFieldsByKeyModel.fromJson(response);
   }
 }
