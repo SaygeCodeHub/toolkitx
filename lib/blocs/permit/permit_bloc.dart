@@ -5,7 +5,11 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/generate_switching_schedule_pdf_model.dart';
+import 'package:toolkit/data/models/permit/mark_switching_schedule_completed_model.dart';
 import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
@@ -95,6 +99,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<AddPermitSwitchingSchedule>(_addPermitSwitchingSchedule);
     on<MoveDownPermitSwitchingSchedule>(_moveDownPermitSwitchingSchedule);
     on<MoveUpPermitSwitchingSchedule>(_moveUpPermitSwitchingSchedule);
+    on<GenerateSwitchingSchedulePdf>(_generateSwitchingSchedulePdf);
+    on<MarkSwitchingScheduleComplete>(_markSwitchingScheduleComplete);
+    on<DeletePermitSwitchingSchedule>(_deletePermitSwitchingSchedule);
+    on<FetchSwitchingScheduleDetails>(_fetchSwitchingScheduleDetails);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -2080,24 +2088,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "safetykeynumber":
             event.editSwitchingScheduleMap['safetykeynumber'] ?? ''
       };
-
-      if (event.editSwitchingScheduleMap['carriedoutdate'] ==
-              event.editSwitchingScheduleMap['carriedoutconfirmeddate'] &&
-          event.editSwitchingScheduleMap['carriedouttime'] ==
-              event.editSwitchingScheduleMap['carriedoutconfirmedtime']) {
-        UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
-            await _permitRepository
-                .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
-        if (updatePermitSwitchingScheduleModel.message == '1') {
-          emit(PermitSwitchingScheduleUpdated());
-        } else {
-          emit(PermitSwitchingScheduleNotUpdated(
-              errorMessage: updatePermitSwitchingScheduleModel.message));
-        }
+      UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
+          await _permitRepository
+              .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
+      if (updatePermitSwitchingScheduleModel.message == '1') {
+        emit(PermitSwitchingScheduleUpdated());
       } else {
         emit(PermitSwitchingScheduleNotUpdated(
-            errorMessage:
-                StringConstants.kCarriedoutNotSimilarToCarriedoutConfirmed));
+            errorMessage: updatePermitSwitchingScheduleModel.message));
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotUpdated(errorMessage: e.toString()));
@@ -2132,31 +2130,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "safetykeynumber":
             event.addSwitchingScheduleMap['safetykeynumber'] ?? ''
       };
-      if (event.addSwitchingScheduleMap['carriedoutdate'] ==
-              event.addSwitchingScheduleMap['carriedoutconfirmeddate'] &&
-          event.addSwitchingScheduleMap['carriedouttime'] ==
-              event.addSwitchingScheduleMap['carriedoutconfirmedtime']) {
-        if (event.addSwitchingScheduleMap['location'] != null &&
-            event.addSwitchingScheduleMap['equipmentuid'] != null &&
-            event.addSwitchingScheduleMap['operation'] != null) {
-          AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
-              await _permitRepository
-                  .addPermitSwitchingSchedule(addSwitchingScheduleMap);
-          if (addPermitSwitchingScheduleModel.message == '1') {
-            emit(PermitSwitchingScheduleAdded());
-          } else {
-            emit(PermitSwitchingScheduleNotAdded(
-                errorMessage: addPermitSwitchingScheduleModel.message));
-          }
+
+      if (event.addSwitchingScheduleMap['location'] != null &&
+          event.addSwitchingScheduleMap['equipmentuid'] != null &&
+          event.addSwitchingScheduleMap['operation'] != null) {
+        AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
+            await _permitRepository
+                .addPermitSwitchingSchedule(addSwitchingScheduleMap);
+        if (addPermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleAdded());
         } else {
-          emit(PermitSwitchingScheduleNotUpdated(
-              errorMessage:
-                  StringConstants.kLocationEquipmentOperationMandatory));
+          emit(PermitSwitchingScheduleNotAdded(
+              errorMessage: addPermitSwitchingScheduleModel.message));
         }
       } else {
         emit(PermitSwitchingScheduleNotUpdated(
             errorMessage:
-                StringConstants.kCarriedoutNotSimilarToCarriedoutConfirmed));
+                StringConstants.kLocationEquipmentOperationMandatory));
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
@@ -2206,6 +2196,100 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotMovedUp(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _generateSwitchingSchedulePdf(
+      GenerateSwitchingSchedulePdf event, Emitter<PermitStates> emit) async {
+    emit(SwitchingSchedulePdfGenerating());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+      GenerateSwitchingSchedulePdfModel generateSwitchingSchedulePdfModel =
+          await _permitRepository.generateSwitchingSchedulePdf(
+              event.switchingScheduleId, hashCode);
+      if (generateSwitchingSchedulePdfModel.status == 200) {
+        var decrypted = EncryptData.decryptAESPrivateKey(
+            generateSwitchingSchedulePdfModel.message, apiKey);
+        emit(SwitchingSchedulePdfGenerated(
+            generateSwitchingSchedulePdfModel:
+                generateSwitchingSchedulePdfModel,
+            decryptedFile: decrypted));
+      } else {
+        emit(SwitchingSchedulePdfNotGenerated(
+            errorMessage: generateSwitchingSchedulePdfModel.message));
+      }
+    } catch (e) {
+      emit(SwitchingSchedulePdfNotGenerated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _markSwitchingScheduleComplete(
+      MarkSwitchingScheduleComplete event, Emitter<PermitStates> emit) async {
+    emit(MarkSwitchingScheduleCompleting());
+    try {
+      Map markSwitchingScheduleCompleteMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "switchingscheduleid": event.switchingScheduleId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      MarkSwitchingScheduleCompletedModel markSwitchingScheduleCompletedModel =
+          await _permitRepository
+              .markSwitchingScheduleComplete(markSwitchingScheduleCompleteMap);
+      if (markSwitchingScheduleCompletedModel.message == '1') {
+        emit(MarkSwitchingScheduleCompleted());
+      } else {
+        emit(MarkSwitchingScheduleNotCompleted(
+            errorMessage: markSwitchingScheduleCompletedModel.message));
+      }
+    } catch (e) {
+      emit(MarkSwitchingScheduleNotCompleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deletePermitSwitchingSchedule(
+      DeletePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleDeleting());
+    try {
+      Map deleteSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      DeleteSwitchingScheduleModel deleteSwitchingScheduleModel =
+          await _permitRepository
+              .deleteSwitchingSchedule(deleteSwitchingScheduleMap);
+      if (deleteSwitchingScheduleModel.message == '1') {
+        emit(PermitSwitchingScheduleDeleted());
+      } else {
+        emit(PermitSwitchingScheduleNotDeleted(
+            errorMessage: deleteSwitchingScheduleModel.message));
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchSwitchingScheduleDetails(
+      FetchSwitchingScheduleDetails event, Emitter<PermitStates> emit) async {
+    emit(SwitchingScheduleDetailsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
+          await _permitRepository.fetchSwitchingScheduleDetails(
+              event.instructionId, hashCode);
+      if (fetchSwitchingScheduleDetailsModel.status == 200) {
+        emit(SwitchingScheduleDetailsFetched(
+            fetchSwitchingScheduleDetailsModel:
+                fetchSwitchingScheduleDetailsModel));
+      } else {
+        emit(SwitchingScheduleDetailsNotFetched(
+            errorMessage: StringConstants.kNoRecordsFound));
+      }
+    } catch (e) {
+      emit(SwitchingScheduleDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 }

@@ -1,11 +1,15 @@
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
+import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/generate_switching_schedule_pdf_model.dart';
+import 'package:toolkit/data/models/permit/mark_switching_schedule_completed_model.dart';
 import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/open_close_permit_model.dart';
@@ -94,4 +98,16 @@ abstract class PermitRepository {
 
   Future<MoveUpPermitSwitchingScheduleModel> moveUpPermitSwitchingSchedule(
       Map moveUpSwitchingScheduleMap);
+
+  Future<MarkSwitchingScheduleCompletedModel> markSwitchingScheduleComplete(
+      Map markSwitchingScheduleCompleteMap);
+
+  Future<GenerateSwitchingSchedulePdfModel> generateSwitchingSchedulePdf(
+      String switchingScheduleId, String hashCode);
+
+  Future<DeleteSwitchingScheduleModel> deleteSwitchingSchedule(
+      Map deleteSwitchingScheduleMap);
+
+  Future<FetchSwitchingScheduleDetailsModel> fetchSwitchingScheduleDetails(
+      String instructionId, String hashCode);
 }

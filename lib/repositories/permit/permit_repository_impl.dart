@@ -2,10 +2,14 @@ import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
+import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/generate_switching_schedule_pdf_model.dart';
+import 'package:toolkit/data/models/permit/mark_switching_schedule_completed_model.dart';
 import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
@@ -248,5 +252,39 @@ class PermitRepositoryImpl extends PermitRepository {
         "${ApiConstants.baseUrl}permit/MovePermitSwitchingScheduleInstructionUp",
         moveUpSwitchingScheduleMap);
     return MoveUpPermitSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<MarkSwitchingScheduleCompletedModel> markSwitchingScheduleComplete(
+      Map markSwitchingScheduleCompleteMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/MarkPermitSwitchingScheduleCompleted",
+        markSwitchingScheduleCompleteMap);
+    return MarkSwitchingScheduleCompletedModel.fromJson(response);
+  }
+
+  @override
+  Future<GenerateSwitchingSchedulePdfModel> generateSwitchingSchedulePdf(
+      String switchingScheduleId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/GenerateSwitchingSchedulePDF?switchingscheduleid=$switchingScheduleId&hashcode=$hashCode");
+    return GenerateSwitchingSchedulePdfModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteSwitchingScheduleModel> deleteSwitchingSchedule(
+      Map deleteSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/DeletePermitSwitchingScheduleInstruction",
+        deleteSwitchingScheduleMap);
+    return DeleteSwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchSwitchingScheduleDetailsModel> fetchSwitchingScheduleDetails(
+      String instructionId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}permit/GetSwitchingScheduleInstruction?instructionid=$instructionId&hashcode=$hashCode");
+    return FetchSwitchingScheduleDetailsModel.fromJson(response);
   }
 }

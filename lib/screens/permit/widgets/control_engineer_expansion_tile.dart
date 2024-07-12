@@ -10,10 +10,12 @@ class ControlEngineerExpansionTile extends StatefulWidget {
     required this.controlEngineerList,
     required this.editSwitchingScheduleMap,
     this.editValue,
+    this.editName,
   });
 
   final List controlEngineerList;
   final Map editSwitchingScheduleMap;
+  final String? editName;
   final String? editValue;
 
   @override
@@ -27,7 +29,8 @@ class ControlEngineerExpansionTileState
 
   @override
   void initState() {
-    selectedValue = widget.editValue ?? '';
+    widget.editSwitchingScheduleMap['controlengineer'] = widget.editValue;
+    selectedValue = widget.editName ?? '';
     super.initState();
   }
 

@@ -165,7 +165,8 @@ class PermitDetailsScreen extends StatelessWidget {
                             PermitComments(
                                 permitDetailsModel: state.permitDetailsModel),
                             PermitSwitchingScheduleTab(
-                                permitDetailsModel: state.permitDetailsModel)
+                                permitDetailsModel: state.permitDetailsModel,
+                                permitId: permitId)
                           ])
                     ]));
               } else {

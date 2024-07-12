@@ -709,4 +709,5 @@ abstract class StringConstants {
   static const String kIncludingVoltageLevel =
       "Including voltage level if appropriate";
   static const String kCategoryName = "Category Name";
+  static const String kEditSelected = "Edit Selected";
 }

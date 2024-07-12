@@ -8,9 +8,14 @@ typedef CallBackFunctionForDateTime = Function(String date, String time);
 
 class PermitSwitchingDateTimeFields extends StatefulWidget {
   const PermitSwitchingDateTimeFields(
-      {super.key, required this.callBackFunctionForDateTime});
+      {super.key,
+      required this.callBackFunctionForDateTime,
+      this.editDate,
+      this.editTime});
 
   final CallBackFunctionForDateTime callBackFunctionForDateTime;
+  final String? editDate;
+  final String? editTime;
 
   @override
   State<PermitSwitchingDateTimeFields> createState() =>
@@ -29,6 +34,7 @@ class _PermitSwitchingDateTimeFieldsState
       children: [
         Expanded(
           child: PermitDatePicker(
+            editDate: widget.editDate ?? '',
             hintText: selectedDate ?? '',
             onDateChanged: (date) {
               selectedDate = date;
@@ -40,6 +46,7 @@ class _PermitSwitchingDateTimeFieldsState
         const SizedBox(width: xxxSmallestSpacing),
         Expanded(
           child: PermitTimePicker(
+            editTime: widget.editTime ?? '',
             hintText: selectedTime ?? '',
             onTimeChanged: (time) {
               selectedTime = time;

@@ -17,6 +17,7 @@ class AppColor {
   static const Color errorRed = Color(0xFFDF4661);
   static const Color lightGreen = Color(0xFF99C051);
   static const Color yellow = Color(0xFFE7BD46);
+  static const Color basicYellow = Color(0xFFFFFF00);
   static const Color greyBlack = Color(0xFF6A6D70);
   static const Color offWhite = Color(0xFFF5F5FF);
   static const Color orange = Color(0xFFf4bd0e);

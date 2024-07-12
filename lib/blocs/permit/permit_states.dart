@@ -1,7 +1,9 @@
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
+import 'package:toolkit/data/models/permit/fetch_switching_schedule_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import 'package:toolkit/data/models/permit/generate_switching_schedule_pdf_model.dart';
 
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
@@ -438,4 +440,56 @@ class PermitSwitchingScheduleNotMovedUp extends PermitStates {
   final String errorMessage;
 
   PermitSwitchingScheduleNotMovedUp({required this.errorMessage});
+}
+
+class SwitchingSchedulePdfGenerating extends PermitStates {}
+
+class SwitchingSchedulePdfGenerated extends PermitStates {
+  final GenerateSwitchingSchedulePdfModel generateSwitchingSchedulePdfModel;
+  final String decryptedFile;
+
+  SwitchingSchedulePdfGenerated(
+      {required this.generateSwitchingSchedulePdfModel,
+      required this.decryptedFile});
+}
+
+class SwitchingSchedulePdfNotGenerated extends PermitStates {
+  final String errorMessage;
+
+  SwitchingSchedulePdfNotGenerated({required this.errorMessage});
+}
+
+class MarkSwitchingScheduleCompleting extends PermitStates {}
+
+class MarkSwitchingScheduleCompleted extends PermitStates {}
+
+class MarkSwitchingScheduleNotCompleted extends PermitStates {
+  final String errorMessage;
+
+  MarkSwitchingScheduleNotCompleted({required this.errorMessage});
+}
+
+class PermitSwitchingScheduleDeleting extends PermitStates {}
+
+class PermitSwitchingScheduleDeleted extends PermitStates {}
+
+class PermitSwitchingScheduleNotDeleted extends PermitStates {
+  final String errorMessage;
+
+  PermitSwitchingScheduleNotDeleted({required this.errorMessage});
+}
+
+class SwitchingScheduleDetailsFetching extends PermitStates {}
+
+class SwitchingScheduleDetailsFetched extends PermitStates {
+  final FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel;
+
+  SwitchingScheduleDetailsFetched(
+      {required this.fetchSwitchingScheduleDetailsModel});
+}
+
+class SwitchingScheduleDetailsNotFetched extends PermitStates {
+  final String errorMessage;
+
+  SwitchingScheduleDetailsNotFetched({required this.errorMessage});
 }

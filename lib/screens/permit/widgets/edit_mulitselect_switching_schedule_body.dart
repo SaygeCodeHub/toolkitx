@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/permit_get_master_model.dart';
 import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.dart';
-import 'package:toolkit/screens/permit/widgets/instructed_date_time_fields.dart';
+import 'package:toolkit/screens/permit/widgets/permit_switching_date_time_fields.dart';
 import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';

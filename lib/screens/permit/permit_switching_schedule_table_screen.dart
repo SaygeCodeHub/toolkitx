@@ -7,9 +7,10 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/data/enums/permit/permit_switching_schedule_enum.dart';
-import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/screens/permit/widgets/permit_schedule_instuction_bottom_sheet.dart';
+import 'package:toolkit/screens/permit/widgets/switching_schedule_table_checkbox.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -68,16 +69,21 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                               width: kPermitEditSelectedButtonWidth,
                               child: PrimaryButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context,
-                                        EditMultiSelectSwitchingScheduleScreen
-                                            .routeName,
-                                        arguments: [
-                                          scheduleId,
-                                          instructionIds
-                                        ]);
+                                    if (instructionIds != '') {
+                                      Navigator.pushNamed(
+                                          context,
+                                          EditMultiSelectSwitchingScheduleScreen
+                                              .routeName,
+                                          arguments: [
+                                            scheduleId,
+                                            instructionIds
+                                          ]);
+                                    } else {
+                                      showCustomSnackBar(
+                                          context, 'No records selected', '');
+                                    }
                                   },
-                                  textValue: "Edit Selected"),
+                                  textValue: StringConstants.kEditSelected),
                             )),
                           ],
                           rows: [
@@ -85,6 +91,16 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                 index < state.scheduleInstructionDatum.length;
                                 index++)
                               DataRow(
+                                color: WidgetStateProperty.resolveWith<Color?>(
+                                  (Set<WidgetState> states) {
+                                    if (state.scheduleInstructionDatum[index]
+                                            .ismanual ==
+                                        1) {
+                                      return AppColor.basicYellow;
+                                    }
+                                    return AppColor.white;
+                                  },
+                                ),
                                 cells: [
                                   DataCell(Text((index + 1).toString())),
                                   ...[
@@ -97,39 +113,48 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                               '',
                                           overflow: TextOverflow.ellipsis))
                                   ],
-                                  DataCell(TextButton(
-                                      onPressed: () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) {
-                                              return PermitScheduleInstructionBottomSheet(
-                                                permitSwithcingScheduleInstructionDatum:
-                                                    state.scheduleInstructionDatum[
-                                                        index],
-                                                scheduleId: scheduleId,
-                                              );
-                                            });
-                                      },
-                                      child: const Text(
-                                          StringConstants.kViewOptions))),
+                                  DataCell(Visibility(
+                                    visible: state
+                                            .scheduleInstructionDatum[index]
+                                            .canexecute ==
+                                        '1',
+                                    child: TextButton(
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return PermitScheduleInstructionBottomSheet(
+                                                  permitSwithcingScheduleInstructionDatum:
+                                                      state.scheduleInstructionDatum[
+                                                          index],
+                                                  scheduleId: scheduleId,
+                                                  index: index,
+                                                  length: state
+                                                      .scheduleInstructionDatum
+                                                      .length,
+                                                );
+                                              });
+                                        },
+                                        child: const Text(
+                                            StringConstants.kViewOptions)),
+                                  )),
                                   DataCell(
-                                    SwitchingScheduleTableCheckbox(
-                                      index: index,
-                                      scheduleInstructionDatum:
-                                          state.scheduleInstructionDatum,
-                                      onCreatedForChanged: (List idList) {
-                                        if (idList.isNotEmpty) {
-                                          if (!selectedIdList
-                                              .contains(idList[0])) {
-                                            selectedIdList.add(idList[0]);
-                                            instructionIds = selectedIdList
-                                                .toString()
-                                                .replaceAll("[", "")
-                                                .replaceAll("]", "")
-                                                .replaceAll(", ", ",");
-                                          }
-                                        }
-                                      },
+                                    Visibility(
+                                      visible: state
+                                              .scheduleInstructionDatum[index]
+                                              .canexecute ==
+                                          '1',
+                                      child: SwitchingScheduleTableCheckbox(
+                                        index: index,
+                                        scheduleInstructionDatum:
+                                            state.scheduleInstructionDatum,
+                                        selectedIdList: selectedIdList,
+                                        onCreatedForChanged: (List idList) {
+                                          selectedIdList = idList;
+                                          instructionIds =
+                                              selectedIdList.join(',');
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -149,55 +174,6 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-typedef CreatedForStringCallBack = Function(List idList);
-
-class SwitchingScheduleTableCheckbox extends StatefulWidget {
-  const SwitchingScheduleTableCheckbox({
-    super.key,
-    required this.index,
-    required this.scheduleInstructionDatum,
-    required this.onCreatedForChanged,
-  });
-
-  final CreatedForStringCallBack onCreatedForChanged;
-  final List<PermitSwithcingScheduleInstructionDatum> scheduleInstructionDatum;
-  final int index;
-
-  @override
-  State<SwitchingScheduleTableCheckbox> createState() =>
-      _SwitchingScheduleTableCheckboxState();
-}
-
-class _SwitchingScheduleTableCheckboxState
-    extends State<SwitchingScheduleTableCheckbox> {
-  List selectedIdList = [];
-
-  void _checkboxChange(isSelected, userId) {
-    if (isSelected) {
-      selectedIdList.add(userId);
-      widget.onCreatedForChanged(selectedIdList);
-    } else {
-      selectedIdList.remove(userId);
-      widget.onCreatedForChanged(selectedIdList);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Checkbox(
-      activeColor: AppColor.deepBlue,
-      value: selectedIdList
-          .contains(widget.scheduleInstructionDatum[widget.index].id),
-      onChanged: (isChecked) {
-        setState(() {
-          _checkboxChange(
-              isChecked, widget.scheduleInstructionDatum[widget.index].id);
-        });
-      },
     );
   }
 }
