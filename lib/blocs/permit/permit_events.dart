@@ -243,3 +243,27 @@ class MoveUpPermitSwitchingSchedule extends PermitEvents {
 
   MoveUpPermitSwitchingSchedule({required this.instructionId});
 }
+
+class GenerateSwitchingSchedulePdf extends PermitEvents {
+  final String switchingScheduleId;
+
+  GenerateSwitchingSchedulePdf({required this.switchingScheduleId});
+}
+
+class MarkSwitchingScheduleComplete extends PermitEvents {
+  final String switchingScheduleId;
+
+  MarkSwitchingScheduleComplete({required this.switchingScheduleId});
+}
+
+class DeletePermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  DeletePermitSwitchingSchedule({required this.instructionId});
+}
+
+class FetchSwitchingScheduleDetails extends PermitEvents {
+  final String instructionId;
+
+  FetchSwitchingScheduleDetails({required this.instructionId});
+}

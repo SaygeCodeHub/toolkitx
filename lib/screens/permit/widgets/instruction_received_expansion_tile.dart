@@ -10,11 +10,13 @@ class InstructionReceivedExpansionTile extends StatefulWidget {
     required this.instructionList,
     required this.editSwitchingScheduleMap,
     this.editName,
+    this.editValue,
   });
 
   final List instructionList;
   final Map editSwitchingScheduleMap;
   final String? editName;
+  final String? editValue;
 
   @override
   State<InstructionReceivedExpansionTile> createState() =>
@@ -28,6 +30,7 @@ class InstructionReceivedExpansionTileState
   @override
   void initState() {
     selectedValue = widget.editName ?? '';
+    widget.editSwitchingScheduleMap['instructionreceivedby'] = widget.editValue;
     super.initState();
   }
 

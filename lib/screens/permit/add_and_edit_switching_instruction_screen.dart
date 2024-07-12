@@ -49,14 +49,7 @@ class AddAndEditSwitchingInstructionScreen extends StatelessWidget {
                   currentState is PermitMasterFetched ||
                   currentState is CouldNotFetchPermitMaster,
               builder: (context, state) {
-                if (state is FetchingPermitMaster) {
-                  return Center(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 2.5),
-                        child: const CircularProgressIndicator()),
-                  );
-                } else if (state is PermitMasterFetched) {
+                if (state is PermitMasterFetched) {
                   return AddAndEditSwitchingInstructionBody(
                     isFromEdit: isFromEdit,
                     permitSwithcingScheduleInstructionDatum:
