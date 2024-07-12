@@ -10,11 +10,13 @@ class SwitchingScheduleTableCheckbox extends StatefulWidget {
     required this.index,
     required this.scheduleInstructionDatum,
     required this.onCreatedForChanged,
+    required this.selectedIdList,
   });
 
   final CreatedForStringCallBack onCreatedForChanged;
   final List<PermitSwithcingScheduleInstructionDatum> scheduleInstructionDatum;
   final int index;
+  final List selectedIdList;
 
   @override
   State<SwitchingScheduleTableCheckbox> createState() =>
@@ -23,15 +25,13 @@ class SwitchingScheduleTableCheckbox extends StatefulWidget {
 
 class _SwitchingScheduleTableCheckboxState
     extends State<SwitchingScheduleTableCheckbox> {
-  List selectedIdList = [];
-
   void _checkboxChange(isSelected, userId) {
     if (isSelected) {
-      selectedIdList.add(userId);
-      widget.onCreatedForChanged(selectedIdList);
+      widget.selectedIdList.add(userId);
+      widget.onCreatedForChanged(widget.selectedIdList);
     } else {
-      selectedIdList.remove(userId);
-      widget.onCreatedForChanged(selectedIdList);
+      widget.selectedIdList.remove(userId);
+      widget.onCreatedForChanged(widget.selectedIdList);
     }
   }
 
@@ -39,7 +39,7 @@ class _SwitchingScheduleTableCheckboxState
   Widget build(BuildContext context) {
     return Checkbox(
       activeColor: AppColor.deepBlue,
-      value: selectedIdList
+      value: widget.selectedIdList
           .contains(widget.scheduleInstructionDatum[widget.index].id),
       onChanged: (isChecked) {
         setState(() {

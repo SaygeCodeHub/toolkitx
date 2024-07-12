@@ -10,6 +10,7 @@ import 'package:toolkit/data/enums/permit/permit_switching_schedule_enum.dart';
 import 'package:toolkit/screens/permit/widgets/permit_schedule_instuction_bottom_sheet.dart';
 import 'package:toolkit/screens/permit/widgets/switching_schedule_table_checkbox.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -68,16 +69,21 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                               width: kPermitEditSelectedButtonWidth,
                               child: PrimaryButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context,
-                                        EditMultiSelectSwitchingScheduleScreen
-                                            .routeName,
-                                        arguments: [
-                                          scheduleId,
-                                          instructionIds
-                                        ]);
+                                    if (instructionIds != '') {
+                                      Navigator.pushNamed(
+                                          context,
+                                          EditMultiSelectSwitchingScheduleScreen
+                                              .routeName,
+                                          arguments: [
+                                            scheduleId,
+                                            instructionIds
+                                          ]);
+                                    } else {
+                                      showCustomSnackBar(
+                                          context, 'No records selected', '');
+                                    }
                                   },
-                                  textValue: "Edit Selected"),
+                                  textValue: StringConstants.kEditSelected),
                             )),
                           ],
                           rows: [
@@ -90,7 +96,7 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                     if (state.scheduleInstructionDatum[index]
                                             .ismanual ==
                                         1) {
-                                      return AppColor.yellow;
+                                      return AppColor.basicYellow;
                                     }
                                     return AppColor.white;
                                   },
@@ -142,18 +148,11 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                         index: index,
                                         scheduleInstructionDatum:
                                             state.scheduleInstructionDatum,
+                                        selectedIdList: selectedIdList,
                                         onCreatedForChanged: (List idList) {
-                                          if (idList.isNotEmpty) {
-                                            if (!selectedIdList
-                                                .contains(idList[0])) {
-                                              selectedIdList.add(idList[0]);
-                                              instructionIds = selectedIdList
-                                                  .toString()
-                                                  .replaceAll("[", "")
-                                                  .replaceAll("]", "")
-                                                  .replaceAll(", ", ",");
-                                            }
-                                          }
+                                          selectedIdList = idList;
+                                          instructionIds =
+                                              selectedIdList.join(',');
                                         },
                                       ),
                                     ),

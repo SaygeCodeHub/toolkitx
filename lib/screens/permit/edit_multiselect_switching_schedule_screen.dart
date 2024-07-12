@@ -27,7 +27,6 @@ class EditMultiSelectSwitchingScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('instructionIds========>$instructionIds');
     context.read<PermitBloc>().add(const FetchPermitMaster());
     Map switchingScheduleMap = {};
     return Scaffold(

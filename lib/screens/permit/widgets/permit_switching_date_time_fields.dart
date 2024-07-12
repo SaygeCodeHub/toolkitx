@@ -34,7 +34,7 @@ class _PermitSwitchingDateTimeFieldsState
       children: [
         Expanded(
           child: PermitDatePicker(
-            editDate: widget.editDate!,
+            editDate: widget.editDate ?? '',
             hintText: selectedDate ?? '',
             onDateChanged: (date) {
               selectedDate = date;
@@ -46,7 +46,7 @@ class _PermitSwitchingDateTimeFieldsState
         const SizedBox(width: xxxSmallestSpacing),
         Expanded(
           child: PermitTimePicker(
-            editTime: widget.editTime!,
+            editTime: widget.editTime ?? '',
             hintText: selectedTime ?? '',
             onTimeChanged: (time) {
               selectedTime = time;
