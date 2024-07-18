@@ -8,6 +8,7 @@ import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
 import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_list_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
@@ -314,6 +315,12 @@ class OnLineModules extends StatelessWidget {
         globalBloc.add(UpdateCount(type: 'manifest'));
         Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) =>
+                clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'tanks':
+        globalBloc.add(UpdateCount(type: 'tanks'));
+        Navigator.pushNamed(context, TankManagementListScreen.routeName).then(
+            (_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
     }
