@@ -120,6 +120,11 @@ abstract class ModulesUtil {
         key: 'loto',
         notificationKey: 'loto'),
     ModulesModel(
+        moduleName: 'TankManagement',
+        moduleImage: '${kBaseImagePath}tank_icon.png',
+        key: 'tanks',
+        notificationKey: 'tanks'),
+    ModulesModel(
         moduleName: 'Ticket',
         moduleImage: '${kBaseImagePath}ticket.png',
         key: 'tickets',

@@ -18,6 +18,8 @@ import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
 import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
+import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
+import 'package:toolkit/repositories/tankManagement/tank_management_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
 
@@ -130,6 +132,8 @@ configurableDependencies() {
   getIt
       .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
   getIt.registerLazySingleton<TripsRepository>(() => TripsRepositoryImpl());
+  getIt.registerLazySingleton<TankManagementRepository>(
+      () => TankManagementRepositoryImpl());
   getIt.registerLazySingleton<MeetingRoomRepository>(
       () => MeetingRoomRepositoryImpl());
 }

@@ -1,0 +1,15 @@
+import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
+
+import '../../utils/constants/api_constants.dart';
+import '../../utils/dio_client.dart';
+
+class TankManagementRepositoryImpl extends TankManagementRepository {
+  @override
+  Future<FetchTankManagementListModel> fetchTankManagementList(
+      int pageNo, String hashCode, String filter, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}nomination/get?pageno=$pageNo&hashcode=$hashCode&filter=$filter&userid=$userId");
+    return FetchTankManagementListModel.fromJson(response);
+  }
+}
