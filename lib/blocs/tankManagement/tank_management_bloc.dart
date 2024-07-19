@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
@@ -21,9 +22,11 @@ class TankManagementBloc
 
   TankManagementBloc() : super(TankManagementInitial()) {
     on<FetchTankManagementList>(_fetchTankManagementList);
+    on<FetchTankManagementDetails>(_fetchTankManagementDetails);
   }
 
   Map filterMap = {};
+  int tabIndex = 0;
 
   Future<FutureOr<void>> _fetchTankManagementList(
       FetchTankManagementList event, Emitter<TankManagementState> emit) async {
@@ -40,11 +43,34 @@ class TankManagementBloc
         emit(TankManagementListFetched(
             fetchTankManagementListModel: fetchTankManagementListModel));
       } else {
-        emit(TankManagementNotFetched(
+        emit(TankManagementListNotFetched(
             errorMessage: fetchTankManagementListModel.message));
       }
     } catch (e) {
-      emit(TankManagementNotFetched(errorMessage: e.toString()));
+      emit(TankManagementListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchTankManagementDetails(
+      FetchTankManagementDetails event,
+      Emitter<TankManagementState> emit) async {
+    emit(TankManagementDetailsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+
+      FetchTankManagementDetailsModel fetchTankManagementDetailsModel =
+          await _managementRepository.fetchTankManagementDetails(
+              event.nominationId, hashCode);
+      if (fetchTankManagementDetailsModel.status == 200) {
+        emit(TankManagementDetailsFetched(
+            fetchTankManagementDetailsModel: fetchTankManagementDetailsModel));
+      } else {
+        emit(TankManagementDetailsNotFetched(
+            errorMessage: fetchTankManagementDetailsModel.message));
+      }
+    } catch (e) {
+      emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
     }
   }
 }
