@@ -73,7 +73,8 @@ class TankManagementDetailsScreen extends StatelessWidget {
                         const Center(child: Text("Checklist")),
                         TankManagementICSSDetails(
                             fetchTankManagementDetailsModel:
-                                state.fetchTankManagementDetailsModel)
+                                state.fetchTankManagementDetailsModel,
+                            nominationId: nominationId)
                       ])
                 ],
               );

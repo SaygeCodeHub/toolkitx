@@ -12,7 +12,7 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.rfidnumber),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Truck No',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -24,13 +24,13 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.tankername),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Max Capacity',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.tankermaxcapacity),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Seal Number(s)',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -42,25 +42,25 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrivaldatetime),
+          Text(data.drivername),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Tank',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.actualarrivaldatetime),
+          Text(data.tank),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Carrier Company',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.deplocname),
+          Text(data.carriercompany),
           const SizedBox(height: xxxSmallestSpacing),
           Text('No of Compartments',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrlocname),
+          Text(data.noofcompartments),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Flowmeter Quantity (cbm) per Compartment',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -72,13 +72,13 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.remarks),
+          Text(data.truckposition),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Driver Phone',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.remarks),
+          Text(data.driverphone),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Nominated Quantity / Loading Certificate Weight',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -122,55 +122,55 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.shipname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Berth',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.berth),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Agent',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.agentname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Captain / Carrier Person',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.captainCarrierperson),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Load port',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.actualdeparturedatetime),
+          Text(data.loadport),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Contract',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrivaldatetime),
+          Text(data.contractname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Disport',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.actualarrivaldatetime),
+          Text(data.disport),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Country of origin',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.deplocname),
+          Text(data.countryoforigin),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('QCountry of Production',
+          Text('Country of Production',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrlocname),
+          Text(data.countryofproduction),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Bill of Lading',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -214,7 +214,7 @@ import 'package:toolkit/configs/app_theme.dart';
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          Text(data.destinationtankname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Source tank deliverded quantity',
               style: Theme.of(context).textTheme.xSmall.copyWith(

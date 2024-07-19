@@ -38,87 +38,100 @@ class TankManagementListScreen extends StatelessWidget {
                   primaryOnPress: () {},
                   secondaryOnPress: () {},
                   clearOnPress: () {}),
-              Expanded(child:
-                  BlocBuilder<TankManagementBloc, TankManagementState>(
+              Expanded(
+                  child: BlocBuilder<TankManagementBloc, TankManagementState>(
+                      buildWhen: (previous, current) =>
+                          current is TankManagementListFetching ||
+                          current is TankManagementListFetched ||
+                          current is TankManagementListNotFetched,
                       builder: (context, state) {
-                if (state is TankManagementListFetching) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is TankManagementListFetched) {
-                  var data = state.fetchTankManagementListModel.data;
-                  return ListView.separated(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return CustomCard(
-                            child: ListTile(
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      TankManagementDetailsScreen.routeName,
-                                      arguments: data[index].id);
-                                },
-                                title: Text(data[index].nominationNo,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .small
-                                        .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.black)),
-                                subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: xxxTinierSpacing,
-                                      ),
-                                      Text(
-                                        data[index].announce,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(height: xxxTinierSpacing),
-                                      Text(
-                                        data[index].date,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(
-                                        height: xxxTinierSpacing,
-                                      ),
-                                      Text(
-                                        data[index].contractname,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(height: xxxTinierSpacing)
-                                    ]),
-                                trailing: Text(data[index].status,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.deepBlue))));
-                      },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: xxTinierSpacing);
-                      });
-                } else if (state is TankManagementListNotFetched) {
-                  return const Center(
-                      child: Text(StringConstants.kNoRecordsFound));
-                }
-                return const SizedBox.shrink();
-              }))
+                        if (state is TankManagementListFetching) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (state is TankManagementListFetched) {
+                          var data = state.fetchTankManagementListModel.data;
+                          return ListView.separated(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return CustomCard(
+                                    child: ListTile(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context,
+                                              TankManagementDetailsScreen
+                                                  .routeName,
+                                              arguments: data[index].id);
+                                        },
+                                        title: Text(data[index].nominationNo,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .small
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: AppColor.black)),
+                                        subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: xxxTinierSpacing,
+                                              ),
+                                              Text(
+                                                data[index].announce,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .xSmall
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: AppColor.grey),
+                                              ),
+                                              const SizedBox(
+                                                  height: xxxTinierSpacing),
+                                              Text(
+                                                data[index].date,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .xSmall
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: AppColor.grey),
+                                              ),
+                                              const SizedBox(
+                                                height: xxxTinierSpacing,
+                                              ),
+                                              Text(
+                                                data[index].contractname,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .xSmall
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: AppColor.grey),
+                                              ),
+                                              const SizedBox(
+                                                  height: xxxTinierSpacing)
+                                            ]),
+                                        trailing: Text(data[index].status,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .xSmall
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        AppColor.deepBlue))));
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(height: xxTinierSpacing);
+                              });
+                        } else if (state is TankManagementListNotFetched) {
+                          return const Center(
+                              child: Text(StringConstants.kNoRecordsFound));
+                        }
+                        return const SizedBox.shrink();
+                      }))
             ])));
   }
 }

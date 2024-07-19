@@ -28,13 +28,13 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.purposetext),
+          // Text(data.no),
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kStatus,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.vesselname),
+          Text(data.status),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Title',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -46,31 +46,31 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.departuredatetime),
+          Text(data.announcedetails),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Customer',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.actualdeparturedatetime),
+          Text(data.customername),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Contract',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrivaldatetime),
+          Text(data.contractname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Tank',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.actualarrivaldatetime),
+          Text(data.tank),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Product',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.deplocname),
+          Text(data.productname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Quantity (cbm)',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -94,7 +94,7 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.remarks),
+          Text(data.customstatus),
           const SizedBox(height: xxxSmallestSpacing),
           basicDetailsTabSwitchCase(context, data.type, data)
         ]),
