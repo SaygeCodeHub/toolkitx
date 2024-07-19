@@ -37,6 +37,7 @@ import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
 import 'package:toolkit/screens/tankManagement/tank_management_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
@@ -734,6 +735,9 @@ class AppRoutes {
         ));
       case TankManagementListScreen.routeName:
         return _createRoute(const TankManagementListScreen());
+      case TankManagementDetailsScreen.routeName:
+        return _createRoute(
+            TankManagementDetailsScreen(nominationId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

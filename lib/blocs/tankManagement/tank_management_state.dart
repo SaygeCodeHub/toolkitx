@@ -12,8 +12,23 @@ class TankManagementListFetched extends TankManagementState {
   TankManagementListFetched({required this.fetchTankManagementListModel});
 }
 
-class TankManagementNotFetched extends TankManagementState {
+class TankManagementListNotFetched extends TankManagementState {
   final String errorMessage;
 
-  TankManagementNotFetched({required this.errorMessage});
+  TankManagementListNotFetched({required this.errorMessage});
 }
+
+class TankManagementDetailsFetching extends TankManagementState {}
+
+class TankManagementDetailsFetched extends TankManagementState {
+  final FetchTankManagementDetailsModel fetchTankManagementDetailsModel;
+
+  TankManagementDetailsFetched({required this.fetchTankManagementDetailsModel});
+}
+
+class TankManagementDetailsNotFetched extends TankManagementState {
+  final String errorMessage;
+
+  TankManagementDetailsNotFetched({required this.errorMessage});
+}
+

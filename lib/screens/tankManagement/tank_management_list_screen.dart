@@ -4,7 +4,9 @@ import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_icon_button_row.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -22,7 +24,7 @@ class TankManagementListScreen extends StatelessWidget {
         .read<TankManagementBloc>()
         .add(FetchTankManagementList(pageNo: pageNo, isFromHome: isFromHome));
     return Scaffold(
-        appBar: const GenericAppBar(title: "Tank Management"),
+        appBar: GenericAppBar(title: DatabaseUtil.getText('tanks')),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -48,6 +50,11 @@ class TankManagementListScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return CustomCard(
                             child: ListTile(
+                                onTap: () {
+                                  Navigator.pushNamed(context,
+                                      TankManagementDetailsScreen.routeName,
+                                      arguments: data[index].id);
+                                },
                                 title: Text(data[index].nominationNo,
                                     style: Theme.of(context)
                                         .textTheme
@@ -106,7 +113,7 @@ class TankManagementListScreen extends StatelessWidget {
                       separatorBuilder: (context, index) {
                         return const SizedBox(height: xxTinierSpacing);
                       });
-                } else if (state is TankManagementNotFetched) {
+                } else if (state is TankManagementListNotFetched) {
                   return const Center(
                       child: Text(StringConstants.kNoRecordsFound));
                 }

@@ -8,3 +8,9 @@ class FetchTankManagementList extends TankManagementEvent {
 
   FetchTankManagementList({required this.pageNo, required this.isFromHome});
 }
+
+class FetchTankManagementDetails extends TankManagementEvent {
+  final String nominationId;
+
+  FetchTankManagementDetails({required this.nominationId});
+}
