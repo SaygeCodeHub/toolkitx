@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
 import 'package:toolkit/di/app_module.dart';
@@ -23,6 +24,7 @@ class TankManagementBloc
   TankManagementBloc() : super(TankManagementInitial()) {
     on<FetchTankManagementList>(_fetchTankManagementList);
     on<FetchTankManagementDetails>(_fetchTankManagementDetails);
+    on<FetchNominationChecklist>(_fetchNominationChecklist);
   }
 
   Map filterMap = {};
@@ -71,6 +73,29 @@ class TankManagementBloc
       }
     } catch (e) {
       emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchNominationChecklist(
+      FetchNominationChecklist event, Emitter<TankManagementState> emit) async {
+    emit(NominationChecklistFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+
+      FetchNominationChecklistModel fetchNominationChecklistModel =
+          await _managementRepository.fetchNominationChecklist(
+              event.nominationId, hashCode, userId);
+      if (fetchNominationChecklistModel.status == 200) {
+        emit(NominationChecklistFetched(
+            fetchNominationChecklistModel: fetchNominationChecklistModel));
+      } else {
+        emit(NominationChecklistNotFetched(
+            errorMessage: fetchNominationChecklistModel.message));
+      }
+    } catch (e) {
+      emit(NominationChecklistNotFetched(errorMessage: e.toString()));
     }
   }
 }

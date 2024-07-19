@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
@@ -20,5 +21,13 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}nomination/getnomination?nominationid=$nominationId&hashcode=$hashCode");
     return FetchTankManagementDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchNominationChecklistModel> fetchNominationChecklist(
+      String nominationId, String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}nomination/getnominationchecklist?nominationid=$nominationId&hashcode=$hashCode&userid=$userId");
+    return FetchNominationChecklistModel.fromJson(response);
   }
 }
