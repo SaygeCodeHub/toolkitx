@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchTmsNominationDataModel fetchTmsNominationDataModelFromJson(String str) => FetchTmsNominationDataModel.fromJson(json.decode(str));
+FetchTmsNominationDataModel fetchTmsNominationDataModelFromJson(String str) =>
+    FetchTmsNominationDataModel.fromJson(json.decode(str));
 
-String fetchTmsNominationDataModelToJson(FetchTmsNominationDataModel data) => json.encode(data.toJson());
+String fetchTmsNominationDataModelToJson(FetchTmsNominationDataModel data) =>
+    json.encode(data.toJson());
 
 class FetchTmsNominationDataModel {
   final int status;
@@ -15,17 +17,18 @@ class FetchTmsNominationDataModel {
     required this.data,
   });
 
-  factory FetchTmsNominationDataModel.fromJson(Map<String, dynamic> json) => FetchTmsNominationDataModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: Data.fromJson(json["Data"]),
-  );
+  factory FetchTmsNominationDataModel.fromJson(Map<String, dynamic> json) =>
+      FetchTmsNominationDataModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: Data.fromJson(json["Data"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {
@@ -53,6 +56,9 @@ class Data {
   final String thaintime;
   final String thaouttime;
   final String quantity;
+  final String tank;
+  final String licenseplate;
+  final String productname;
   final List<dynamic> sourcetankreading;
   final List<dynamic> destinationtankreading;
 
@@ -83,63 +89,80 @@ class Data {
     required this.quantity,
     required this.sourcetankreading,
     required this.destinationtankreading,
+    required this.tank,
+    required this.productname,
+    required this.licenseplate,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"] ?? '',
-    nominationid: json["nominationid"] ?? '',
-    fillinglevel: json["fillinglevel"] ?? '',
-    temperature: json["temperature"] ?? '',
-    density: json["density"] ?? '',
-    entrydate: json["entrydate"] ?? '',
-    entryweight: json["entryweight"] ?? '',
-    exitweight: json["exitweight"] ?? '',
-    exitdate: json["exitdate"] ?? '',
-    thaOpereationCompleted: json["tha_opereation_completed"] ?? '',
-    startdate: json["startdate"] ?? '',
-    enddate: json["enddate"] ?? '',
-    postOperationSourceTankVolume: json["post_operation_source_tank_volume"] ?? '',
-    preOperationSourceTankVolume: json["pre_operation_source_tank_volume"] ?? '',
-    postOperationDestinationTankVolume: json["post_operation_destination_tank_volume"] ?? '',
-    updateddate: json["updateddate"] ?? '',
-    tankinitialweight: json["tankinitialweight"] ?? '',
-    tankinitiallevel: json["tankinitiallevel"] ?? '',
-    tankfinalweight: json["tankfinalweight"] ?? '',
-    tankfinallevel: json["tankfinallevel"] ?? '',
-    reportingtime: json["reportingtime"] ?? '',
-    thaintime: json["thaintime"] ?? '',
-    thaouttime: json["thaouttime"] ?? '',
-    quantity: json["quantity"] ?? '',
-    sourcetankreading: List<dynamic>.from(json["sourcetankreading"].map((x) => x)),
-    destinationtankreading: List<dynamic>.from(json["destinationtankreading"].map((x) => x)),
-  );
+        id: json["id"] ?? '',
+        nominationid: json["nominationid"] ?? '',
+        fillinglevel: json["fillinglevel"] ?? '',
+        temperature: json["temperature"] ?? '',
+        density: json["density"] ?? '',
+        entrydate: json["entrydate"] ?? '',
+        entryweight: json["entryweight"] ?? '',
+        exitweight: json["exitweight"] ?? '',
+        exitdate: json["exitdate"] ?? '',
+        thaOpereationCompleted: json["tha_opereation_completed"] ?? '',
+        startdate: json["startdate"] ?? '',
+        enddate: json["enddate"] ?? '',
+        postOperationSourceTankVolume:
+            json["post_operation_source_tank_volume"] ?? '',
+        preOperationSourceTankVolume:
+            json["pre_operation_source_tank_volume"] ?? '',
+        postOperationDestinationTankVolume:
+            json["post_operation_destination_tank_volume"] ?? '',
+        updateddate: json["updateddate"] ?? '',
+        tankinitialweight: json["tankinitialweight"] ?? '',
+        tankinitiallevel: json["tankinitiallevel"] ?? '',
+        tankfinalweight: json["tankfinalweight"] ?? '',
+        tankfinallevel: json["tankfinallevel"] ?? '',
+        reportingtime: json["reportingtime"] ?? '',
+        thaintime: json["thaintime"] ?? '',
+        thaouttime: json["thaouttime"] ?? '',
+        quantity: json["quantity"] ?? '',
+        tank: json["tank"] ?? '',
+        productname: json["productname"] ?? '',
+        licenseplate: json["licenseplate"] ?? '',
+        sourcetankreading:
+            List<dynamic>.from(json["sourcetankreading"].map((x) => x)),
+        destinationtankreading:
+            List<dynamic>.from(json["destinationtankreading"].map((x) => x)),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "nominationid": nominationid,
-    "fillinglevel": fillinglevel,
-    "temperature": temperature,
-    "density": density,
-    "entrydate": entrydate,
-    "entryweight": entryweight,
-    "exitweight": exitweight,
-    "exitdate": exitdate,
-    "tha_opereation_completed": thaOpereationCompleted,
-    "startdate": startdate,
-    "enddate": enddate,
-    "post_operation_source_tank_volume": postOperationSourceTankVolume,
-    "pre_operation_source_tank_volume": preOperationSourceTankVolume,
-    "post_operation_destination_tank_volume": postOperationDestinationTankVolume,
-    "updateddate": updateddate,
-    "tankinitialweight": tankinitialweight,
-    "tankinitiallevel": tankinitiallevel,
-    "tankfinalweight": tankfinalweight,
-    "tankfinallevel": tankfinallevel,
-    "reportingtime": reportingtime,
-    "thaintime": thaintime,
-    "thaouttime": thaouttime,
-    "quantity": quantity,
-    "sourcetankreading": List<dynamic>.from(sourcetankreading.map((x) => x)),
-    "destinationtankreading": List<dynamic>.from(destinationtankreading.map((x) => x)),
-  };
+        "id": id,
+        "nominationid": nominationid,
+        "fillinglevel": fillinglevel,
+        "temperature": temperature,
+        "density": density,
+        "entrydate": entrydate,
+        "entryweight": entryweight,
+        "exitweight": exitweight,
+        "exitdate": exitdate,
+        "tha_opereation_completed": thaOpereationCompleted,
+        "startdate": startdate,
+        "enddate": enddate,
+        "post_operation_source_tank_volume": postOperationSourceTankVolume,
+        "pre_operation_source_tank_volume": preOperationSourceTankVolume,
+        "post_operation_destination_tank_volume":
+            postOperationDestinationTankVolume,
+        "updateddate": updateddate,
+        "tankinitialweight": tankinitialweight,
+        "tankinitiallevel": tankinitiallevel,
+        "tankfinalweight": tankfinalweight,
+        "tankfinallevel": tankfinallevel,
+        "reportingtime": reportingtime,
+        "thaintime": thaintime,
+        "thaouttime": thaouttime,
+        "quantity": quantity,
+        "tank": tank,
+        "productname": productname,
+        "licenseplate": licenseplate,
+        "sourcetankreading":
+            List<dynamic>.from(sourcetankreading.map((x) => x)),
+        "destinationtankreading":
+            List<dynamic>.from(destinationtankreading.map((x) => x)),
+      };
 }

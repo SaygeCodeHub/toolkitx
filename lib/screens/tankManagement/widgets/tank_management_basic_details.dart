@@ -28,7 +28,7 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.no),
+          Text(data.nominationo),
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kStatus,
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -40,7 +40,7 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.statustext),
+          Text(data.announcetext),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Scheduled Date',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -76,19 +76,19 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.arrlocname),
+          Text(data.metriccbm),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Quantity (kg)',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.remarks),
+          Text(data.metrictons),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Surveyour',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(data.remarks),
+          Text(data.surveyourname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Custom Status',
               style: Theme.of(context).textTheme.xSmall.copyWith(

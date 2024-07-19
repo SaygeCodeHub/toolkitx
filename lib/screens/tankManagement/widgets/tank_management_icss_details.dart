@@ -22,37 +22,30 @@ class TankManagementICSSDetails extends StatelessWidget {
     context
         .read<TankManagementBloc>()
         .add(FetchTmsNominationData(nominationId: nominationId));
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: leftRightMargin,
-        right: leftRightMargin,
-        top: xxTinierSpacing,
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: IconButton(
-              onPressed: () {
-                context
-                    .read<TankManagementBloc>()
-                    .add(FetchTmsNominationData(nominationId: nominationId));
-              },
-              icon: const Icon(Icons.refresh)),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){context
+          .read<TankManagementBloc>()
+          .add(FetchTmsNominationData(nominationId: nominationId));},child: const Icon(Icons.refresh),),
+      body: Padding(
+        padding: const EdgeInsets.only(
+          left: leftRightMargin,
+          right: leftRightMargin,
+          top: xxTinierSpacing,
         ),
-        BlocBuilder<TankManagementBloc, TankManagementState>(
-          builder: (context, state) {
-            if (state is TmsNominationDataFetching) {
-              return Center(
-                  child: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 4),
-                child: const CircularProgressIndicator(),
-              ));
-            } else if (state is TmsNominationDataFetched) {
-              var icssData = state.fetchTmsNominationDataModel.data;
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: BlocBuilder<TankManagementBloc, TankManagementState>(
+            builder: (context, state) {
+              if (state is TmsNominationDataFetching) {
+                return Center(
+                    child: Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 4),
+                  child: const CircularProgressIndicator(),
+                ));
+              } else if (state is TmsNominationDataFetched) {
+                var icssData = state.fetchTmsNominationDataModel.data;
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     icssDetailsTabSwitchCase(
@@ -90,39 +83,40 @@ class TankManagementICSSDetails extends StatelessWidget {
                       ]),
                     )
                   ],
-                ),
-              );
-            } else if (state is TmsNominationDataNotFetched) {
-              return Center(
-                  child: Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height / 4),
-                child: const Text(StringConstants.kNoRecordsFound),
-              ));
-            }
-            return const SizedBox.shrink();
-          },
-        )
-      ]),
+                );
+              } else if (state is TmsNominationDataNotFetched) {
+                return Center(
+                    child: Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 4),
+                  child: const Text(StringConstants.kNoRecordsFound),
+                ));
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      ),
     );
   }
 
   Widget icssDetailsTabSwitchCase(
       context, type, tankManagementDetails, icssData) {
     switch (type) {
-      case '1':
+      case '2':
+      case '3':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('Tank',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.purposetext),
+          Text(icssData.tank),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Product',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.vesselname),
+          Text(icssData.productname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Density (kg/m3)',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -140,7 +134,7 @@ class TankManagementICSSDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.actualdeparturedatetime),
+          Text(icssData.licenseplate),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Entry DateTime',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -194,7 +188,7 @@ class TankManagementICSSDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.remarks),
+          Text(icssData.quantity),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Reporting Time',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -220,26 +214,21 @@ class TankManagementICSSDetails extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(icssData.thaOpereationCompleted),
         ]);
-      case '2':
-      case '3':
+      case '4':
+      case '5':
+      case '1':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('Tank',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.purposetext),
+          Text(icssData.tank),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('PitA - Tank-1Product',
+          Text('Product',
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          // Text(icssData.purposetext),
-          const SizedBox(height: xxxSmallestSpacing),
-          Text('Product 3',
-              style: Theme.of(context).textTheme.xSmall.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: tiniestSpacing),
-          // Text(icssData.purposetext),
+          Text(icssData.productname),
           const SizedBox(height: xxxSmallestSpacing),
           Text('Density (kg/m3)',
               style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -259,7 +248,6 @@ class TankManagementICSSDetails extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(icssData.enddate),
         ]);
-
       default:
         return Container();
     }
