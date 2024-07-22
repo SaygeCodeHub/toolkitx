@@ -23,9 +23,14 @@ class TankManagementICSSDetails extends StatelessWidget {
         .read<TankManagementBloc>()
         .add(FetchTmsNominationData(nominationId: nominationId));
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){context
-          .read<TankManagementBloc>()
-          .add(FetchTmsNominationData(nominationId: nominationId));},child: const Icon(Icons.refresh),),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context
+              .read<TankManagementBloc>()
+              .add(FetchTmsNominationData(nominationId: nominationId));
+        },
+        child: const Icon(Icons.refresh),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
           left: leftRightMargin,
@@ -56,7 +61,8 @@ class TankManagementICSSDetails extends StatelessWidget {
                     const SizedBox(height: xxTinierSpacing),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: DataTable(border: TableBorder.all(), columns: const [
+                      child:
+                          DataTable(border: TableBorder.all(), columns: const [
                         DataColumn(label: Text('')),
                         DataColumn(label: Text('')),
                         DataColumn(label: Text('Tank Level (mm)')),
