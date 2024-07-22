@@ -17,6 +17,37 @@ class FetchTankManagementDetails extends TankManagementEvent {
 
 class FetchNominationChecklist extends TankManagementEvent {
   final String nominationId;
+  final int tabIndex;
 
-  FetchNominationChecklist({required this.nominationId});
+  FetchNominationChecklist(
+      {required this.nominationId, required this.tabIndex});
+}
+
+class SubmitNominationChecklist extends TankManagementEvent {
+  final Map tankChecklistMap;
+
+  SubmitNominationChecklist({required this.tankChecklistMap});
+}
+
+class SelectTankChecklistAnswer extends TankManagementEvent {
+  final String? dropDownValue;
+  final List multiSelectIdList;
+  final String multiSelectItem;
+  final String? radioValue;
+  final String multiSelectName;
+  final List multiSelectNameList;
+
+  SelectTankChecklistAnswer(
+      {required this.multiSelectNameList,
+      required this.multiSelectName,
+      this.radioValue = '',
+      required this.multiSelectItem,
+      required this.multiSelectIdList,
+      this.dropDownValue = ''});
+}
+
+class TankCheckListFetchQuestions extends TankManagementEvent {
+  final Map tankChecklistMap;
+
+  TankCheckListFetchQuestions({required this.tankChecklistMap});
 }

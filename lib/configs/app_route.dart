@@ -39,6 +39,8 @@ import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
 import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
 import 'package:toolkit/screens/tankManagement/tank_management_list_screen.dart';
+import 'package:toolkit/screens/tankManagement/widgets/submit_tank_checklist_screen.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_view_response_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
@@ -179,6 +181,7 @@ import '../screens/safetyNotice/safety_notice_history_screen.dart';
 import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
+import '../screens/tankManagement/widgets/tank_add_image_comment_screen.dart';
 import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
@@ -736,8 +739,17 @@ class AppRoutes {
       case TankManagementListScreen.routeName:
         return _createRoute(const TankManagementListScreen());
       case TankManagementDetailsScreen.routeName:
-        return _createRoute(
-            TankManagementDetailsScreen(nominationId: settings.arguments.toString()));
+        return _createRoute(TankManagementDetailsScreen(
+            nominationId: settings.arguments.toString()));
+      case SubmitTankChecklistScreen.routeName:
+        return _createRoute(SubmitTankChecklistScreen(
+            tankChecklistMap: settings.arguments as Map));
+      case TankViewResponseScreen.routeName:
+        return _createRoute(TankViewResponseScreen(
+            tankChecklistMap: settings.arguments as Map));
+      case TankAddImageCommentScreen.routeName:
+        return _createRoute(TankAddImageCommentScreen(
+            questionResponseId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

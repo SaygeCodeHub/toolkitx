@@ -45,3 +45,47 @@ class NominationChecklistNotFetched extends TankManagementState {
 
   NominationChecklistNotFetched({required this.errorMessage});
 }
+
+class NominationChecklistSubmitting extends TankManagementState {}
+
+class NominationChecklistSubmitted extends TankManagementState {}
+
+class NominationChecklistNotSubmitted extends TankManagementState {
+  final String errorMessage;
+
+  NominationChecklistNotSubmitted({required this.errorMessage});
+}
+
+class TankCheckListAnswersSelected extends TankManagementState {
+  final String? dropDownValue;
+  final List multiSelectId;
+
+  final List multiSelectNames;
+
+  TankCheckListAnswersSelected(
+      {required this.multiSelectNames,
+      required this.multiSelectId,
+      this.dropDownValue});
+}
+
+class TankChecklistQuestionsListFetching extends TankManagementState {}
+
+class TankChecklistQuestionsListFetched extends TankManagementState {
+  final FetchTankChecklistQuestionModel
+      fetchTankChecklistQuestionModelQuestionListModel;
+  final List answerList;
+  final Map allChecklistDataMap;
+
+  TankChecklistQuestionsListFetched(
+      {required this.fetchTankChecklistQuestionModelQuestionListModel,
+      required this.allChecklistDataMap,
+      required this.answerList});
+}
+
+class TankCheckListQuestionsListNotFetched extends TankManagementState {
+  final Map allChecklistDataMap;
+  final String errorMessage;
+
+  TankCheckListQuestionsListNotFetched(
+      {required this.errorMessage, required this.allChecklistDataMap});
+}
