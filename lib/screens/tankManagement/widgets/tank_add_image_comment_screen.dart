@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/checklist_save_comment_button.dart';
@@ -20,13 +21,14 @@ class TankAddImageCommentScreen extends StatelessWidget {
   final String questionResponseId;
 
   TankAddImageCommentScreen({super.key, required this.questionResponseId});
+
   final Map saveQuestionCommentsMap = {};
 
   @override
   Widget build(BuildContext context) {
     context
-        .read<WorkForceCheckListCommentBloc>()
-        .add(CheckListFetchComment(questionResponseId: questionResponseId));
+        .read<TankManagementBloc>()
+        .add(FetchTankChecklistComments(questionId: questionResponseId));
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kAddCommentImage),
@@ -35,24 +37,27 @@ class TankAddImageCommentScreen extends StatelessWidget {
                 left: leftRightMargin,
                 right: leftRightMargin,
                 top: topBottomPadding),
-            child: BlocBuilder<WorkForceCheckListCommentBloc,
-                    WorkForceCheckListCommentStates>(
+            child: BlocBuilder<TankManagementBloc, TankManagementState>(
                 buildWhen: (previousState, currentState) =>
-                    currentState is CheckListFetchingComment ||
-                    currentState is CheckListCommentFetched ||
-                    currentState is CheckListCommentNotFetched,
+                    currentState is TankCheckListCommentsFetching ||
+                    currentState is TankCheckListCommentsFetched ||
+                    currentState is TankCheckListCommentsNotFetched,
                 builder: (context, state) {
-                  if (state is CheckListFetchingComment) {
+                  if (state is TankCheckListCommentsFetching) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is CheckListCommentFetched) {
-                    saveQuestionCommentsMap["comments"] =
-                        state.getQuestionCommentsModel.data!.additionalcomment;
+                  } else if (state is TankCheckListCommentsFetched) {
+                    saveQuestionCommentsMap["comments"] = state
+                        .fetchTankChecklistCommentsModel
+                        .data!
+                        .additionalcomment;
                     return SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(state.getQuestionCommentsModel.data!.title,
+                              Text(
+                                  state.fetchTankChecklistCommentsModel.data!
+                                      .title!,
                                   style: Theme.of(context)
                                       .textTheme
                                       .small
@@ -61,8 +66,8 @@ class TankAddImageCommentScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w500)),
                               const SizedBox(height: xxTinierSpacing),
                               Text(
-                                  state
-                                      .getQuestionCommentsModel.data!.optiontext
+                                  state.fetchTankChecklistCommentsModel.data!
+                                      .optiontext
                                       .toString(),
                                   style: Theme.of(context)
                                       .textTheme
@@ -97,7 +102,9 @@ class TankAddImageCommentScreen extends StatelessWidget {
                                           color: AppColor.deepBlue,
                                           fontWeight: FontWeight.w500)),
                               const SizedBox(height: xxTinierSpacing),
-                              Text(state.getQuestionCommentsModel.data!.files!,
+                              Text(
+                                  state.fetchTankChecklistCommentsModel.data!
+                                      .files!,
                                   style: Theme.of(context).textTheme.xSmall),
                               const SizedBox(height: xxTinierSpacing),
                               Text(StringConstants.kUploadPhoto,
@@ -124,7 +131,7 @@ class TankAddImageCommentScreen extends StatelessWidget {
                         onPressed: () {
                           context.read<WorkForceCheckListCommentBloc>().add(
                               CheckListFetchComment(
-                                  questionResponseId: state.quesResponseId));
+                                  questionResponseId: questionResponseId));
                         },
                         textValue: StringConstants.kReload);
                   } else {

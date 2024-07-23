@@ -3,6 +3,7 @@ import 'dart:convert';
 FetchTankChecklistQuestionModel fetchTankChecklistQuestionModelFromJson(
         String str) =>
     FetchTankChecklistQuestionModel.fromJson(json.decode(str));
+
 String fetchTankChecklistQuestionModelToJson(
         FetchTankChecklistQuestionModel data) =>
     json.encode(data.toJson());
@@ -11,17 +12,20 @@ class FetchTankChecklistQuestionModel {
   final int? status;
   final String? message;
   final Data? data;
+
   FetchTankChecklistQuestionModel({
     this.status,
     this.message,
     this.data,
   });
+
   factory FetchTankChecklistQuestionModel.fromJson(Map<String, dynamic> json) =>
       FetchTankChecklistQuestionModel(
         status: json["Status"],
         message: json["Message"],
         data: json["Data"] == null ? null : Data.fromJson(json["Data"]),
       );
+
   Map<String, dynamic> toJson() => {
         "Status": status,
         "Message": message,
@@ -38,7 +42,8 @@ class Data {
   final String? showlocation;
   final String? templateid;
   final String? responseid;
-  final List<Questionlist>? questionlist;
+  final List<TankQuestionList>? questionlist;
+
   Data({
     this.checklistid,
     this.scheduleid,
@@ -50,6 +55,7 @@ class Data {
     this.responseid,
     this.questionlist,
   });
+
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         checklistid: json["checklistid"],
         scheduleid: json["scheduleid"],
@@ -61,9 +67,10 @@ class Data {
         responseid: json["responseid"],
         questionlist: json["questionlist"] == null
             ? []
-            : List<Questionlist>.from(
-                json["questionlist"]!.map((x) => Questionlist.fromJson(x))),
+            : List<TankQuestionList>.from(
+                json["questionlist"]!.map((x) => TankQuestionList.fromJson(x))),
       );
+
   Map<String, dynamic> toJson() => {
         "checklistid": checklistid,
         "scheduleid": scheduleid,
@@ -79,7 +86,7 @@ class Data {
       };
 }
 
-class Questionlist {
+class TankQuestionList {
   final String? id;
   final int? type;
   final String? title;
@@ -103,9 +110,10 @@ class Questionlist {
   final String? moreinfo;
   final dynamic matrixrowcount;
   final List<Maplink>? maplinks;
-  final List<Queoption>? queoptions;
+  final List<dynamic>? queoptions;
   final List<dynamic>? matrixcols;
-  Questionlist({
+
+  TankQuestionList({
     this.id,
     this.type,
     this.title,
@@ -132,7 +140,9 @@ class Questionlist {
     this.queoptions,
     this.matrixcols,
   });
-  factory Questionlist.fromJson(Map<String, dynamic> json) => Questionlist(
+
+  factory TankQuestionList.fromJson(Map<String, dynamic> json) =>
+      TankQuestionList(
         id: json["id"],
         type: json["type"],
         title: json["title"],
@@ -161,12 +171,12 @@ class Questionlist {
                 json["maplinks"]!.map((x) => Maplink.fromJson(x))),
         queoptions: json["queoptions"] == null
             ? []
-            : List<Queoption>.from(
-                json["queoptions"]!.map((x) => Queoption.fromJson(x))),
+            : List<dynamic>.from(json["queoptions"]!.map((x) => x)),
         matrixcols: json["matrixcols"] == null
             ? []
             : List<dynamic>.from(json["matrixcols"]!.map((x) => x)),
       );
+
   Map<String, dynamic> toJson() => {
         "id": id,
         "type": type,
@@ -206,16 +216,19 @@ class Maplink {
   final String? name;
   final String? link;
   final String? classname;
+
   Maplink({
     this.name,
     this.link,
     this.classname,
   });
+
   factory Maplink.fromJson(Map<String, dynamic> json) => Maplink(
         name: json["name"],
         link: json["link"],
         classname: json["classname"],
       );
+
   Map<String, dynamic> toJson() => {
         "name": name,
         "link": link,
@@ -223,17 +236,20 @@ class Maplink {
       };
 }
 
-class Queoption {
+class TankQueoption {
   final int? queoptionid;
   final String? queoptiontext;
-  Queoption({
+
+  TankQueoption({
     this.queoptionid,
     this.queoptiontext,
   });
-  factory Queoption.fromJson(Map<String, dynamic> json) => Queoption(
+
+  factory TankQueoption.fromJson(Map<String, dynamic> json) => TankQueoption(
         queoptionid: json["queoptionid"],
         queoptiontext: json["queoptiontext"],
       );
+
   Map<String, dynamic> toJson() => {
         "queoptionid": queoptionid,
         "queoptiontext": queoptiontext,

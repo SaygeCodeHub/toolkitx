@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_question_model.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../configs/app_color.dart';
-import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../widgets/expansion_tile_border.dart';
 
 typedef CheckBoxCallBack = Function(String checkboxId, String checkboxValue);
 
 class TankMultiSelectExpansionTile extends StatelessWidget {
-  final List<Questionlist> answerModelList;
+  final List<TankQuestionList> answerModelList;
   final int index;
   final List selectedIdList;
   final List selectedNamesList;
@@ -42,31 +42,35 @@ class TankMultiSelectExpansionTile extends StatelessWidget {
                     : multiSelectNames,
                 style: Theme.of(context).textTheme.xSmall),
             children: [
-              ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: answerModelList[index].queoptions!.length,
-                  itemBuilder: (BuildContext context, int listIndex) {
-                    return CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        value: selectedIdList.contains(answerModelList[index]
-                            .queoptions![listIndex]["queoptionid"]
-                            .toString()),
-                        title: Text(answerModelList[index]
-                            .queoptions![listIndex]["queoptiontext"]),
-                        controlAffinity: ListTileControlAffinity.trailing,
-                        onChanged: (isChecked) {
-                          context.read<TankManagementBloc>().add(
-                              SelectTankChecklistAnswer(
-                                  multiSelectIdList: selectedIdList,
-                                  multiSelectItem: answerModelList[index]
-                                      .queoptions![listIndex]["queoptionid"]
-                                      .toString(),
-                                  multiSelectName: answerModelList[index]
-                                      .queoptions![listIndex]["queoptiontext"],
-                                  multiSelectNameList: selectedNamesList));
-                        });
-                  })
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: answerModelList[index].queoptions!.length,
+                    itemBuilder: (BuildContext context, int listIndex) {
+                      return CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          value: selectedIdList.contains(answerModelList[index]
+                              .queoptions![listIndex]["queoptionid"]
+                              .toString()),
+                          title: Text(answerModelList[index]
+                              .queoptions![listIndex]["queoptiontext"]),
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          onChanged: (isChecked) {
+                            context.read<TankManagementBloc>().add(
+                                SelectTankChecklistAnswer(
+                                    multiSelectIdList: selectedIdList,
+                                    multiSelectItem: answerModelList[index]
+                                        .queoptions![listIndex]["queoptionid"]
+                                        .toString(),
+                                    multiSelectName: answerModelList[index]
+                                            .queoptions![listIndex]
+                                        ["queoptiontext"],
+                                    multiSelectNameList: selectedNamesList));
+                          });
+                    }),
+              )
             ]));
   }
 }

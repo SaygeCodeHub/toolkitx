@@ -31,7 +31,9 @@ class TankManagementChecklistTab extends StatelessWidget {
             itemBuilder: (context, index) {
               Map tankChecklistMap = {
                 "scheduleId": data[index].scheduleid,
-                'title': data[index].checklistname
+                "executionId": data[index].executionid,
+                'title': data[index].checklistname,
+                'nominationId': nominationId
               };
               return CustomCard(
                 child: ListTile(

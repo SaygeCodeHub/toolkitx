@@ -74,7 +74,9 @@ class TankSubmitAnswerSignaturePadSection extends StatelessWidget {
                                               .read<TankManagementBloc>()
                                               .add(SubmitNominationChecklist(
                                                   tankChecklistMap:
-                                                      tankChecklistDataMap));
+                                                      tankChecklistDataMap,
+                                                  editQuestionsList: answerList,
+                                                  isDraft: false));
                                         },
                                         textValue: StringConstants.kYes)
                                   ]);

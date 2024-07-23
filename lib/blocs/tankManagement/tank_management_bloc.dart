@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_model.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
 import 'package:toolkit/di/app_module.dart';
@@ -12,6 +13,7 @@ import 'package:toolkit/repositories/tankManagement/tank_management_repository.d
 import '../../data/models/tankManagement/fetch_tank_checklist_question_model.dart';
 import '../../data/models/tankManagement/submit_nomination_checklist_model.dart';
 import '../../utils/constants/string_constants.dart';
+import '../../utils/database_utils.dart';
 
 part 'tank_management_event.dart';
 
@@ -32,10 +34,11 @@ class TankManagementBloc
     on<SubmitNominationChecklist>(_submitNominationChecklist);
     on<SelectTankChecklistAnswer>(_selectTankChecklistAnswer);
     on<TankCheckListFetchQuestions>(_tankCheckListFetchQuestions);
+    on<FetchTankChecklistComments>(_fetchTankChecklistComments);
   }
 
   List answerList = [];
-  List<Questionlist>? questionList;
+  List<TankQuestionList>? questionList;
   Map allDataForChecklistMap = {};
   Map filterMap = {};
   int tabIndex = 0;
@@ -134,24 +137,60 @@ class TankManagementBloc
       Emitter<TankManagementState> emit) async {
     emit(NominationChecklistSubmitting());
     try {
-      Map tankChecklistMap = {
-        "executionid": "4EXuS6I0AhNAJeJmuB7q0w==",
-        "userid": "2ATY8mLx8MjkcnrmiRLvrA==",
-        "isdraft": "1",
-        "questions": [
-          {"questionid": "1taSheEvrxhT90dldIQnJA==", "answer": "1"},
-          {"questionid": "x+XZRx2SWL3fBM7x1d5fYw==", "answer": "1"}
-        ],
-        "hashcode":
-            "vbdvrj9aN/gnmG9HRZBOV137+VBlDH1innvdsfSI8lOHTShvQP8iAcfeuRbflSG0|23|1|1|cet_3"
-      };
-      SubmitNominationChecklistModel submitNominationChecklistModel =
-          await _managementRepository.saveNominationChecklist(tankChecklistMap);
-      if (submitNominationChecklistModel.message == '1') {
-        emit(NominationChecklistSubmitted());
+      List submitList = [];
+      List validateSubmitList = [];
+      String id = '';
+      String answer = '';
+      String isMandatory = '';
+      for (int j = 0; j < event.editQuestionsList.length; j++) {
+        id = event.editQuestionsList[j]["questionid"];
+        answer = event.editQuestionsList[j]["answer"];
+        isMandatory = event.editQuestionsList[j]["ismandatory"].toString();
+        submitList.add({"questionid": id, "answer": answer});
+        validateSubmitList.add({"ismandatory": isMandatory, "answer": answer});
+      }
+      if (event.isDraft == true) {
+        Map tankChecklistMap = {
+          "executionid": event.tankChecklistMap['executionId'],
+          "userid": await _customerCache.getUserId(CacheKeys.userId),
+          "isdraft": (event.isDraft == true) ? "1" : "0",
+          "questions": answerList,
+          "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+        };
+        SubmitNominationChecklistModel submitNominationChecklistModel =
+            await _managementRepository
+                .saveNominationChecklist(tankChecklistMap);
+        if (submitNominationChecklistModel.message == '1') {
+          emit(NominationChecklistSubmitted());
+        } else {
+          emit(NominationChecklistNotSubmitted(
+              errorMessage: submitNominationChecklistModel.message));
+        }
       } else {
-        emit(NominationChecklistNotSubmitted(
-            errorMessage: submitNominationChecklistModel.message));
+        if (validateSubmitList
+            .map((e) => e["answer"] == "" && e["ismandatory"] == "1")
+            .contains(true)) {
+          emit(NominationChecklistNotSubmitted(
+              errorMessage:
+                  DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
+        } else {
+          Map tankChecklistMap = {
+            "executionid": event.tankChecklistMap['executionId'],
+            "userid": await _customerCache.getUserId(CacheKeys.userId),
+            "isdraft": (event.isDraft == true) ? "1" : "0",
+            "questions": answerList,
+            "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+          };
+          SubmitNominationChecklistModel submitNominationChecklistModel =
+              await _managementRepository
+                  .saveNominationChecklist(tankChecklistMap);
+          if (submitNominationChecklistModel.message == '1') {
+            emit(NominationChecklistSubmitted());
+          } else {
+            emit(NominationChecklistNotSubmitted(
+                errorMessage: submitNominationChecklistModel.message));
+          }
+        }
       }
     } catch (e) {
       emit(NominationChecklistNotSubmitted(errorMessage: e.toString()));
@@ -203,11 +242,16 @@ class TankManagementBloc
                   .data!.questionlist![i].ismandatory,
             });
           }
+          add(SelectTankChecklistAnswer(
+              multiSelectIdList: [],
+              multiSelectItem: '',
+              multiSelectName: '',
+              multiSelectNameList: []));
           emit(TankChecklistQuestionsListFetched(
-              fetchTankChecklistQuestionModelQuestionListModel:
-                  fetchTankChecklistQuestionModel,
+              fetchTankChecklistQuestionModel: fetchTankChecklistQuestionModel,
               answerList: answerList,
-              allChecklistDataMap: allDataForChecklistMap));
+              allChecklistDataMap: allDataForChecklistMap,
+              questionList: questionList!));
         } else {
           emit(TankCheckListQuestionsListNotFetched(
               allChecklistDataMap: {},
@@ -218,6 +262,28 @@ class TankManagementBloc
       emit(TankCheckListQuestionsListNotFetched(
           allChecklistDataMap: allDataForChecklistMap,
           errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchTankChecklistComments(
+      FetchTankChecklistComments event,
+      Emitter<TankManagementState> emit) async {
+    emit(TankCheckListCommentsFetching());
+    try {
+      allDataForChecklistMap["questionResponseId"] = event.questionId;
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      FetchTankChecklistCommentsModel fetchTankChecklistCommentsModel =
+          await _managementRepository.fetchTankChecklistComments(
+              event.questionId, hashCode);
+      if (fetchTankChecklistCommentsModel.status == 200) {
+        emit(TankCheckListCommentsFetched(
+            fetchTankChecklistCommentsModel: fetchTankChecklistCommentsModel));
+      } else {
+        emit(TankCheckListCommentsNotFetched(
+            errorMessage: fetchTankChecklistCommentsModel.message!));
+      }
+    } catch (e) {
+      emit(TankCheckListCommentsNotFetched(errorMessage: e.toString()));
     }
   }
 }

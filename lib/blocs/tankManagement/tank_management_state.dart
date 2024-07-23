@@ -71,15 +71,16 @@ class TankCheckListAnswersSelected extends TankManagementState {
 class TankChecklistQuestionsListFetching extends TankManagementState {}
 
 class TankChecklistQuestionsListFetched extends TankManagementState {
-  final FetchTankChecklistQuestionModel
-      fetchTankChecklistQuestionModelQuestionListModel;
+  final FetchTankChecklistQuestionModel fetchTankChecklistQuestionModel;
   final List answerList;
   final Map allChecklistDataMap;
+  final List<TankQuestionList> questionList;
 
   TankChecklistQuestionsListFetched(
-      {required this.fetchTankChecklistQuestionModelQuestionListModel,
+      {required this.fetchTankChecklistQuestionModel,
       required this.allChecklistDataMap,
-      required this.answerList});
+      required this.answerList,
+      required this.questionList});
 }
 
 class TankCheckListQuestionsListNotFetched extends TankManagementState {
@@ -88,4 +89,18 @@ class TankCheckListQuestionsListNotFetched extends TankManagementState {
 
   TankCheckListQuestionsListNotFetched(
       {required this.errorMessage, required this.allChecklistDataMap});
+}
+
+class TankCheckListCommentsFetching extends TankManagementState {}
+
+class TankCheckListCommentsFetched extends TankManagementState {
+  final FetchTankChecklistCommentsModel fetchTankChecklistCommentsModel;
+
+  TankCheckListCommentsFetched({required this.fetchTankChecklistCommentsModel});
+}
+
+class TankCheckListCommentsNotFetched extends TankManagementState {
+  final String errorMessage;
+
+  TankCheckListCommentsNotFetched({required this.errorMessage});
 }

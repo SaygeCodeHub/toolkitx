@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/tankManagement/widgets/tank_multi_selection_expantion_tile.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_radio_button_expansion_tile.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
-import '../screens/checklist/workforce/widgets/drop_down_expansion_tile.dart';
-import '../screens/checklist/workforce/widgets/radio_button_expansion_tile.dart';
 import '../screens/checklist/workforce/widgets/upload_image_section.dart';
 import '../screens/incident/widgets/date_picker.dart';
 import '../screens/incident/widgets/time_picker.dart';
+import '../screens/tankManagement/widgets/tank_drop_down_expansion_tile.dart';
 import '../widgets/generic_text_field.dart';
 import 'constants/string_constants.dart';
 
@@ -46,7 +46,7 @@ class TankChecklistQuestionUtil {
               answerList[index]["answer"] = textValue;
             });
       case 3:
-        return DropDownExpansionTile(
+        return TankDropDownExpansionTile(
           onValueChanged: (String dropDownId, String dropDownString) {
             answerList[index]["answer"] = dropDownId;
           },
@@ -58,7 +58,7 @@ class TankChecklistQuestionUtil {
               : answerModelList[index].optiontext,
         );
       case 4:
-        return RadioButtonExpansionTile(
+        return TankRadioButtonExpansionTile(
             answerModelList: answerModelList,
             index: index,
             onRadioButtonChecked: (String radioId, String radioValue) {

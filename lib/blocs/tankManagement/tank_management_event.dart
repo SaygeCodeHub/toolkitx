@@ -25,8 +25,13 @@ class FetchNominationChecklist extends TankManagementEvent {
 
 class SubmitNominationChecklist extends TankManagementEvent {
   final Map tankChecklistMap;
+  final List editQuestionsList;
+  final bool isDraft;
 
-  SubmitNominationChecklist({required this.tankChecklistMap});
+  SubmitNominationChecklist(
+      {required this.tankChecklistMap,
+      required this.editQuestionsList,
+      required this.isDraft});
 }
 
 class SelectTankChecklistAnswer extends TankManagementEvent {
@@ -50,4 +55,10 @@ class TankCheckListFetchQuestions extends TankManagementEvent {
   final Map tankChecklistMap;
 
   TankCheckListFetchQuestions({required this.tankChecklistMap});
+}
+
+class FetchTankChecklistComments extends TankManagementEvent {
+  final String questionId;
+
+  FetchTankChecklistComments({required this.questionId});
 }
