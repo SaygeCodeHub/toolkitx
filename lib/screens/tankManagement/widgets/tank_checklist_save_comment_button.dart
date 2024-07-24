@@ -69,9 +69,8 @@ class TankChecklistSaveCommentButton extends StatelessWidget {
                   imageLength:
                       context.read<ImagePickerBloc>().lengthOfImageList));
             } else {
-              context.read<TankManagementBloc>().add(
-                  SaveTankQuestionsComments(
-                      tankCommentsMap: saveQuestionCommentsMap));
+              context.read<TankManagementBloc>().add(SaveTankQuestionsComments(
+                  tankCommentsMap: saveQuestionCommentsMap));
             }
           },
           textValue: StringConstants.kSave),
