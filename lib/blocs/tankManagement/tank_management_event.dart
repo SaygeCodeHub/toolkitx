@@ -15,6 +15,12 @@ class FetchTankManagementDetails extends TankManagementEvent {
   FetchTankManagementDetails({required this.nominationId});
 }
 
+class FetchTmsNominationData extends TankManagementEvent {
+  final String nominationId;
+
+  FetchTmsNominationData({required this.nominationId});
+}
+
 class FetchNominationChecklist extends TankManagementEvent {
   final String nominationId;
   final int tabIndex;

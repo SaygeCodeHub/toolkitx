@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_mo
 import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_tms_nomination_data_model.dart';
 import 'package:toolkit/data/models/tankManagement/save_tank_questions_comments_model.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
 
@@ -25,6 +26,14 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}nomination/getnomination?nominationid=$nominationId&hashcode=$hashCode");
     return FetchTankManagementDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchTmsNominationDataModel> fetchTmsNominationData(
+      String nominationId, String hashCode) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}nomination/gettmsnominationdata?nominationid=$nominationId&hashcode=$hashCode");
+    return FetchTmsNominationDataModel.fromJson(response);
   }
 
   @override

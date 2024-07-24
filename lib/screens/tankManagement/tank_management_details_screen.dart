@@ -74,7 +74,8 @@ class TankManagementDetailsScreen extends StatelessWidget {
                         TankManagementChecklistTab(nominationId: data.id),
                         TankManagementICSSDetails(
                             fetchTankManagementDetailsModel:
-                                state.fetchTankManagementDetailsModel)
+                                state.fetchTankManagementDetailsModel,
+                            nominationId: nominationId)
                       ])
                 ],
               );

@@ -32,6 +32,19 @@ class TankManagementDetailsNotFetched extends TankManagementState {
   TankManagementDetailsNotFetched({required this.errorMessage});
 }
 
+class TmsNominationDataFetching extends TankManagementState {}
+
+class TmsNominationDataFetched extends TankManagementState {
+  final FetchTmsNominationDataModel fetchTmsNominationDataModel;
+
+  TmsNominationDataFetched({required this.fetchTmsNominationDataModel});
+}
+
+class TmsNominationDataNotFetched extends TankManagementState {
+  final String errorMessage;
+
+  TmsNominationDataNotFetched({required this.errorMessage});
+}
 class NominationChecklistFetching extends TankManagementState {}
 
 class NominationChecklistFetched extends TankManagementState {
