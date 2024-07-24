@@ -50,46 +50,8 @@ class TankManagementICSSDetails extends StatelessWidget {
                 ));
               } else if (state is TmsNominationDataFetched) {
                 var icssData = state.fetchTmsNominationDataModel.data;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    icssDetailsTabSwitchCase(
-                        context,
-                        tankManagementDetails.type,
-                        tankManagementDetails,
-                        icssData),
-                    const SizedBox(height: xxTinierSpacing),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child:
-                          DataTable(border: TableBorder.all(), columns: const [
-                        DataColumn(label: Text('')),
-                        DataColumn(label: Text('')),
-                        DataColumn(label: Text('Tank Level (mm)')),
-                        DataColumn(label: Text('Tank Volume (cbm)')),
-                        DataColumn(label: Text('Tank Temperature (°C)')),
-                        DataColumn(label: Text('Tank Mass (kg)')),
-                      ], rows: const [
-                        DataRow(cells: [
-                          DataCell(Text("ACT Tank 678")),
-                          DataCell(Text("Open reading")),
-                          DataCell(Text("")),
-                          DataCell(Text("")),
-                          DataCell(Text("")),
-                          DataCell(Text("")),
-                        ]),
-                        DataRow(cells: [
-                          DataCell(Text('')),
-                          DataCell(Text('Close reading')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                          DataCell(Text('')),
-                        ]),
-                      ]),
-                    )
-                  ],
-                );
+                return icssDetailsTabSwitchCase(
+                    context, '4', tankManagementDetails, icssData);
               } else if (state is TmsNominationDataNotFetched) {
                 return Center(
                     child: Padding(
@@ -112,109 +74,97 @@ class TankManagementICSSDetails extends StatelessWidget {
       case '2':
       case '3':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Tank',
+          Text(StringConstants.kTank,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tank),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Product',
+          Text(StringConstants.kProduct,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          Text(icssData.productname),
+          Text(icssData.product),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Density (kg/m3)',
-              style: Theme.of(context).textTheme.xSmall.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: tiniestSpacing),
-          Text(icssData.density),
-          const SizedBox(height: xxxSmallestSpacing),
-          Text('Temperature (°C)',
-              style: Theme.of(context).textTheme.xSmall.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: tiniestSpacing),
-          Text(icssData.temperature),
-          const SizedBox(height: xxxSmallestSpacing),
-          Text('Truck No',
+          Text(StringConstants.kTruckNo,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.licenseplate),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Entry DateTime',
+          Text(StringConstants.kEntryDateTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.entrydate),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Entry Weight (kg)',
+          Text(StringConstants.kEntryWeight,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.entryweight),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Exit DateTime',
+          Text(StringConstants.kExitDateTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.exitdate),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Exit Weight (kg)',
+          Text(StringConstants.kExitDateTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.exitweight),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Tank Initial Weight (kg) ',
+          Text(StringConstants.kTankInitialWeight,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tankinitialweight),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Tank Initial Level (mm)',
+          Text(StringConstants.kTankInitialLevel,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tankinitiallevel),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Tank Final Weight (kg)',
+          Text(StringConstants.kTankFinalWeight,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tankfinalweight),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Tank Final Level (mm)',
+          Text(StringConstants.kTankFinalLevel,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tankfinallevel),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Flowmeter Quantity (kg) per Compartment',
+          Text(StringConstants.kFlowMeterQuantityKGAsPerCompartment,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.quantity),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Reporting Time',
+          Text(StringConstants.kReportingTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.reportingtime),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('THA In Time',
+          Text(StringConstants.kTHAInTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.thaintime),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('THA Out Time',
+          Text(StringConstants.kTHAOutTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.thaouttime),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('THA Opereation Completed',
+          Text(StringConstants.kTHAOperationCompleted,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
@@ -224,35 +174,112 @@ class TankManagementICSSDetails extends StatelessWidget {
       case '5':
       case '1':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Tank',
+          Text(StringConstants.kTank,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.tank),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Product',
+          Text(StringConstants.kProduct,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          Text(icssData.productname),
+          Text(icssData.product),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('Density (kg/m3)',
-              style: Theme.of(context).textTheme.xSmall.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.bold)),
-          const SizedBox(height: tiniestSpacing),
-          Text(icssData.density),
-          const SizedBox(height: xxxSmallestSpacing),
-          Text('Start DateTime',
+          Text(StringConstants.kStartDateTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.startdate),
           const SizedBox(height: xxxSmallestSpacing),
-          Text('End DateTime',
+          Text(StringConstants.kEndDateTime,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
           Text(icssData.enddate),
+          const SizedBox(height: xxxSmallestSpacing),
+          Visibility(
+              visible: icssData.sourcetankreading.length > 0,
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                      border: TableBorder.all(),
+                      columns: const [
+                        DataColumn(label: Text('')),
+                        DataColumn(label: Text('')),
+                        DataColumn(label: Text(StringConstants.kTankLevel)),
+                        DataColumn(label: Text(StringConstants.kTankVolume)),
+                        DataColumn(
+                            label: Text(StringConstants.kTankTemperature)),
+                        DataColumn(label: Text(StringConstants.kTankMass)),
+                      ],
+                      rows: List<DataRow>.generate(
+                          icssData.sourcetankreading.length * 2, (index) {
+                        final tank = icssData.sourcetankreading[index ~/ 2];
+                        final isOpenReading = index % 2 == 0;
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(isOpenReading ? tank.tankname : '')),
+                            DataCell(Text(isOpenReading
+                                ? StringConstants.kOpenReading
+                                : StringConstants.kCloseReading)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openProductlevel
+                                : tank.closeProductlevel)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openTotalobservedvolume
+                                : tank.openTotalobservedvolume)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openProducttemperature
+                                : tank.closeProducttemperature)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openMassliquid
+                                : tank.closeMassliquid)),
+                          ],
+                        );
+                      })))),
+          const SizedBox(height: xxxSmallestSpacing),
+          Visibility(
+              visible: icssData.destinationtankreading.length > 0,
+              child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                      border: TableBorder.all(),
+                      columns: const [
+                        DataColumn(label: Text('')),
+                        DataColumn(label: Text('')),
+                        DataColumn(label: Text(StringConstants.kTankLevel)),
+                        DataColumn(label: Text(StringConstants.kTankVolume)),
+                        DataColumn(
+                            label: Text(StringConstants.kTankTemperature)),
+                        DataColumn(label: Text(StringConstants.kTankMass)),
+                      ],
+                      rows: List<DataRow>.generate(
+                          icssData.destinationtankreading.length * 2, (index) {
+                        final tank =
+                            icssData.destinationtankreading[index ~/ 2];
+                        final isOpenReading = index % 2 == 0;
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(isOpenReading ? tank.tankname : '')),
+                            DataCell(Text(isOpenReading
+                                ? StringConstants.kOpenReading
+                                : StringConstants.kCloseReading)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openProductlevel
+                                : tank.closeProductlevel)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openTotalobservedvolume
+                                : tank.openTotalobservedvolume)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openProducttemperature
+                                : tank.closeProducttemperature)),
+                            DataCell(Text(isOpenReading
+                                ? tank.openMassliquid
+                                : tank.closeMassliquid)),
+                          ],
+                        );
+                      }))))
         ]);
       default:
         return Container();
