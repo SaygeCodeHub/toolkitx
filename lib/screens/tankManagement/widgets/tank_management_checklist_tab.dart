@@ -53,7 +53,7 @@ class TankManagementChecklistTab extends StatelessWidget {
                                           nominationId: nominationId,
                                           tabIndex: 1)));
                             },
-                            child: Text('submit response',
+                            child: Text(StringConstants.kSubmitResponse,
                                 style: Theme.of(context)
                                     .textTheme
                                     .xSmall

@@ -101,7 +101,7 @@ class TankManagementBloc
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
 
       FetchTmsNominationDataModel fetchTmsNominationDataModel =
-          await _managementRepository.fetchTmsNominationData(
+          await _tankManagementRepository.fetchTmsNominationData(
               event.nominationId, hashCode);
       if (fetchTmsNominationDataModel.status == 200) {
         emit(TmsNominationDataFetched(

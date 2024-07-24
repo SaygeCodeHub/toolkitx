@@ -741,8 +741,6 @@ class AppRoutes {
       case TankManagementDetailsScreen.routeName:
         return _createRoute(TankManagementDetailsScreen(
             nominationId: settings.arguments.toString()));
-        return _createRoute(TankManagementDetailsScreen(
-            nominationId: settings.arguments.toString()));
       case SubmitTankChecklistScreen.routeName:
         return _createRoute(SubmitTankChecklistScreen(
             tankChecklistMap: settings.arguments as Map));
