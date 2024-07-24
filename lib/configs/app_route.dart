@@ -736,8 +736,8 @@ class AppRoutes {
       case TankManagementListScreen.routeName:
         return _createRoute(const TankManagementListScreen());
       case TankManagementDetailsScreen.routeName:
-        return _createRoute(
-            TankManagementDetailsScreen(nominationId: settings.arguments.toString()));
+        return _createRoute(TankManagementDetailsScreen(
+            nominationId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

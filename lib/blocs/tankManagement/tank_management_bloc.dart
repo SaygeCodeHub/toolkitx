@@ -5,6 +5,7 @@ import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/data/models/tankManagement/fetch_tms_nomination_data_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
 
@@ -23,6 +24,7 @@ class TankManagementBloc
   TankManagementBloc() : super(TankManagementInitial()) {
     on<FetchTankManagementList>(_fetchTankManagementList);
     on<FetchTankManagementDetails>(_fetchTankManagementDetails);
+    on<FetchTmsNominationData>(_fetchTmsNominationData);
   }
 
   Map filterMap = {};
@@ -71,6 +73,28 @@ class TankManagementBloc
       }
     } catch (e) {
       emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchTmsNominationData(
+      FetchTmsNominationData event, Emitter<TankManagementState> emit) async {
+    emit(TmsNominationDataFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+
+      FetchTmsNominationDataModel fetchTmsNominationDataModel =
+          await _managementRepository.fetchTmsNominationData(
+              event.nominationId, hashCode);
+      if (fetchTmsNominationDataModel.status == 200) {
+        emit(TmsNominationDataFetched(
+            fetchTmsNominationDataModel: fetchTmsNominationDataModel));
+      } else {
+        emit(TmsNominationDataNotFetched(
+            errorMessage: fetchTmsNominationDataModel.message));
+      }
+    } catch (e) {
+      emit(TmsNominationDataNotFetched(errorMessage: e.toString()));
     }
   }
 }
