@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 Widget basicDetailsTabSwitchCase(context, type, data) {
   switch (type) {
     case '2':
     case '3':
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('RFId Number',
+        Text(StringConstants.kRFIdNumber,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -16,7 +17,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.rfidnumber),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Truck No',
+        Text(StringConstants.kTruckNo,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -24,7 +25,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.licenseplate),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Tanker Name',
+        Text(StringConstants.kTankerName,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -32,7 +33,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.tankername),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Max Capacity',
+        Text(StringConstants.kMaxCapacity,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -40,15 +41,16 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.tankermaxcapacity),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Seal Number(s)',
+        Text(StringConstants.kSealNumber,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text('Top : ${data.sealnotop} / Bottom : ${data.sealnobottom}'),
+        Text(
+            '${StringConstants.kTop} : ${data.sealnotop} / ${StringConstants.kBottom} : ${data.sealnobottom}'),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Driver EID/Name',
+        Text(StringConstants.kDriverEIDName,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -56,15 +58,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.drivername),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Tank',
-            style: Theme.of(context)
-                .textTheme
-                .xSmall
-                .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
-        const SizedBox(height: tiniestSpacing),
-        Text(data.tank),
-        const SizedBox(height: xxxSmallestSpacing),
-        Text('Carrier Company',
+        Text(StringConstants.kCarrierCompany,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -72,7 +66,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.carriercompany),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('No of Compartments',
+        Text(StringConstants.kNoOfCompartment,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -80,7 +74,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.noofcompartments),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Flowmeter Quantity (cbm) per Compartment',
+        Text(StringConstants.kFlowMeterQuantityCBMPerCompartment,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -88,7 +82,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.volumn),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Truck Loading Position',
+        Text(StringConstants.kTruckLoadingPosition,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -96,7 +90,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.truckposition),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Driver Phone',
+        Text(StringConstants.kDriverPhone,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -107,7 +101,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
     case '4':
     case '5':
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Ship Name',
+        Text(StringConstants.kShipName,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -115,7 +109,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.shipname),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Berth',
+        Text(StringConstants.kBerth,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -123,7 +117,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.berth),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Agent',
+        Text(StringConstants.kAgent,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -131,7 +125,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.agentname),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Captain / Carrier Person',
+        Text(StringConstants.kCaptainCarrierPerson,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -139,7 +133,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.captainCarrierperson),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Load port',
+        Text(StringConstants.kLoadPart,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -147,7 +141,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.loadport),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Contract',
+        Text(StringConstants.kContract,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -155,7 +149,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.contractname),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Disport',
+        Text(StringConstants.kDisport,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -163,7 +157,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.disport),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Country of origin',
+        Text(StringConstants.kCountryOfOrigin,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -171,7 +165,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
         const SizedBox(height: tiniestSpacing),
         Text(data.countryoforigin),
         const SizedBox(height: xxxSmallestSpacing),
-        Text('Country of Production',
+        Text(StringConstants.kCountryOfProduction,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -181,7 +175,7 @@ Widget basicDetailsTabSwitchCase(context, type, data) {
       ]);
     case '1':
       return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Destination Tank',
+        Text(StringConstants.kDestinationTank,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
