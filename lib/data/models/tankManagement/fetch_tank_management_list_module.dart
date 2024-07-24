@@ -9,7 +9,7 @@ String fetchTankManagementListModelToJson(FetchTankManagementListModel data) =>
 class FetchTankManagementListModel {
   final int status;
   final String message;
-  final List<Datum> data;
+  final List<TankDatum> data;
 
   FetchTankManagementListModel({
     required this.status,
@@ -21,7 +21,8 @@ class FetchTankManagementListModel {
       FetchTankManagementListModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<TankDatum>.from(
+            json["Data"].map((x) => TankDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,7 +32,7 @@ class FetchTankManagementListModel {
       };
 }
 
-class Datum {
+class TankDatum {
   final String id;
   final String nominationNo;
   final String date;
@@ -39,7 +40,7 @@ class Datum {
   final String contractname;
   final String status;
 
-  Datum({
+  TankDatum({
     required this.id,
     required this.nominationNo,
     required this.date,
@@ -48,7 +49,7 @@ class Datum {
     required this.status,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory TankDatum.fromJson(Map<String, dynamic> json) => TankDatum(
         id: json["id"],
         nominationNo: json["nomination_no"],
         date: json["date"],

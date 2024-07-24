@@ -85,13 +85,15 @@ class TripsListScreen extends StatelessWidget {
                   }
                 },
                 builder: (context, state) {
-                  print('State===============>$state');
                   if (state is TripsListFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is TripsListFetched) {
-                    return TripListBody(tripListDatum: state.tripDatum);
-                  } else if (state is TripsListNotFetched) {
-                    return Center(child: Text(state.errorMessage));
+                    if (state.tripDatum.isNotEmpty) {
+                      return TripListBody(tripListDatum: state.tripDatum);
+                    } else {
+                      return const Center(
+                          child: Text(StringConstants.kNoRecordsFound));
+                    }
                   }
                   return const SizedBox.shrink();
                 },

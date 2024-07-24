@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/checklist/workforce/add_image_and_comments_screen.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/question_list_title_section.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_add_image_comment_screen.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../../configs/app_color.dart';
@@ -121,7 +121,7 @@ class TankViewResponseBody extends StatelessWidget {
                     context.read<ImagePickerBloc>().pickedImagesList.clear();
                     context.read<ImagePickerBloc>().add(PickImageInitial());
                     Navigator.pushNamed(
-                        context, AddImageAndCommentScreen.routeName,
+                        context, TankAddImageCommentScreen.routeName,
                         arguments:
                             questionList[index].queresponseid.toString());
                   },

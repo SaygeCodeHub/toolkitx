@@ -182,6 +182,7 @@ import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
 import '../screens/tankManagement/widgets/tank_add_image_comment_screen.dart';
+import '../screens/tankManagement/widgets/tank_filter_screen.dart';
 import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
@@ -750,6 +751,8 @@ class AppRoutes {
       case TankAddImageCommentScreen.routeName:
         return _createRoute(TankAddImageCommentScreen(
             questionResponseId: settings.arguments.toString()));
+      case TankFilterScreen.routeName:
+        return _createRoute(const TankFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

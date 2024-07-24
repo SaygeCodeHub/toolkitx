@@ -74,3 +74,25 @@ class SaveTankQuestionsComments extends TankManagementEvent {
 
   SaveTankQuestionsComments({required this.tankCommentsMap});
 }
+
+class SelectTankStatusFilter extends TankManagementEvent {
+  final String selectedIndex;
+  final bool selected;
+
+  SelectTankStatusFilter({required this.selected, required this.selectedIndex});
+}
+
+class SelectTankTitleFilter extends TankManagementEvent {
+  final String selectedIndex;
+  final bool selected;
+
+  SelectTankTitleFilter({required this.selected, required this.selectedIndex});
+}
+
+class ApplyTankFilter extends TankManagementEvent {
+  final Map tankFilterMap;
+
+  ApplyTankFilter({required this.tankFilterMap});
+}
+
+class ClearTankFilter extends TankManagementEvent {}

@@ -8,8 +8,13 @@ class TankManagementListFetching extends TankManagementState {}
 
 class TankManagementListFetched extends TankManagementState {
   final FetchTankManagementListModel fetchTankManagementListModel;
+  final List<TankDatum> tankDatum;
+  final Map filterMap;
 
-  TankManagementListFetched({required this.fetchTankManagementListModel});
+  TankManagementListFetched(
+      {required this.fetchTankManagementListModel,
+      required this.tankDatum,
+      required this.filterMap});
 }
 
 class TankManagementListNotFetched extends TankManagementState {
@@ -45,6 +50,7 @@ class TmsNominationDataNotFetched extends TankManagementState {
 
   TmsNominationDataNotFetched({required this.errorMessage});
 }
+
 class NominationChecklistFetching extends TankManagementState {}
 
 class NominationChecklistFetched extends TankManagementState {
@@ -126,4 +132,20 @@ class TankQuestionCommentsNotSaved extends TankManagementState {
   final String errorMessage;
 
   TankQuestionCommentsNotSaved({required this.errorMessage});
+}
+
+class TankStatusFilterSelected extends TankManagementState {
+  final String selectedIndex;
+  final bool selected;
+
+  TankStatusFilterSelected(
+      {required this.selected, required this.selectedIndex});
+}
+
+class TankTitleFilterSelected extends TankManagementState {
+  final String selectedIndex;
+  final bool selected;
+
+  TankTitleFilterSelected(
+      {required this.selected, required this.selectedIndex});
 }
