@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -39,6 +40,10 @@ class TankManagementBloc
     on<TankCheckListFetchQuestions>(_tankCheckListFetchQuestions);
     on<FetchTankChecklistComments>(_fetchTankChecklistComments);
     on<SaveTankQuestionsComments>(_saveTankQuestionsComments);
+    on<SelectTankStatusFilter>(_selectTankStatusFilter);
+    on<SelectTankTitleFilter>(_selectTankTitleFilter);
+    on<ApplyTankFilter>(_applyTankFilter);
+    on<ClearTankFilter>(_clearTankFilter);
   }
 
   List answerList = [];
@@ -46,6 +51,8 @@ class TankManagementBloc
   Map allDataForChecklistMap = {};
   Map filterMap = {};
   int tabIndex = 0;
+  bool hasReachedMax = false;
+  List<TankDatum> tankDatum = [];
 
   Future<FutureOr<void>> _fetchTankManagementList(
       FetchTankManagementList event, Emitter<TankManagementState> emit) async {
@@ -54,16 +61,26 @@ class TankManagementBloc
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-
-      FetchTankManagementListModel fetchTankManagementListModel =
-          await _tankManagementRepository.fetchTankManagementList(
-              event.pageNo, hashCode, '', userId);
-      if (fetchTankManagementListModel.status == 200) {
+      if (event.isFromHome) {
+        FetchTankManagementListModel fetchTankManagementListModel =
+            await _tankManagementRepository.fetchTankManagementList(
+                event.pageNo, hashCode, '', userId);
+        tankDatum.addAll(fetchTankManagementListModel.data);
+        hasReachedMax = fetchTankManagementListModel.data.isEmpty;
         emit(TankManagementListFetched(
-            fetchTankManagementListModel: fetchTankManagementListModel));
+            fetchTankManagementListModel: fetchTankManagementListModel,
+            tankDatum: tankDatum,
+            filterMap: {}));
       } else {
-        emit(TankManagementListNotFetched(
-            errorMessage: fetchTankManagementListModel.message));
+        FetchTankManagementListModel fetchTankManagementListModel =
+            await _tankManagementRepository.fetchTankManagementList(
+                event.pageNo, hashCode, jsonEncode(filterMap), userId);
+        tankDatum.addAll(fetchTankManagementListModel.data);
+        hasReachedMax = fetchTankManagementListModel.data.isEmpty;
+        emit(TankManagementListFetched(
+            fetchTankManagementListModel: fetchTankManagementListModel,
+            tankDatum: tankDatum,
+            filterMap: filterMap));
       }
     } catch (e) {
       emit(TankManagementListNotFetched(errorMessage: e.toString()));
@@ -337,5 +354,27 @@ class TankManagementBloc
     } catch (e) {
       emit(TankQuestionCommentsNotSaved(errorMessage: e.toString()));
     }
+  }
+
+  FutureOr<void> _selectTankStatusFilter(
+      SelectTankStatusFilter event, Emitter<TankManagementState> emit) {
+    emit(TankStatusFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _selectTankTitleFilter(
+      SelectTankTitleFilter event, Emitter<TankManagementState> emit) {
+    emit(TankTitleFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _applyTankFilter(
+      ApplyTankFilter event, Emitter<TankManagementState> emit) {
+    filterMap = event.tankFilterMap;
+  }
+
+  FutureOr<void> _clearTankFilter(
+      ClearTankFilter event, Emitter<TankManagementState> emit) {
+    filterMap = {};
   }
 }

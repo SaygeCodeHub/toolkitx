@@ -26,6 +26,7 @@ class TankAddImageCommentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('here========>$questionResponseId');
     context
         .read<TankManagementBloc>()
         .add(FetchTankChecklistComments(questionId: questionResponseId));
@@ -47,9 +48,7 @@ class TankAddImageCommentScreen extends StatelessWidget {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is TankCheckListCommentsFetched) {
                     saveQuestionCommentsMap["comments"] = state
-                        .fetchTankChecklistCommentsModel
-                        .data!
-                        .additionalcomment;
+                        .fetchTankChecklistCommentsModel.data!.optioncomment;
                     return SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
                         child: Column(
