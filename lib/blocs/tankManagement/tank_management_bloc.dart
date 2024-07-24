@@ -7,6 +7,7 @@ import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_mo
 import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/data/models/tankManagement/save_tank_questions_comments_model.dart';
 import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
 
@@ -22,7 +23,7 @@ part 'tank_management_state.dart';
 class TankManagementBloc
     extends Bloc<TankManagementEvent, TankManagementState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
-  final TankManagementRepository _managementRepository =
+  final TankManagementRepository _tankManagementRepository =
       getIt<TankManagementRepository>();
 
   TankManagementState get initialState => TankManagementInitial();
@@ -35,6 +36,7 @@ class TankManagementBloc
     on<SelectTankChecklistAnswer>(_selectTankChecklistAnswer);
     on<TankCheckListFetchQuestions>(_tankCheckListFetchQuestions);
     on<FetchTankChecklistComments>(_fetchTankChecklistComments);
+    on<SaveTankQuestionsComments>(_saveTankQuestionsComments);
   }
 
   List answerList = [];
@@ -52,7 +54,7 @@ class TankManagementBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
 
       FetchTankManagementListModel fetchTankManagementListModel =
-          await _managementRepository.fetchTankManagementList(
+          await _tankManagementRepository.fetchTankManagementList(
               event.pageNo, hashCode, '', userId);
       if (fetchTankManagementListModel.status == 200) {
         emit(TankManagementListFetched(
@@ -75,7 +77,7 @@ class TankManagementBloc
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
 
       FetchTankManagementDetailsModel fetchTankManagementDetailsModel =
-          await _managementRepository.fetchTankManagementDetails(
+          await _tankManagementRepository.fetchTankManagementDetails(
               event.nominationId, hashCode);
       if (fetchTankManagementDetailsModel.status == 200) {
         emit(TankManagementDetailsFetched(
@@ -99,7 +101,7 @@ class TankManagementBloc
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
 
       FetchNominationChecklistModel fetchNominationChecklistModel =
-          await _managementRepository.fetchNominationChecklist(
+          await _tankManagementRepository.fetchNominationChecklist(
               event.nominationId, hashCode, userId);
       if (fetchNominationChecklistModel.status == 200) {
         emit(NominationChecklistFetched(
@@ -158,7 +160,7 @@ class TankManagementBloc
           "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
         };
         SubmitNominationChecklistModel submitNominationChecklistModel =
-            await _managementRepository
+            await _tankManagementRepository
                 .saveNominationChecklist(tankChecklistMap);
         if (submitNominationChecklistModel.message == '1') {
           emit(NominationChecklistSubmitted());
@@ -182,7 +184,7 @@ class TankManagementBloc
             "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
           };
           SubmitNominationChecklistModel submitNominationChecklistModel =
-              await _managementRepository
+              await _tankManagementRepository
                   .saveNominationChecklist(tankChecklistMap);
           if (submitNominationChecklistModel.message == '1') {
             emit(NominationChecklistSubmitted());
@@ -208,7 +210,7 @@ class TankManagementBloc
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       String answerText = '';
       FetchTankChecklistQuestionModel fetchTankChecklistQuestionModel =
-          await _managementRepository.fetchTankQuestionsList(
+          await _tankManagementRepository.fetchTankQuestionsList(
               event.tankChecklistMap["scheduleId"], userId, hashCode);
       if (fetchTankChecklistQuestionModel.status == 200) {
         questionList = fetchTankChecklistQuestionModel.data!.questionlist;
@@ -273,7 +275,7 @@ class TankManagementBloc
       allDataForChecklistMap["questionResponseId"] = event.questionId;
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       FetchTankChecklistCommentsModel fetchTankChecklistCommentsModel =
-          await _managementRepository.fetchTankChecklistComments(
+          await _tankManagementRepository.fetchTankChecklistComments(
               event.questionId, hashCode);
       if (fetchTankChecklistCommentsModel.status == 200) {
         emit(TankCheckListCommentsFetched(
@@ -284,6 +286,32 @@ class TankManagementBloc
       }
     } catch (e) {
       emit(TankCheckListCommentsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveTankQuestionsComments(
+      SaveTankQuestionsComments event,
+      Emitter<TankManagementState> emit) async {
+    emit(TankQuestionCommentsSaving());
+    try {
+      Map tankCommentsMap = {
+        "id": "",
+        "queresponseid": allDataForChecklistMap["questionResponseId"],
+        "comments": event.tankCommentsMap["comments"],
+        "filenames": event.tankCommentsMap["filenames"],
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      };
+      SaveTankQuestionCommentsModel saveTankQuestionCommentsModel =
+          await _tankManagementRepository
+              .saveTankQuestionComments(tankCommentsMap);
+      if (saveTankQuestionCommentsModel.message == '1') {
+        emit(TankQuestionCommentsSaved());
+      } else {
+        emit(TankQuestionCommentsNotSaved(
+            errorMessage: saveTankQuestionCommentsModel.message));
+      }
+    } catch (e) {
+      emit(TankQuestionCommentsNotSaved(errorMessage: e.toString()));
     }
   }
 }

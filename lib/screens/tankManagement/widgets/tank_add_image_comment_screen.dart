@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/checklist/workforce/widgets/checklist_save_comment_button.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/upload_image_section.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_checklist_save_comment_button.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/error_section.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -122,7 +122,7 @@ class TankAddImageCommentScreen extends StatelessWidget {
                                 },
                               ),
                               const SizedBox(height: xxTinySpacing),
-                              ChecklistSaveCommentButton(
+                              TankChecklistSaveCommentButton(
                                   saveQuestionCommentsMap:
                                       saveQuestionCommentsMap),
                             ]));

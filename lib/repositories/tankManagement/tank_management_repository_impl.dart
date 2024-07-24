@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_mo
 import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/data/models/tankManagement/save_tank_questions_comments_model.dart';
 import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
 
 import '../../data/models/tankManagement/fetch_tank_checklist_question_model.dart';
@@ -57,5 +58,14 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}checklist/getquestionresponsecomments?queresponseid=$questionId&hashcode=$hashCode");
     return FetchTankChecklistCommentsModel.fromJson(response);
+  }
+
+  @override
+  Future<SaveTankQuestionCommentsModel> saveTankQuestionComments(
+      Map tankCommentsMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}checklist/SaveQuestionResponseComments",
+        tankCommentsMap);
+    return SaveTankQuestionCommentsModel.fromJson(response);
   }
 }

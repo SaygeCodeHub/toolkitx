@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments
 import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_question_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_list_module.dart';
+import 'package:toolkit/data/models/tankManagement/save_tank_questions_comments_model.dart';
 
 import '../../data/models/tankManagement/submit_nomination_checklist_model.dart';
 
@@ -24,4 +25,7 @@ abstract class TankManagementRepository {
 
   Future<FetchTankChecklistCommentsModel> fetchTankChecklistComments(
       String questionId, String hashCode);
+
+  Future<SaveTankQuestionCommentsModel> saveTankQuestionComments(
+      Map tankCommentsMap);
 }

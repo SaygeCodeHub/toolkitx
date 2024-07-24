@@ -62,3 +62,9 @@ class FetchTankChecklistComments extends TankManagementEvent {
 
   FetchTankChecklistComments({required this.questionId});
 }
+
+class SaveTankQuestionsComments extends TankManagementEvent {
+  final Map tankCommentsMap;
+
+  SaveTankQuestionsComments({required this.tankCommentsMap});
+}

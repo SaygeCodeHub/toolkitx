@@ -104,3 +104,13 @@ class TankCheckListCommentsNotFetched extends TankManagementState {
 
   TankCheckListCommentsNotFetched({required this.errorMessage});
 }
+
+class TankQuestionCommentsSaving extends TankManagementState {}
+
+class TankQuestionCommentsSaved extends TankManagementState {}
+
+class TankQuestionCommentsNotSaved extends TankManagementState {
+  final String errorMessage;
+
+  TankQuestionCommentsNotSaved({required this.errorMessage});
+}
