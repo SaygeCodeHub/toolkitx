@@ -710,6 +710,7 @@ abstract class StringConstants {
       "Including voltage level if appropriate";
   static const String kCategoryName = "Category Name";
   static const String kEditSelected = "Edit Selected";
+  static const String kSubmitResponse = "Submit Response";
   static const String kTank = "Tank";
   static const String kProduct = "Product";
   static const String kTruckNo = "Truck No";
