@@ -63,6 +63,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   int statusId = 0;
   bool showTransferWarning = false;
   List<Map<String, dynamic>> getAllSwitchingScheduleData = [];
+  String permitId = '';
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -382,6 +383,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           userType: userType));
     } else {
       emit(const FetchingPermitDetails());
+      permitId = event.permitId;
       Map<String, dynamic> permitDetailsMap =
           await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
       statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
@@ -2201,24 +2203,29 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _moveDownPermitSwitchingSchedule(
       MoveDownPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleMovingDown());
-    try {
+    // try {
       Map moveDownSwitchingScheduleMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "instructionid": event.instructionId,
         "userid": await _customerCache.getUserId(CacheKeys.userId)
       };
-      MoveDownPermitSwitchingScheduleModel
-          moveDownPermitSwitchingScheduleModel = await _permitRepository
-              .moveDownPermitSwitchingSchedule(moveDownSwitchingScheduleMap);
-      if (moveDownPermitSwitchingScheduleModel.message == '1') {
-        emit(PermitSwitchingScheduleMovedDown());
+      if (isNetworkEstablished) {
+        MoveDownPermitSwitchingScheduleModel
+            moveDownPermitSwitchingScheduleModel = await _permitRepository
+                .moveDownPermitSwitchingSchedule(moveDownSwitchingScheduleMap);
+        if (moveDownPermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleMovedDown());
+        } else {
+          emit(PermitSwitchingScheduleNotMovedDown(
+              errorMessage: moveDownPermitSwitchingScheduleModel.message));
+        }
       } else {
-        emit(PermitSwitchingScheduleNotMovedDown(
-            errorMessage: moveDownPermitSwitchingScheduleModel.message));
+        await _databaseHelper.downInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleMovedDown());
       }
-    } catch (e) {
-      emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
-    }
+    // } catch (e) {
+    //   emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _moveUpPermitSwitchingSchedule(
@@ -2230,14 +2237,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "instructionid": event.instructionId,
         "userid": await _customerCache.getUserId(CacheKeys.userId)
       };
-      MoveUpPermitSwitchingScheduleModel moveUpPermitSwitchingScheduleModel =
-          await _permitRepository
-              .moveUpPermitSwitchingSchedule(moveUpSwitchingScheduleMap);
-      if (moveUpPermitSwitchingScheduleModel.message == '1') {
-        emit(PermitSwitchingScheduleMovedUp());
+      if (isNetworkEstablished) {
+        MoveUpPermitSwitchingScheduleModel moveUpPermitSwitchingScheduleModel =
+            await _permitRepository
+                .moveUpPermitSwitchingSchedule(moveUpSwitchingScheduleMap);
+        if (moveUpPermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleMovedUp());
+        } else {
+          emit(PermitSwitchingScheduleNotMovedUp(
+              errorMessage: moveUpPermitSwitchingScheduleModel.message));
+        }
       } else {
-        emit(PermitSwitchingScheduleNotMovedUp(
-            errorMessage: moveUpPermitSwitchingScheduleModel.message));
+        await _databaseHelper.upInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleMovedUp());
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotMovedUp(errorMessage: e.toString()));

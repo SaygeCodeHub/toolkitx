@@ -684,7 +684,7 @@ class DatabaseHelper {
     List<Map<String, dynamic>> result = await db.rawQuery('''
     SELECT tab7
     FROM OfflinePermit
-    WHERE tab7 IS NOT NULL
+     WHERE tab7 IS NOT NULL
   ''');
     return result;
   }
@@ -793,5 +793,162 @@ class DatabaseHelper {
       instructions.insert(index + 1, instruction);
     }
     return instructions;
+  }
+
+  //this is to show table data
+  Future<List> getAllInstructions(ssid) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline("event.permitId");
+    var temp = offlinePermitData['tab7'];
+    var inst = [];
+    for (var x = 0; x < temp.length; x++) {
+      if (temp[x].id == ssid) {
+        inst = temp[x]["instructions"];
+        return inst;
+      }
+    }
+    return inst;
+  }
+
+  Future<Map> getSSFromInstruction(instId) async {
+    var ss = {};
+
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline("event.permitId");
+    var temp = offlinePermitData['tab7'];
+
+    for (var a = 0; a < temp.length; a++) {
+      var instructions = temp[a]["instructions"];
+
+      if (instructions && instructions.length > 0) {
+        for (var x = 0; x < instructions.length; x++) {
+          if (instructions[x].id == instId) {
+            ss = temp[a];
+            return ss;
+          }
+        }
+      }
+    }
+    return ss;
+  }
+
+  // this is to update all data in tab7
+  Future<void> updateTab7(String permitId, tab7) async {
+    final db = await database;
+    String updatedListPageJson = jsonEncode(tab7);
+    await db.update('OfflinePermit', {'tab7': updatedListPageJson},
+        where: 'permitId = ?', whereArgs: [permitId]);
+    print('tab7===========>$tab7');
+  }
+
+  Future<int> getSSFromInstructionIndex(instId, permitId) async {
+    var index = -1;
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    if (offlinePermitData.containsKey('tab7')) {
+      List<dynamic> temp = offlinePermitData['tab7'];
+      for (int a = 0; a < temp.length; a++) {
+        List<dynamic>? instructions = temp[a]['instructions'];
+        if (instructions != null) {
+          for (int x = 0; x < instructions.length; x++) {
+            dynamic instruction = instructions[x];
+            if (instruction['id'] == instId) {
+              index = a;
+              break;
+            }
+          }
+          if (index != -1) {
+            break;
+          }
+        }
+      }
+    }
+    return index;
+  }
+
+  Future<void> upInstruction(String instId, String permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    int currentIndex = -1;
+
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        currentIndex = x;
+      }
+    }
+    if (currentIndex <= 0) return;
+    var el = instructions[currentIndex];
+    instructions[currentIndex] = instructions[currentIndex - 1];
+    instructions[currentIndex - 1] = el;
+
+    ss["instructions"] = instructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<void> downInstruction(String instId, String permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    int currentIndex = -1;
+
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        currentIndex = x;
+      }
+    }
+    var el = instructions[currentIndex];
+    instructions[currentIndex] = instructions[currentIndex + 1];
+    instructions[currentIndex + 1] = el;
+    ss["instructions"] = instructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  // Future<void> deleteInstruction(instId,permitId) async {
+  //   Map<String, dynamic> offlinePermitData =
+  //       await fetchPermitDetailsOffline(permitId);
+  //   var temp = offlinePermitData['tab7'];
+  //
+  //   var ssindex = getSSFromInstructionIndex(instId,permitId);
+  //   if(ssindex < 0) return temp;
+  //
+  //   var temp_instructions = [];
+  //
+  //   var ss = temp[ssindex];
+  //   var instructions = ss["instructions"];
+  //   for(var x=0;x<instructions.length;x++){
+  //     if(instructions[x].id == instId){
+  //       // todo
+  //     }
+  //     else{
+  //       temp_instructions.push(instructions[x]);
+  //     }
+  //   }
+  //   ss["instructions"] = temp_instructions;
+  //   temp[ssindex] = ss;
+  //   await updateTab7(permitId, temp);
+  // }
+
+  Future<Map> getInstruction(instId) async {
+    var instruction = {};
+    var ss = await getSSFromInstruction(instId);
+    var instructions = ss["instructions"];
+    if (instructions && instructions.length > 0) {
+      for (var x = 0; x < instructions.length; x++) {
+        if (instructions[x].id == instId) {
+          instruction = instructions[x];
+          return instruction;
+        }
+      }
+    }
+    return instruction;
   }
 }

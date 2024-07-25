@@ -8,8 +8,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
 import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/screens/permit/widgets/add_and_edit_switching_instruction_body.dart';
-import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.dart';
-import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
 import 'package:toolkit/screens/permit/widgets/permit_switching_date_time_fields.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
