@@ -415,6 +415,7 @@ class Tab7 {
   final String number;
   final String title;
   final String status;
+  // final List<Instruction> instructions;
 
   Tab7({
     required this.id,

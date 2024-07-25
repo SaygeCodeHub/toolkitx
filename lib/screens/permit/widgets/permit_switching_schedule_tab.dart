@@ -24,6 +24,7 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('permit details tab 7 ${permitDetailsModel.data.tab7}');
     return ListView.separated(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,

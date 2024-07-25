@@ -16,6 +16,7 @@ import 'package:toolkit/data/models/permit/update_permit_switching_schedule_mode
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/enums/offlinePermit/instruction_operstions_enum.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/accept_permit_request_model.dart';
@@ -61,6 +62,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   PermitBasicData? permitBasicData;
   int statusId = 0;
   bool showTransferWarning = false;
+  List<Map<String, dynamic>> getAllSwitchingScheduleData = [];
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -107,22 +109,24 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
-    try {
-      emit(const PreparingPermitLocalDatabase());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      OfflinePermitModel offlinePermitModel =
-          await _permitRepository.fetchOfflinePermit(hashCode);
-      if (offlinePermitModel.status == 200) {
-        for (var datum in offlinePermitModel.data) {
-          await _databaseHelper.insertOfflinePermit(datum);
-        }
-        emit(const PermitLocalDatabasePrepared());
-      } else {
-        emit(const PreparingPermitLocalDatabaseFailed());
+    // try {
+    emit(const PreparingPermitLocalDatabase());
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    print('hashcodee $hashCode');
+    OfflinePermitModel offlinePermitModel =
+        await _permitRepository.fetchOfflinePermit(hashCode);
+    if (offlinePermitModel.status == 200) {
+      for (var datum in offlinePermitModel.data) {
+        // log('permit offline datum ${datum.tab7.first.toJson()}');
+        await _databaseHelper.insertOfflinePermit(datum);
       }
-    } catch (e) {
+      emit(const PermitLocalDatabasePrepared());
+    } else {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
+    // } catch (e) {
+    //   emit(const PreparingPermitLocalDatabaseFailed());
+    // }
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -336,96 +340,96 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     String? userType =
         await _customerCache.getUserType(CacheKeys.userType) ?? '';
-    try {
-      if (isNetworkEstablished) {
-        add(FetchPermitBasicDetails(permitId: event.permitId));
-        emit(const FetchingPermitDetails());
-        String hashCode =
-            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-        PermitDetailsModel permitDetailsModel = await _permitRepository
-            .fetchPermitDetails(hashCode, event.permitId, roleId);
-        if (permitDetailsModel.data.tab1.isopen == '1') {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (permitDetailsModel.data.tab1.isclose == '1') {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (permitDetailsModel.data.tab1.status ==
-            DatabaseUtil.getText('Created')) {
-          permitPopUpMenu.add(StringConstants.kRequestPermit);
-        }
-        if (permitBasicData?.isprepared == '1') {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (permitBasicData?.iseditsafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (permitBasicData?.isacceptissue == '1') {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-        }
-        if (permitBasicData?.isclearpermit == '1') {
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
-        if (permitBasicData?.istransfersafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        }
-        if (permitBasicData?.issurrendercp == '1') {
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-        }
+    // try {
+    if (isNetworkEstablished) {
+      add(FetchPermitBasicDetails(permitId: event.permitId));
+      emit(const FetchingPermitDetails());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      PermitDetailsModel permitDetailsModel = await _permitRepository
+          .fetchPermitDetails(hashCode, event.permitId, roleId);
+      if (permitDetailsModel.data.tab1.isopen == '1') {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (permitDetailsModel.data.tab1.isclose == '1') {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (permitDetailsModel.data.tab1.status ==
+          DatabaseUtil.getText('Created')) {
+        permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (permitBasicData?.isclearpermit == '1') {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      if (permitBasicData?.istransfersafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
+      if (permitBasicData?.issurrendercp == '1') {
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+      }
+      emit(PermitDetailsFetched(
+          permitDetailsModel: permitDetailsModel,
+          permitPopUpMenu: permitPopUpMenu,
+          clientId: clientId,
+          userType: userType));
+    } else {
+      emit(const FetchingPermitDetails());
+      Map<String, dynamic> permitDetailsMap =
+          await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+      statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
+      log('detils mappp $permitDetailsMap');
+      PermitDetailsData permitDerailsData =
+          PermitDetailsData.fromJson(permitDetailsMap);
+      permitDerailsData.tab1.status = getStatusText(
+          permitDerailsData.tab1.permitType.toString(), statusId.toString());
+      PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+          status: 200,
+          message: '',
+          data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+      if (statusId == 16 || statusId == 7) {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (statusId == 18) {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (statusId == 10) {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (statusId == 10 || statusId == 5) {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (statusId == 2) {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
+      if (statusId == 17) {
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+
+      if (permitDetailsModel.toJson().isNotEmpty) {
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu,
             clientId: clientId,
             userType: userType));
       } else {
-        emit(const FetchingPermitDetails());
-        Map<String, dynamic> permitDetailsMap =
-            await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
-        statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
-        PermitDetailsData permitDerailsData =
-            PermitDetailsData.fromJson(permitDetailsMap);
-        permitDerailsData.tab1.status = getStatusText(
-            permitDerailsData.tab1.permitType.toString(), statusId.toString());
-        PermitDetailsModel permitDetailsModel = PermitDetailsModel(
-            status: 200,
-            message: '',
-            data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-        if (statusId == 16 || statusId == 7) {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (statusId == 18) {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (statusId == 10) {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (statusId == 10 || statusId == 5) {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (statusId == 2) {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        }
-        if (statusId == 17) {
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
-
-        if (permitDetailsModel.toJson().isNotEmpty) {
-          emit(PermitDetailsFetched(
-              permitDetailsModel: permitDetailsModel,
-              permitPopUpMenu: permitPopUpMenu,
-              clientId: clientId,
-              userType: userType));
-        } else {
-          emit(const CouldNotFetchPermitDetails());
-        }
+        emit(const CouldNotFetchPermitDetails());
       }
-    } catch (e) {
-      emit(const CouldNotFetchPermitDetails());
     }
+    // } catch (e) {
+    //   emit(const CouldNotFetchPermitDetails());
+    // }
   }
 
   String getStatusText(String ptype, String pstatus) {
@@ -2043,18 +2047,48 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _fetchSwitchingScheduleInstructions(
       FetchSwitchingScheduleInstructions event,
       Emitter<PermitStates> emit) async {
-    emit(FetchingSwitchingScheduleInstructions());
     try {
-      FetchSwitchingScheduleInstructionsModel
-          fetchSwitchingScheduleInstructionsModel = await _permitRepository
-              .fetchSwitchingScheduleInstructions(event.scheduleId);
-      if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
-        emit(SwitchingScheduleInstructionsFetched(
-            scheduleInstructionDatum:
-                fetchSwitchingScheduleInstructionsModel.data));
+      if (isNetworkEstablished) {
+        emit(FetchingSwitchingScheduleInstructions());
+        FetchSwitchingScheduleInstructionsModel
+            fetchSwitchingScheduleInstructionsModel = await _permitRepository
+                .fetchSwitchingScheduleInstructions(event.scheduleId);
+        if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
+          emit(SwitchingScheduleInstructionsFetched(
+              scheduleInstructionDatum:
+                  fetchSwitchingScheduleInstructionsModel.data));
+        } else {
+          emit(SwitchingScheduleInstructionsNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
       } else {
-        emit(SwitchingScheduleInstructionsNotFetched(
-            errorMessage: StringConstants.kNoDataFound));
+        print('schedule id ${event.scheduleId}');
+        List<Map<String, dynamic>> filteredInstructions =
+            await _databaseHelper.getInstructionsByScheduleId(event.scheduleId);
+        log('schedule list $filteredInstructions');
+        List<PermitSwithcingScheduleInstructionDatum> instructions =
+            filteredInstructions
+                .map((item) =>
+                    PermitSwithcingScheduleInstructionDatum.fromJson(item))
+                .toList();
+
+        FetchSwitchingScheduleInstructionsModel
+            fetchSwitchingScheduleInstructionsModel =
+            FetchSwitchingScheduleInstructionsModel.fromJson({
+          "Status": 200,
+          "Message": '',
+          "Data": instructions.map((i) => i.toJson()).toList(),
+        });
+        print(
+            'switching schedule final data ${fetchSwitchingScheduleInstructionsModel.data}');
+        if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
+          emit(SwitchingScheduleInstructionsFetched(
+              scheduleInstructionDatum:
+                  fetchSwitchingScheduleInstructionsModel.data));
+        } else {
+          emit(SwitchingScheduleInstructionsNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
       }
     } catch (e) {
       rethrow;
@@ -2105,32 +2139,28 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _addPermitSwitchingSchedule(
       AddPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleAdding());
-    try {
-      Map addSwitchingScheduleMap = {
-        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-        "instructionid": event.addSwitchingScheduleMap['instructionid'],
-        "userid": await _customerCache.getUserId(CacheKeys.userId),
-        "location": event.addSwitchingScheduleMap['location'],
-        "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'],
-        "operation": event.addSwitchingScheduleMap['operation'],
-        "instructionreceivedby":
-            event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
-        "controlengineer":
-            event.addSwitchingScheduleMap['controlengineer'] ?? '',
-        "instructiondate":
-            event.addSwitchingScheduleMap['instructiondate'] ?? '',
-        "instructiontime":
-            event.addSwitchingScheduleMap['instructiontime'] ?? '',
-        "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
-        "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
-        "carriedoutconfirmeddate":
-            event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
-        "carriedoutconfirmedtime":
-            event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
-        "safetykeynumber":
-            event.addSwitchingScheduleMap['safetykeynumber'] ?? ''
-      };
-
+    // try {
+    Map<String, dynamic> addSwitchingScheduleMap = {
+      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+      "instructionid": event.addSwitchingScheduleMap['instructionid'] ?? '',
+      "userid": await _customerCache.getUserId(CacheKeys.userId),
+      "location": event.addSwitchingScheduleMap['location'] ?? '',
+      "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'] ?? '',
+      "operation": event.addSwitchingScheduleMap['operation'] ?? '',
+      "instructionreceivedby":
+          event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
+      "controlengineer": event.addSwitchingScheduleMap['controlengineer'] ?? '',
+      "instructiondate": event.addSwitchingScheduleMap['instructiondate'] ?? '',
+      "instructiontime": event.addSwitchingScheduleMap['instructiontime'] ?? '',
+      "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
+      "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
+      "carriedoutconfirmeddate":
+          event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+      "carriedoutconfirmedtime":
+          event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+      "safetykeynumber": event.addSwitchingScheduleMap['safetykeynumber'] ?? ''
+    };
+    if (isNetworkEstablished) {
       if (event.addSwitchingScheduleMap['location'] != null &&
           event.addSwitchingScheduleMap['equipmentuid'] != null &&
           event.addSwitchingScheduleMap['operation'] != null) {
@@ -2148,9 +2178,24 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             errorMessage:
                 StringConstants.kLocationEquipmentOperationMandatory));
       }
-    } catch (e) {
-      emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
+    } else {
+      if (event.addSwitchingScheduleMap['location'] != null &&
+          event.addSwitchingScheduleMap['equipmentuid'] != null &&
+          event.addSwitchingScheduleMap['operation'] != null) {
+        await _databaseHelper.updateInstructions(
+            event.addSwitchingScheduleMap['instructionid'],
+            addSwitchingScheduleMap,
+            InstructionOperation.add);
+        emit(PermitSwitchingScheduleAdded());
+      } else {
+        emit(PermitSwitchingScheduleNotUpdated(
+            errorMessage:
+                StringConstants.kLocationEquipmentOperationMandatory));
+      }
     }
+    // } catch (e) {
+    //   emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _moveDownPermitSwitchingSchedule(
