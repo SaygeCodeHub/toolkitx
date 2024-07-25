@@ -866,6 +866,25 @@ class DatabaseHelper {
     return index;
   }
 
+  Future<dynamic> addInstruction(data, instId, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      tempInstructions.add(instructions[x]);
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.add(data);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
   Future<void> upInstruction(String instId, String permitId) async {
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
@@ -912,30 +931,25 @@ class DatabaseHelper {
     await updateTab7(permitId, temp);
   }
 
-  // Future<void> deleteInstruction(instId,permitId) async {
-  //   Map<String, dynamic> offlinePermitData =
-  //       await fetchPermitDetailsOffline(permitId);
-  //   var temp = offlinePermitData['tab7'];
-  //
-  //   var ssindex = getSSFromInstructionIndex(instId,permitId);
-  //   if(ssindex < 0) return temp;
-  //
-  //   var temp_instructions = [];
-  //
-  //   var ss = temp[ssindex];
-  //   var instructions = ss["instructions"];
-  //   for(var x=0;x<instructions.length;x++){
-  //     if(instructions[x].id == instId){
-  //       // todo
-  //     }
-  //     else{
-  //       temp_instructions.push(instructions[x]);
-  //     }
-  //   }
-  //   ss["instructions"] = temp_instructions;
-  //   temp[ssindex] = ss;
-  //   await updateTab7(permitId, temp);
-  // }
+  Future<void> deleteInstruction(instId, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.remove(instructions[x]);
+      } else {
+        tempInstructions.add(instructions[x]);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
 
   Future<Map> getInstruction(instId) async {
     var instruction = {};

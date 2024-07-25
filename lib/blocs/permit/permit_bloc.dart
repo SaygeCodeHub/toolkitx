@@ -16,7 +16,6 @@ import 'package:toolkit/data/models/permit/update_permit_switching_schedule_mode
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
-import '../../data/enums/offlinePermit/instruction_operstions_enum.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/accept_permit_request_model.dart';
@@ -2141,7 +2140,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _addPermitSwitchingSchedule(
       AddPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleAdding());
-    // try {
+    try {
     Map<String, dynamic> addSwitchingScheduleMap = {
       "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
       "instructionid": event.addSwitchingScheduleMap['instructionid'] ?? '',
@@ -2160,7 +2159,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
       "carriedoutconfirmedtime":
           event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
-      "safetykeynumber": event.addSwitchingScheduleMap['safetykeynumber'] ?? ''
+      "safetykeynumber": event.addSwitchingScheduleMap['safetykeynumber'] ?? '',
+      "canexecute" : '1',
+      "ismanual" : 1
     };
     if (isNetworkEstablished) {
       if (event.addSwitchingScheduleMap['location'] != null &&
@@ -2184,10 +2185,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       if (event.addSwitchingScheduleMap['location'] != null &&
           event.addSwitchingScheduleMap['equipmentuid'] != null &&
           event.addSwitchingScheduleMap['operation'] != null) {
-        await _databaseHelper.updateInstructions(
-            event.addSwitchingScheduleMap['instructionid'],
+        await _databaseHelper.addInstruction(
             addSwitchingScheduleMap,
-            InstructionOperation.add);
+            event.addSwitchingScheduleMap['instructionid'],
+            permitId);
         emit(PermitSwitchingScheduleAdded());
       } else {
         emit(PermitSwitchingScheduleNotUpdated(
@@ -2195,15 +2196,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 StringConstants.kLocationEquipmentOperationMandatory));
       }
     }
-    // } catch (e) {
-    //   emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _moveDownPermitSwitchingSchedule(
       MoveDownPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleMovingDown());
-    // try {
+    try {
       Map moveDownSwitchingScheduleMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "instructionid": event.instructionId,
@@ -2223,9 +2224,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         await _databaseHelper.downInstruction(event.instructionId, permitId);
         emit(PermitSwitchingScheduleMovedDown());
       }
-    // } catch (e) {
-    //   emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _moveUpPermitSwitchingSchedule(
@@ -2314,14 +2315,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "instructionid": event.instructionId,
         "userid": await _customerCache.getUserId(CacheKeys.userId)
       };
-      DeleteSwitchingScheduleModel deleteSwitchingScheduleModel =
-          await _permitRepository
-              .deleteSwitchingSchedule(deleteSwitchingScheduleMap);
-      if (deleteSwitchingScheduleModel.message == '1') {
-        emit(PermitSwitchingScheduleDeleted());
+      if (isNetworkEstablished) {
+        DeleteSwitchingScheduleModel deleteSwitchingScheduleModel =
+            await _permitRepository
+                .deleteSwitchingSchedule(deleteSwitchingScheduleMap);
+        if (deleteSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleDeleted());
+        } else {
+          emit(PermitSwitchingScheduleNotDeleted(
+              errorMessage: deleteSwitchingScheduleModel.message));
+        }
       } else {
-        emit(PermitSwitchingScheduleNotDeleted(
-            errorMessage: deleteSwitchingScheduleModel.message));
+        await _databaseHelper.deleteInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleDeleted());
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotDeleted(errorMessage: e.toString()));
