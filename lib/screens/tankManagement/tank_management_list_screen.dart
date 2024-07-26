@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
-import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_filter_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_icon_button_row.dart';
+import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+
+import '../../blocs/tankManagement/tank_management_list_body.dart';
 
 class TankManagementListScreen extends StatelessWidget {
   static const routeName = 'TankManagementListScreen';
@@ -20,9 +20,12 @@ class TankManagementListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    pageNo = 1;
+    context.read<TankManagementBloc>().hasReachedMax = false;
+    context.read<TankManagementBloc>().tankDatum.clear();
     context
         .read<TankManagementBloc>()
-        .add(FetchTankManagementList(pageNo: pageNo, isFromHome: isFromHome));
+        .add(FetchTankManagementList(pageNo: 1, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('tanks')),
         body: Padding(
@@ -32,93 +35,74 @@ class TankManagementListScreen extends StatelessWidget {
                 top: xxTinierSpacing,
                 bottom: xxTinierSpacing),
             child: Column(children: [
-              CustomIconButtonRow(
-                  secondaryVisible: false,
-                  isEnabled: true,
-                  primaryOnPress: () {},
-                  secondaryOnPress: () {},
-                  clearOnPress: () {}),
-              Expanded(child:
-                  BlocBuilder<TankManagementBloc, TankManagementState>(
-                      builder: (context, state) {
-                if (state is TankManagementListFetching) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is TankManagementListFetched) {
-                  var data = state.fetchTankManagementListModel.data;
-                  return ListView.separated(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        return CustomCard(
-                            child: ListTile(
-                                onTap: () {
-                                  Navigator.pushNamed(context,
-                                      TankManagementDetailsScreen.routeName,
-                                      arguments: data[index].id);
-                                },
-                                title: Text(data[index].nominationNo,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .small
-                                        .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.black)),
-                                subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: xxxTinierSpacing,
-                                      ),
-                                      Text(
-                                        data[index].announce,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(height: xxxTinierSpacing),
-                                      Text(
-                                        data[index].date,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(
-                                        height: xxxTinierSpacing,
-                                      ),
-                                      Text(
-                                        data[index].contractname,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .xSmall
-                                            .copyWith(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.grey),
-                                      ),
-                                      const SizedBox(height: xxxTinierSpacing)
-                                    ]),
-                                trailing: Text(data[index].status,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .xSmall
-                                        .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: AppColor.deepBlue))));
+              BlocBuilder<TankManagementBloc, TankManagementState>(
+                buildWhen: (previousState, currentState) {
+                  if (currentState is TankManagementListFetching &&
+                      isFromHome == true) {
+                    return true;
+                  } else if (currentState is TankManagementListFetched) {
+                    return true;
+                  }
+                  return false;
+                },
+                builder: (context, state) {
+                  if (state is TankManagementListFetched) {
+                    return CustomIconButtonRow(
+                        primaryOnPress: () {
+                          Navigator.pushNamed(
+                              context, TankFilterScreen.routeName);
+                        },
+                        secondaryOnPress: () {},
+                        secondaryVisible: false,
+                        clearVisible:
+                            state.filterMap.isNotEmpty && isFromHome != true,
+                        clearOnPress: () {
+                          pageNo = 1;
+                          context.read<TankManagementBloc>().hasReachedMax =
+                              false;
+                          context.read<TankManagementBloc>().filterMap.clear();
+                          context.read<TankManagementBloc>().tankDatum.clear();
+                          context
+                              .read<TankManagementBloc>()
+                              .add(ClearTankFilter());
+                          context.read<TankManagementBloc>().add(
+                              FetchTankManagementList(
+                                  pageNo: 1, isFromHome: isFromHome));
+                        });
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+              Expanded(
+                  child: BlocConsumer<TankManagementBloc, TankManagementState>(
+                      buildWhen: (previousState, currentState) =>
+                          (currentState is TankManagementListFetching &&
+                              pageNo == 1) ||
+                          (currentState is TankManagementListFetched),
+                      listener: (context, state) {
+                        if (state is TankManagementListFetched &&
+                            context.read<TankManagementBloc>().hasReachedMax) {
+                          showCustomSnackBar(
+                              context, StringConstants.kAllDataLoaded, '');
+                        }
                       },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: xxTinierSpacing);
-                      });
-                } else if (state is TankManagementListNotFetched) {
-                  return const Center(
-                      child: Text(StringConstants.kNoRecordsFound));
-                }
-                return const SizedBox.shrink();
-              }))
+                      builder: (context, state) {
+                        if (state is TankManagementListFetching) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (state is TankManagementListFetched) {
+                          if (state.tankDatum.isNotEmpty) {
+                            return TankManagementListBody(
+                                tankDatum: state.tankDatum);
+                          } else {
+                            return const Center(
+                                child: Text(StringConstants.kNoRecordsFound));
+                          }
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }))
             ])));
   }
 }

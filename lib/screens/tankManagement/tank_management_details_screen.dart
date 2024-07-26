@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/screens/tankManagement/widgets/tank_management_basic_details.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_management_checklist_tab.dart';
 import 'package:toolkit/screens/tankManagement/widgets/tank_management_icss_details.dart';
 import 'package:toolkit/utils/tank_management_tab_util.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -70,10 +71,11 @@ class TankManagementDetailsScreen extends StatelessWidget {
                         TankManagementBasicDetails(
                             fetchTankManagementDetailsModel:
                                 state.fetchTankManagementDetailsModel),
-                        const Center(child: Text("Checklist")),
+                        TankManagementChecklistTab(nominationId: data.id),
                         TankManagementICSSDetails(
                             fetchTankManagementDetailsModel:
-                                state.fetchTankManagementDetailsModel)
+                                state.fetchTankManagementDetailsModel,
+                            nominationId: nominationId)
                       ])
                 ],
               );
