@@ -7,28 +7,23 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
-import 'package:toolkit/data/models/permit/permit_get_master_model.dart';
-import 'package:toolkit/screens/permit/widgets/control_engineer_expansion_tile.dart';
 import 'package:toolkit/screens/permit/widgets/permit_switching_date_time_fields.dart';
-import 'package:toolkit/screens/permit/widgets/instruction_received_expansion_tile.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 
-class AddAndEditSwitchingInstructionBody extends StatelessWidget {
-  const AddAndEditSwitchingInstructionBody({
+class AddAndEditInstructionOfflineBody extends StatelessWidget {
+  const AddAndEditInstructionOfflineBody({
     super.key,
     required this.isFromEdit,
-    required this.permitSwithcingScheduleInstructionDatum,
     required this.switchingScheduleMap,
-    required this.permitGetMasterModel,
+    required this.permitSwithcingScheduleInstructionDatum,
   });
 
   final bool isFromEdit;
+  final Map switchingScheduleMap;
   final PermitSwithcingScheduleInstructionDatum
       permitSwithcingScheduleInstructionDatum;
-  final Map switchingScheduleMap;
-  final PermitGetMasterModel permitGetMasterModel;
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +43,11 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                   child: const CircularProgressIndicator()));
         } else if (state is SwitchingScheduleDetailsFetched) {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
-          switchingScheduleMap['instructionid'] =
-              permitSwithcingScheduleInstructionDatum.id;
+          switchingScheduleMap['instructionid'] = data.id;
           switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
-          switchingScheduleMap['ismanual'] = data.ismanual;
+          switchingScheduleMap['location'] = data.location;
+          switchingScheduleMap['operation'] = data.operation;
+          switchingScheduleMap['equipmentuid'] = data.equipmentuid;
           switchingScheduleMap["instructiondate"] =
               data.instructionreceiveddate;
           switchingScheduleMap["instructiontime"] =
@@ -62,6 +58,11 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
               data.carriedoutconfirmeddate;
           switchingScheduleMap["carriedoutconfirmedtime"] =
               data.carriedoutconfirmedtime;
+          switchingScheduleMap["instructionreceivedbyname"] =
+              data.instructionreceivedbyname;
+          switchingScheduleMap["controlengineername"] =
+              data.controlengineername;
+          switchingScheduleMap["ismanual"] = data.ismanual;
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -114,15 +115,13 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                         color: AppColor.black, fontWeight: FontWeight.bold)),
                 const SizedBox(height: tiniestSpacing),
-                InstructionReceivedExpansionTile(
-                  instructionList: permitGetMasterModel.data[3],
-                  editSwitchingScheduleMap: switchingScheduleMap,
-                  editName: isFromEdit == true
-                      ? permitSwithcingScheduleInstructionDatum
-                          .instructionreceivedbyname
-                      : '',
-                  editValue:
-                      isFromEdit == true ? data.instructionreceivedby : '',
+                TextFieldWidget(
+                  value:
+                      isFromEdit == true ? data.instructionreceivedbyname : '',
+                  onTextFieldChanged: (textField) {
+                    switchingScheduleMap["instructionreceivedbyname"] =
+                        textField;
+                  },
                 ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kInstructedDateTime,
@@ -144,14 +143,11 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                     style: Theme.of(context).textTheme.xSmall.copyWith(
                         color: AppColor.black, fontWeight: FontWeight.bold)),
                 const SizedBox(height: tiniestSpacing),
-                ControlEngineerExpansionTile(
-                  controlEngineerList: permitGetMasterModel.data[3],
-                  editSwitchingScheduleMap: switchingScheduleMap,
-                  editName: isFromEdit == true
-                      ? permitSwithcingScheduleInstructionDatum
-                          .controlengineername
-                      : '',
-                  editValue: isFromEdit == true ? data.controlengineerid : '',
+                TextFieldWidget(
+                  value: isFromEdit == true ? data.controlengineername : '',
+                  onTextFieldChanged: (textField) {
+                    switchingScheduleMap['controlengineername'] = textField;
+                  },
                 ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kCarriedoutDateTime,

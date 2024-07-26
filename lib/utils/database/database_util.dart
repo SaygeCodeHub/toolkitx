@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 
 import '../../data/enums/offlinePermit/instruction_operstions_enum.dart';
 import '../../data/models/chatBox/fetch_employees_model.dart';
@@ -810,35 +811,12 @@ class DatabaseHelper {
     return inst;
   }
 
-  Future<Map> getSSFromInstruction(instId) async {
-    var ss = {};
-
-    Map<String, dynamic> offlinePermitData =
-        await fetchPermitDetailsOffline("event.permitId");
-    var temp = offlinePermitData['tab7'];
-
-    for (var a = 0; a < temp.length; a++) {
-      var instructions = temp[a]["instructions"];
-
-      if (instructions && instructions.length > 0) {
-        for (var x = 0; x < instructions.length; x++) {
-          if (instructions[x].id == instId) {
-            ss = temp[a];
-            return ss;
-          }
-        }
-      }
-    }
-    return ss;
-  }
-
   // this is to update all data in tab7
   Future<void> updateTab7(String permitId, tab7) async {
     final db = await database;
     String updatedListPageJson = jsonEncode(tab7);
     await db.update('OfflinePermit', {'tab7': updatedListPageJson},
         where: 'permitId = ?', whereArgs: [permitId]);
-    print('tab7===========>$tab7');
   }
 
   Future<int> getSSFromInstructionIndex(instId, permitId) async {
@@ -866,7 +844,7 @@ class DatabaseHelper {
     return index;
   }
 
-  Future<dynamic> addInstruction(data, instId, permitId) async {
+  Future<dynamic> addInstruction(data, instId, permitId, apiKey) async {
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
@@ -874,6 +852,18 @@ class DatabaseHelper {
     var tempInstructions = [];
     var ss = temp[ssIndex];
     var instructions = ss["instructions"];
+
+    int maxInstructionId = -1;
+    for (var x = 0; x < instructions.length; x++) {
+      var inId = instructions[x]['id'];
+      int? inIdInt =
+          int.tryParse(EncryptData.decryptAESPrivateKey(inId, apiKey));
+      if (inIdInt! > maxInstructionId) maxInstructionId = inIdInt;
+    }
+    maxInstructionId = maxInstructionId + 1;
+    data['id'] =
+        EncryptData.encryptAESPrivateKey(maxInstructionId.toString(), apiKey);
+
     for (var x = 0; x < instructions.length; x++) {
       tempInstructions.add(instructions[x]);
       if (instructions[x]['id'] == instId) {
@@ -951,18 +941,99 @@ class DatabaseHelper {
     await updateTab7(permitId, temp);
   }
 
-  Future<Map> getInstruction(instId) async {
-    var instruction = {};
-    var ss = await getSSFromInstruction(instId);
+  Future<Map> getSSFromInstruction(instId, permitId) async {
+    var ss = {};
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    for (var a = 0; a < temp.length; a++) {
+      var instructions = temp[a]["instructions"];
+
+      if (instructions.length > 0) {
+        for (var x = 0; x < instructions.length; x++) {
+          if (instructions[x]['id'] == instId) {
+            ss = temp[a];
+            return ss;
+          }
+        }
+      }
+    }
+    return ss;
+  }
+
+  Future<Map> getInstruction(instId, permitId) async {
+    Map<String, dynamic> instruction = {};
+    var ss = await getSSFromInstruction(instId, permitId);
     var instructions = ss["instructions"];
-    if (instructions && instructions.length > 0) {
+    if (instructions != null && instructions.length > 0) {
       for (var x = 0; x < instructions.length; x++) {
-        if (instructions[x].id == instId) {
+        if (instructions[x]['id'] == instId) {
           instruction = instructions[x];
-          return instruction;
         }
       }
     }
     return instruction;
+  }
+
+  Future<dynamic> editInstruction(data, instId, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.add(data);
+      } else {
+        tempInstructions.add(instructions[x]);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<dynamic> editMultiSelectInstructions(data, instIds, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+
+    var arr = instIds.split(',');
+    for (var i = 0; i < arr.length; i++) {
+      var ssIndex = await getSSFromInstructionIndex(arr[i], permitId);
+      if (ssIndex >= 0) {
+        var ss = temp[ssIndex];
+        var instructions = ss["instructions"];
+
+        for (var x = 0; x < instructions.length; x++) {
+          if (instructions[x]['id'] == arr[i]) {
+            instructions[x]['instructionreceivedby'] = 0;
+            instructions[x]['controlengineerid'] = 0;
+            instructions[x]['instructionreceivedbyname'] =
+                data['instructionreceivedbyname'];
+            instructions[x]['controlengineername'] =
+                data['controlengineername'];
+
+            instructions[x]['instructionreceiveddate'] =
+                data['instructionreceiveddate'];
+            instructions[x]['instructionreceivedtime'] =
+                data['instructionreceivedtime'];
+
+            instructions[x]['carriedoutdate'] = data['carriedoutdate'];
+            instructions[x]['carriedouttime'] = data['carriedouttime'];
+
+            instructions[x]['carriedoutconfirmeddate'] =
+                data['carriedoutconfirmeddate'];
+            instructions[x]['carriedoutconfirmedtime'] =
+                data['carriedoutconfirmedtime'];
+
+            instructions[x]['safetykeynumber'] = data['safetykeynumber'];
+          }
+        }
+      }
+    }
+    await updateTab7(permitId, temp);
   }
 }

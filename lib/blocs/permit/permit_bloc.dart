@@ -109,10 +109,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
-    // try {
+    try {
     emit(const PreparingPermitLocalDatabase());
     String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    print('hashcodee $hashCode');
     OfflinePermitModel offlinePermitModel =
         await _permitRepository.fetchOfflinePermit(hashCode);
     if (offlinePermitModel.status == 200) {
@@ -124,9 +123,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } else {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
-    // } catch (e) {
-    //   emit(const PreparingPermitLocalDatabaseFailed());
-    // }
+    } catch (e) {
+      emit(const PreparingPermitLocalDatabaseFailed());
+    }
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -2063,7 +2062,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               errorMessage: StringConstants.kNoDataFound));
         }
       } else {
-        print('schedule id ${event.scheduleId}');
         List<Map<String, dynamic>> filteredInstructions =
             await _databaseHelper.getInstructionsByScheduleId(event.scheduleId);
         log('schedule list $filteredInstructions');
@@ -2080,8 +2078,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           "Message": '',
           "Data": instructions.map((i) => i.toJson()).toList(),
         });
-        print(
-            'switching schedule final data ${fetchSwitchingScheduleInstructionsModel.data}');
         if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
           emit(SwitchingScheduleInstructionsFetched(
               scheduleInstructionDatum:
@@ -2103,6 +2099,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       Map editSwitchingScheduleMap = {
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "instructionid": event.editSwitchingScheduleMap['instructionid'],
+        "id": event.editSwitchingScheduleMap['instructionid'],
         "userid": await _customerCache.getUserId(CacheKeys.userId),
         "instructionreceivedby":
             event.editSwitchingScheduleMap['instructionreceivedby'] ?? '',
@@ -2121,16 +2118,36 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "carriedoutconfirmedtime":
             event.editSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
         "safetykeynumber":
-            event.editSwitchingScheduleMap['safetykeynumber'] ?? ''
+            event.editSwitchingScheduleMap['safetykeynumber'] ?? '',
+        "location": event.editSwitchingScheduleMap['location'] ?? '',
+        "equipmentuid": event.editSwitchingScheduleMap['equipmentuid'] ?? '',
+        "operation": event.editSwitchingScheduleMap['operation'] ?? '',
+        "instructionreceivedbyname":
+            event.editSwitchingScheduleMap["instructionreceivedbyname"],
+        "controlengineername":
+            event.editSwitchingScheduleMap["controlengineername"],
+        "canexecute": '1',
+        "ismanual": event.editSwitchingScheduleMap['ismanual']
       };
-      UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
-          await _permitRepository
-              .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
-      if (updatePermitSwitchingScheduleModel.message == '1') {
-        emit(PermitSwitchingScheduleUpdated());
+      if (isNetworkEstablished) {
+        UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
+            await _permitRepository
+                .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
+        if (updatePermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleUpdated());
+        } else {
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage: updatePermitSwitchingScheduleModel.message));
+        }
       } else {
-        emit(PermitSwitchingScheduleNotUpdated(
-            errorMessage: updatePermitSwitchingScheduleModel.message));
+        event.isFromMultiSelect
+            ? await _databaseHelper.editMultiSelectInstructions(
+                editSwitchingScheduleMap,
+                event.editSwitchingScheduleMap['instructionid'],
+                permitId)
+            : await _databaseHelper.editInstruction(editSwitchingScheduleMap,
+                event.editSwitchingScheduleMap['instructionid'], permitId);
+        emit(PermitSwitchingScheduleUpdated());
       }
     } catch (e) {
       emit(PermitSwitchingScheduleNotUpdated(errorMessage: e.toString()));
@@ -2141,61 +2158,69 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       AddPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
     emit(PermitSwitchingScheduleAdding());
     try {
-    Map<String, dynamic> addSwitchingScheduleMap = {
-      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
-      "instructionid": event.addSwitchingScheduleMap['instructionid'] ?? '',
-      "userid": await _customerCache.getUserId(CacheKeys.userId),
-      "location": event.addSwitchingScheduleMap['location'] ?? '',
-      "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'] ?? '',
-      "operation": event.addSwitchingScheduleMap['operation'] ?? '',
-      "instructionreceivedby":
-          event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
-      "controlengineer": event.addSwitchingScheduleMap['controlengineer'] ?? '',
-      "instructiondate": event.addSwitchingScheduleMap['instructiondate'] ?? '',
-      "instructiontime": event.addSwitchingScheduleMap['instructiontime'] ?? '',
-      "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
-      "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
-      "carriedoutconfirmeddate":
-          event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
-      "carriedoutconfirmedtime":
-          event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
-      "safetykeynumber": event.addSwitchingScheduleMap['safetykeynumber'] ?? '',
-      "canexecute" : '1',
-      "ismanual" : 1
-    };
-    if (isNetworkEstablished) {
-      if (event.addSwitchingScheduleMap['location'] != null &&
-          event.addSwitchingScheduleMap['equipmentuid'] != null &&
-          event.addSwitchingScheduleMap['operation'] != null) {
-        AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
-            await _permitRepository
-                .addPermitSwitchingSchedule(addSwitchingScheduleMap);
-        if (addPermitSwitchingScheduleModel.message == '1') {
-          emit(PermitSwitchingScheduleAdded());
+      Map<String, dynamic> addSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.addSwitchingScheduleMap['instructionid'] ?? '',
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "location": event.addSwitchingScheduleMap['location'] ?? '',
+        "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'] ?? '',
+        "operation": event.addSwitchingScheduleMap['operation'] ?? '',
+        "instructionreceivedby":
+            event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
+        "controlengineer":
+            event.addSwitchingScheduleMap['controlengineer'] ?? '',
+        "instructiondate":
+            event.addSwitchingScheduleMap['instructiondate'] ?? '',
+        "instructiontime":
+            event.addSwitchingScheduleMap['instructiontime'] ?? '',
+        "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
+        "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
+        "carriedoutconfirmeddate":
+            event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+        "carriedoutconfirmedtime":
+            event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+        "safetykeynumber":
+            event.addSwitchingScheduleMap['safetykeynumber'] ?? '',
+        "instructionreceivedbyname":
+            event.addSwitchingScheduleMap["instructionreceivedbyname"],
+        "controlengineername":
+            event.addSwitchingScheduleMap["controlengineername"],
+        "canexecute": '1',
+        "ismanual": 1
+      };
+      if (isNetworkEstablished) {
+        if (event.addSwitchingScheduleMap['location'] != null &&
+            event.addSwitchingScheduleMap['equipmentuid'] != null &&
+            event.addSwitchingScheduleMap['operation'] != null) {
+          AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
+              await _permitRepository
+                  .addPermitSwitchingSchedule(addSwitchingScheduleMap);
+          if (addPermitSwitchingScheduleModel.message == '1') {
+            emit(PermitSwitchingScheduleAdded());
+          } else {
+            emit(PermitSwitchingScheduleNotAdded(
+                errorMessage: addPermitSwitchingScheduleModel.message));
+          }
         } else {
-          emit(PermitSwitchingScheduleNotAdded(
-              errorMessage: addPermitSwitchingScheduleModel.message));
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage:
+                  StringConstants.kLocationEquipmentOperationMandatory));
         }
       } else {
-        emit(PermitSwitchingScheduleNotUpdated(
-            errorMessage:
-                StringConstants.kLocationEquipmentOperationMandatory));
+        if (event.addSwitchingScheduleMap['location'] != null &&
+            event.addSwitchingScheduleMap['equipmentuid'] != null &&
+            event.addSwitchingScheduleMap['operation'] != null) {
+          String? apiKey =
+              await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+          await _databaseHelper.addInstruction(addSwitchingScheduleMap,
+              event.addSwitchingScheduleMap['instructionid'], permitId, apiKey);
+          emit(PermitSwitchingScheduleAdded());
+        } else {
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage:
+                  StringConstants.kLocationEquipmentOperationMandatory));
+        }
       }
-    } else {
-      if (event.addSwitchingScheduleMap['location'] != null &&
-          event.addSwitchingScheduleMap['equipmentuid'] != null &&
-          event.addSwitchingScheduleMap['operation'] != null) {
-        await _databaseHelper.addInstruction(
-            addSwitchingScheduleMap,
-            event.addSwitchingScheduleMap['instructionid'],
-            permitId);
-        emit(PermitSwitchingScheduleAdded());
-      } else {
-        emit(PermitSwitchingScheduleNotUpdated(
-            errorMessage:
-                StringConstants.kLocationEquipmentOperationMandatory));
-      }
-    }
     } catch (e) {
       emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
     }
@@ -2340,16 +2365,30 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
-          await _permitRepository.fetchSwitchingScheduleDetails(
-              event.instructionId, hashCode);
-      if (fetchSwitchingScheduleDetailsModel.status == 200) {
+      if (isNetworkEstablished) {
+        FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
+            await _permitRepository.fetchSwitchingScheduleDetails(
+                event.instructionId, hashCode);
+        if (fetchSwitchingScheduleDetailsModel.status == 200) {
+          emit(SwitchingScheduleDetailsFetched(
+              fetchSwitchingScheduleDetailsModel:
+                  fetchSwitchingScheduleDetailsModel));
+        } else {
+          emit(SwitchingScheduleDetailsNotFetched(
+              errorMessage: StringConstants.kNoRecordsFound));
+        }
+      } else {
+        Map instructions =
+            await _databaseHelper.getInstruction(event.instructionId, permitId);
+        FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
+            FetchSwitchingScheduleDetailsModel.fromJson({
+          "Status": 200,
+          "Message": '',
+          "Data": instructions,
+        });
         emit(SwitchingScheduleDetailsFetched(
             fetchSwitchingScheduleDetailsModel:
                 fetchSwitchingScheduleDetailsModel));
-      } else {
-        emit(SwitchingScheduleDetailsNotFetched(
-            errorMessage: StringConstants.kNoRecordsFound));
       }
     } catch (e) {
       emit(SwitchingScheduleDetailsNotFetched(errorMessage: e.toString()));

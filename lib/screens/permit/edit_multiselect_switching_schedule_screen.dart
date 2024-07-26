@@ -5,7 +5,9 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/screens/permit/widgets/edit_mulitselect_switching_schedule_body.dart';
+import 'package:toolkit/screens/permit/widgets/edit_multiselect_instruction_offline_body.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -39,30 +41,36 @@ class EditMultiSelectSwitchingScheduleScreen extends StatelessWidget {
               bottom: xxTinierSpacing),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: BlocBuilder<PermitBloc, PermitStates>(
-              buildWhen: (previousState, currentState) =>
-                  currentState is FetchingPermitMaster ||
-                  currentState is PermitMasterFetched ||
-                  currentState is CouldNotFetchPermitMaster,
-              builder: (context, state) {
-                if (state is FetchingPermitMaster) {
-                  return Center(
-                    child: Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 2.5),
-                        child: const CircularProgressIndicator()),
-                  );
-                } else if (state is PermitMasterFetched) {
-                  return EditMultiSelectSwitchingInstructionBody(
-                    switchingScheduleMap: switchingScheduleMap,
-                    permitGetMasterModel: state.permitGetMasterModel,
-                  );
-                } else if (state is CouldNotFetchPermitMaster) {
-                  return const Center(
-                      child: Text(StringConstants.kNoRecordsFound));
-                }
-                return const SizedBox.shrink();
-              },
+            child: Visibility(
+              visible: isNetworkEstablished == true,
+              replacement: EditMultiSelectInstructionOfflineBody(
+                switchingScheduleMap: switchingScheduleMap,
+              ),
+              child: BlocBuilder<PermitBloc, PermitStates>(
+                buildWhen: (previousState, currentState) =>
+                    currentState is FetchingPermitMaster ||
+                    currentState is PermitMasterFetched ||
+                    currentState is CouldNotFetchPermitMaster,
+                builder: (context, state) {
+                  if (state is FetchingPermitMaster) {
+                    return Center(
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 2.5),
+                          child: const CircularProgressIndicator()),
+                    );
+                  } else if (state is PermitMasterFetched) {
+                    return EditMultiSelectSwitchingInstructionBody(
+                      switchingScheduleMap: switchingScheduleMap,
+                      permitGetMasterModel: state.permitGetMasterModel,
+                    );
+                  } else if (state is CouldNotFetchPermitMaster) {
+                    return const Center(
+                        child: Text(StringConstants.kNoRecordsFound));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
           )),
       bottomNavigationBar: Padding(
@@ -86,7 +94,8 @@ class EditMultiSelectSwitchingScheduleScreen extends StatelessWidget {
               onPressed: () {
                 switchingScheduleMap['instructionid'] = instructionIds;
                 context.read<PermitBloc>().add(UpdatePermitSwitchingSchedule(
-                    editSwitchingScheduleMap: switchingScheduleMap));
+                    editSwitchingScheduleMap: switchingScheduleMap,
+                    isFromMultiSelect: true));
               },
               textValue: DatabaseUtil.getText('buttonSave')),
         ),

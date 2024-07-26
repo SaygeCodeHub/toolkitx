@@ -222,8 +222,11 @@ class FetchSwitchingScheduleInstructions extends PermitEvents {
 
 class UpdatePermitSwitchingSchedule extends PermitEvents {
   final Map editSwitchingScheduleMap;
+  final bool isFromMultiSelect;
 
-  UpdatePermitSwitchingSchedule({required this.editSwitchingScheduleMap});
+  UpdatePermitSwitchingSchedule(
+      {required this.editSwitchingScheduleMap,
+      required this.isFromMultiSelect});
 }
 
 class AddPermitSwitchingSchedule extends PermitEvents {
