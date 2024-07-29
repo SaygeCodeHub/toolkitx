@@ -2105,10 +2105,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.editSwitchingScheduleMap['instructionreceivedby'] ?? '',
         "controlengineer":
             event.editSwitchingScheduleMap['controlengineer'] ?? '',
-        "instructiondate":
-            event.editSwitchingScheduleMap['instructiondate'] ?? '',
-        "instructiontime":
-            event.editSwitchingScheduleMap['instructiontime'] ?? '',
+        "instructionreceiveddate":
+            event.editSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.editSwitchingScheduleMap['instructionreceivedtime'] ?? '',
         "carriedoutdate":
             event.editSwitchingScheduleMap['carriedoutdate'] ?? '',
         "carriedouttime":
@@ -2169,10 +2169,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
         "controlengineer":
             event.addSwitchingScheduleMap['controlengineer'] ?? '',
-        "instructiondate":
-            event.addSwitchingScheduleMap['instructiondate'] ?? '',
-        "instructiontime":
-            event.addSwitchingScheduleMap['instructiontime'] ?? '',
+        "instructionreceiveddate":
+            event.addSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.addSwitchingScheduleMap['instructionreceivedtime'] ?? '',
         "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
         "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
         "carriedoutconfirmeddate":
@@ -2202,7 +2202,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 errorMessage: addPermitSwitchingScheduleModel.message));
           }
         } else {
-          emit(PermitSwitchingScheduleNotUpdated(
+          emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
         }
@@ -2215,8 +2215,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           await _databaseHelper.addInstruction(addSwitchingScheduleMap,
               event.addSwitchingScheduleMap['instructionid'], permitId, apiKey);
           emit(PermitSwitchingScheduleAdded());
-        } else {
-          emit(PermitSwitchingScheduleNotUpdated(
+        }
+        else {
+          emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
         }

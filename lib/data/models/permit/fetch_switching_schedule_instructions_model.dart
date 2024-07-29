@@ -41,10 +41,10 @@ class PermitSwithcingScheduleInstructionDatum {
   final String equipmentuid;
   final String operation;
   final String instructionreceivedbyname;
-  final String instructionreceiveddate;
+  final String instructionreceiveddatetime;
   final String controlengineername;
-  final String carriedoutdate;
-  final String carriedoutconfirmeddate;
+  final String carriedoutdatetime;
+  final String carriedoutconfirmeddatetime;
   final String safetykeynumber;
   final int ismanual;
   final String canexecute;
@@ -55,10 +55,10 @@ class PermitSwithcingScheduleInstructionDatum {
     required this.equipmentuid,
     required this.operation,
     required this.instructionreceivedbyname,
-    required this.instructionreceiveddate,
+    required this.instructionreceiveddatetime,
     required this.controlengineername,
-    required this.carriedoutdate,
-    required this.carriedoutconfirmeddate,
+    required this.carriedoutdatetime,
+    required this.carriedoutconfirmeddatetime,
     required this.safetykeynumber,
     required this.ismanual,
     required this.canexecute,
@@ -72,10 +72,10 @@ class PermitSwithcingScheduleInstructionDatum {
         equipmentuid: json["equipmentuid"] ?? '',
         operation: json["operation"] ?? '',
         instructionreceivedbyname: json["instructionreceivedbyname"] ?? '',
-        instructionreceiveddate: json["instructionreceiveddate"] ?? '',
+        instructionreceiveddatetime: json["instructionreceiveddatetime"] ?? '',
         controlengineername: json["controlengineername"] ?? '',
-        carriedoutdate: json["carriedoutdate"] ?? '',
-        carriedoutconfirmeddate: json["carriedoutconfirmeddate"] ?? '',
+        carriedoutdatetime: json["carriedoutdatetime"] ?? '',
+        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"] ?? '',
         safetykeynumber: json["safetykeynumber"] ?? '',
         ismanual: json["ismanual"] ?? 0,
         canexecute: json["canexecute"] ?? '',
@@ -87,10 +87,10 @@ class PermitSwithcingScheduleInstructionDatum {
         "equipmentuid": equipmentuid,
         "operation": operation,
         "instructionreceivedbyname": instructionreceivedbyname,
-        "instructionreceiveddate": instructionreceiveddate,
+        "instructionreceiveddatetime": instructionreceiveddatetime,
         "controlengineername": controlengineername,
-        "carriedoutdate": carriedoutdate,
-        "carriedoutconfirmeddate": carriedoutconfirmeddate,
+        "carriedoutdatetime": carriedoutdatetime,
+        "carriedoutconfirmeddatetime": carriedoutconfirmeddatetime,
         "safetykeynumber": safetykeynumber,
         "ismanual": ismanual,
         "canexecute": canexecute,

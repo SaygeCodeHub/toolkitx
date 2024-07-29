@@ -52,9 +52,9 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
               permitSwithcingScheduleInstructionDatum.id;
           switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
           switchingScheduleMap['ismanual'] = data.ismanual;
-          switchingScheduleMap["instructiondate"] =
+          switchingScheduleMap["instructionreceiveddate"] =
               data.instructionreceiveddate;
-          switchingScheduleMap["instructiontime"] =
+          switchingScheduleMap["instructionreceivedtime"] =
               data.instructionreceivedtime;
           switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
           switchingScheduleMap["carriedouttime"] = data.carriedouttime;
@@ -131,8 +131,8 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["instructiondate"] = date;
-                    switchingScheduleMap["instructiontime"] = time;
+                    switchingScheduleMap["instructionreceiveddate"] = date;
+                    switchingScheduleMap["instructionreceivedtime"] = time;
                   },
                   editDate:
                       isFromEdit == true ? data.instructionreceiveddate : '',

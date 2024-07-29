@@ -109,7 +109,7 @@ class AddAndEditSwitchingInstructionScreen extends StatelessWidget {
           },
           child: PrimaryButton(
               onPressed: () {
-                print('on tap map $switchingScheduleMap');
+                print('switchingScheduleMap========================>$switchingScheduleMap');
                 isFromEdit == true
                     ? context.read<PermitBloc>().add(
                         UpdatePermitSwitchingSchedule(

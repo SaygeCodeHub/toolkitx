@@ -500,6 +500,7 @@ class Instruction {
   final int controlengineerid;
   final String permitid;
   final int sortorder;
+  final int ismanual;
   final String canexecute;
   final String instructionreceiveddatetime;
   final String instructionreceiveddate;
@@ -524,6 +525,7 @@ class Instruction {
     required this.controlengineerid,
     required this.permitid,
     required this.sortorder,
+    required this.ismanual,
     required this.canexecute,
     required this.instructionreceiveddatetime,
     required this.instructionreceiveddate,
@@ -549,6 +551,7 @@ class Instruction {
         controlengineerid: json["controlengineerid"] ?? 0,
         permitid: json["permitid"],
         sortorder: json["sortorder"],
+        ismanual: json["ismanual"],
         canexecute: json["canexecute"],
         instructionreceiveddatetime: json["instructionreceiveddatetime"],
         instructionreceiveddate: json["instructionreceiveddate"],
@@ -574,6 +577,7 @@ class Instruction {
         "controlengineerid": controlengineerid,
         "permitid": permitid,
         "sortorder": sortorder,
+        "ismanual": ismanual,
         "canexecute": canexecute,
         "instructionreceiveddatetime": instructionreceiveddatetime,
         "instructionreceiveddate": instructionreceiveddate,

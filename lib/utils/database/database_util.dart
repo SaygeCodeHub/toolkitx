@@ -845,6 +845,13 @@ class DatabaseHelper {
   }
 
   Future<dynamic> addInstruction(data, instId, permitId, apiKey) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
+
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
@@ -976,6 +983,12 @@ class DatabaseHelper {
   }
 
   Future<dynamic> editInstruction(data, instId, permitId) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
@@ -996,6 +1009,12 @@ class DatabaseHelper {
   }
 
   Future<dynamic> editMultiSelectInstructions(data, instIds, permitId) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
