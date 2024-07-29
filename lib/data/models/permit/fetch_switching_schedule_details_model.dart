@@ -35,27 +35,32 @@ class FetchSwitchingScheduleDetailsModel {
 }
 
 class Data {
-  final String permitswitchingscheduleid;
+  final dynamic permitswitchingscheduleid;
+  final String id;
   final String location;
   final String equipmentuid;
   final String operation;
-  final String instructionreceivedby;
+  final dynamic instructionreceivedby;
   final String instructionreceiveddatetime;
-  final String controlengineerid;
+  final dynamic controlengineerid;
   final String carriedoutdatetime;
   final String carriedoutconfirmeddatetime;
   final String safetykeynumber;
   final String permitid;
-  final String sortorder;
+  final dynamic sortorder;
   final String instructionreceiveddate;
   final String instructionreceivedtime;
   final String carriedoutdate;
   final String carriedouttime;
   final String carriedoutconfirmeddate;
   final String carriedoutconfirmedtime;
+  final String instructionreceivedbyname;
+  final String controlengineername;
+  final dynamic ismanual;
 
   Data({
     required this.permitswitchingscheduleid,
+    required this.id,
     required this.location,
     required this.equipmentuid,
     required this.operation,
@@ -73,31 +78,39 @@ class Data {
     required this.carriedouttime,
     required this.carriedoutconfirmeddate,
     required this.carriedoutconfirmedtime,
+    required this.instructionreceivedbyname,
+    required this.controlengineername,
+    required this.ismanual,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        permitswitchingscheduleid: json["permitswitchingscheduleid"],
-        location: json["location"],
-        equipmentuid: json["equipmentuid"],
-        operation: json["operation"],
-        instructionreceivedby: json["instructionreceivedby"],
-        instructionreceiveddatetime: json["instructionreceiveddatetime"],
-        controlengineerid: json["controlengineerid"],
-        carriedoutdatetime: json["carriedoutdatetime"],
-        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"],
-        safetykeynumber: json["safetykeynumber"],
-        permitid: json["permitid"],
-        sortorder: json["sortorder"],
-        instructionreceiveddate: json["instructionreceiveddate"],
-        instructionreceivedtime: json["instructionreceivedtime"],
-        carriedoutdate: json["carriedoutdate"],
-        carriedouttime: json["carriedouttime"],
-        carriedoutconfirmeddate: json["carriedoutconfirmeddate"],
-        carriedoutconfirmedtime: json["carriedoutconfirmedtime"],
+        permitswitchingscheduleid: json["permitswitchingscheduleid"] ?? '',
+        id: json["id"] ?? '',
+        location: json["location"] ?? '',
+        equipmentuid: json["equipmentuid"] ?? '',
+        operation: json["operation"] ?? '',
+        instructionreceivedby: json["instructionreceivedby"] ?? '',
+        instructionreceiveddatetime: json["instructionreceiveddatetime"] ?? '',
+        controlengineerid: json["controlengineerid"] ?? '',
+        carriedoutdatetime: json["carriedoutdatetime"] ?? '',
+        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"] ?? '',
+        safetykeynumber: json["safetykeynumber"] ?? '',
+        permitid: json["permitid"] ?? '',
+        sortorder: json["sortorder"] ?? '',
+        instructionreceiveddate: json["instructionreceiveddate"] ?? '',
+        instructionreceivedtime: json["instructionreceivedtime"] ?? '',
+        carriedoutdate: json["carriedoutdate"] ?? '',
+        carriedouttime: json["carriedouttime"] ?? '',
+        carriedoutconfirmeddate: json["carriedoutconfirmeddate"] ?? '',
+        carriedoutconfirmedtime: json["carriedoutconfirmedtime"] ?? '',
+        instructionreceivedbyname: json["instructionreceivedbyname"] ?? '',
+        controlengineername: json["controlengineername"] ?? '',
+        ismanual: json["ismanual"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "permitswitchingscheduleid": permitswitchingscheduleid,
+        "id": id,
         "location": location,
         "equipmentuid": equipmentuid,
         "operation": operation,
@@ -115,5 +128,8 @@ class Data {
         "carriedouttime": carriedouttime,
         "carriedoutconfirmeddate": carriedoutconfirmeddate,
         "carriedoutconfirmedtime": carriedoutconfirmedtime,
+        "instructionreceivedbyname": instructionreceivedbyname,
+        "controlengineername": controlengineername,
+        "ismanual": ismanual,
       };
 }
