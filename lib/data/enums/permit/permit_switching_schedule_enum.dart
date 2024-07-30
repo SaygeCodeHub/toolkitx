@@ -3,10 +3,10 @@ enum PermitSwitchingScheduleEnum {
   equipmentuid,
   operation,
   instructionreceivedbyname,
-  instructionreceiveddate,
+  instructionreceiveddatetime,
   controlengineername,
-  carriedoutdate,
-  carriedoutconfirmeddate,
+  carriedoutdatetime,
+  carriedoutconfirmeddatetime,
   safetykeynumber
 }
 
@@ -21,13 +21,13 @@ extension PermitSwitchingScheduleEnumExtension on PermitSwitchingScheduleEnum {
         return 'Operation';
       case PermitSwitchingScheduleEnum.instructionreceivedbyname:
         return 'Instruction Received By';
-      case PermitSwitchingScheduleEnum.instructionreceiveddate:
+      case PermitSwitchingScheduleEnum.instructionreceiveddatetime:
         return 'Instructed Date';
       case PermitSwitchingScheduleEnum.controlengineername:
         return 'Control Engineer';
-      case PermitSwitchingScheduleEnum.carriedoutdate:
+      case PermitSwitchingScheduleEnum.carriedoutdatetime:
         return 'Carriedout Date';
-      case PermitSwitchingScheduleEnum.carriedoutconfirmeddate:
+      case PermitSwitchingScheduleEnum.carriedoutconfirmeddatetime:
         return 'Carriedout Confirmed Date';
       case PermitSwitchingScheduleEnum.safetykeynumber:
         return 'Safety Key Number';
@@ -46,14 +46,14 @@ extension PermitSwitchingScheduleEnumExtension on PermitSwitchingScheduleEnum {
         return 'operation';
       case PermitSwitchingScheduleEnum.instructionreceivedbyname:
         return 'instructionreceivedbyname';
-      case PermitSwitchingScheduleEnum.instructionreceiveddate:
-        return 'instructionreceiveddate';
+      case PermitSwitchingScheduleEnum.instructionreceiveddatetime:
+        return 'instructionreceiveddatetime';
       case PermitSwitchingScheduleEnum.controlengineername:
         return 'controlengineername';
-      case PermitSwitchingScheduleEnum.carriedoutdate:
-        return 'carriedoutdate';
-      case PermitSwitchingScheduleEnum.carriedoutconfirmeddate:
-        return 'carriedoutconfirmeddate';
+      case PermitSwitchingScheduleEnum.carriedoutdatetime:
+        return 'carriedoutdatetime';
+      case PermitSwitchingScheduleEnum.carriedoutconfirmeddatetime:
+        return 'carriedoutconfirmeddatetime';
       case PermitSwitchingScheduleEnum.safetykeynumber:
         return 'safetykeynumber';
       default:

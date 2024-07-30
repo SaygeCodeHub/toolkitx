@@ -40,8 +40,8 @@ class EditMultiSelectSwitchingInstructionBody extends StatelessWidget {
       const SizedBox(height: tiniestSpacing),
       PermitSwitchingDateTimeFields(
           callBackFunctionForDateTime: (String date, String time) {
-        switchingScheduleMap["instructiondate"] = date;
-        switchingScheduleMap["instructiontime"] = time;
+        switchingScheduleMap["instructionreceiveddate"] = date;
+        switchingScheduleMap["instructionreceivedtime"] = time;
       }),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kControlEngineer,

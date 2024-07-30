@@ -44,25 +44,27 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
         } else if (state is SwitchingScheduleDetailsFetched) {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
           switchingScheduleMap['instructionid'] = data.id;
-          switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
-          switchingScheduleMap['location'] = data.location;
-          switchingScheduleMap['operation'] = data.operation;
-          switchingScheduleMap['equipmentuid'] = data.equipmentuid;
-          switchingScheduleMap["instructiondate"] =
-              data.instructionreceiveddate;
-          switchingScheduleMap["instructiontime"] =
-              data.instructionreceivedtime;
-          switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
-          switchingScheduleMap["carriedouttime"] = data.carriedouttime;
-          switchingScheduleMap["carriedoutconfirmeddate"] =
-              data.carriedoutconfirmeddate;
-          switchingScheduleMap["carriedoutconfirmedtime"] =
-              data.carriedoutconfirmedtime;
-          switchingScheduleMap["instructionreceivedbyname"] =
-              data.instructionreceivedbyname;
-          switchingScheduleMap["controlengineername"] =
-              data.controlengineername;
-          switchingScheduleMap["ismanual"] = data.ismanual;
+          if (isFromEdit) {
+            switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
+            switchingScheduleMap['location'] = data.location;
+            switchingScheduleMap['operation'] = data.operation;
+            switchingScheduleMap['equipmentuid'] = data.equipmentuid;
+            switchingScheduleMap["instructionreceiveddate"] =
+                data.instructionreceiveddate;
+            switchingScheduleMap["instructionreceivedtime"] =
+                data.instructionreceivedtime;
+            switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
+            switchingScheduleMap["carriedouttime"] = data.carriedouttime;
+            switchingScheduleMap["carriedoutconfirmeddate"] =
+                data.carriedoutconfirmeddate;
+            switchingScheduleMap["carriedoutconfirmedtime"] =
+                data.carriedoutconfirmedtime;
+            switchingScheduleMap["instructionreceivedbyname"] =
+                data.instructionreceivedbyname;
+            switchingScheduleMap["controlengineername"] =
+                data.controlengineername;
+            switchingScheduleMap["ismanual"] = data.ismanual;
+          }
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -130,8 +132,8 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["instructiondate"] = date;
-                    switchingScheduleMap["instructiontime"] = time;
+                    switchingScheduleMap["instructionreceiveddate"] = date;
+                    switchingScheduleMap["instructionreceivedtime"] = time;
                   },
                   editDate:
                       isFromEdit == true ? data.instructionreceiveddate : '',

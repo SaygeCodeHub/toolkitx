@@ -98,7 +98,6 @@ class AddAndEditSwitchingInstructionScreen extends StatelessWidget {
             } else if (state is PermitSwitchingScheduleAdded) {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
-              print('schedule id $scheduleId');
               Navigator.pushReplacementNamed(
                   context, PermitSwitchingScheduleTableScreen.routeName,
                   arguments: scheduleId);
@@ -109,7 +108,6 @@ class AddAndEditSwitchingInstructionScreen extends StatelessWidget {
           },
           child: PrimaryButton(
               onPressed: () {
-                print('on tap map $switchingScheduleMap');
                 isFromEdit == true
                     ? context.read<PermitBloc>().add(
                         UpdatePermitSwitchingSchedule(

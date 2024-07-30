@@ -50,18 +50,20 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
           switchingScheduleMap['instructionid'] =
               permitSwithcingScheduleInstructionDatum.id;
-          switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
-          switchingScheduleMap['ismanual'] = data.ismanual;
-          switchingScheduleMap["instructiondate"] =
-              data.instructionreceiveddate;
-          switchingScheduleMap["instructiontime"] =
-              data.instructionreceivedtime;
-          switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
-          switchingScheduleMap["carriedouttime"] = data.carriedouttime;
-          switchingScheduleMap["carriedoutconfirmeddate"] =
-              data.carriedoutconfirmeddate;
-          switchingScheduleMap["carriedoutconfirmedtime"] =
-              data.carriedoutconfirmedtime;
+          if (isFromEdit) {
+            switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
+            switchingScheduleMap['ismanual'] = data.ismanual;
+            switchingScheduleMap["instructionreceiveddate"] =
+                data.instructionreceiveddate;
+            switchingScheduleMap["instructionreceivedtime"] =
+                data.instructionreceivedtime;
+            switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
+            switchingScheduleMap["carriedouttime"] = data.carriedouttime;
+            switchingScheduleMap["carriedoutconfirmeddate"] =
+                data.carriedoutconfirmeddate;
+            switchingScheduleMap["carriedoutconfirmedtime"] =
+                data.carriedoutconfirmedtime;
+          }
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -131,8 +133,8 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["instructiondate"] = date;
-                    switchingScheduleMap["instructiontime"] = time;
+                    switchingScheduleMap["instructionreceiveddate"] = date;
+                    switchingScheduleMap["instructionreceivedtime"] = time;
                   },
                   editDate:
                       isFromEdit == true ? data.instructionreceiveddate : '',

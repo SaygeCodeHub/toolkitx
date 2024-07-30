@@ -110,19 +110,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
     try {
-    emit(const PreparingPermitLocalDatabase());
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    OfflinePermitModel offlinePermitModel =
-        await _permitRepository.fetchOfflinePermit(hashCode);
-    if (offlinePermitModel.status == 200) {
-      for (var datum in offlinePermitModel.data) {
-        // log('permit offline datum ${datum.tab7.first.toJson()}');
-        await _databaseHelper.insertOfflinePermit(datum);
+      emit(const PreparingPermitLocalDatabase());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      OfflinePermitModel offlinePermitModel =
+          await _permitRepository.fetchOfflinePermit(hashCode);
+      if (offlinePermitModel.status == 200) {
+        for (var datum in offlinePermitModel.data) {
+          await _databaseHelper.insertOfflinePermit(datum);
+        }
+        emit(const PermitLocalDatabasePrepared());
+      } else {
+        emit(const PreparingPermitLocalDatabaseFailed());
       }
-      emit(const PermitLocalDatabasePrepared());
-    } else {
-      emit(const PreparingPermitLocalDatabaseFailed());
-    }
     } catch (e) {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
@@ -2105,10 +2104,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.editSwitchingScheduleMap['instructionreceivedby'] ?? '',
         "controlengineer":
             event.editSwitchingScheduleMap['controlengineer'] ?? '',
-        "instructiondate":
-            event.editSwitchingScheduleMap['instructiondate'] ?? '',
-        "instructiontime":
-            event.editSwitchingScheduleMap['instructiontime'] ?? '',
+        "instructionreceiveddate":
+            event.editSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.editSwitchingScheduleMap['instructionreceivedtime'] ?? '',
         "carriedoutdate":
             event.editSwitchingScheduleMap['carriedoutdate'] ?? '',
         "carriedouttime":
@@ -2169,10 +2168,10 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
         "controlengineer":
             event.addSwitchingScheduleMap['controlengineer'] ?? '',
-        "instructiondate":
-            event.addSwitchingScheduleMap['instructiondate'] ?? '',
-        "instructiontime":
-            event.addSwitchingScheduleMap['instructiontime'] ?? '',
+        "instructionreceiveddate":
+            event.addSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.addSwitchingScheduleMap['instructionreceivedtime'] ?? '',
         "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
         "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
         "carriedoutconfirmeddate":
@@ -2202,7 +2201,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 errorMessage: addPermitSwitchingScheduleModel.message));
           }
         } else {
-          emit(PermitSwitchingScheduleNotUpdated(
+          emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
         }
@@ -2216,7 +2215,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               event.addSwitchingScheduleMap['instructionid'], permitId, apiKey);
           emit(PermitSwitchingScheduleAdded());
         } else {
-          emit(PermitSwitchingScheduleNotUpdated(
+          emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
         }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:math';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
@@ -700,7 +700,6 @@ class DatabaseHelper {
     if (result.isNotEmpty) {
       // Iterate over all fetched rows
       for (var row in result) {
-        print('rowww data $row');
         if (row['tab7'] != null) {
           String tab7Json = row['tab7'];
           List<dynamic> tab7Data = jsonDecode(tab7Json);
@@ -755,7 +754,7 @@ class DatabaseHelper {
 
               // Convert updated data to JSON
               String updatedTab7Json = jsonEncode(tab7Data);
-              log('updatedTab7Json $updatedTab7Json');
+              // log('updatedTab7Json $updatedTab7Json');
               // Update the tab7 data in the database
               final db = await database;
               await db.rawUpdate('''
@@ -845,6 +844,13 @@ class DatabaseHelper {
   }
 
   Future<dynamic> addInstruction(data, instId, permitId, apiKey) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
+
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
@@ -852,17 +858,11 @@ class DatabaseHelper {
     var tempInstructions = [];
     var ss = temp[ssIndex];
     var instructions = ss["instructions"];
-
-    int maxInstructionId = -1;
-    for (var x = 0; x < instructions.length; x++) {
-      var inId = instructions[x]['id'];
-      int? inIdInt =
-          int.tryParse(EncryptData.decryptAESPrivateKey(inId, apiKey));
-      if (inIdInt! > maxInstructionId) maxInstructionId = inIdInt;
-    }
-    maxInstructionId = maxInstructionId + 1;
-    data['id'] =
-        EncryptData.encryptAESPrivateKey(maxInstructionId.toString(), apiKey);
+    DateTime dateTime = DateTime.now();
+    Random random = Random();
+    int randomValue = random.nextInt(100000);
+    String maxInstructionId = '${dateTime.millisecondsSinceEpoch}$randomValue';
+    data['id'] = EncryptData.encryptAESPrivateKey(maxInstructionId, apiKey);
 
     for (var x = 0; x < instructions.length; x++) {
       tempInstructions.add(instructions[x]);
@@ -976,6 +976,12 @@ class DatabaseHelper {
   }
 
   Future<dynamic> editInstruction(data, instId, permitId) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
     Map<String, dynamic> offlinePermitData =
         await fetchPermitDetailsOffline(permitId);
     var temp = offlinePermitData['tab7'];
@@ -1030,6 +1036,16 @@ class DatabaseHelper {
                 data['carriedoutconfirmedtime'];
 
             instructions[x]['safetykeynumber'] = data['safetykeynumber'];
+            instructions[x]['instructionreceiveddatetime'] =
+                data['instructionreceiveddate'] +
+                    ' ' +
+                    data['instructionreceivedtime'];
+            instructions[x]['carriedoutdatetime'] =
+                data['carriedoutdate'] + ' ' + data['carriedouttime'];
+            instructions[x]['carriedoutconfirmeddatetime'] =
+                data['carriedoutconfirmeddate'] +
+                    ' ' +
+                    data['carriedoutconfirmedtime'];
           }
         }
       }
