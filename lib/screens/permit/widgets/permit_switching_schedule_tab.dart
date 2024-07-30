@@ -10,6 +10,7 @@ import 'package:toolkit/data/models/permit/permit_details_model.dart';
 import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
@@ -24,7 +25,6 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('permit details tab 7 ${permitDetailsModel.data.tab7}');
     return ListView.separated(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
@@ -72,36 +72,39 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                             showCustomSnackBar(context, state.errorMessage, '');
                           }
                         },
-                        child: PopupMenuButton(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              PopupMenuItem(
-                                onTap: () {
-                                  context.read<PermitBloc>().add(
-                                      MarkSwitchingScheduleComplete(
-                                          switchingScheduleId:
-                                              permitDetailsModel
-                                                  .data.tab7[index].id));
-                                },
-                                value: StringConstants.kMarkAsComplete,
-                                child: Text(StringConstants.kMarkAsComplete,
-                                    style: Theme.of(context).textTheme.xxSmall),
-                              ),
-                              PopupMenuItem(
-                                onTap: () {
-                                  context.read<PermitBloc>().add(
-                                      GenerateSwitchingSchedulePdf(
-                                          switchingScheduleId:
-                                              permitDetailsModel
-                                                  .data.tab7[index].id));
-                                },
-                                value: StringConstants.kGeneratePdf,
-                                child: Text(StringConstants.kGeneratePdf,
-                                    style: Theme.of(context).textTheme.xxSmall),
-                              ),
-                            ];
-                          },
+                        child: Visibility(
+                          visible: isNetworkEstablished,
+                          child: PopupMenuButton(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (BuildContext context) {
+                              return [
+                                PopupMenuItem(
+                                  onTap: () {
+                                    context.read<PermitBloc>().add(
+                                        MarkSwitchingScheduleComplete(
+                                            switchingScheduleId:
+                                                permitDetailsModel
+                                                    .data.tab7[index].id));
+                                  },
+                                  value: StringConstants.kMarkAsComplete,
+                                  child: Text(StringConstants.kMarkAsComplete,
+                                      style: Theme.of(context).textTheme.xxSmall),
+                                ),
+                                PopupMenuItem(
+                                  onTap: () {
+                                    context.read<PermitBloc>().add(
+                                        GenerateSwitchingSchedulePdf(
+                                            switchingScheduleId:
+                                                permitDetailsModel
+                                                    .data.tab7[index].id));
+                                  },
+                                  value: StringConstants.kGeneratePdf,
+                                  child: Text(StringConstants.kGeneratePdf,
+                                      style: Theme.of(context).textTheme.xxSmall),
+                                ),
+                              ];
+                            },
+                          ),
                         ),
                       ),
                       subtitle: Padding(

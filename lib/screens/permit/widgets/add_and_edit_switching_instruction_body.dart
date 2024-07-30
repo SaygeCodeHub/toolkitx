@@ -50,18 +50,20 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
           switchingScheduleMap['instructionid'] =
               permitSwithcingScheduleInstructionDatum.id;
-          switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
-          switchingScheduleMap['ismanual'] = data.ismanual;
-          switchingScheduleMap["instructionreceiveddate"] =
-              data.instructionreceiveddate;
-          switchingScheduleMap["instructionreceivedtime"] =
-              data.instructionreceivedtime;
-          switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
-          switchingScheduleMap["carriedouttime"] = data.carriedouttime;
-          switchingScheduleMap["carriedoutconfirmeddate"] =
-              data.carriedoutconfirmeddate;
-          switchingScheduleMap["carriedoutconfirmedtime"] =
-              data.carriedoutconfirmedtime;
+          if(isFromEdit){
+            switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
+            switchingScheduleMap['ismanual'] = data.ismanual;
+            switchingScheduleMap["instructionreceiveddate"] =
+                data.instructionreceiveddate;
+            switchingScheduleMap["instructionreceivedtime"] =
+                data.instructionreceivedtime;
+            switchingScheduleMap["carriedoutdate"] = data.carriedoutdate;
+            switchingScheduleMap["carriedouttime"] = data.carriedouttime;
+            switchingScheduleMap["carriedoutconfirmeddate"] =
+                data.carriedoutconfirmeddate;
+            switchingScheduleMap["carriedoutconfirmedtime"] =
+                data.carriedoutconfirmedtime;
+          }
           return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

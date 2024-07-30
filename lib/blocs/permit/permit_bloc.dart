@@ -2201,7 +2201,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             emit(PermitSwitchingScheduleNotAdded(
                 errorMessage: addPermitSwitchingScheduleModel.message));
           }
-        } else {
+        }
+        else {
           emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));

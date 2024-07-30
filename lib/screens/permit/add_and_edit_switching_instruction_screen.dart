@@ -108,8 +108,6 @@ class AddAndEditSwitchingInstructionScreen extends StatelessWidget {
           },
           child: PrimaryButton(
               onPressed: () {
-                switchingScheduleMap['instructionid'] =
-                    permitSwithcingScheduleInstructionDatum.id;
                 isFromEdit == true
                     ? context.read<PermitBloc>().add(
                         UpdatePermitSwitchingSchedule(
