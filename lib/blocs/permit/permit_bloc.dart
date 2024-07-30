@@ -116,7 +116,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           await _permitRepository.fetchOfflinePermit(hashCode);
       if (offlinePermitModel.status == 200) {
         for (var datum in offlinePermitModel.data) {
-          // log('permit offline datum ${datum.tab7.first.toJson()}');
           await _databaseHelper.insertOfflinePermit(datum);
         }
         emit(const PermitLocalDatabasePrepared());
