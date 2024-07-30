@@ -728,11 +728,12 @@ abstract class StringConstants {
   static const String kTankMass = "Tank Mass (Kg)";
   static const String kOpenReading = "OpenReading";
   static const String kCloseReading = "CloseReading";
-  static const String kFlowMeterQuantityKGAsPerCompartment = "FlowMeter Quantity (Kg) as per Compartment";
+  static const String kFlowMeterQuantityKGAsPerCompartment =
+      "FlowMeter Quantity (Kg) as per Compartment";
   static const String kReportingTime = "Reporting Time";
   static const String kTHAInTime = "THA In Time";
   static const String kTHAOutTime = "THA Out Time";
-  static const String kTHAOperationCompleted= "THA Operation Completed";
+  static const String kTHAOperationCompleted = "THA Operation Completed";
   static const String kStartDateTime = "Start DateTime";
   static const String kEndDateTime = "End DateTime";
   static const String kTitle = "Title";
@@ -752,7 +753,8 @@ abstract class StringConstants {
   static const String kDriverEIDName = "Driver EID/Name";
   static const String kCarrierCompany = "Carrier Company";
   static const String kNoOfCompartment = "No Of Compartment";
-  static const String kFlowMeterQuantityCBMPerCompartment = "FlowMeter Quantity (cbm) per Compartment";
+  static const String kFlowMeterQuantityCBMPerCompartment =
+      "FlowMeter Quantity (cbm) per Compartment";
   static const String kTruckLoadingPosition = "Truck Loading Position";
   static const String kDriverPhone = "Driver Phone";
   static const String kShipName = "Ship Name";
@@ -764,5 +766,4 @@ abstract class StringConstants {
   static const String kCountryOfOrigin = "Country of Origin";
   static const String kCountryOfProduction = "Country of Production";
   static const String kDestinationTank = "Destination Tank";
-
 }

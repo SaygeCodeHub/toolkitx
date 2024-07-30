@@ -88,7 +88,8 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                                   },
                                   value: StringConstants.kMarkAsComplete,
                                   child: Text(StringConstants.kMarkAsComplete,
-                                      style: Theme.of(context).textTheme.xxSmall),
+                                      style:
+                                          Theme.of(context).textTheme.xxSmall),
                                 ),
                                 PopupMenuItem(
                                   onTap: () {
@@ -100,7 +101,8 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                                   },
                                   value: StringConstants.kGeneratePdf,
                                   child: Text(StringConstants.kGeneratePdf,
-                                      style: Theme.of(context).textTheme.xxSmall),
+                                      style:
+                                          Theme.of(context).textTheme.xxSmall),
                                 ),
                               ];
                             },

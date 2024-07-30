@@ -50,7 +50,7 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
           switchingScheduleMap['instructionid'] =
               permitSwithcingScheduleInstructionDatum.id;
-          if(isFromEdit){
+          if (isFromEdit) {
             switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
             switchingScheduleMap['ismanual'] = data.ismanual;
             switchingScheduleMap["instructionreceiveddate"] =

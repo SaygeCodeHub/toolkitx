@@ -43,8 +43,8 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                   child: const CircularProgressIndicator()));
         } else if (state is SwitchingScheduleDetailsFetched) {
           var data = state.fetchSwitchingScheduleDetailsModel.data;
-            switchingScheduleMap['instructionid'] = data.id;
-          if(isFromEdit){
+          switchingScheduleMap['instructionid'] = data.id;
+          if (isFromEdit) {
             switchingScheduleMap['safetykeynumber'] = data.safetykeynumber;
             switchingScheduleMap['location'] = data.location;
             switchingScheduleMap['operation'] = data.operation;

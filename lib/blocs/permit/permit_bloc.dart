@@ -110,19 +110,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
     try {
-    emit(const PreparingPermitLocalDatabase());
-    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-    OfflinePermitModel offlinePermitModel =
-        await _permitRepository.fetchOfflinePermit(hashCode);
-    if (offlinePermitModel.status == 200) {
-      for (var datum in offlinePermitModel.data) {
-        // log('permit offline datum ${datum.tab7.first.toJson()}');
-        await _databaseHelper.insertOfflinePermit(datum);
+      emit(const PreparingPermitLocalDatabase());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      OfflinePermitModel offlinePermitModel =
+          await _permitRepository.fetchOfflinePermit(hashCode);
+      if (offlinePermitModel.status == 200) {
+        for (var datum in offlinePermitModel.data) {
+          // log('permit offline datum ${datum.tab7.first.toJson()}');
+          await _databaseHelper.insertOfflinePermit(datum);
+        }
+        emit(const PermitLocalDatabasePrepared());
+      } else {
+        emit(const PreparingPermitLocalDatabaseFailed());
       }
-      emit(const PermitLocalDatabasePrepared());
-    } else {
-      emit(const PreparingPermitLocalDatabaseFailed());
-    }
     } catch (e) {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
@@ -2201,8 +2201,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             emit(PermitSwitchingScheduleNotAdded(
                 errorMessage: addPermitSwitchingScheduleModel.message));
           }
-        }
-        else {
+        } else {
           emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
@@ -2216,8 +2215,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           await _databaseHelper.addInstruction(addSwitchingScheduleMap,
               event.addSwitchingScheduleMap['instructionid'], permitId, apiKey);
           emit(PermitSwitchingScheduleAdded());
-        }
-        else {
+        } else {
           emit(PermitSwitchingScheduleNotAdded(
               errorMessage:
                   StringConstants.kLocationEquipmentOperationMandatory));
