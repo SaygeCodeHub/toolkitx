@@ -96,7 +96,7 @@ class TankManagementBasicDetails extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(data.customstatus),
           const SizedBox(height: xxxSmallestSpacing),
-          basicDetailsTabSwitchCase(context, data.type, data)
+          basicDetailsTabSwitchCase(context, data.announce, data)
         ]),
       ),
     );

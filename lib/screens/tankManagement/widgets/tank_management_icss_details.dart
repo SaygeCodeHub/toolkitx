@@ -51,7 +51,10 @@ class TankManagementICSSDetails extends StatelessWidget {
               } else if (state is TmsNominationDataFetched) {
                 var icssData = state.fetchTmsNominationDataModel.data;
                 return icssDetailsTabSwitchCase(
-                    context, '4', tankManagementDetails, icssData);
+                    context,
+                    fetchTankManagementDetailsModel.data.announce,
+                    tankManagementDetails,
+                    icssData);
               } else if (state is TmsNominationDataNotFetched) {
                 return Center(
                     child: Padding(

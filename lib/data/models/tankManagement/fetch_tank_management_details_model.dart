@@ -212,7 +212,7 @@ class Data {
         tanknames: json["tanknames"] ?? '',
         nominationo: json["nominationo"] ?? '',
         announcetext: json["announcetext"] ?? '',
-        approvelist: List<Approvelist>.from(
+        approvelist: json["approvelist"] == null ? [] : List<Approvelist>.from(
             json["approvelist"].map((x) => Approvelist.fromJson(x))),
       );
 

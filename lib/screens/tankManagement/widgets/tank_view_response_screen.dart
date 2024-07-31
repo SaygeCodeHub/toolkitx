@@ -40,7 +40,7 @@ class TankViewResponseScreen extends StatelessWidget {
               },
               textValue: StringConstants.kReload);
         } else if (state is CheckListQuestionsListNotFetched) {
-          return NoRecordsText(text: state.errorMessage);
+          return Center(child: Text(state.errorMessage));
         } else {
           return const SizedBox();
         }
