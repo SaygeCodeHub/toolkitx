@@ -414,7 +414,7 @@ class Tab7 {
   final String id;
   final String number;
   final String title;
-  final String status;
+  final dynamic status;
 
   Tab7({
     required this.id,
