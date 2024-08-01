@@ -25,11 +25,17 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List popUpMenuItems = [
+      StringConstants.kMarkAsComplete,
+      StringConstants.kGeneratePdf
+    ];
+    final permitBloc = context.read<PermitBloc>();
     return ListView.separated(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
         itemCount: permitDetailsModel.data.tab7.length,
         itemBuilder: (context, index) {
+          var switchingScheduleId = permitDetailsModel.data.tab7[index].id;
           return CustomCard(
               child: Padding(
                   padding: const EdgeInsets.only(top: xxTinierSpacing),
@@ -74,38 +80,34 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                         },
                         child: Visibility(
                           visible: isNetworkEstablished,
-                          child: PopupMenuButton(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (BuildContext context) {
-                              return [
-                                PopupMenuItem(
-                                  onTap: () {
-                                    context.read<PermitBloc>().add(
-                                        MarkSwitchingScheduleComplete(
-                                            switchingScheduleId:
-                                                permitDetailsModel
-                                                    .data.tab7[index].id));
-                                  },
-                                  value: StringConstants.kMarkAsComplete,
-                                  child: Text(StringConstants.kMarkAsComplete,
-                                      style:
-                                          Theme.of(context).textTheme.xxSmall),
-                                ),
-                                PopupMenuItem(
-                                  onTap: () {
-                                    context.read<PermitBloc>().add(
-                                        GenerateSwitchingSchedulePdf(
-                                            switchingScheduleId:
-                                                permitDetailsModel
-                                                    .data.tab7[index].id));
-                                  },
-                                  value: StringConstants.kGeneratePdf,
-                                  child: Text(StringConstants.kGeneratePdf,
-                                      style:
-                                          Theme.of(context).textTheme.xxSmall),
-                                ),
-                              ];
+                          child: MenuAnchor(
+                            builder: (BuildContext context,
+                                MenuController controller, Widget? child) {
+                              return IconButton(
+                                onPressed: () {
+                                  if (controller.isOpen) {
+                                    controller.close();
+                                  } else {
+                                    controller.open();
+                                  }
+                                },
+                                icon: const Icon(Icons.more_horiz),
+                              );
                             },
+                            alignmentOffset: const Offset(-80.0, 0.0),
+                            menuChildren: List<MenuItemButton>.generate(
+                              popUpMenuItems.length,
+                              (int index) => MenuItemButton(
+                                onPressed: () {
+                                  callFunction(
+                                      popUpMenuItems[index],
+                                      context,
+                                      switchingScheduleId,
+                                      permitBloc);
+                                },
+                                child: Text(popUpMenuItems[index]),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -117,7 +119,7 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                               children: [
                                 Text(permitDetailsModel.data.tab7[index].title),
                                 const SizedBox(height: xxTinierSpacing),
-                                Text(permitDetailsModel.data.tab7[index].status,
+                                Text(permitDetailsModel.data.tab7[index].status.toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .xxSmall
@@ -128,5 +130,18 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
         separatorBuilder: (context, index) {
           return const SizedBox(height: xxTinierSpacing);
         });
+  }
+
+  callFunction(buttonName, context, switchingScheduleId, permitBloc) {
+    switch (buttonName) {
+      case StringConstants.kMarkAsComplete:
+        permitBloc.add(MarkSwitchingScheduleComplete(
+            switchingScheduleId: switchingScheduleId));
+        break;
+      case StringConstants.kGeneratePdf:
+        permitBloc.add(GenerateSwitchingSchedulePdf(
+            switchingScheduleId: switchingScheduleId));
+        break;
+    }
   }
 }

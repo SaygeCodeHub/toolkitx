@@ -133,8 +133,15 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["instructionreceiveddate"] = date;
-                    switchingScheduleMap["instructionreceivedtime"] = time;
+                    if (isFromEdit) {
+                      switchingScheduleMap["instructionreceiveddate"] =
+                      date != '' ? date : data.instructionreceiveddate;
+                      switchingScheduleMap["instructionreceivedtime"] =
+                      time != '' ? time : data.instructionreceivedtime;
+                    } else {
+                      switchingScheduleMap["instructionreceiveddate"] = date;
+                      switchingScheduleMap["instructionreceivedtime"] = time;
+                    }
                   },
                   editDate:
                       isFromEdit == true ? data.instructionreceiveddate : '',
@@ -162,8 +169,15 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["carriedoutdate"] = date;
-                    switchingScheduleMap["carriedouttime"] = time;
+                    if (isFromEdit) {
+                      switchingScheduleMap["carriedoutdate"] =
+                      date != '' ? date : data.carriedoutdate;
+                      switchingScheduleMap["carriedouttime"] =
+                      time != '' ? time : data.carriedouttime;
+                    } else {
+                      switchingScheduleMap["carriedoutdate"] = date;
+                      switchingScheduleMap["carriedouttime"] = time;
+                    }
                   },
                   editDate: isFromEdit == true ? data.carriedoutdate : '',
                   editTime: isFromEdit == true ? data.carriedouttime : '',
@@ -175,8 +189,15 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 PermitSwitchingDateTimeFields(
                   callBackFunctionForDateTime: (String date, String time) {
-                    switchingScheduleMap["carriedoutconfirmeddate"] = date;
-                    switchingScheduleMap["carriedoutconfirmedtime"] = time;
+                    if (isFromEdit) {
+                      switchingScheduleMap["carriedoutconfirmeddate"] =
+                      date != '' ? date : data.carriedoutconfirmeddate;
+                      switchingScheduleMap["carriedoutconfirmedtime"] =
+                      time != '' ? time : data.carriedoutconfirmedtime;
+                    } else {
+                      switchingScheduleMap["carriedoutconfirmeddate"] = date;
+                      switchingScheduleMap["carriedoutconfirmedtime"] = time;
+                    }
                   },
                   editDate:
                       isFromEdit == true ? data.carriedoutconfirmeddate : '',
