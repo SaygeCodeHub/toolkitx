@@ -169,6 +169,7 @@ class DatabaseHelper {
             'sign': sign
           },
           conflictAlgorithm: ConflictAlgorithm.replace);
+      print('result====>${result > 0}');
 
       return result > 0;
     } catch (e) {
@@ -431,11 +432,12 @@ class DatabaseHelper {
       String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-        'SELECT tab1, tab2, tab3, tab4, tab5, tab6, tab7, html FROM OfflinePermit WHERE permitId = ?',
+        'SELECT listPage, tab1, tab2, tab3, tab4, tab5, tab6, tab7, html FROM OfflinePermit WHERE permitId = ?',
         [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = {
+        "listPage": jsonDecode(result['listPage']),
         "tab1": jsonDecode(result['tab1']),
         "tab2": jsonDecode(result['tab2']),
         "tab3": jsonDecode(result['tab3']),
@@ -816,6 +818,8 @@ class DatabaseHelper {
     String updatedListPageJson = jsonEncode(tab7);
     await db.update('OfflinePermit', {'tab7': updatedListPageJson},
         where: 'permitId = ?', whereArgs: [permitId]);
+    await insertOfflinePermitAction(
+        permitId, 'switching_schedule', {}, "", null);
   }
 
   Future<int> getSSFromInstructionIndex(instId, permitId) async {

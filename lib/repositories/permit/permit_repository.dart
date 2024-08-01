@@ -28,6 +28,7 @@ import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/surrender_permit_model.dart';
+import '../../data/models/permit/sync_switching_schedule_model.dart';
 
 abstract class PermitRepository {
   Future<AllPermitModel> getAllPermits(
@@ -110,4 +111,7 @@ abstract class PermitRepository {
 
   Future<FetchSwitchingScheduleDetailsModel> fetchSwitchingScheduleDetails(
       String instructionId, String hashCode);
+
+  Future<SwitchingScheduleModel> syncSwitchingSchedule(
+      Map syncSwitchingScheduleMap);
 }
