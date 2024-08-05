@@ -159,6 +159,7 @@ import '../screens/onboarding/welcome_screen.dart';
 import '../screens/permit/close_permit_screen.dart';
 import '../screens/permit/open_permit_screen.dart';
 import '../screens/permit/permit_filter_screen.dart';
+import '../screens/permit/permit_select_file_screen.dart';
 import '../screens/profile/change_password_screen.dart';
 import '../screens/profile/select_change_password_screen.dart';
 import '../screens/profile/profile_edit_screen.dart';
@@ -753,6 +754,8 @@ class AppRoutes {
             questionResponseId: settings.arguments.toString()));
       case TankFilterScreen.routeName:
         return _createRoute(const TankFilterScreen());
+      case PermitSelectFileScreen.routeName:
+        return _createRoute(const PermitSelectFileScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

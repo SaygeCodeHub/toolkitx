@@ -1,31 +1,35 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
-import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
-import 'package:toolkit/data/models/permit/fetch_switching_schedule_details_model.dart';
-import 'package:toolkit/data/models/permit/fetch_switching_schedule_instructions_model.dart';
-import 'package:toolkit/data/models/permit/generate_switching_schedule_pdf_model.dart';
-import 'package:toolkit/data/models/permit/mark_switching_schedule_completed_model.dart';
-import 'package:toolkit/data/models/permit/move_down_permit_switching_schedule_model.dart';
-import 'package:toolkit/data/models/permit/move_up_permit_switching_schedule_model.dart';
-import 'package:toolkit/data/models/permit/update_permit_switching_schedule_model.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
 import '../../data/models/permit/accept_permit_request_model.dart';
+import '../../data/models/permit/add_permit_switching_schedule_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
 import '../../data/models/permit/change_permit_cp_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/delete_switching_schedule_model.dart';
 import '../../data/models/permit/fetch_clear_permit_details_model.dart';
 import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import '../../data/models/permit/fetch_data_for_open_permit_model.dart';
 import '../../data/models/permit/fetch_permit_basic_details_model.dart';
+import '../../data/models/permit/fetch_switching_schedule_details_model.dart';
+import '../../data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import '../../data/models/permit/generate_switching_schedule_pdf_model.dart';
+import '../../data/models/permit/mark_switching_schedule_completed_model.dart';
+import '../../data/models/permit/move_down_permit_switching_schedule_model.dart';
+import '../../data/models/permit/move_up_permit_switching_schedule_model.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
@@ -39,6 +43,7 @@ import '../../data/models/permit/save_permit_safety_notice_model.dart';
 import '../../data/models/permit/surrender_permit_model.dart';
 import '../../data/models/permit/sync_switching_schedule_model.dart';
 import '../../data/models/permit/sync_transfer_cp_model.dart';
+import '../../data/models/permit/update_permit_switching_schedule_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/permit/permit_repository.dart';
 import '../../utils/constants/html_constants.dart';
@@ -64,6 +69,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool showTransferWarning = false;
   List<Map<String, dynamic>> getAllSwitchingScheduleData = [];
   String permitId = '';
+  late File pickedFile;
+  String filePath = '';
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -106,26 +113,30 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<MarkSwitchingScheduleComplete>(_markSwitchingScheduleComplete);
     on<DeletePermitSwitchingSchedule>(_deletePermitSwitchingSchedule);
     on<FetchSwitchingScheduleDetails>(_fetchSwitchingScheduleDetails);
+    on<GenerateTextFile>(_generateTextFile);
+    on<PickFileFromStorage>(_fetchFileFromStorage);
+    on<PickFileFromStorageInitialEvent>(_fetchFileFromStorageInitial);
+    on<SaveFileData>(_saveFileData);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
       PreparePermitLocalDatabase event, Emitter<PermitStates> emit) async {
-    try {
-      emit(const PreparingPermitLocalDatabase());
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      OfflinePermitModel offlinePermitModel =
-          await _permitRepository.fetchOfflinePermit(hashCode);
-      if (offlinePermitModel.status == 200) {
-        for (var datum in offlinePermitModel.data) {
-          await _databaseHelper.insertOfflinePermit(datum);
-        }
-        emit(const PermitLocalDatabasePrepared());
-      } else {
-        emit(const PreparingPermitLocalDatabaseFailed());
+    // try {
+    emit(const PreparingPermitLocalDatabase());
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    OfflinePermitModel offlinePermitModel =
+        await _permitRepository.fetchOfflinePermit(hashCode);
+    if (offlinePermitModel.status == 200) {
+      for (var datum in offlinePermitModel.data) {
+        await _databaseHelper.insertOfflinePermit(datum);
       }
-    } catch (e) {
+      emit(const PermitLocalDatabasePrepared());
+    } else {
       emit(const PreparingPermitLocalDatabaseFailed());
     }
+    // } catch (e) {
+    //   emit(const PreparingPermitLocalDatabaseFailed());
+    // }
   }
 
   FutureOr<void> _fetchPermitRoles(
@@ -381,6 +392,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             clientId: clientId,
             userType: userType));
       } else {
+        permitPopUpMenu.add('Export File');
         emit(const FetchingPermitDetails());
         permitId = event.permitId;
         Map<String, dynamic> permitDetailsMap =
@@ -2415,6 +2427,174 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       }
     } catch (e) {
       emit(SwitchingScheduleDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _generateTextFile(
+      GenerateTextFile event, Emitter<PermitStates> emit) async {
+    Map<String, dynamic> fetchOfflinePermitData = {};
+    try {
+      emit(GeneratingTextFile());
+      Map<String, dynamic>? fetchOfflinePermits =
+          await _databaseHelper.fetchOfflinePermit(permitId);
+      if (fetchOfflinePermits != null) {
+        fetchOfflinePermits['actions'] = [];
+        List<Map<String, dynamic>> permitActionsList =
+            await _databaseHelper.fetchOfflinePermitAction(permitId);
+        if (permitActionsList.isNotEmpty) {
+          fetchOfflinePermits['actions'] = permitActionsList;
+        }
+
+        print('fetchOfflinePermits not null ====>$fetchOfflinePermits');
+        fetchOfflinePermitData.addAll(fetchOfflinePermits);
+        await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
+            .then((_) {
+          emit(TextFileGenerated());
+        }).catchError((_) {
+          emit(FailedToGenerateTextFile(
+              errorMessage: 'Could not generate file. Please try again!'));
+        });
+      }
+      print('fetchOfflinePermits====>$fetchOfflinePermits');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> writeOfflinePermitDataToFile(String jsonData) async {
+    try {
+      print('writeOfflinePermitDataToFile============>$jsonData');
+      final directory = await getExternalStorageDirectory();
+      final file = File('${directory!.path}/import_file_$permitId.txt');
+      await file.writeAsString(jsonData).then((_) async {
+        await OpenFile.open(file.path);
+        filePath = file.path;
+        print('file saved at ${file.path}');
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchFileFromStorage(
+      PickFileFromStorage event, Emitter<PermitStates> emit) async {
+    try {
+      final permissionStatus = await Permission.storage.request();
+
+      if (permissionStatus == PermissionStatus.denied) {
+        print('permission denied');
+        emit(FileFromStorageFailedToPick(
+            errorMessage:
+                "Looks like you denied permission to access the camera/storage. To choose an image, you'll need to grant permission in your app settings. Tap 'Open Settings' below and enable Camera/Storage access"));
+        return;
+      } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
+        print('permission denied');
+        emit(FileFromStorageFailedToPick(
+            errorMessage:
+                "Looks like you denied permission to access the camera/storage. To choose an image, you'll need to grant permission in your app settings. Tap 'Open Settings' below and enable Camera/Storage access"));
+        return;
+      }
+
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
+      if (result != null) {
+        if (result.files.single.path != null) {
+          pickedFile = File(result.files.single.path!);
+          emit(FileFromStoragePicked(filePath: pickedFile.path));
+        } else {
+          emit(FileFromStorageFailedToPick(
+              errorMessage: 'Could not pick file. Please try again!'));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchFileFromStorageInitial(
+      PickFileFromStorageInitialEvent event, Emitter<PermitStates> emit) async {
+    try {
+      emit(PickFileFromStorageInitial());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _saveFileData(
+      SaveFileData event, Emitter<PermitStates> emit) async {
+    emit(SavingFileData());
+    try {
+      final file = File(pickedFile.path);
+      String contents = await file.readAsString();
+      Map<String, dynamic> jsonData = await jsonDecode(contents);
+      if (jsonData.containsKey('listPage')) {
+        jsonData['listPage'] = jsonDecode(jsonData['listPage']);
+      }
+      if (jsonData.containsKey('tab1')) {
+        jsonData['tab1'] = jsonDecode(jsonData['tab1']);
+      }
+      if (jsonData.containsKey('tab2')) {
+        jsonData['tab2'] = jsonDecode(jsonData['tab2']);
+      }
+      if (jsonData.containsKey('tab3')) {
+        jsonData['tab3'] = jsonDecode(jsonData['tab3']);
+      }
+      if (jsonData.containsKey('tab4')) {
+        jsonData['tab4'] = jsonDecode(jsonData['tab4']);
+      }
+      if (jsonData.containsKey('tab5')) {
+        jsonData['tab5'] = jsonDecode(jsonData['tab5']);
+      }
+      if (jsonData.containsKey('tab6')) {
+        jsonData['tab6'] = jsonDecode(jsonData['tab6']);
+      }
+      if (jsonData.containsKey('tab7')) {
+        jsonData['tab7'] = jsonDecode(jsonData['tab7']);
+      }
+      if (jsonData.containsKey('html')) {
+        jsonData['html'] = jsonDecode(jsonData['html']);
+      }
+      if (jsonData.containsKey('actions')) {
+        jsonData['actions'] = jsonDecode(jsonData['actions']);
+      }
+
+      Map<String, dynamic> newJson = Map.from(jsonData);
+      log('JSON data: $newJson');
+
+      if (newJson.isNotEmpty) {
+        newJson.remove('id');
+        OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
+          'permitId': newJson['permitId'] ?? '',
+          'listpage': newJson['listPage'] ?? {},
+          'tab1': newJson['tab1'],
+          'tab2': newJson['tab2'],
+          'tab3': newJson['tab3'],
+          'tab4': newJson['tab4'],
+          'tab5': newJson['tab5'],
+          'tab6': newJson['tab6'],
+          'tab7': newJson['tab7'],
+          'html': newJson['html'],
+          'statusId': newJson['statusId'] ?? ''
+        });
+        if (offlinePermitDatum.toJson().isNotEmpty) {
+          await _databaseHelper.insertOfflinePermit(offlinePermitDatum);
+          if (newJson['actions'] != null) {
+            for (int i = 0; i < newJson['actions'].length; i++) {
+              await _databaseHelper.insertOfflinePermitAction(
+                  newJson['permitId'],
+                  newJson['actions'][i]['actionText'],
+                  newJson['actions'][i]['actionJson'],
+                  newJson['actions'][i]['sign'],
+                  newJson['actions'][i]['actionDateTime']);
+            }
+          }
+          emit(FileDataSaved());
+        } else {
+          emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));
+        }
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

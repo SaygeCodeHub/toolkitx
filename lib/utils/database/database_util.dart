@@ -1056,4 +1056,20 @@ class DatabaseHelper {
     }
     await updateTab7(permitId, temp);
   }
+  Future<Map<String, dynamic>?> fetchOfflinePermit(String permitId) async {
+    final Database db = await database;
+    try {
+      List<Map<String, dynamic>> fetchOfflinePermits = await db.rawQuery(
+        'SELECT * FROM OfflinePermit WHERE permitId = ?',
+        [permitId],
+      );
+      if (fetchOfflinePermits.isNotEmpty) {
+        return fetchOfflinePermits.first; // Return the first (and only) result
+      } else {
+        return null; // Return null if no data is found
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -458,7 +458,7 @@ class Tab7 {
   final String id;
   final String number;
   final String title;
-  final String status;
+  final dynamic status;
   final List<Instruction> instructions;
 
   Tab7({
@@ -543,7 +543,7 @@ class Instruction {
         location: json["location"],
         equipmentuid: json["equipmentuid"],
         operation: json["operation"],
-        instructionreceivedbyname: json["instructionreceivedbyname"],
+        instructionreceivedbyname: json["instructionreceivedbyname"]??'',
         controlengineername: json["controlengineername"] ?? '',
         safetykeynumber: json["safetykeynumber"] ?? '',
         permitswitchingscheduleid: json["permitswitchingscheduleid"],

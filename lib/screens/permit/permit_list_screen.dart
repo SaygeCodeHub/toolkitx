@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/permit/permit_select_file_screen.dart';
 import 'package:toolkit/utils/global.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
@@ -57,39 +58,51 @@ class PermitListScreen extends StatelessWidget {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Visibility(
-                      visible: isNetworkEstablished == true,
-                      child: BlocBuilder<PermitBloc, PermitStates>(
-                          builder: (context, state) {
-                        return CustomIconButtonRow(
-                            downloadVisible: true,
-                            onDownloadPress: () {
-                              context
-                                  .read<PermitBloc>()
-                                  .add(PreparePermitLocalDatabase());
-                            },
-                            isEnabled: true,
-                            primaryOnPress: () {
-                              PermitFilterScreen.isFromLocation = false;
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      Visibility(
+                        visible: !isNetworkEstablished,
+                        child: TextButton(
+                            onPressed: () {
                               Navigator.pushNamed(
-                                  context, PermitFilterScreen.routeName);
+                                  context, PermitSelectFileScreen.routeName);
                             },
-                            secondaryOnPress: () {
-                              Navigator.pushNamed(
-                                  context, GetPermitRolesScreen.routeName);
-                            },
-                            clearVisible:
-                                context.read<PermitBloc>().filters.isNotEmpty,
-                            clearOnPress: () {
-                              page = 1;
-                              context
-                                  .read<PermitBloc>()
-                                  .add(const ClearPermitFilters());
-                              context.read<PermitBloc>().add(GetAllPermits(
-                                  isFromHome: isFromHome, page: 1));
-                            });
-                      }),
-                    ),
+                            child: const Text('Import Permit'))
+                      ),
+                      Visibility(
+                          visible: isNetworkEstablished == true,
+                          child: BlocBuilder<PermitBloc, PermitStates>(
+                              builder: (context, state) {
+                            return CustomIconButtonRow(
+                                downloadVisible: true,
+                                onDownloadPress: () {
+                                  context
+                                      .read<PermitBloc>()
+                                      .add(PreparePermitLocalDatabase());
+                                },
+                                isEnabled: true,
+                                primaryOnPress: () {
+                                  PermitFilterScreen.isFromLocation = false;
+                                  Navigator.pushNamed(
+                                      context, PermitFilterScreen.routeName);
+                                },
+                                secondaryOnPress: () {
+                                  Navigator.pushNamed(
+                                      context, GetPermitRolesScreen.routeName);
+                                },
+                                clearVisible: context
+                                    .read<PermitBloc>()
+                                    .filters
+                                    .isNotEmpty,
+                                clearOnPress: () {
+                                  page = 1;
+                                  context
+                                      .read<PermitBloc>()
+                                      .add(const ClearPermitFilters());
+                                  context.read<PermitBloc>().add(GetAllPermits(
+                                      isFromHome: isFromHome, page: 1));
+                                });
+                          }))
+                    ]),
                     const SizedBox(height: xxTinierSpacing),
                     const PermitListTile()
                   ]);
