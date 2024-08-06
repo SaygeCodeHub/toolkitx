@@ -345,7 +345,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
-    List permitPopUpMenu = [StringConstants.kPrintPermit];
+    List permitPopUpMenu = [StringConstants.kPrintPermit, 'Export File'];
     String? clientId =
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     String? userType =
@@ -392,7 +392,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             clientId: clientId,
             userType: userType));
       } else {
-        permitPopUpMenu.add('Export File');
+        // permitPopUpMenu.add('Export File');
         emit(const FetchingPermitDetails());
         permitId = event.permitId;
         Map<String, dynamic> permitDetailsMap =
@@ -2438,15 +2438,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       Map<String, dynamic>? fetchOfflinePermits =
           await _databaseHelper.fetchOfflinePermit(permitId);
       if (fetchOfflinePermits != null) {
-        fetchOfflinePermits['actions'] = [];
+        fetchOfflinePermitData.addAll(fetchOfflinePermits);
         List<Map<String, dynamic>> permitActionsList =
             await _databaseHelper.fetchOfflinePermitAction(permitId);
         if (permitActionsList.isNotEmpty) {
-          fetchOfflinePermits['actions'] = permitActionsList;
+          fetchOfflinePermitData['actions'] = permitActionsList;
+        } else {
+          fetchOfflinePermitData['actions'] = [];
         }
-
-        print('fetchOfflinePermits not null ====>$fetchOfflinePermits');
-        fetchOfflinePermitData.addAll(fetchOfflinePermits);
+        print('fetchOfflinePermits not null ====>$fetchOfflinePermitData');
         await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
             .then((_) {
           emit(TextFileGenerated());

@@ -60,7 +60,7 @@ class PermitListScreen extends StatelessWidget {
                   children: [
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       Visibility(
-                        visible: !isNetworkEstablished,
+                        visible: true,
                         child: TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
