@@ -26,7 +26,7 @@ class PermitSelectFileScreen extends StatelessWidget {
                 onPressed: () {
                   context.read<PermitBloc>().add(SaveFileData());
                 },
-                textValue: 'Save File')),
+                textValue: 'Import File')),
         body:
             BlocConsumer<PermitBloc, PermitStates>(listener: (context, state) {
               if(state is FileFromStorageFailedToPick){

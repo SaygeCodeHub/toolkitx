@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
@@ -350,99 +351,99 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     String? userType =
         await _customerCache.getUserType(CacheKeys.userType) ?? '';
-    try {
-      if (isNetworkEstablished) {
-        add(FetchPermitBasicDetails(permitId: event.permitId));
-        emit(const FetchingPermitDetails());
-        String hashCode =
-            (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-        PermitDetailsModel permitDetailsModel = await _permitRepository
-            .fetchPermitDetails(hashCode, event.permitId, roleId);
-        if (permitDetailsModel.data.tab1.isopen == '1') {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (permitDetailsModel.data.tab1.isclose == '1') {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (permitDetailsModel.data.tab1.status ==
-            DatabaseUtil.getText('Created')) {
-          permitPopUpMenu.add(StringConstants.kRequestPermit);
-        }
-        if (permitBasicData?.isprepared == '1') {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (permitBasicData?.iseditsafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (permitBasicData?.isacceptissue == '1') {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-        }
-        if (permitBasicData?.isclearpermit == '1') {
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
-        if (permitBasicData?.istransfersafetydocument == '1') {
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        }
-        if (permitBasicData?.issurrendercp == '1') {
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-        }
+    // try {
+    if (isNetworkEstablished) {
+      add(FetchPermitBasicDetails(permitId: event.permitId));
+      emit(const FetchingPermitDetails());
+      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      PermitDetailsModel permitDetailsModel = await _permitRepository
+          .fetchPermitDetails(hashCode, event.permitId, roleId);
+      if (permitDetailsModel.data.tab1.isopen == '1') {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (permitDetailsModel.data.tab1.isclose == '1') {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (permitDetailsModel.data.tab1.status ==
+          DatabaseUtil.getText('Created')) {
+        permitPopUpMenu.add(StringConstants.kRequestPermit);
+      }
+      if (permitBasicData?.isprepared == '1') {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (permitBasicData?.iseditsafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (permitBasicData?.isacceptissue == '1') {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+      }
+      if (permitBasicData?.isclearpermit == '1') {
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+      if (permitBasicData?.istransfersafetydocument == '1') {
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
+      if (permitBasicData?.issurrendercp == '1') {
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+      }
+      emit(PermitDetailsFetched(
+          permitDetailsModel: permitDetailsModel,
+          permitPopUpMenu: permitPopUpMenu,
+          clientId: clientId,
+          userType: userType));
+    } else {
+      // permitPopUpMenu.add('Export File');
+      emit(const FetchingPermitDetails());
+      permitId = event.permitId;
+      Map<String, dynamic> permitDetailsMap =
+          await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
+      statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
+      log('detils mappp $permitDetailsMap');
+      PermitDetailsData permitDerailsData =
+          PermitDetailsData.fromJson(permitDetailsMap);
+      permitDerailsData.tab1.status = getStatusText(
+          permitDerailsData.tab1.permitType.toString(), statusId.toString());
+      PermitDetailsModel permitDetailsModel = PermitDetailsModel(
+          status: 200,
+          message: '',
+          data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
+      if (statusId == 16 || statusId == 7) {
+        permitPopUpMenu.add(StringConstants.kOpenPermit);
+      }
+      if (statusId == 18) {
+        permitPopUpMenu.add(StringConstants.kClosePermit);
+      }
+      if (statusId == 10) {
+        permitPopUpMenu.add(StringConstants.kPreparePermit);
+      }
+      if (statusId == 10 || statusId == 5) {
+        permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
+      }
+      if (statusId == 2) {
+        permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+      }
+      if (statusId == 17) {
+        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
+        permitPopUpMenu.add(StringConstants.kClearPermit);
+      }
+
+      if (permitDetailsModel.toJson().isNotEmpty) {
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
             permitPopUpMenu: permitPopUpMenu,
             clientId: clientId,
             userType: userType));
-      } else {
-        // permitPopUpMenu.add('Export File');
-        emit(const FetchingPermitDetails());
-        permitId = event.permitId;
-        Map<String, dynamic> permitDetailsMap =
-            await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
-        statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
-        log('detils mappp $permitDetailsMap');
-        PermitDetailsData permitDerailsData =
-            PermitDetailsData.fromJson(permitDetailsMap);
-        permitDerailsData.tab1.status = getStatusText(
-            permitDerailsData.tab1.permitType.toString(), statusId.toString());
-        PermitDetailsModel permitDetailsModel = PermitDetailsModel(
-            status: 200,
-            message: '',
-            data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-        if (statusId == 16 || statusId == 7) {
-          permitPopUpMenu.add(StringConstants.kOpenPermit);
-        }
-        if (statusId == 18) {
-          permitPopUpMenu.add(StringConstants.kClosePermit);
-        }
-        if (statusId == 10) {
-          permitPopUpMenu.add(StringConstants.kPreparePermit);
-        }
-        if (statusId == 10 || statusId == 5) {
-          permitPopUpMenu.add(StringConstants.kEditSafetyDocument);
-        }
-        if (statusId == 2) {
-          permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        }
-        if (statusId == 17) {
-          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
-          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-          permitPopUpMenu.add(StringConstants.kClearPermit);
-        }
-
-        if (permitDetailsModel.toJson().isNotEmpty) {
-          emit(PermitDetailsFetched(
-              permitDetailsModel: permitDetailsModel,
-              permitPopUpMenu: permitPopUpMenu,
-              clientId: clientId,
-              userType: userType));
-        } else {
-          emit(const CouldNotFetchPermitDetails());
-        }
       }
-    } catch (e) {
-      emit(const CouldNotFetchPermitDetails());
+      // else {
+      //   emit(const CouldNotFetchPermitDetails());
+      // }
     }
+    // } catch (e) {
+    //   emit(const CouldNotFetchPermitDetails());
+    // }
   }
 
   String getStatusText(String ptype, String pstatus) {
@@ -2463,7 +2464,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<void> writeOfflinePermitDataToFile(String jsonData) async {
     try {
-      print('writeOfflinePermitDataToFile============>$jsonData');
       final directory = await getExternalStorageDirectory();
       final file = File('${directory!.path}/import_file_$permitId.txt');
       await file.writeAsString(jsonData).then((_) async {
@@ -2555,15 +2555,16 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         jsonData['html'] = jsonDecode(jsonData['html']);
       }
       if (jsonData.containsKey('actions')) {
-        jsonData['actions'] = jsonDecode(jsonData['actions']);
+        jsonData['actions'] = jsonDecode(jsonData['actions'] ?? []);
       }
 
       Map<String, dynamic> newJson = Map.from(jsonData);
-      log('JSON data: $newJson');
+      // log('JSON data: $newJson');
 
       if (newJson.isNotEmpty) {
-        newJson.remove('id');
+        // newJson.remove('id');
         OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
+          'id': newJson['id'].toString() ?? '',
           'permitId': newJson['permitId'] ?? '',
           'listpage': newJson['listPage'] ?? {},
           'tab1': newJson['tab1'],
