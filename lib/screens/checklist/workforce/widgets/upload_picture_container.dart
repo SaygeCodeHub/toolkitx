@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
@@ -12,10 +11,14 @@ import '../../../../configs/app_spacing.dart';
 class UploadPictureContainer extends StatelessWidget {
   final List imagePathsList;
   final String clientId;
+  final ImagePickerBloc imagePickerBloc; // Accept the bloc as a parameter
 
-  const UploadPictureContainer(
-      {Key? key, required this.imagePathsList, required this.clientId})
-      : super(key: key);
+  const UploadPictureContainer({
+    Key? key,
+    required this.imagePathsList,
+    required this.clientId,
+    required this.imagePickerBloc, // Initialize the bloc parameter
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +47,9 @@ class UploadPictureContainer extends StatelessWidget {
                               contentValue: StringConstants.kDeleteImage,
                               onPrimaryButton: () {
                                 Navigator.pop(context);
-                                context.read<ImagePickerBloc>().add(
-                                    RemovePickedImage(
-                                        pickedImagesList: imagePathsList,
-                                        index: index));
+                                imagePickerBloc.add(RemovePickedImage(
+                                    pickedImagesList: imagePathsList,
+                                    index: index));
                               });
                         });
                   }),

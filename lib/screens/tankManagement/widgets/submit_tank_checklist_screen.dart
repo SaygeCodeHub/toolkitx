@@ -59,8 +59,6 @@ class SubmitTankChecklistScreen extends StatelessWidget {
                             itemCount: state.fetchTankChecklistQuestionModel
                                 .data!.questionlist!.length,
                             itemBuilder: (context, index) {
-                              print('length========>${state.fetchTankChecklistQuestionModel
-                                  .data!.questionlist!.length}');
                               var questionList = state
                                   .fetchTankChecklistQuestionModel
                                   .data!

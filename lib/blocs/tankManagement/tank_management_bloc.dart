@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
@@ -58,7 +57,7 @@ class TankManagementBloc
   Future<FutureOr<void>> _fetchTankManagementList(
       FetchTankManagementList event, Emitter<TankManagementState> emit) async {
     emit(TankManagementListFetching());
-    // try {
+    try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
@@ -83,16 +82,16 @@ class TankManagementBloc
             tankDatum: tankDatum,
             filterMap: filterMap));
       }
-    // } catch (e) {
-    //   emit(TankManagementListNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(TankManagementListNotFetched(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _fetchTankManagementDetails(
       FetchTankManagementDetails event,
       Emitter<TankManagementState> emit) async {
     emit(TankManagementDetailsFetching());
-    // try {
+    try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
 
@@ -102,14 +101,13 @@ class TankManagementBloc
       if (fetchTankManagementDetailsModel.status == 200) {
         emit(TankManagementDetailsFetched(
             fetchTankManagementDetailsModel: fetchTankManagementDetailsModel));
+      } else {
+        emit(TankManagementDetailsNotFetched(
+            errorMessage: fetchTankManagementDetailsModel.message));
       }
-      // else {
-      //   emit(TankManagementDetailsNotFetched(
-      //       errorMessage: fetchTankManagementDetailsModel.message));
-      // }
-    // } catch (e) {
-    //   emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _fetchTmsNominationData(
@@ -181,7 +179,7 @@ class TankManagementBloc
       SubmitNominationChecklist event,
       Emitter<TankManagementState> emit) async {
     emit(NominationChecklistSubmitting());
-    // try {
+    try {
       List submitList = [];
       List validateSubmitList = [];
       String id = '';
@@ -202,17 +200,15 @@ class TankManagementBloc
           "questions": answerList,
           "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
         };
-        debugPrint('tankChecklistMap=======>$tankChecklistMap');
         SubmitNominationChecklistModel submitNominationChecklistModel =
             await _tankManagementRepository
                 .saveNominationChecklist(tankChecklistMap);
-        if (submitNominationChecklistModel.message == '1') {
+        if (submitNominationChecklistModel.message == '0') {
+          emit(NominationChecklistNotSubmitted(
+              errorMessage: submitNominationChecklistModel.message));
+        } else {
           emit(NominationChecklistSubmitted());
         }
-        // else {
-        //   emit(NominationChecklistNotSubmitted(
-        //       errorMessage: submitNominationChecklistModel.message));
-        // }
       } else {
         if (validateSubmitList
             .map((e) => e["answer"] == "" && e["ismandatory"] == "1")
@@ -231,17 +227,17 @@ class TankManagementBloc
           SubmitNominationChecklistModel submitNominationChecklistModel =
               await _tankManagementRepository
                   .saveNominationChecklist(tankChecklistMap);
-          if (submitNominationChecklistModel.message == '1') {
-            emit(NominationChecklistSubmitted());
-          } else {
+          if (submitNominationChecklistModel.message == '0') {
             emit(NominationChecklistNotSubmitted(
                 errorMessage: submitNominationChecklistModel.message));
+          } else {
+            emit(NominationChecklistSubmitted());
           }
         }
       }
-    // } catch (e) {
-    //   emit(NominationChecklistNotSubmitted(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(NominationChecklistNotSubmitted(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _tankCheckListFetchQuestions(
@@ -319,12 +315,14 @@ class TankManagementBloc
     try {
       allDataForChecklistMap["questionResponseId"] = event.questionId;
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+      String clientId = (await _customerCache.getClientId(CacheKeys.clientId))!;
       FetchTankChecklistCommentsModel fetchTankChecklistCommentsModel =
           await _tankManagementRepository.fetchTankChecklistComments(
               event.questionId, hashCode);
       if (fetchTankChecklistCommentsModel.status == 200) {
         emit(TankCheckListCommentsFetched(
-            fetchTankChecklistCommentsModel: fetchTankChecklistCommentsModel));
+            fetchTankChecklistCommentsModel: fetchTankChecklistCommentsModel,
+            clientId: clientId));
       } else {
         emit(TankCheckListCommentsNotFetched(
             errorMessage: fetchTankChecklistCommentsModel.message!));

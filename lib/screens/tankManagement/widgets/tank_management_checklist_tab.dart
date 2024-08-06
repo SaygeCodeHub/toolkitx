@@ -3,7 +3,6 @@ import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
 import 'package:toolkit/screens/tankManagement/widgets/submit_tank_checklist_screen.dart';
 import 'package:toolkit/screens/tankManagement/widgets/tank_view_response_screen.dart';
 import '../../../configs/app_color.dart';

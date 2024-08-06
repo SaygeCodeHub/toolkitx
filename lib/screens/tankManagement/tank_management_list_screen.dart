@@ -9,7 +9,7 @@ import 'package:toolkit/widgets/custom_icon_button_row.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
-import '../../blocs/tankManagement/tank_management_list_body.dart';
+import 'widgets/tank_management_list_body.dart';
 
 class TankManagementListScreen extends StatelessWidget {
   static const routeName = 'TankManagementListScreen';

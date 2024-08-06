@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/configs/app_color.dart';
@@ -12,8 +11,13 @@ import 'package:toolkit/widgets/upload_alert_dialog.dart';
 
 class PickImageWidget extends StatelessWidget {
   final Map imageMap;
+  final ImagePickerBloc imagePickerBloc; // Accept the bloc as a parameter
 
-  const PickImageWidget({super.key, required this.imageMap});
+  const PickImageWidget({
+    Key? key,
+    required this.imageMap,
+    required this.imagePickerBloc, // Initialize the bloc parameter
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +38,31 @@ class PickImageWidget extends StatelessWidget {
         ),
         UploadPictureContainer(
             imagePathsList: imageMap['imageList'] ?? [],
-            clientId: imageMap['clientId'] ?? ''),
+            clientId: imageMap['clientId'] ?? '',
+            imagePickerBloc: imagePickerBloc),
         const SizedBox(height: xxTinierSpacing),
         SecondaryButton(
             onPressed: imageMap['imageCount'] != 6
                 ? () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return UploadAlertDialog(
-                            isSignature: imageMap['isSignature'],
-                            onCamera: () {
-                              context.read<ImagePickerBloc>().isCamera = true;
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onDevice: () {
-                              context.read<ImagePickerBloc>().isCamera = false;
-                              context.read<ImagePickerBloc>().add(PickImage());
-                              Navigator.pop(context);
-                            },
-                            onSign: imageMap['onSign'],
-                          );
-                        });
-                  }
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return UploadAlertDialog(
+                      isSignature: imageMap['isSignature'],
+                      onCamera: () {
+                        imagePickerBloc.isCamera = true;
+                        imagePickerBloc.add(PickImage());
+                        Navigator.pop(context);
+                      },
+                      onDevice: () {
+                        imagePickerBloc.isCamera = false;
+                        imagePickerBloc.add(PickImage());
+                        Navigator.pop(context);
+                      },
+                      onSign: imageMap['onSign'],
+                    );
+                  });
+            }
                 : null,
             textValue: (imageMap['isSignature'] == false)
                 ? StringConstants.kUpload
@@ -66,3 +71,4 @@ class PickImageWidget extends StatelessWidget {
     );
   }
 }
+

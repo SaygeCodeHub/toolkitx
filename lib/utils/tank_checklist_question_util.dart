@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/tankManagement/widgets/tank_multi_selection_expantion_tile.dart';
@@ -92,6 +93,7 @@ class TankChecklistQuestionUtil {
             });
       case 6:
         return UploadImageMenu(
+          imagePickerBloc: ImagePickerBloc(),
             onUploadImageResponse: (List<dynamic> uploadImageList) {
           answerList[index]["answer"] = uploadImageList.join(',');
         });

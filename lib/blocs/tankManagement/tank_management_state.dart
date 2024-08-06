@@ -114,8 +114,10 @@ class TankCheckListCommentsFetching extends TankManagementState {}
 
 class TankCheckListCommentsFetched extends TankManagementState {
   final FetchTankChecklistCommentsModel fetchTankChecklistCommentsModel;
+  final String clientId;
 
-  TankCheckListCommentsFetched({required this.fetchTankChecklistCommentsModel});
+  TankCheckListCommentsFetched(
+      {required this.fetchTankChecklistCommentsModel, required this.clientId});
 }
 
 class TankCheckListCommentsNotFetched extends TankManagementState {

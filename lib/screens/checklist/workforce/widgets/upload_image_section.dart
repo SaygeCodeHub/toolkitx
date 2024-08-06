@@ -10,36 +10,59 @@ import '../../../../configs/app_spacing.dart';
 
 typedef UploadImageResponseCallBack = Function(List uploadImageList);
 
-class UploadImageMenu extends StatelessWidget {
+class UploadImageMenu extends StatefulWidget {
   final UploadImageResponseCallBack onUploadImageResponse;
   final void Function()? onSign;
   final void Function()? removeSignPad;
   final bool? showSignPad;
   final bool? isSignature;
   final bool? isUpload;
-  final List uploadImageList = [];
   final bool? isFromCertificate;
   final List? editedImageList;
+  final ImagePickerBloc? imagePickerBloc; // Pass the bloc as a parameter
 
-  UploadImageMenu(
-      {Key? key,
-      required this.onUploadImageResponse,
-      this.onSign,
-      this.isSignature = false,
-      this.showSignPad = false,
-      this.removeSignPad,
-      this.isUpload = false,
-      this.isFromCertificate = false,
-      this.editedImageList = const []})
-      : super(key: key);
+  const UploadImageMenu({
+    Key? key,
+    required this.onUploadImageResponse,
+    this.imagePickerBloc, // Initialize the bloc parameter
+    this.onSign,
+    this.isSignature = false,
+    this.showSignPad = false,
+    this.removeSignPad,
+    this.isUpload = false,
+    this.isFromCertificate = false,
+    this.editedImageList = const [],
+  }) : super(key: key);
+
+  @override
+  _UploadImageMenuState createState() => _UploadImageMenuState();
+}
+
+class _UploadImageMenuState extends State<UploadImageMenu> {
+  late ImagePickerBloc _imagePickerBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _imagePickerBloc = widget.imagePickerBloc!;
+    _imagePickerBloc.add(FetchImages());
+  }
+
+  @override
+  void dispose() {
+    _imagePickerBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<ImagePickerBloc>().add(FetchImages());
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      BlocBuilder<ImagePickerBloc, ImagePickerState>(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        BlocBuilder<ImagePickerBloc, ImagePickerState>(
+          bloc: _imagePickerBloc, // Pass the bloc directly to BlocBuilder
           buildWhen: (previousState, currentState) =>
-              currentState is PickingImage ||
+          currentState is PickingImage ||
               currentState is ImagePicked ||
               currentState is FailedToPickImage ||
               currentState is ImagesFetched,
@@ -53,38 +76,50 @@ class UploadImageMenu extends StatelessWidget {
                     child: CircularProgressIndicator()),
               );
             } else if (state is ImagePicked) {
-              onUploadImageResponse(state.pickedImagesList);
-              return PickImageWidget(imageMap: {
-                'imageCount': state.imageCount,
-                'imageList': state.pickedImagesList,
-                'clientId': state.clientId,
-                'isSignature': isSignature,
-                'onSign': onSign
-              });
+              widget.onUploadImageResponse(state.pickedImagesList);
+              return PickImageWidget(
+                imageMap: {
+                  'imageCount': state.imageCount,
+                  'imageList': state.pickedImagesList,
+                  'clientId': state.clientId,
+                  'isSignature': widget.isSignature,
+                  'onSign': widget.onSign,
+                },
+                imagePickerBloc: _imagePickerBloc,
+              );
             } else if (state is FailedToPickImage) {
               return Text(
                 state.errText,
                 style: const TextStyle(color: AppColor.errorRed),
               );
             } else if (state is ImagesFetched) {
-              onUploadImageResponse(state.images);
-              return PickImageWidget(imageMap: {
-                'imageCount': state.imageCount,
-                'imageList': state.images,
-                'clientId': state.clientId,
-                'isSignature': isSignature,
-                'onSign': onSign
-              });
+              widget.onUploadImageResponse(state.images);
+              return PickImageWidget(
+                imageMap: {
+                  'imageCount': state.imageCount,
+                  'imageList': state.images,
+                  'clientId': state.clientId,
+                  'isSignature': widget.isSignature,
+                  'onSign': widget.onSign,
+                },
+                imagePickerBloc: _imagePickerBloc,
+              );
             } else {
-              return PickImageWidget(imageMap: {
-                'imageCount': 0,
-                'imageList': const [],
-                'clientId': '',
-                'isSignature': isSignature,
-                'onSign': onSign
-              });
+              return PickImageWidget(
+                imageMap: {
+                  'imageCount': 0,
+                  'imageList': const [],
+                  'clientId': '',
+                  'isSignature': widget.isSignature,
+                  'onSign': widget.onSign,
+                },
+                imagePickerBloc: _imagePickerBloc,
+              );
             }
-          })
-    ]);
+          },
+        )
+      ],
+    );
   }
 }
+
