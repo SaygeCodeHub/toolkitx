@@ -60,14 +60,13 @@ class PermitListScreen extends StatelessWidget {
                   children: [
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       Visibility(
-                        visible: true,
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, PermitSelectFileScreen.routeName);
-                            },
-                            child: const Text('Import Permit'))
-                      ),
+                          visible: true,
+                          child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, PermitSelectFileScreen.routeName);
+                              },
+                              child: const Text('Import Permit'))),
                       Visibility(
                           visible: isNetworkEstablished == true,
                           child: BlocBuilder<PermitBloc, PermitStates>(

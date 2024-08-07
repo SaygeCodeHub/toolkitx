@@ -177,8 +177,11 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> insertOfflinePermit(OfflinePermitDatum data) async {
+  Future<void> insertOfflinePermit(
+      OfflinePermitDatum data, int statusId) async {
+    print('data.id=============> ${data.id}');
     final Database db = await database;
+    // var add=
     await db.insert(
       'OfflinePermit',
       {
@@ -192,7 +195,7 @@ class DatabaseHelper {
         'tab6': jsonEncode(data.tab6),
         'tab7': jsonEncode(data.tab7.map((e) => e.toJson()).toList()),
         'html': jsonEncode(data.html),
-        'statusId': data.listpage.statusid
+        'statusId': statusId
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -509,6 +512,12 @@ class DatabaseHelper {
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
+  }
+
+  Future<void> deletePermitOfflineAction(String permitId) async {
+    final db = await database;
+    await db.delete('OfflinePermitAction',
+        where: 'permitId = ?', whereArgs: [permitId]);
   }
 
   Future<void> updateStatusId(String permitId, int updatedStatus) async {
@@ -1056,6 +1065,7 @@ class DatabaseHelper {
     }
     await updateTab7(permitId, temp);
   }
+
   Future<Map<String, dynamic>?> fetchOfflinePermit(String permitId) async {
     final Database db = await database;
     try {

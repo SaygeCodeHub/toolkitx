@@ -29,9 +29,9 @@ class PermitSelectFileScreen extends StatelessWidget {
                 textValue: 'Import File')),
         body:
             BlocConsumer<PermitBloc, PermitStates>(listener: (context, state) {
-              if(state is FileFromStorageFailedToPick){
-                showCustomSnackBar(context, state.errorMessage, '');
-              }
+          if (state is FileFromStorageFailedToPick) {
+            showCustomSnackBar(context, state.errorMessage, '');
+          }
           if (state is SavingFileData) {
             ProgressBar.show(context);
           } else if (state is FileDataSaved) {

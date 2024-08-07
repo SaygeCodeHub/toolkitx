@@ -272,7 +272,6 @@ class FetchSwitchingScheduleDetails extends PermitEvents {
 }
 
 class GenerateTextFile extends PermitEvents {
-
   GenerateTextFile();
 }
 
@@ -283,6 +282,7 @@ class PickFileFromStorage extends PermitEvents {
 class PickFileFromStorageInitialEvent extends PermitEvents {
   PickFileFromStorageInitialEvent();
 }
+
 class SaveFileData extends PermitEvents {
   SaveFileData();
 }
