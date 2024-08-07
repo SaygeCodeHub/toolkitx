@@ -54,6 +54,7 @@ class AddTicketDocumentScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500, color: AppColor.black)),
               const SizedBox(height: tiniestSpacing),
               UploadImageMenu(
+                imagePickerBloc: ImagePickerBloc(),
                 isUpload: true,
                 onUploadImageResponse: (List uploadImageList) {
                   saveDocumentMap['fileList'] = uploadImageList;

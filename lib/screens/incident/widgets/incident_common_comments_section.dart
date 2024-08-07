@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/incident_details_model.dart';
@@ -58,6 +59,7 @@ class IncidentCommonCommentsSection extends StatelessWidget {
               }),
           const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
+            imagePickerBloc: ImagePickerBloc(),
             isUpload: true,
             onUploadImageResponse: (List uploadImageList) {
               onPhotosUploaded(uploadImageList);

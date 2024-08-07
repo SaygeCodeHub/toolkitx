@@ -203,6 +203,7 @@ class ExpenseEditFormThree extends StatelessWidget {
                   }),
               const SizedBox(height: xxTinySpacing),
               UploadImageMenu(
+                  imagePickerBloc: ImagePickerBloc(),
                   isUpload: true,
                   onUploadImageResponse: (List uploadImageList) {
                     ExpenseEditItemsScreen.editExpenseMap['pickedImage'] =

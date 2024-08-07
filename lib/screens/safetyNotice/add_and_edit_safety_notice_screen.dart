@@ -7,6 +7,7 @@ import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/generic_text_field.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
@@ -106,6 +107,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: xxTinySpacing),
                       UploadImageMenu(
+                          imagePickerBloc: ImagePickerBloc(),
                           isUpload: false,
                           onUploadImageResponse: (List uploadImageList) {
                             manageSafetyNoticeMap['file_name'] =

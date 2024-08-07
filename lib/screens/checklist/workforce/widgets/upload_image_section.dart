@@ -19,12 +19,12 @@ class UploadImageMenu extends StatefulWidget {
   final bool? isUpload;
   final bool? isFromCertificate;
   final List? editedImageList;
-  final ImagePickerBloc? imagePickerBloc; // Pass the bloc as a parameter
+  final ImagePickerBloc imagePickerBloc;
 
   const UploadImageMenu({
     Key? key,
     required this.onUploadImageResponse,
-    this.imagePickerBloc, // Initialize the bloc parameter
+    required this.imagePickerBloc,
     this.onSign,
     this.isSignature = false,
     this.showSignPad = false,
@@ -44,7 +44,7 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
   @override
   void initState() {
     super.initState();
-    _imagePickerBloc = widget.imagePickerBloc!;
+    _imagePickerBloc = widget.imagePickerBloc;
     _imagePickerBloc.add(FetchImages());
   }
 
@@ -60,7 +60,7 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         BlocBuilder<ImagePickerBloc, ImagePickerState>(
-          bloc: _imagePickerBloc, // Pass the bloc directly to BlocBuilder
+          bloc: _imagePickerBloc,
           buildWhen: (previousState, currentState) =>
           currentState is PickingImage ||
               currentState is ImagePicked ||

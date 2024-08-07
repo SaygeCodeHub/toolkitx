@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/widgets/loto_select_multi_checklist_answer.dart';
 import 'package:toolkit/screens/loto/widgets/type_three_expansion_tile.dart';
+import '../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
@@ -67,6 +68,7 @@ class LotoChecklistQuestionTypeUtil {
         );
       case 6:
         return UploadImageMenu(
+          imagePickerBloc: ImagePickerBloc(),
           isFromCertificate: true,
           onUploadImageResponse: (List<dynamic> imageList) {
             startLotoMap['pickedImage'] = imageList;

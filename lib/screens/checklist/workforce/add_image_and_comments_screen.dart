@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/checklist_save_comment_button.dart';
@@ -110,6 +111,7 @@ class AddImageAndCommentScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w500)),
                               const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
+                                imagePickerBloc: ImagePickerBloc(),
                                 onUploadImageResponse: (List uploadImageList) {
                                   saveQuestionCommentsMap["pickedImage"] =
                                       uploadImageList;

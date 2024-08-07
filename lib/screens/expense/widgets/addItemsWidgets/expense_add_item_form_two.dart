@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../data/models/expense/fetch_expense_details_model.dart';
 import '../../../../utils/database_utils.dart';
@@ -54,6 +55,7 @@ class ExpenseAddItemFormTwo extends StatelessWidget {
               }),
           const SizedBox(height: xxTinySpacing),
           UploadImageMenu(
+              imagePickerBloc: ImagePickerBloc(),
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {
                 ExpenseDetailsTabOne.manageItemsMap['pickedImage'] =

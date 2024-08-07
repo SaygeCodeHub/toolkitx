@@ -11,6 +11,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../configs/app_spacing.dart';
@@ -164,6 +165,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: xxTinySpacing),
                       UploadImageMenu(
+                        imagePickerBloc: ImagePickerBloc(),
                         isUpload: true,
                         onUploadImageResponse: (List uploadImageList) {
                           addAndEditIncidentMap['pickedImage'] =

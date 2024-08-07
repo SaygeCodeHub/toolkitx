@@ -82,6 +82,7 @@ class UploadCertificateScreen extends StatelessWidget {
                 height: tinySpacing,
               ),
               UploadImageMenu(
+                imagePickerBloc: ImagePickerBloc(),
                 isFromCertificate: true,
                 onUploadImageResponse: (List uploadCertificateList) {
                   uploadCertificateMap['picked_file'] = uploadCertificateList;

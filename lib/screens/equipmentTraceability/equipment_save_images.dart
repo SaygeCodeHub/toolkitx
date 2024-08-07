@@ -98,6 +98,7 @@ class EquipmentSaveImages extends StatelessWidget {
                 Column(children: [
                   const SizedBox(height: tinySpacing),
                   UploadImageMenu(
+                    imagePickerBloc: ImagePickerBloc(),
                     isUpload: true,
                     onUploadImageResponse: (List uploadPhotosList) {
                       saveImagesMap["pickedImage"] = uploadPhotosList;

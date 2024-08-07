@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -65,6 +66,7 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
               }),
           const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
+            imagePickerBloc: ImagePickerBloc(),
             isUpload: true,
             onUploadImageResponse: (List uploadImageList) {
               onPhotosUploaded(uploadImageList);

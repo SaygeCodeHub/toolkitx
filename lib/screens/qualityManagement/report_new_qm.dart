@@ -210,6 +210,7 @@ class ReportNewQA extends StatelessWidget {
                               ),
                               const SizedBox(height: xxTinySpacing),
                               UploadImageMenu(
+                                imagePickerBloc: ImagePickerBloc(),
                                 isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
                                   reportAndEditQMMap['pickedImage'] =

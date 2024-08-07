@@ -108,6 +108,7 @@ class AssetsAddCommentScreen extends StatelessWidget {
                   maxLines: 2),
               const SizedBox(height: tinierSpacing),
               UploadImageMenu(
+                  imagePickerBloc: ImagePickerBloc(),
                   isUpload: true,
                   onUploadImageResponse: (List uploadLotoPhotosList) {
                     addAssetCommentMap["pickedImage"] = uploadLotoPhotosList;

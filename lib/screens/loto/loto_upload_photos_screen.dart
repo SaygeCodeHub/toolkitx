@@ -103,6 +103,7 @@ class LotoUploadPhotosScreen extends StatelessWidget {
             child: Column(children: [
               const SizedBox(height: tinySpacing),
               UploadImageMenu(
+                imagePickerBloc: ImagePickerBloc(),
                 isUpload: true,
                 onUploadImageResponse: (List uploadLotoPhotosList) {
                   lotoUploadPhotosMap["filename"] = uploadLotoPhotosList;

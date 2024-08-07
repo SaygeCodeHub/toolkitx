@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import '../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_bloc.dart';
 import '../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
+import '../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
 import '../screens/checklist/workforce/widgets/drop_down_expansion_tile.dart';
@@ -98,6 +99,7 @@ class EditAnswerUtil {
             });
       case 6:
         return UploadImageMenu(
+            imagePickerBloc: ImagePickerBloc(),
             onUploadImageResponse: (List<dynamic> uploadImageList) {
           answerList[index]["answer"] = uploadImageList
               .toString()
