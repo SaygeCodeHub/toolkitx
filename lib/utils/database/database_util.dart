@@ -90,6 +90,7 @@ class DatabaseHelper {
         CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -128,6 +129,7 @@ class DatabaseHelper {
     CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -183,6 +185,7 @@ class DatabaseHelper {
       'OfflinePermit',
       {
         'permitId': data.id,
+        'permitId2' : data.id2,
         'listpage': jsonEncode(data.listpage.toJson()),
         'tab1': jsonEncode(data.tab1.toJson()),
         'tab2': jsonEncode(data.tab2.toJson()),
@@ -424,7 +427,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
     final List<Map<String, dynamic>> result = await db.rawQuery(
-        'SELECT listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit');
+        'SELECT listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit ORDER BY permitId2 DESC');
     return result;
   }
 
