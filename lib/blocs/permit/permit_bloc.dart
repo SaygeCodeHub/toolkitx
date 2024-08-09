@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -126,16 +127,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       OfflinePermitModel offlinePermitModel =
           await _permitRepository.fetchOfflinePermit(hashCode);
       if (offlinePermitModel.status == 200) {
-        for (var datum in offlinePermitModel.data) {
-          await _databaseHelper.insertOfflinePermit(
-              datum, datum.listpage.statusid);
+        if (offlinePermitModel.data.isNotEmpty) {
+          for (var datum in offlinePermitModel.data) {
+            await _databaseHelper.insertOfflinePermit(
+                datum, datum.listpage.statusid);
+          }
+          emit(const PermitLocalDatabasePrepared());
+        } else {
+          emit(PreparingPermitLocalDatabaseFailed(
+              errorMessage: StringConstants.kNotGrantedPermitOffline));
         }
-        emit(const PermitLocalDatabasePrepared());
       } else {
-        emit(const PreparingPermitLocalDatabaseFailed());
+        emit(PreparingPermitLocalDatabaseFailed(
+            errorMessage: StringConstants.kOfflineFailedInDataPreparation));
       }
     } catch (e) {
-      emit(const PreparingPermitLocalDatabaseFailed());
+      emit(PreparingPermitLocalDatabaseFailed(
+          errorMessage: StringConstants.kOfflineFailedInDataPreparation));
     }
   }
 
@@ -287,8 +295,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
     try {
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
 
       if (!listReachedMax) {
         if (isNetworkEstablished) {
@@ -1373,6 +1382,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           await _databaseHelper.fetchAllOfflinePermitAction();
       if (permitActions.isNotEmpty) {
         for (var action in permitActions) {
+          log('action======>$action');
           switch (action['actionText']) {
             case 'edit_safety_document':
               SavePermitEditSafetyDocumentModel
@@ -1772,7 +1782,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   surrenderList.add(action['actionJson']['surrender'][j]);
                 }
               }
-              if (action['actionJson']['reciever'].length > 0) {
+              if (action['actionJson']['reciever'] != null &&
+                  action['actionJson']['reciever'].length > 0) {
                 for (int j = 0;
                     j < action['actionJson']['reciever'].length;
                     j++) {
@@ -2429,31 +2440,32 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _generateTextFile(
       GenerateTextFile event, Emitter<PermitStates> emit) async {
     Map<String, dynamic> fetchOfflinePermitData = {};
-    try {
-      emit(GeneratingTextFile());
-      Map<String, dynamic>? fetchOfflinePermits =
-          await _databaseHelper.fetchOfflinePermit(permitId);
-      if (fetchOfflinePermits != null) {
-        fetchOfflinePermitData.addAll(fetchOfflinePermits);
-        List<Map<String, dynamic>> offlinePermitActionsList = [];
-        List<Map<String, dynamic>> permitActionsList =
-            await _databaseHelper.fetchOfflinePermitAction(permitId);
-        if (permitActionsList.isNotEmpty) {
-          offlinePermitActionsList = permitActionsList;
-        }
-        fetchOfflinePermitData['actions'] =
-            jsonEncode(offlinePermitActionsList);
-        await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
-            .then((_) {
-          emit(TextFileGenerated());
-        }).catchError((_) {
-          emit(FailedToGenerateTextFile(
-              errorMessage: 'Could not generate file. Please try again!'));
-        });
+    // try {
+    emit(GeneratingTextFile());
+    Map<String, dynamic>? fetchOfflinePermits =
+        await _databaseHelper.fetchOfflinePermit(permitId);
+    if (fetchOfflinePermits != null) {
+      fetchOfflinePermitData.addAll(fetchOfflinePermits);
+      fetchOfflinePermitData['clientid'] =
+          await _customerCache.getClientId(CacheKeys.clientId);
+      List<Map<String, dynamic>> offlinePermitActionsList = [];
+      List<Map<String, dynamic>> permitActionsList =
+          await _databaseHelper.fetchOfflinePermitAction(permitId);
+      if (permitActionsList.isNotEmpty) {
+        offlinePermitActionsList = permitActionsList;
       }
-    } catch (e) {
-      rethrow;
+      fetchOfflinePermitData['actions'] = jsonEncode(offlinePermitActionsList);
+      await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
+          .then((_) {
+        emit(TextFileGenerated());
+      }).catchError((_) {
+        emit(FailedToGenerateTextFile(
+            errorMessage: 'Could not generate file. Please try again!'));
+      });
     }
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   Future<void> writeOfflinePermitDataToFile(String jsonData) async {
@@ -2515,75 +2527,100 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       final file = File(pickedFile.path);
       String contents = await file.readAsString();
       Map<String, dynamic> jsonData = await jsonDecode(contents);
-      if (jsonData.containsKey('listPage')) {
-        jsonData['listPage'] = jsonDecode(jsonData['listPage']);
-      }
-      if (jsonData.containsKey('tab1')) {
-        jsonData['tab1'] = jsonDecode(jsonData['tab1']);
-      }
-      if (jsonData.containsKey('tab2')) {
-        jsonData['tab2'] = jsonDecode(jsonData['tab2']);
-      }
-      if (jsonData.containsKey('tab3')) {
-        jsonData['tab3'] = jsonDecode(jsonData['tab3']);
-      }
-      if (jsonData.containsKey('tab4')) {
-        jsonData['tab4'] = jsonDecode(jsonData['tab4']);
-      }
-      if (jsonData.containsKey('tab5')) {
-        jsonData['tab5'] = jsonDecode(jsonData['tab5']);
-      }
-      if (jsonData.containsKey('tab6')) {
-        jsonData['tab6'] = jsonDecode(jsonData['tab6']);
-      }
-      if (jsonData.containsKey('tab7')) {
-        jsonData['tab7'] = jsonDecode(jsonData['tab7']);
-      }
-      if (jsonData.containsKey('html')) {
-        jsonData['html'] = jsonDecode(jsonData['html']);
-      }
-      if (jsonData.containsKey('actions')) {
-        jsonData['actions'] =
-            (jsonData['actions'] != null || jsonData['actions'] != '')
-                ? jsonData['actions']
-                : [];
-      }
-      Map<String, dynamic> newJson = Map.from(jsonData);
-      if (newJson.isNotEmpty) {
-        OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
-          'id': newJson['permitId'].toString(),
-          'listpage': newJson['listPage'] ?? {},
-          'tab1': newJson['tab1'],
-          'tab2': newJson['tab2'],
-          'tab3': newJson['tab3'],
-          'tab4': newJson['tab4'],
-          'tab5': newJson['tab5'],
-          'tab6': newJson['tab6'],
-          'tab7': newJson['tab7'],
-          'html': newJson['html'],
-          'statusId': newJson['statusId'] ?? ''
-        });
-        if (offlinePermitDatum.toJson().isNotEmpty) {
-          await _databaseHelper.insertOfflinePermit(
-              offlinePermitDatum, newJson['statusId']);
-          await _databaseHelper.deletePermitOfflineAction(newJson['permitId']);
-          if (newJson['actions'] != null) {
-            for (int i = 0; i < newJson['actions'].length; i++) {
-              await _databaseHelper.insertOfflinePermitAction(
-                  newJson['permitId'],
-                  newJson['actions'][i]['actionText'],
-                  newJson['actions'][i]['actionJson'],
-                  newJson['actions'][i]['sign'],
-                  newJson['actions'][i]['actionDateTime']);
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      if (jsonData.containsKey('clientid') == false ||
+          jsonData['clientid'] != clientId) {
+        emit(FailedToSaveFileData(errorMessage: 'Invalid File'));
+      } else {
+        if (jsonData.containsKey('listPage')) {
+          jsonData['listPage'] = jsonDecode(jsonData['listPage']);
+        }
+        if (jsonData.containsKey('tab1')) {
+          jsonData['tab1'] = jsonDecode(jsonData['tab1']);
+        }
+        if (jsonData.containsKey('tab2')) {
+          jsonData['tab2'] = jsonDecode(jsonData['tab2']);
+        }
+        if (jsonData.containsKey('tab3')) {
+          jsonData['tab3'] = jsonDecode(jsonData['tab3']);
+        }
+        if (jsonData.containsKey('tab4')) {
+          jsonData['tab4'] = jsonDecode(jsonData['tab4']);
+        }
+        if (jsonData.containsKey('tab5')) {
+          jsonData['tab5'] = jsonDecode(jsonData['tab5']);
+        }
+        if (jsonData.containsKey('tab6')) {
+          jsonData['tab6'] = jsonDecode(jsonData['tab6']);
+        }
+        if (jsonData.containsKey('tab7')) {
+          jsonData['tab7'] = jsonDecode(jsonData['tab7']);
+        }
+        if (jsonData.containsKey('html')) {
+          jsonData['html'] = jsonDecode(jsonData['html']);
+        }
+        if (jsonData.containsKey('actions')) {
+          // jsonData['actions'] =
+          //     (jsonData['actions'] != null || jsonData['actions'] != '')
+          //         ? jsonDecode(jsonData['actions'])
+          //         : [];
+          if (jsonData['actions'] != null || jsonData['actions'] != '') {
+            if (jsonData['actions'] is String ||
+                jsonData['actions'].runtimeType == String) {
+              jsonData['actions'] = jsonDecode(jsonData['actions']);
             }
+          } else {
+            jsonData['actions'] = [];
           }
-          emit(FileDataSaved());
-        } else {
-          emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));
+        }
+        Map<String, dynamic> newJson = Map.from(jsonData);
+        if (newJson.isNotEmpty) {
+          OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
+            'id': newJson['permitId'],
+            'listpage': newJson['listPage'] ?? {},
+            'tab1': newJson['tab1'],
+            'tab2': newJson['tab2'],
+            'tab3': newJson['tab3'],
+            'tab4': newJson['tab4'],
+            'tab5': newJson['tab5'],
+            'tab6': newJson['tab6'],
+            'tab7': newJson['tab7'],
+            'html': newJson['html'],
+            'statusId': newJson['statusId'] ?? ''
+          });
+          if (offlinePermitDatum.toJson().isNotEmpty) {
+            await _databaseHelper.insertOfflinePermit(
+                offlinePermitDatum, newJson['statusId']);
+            await _databaseHelper
+                .deletePermitOfflineAction(newJson['permitId']);
+            if (newJson['actions'] != null) {
+              for (int i = 0; i < newJson['actions'].length; i++) {
+                await _databaseHelper.insertOfflinePermitAction(
+                    newJson['permitId'],
+                    newJson['actions'][i]['actionText'],
+                    newJson['actions'][i]['actionJson'],
+                    newJson['actions'][i]['sign'],
+                    newJson['actions'][i]['actionDateTime']);
+              }
+            }
+            emit(FileDataSaved());
+          } else {
+            emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));
+          }
         }
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  bool isJson(dynamic jsonString) {
+    try {
+      jsonDecode(jsonString);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

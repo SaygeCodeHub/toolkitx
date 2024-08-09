@@ -36,7 +36,6 @@ class PermitDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('id===========>$permitId');
     context.read<PermitBloc>().add(GetPermitDetails(permitId: permitId));
     return Scaffold(
         appBar: GenericAppBar(

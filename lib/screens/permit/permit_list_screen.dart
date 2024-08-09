@@ -50,8 +50,7 @@ class PermitListScreen extends StatelessWidget {
                 ProgressBar.dismiss(context);
               }
               if (state is PreparingPermitLocalDatabaseFailed) {
-                showCustomSnackBar(context,
-                    StringConstants.kOfflineFailedInDataPreparation, '');
+                showCustomSnackBar(context, state.errorMessage, '');
                 ProgressBar.dismiss(context);
               }
             }, builder: (context, state) {
@@ -60,13 +59,14 @@ class PermitListScreen extends StatelessWidget {
                   children: [
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       Visibility(
-                          visible: true,
-                          child: TextButton(
+                          visible: !isNetworkEstablished,
+                          child: IconButton(
                               onPressed: () {
                                 Navigator.pushNamed(
                                     context, PermitSelectFileScreen.routeName);
                               },
-                              child: const Text('Import Permit'))),
+                              icon: const Icon(Icons.drive_folder_upload,
+                                  size: 30))),
                       Visibility(
                           visible: isNetworkEstablished == true,
                           child: BlocBuilder<PermitBloc, PermitStates>(

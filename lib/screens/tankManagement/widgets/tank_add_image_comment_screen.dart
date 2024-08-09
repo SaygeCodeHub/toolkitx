@@ -26,7 +26,6 @@ class TankAddImageCommentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('here========>$questionResponseId');
     context
         .read<TankManagementBloc>()
         .add(FetchTankChecklistComments(questionId: questionResponseId));

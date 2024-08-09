@@ -20,14 +20,24 @@ class PermitSelectFileSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               (filePath.isNotEmpty)
-                  ? Image.asset('assets/images/text.png',
-                      height: 120, width: 120)
+                  ? Container(
+                      height: 120,
+                      width: 120,
+                      decoration:
+                          const BoxDecoration(color: AppColor.lightGrey),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.file_present_sharp),
+                          Text('File Attached')
+                        ],
+                      ))
                   : Container(
                       height: 120,
                       width: 120,
                       decoration:
                           const BoxDecoration(color: AppColor.lightGrey),
-                      child: const Icon(Icons.file_copy)),
+                      child: const Icon(Icons.file_open)),
               const SizedBox(height: xxTinierSpacing),
               Center(
                   child: SizedBox(

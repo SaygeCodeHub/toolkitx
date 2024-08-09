@@ -203,7 +203,9 @@ class PermitLocalDatabasePrepared extends PermitStates {
 }
 
 class PreparingPermitLocalDatabaseFailed extends PermitStates {
-  const PreparingPermitLocalDatabaseFailed();
+  final String errorMessage;
+
+  PreparingPermitLocalDatabaseFailed({required this.errorMessage});
 }
 
 class PermitBasicDetailsFetching extends PermitStates {}

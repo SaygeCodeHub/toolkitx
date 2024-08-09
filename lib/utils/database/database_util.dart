@@ -169,7 +169,6 @@ class DatabaseHelper {
             'sign': sign
           },
           conflictAlgorithm: ConflictAlgorithm.replace);
-      print('result====>${result > 0}');
 
       return result > 0;
     } catch (e) {
@@ -179,9 +178,7 @@ class DatabaseHelper {
 
   Future<void> insertOfflinePermit(
       OfflinePermitDatum data, int statusId) async {
-    print('data.id=============> ${data.id}');
     final Database db = await database;
-    // var add=
     await db.insert(
       'OfflinePermit',
       {
