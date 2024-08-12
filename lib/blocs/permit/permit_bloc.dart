@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -2439,28 +2438,29 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       GenerateTextFile event, Emitter<PermitStates> emit) async {
     Map<String, dynamic> fetchOfflinePermitData = {};
     try {
-    emit(GeneratingTextFile());
-    Map<String, dynamic>? fetchOfflinePermits =
-        await _databaseHelper.fetchOfflinePermit(permitId);
-    if (fetchOfflinePermits != null) {
-      fetchOfflinePermitData.addAll(fetchOfflinePermits);
-      fetchOfflinePermitData['clientid'] =
-          await _customerCache.getClientId(CacheKeys.clientId);
-      List<Map<String, dynamic>> offlinePermitActionsList = [];
-      List<Map<String, dynamic>> permitActionsList =
-          await _databaseHelper.fetchOfflinePermitAction(permitId);
-      if (permitActionsList.isNotEmpty) {
-        offlinePermitActionsList = permitActionsList;
+      emit(GeneratingTextFile());
+      Map<String, dynamic>? fetchOfflinePermits =
+          await _databaseHelper.fetchOfflinePermit(permitId);
+      if (fetchOfflinePermits != null) {
+        fetchOfflinePermitData.addAll(fetchOfflinePermits);
+        fetchOfflinePermitData['clientid'] =
+            await _customerCache.getClientId(CacheKeys.clientId);
+        List<Map<String, dynamic>> offlinePermitActionsList = [];
+        List<Map<String, dynamic>> permitActionsList =
+            await _databaseHelper.fetchOfflinePermitAction(permitId);
+        if (permitActionsList.isNotEmpty) {
+          offlinePermitActionsList = permitActionsList;
+        }
+        fetchOfflinePermitData['actions'] =
+            jsonEncode(offlinePermitActionsList);
+        await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
+            .then((_) {
+          emit(TextFileGenerated());
+        }).catchError((_) {
+          emit(FailedToGenerateTextFile(
+              errorMessage: 'Could not generate file. Please try again!'));
+        });
       }
-      fetchOfflinePermitData['actions'] = jsonEncode(offlinePermitActionsList);
-      await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
-          .then((_) {
-        emit(TextFileGenerated());
-      }).catchError((_) {
-        emit(FailedToGenerateTextFile(
-            errorMessage: 'Could not generate file. Please try again!'));
-      });
-    }
     } catch (e) {
       rethrow;
     }
@@ -2524,7 +2524,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     try {
       final file = File(pickedFile.path);
       String contents = await file.readAsString();
-      String hashCode = await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map<String, dynamic> jsonData = await jsonDecode(contents);
       String? clientId =
           await _customerCache.getClientId(CacheKeys.clientId) ?? '';
@@ -2560,10 +2562,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           jsonData['html'] = jsonDecode(jsonData['html']);
         }
         if (jsonData.containsKey('actions')) {
-          // jsonData['actions'] =
-          //     (jsonData['actions'] != null || jsonData['actions'] != '')
-          //         ? jsonDecode(jsonData['actions'])
-          //         : [];
           if (jsonData['actions'] != null || jsonData['actions'] != '') {
             if (jsonData['actions'] is String ||
                 jsonData['actions'].runtimeType == String) {
@@ -2580,6 +2578,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               await _customerCache.getApiKey(CacheKeys.apiKey));
           newJson['permitId'] = newpermitId;
           newJson['listPage']['id'] = newpermitId;
+          newJson['tab1']['id'] = newpermitId;
           OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
             'id': newJson['permitId'],
             'id2': newJson['permitId2'],
@@ -2603,6 +2602,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               for (int i = 0; i < newJson['actions'].length; i++) {
                 Map actionMap = newJson['actions'][i]['actionJson'];
                 actionMap['hashcode'] = hashCode;
+                actionMap['userid'] = userId;
+                if (actionMap.containsKey('permitId')) {
+                  actionMap['permitId'] = newpermitId;
+                }
+                if (actionMap.containsKey('permitid')) {
+                  actionMap['permitid'] = newpermitId;
+                }
                 await _databaseHelper.insertOfflinePermitAction(
                     newJson['permitId'],
                     newJson['actions'][i]['actionText'],

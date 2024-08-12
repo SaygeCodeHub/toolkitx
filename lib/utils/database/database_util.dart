@@ -185,7 +185,7 @@ class DatabaseHelper {
       'OfflinePermit',
       {
         'permitId': data.id,
-        'permitId2' : data.id2,
+        'permitId2': data.id2,
         'listpage': jsonEncode(data.listpage.toJson()),
         'tab1': jsonEncode(data.tab1.toJson()),
         'tab2': jsonEncode(data.tab2.toJson()),
@@ -458,6 +458,7 @@ class DatabaseHelper {
 
   Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
+
     final List<Map<String, dynamic>> results = await db.rawQuery(
         'SELECT html FROM OfflinePermit WHERE permitId = ?', [permitId]);
     if (results.isNotEmpty) {
