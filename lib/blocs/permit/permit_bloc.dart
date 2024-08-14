@@ -2468,12 +2468,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   Future<void> writeOfflinePermitDataToFile(String jsonData) async {
     try {
-      final directory = await getExternalStorageDirectory();
-      final file = File('${directory!.path}/import_file_$permitId.txt');
-      await file.writeAsString(jsonData).then((_) async {
-        await OpenFile.open(file.path);
-        filePath = file.path;
-      });
+      final output = await getTemporaryDirectory();
+      final File file = File('${output.path}/import_file_$permitId.txt');
+      await file.writeAsString(jsonData);
+      await OpenFile.open(file.path);
+      filePath = file.path;
+
+      // It will be commented as per Sumit sir
+      // final directory = await getExternalStorageDirectory();
+      // final file = File('${directory!.path}/import_file_$permitId.txt');
+      // await file.writeAsString(jsonData).then((_) async {
+      //   await OpenFile.open(file.path);
+      //   filePath = file.path;
+      // });
     } catch (e) {
       rethrow;
     }
