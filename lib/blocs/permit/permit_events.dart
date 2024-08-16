@@ -270,3 +270,19 @@ class FetchSwitchingScheduleDetails extends PermitEvents {
 
   FetchSwitchingScheduleDetails({required this.instructionId});
 }
+
+class GenerateTextFile extends PermitEvents {
+  GenerateTextFile();
+}
+
+class PickFileFromStorage extends PermitEvents {
+  PickFileFromStorage();
+}
+
+class PickFileFromStorageInitialEvent extends PermitEvents {
+  PickFileFromStorageInitialEvent();
+}
+
+class SaveFileData extends PermitEvents {
+  SaveFileData();
+}

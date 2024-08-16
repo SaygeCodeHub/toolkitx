@@ -32,6 +32,7 @@ import '../../data/models/permit/open_permit_details_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
+import '../../data/models/permit/sync_switching_schedule_model.dart';
 import '../../utils/dio_client.dart';
 import 'permit_repository.dart';
 
@@ -286,5 +287,14 @@ class PermitRepositoryImpl extends PermitRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}permit/GetSwitchingScheduleInstruction?instructionid=$instructionId&hashcode=$hashCode");
     return FetchSwitchingScheduleDetailsModel.fromJson(response);
+  }
+
+  @override
+  Future<SwitchingScheduleModel> syncSwitchingSchedule(
+      Map syncSwitchingScheduleMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/SyncSwitchingScheduleProcess",
+        syncSwitchingScheduleMap);
+    return SwitchingScheduleModel.fromJson(response);
   }
 }

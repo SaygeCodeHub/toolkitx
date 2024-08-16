@@ -99,11 +99,8 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                               popUpMenuItems.length,
                               (int index) => MenuItemButton(
                                 onPressed: () {
-                                  callFunction(
-                                      popUpMenuItems[index],
-                                      context,
-                                      switchingScheduleId,
-                                      permitBloc);
+                                  callFunction(popUpMenuItems[index], context,
+                                      switchingScheduleId, permitBloc);
                                 },
                                 child: Text(popUpMenuItems[index]),
                               ),
@@ -119,7 +116,9 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                               children: [
                                 Text(permitDetailsModel.data.tab7[index].title),
                                 const SizedBox(height: xxTinierSpacing),
-                                Text(permitDetailsModel.data.tab7[index].status.toString(),
+                                Text(
+                                    permitDetailsModel.data.tab7[index].status
+                                        .toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .xxSmall

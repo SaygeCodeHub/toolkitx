@@ -46,7 +46,9 @@ class PTWActionMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert_outlined),
         offset: const Offset(0, xxTiniestSpacing),
         onSelected: (value) {
-          if (popUpMenuItems[value] == StringConstants.kPrintPermit) {
+          if (popUpMenuItems[value] == 'Export File') {
+            context.read<PermitBloc>().add(GenerateTextFile());
+          } else if (popUpMenuItems[value] == StringConstants.kPrintPermit) {
             if (isNetworkEstablished) {
               context.read<PermitBloc>().add(GeneratePDF(permitId));
             } else {

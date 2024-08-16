@@ -23,7 +23,7 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
   final bool isFromEdit;
   final Map switchingScheduleMap;
   final PermitSwithcingScheduleInstructionDatum
-  permitSwithcingScheduleInstructionDatum;
+      permitSwithcingScheduleInstructionDatum;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
         instructionId: permitSwithcingScheduleInstructionDatum.id));
     return BlocBuilder<PermitBloc, PermitStates>(
       buildWhen: (previousState, currentState) =>
-      currentState is SwitchingScheduleDetailsFetching ||
+          currentState is SwitchingScheduleDetailsFetching ||
           currentState is SwitchingScheduleDetailsFetched ||
           currentState is SwitchingScheduleDetailsNotFetched,
       builder: (context, state) {
@@ -75,10 +75,10 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                 isFromEdit == true
                     ? Text(data.location)
                     : TextFieldWidget(
-                  onTextFieldChanged: (textField) {
-                    switchingScheduleMap['location'] = textField;
-                  },
-                ),
+                        onTextFieldChanged: (textField) {
+                          switchingScheduleMap['location'] = textField;
+                        },
+                      ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kEquipmentUIN,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -87,19 +87,19 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                 isFromEdit == true
                     ? Text(data.equipmentuid)
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFieldWidget(
-                      maxLines: 5,
-                      onTextFieldChanged: (textField) {
-                        switchingScheduleMap['equipmentuid'] = textField;
-                      },
-                    ),
-                    const SizedBox(height: tiniestSpacing),
-                    const Text(StringConstants.kIncludingVoltageLevel,
-                        style: TextStyle(color: AppColor.deepBlue))
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFieldWidget(
+                            maxLines: 5,
+                            onTextFieldChanged: (textField) {
+                              switchingScheduleMap['equipmentuid'] = textField;
+                            },
+                          ),
+                          const SizedBox(height: tiniestSpacing),
+                          const Text(StringConstants.kIncludingVoltageLevel,
+                              style: TextStyle(color: AppColor.deepBlue))
+                        ],
+                      ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kOperation,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -108,10 +108,10 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                 isFromEdit == true
                     ? Text(data.operation)
                     : TextFieldWidget(
-                  onTextFieldChanged: (textField) {
-                    switchingScheduleMap['operation'] = textField;
-                  },
-                ),
+                        onTextFieldChanged: (textField) {
+                          switchingScheduleMap['operation'] = textField;
+                        },
+                      ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kInstructionReceivedBy,
                     style: Theme.of(context).textTheme.xSmall.copyWith(
@@ -119,7 +119,7 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                 const SizedBox(height: tiniestSpacing),
                 TextFieldWidget(
                   value:
-                  isFromEdit == true ? data.instructionreceivedbyname : '',
+                      isFromEdit == true ? data.instructionreceivedbyname : '',
                   onTextFieldChanged: (textField) {
                     switchingScheduleMap["instructionreceivedbyname"] =
                         textField;
@@ -134,18 +134,18 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String? date, String? time) {
                     if (isFromEdit) {
                       switchingScheduleMap["instructionreceiveddate"] =
-                      date != '' ? date : data.instructionreceiveddate;
+                          date != '' ? date : data.instructionreceiveddate;
                       switchingScheduleMap["instructionreceivedtime"] =
-                      time != '' ? time : data.instructionreceivedtime;
+                          time != '' ? time : data.instructionreceivedtime;
                     } else {
                       switchingScheduleMap["instructionreceiveddate"] = date;
                       switchingScheduleMap["instructionreceivedtime"] = time;
                     }
                   },
                   editDate:
-                  isFromEdit == true ? data.instructionreceiveddate : '',
+                      isFromEdit == true ? data.instructionreceiveddate : '',
                   editTime:
-                  isFromEdit == true ? data.instructionreceivedtime : '',
+                      isFromEdit == true ? data.instructionreceivedtime : '',
                 ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kControlEngineer,
@@ -167,9 +167,9 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String? date, String? time) {
                     if (isFromEdit) {
                       switchingScheduleMap["carriedoutdate"] =
-                      date != '' ? date : data.carriedoutdate;
+                          date != '' ? date : data.carriedoutdate;
                       switchingScheduleMap["carriedouttime"] =
-                      time != '' ? time : data.carriedouttime;
+                          time != '' ? time : data.carriedouttime;
                     } else {
                       switchingScheduleMap["carriedoutdate"] = date;
                       switchingScheduleMap["carriedouttime"] = time;
@@ -187,18 +187,18 @@ class AddAndEditInstructionOfflineBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String? date, String? time) {
                     if (isFromEdit) {
                       switchingScheduleMap["carriedoutconfirmeddate"] =
-                      date != '' ? date : data.carriedoutconfirmeddate;
+                          date != '' ? date : data.carriedoutconfirmeddate;
                       switchingScheduleMap["carriedoutconfirmedtime"] =
-                      time != '' ? time : data.carriedoutconfirmedtime;
+                          time != '' ? time : data.carriedoutconfirmedtime;
                     } else {
                       switchingScheduleMap["carriedoutconfirmeddate"] = date;
                       switchingScheduleMap["carriedoutconfirmedtime"] = time;
                     }
                   },
                   editDate:
-                  isFromEdit == true ? data.carriedoutconfirmeddate : '',
+                      isFromEdit == true ? data.carriedoutconfirmeddate : '',
                   editTime:
-                  isFromEdit == true ? data.carriedoutconfirmedtime : '',
+                      isFromEdit == true ? data.carriedoutconfirmedtime : '',
                 ),
                 const SizedBox(height: xxxSmallestSpacing),
                 Text(StringConstants.kSafetyKeyNumber,

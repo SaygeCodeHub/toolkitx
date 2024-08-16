@@ -632,7 +632,9 @@ abstract class StringConstants {
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =
-      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
+  static const String kNotGrantedPermitOffline =
+      "You are not granted any permits to use offline";
   static const String kOpenTicket = "Open Ticket";
   static const String kApproveOfDev2 = "Approve for Dev2";
   static const String kBackToApprove = "Back to Approve";
