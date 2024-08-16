@@ -1075,9 +1075,9 @@ class DatabaseHelper {
         [permitId],
       );
       if (fetchOfflinePermits.isNotEmpty) {
-        return fetchOfflinePermits.first; // Return the first (and only) result
+        return fetchOfflinePermits.first;
       } else {
-        return null; // Return null if no data is found
+        return null;
       }
     } catch (e) {
       rethrow;

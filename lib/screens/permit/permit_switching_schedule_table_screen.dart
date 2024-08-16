@@ -102,8 +102,6 @@ class PermitSwitchingScheduleTableScreen extends StatelessWidget {
                                           color: WidgetStateProperty
                                               .resolveWith<Color?>(
                                                   (Set<WidgetState> states) {
-                                            print(
-                                                'json?======>${state.scheduleInstructionDatum[index].toJson()}');
                                             if (state
                                                     .scheduleInstructionDatum[
                                                         index]

@@ -128,3 +128,4 @@ const double kPermitDatePickerFontSize = 16;
 const double kPermitEditSwitchingExpansionTileHeight = 120;
 const double kPermitEditSelectedButtonWidth = 150;
 const double kPermitEditSelectedButtonHeight = 40;
+const double kPermitImportDocContainerSize = 120;
