@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/permit/permit_events.dart';
 import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/screens/permit/widgets/permit_select_file_section.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
@@ -26,7 +27,7 @@ class PermitSelectFileScreen extends StatelessWidget {
                 onPressed: () {
                   context.read<PermitBloc>().add(SaveFileData());
                 },
-                textValue: 'Import File')),
+                textValue: StringConstants.kImportFile)),
         body:
             BlocConsumer<PermitBloc, PermitStates>(listener: (context, state) {
           if (state is FileFromStorageFailedToPick) {
