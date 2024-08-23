@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
@@ -29,6 +30,8 @@ class EditMultiSelectSwitchingScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp]);
     context.read<PermitBloc>().add(const FetchPermitMaster());
     Map switchingScheduleMap = {};
     return Scaffold(
