@@ -310,6 +310,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               AllPermitModel allPermitModel = await _permitRepository
                   .getAllPermits(hashCode, '', roleId, event.page);
               permitListData.addAll(allPermitModel.data);
+
+              List<Map<String, dynamic>> dbResult =
+                  await _databaseHelper.fetchPermitListOffline();
+
+              for (AllPermitDatum item in permitListData) {
+                item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+              }
               listReachedMax = allPermitModel.data.isEmpty;
               emit(AllPermitsFetched(
                   allPermitModel: allPermitModel,
@@ -321,6 +328,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _permitRepository.getAllPermits(
                     hashCode, jsonEncode(filters), roleId, event.page);
             permitListData.addAll(allPermitModel.data);
+
+            List<Map<String, dynamic>> dbResult =
+                await _databaseHelper.fetchPermitListOffline();
+
+            for (AllPermitDatum item in permitListData) {
+              item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+            }
             listReachedMax = allPermitModel.data.isEmpty;
             emit(AllPermitsFetched(
                 allPermitModel: allPermitModel,
@@ -349,6 +363,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(const CouldNotFetchPermits());
     }
+  }
+
+  bool _isPermitDownload(String permitId, List<Map<String, dynamic>> dbResult) {
+    for (Map<String, dynamic> result in dbResult) {
+      if (result['permitId'] == permitId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   FutureOr<void> _getPermitDetails(

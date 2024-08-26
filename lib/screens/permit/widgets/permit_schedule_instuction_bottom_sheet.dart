@@ -152,7 +152,8 @@ class PermitScheduleInstructionBottomSheet extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (context) => AndroidPopUp(
-                                      titleValue: DatabaseUtil.getText('Delete'),
+                                      titleValue:
+                                          DatabaseUtil.getText('Delete'),
                                       contentValue: DatabaseUtil.getText(
                                           'DeleteConfirmationImage'),
                                       onPrimaryButton: () {

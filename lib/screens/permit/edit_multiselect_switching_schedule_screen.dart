@@ -30,8 +30,7 @@ class EditMultiSelectSwitchingScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     context.read<PermitBloc>().add(const FetchPermitMaster());
     Map switchingScheduleMap = {};
     return Scaffold(
