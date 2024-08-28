@@ -3,6 +3,7 @@ import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/export_permit_log_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
 import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
@@ -211,11 +212,11 @@ class PermitRepositoryImpl extends PermitRepository {
 
   @override
   Future<FetchSwitchingScheduleInstructionsModel>
-      fetchSwitchingScheduleInstructions(String scheduleId) async {
+      fetchSwitchingScheduleInstructions(String scheduleId, String role) async {
     final String? hashCode =
         await _customerCache.getHashCode(CacheKeys.hashcode);
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}permit/GetSwitchingScheduleInstructions?switchingscheduleid=$scheduleId&hashcode=$hashCode");
+        "${ApiConstants.baseUrl}permit/GetSwitchingScheduleInstructions?switchingscheduleid=$scheduleId&hashcode=$hashCode&role=$role");
     return FetchSwitchingScheduleInstructionsModel.fromJson(response);
   }
 
@@ -296,5 +297,13 @@ class PermitRepositoryImpl extends PermitRepository {
         "${ApiConstants.baseUrl}permit/SyncSwitchingScheduleProcess",
         syncSwitchingScheduleMap);
     return SwitchingScheduleModel.fromJson(response);
+  }
+
+  @override
+  Future<ExportPermitLogModel> exportPermitLog(Map exportPermitLogMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}permit/savepermitexportlog",
+        exportPermitLogMap);
+    return ExportPermitLogModel.fromJson(response);
   }
 }

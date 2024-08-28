@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'package:toolkit/data/models/permit/export_permit_log_model.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/encrypt_class.dart';
@@ -309,6 +309,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               AllPermitModel allPermitModel = await _permitRepository
                   .getAllPermits(hashCode, '', roleId, event.page);
               permitListData.addAll(allPermitModel.data);
+
+              List<Map<String, dynamic>> dbResult =
+                  await _databaseHelper.fetchPermitListOffline();
+
+              for (AllPermitDatum item in permitListData) {
+                item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+              }
               listReachedMax = allPermitModel.data.isEmpty;
               emit(AllPermitsFetched(
                   allPermitModel: allPermitModel,
@@ -320,6 +327,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _permitRepository.getAllPermits(
                     hashCode, jsonEncode(filters), roleId, event.page);
             permitListData.addAll(allPermitModel.data);
+
+            List<Map<String, dynamic>> dbResult =
+                await _databaseHelper.fetchPermitListOffline();
+
+            for (AllPermitDatum item in permitListData) {
+              item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+            }
             listReachedMax = allPermitModel.data.isEmpty;
             emit(AllPermitsFetched(
                 allPermitModel: allPermitModel,
@@ -348,6 +362,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     } catch (e) {
       emit(const CouldNotFetchPermits());
     }
+  }
+
+  bool _isPermitDownload(String permitId, List<Map<String, dynamic>> dbResult) {
+    for (Map<String, dynamic> result in dbResult) {
+      if (result['permitId'] == permitId) {
+        return true;
+      }
+    }
+    return false;
   }
 
   FutureOr<void> _getPermitDetails(
@@ -401,7 +424,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             clientId: clientId,
             userType: userType));
       } else {
-        permitPopUpMenu.add('Export File');
+        permitPopUpMenu.add(StringConstants.kExportPermit);
         emit(const FetchingPermitDetails());
         permitId = event.permitId;
         Map<String, dynamic> permitDetailsMap =
@@ -1461,6 +1484,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
               }
               break;
+            case 'exportpermitlog':
+              ExportPermitLogModel exportPermitLogModel =
+                  await _permitRepository
+                      .exportPermitLog(jsonDecode(action['actionJson']));
+              if (exportPermitLogModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']!);
+              }
+              break;
           }
         }
       }
@@ -2092,7 +2123,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         emit(FetchingSwitchingScheduleInstructions());
         FetchSwitchingScheduleInstructionsModel
             fetchSwitchingScheduleInstructionsModel = await _permitRepository
-                .fetchSwitchingScheduleInstructions(event.scheduleId);
+                .fetchSwitchingScheduleInstructions(event.scheduleId, roleId);
         if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
           emit(SwitchingScheduleInstructionsFetched(
               scheduleInstructionDatum:
@@ -2445,6 +2476,8 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         fetchOfflinePermitData.addAll(fetchOfflinePermits);
         fetchOfflinePermitData['clientid'] =
             await _customerCache.getClientId(CacheKeys.clientId);
+        fetchOfflinePermitData['senderid'] =
+            await _customerCache.getUserId2(CacheKeys.userId2);
         List<Map<String, dynamic>> offlinePermitActionsList = [];
         List<Map<String, dynamic>> permitActionsList =
             await _databaseHelper.fetchOfflinePermitAction(permitId);
@@ -2453,7 +2486,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         fetchOfflinePermitData['actions'] =
             jsonEncode(offlinePermitActionsList);
-        await writeOfflinePermitDataToFile(jsonEncode(fetchOfflinePermitData))
+        Map<String, dynamic> listPage =
+            jsonDecode(fetchOfflinePermits['listPage']);
+        String fileName = listPage['permit'];
+        await writeOfflinePermitDataToFile(
+                jsonEncode(fetchOfflinePermitData), fileName)
             .then((_) {
           emit(TextFileGenerated());
         }).catchError((_) {
@@ -2466,10 +2503,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     }
   }
 
-  Future<void> writeOfflinePermitDataToFile(String jsonData) async {
+  Future<void> writeOfflinePermitDataToFile(
+      String jsonData, String fileName) async {
     try {
+      if (fileName.isEmpty) {
+        fileName = 'import_file_$permitId';
+      }
       final output = await getTemporaryDirectory();
-      final File file = File('${output.path}/import_file_$permitId.txt');
+      final File file = File('${output.path}/$fileName.txt');
       await file.writeAsString(jsonData);
       await OpenFile.open(file.path);
       filePath = file.path;
@@ -2624,6 +2665,14 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                     newJson['actions'][i]['actionDateTime']);
               }
             }
+            Map senderMap = {
+              "permitid": newpermitId,
+              "userid": userId,
+              "senderid": jsonData['senderid'],
+              "hashcode": hashCode
+            };
+            await _databaseHelper.insertOfflinePermitAction(
+                newJson['permitId'], 'exportpermitlog', senderMap, '', '');
             emit(FileDataSaved());
           } else {
             emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));

@@ -292,11 +292,13 @@ abstract class StringConstants {
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
   static const String kPrintPermit = 'Print Permit';
+  static const String kExportPermit = 'Transfer Permit';
   static const String kClosePermit = 'Cancel Permit';
   static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
+  static const String kImportFile = 'Import File';
   static const String kSAP = 'SAP';
   static const String kCP = "CP";
   static const String kEditSafetyDocument = 'Edit Safety Document';

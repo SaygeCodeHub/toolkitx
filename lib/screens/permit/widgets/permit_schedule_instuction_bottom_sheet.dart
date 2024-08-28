@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
@@ -79,90 +80,97 @@ class PermitScheduleInstructionBottomSheet extends StatelessWidget {
                     showCustomSnackBar(context, state.errorMessage, '');
                   }
                 },
-                child: Column(
-                  children: [
-                    ListTile(
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context,
-                              AddAndEditSwitchingInstructionScreen.routeName,
-                              arguments: [
-                                permitSwithcingScheduleInstructionDatum,
-                                false,
-                                scheduleId
-                              ]);
-                        },
-                        leading: const Icon(Icons.add,
-                            size: kPermitScheduleInstIconSize),
-                        title: Text(StringConstants.kAdd,
-                            style: Theme.of(context).textTheme.xSmall)),
-                    ListTile(
-                        onTap: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context,
-                              AddAndEditSwitchingInstructionScreen.routeName,
-                              arguments: [
-                                permitSwithcingScheduleInstructionDatum,
-                                true,
-                                scheduleId
-                              ]);
-                        },
-                        leading: const Icon(Icons.edit,
-                            size: kPermitScheduleInstIconSize),
-                        title: Text(StringConstants.kEdit,
-                            style: Theme.of(context).textTheme.xSmall)),
-                    Visibility(
-                      visible: index > 0,
-                      child: ListTile(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
                           onTap: () {
-                            context.read<PermitBloc>().add(
-                                MoveUpPermitSwitchingSchedule(
-                                    instructionId:
-                                        permitSwithcingScheduleInstructionDatum
-                                            .id));
+                            SystemChrome.setPreferredOrientations(
+                                [DeviceOrientation.portraitUp]);
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context,
+                                AddAndEditSwitchingInstructionScreen.routeName,
+                                arguments: [
+                                  permitSwithcingScheduleInstructionDatum,
+                                  false,
+                                  scheduleId
+                                ]);
                           },
-                          leading: const Icon(Icons.arrow_upward,
+                          leading: const Icon(Icons.add,
                               size: kPermitScheduleInstIconSize),
-                          title: Text(StringConstants.kMoveUp,
+                          title: Text(StringConstants.kAdd,
                               style: Theme.of(context).textTheme.xSmall)),
-                    ),
-                    Visibility(
-                      visible: index < length - 1,
-                      child: ListTile(
+                      ListTile(
                           onTap: () {
-                            context.read<PermitBloc>().add(
-                                MoveDownPermitSwitchingSchedule(
-                                    instructionId:
-                                        permitSwithcingScheduleInstructionDatum
-                                            .id));
+                            SystemChrome.setPreferredOrientations(
+                                [DeviceOrientation.portraitUp]);
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context,
+                                AddAndEditSwitchingInstructionScreen.routeName,
+                                arguments: [
+                                  permitSwithcingScheduleInstructionDatum,
+                                  true,
+                                  scheduleId
+                                ]);
                           },
-                          leading: const Icon(Icons.arrow_downward,
+                          leading: const Icon(Icons.edit,
                               size: kPermitScheduleInstIconSize),
-                          title: Text(StringConstants.kMoveDown,
+                          title: Text(StringConstants.kEdit,
                               style: Theme.of(context).textTheme.xSmall)),
-                    ),
-                    ListTile(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => AndroidPopUp(
-                                    titleValue: DatabaseUtil.getText('Delete'),
-                                    contentValue: DatabaseUtil.getText(
-                                        'DeleteConfirmationImage'),
-                                    onPrimaryButton: () {
-                                      context.read<PermitBloc>().add(
-                                          DeletePermitSwitchingSchedule(
-                                              instructionId:
-                                                  permitSwithcingScheduleInstructionDatum
-                                                      .id));
-                                    },
-                                  ));
-                        },
-                        leading: const Icon(Icons.delete,
-                            size: kPermitScheduleInstIconSize),
-                        title: Text(StringConstants.kDelete,
-                            style: Theme.of(context).textTheme.xSmall))
-                  ],
+                      Visibility(
+                        visible: index > 0,
+                        child: ListTile(
+                            onTap: () {
+                              context.read<PermitBloc>().add(
+                                  MoveUpPermitSwitchingSchedule(
+                                      instructionId:
+                                          permitSwithcingScheduleInstructionDatum
+                                              .id));
+                            },
+                            leading: const Icon(Icons.arrow_upward,
+                                size: kPermitScheduleInstIconSize),
+                            title: Text(StringConstants.kMoveUp,
+                                style: Theme.of(context).textTheme.xSmall)),
+                      ),
+                      Visibility(
+                        visible: index < length - 1,
+                        child: ListTile(
+                            onTap: () {
+                              context.read<PermitBloc>().add(
+                                  MoveDownPermitSwitchingSchedule(
+                                      instructionId:
+                                          permitSwithcingScheduleInstructionDatum
+                                              .id));
+                            },
+                            leading: const Icon(Icons.arrow_downward,
+                                size: kPermitScheduleInstIconSize),
+                            title: Text(StringConstants.kMoveDown,
+                                style: Theme.of(context).textTheme.xSmall)),
+                      ),
+                      ListTile(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => AndroidPopUp(
+                                      titleValue:
+                                          DatabaseUtil.getText('Delete'),
+                                      contentValue: DatabaseUtil.getText(
+                                          'DeleteConfirmationImage'),
+                                      onPrimaryButton: () {
+                                        context.read<PermitBloc>().add(
+                                            DeletePermitSwitchingSchedule(
+                                                instructionId:
+                                                    permitSwithcingScheduleInstructionDatum
+                                                        .id));
+                                      },
+                                    ));
+                          },
+                          leading: const Icon(Icons.delete,
+                              size: kPermitScheduleInstIconSize),
+                          title: Text(StringConstants.kDelete,
+                              style: Theme.of(context).textTheme.xSmall))
+                    ],
+                  ),
                 ),
               );
             }),

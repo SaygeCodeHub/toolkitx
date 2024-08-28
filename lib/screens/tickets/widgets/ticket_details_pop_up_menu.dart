@@ -67,11 +67,11 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
           if (value == DatabaseUtil.getText('ticket_development')) {
             Navigator.pushNamed(context, TicketCompletionDateScreen.routeName);
           }
-          if (value == DatabaseUtil.getText('ticket_testing')) {
+          if (value == DatabaseUtil.getText('ticket_defer')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.testing.value));
+                status: TicketStatusEnum.deferred.value));
           }
           if (value == DatabaseUtil.getText('ticket_testing')) {
             context.read<TicketsBloc>().add(UpdateTicketStatus(
