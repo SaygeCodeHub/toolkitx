@@ -22,6 +22,8 @@ import 'package:toolkit/repositories/tankManagement/tank_management_repository.d
 import 'package:toolkit/repositories/tankManagement/tank_management_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
+import 'package:toolkit/repositories/tickets2/tickets2_repository.dart';
+import 'package:toolkit/repositories/tickets2/tickets2_repository_impl.dart';
 
 import '../data/cache/customer_cache.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
@@ -136,4 +138,6 @@ configurableDependencies() {
       () => TankManagementRepositoryImpl());
   getIt.registerLazySingleton<MeetingRoomRepository>(
       () => MeetingRoomRepositoryImpl());
+  getIt.registerLazySingleton<Tickets2Repository>(
+      () => Tickets2RepositoryImpl());
 }

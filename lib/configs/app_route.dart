@@ -47,6 +47,7 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
+import 'package:toolkit/screens/tickets2/add_ticket2_screen.dart';
 import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/trips/trip_filter_screen.dart';
 import 'package:toolkit/screens/trips/add_special_request_screen.dart';
@@ -211,6 +212,7 @@ import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_form_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
+import '../screens/workorder/workorder_role_screen.dart';
 import '../widgets/in_app_web_view.dart';
 import '../widgets/view_offline_permit_screen.dart';
 
@@ -756,6 +758,11 @@ class AppRoutes {
         return _createRoute(const TankFilterScreen());
       case PermitSelectFileScreen.routeName:
         return _createRoute(const PermitSelectFileScreen());
+      case AddTicket2Screen.routeName:
+        return _createRoute(
+            AddTicket2Screen(responsequeid: settings.arguments.toString()));
+      case WorkOrderRoleScreen.routeName:
+        return _createRoute(const WorkOrderRoleScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
