@@ -178,7 +178,7 @@ class EditAnswerListScreen extends StatelessWidget {
                                                           },
                                                           textValue:
                                                               StringConstants
-                                                                  .kAddImages),
+                                                                  .kAddComment),
                                                     ),
                                                     const SizedBox(
                                                         width: tiniestSpacing),

@@ -137,7 +137,7 @@ class QuestionListSectionBody extends StatelessWidget {
                               arguments:
                                   questionList[index].queresponseid.toString());
                         },
-                        textValue: StringConstants.kAddImages)),
+                        textValue: StringConstants.kAddComment)),
                 const SizedBox(width: tiniestSpacing),
                 Expanded(
                   child: SecondaryButton(

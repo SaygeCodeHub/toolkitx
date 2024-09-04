@@ -71,6 +71,7 @@ abstract class StringConstants {
   static const String kAddMore = 'Add More';
   static const String kDelete = 'Delete';
   static const String kAddImages = 'Add Images/Comment';
+  static const String kAddComment = 'Add Comment';
   static const String kErrorImageUpload =
       'Cannot upload image! Please try again!';
   static const String kErrorPickImage = 'Failed to pick image';
