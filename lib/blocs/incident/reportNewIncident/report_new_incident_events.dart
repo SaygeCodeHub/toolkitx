@@ -104,3 +104,21 @@ class IncidentRemoveInjuredPersonDetails extends ReportNewIncidentEvent {
   IncidentRemoveInjuredPersonDetails(
       {this.index, required this.injuredPersonDetailsList});
 }
+
+class FetchIncidentLocations extends ReportNewIncidentEvent {
+  final String siteId;
+
+  FetchIncidentLocations({required this.siteId});
+}
+
+class SelectLocationId extends ReportNewIncidentEvent {
+  final dynamic locationId;
+
+  SelectLocationId({required this.locationId});
+}
+
+class FetchIncidentAssetsList extends ReportNewIncidentEvent {
+  final List<Map<String, dynamic>> assetList;
+
+  FetchIncidentAssetsList({required this.assetList});
+}

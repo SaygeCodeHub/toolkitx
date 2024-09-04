@@ -136,3 +136,24 @@ class ReportNewIncidentInjuredPersonDetailsFetched
   ReportNewIncidentInjuredPersonDetailsFetched(
       {required this.injuredPersonDetailsList});
 }
+
+class IncidentLocationsFetching extends ReportNewIncidentStates {}
+
+class IncidentLocationsFetched extends ReportNewIncidentStates {
+  // final SaveReportNewIncidentModel saveReportNewIncidentModel;
+  final List<Map<String, dynamic>> locationList;
+
+  IncidentLocationsFetched({required this.locationList});
+}
+
+class IncidentLocationsNotFetched extends ReportNewIncidentStates {
+  final String errorMessage;
+
+  IncidentLocationsNotFetched({required this.errorMessage});
+}
+
+class IncidentAssetListFetched extends ReportNewIncidentStates {
+  final List<Map<String, dynamic>> assetList;
+
+  IncidentAssetListFetched({required this.assetList});
+}

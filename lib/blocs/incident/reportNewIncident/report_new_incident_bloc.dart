@@ -22,6 +22,36 @@ class ReportNewIncidentBloc
   String selectSiteName = '';
   String incidentId = '';
   int imageIndex = 0;
+  String selectedAsset = '';
+  List<Map<String, dynamic>> locationList = [
+    {
+      "id": 1,
+      "name": "Location A",
+      "assets": [
+        {"id": 1, "name": "Asset A"},
+        {"id": 2, "name": "Asset B"},
+        {"id": 3, "name": "Asset C"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Location B",
+      "assets": [
+        {"id": 4, "name": "Asset D"},
+        {"id": 5, "name": "Asset E"},
+        {"id": 6, "name": "Asset F"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Location C",
+      "assets": [
+        {"id": 7, "name": "Asset G"},
+        {"id": 8, "name": "Asset H"},
+        {"id": 9, "name": "Asset I"}
+      ]
+    }
+  ];
 
   ReportNewIncidentStates get initialState => ReportNewIncidentInitial();
 
@@ -42,6 +72,9 @@ class ReportNewIncidentBloc
     on<SaveReportNewIncidentPhotos>(_saveIncidentPhotos);
     on<FetchIncidentInjuredPerson>(_fetchIncidentInjuredPersonDetails);
     on<IncidentRemoveInjuredPersonDetails>(_removeInjuredPerson);
+    on<FetchIncidentLocations>(_fetchIncidentLocations);
+    on<SelectLocationId>(_selectLocationId);
+    on<FetchIncidentAssetsList>(_fetchIncidentAssetsList);
   }
 
   FutureOr<void> _fetchIncidentCategory(
@@ -162,6 +195,7 @@ class ReportNewIncidentBloc
     emit(ReportNewIncidentSiteSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         selectSiteName: event.selectSiteName));
+    add(FetchIncidentLocations(siteId: ''));
   }
 
   _reportIncidentLocation(ReportNewIncidentLocationChange event,
@@ -319,5 +353,39 @@ class ReportNewIncidentBloc
     event.injuredPersonDetailsList.removeAt(event.index!);
     emit(ReportNewIncidentInjuredPersonDetailsFetched(
         injuredPersonDetailsList: event.injuredPersonDetailsList));
+  }
+
+  FutureOr<void> _fetchIncidentLocations(
+      FetchIncidentLocations event, Emitter<ReportNewIncidentStates> emit) {
+    // try {
+    emit(IncidentLocationsFetching());
+
+    emit(IncidentLocationsFetched(locationList: locationList));
+    // }  catch (e) {
+    //   emit(IncidentLocationsNotFetched(errorMessage: e.toString()));
+    // }
+  }
+
+  FutureOr<void> _selectLocationId(
+      SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
+    try {
+      if (event.locationId != '') {
+        var location = locationList
+            .firstWhere((location) => location['id'] == event.locationId!);
+        List<Map<String, dynamic>> assetList = [];
+        if (location.isNotEmpty) {
+          assetList = List<Map<String, dynamic>>.from(location['assets']);
+          add(FetchIncidentAssetsList(assetList: assetList));
+        }
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  FutureOr<void> _fetchIncidentAssetsList(
+      FetchIncidentAssetsList event, Emitter<ReportNewIncidentStates> emit) {
+    selectedAsset = '';
+    emit(IncidentAssetListFetched(assetList: event.assetList));
   }
 }
