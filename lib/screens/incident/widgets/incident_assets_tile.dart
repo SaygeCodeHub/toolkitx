@@ -75,20 +75,16 @@ class _IncidentAssetsTileState extends State<IncidentAssetsTile> {
                                       contentPadding: const EdgeInsets.only(
                                           left: xxTinierSpacing),
                                       title: Text(
-                                          state.assetList[listIndex]['name']),
+                                          state.assetList[listIndex].name),
                                       onTap: () {
                                         setState(() {
                                           context
                                               .read<ReportNewIncidentBloc>()
                                               .selectedAsset =
-                                          state.assetList[listIndex]
-                                          ['name'];
+                                          state.assetList[listIndex].name;
                                           widget.addAndEditIncidentMap[
                                           'assetid'] =
-                                          state.assetList[listIndex]['id'];
-                                          print(
-                                              'widget.addAndEditIncidentMap===========>${widget
-                                                  .addAndEditIncidentMap}');
+                                          state.assetList[listIndex].id;
                                         });
                                       });
                                 })),

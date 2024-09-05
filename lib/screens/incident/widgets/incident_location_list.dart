@@ -21,9 +21,8 @@ class IncidentLocationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<ReportNewIncidentBloc>()
-        .add(FetchIncidentLocations(siteId: ''));
+    context.read<ReportNewIncidentBloc>().add(FetchIncidentLocations(
+        siteId: context.read<ReportNewIncidentBloc>().siteId));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectLocation),
         body: SingleChildScrollView(
@@ -41,6 +40,7 @@ class IncidentLocationList extends StatelessWidget {
                   if (state is IncidentLocationsFetching) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is IncidentLocationsFetched) {
+                    var data = state.fetchIncidentLocationModel.data;
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -48,29 +48,27 @@ class IncidentLocationList extends StatelessWidget {
                               physics: const NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
-                              itemCount: state.locationList.length,
+                              itemCount: data.length,
                               itemBuilder: (context, index) {
                                 return RadioListTile(
                                     contentPadding: EdgeInsets.zero,
                                     activeColor: AppColor.deepBlue,
                                     controlAffinity:
                                         ListTileControlAffinity.trailing,
-                                    title:
-                                        Text(state.locationList[index]['name']),
-                                    value: state.locationList[index]['name'],
+                                    title: Text(data[index].name),
+                                    value: data[index].name,
                                     groupValue: selectLocationName,
                                     onChanged: (value) {
-                                      value = state.locationList[index]['name'];
+                                      value = data[index].name;
                                       context
                                           .read<ReportNewIncidentBloc>()
                                           .add(ReportNewIncidentLocationChange(
-                                            selectLocationName: state
-                                                .locationList[index]['name'],
+                                            selectLocationName:
+                                                data[index].name,
                                           ));
                                       context.read<ReportNewIncidentBloc>().add(
                                           SelectLocationId(
-                                              locationId: state
-                                                  .locationList[index]['id']));
+                                              locationId: data[index].id));
                                       Navigator.pop(context);
                                     });
                               }),

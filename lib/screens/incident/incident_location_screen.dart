@@ -20,11 +20,11 @@ class IncidentLocationScreen extends StatelessWidget {
   static const routeName = 'IncidentLocationScreen';
   final Map addAndEditIncidentMap;
 
-  const IncidentLocationScreen({Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+  const IncidentLocationScreen({super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {
+    context.read<ReportNewIncidentBloc>().siteId = 0;
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kReportNewIncident),
       body: Padding(
@@ -80,6 +80,8 @@ class IncidentLocationScreen extends StatelessWidget {
                         context.read<ReportNewIncidentBloc>().add(
                             ReportNewIncidentSiteLocationValidation(
                                 reportNewIncidentMap: addAndEditIncidentMap));
+                        print(
+                            'widget.addAndEditIncidentMap===========>$addAndEditIncidentMap');
                       },
                       textValue: DatabaseUtil.getText('nextButtonText')),
                 )),

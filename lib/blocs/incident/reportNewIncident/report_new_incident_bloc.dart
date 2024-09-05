@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
+import 'package:toolkit/data/models/incident/fetch_incident_location_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
@@ -23,35 +24,8 @@ class ReportNewIncidentBloc
   String incidentId = '';
   int imageIndex = 0;
   String selectedAsset = '';
-  List<Map<String, dynamic>> locationList = [
-    {
-      "id": 1,
-      "name": "Location A",
-      "assets": [
-        {"id": 1, "name": "Asset A"},
-        {"id": 2, "name": "Asset B"},
-        {"id": 3, "name": "Asset C"}
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Location B",
-      "assets": [
-        {"id": 4, "name": "Asset D"},
-        {"id": 5, "name": "Asset E"},
-        {"id": 6, "name": "Asset F"}
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Location C",
-      "assets": [
-        {"id": 7, "name": "Asset G"},
-        {"id": 8, "name": "Asset H"},
-        {"id": 9, "name": "Asset I"}
-      ]
-    }
-  ];
+  List<LocationDatum> locationList = [];
+  int siteId = 0;
 
   ReportNewIncidentStates get initialState => ReportNewIncidentInitial();
 
@@ -195,7 +169,10 @@ class ReportNewIncidentBloc
     emit(ReportNewIncidentSiteSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         selectSiteName: event.selectSiteName));
-    add(FetchIncidentLocations(siteId: ''));
+
+    if (event.siteId != 0) {
+      add(FetchIncidentLocations(siteId: event.siteId));
+    }
   }
 
   _reportIncidentLocation(ReportNewIncidentLocationChange event,
@@ -355,12 +332,22 @@ class ReportNewIncidentBloc
         injuredPersonDetailsList: event.injuredPersonDetailsList));
   }
 
-  FutureOr<void> _fetchIncidentLocations(
-      FetchIncidentLocations event, Emitter<ReportNewIncidentStates> emit) {
+  Future<FutureOr<void>> _fetchIncidentLocations(FetchIncidentLocations event,
+      Emitter<ReportNewIncidentStates> emit) async {
     // try {
     emit(IncidentLocationsFetching());
-
-    emit(IncidentLocationsFetched(locationList: locationList));
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    FetchIncidentLocationModel fetchIncidentLocationModel =
+        await _incidentRepository.fetchIncidentLocation(hashCode, event.siteId);
+    if (fetchIncidentLocationModel.status == 200) {
+      emit(IncidentLocationsFetched(
+          fetchIncidentLocationModel: fetchIncidentLocationModel));
+      locationList = fetchIncidentLocationModel.data;
+    } else {
+      emit(IncidentLocationsNotFetched(
+          errorMessage: fetchIncidentLocationModel.message));
+    }
     // }  catch (e) {
     //   emit(IncidentLocationsNotFetched(errorMessage: e.toString()));
     // }
@@ -368,24 +355,26 @@ class ReportNewIncidentBloc
 
   FutureOr<void> _selectLocationId(
       SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
-    try {
-      if (event.locationId != '') {
-        var location = locationList
-            .firstWhere((location) => location['id'] == event.locationId!);
-        List<Map<String, dynamic>> assetList = [];
-        if (location.isNotEmpty) {
-          assetList = List<Map<String, dynamic>>.from(location['assets']);
-          add(FetchIncidentAssetsList(assetList: assetList));
-        }
+    // try {
+    print('event.locationId ==========>${event.locationId} ');
+    if (event.locationId != '') {
+      var location = locationList
+          .firstWhere((location) => location.id == event.locationId!);
+      List<Asset> assetList = [];
+      if (location.assets.isNotEmpty) {
+        assetList = List<Asset>.from(location.assets);
+        add(FetchIncidentAssetsList(assetList: assetList));
       }
-    } catch (e) {
-      print("Error $e");
     }
+    // } catch (e) {
+    //   print("Error $e");
+    // }
   }
 
   FutureOr<void> _fetchIncidentAssetsList(
       FetchIncidentAssetsList event, Emitter<ReportNewIncidentStates> emit) {
     selectedAsset = '';
+    print('assetList==========>${event.assetList}');
     emit(IncidentAssetListFetched(assetList: event.assetList));
   }
 }

@@ -1,3 +1,5 @@
+import '../../../data/models/incident/fetch_incident_location_model.dart';
+
 abstract class ReportNewIncidentEvent {}
 
 class FetchIncidentMaster extends ReportNewIncidentEvent {
@@ -34,8 +36,9 @@ class ReportNewIncidentLocationListChange extends ReportNewIncidentEvent {}
 
 class ReportIncidentSiteListChange extends ReportNewIncidentEvent {
   final String selectSiteName;
+  final int siteId;
 
-  ReportIncidentSiteListChange({required this.selectSiteName});
+  ReportIncidentSiteListChange({required this.selectSiteName,required this.siteId});
 }
 
 class ReportNewIncidentLocationChange extends ReportNewIncidentEvent {
@@ -106,7 +109,7 @@ class IncidentRemoveInjuredPersonDetails extends ReportNewIncidentEvent {
 }
 
 class FetchIncidentLocations extends ReportNewIncidentEvent {
-  final String siteId;
+  final int siteId;
 
   FetchIncidentLocations({required this.siteId});
 }
@@ -118,7 +121,7 @@ class SelectLocationId extends ReportNewIncidentEvent {
 }
 
 class FetchIncidentAssetsList extends ReportNewIncidentEvent {
-  final List<Map<String, dynamic>> assetList;
+  final List<Asset> assetList;
 
   FetchIncidentAssetsList({required this.assetList});
 }
