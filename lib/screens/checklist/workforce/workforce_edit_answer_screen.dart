@@ -29,7 +29,6 @@ class EditAnswerListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('checklistDataMap=========>$checklistDataMap');
     context.read<WorkForceCheckListEditAnswerBloc>().add(
         CheckListPopulateAnswerData(
             questionList:
@@ -193,14 +192,24 @@ class EditAnswerListScreen extends StatelessWidget {
                                                             textValue:
                                                                 StringConstants
                                                                     .kAddTodo)),
-                                                    const SizedBox(width: tiniestSpacing),
+                                                    const SizedBox(
+                                                        width: tiniestSpacing),
                                                     Expanded(
                                                       child: SecondaryButton(
                                                         onPressed: () {
-                                                          Navigator.pushNamed(context, AddTicket2Screen.routeName,
-                                                              arguments: 'questionList[index].queresponseid');
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              AddTicket2Screen
+                                                                  .routeName,
+                                                              arguments: state
+                                                                  .answerModelList[
+                                                                      index]
+                                                                  .queresponseid
+                                                                  .toString());
                                                         },
-                                                        textValue: DatabaseUtil.getText('ticket_addticket'),
+                                                        textValue: DatabaseUtil
+                                                            .getText(
+                                                                'ticket_addticket'),
                                                       ),
                                                     ),
                                                   ])
