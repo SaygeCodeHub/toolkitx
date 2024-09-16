@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/documents/documents_events.dart';
-import 'package:toolkit/screens/documents/documents_list_screen.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
+import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
-import '../../blocs/documents/documents_bloc.dart';
-import '../../blocs/documents/documents_states.dart';
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 
-class ChangeRoleDocumentsScreen extends StatelessWidget {
-  static const routeName = 'ChangeRoleDocuments';
+class WorkOrderRoleScreen extends StatelessWidget {
+  static const routeName = 'WorkOrderRoleScreen';
 
-  const ChangeRoleDocumentsScreen({super.key});
+  const WorkOrderRoleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    context.read<DocumentsBloc>().add(GetDocumentRoles());
+    context.read<WorkOrderTabDetailsBloc>().add(FetchWorkOrderRoles());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('ChangeRole')),
         body: Padding(
@@ -26,37 +26,39 @@ class ChangeRoleDocumentsScreen extends StatelessWidget {
               right: leftRightMargin,
               top: xxTinierSpacing,
               bottom: xxTinierSpacing),
-          child: BlocConsumer<DocumentsBloc, DocumentsStates>(
+          child:
+              BlocConsumer<WorkOrderTabDetailsBloc, WorkOrderTabDetailsStates>(
             buildWhen: (previousState, currentState) =>
-                currentState is FetchingDocumentRoles ||
-                currentState is DocumentRolesFetched,
+                currentState is WorkOrderRolesFetching ||
+                currentState is WorkOrderRolesFetched,
             listener: (context, state) {
-              if (state is DocumentRoleSelected) {
+              if (state is WorkOrderRoleSelected) {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, DocumentsListScreen.routeName,
+                Navigator.pushReplacementNamed(
+                    context, WorkOrderListScreen.routeName,
                     arguments: false);
               }
             },
             builder: (context, state) {
-              if (state is FetchingDocumentRoles) {
+              if (state is WorkOrderRolesFetching) {
                 return const Center(child: CircularProgressIndicator());
-              } else if (state is DocumentRolesFetched) {
+              } else if (state is WorkOrderRolesFetched) {
                 return ListView.builder(
-                    itemCount: state.documentRolesModel.data.length,
+                    itemCount: state.fetchWorkOrderRolesModel.data.length,
                     itemBuilder: (context, index) {
                       return RadioListTile(
                           dense: true,
                           activeColor: AppColor.deepBlue,
                           controlAffinity: ListTileControlAffinity.trailing,
                           title: Text(state
-                              .documentRolesModel.data[index].groupName
-                              .toString()),
-                          value: state.documentRolesModel.data[index].groupId,
-                          groupValue: state.roleId,
+                              .fetchWorkOrderRolesModel.data[index].groupName),
+                          value: state
+                              .fetchWorkOrderRolesModel.data[index].groupId,
+                          groupValue: state.role,
                           onChanged: (value) {
                             context
-                                .read<DocumentsBloc>()
-                                .add(SelectDocumentRoleEvent(value!));
+                                .read<WorkOrderTabDetailsBloc>()
+                                .add(SelectWorkOrderRole(roleId: value!));
                           });
                     });
               } else {
