@@ -20,6 +20,7 @@ class IncidentSiteListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('addIncidentMap==========>$addIncidentMap');
     context.read<ReportNewIncidentBloc>().add(ReportIncidentSiteListChange(
         selectSiteName: (addIncidentMap['site_name'] == null)
             ? ''
@@ -33,6 +34,7 @@ class IncidentSiteListTile extends StatelessWidget {
         builder: (context, state) {
           if (state is ReportNewIncidentSiteSelected) {
             addIncidentMap['site_name'] = state.selectSiteName;
+            print('selectSiteName============>${state.selectSiteName}');
             return Column(
               children: [
                 ListTile(

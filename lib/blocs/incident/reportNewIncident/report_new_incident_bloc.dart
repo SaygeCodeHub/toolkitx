@@ -171,6 +171,7 @@ class ReportNewIncidentBloc
         selectSiteName: event.selectSiteName));
 
     if (event.siteId != 0) {
+      siteId = event.siteId;
       add(FetchIncidentLocations(siteId: event.siteId));
     }
   }
@@ -258,6 +259,7 @@ class ReportNewIncidentBloc
         "reporteddatetime": (reportNewIncidentMap['reporteddatetime'] == null)
             ? ""
             : reportNewIncidentMap['reporteddatetime'],
+        "assetid": reportNewIncidentMap['assetid'],
         "category": reportNewIncidentMap['category'],
         "createduserby": (userType == '1') ? userId : '0',
         "createdworkforceby": (userType == '2') ? userId : '0',
@@ -355,8 +357,7 @@ class ReportNewIncidentBloc
 
   FutureOr<void> _selectLocationId(
       SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
-    // try {
-    print('event.locationId ==========>${event.locationId} ');
+    try {
     if (event.locationId != '') {
       var location = locationList
           .firstWhere((location) => location.id == event.locationId!);
@@ -366,15 +367,14 @@ class ReportNewIncidentBloc
         add(FetchIncidentAssetsList(assetList: assetList));
       }
     }
-    // } catch (e) {
-    //   print("Error $e");
-    // }
+    } catch (e) {
+      print("Error $e");
+    }
   }
 
   FutureOr<void> _fetchIncidentAssetsList(
       FetchIncidentAssetsList event, Emitter<ReportNewIncidentStates> emit) {
     selectedAsset = '';
-    print('assetList==========>${event.assetList}');
     emit(IncidentAssetListFetched(assetList: event.assetList));
   }
 }

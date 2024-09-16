@@ -65,7 +65,6 @@ class IncidentRepositoryImpl extends IncidentRepository {
       String hashCode, String role) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/getmaster?hashcode=$hashCode&role=$role");
-    print("${ApiConstants.baseUrl}incident/getmaster?hashcode=$hashCode&role=$role");
     return FetchIncidentMasterModel.fromJson(response);
   }
 
@@ -144,7 +143,6 @@ class IncidentRepositoryImpl extends IncidentRepository {
   Future<FetchIncidentLocationModel> fetchIncidentLocation(String hashCode, int siteId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/GetLocationBySite?hashcode=$hashCode&siteid=$siteId");
-    print("${ApiConstants.baseUrl}incident/GetLocationBySite?hashcode=$hashCode&siteid=$siteId");
     return FetchIncidentLocationModel.fromJson(response);
   }
 }

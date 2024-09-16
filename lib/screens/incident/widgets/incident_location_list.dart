@@ -21,66 +21,58 @@ class IncidentLocationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('siteid===========>${context.read<ReportNewIncidentBloc>().siteId}');
     context.read<ReportNewIncidentBloc>().add(FetchIncidentLocations(
         siteId: context.read<ReportNewIncidentBloc>().siteId));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectLocation),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-              padding: const EdgeInsets.only(
-                  left: leftRightMargin, right: leftRightMargin),
-              child:
-                  BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
-                buildWhen: (previousState, currentState) =>
-                    currentState is IncidentLocationsFetching ||
-                    currentState is IncidentLocationsFetched ||
-                    currentState is IncidentLocationsNotFetched,
-                builder: (context, state) {
-                  if (state is IncidentLocationsFetching) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is IncidentLocationsFetched) {
-                    var data = state.fetchIncidentLocationModel.data;
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                return RadioListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    activeColor: AppColor.deepBlue,
-                                    controlAffinity:
-                                        ListTileControlAffinity.trailing,
-                                    title: Text(data[index].name),
-                                    value: data[index].name,
-                                    groupValue: selectLocationName,
-                                    onChanged: (value) {
-                                      value = data[index].name;
-                                      context
-                                          .read<ReportNewIncidentBloc>()
-                                          .add(ReportNewIncidentLocationChange(
-                                            selectLocationName:
-                                                data[index].name,
-                                          ));
-                                      context.read<ReportNewIncidentBloc>().add(
-                                          SelectLocationId(
-                                              locationId: data[index].id));
-                                      Navigator.pop(context);
-                                    });
-                              }),
-                          const SizedBox(height: xxxSmallerSpacing)
-                        ]);
-                  } else if (state is IncidentLocationsNotFetched) {
-                    return const Center(
-                        child: Text(StringConstants.kNoRecordsFound));
-                  }
-                  return const SizedBox.shrink();
-                },
-              )),
-        ));
+        body: Padding(
+            padding: const EdgeInsets.only(
+                left: leftRightMargin, right: leftRightMargin, bottom: leftRightMargin),
+            child:
+                BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
+              buildWhen: (previousState, currentState) =>
+                  currentState is IncidentLocationsFetching ||
+                  currentState is IncidentLocationsFetched ||
+                  currentState is IncidentLocationsNotFetched,
+              builder: (context, state) {
+                if (state is IncidentLocationsFetching) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is IncidentLocationsFetched) {
+                  var data = state.fetchIncidentLocationModel.data;
+                  return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return RadioListTile(
+                            contentPadding: EdgeInsets.zero,
+                            activeColor: AppColor.deepBlue,
+                            controlAffinity:
+                                ListTileControlAffinity.trailing,
+                            title: Text(data[index].name),
+                            value: data[index].name,
+                            groupValue: selectLocationName,
+                            onChanged: (value) {
+                              value = data[index].name;
+                              context
+                                  .read<ReportNewIncidentBloc>()
+                                  .add(ReportNewIncidentLocationChange(
+                                    selectLocationName:
+                                        data[index].name,
+                                  ));
+                              context.read<ReportNewIncidentBloc>().add(
+                                  SelectLocationId(
+                                      locationId: data[index].id));
+                              Navigator.pop(context);
+                            });
+                      });
+                } else if (state is IncidentLocationsNotFetched) {
+                  return const Center(
+                      child: Text(StringConstants.kNoRecordsFound));
+                }
+                return const SizedBox.shrink();
+              },
+            )));
   }
 }
