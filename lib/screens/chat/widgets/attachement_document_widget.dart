@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -28,11 +29,12 @@ class AttachmentDocumentWidget extends StatelessWidget {
         child: InkWell(
           onTap: () async {
             if (docPath.toLowerCase().endsWith('.pdf')) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          DocumentViewerScreen(documentPath: docPath)));
+              OpenFile.open(docPath);
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) =>
+              //             DocumentViewerScreen(documentPath: docPath)));
             } else {
               await fileViewer.viewFile(context, docPath);
             }

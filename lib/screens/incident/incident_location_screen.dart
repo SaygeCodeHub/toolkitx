@@ -20,7 +20,8 @@ class IncidentLocationScreen extends StatelessWidget {
   static const routeName = 'IncidentLocationScreen';
   final Map addAndEditIncidentMap;
 
-  const IncidentLocationScreen({super.key, required this.addAndEditIncidentMap});
+  const IncidentLocationScreen(
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

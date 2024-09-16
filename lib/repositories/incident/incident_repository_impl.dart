@@ -140,7 +140,8 @@ class IncidentRepositoryImpl extends IncidentRepository {
   }
 
   @override
-  Future<FetchIncidentLocationModel> fetchIncidentLocation(String hashCode, int siteId) async {
+  Future<FetchIncidentLocationModel> fetchIncidentLocation(
+      String hashCode, int siteId) async {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}incident/GetLocationBySite?hashcode=$hashCode&siteid=$siteId");
     return FetchIncidentLocationModel.fromJson(response);

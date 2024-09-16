@@ -28,9 +28,10 @@ class IncidentLocationList extends StatelessWidget {
         appBar: const GenericAppBar(title: StringConstants.kSelectLocation),
         body: Padding(
             padding: const EdgeInsets.only(
-                left: leftRightMargin, right: leftRightMargin, bottom: leftRightMargin),
-            child:
-                BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
+                left: leftRightMargin,
+                right: leftRightMargin,
+                bottom: leftRightMargin),
+            child: BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
               buildWhen: (previousState, currentState) =>
                   currentState is IncidentLocationsFetching ||
                   currentState is IncidentLocationsFetched ||
@@ -48,8 +49,7 @@ class IncidentLocationList extends StatelessWidget {
                         return RadioListTile(
                             contentPadding: EdgeInsets.zero,
                             activeColor: AppColor.deepBlue,
-                            controlAffinity:
-                                ListTileControlAffinity.trailing,
+                            controlAffinity: ListTileControlAffinity.trailing,
                             title: Text(data[index].name),
                             value: data[index].name,
                             groupValue: selectLocationName,
@@ -58,12 +58,10 @@ class IncidentLocationList extends StatelessWidget {
                               context
                                   .read<ReportNewIncidentBloc>()
                                   .add(ReportNewIncidentLocationChange(
-                                    selectLocationName:
-                                        data[index].name,
+                                    selectLocationName: data[index].name,
                                   ));
                               context.read<ReportNewIncidentBloc>().add(
-                                  SelectLocationId(
-                                      locationId: data[index].id));
+                                  SelectLocationId(locationId: data[index].id));
                               Navigator.pop(context);
                             });
                       });

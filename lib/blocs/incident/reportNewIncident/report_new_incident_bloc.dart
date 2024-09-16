@@ -358,15 +358,15 @@ class ReportNewIncidentBloc
   FutureOr<void> _selectLocationId(
       SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
     try {
-    if (event.locationId != '') {
-      var location = locationList
-          .firstWhere((location) => location.id == event.locationId!);
-      List<Asset> assetList = [];
-      if (location.assets.isNotEmpty) {
-        assetList = List<Asset>.from(location.assets);
-        add(FetchIncidentAssetsList(assetList: assetList));
+      if (event.locationId != '') {
+        var location = locationList
+            .firstWhere((location) => location.id == event.locationId!);
+        List<Asset> assetList = [];
+        if (location.assets.isNotEmpty) {
+          assetList = List<Asset>.from(location.assets);
+          add(FetchIncidentAssetsList(assetList: assetList));
+        }
       }
-    }
     } catch (e) {
       print("Error $e");
     }

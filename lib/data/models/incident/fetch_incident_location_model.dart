@@ -21,7 +21,8 @@ class FetchIncidentLocationModel {
       FetchIncidentLocationModel(
         status: json["Status"],
         message: json["Message"],
-        data: List<LocationDatum>.from(json["Data"].map((x) => LocationDatum.fromJson(x))),
+        data: List<LocationDatum>.from(
+            json["Data"].map((x) => LocationDatum.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

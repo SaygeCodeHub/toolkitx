@@ -38,7 +38,8 @@ class ReportIncidentSiteListChange extends ReportNewIncidentEvent {
   final String selectSiteName;
   final int siteId;
 
-  ReportIncidentSiteListChange({required this.selectSiteName,required this.siteId});
+  ReportIncidentSiteListChange(
+      {required this.selectSiteName, required this.siteId});
 }
 
 class ReportNewIncidentLocationChange extends ReportNewIncidentEvent {
