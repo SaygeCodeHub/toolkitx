@@ -13,10 +13,9 @@ class IncidentSiteList extends StatelessWidget {
   final String selectSiteName;
 
   const IncidentSiteList(
-      {Key? key,
+      {super.key,
       required this.fetchIncidentMasterModel,
-      required this.selectSiteName})
-      : super(key: key);
+      required this.selectSiteName});
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +48,14 @@ class IncidentSiteList extends StatelessWidget {
                               onChanged: (value) {
                                 value = fetchIncidentMasterModel
                                     .incidentMasterDatum![0][index].name!;
-                                context
-                                    .read<ReportNewIncidentBloc>()
-                                    .add(ReportIncidentSiteListChange(
-                                      selectSiteName: fetchIncidentMasterModel
-                                          .incidentMasterDatum![0][index].name!,
-                                    ));
+                                context.read<ReportNewIncidentBloc>().add(
+                                    ReportIncidentSiteListChange(
+                                        selectSiteName: fetchIncidentMasterModel
+                                            .incidentMasterDatum![0][index]
+                                            .name!,
+                                        siteId: fetchIncidentMasterModel
+                                            .incidentMasterDatum![0][index]
+                                            .id!));
                                 Navigator.pop(context);
                               });
                         }),

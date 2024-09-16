@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_events.dart';
 import 'package:toolkit/blocs/incident/reportNewIncident/report_new_incident_states.dart';
+import 'package:toolkit/data/models/incident/fetch_incident_location_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../../../data/cache/customer_cache.dart';
@@ -22,6 +23,9 @@ class ReportNewIncidentBloc
   String selectSiteName = '';
   String incidentId = '';
   int imageIndex = 0;
+  String selectedAsset = '';
+  List<LocationDatum> locationList = [];
+  int siteId = 0;
 
   ReportNewIncidentStates get initialState => ReportNewIncidentInitial();
 
@@ -42,6 +46,9 @@ class ReportNewIncidentBloc
     on<SaveReportNewIncidentPhotos>(_saveIncidentPhotos);
     on<FetchIncidentInjuredPerson>(_fetchIncidentInjuredPersonDetails);
     on<IncidentRemoveInjuredPersonDetails>(_removeInjuredPerson);
+    on<FetchIncidentLocations>(_fetchIncidentLocations);
+    on<SelectLocationId>(_selectLocationId);
+    on<FetchIncidentAssetsList>(_fetchIncidentAssetsList);
   }
 
   FutureOr<void> _fetchIncidentCategory(
@@ -162,6 +169,11 @@ class ReportNewIncidentBloc
     emit(ReportNewIncidentSiteSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         selectSiteName: event.selectSiteName));
+
+    if (event.siteId != 0) {
+      siteId = event.siteId;
+      add(FetchIncidentLocations(siteId: event.siteId));
+    }
   }
 
   _reportIncidentLocation(ReportNewIncidentLocationChange event,
@@ -247,6 +259,7 @@ class ReportNewIncidentBloc
         "reporteddatetime": (reportNewIncidentMap['reporteddatetime'] == null)
             ? ""
             : reportNewIncidentMap['reporteddatetime'],
+        "assetid": reportNewIncidentMap['assetid'],
         "category": reportNewIncidentMap['category'],
         "createduserby": (userType == '1') ? userId : '0',
         "createdworkforceby": (userType == '2') ? userId : '0',
@@ -319,5 +332,49 @@ class ReportNewIncidentBloc
     event.injuredPersonDetailsList.removeAt(event.index!);
     emit(ReportNewIncidentInjuredPersonDetailsFetched(
         injuredPersonDetailsList: event.injuredPersonDetailsList));
+  }
+
+  Future<FutureOr<void>> _fetchIncidentLocations(FetchIncidentLocations event,
+      Emitter<ReportNewIncidentStates> emit) async {
+    // try {
+    emit(IncidentLocationsFetching());
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    FetchIncidentLocationModel fetchIncidentLocationModel =
+        await _incidentRepository.fetchIncidentLocation(hashCode, event.siteId);
+    if (fetchIncidentLocationModel.status == 200) {
+      emit(IncidentLocationsFetched(
+          fetchIncidentLocationModel: fetchIncidentLocationModel));
+      locationList = fetchIncidentLocationModel.data;
+    } else {
+      emit(IncidentLocationsNotFetched(
+          errorMessage: fetchIncidentLocationModel.message));
+    }
+    // }  catch (e) {
+    //   emit(IncidentLocationsNotFetched(errorMessage: e.toString()));
+    // }
+  }
+
+  FutureOr<void> _selectLocationId(
+      SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
+    try {
+      if (event.locationId != '') {
+        var location = locationList
+            .firstWhere((location) => location.id == event.locationId!);
+        List<Asset> assetList = [];
+        if (location.assets.isNotEmpty) {
+          assetList = List<Asset>.from(location.assets);
+          add(FetchIncidentAssetsList(assetList: assetList));
+        }
+      }
+    } catch (e) {
+      print("Error $e");
+    }
+  }
+
+  FutureOr<void> _fetchIncidentAssetsList(
+      FetchIncidentAssetsList event, Emitter<ReportNewIncidentStates> emit) {
+    selectedAsset = '';
+    emit(IncidentAssetListFetched(assetList: event.assetList));
   }
 }

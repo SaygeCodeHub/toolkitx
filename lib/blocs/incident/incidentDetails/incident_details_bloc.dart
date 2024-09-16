@@ -84,6 +84,7 @@ class IncidentDetailsBloc
           "description": incidentDetailsModel.data!.description,
           "responsible_person": incidentDetailsModel.data!.responsiblePerson,
           "site_name": incidentDetailsModel.data!.sitename,
+          "site_id": int.tryParse(incidentDetailsModel.data!.site!),
           "location_name": incidentDetailsModel.data!.locationname,
           "category": incidentDetailsModel.data!.category,
           "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,

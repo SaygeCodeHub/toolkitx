@@ -16,8 +16,7 @@ import 'incident_location_list.dart';
 class IncidentLocationListTile extends StatelessWidget {
   final Map addIncidentMap;
 
-  const IncidentLocationListTile({Key? key, required this.addIncidentMap})
-      : super(key: key);
+  const IncidentLocationListTile({super.key, required this.addIncidentMap});
 
   @override
   Widget build(BuildContext context) {
