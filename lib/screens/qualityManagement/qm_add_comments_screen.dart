@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
+import 'package:toolkit/screens/qualityManagement/widgets/reinspection_widget.dart';
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../blocs/uploadImage/upload_image_bloc.dart';
@@ -11,6 +14,7 @@ import '../../configs/app_spacing.dart';
 import '../../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
+import '../../utils/qualityManagement/status_widgets.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_loading_popup.dart';
@@ -21,17 +25,22 @@ import 'widgets/qm_common_comments_section.dart';
 class QualityManagementAddCommentsScreen extends StatelessWidget {
   static const routeName = 'QualityManagementAddCommentsScreen';
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
+  final bool isFromAddComments;
 
   QualityManagementAddCommentsScreen(
-      {Key? key, required this.fetchQualityManagementDetailsModel})
-      : super(key: key);
+      {super.key,
+      required this.fetchQualityManagementDetailsModel,
+      required this.isFromAddComments});
+
   final Map qmCommentsMap = {};
   static int imageIndex = 0;
+  final StatusWidgets statusWidgets = StatusWidgets();
 
   @override
   Widget build(BuildContext context) {
     qmCommentsMap['status'] =
         fetchQualityManagementDetailsModel.data.nextStatus;
+    log('next status ${fetchQualityManagementDetailsModel.data.nextStatus}');
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('Comments')),
       body: Padding(
@@ -43,6 +52,14 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
+              statusWidgets.renderWidgets(
+                  fetchQualityManagementDetailsModel, context, qmCommentsMap),
+              if (fetchQualityManagementDetailsModel.data.isNeedReInspection ==
+                  '1')
+                ReInspectionWidget(
+                    fetchQualityManagementDetailsModel:
+                        fetchQualityManagementDetailsModel,
+                    qmCommentsMap: qmCommentsMap),
               QualityManagementCommonCommentsSection(
                   onPhotosUploaded: (List<dynamic> uploadList) {
                     qmCommentsMap['pickedImage'] = uploadList;

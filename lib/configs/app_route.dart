@@ -371,9 +371,11 @@ class AppRoutes {
       case CalendarScreen.routeName:
         return _createRoute(const CalendarScreen());
       case QualityManagementAddCommentsScreen.routeName:
+        List args = settings.arguments as List;
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:
-                settings.arguments as FetchQualityManagementDetailsModel));
+                args[0] as FetchQualityManagementDetailsModel,
+            isFromAddComments: args[1] as bool));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
