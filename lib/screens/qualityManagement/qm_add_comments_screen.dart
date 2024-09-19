@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
-import 'package:toolkit/screens/qualityManagement/widgets/reinspection_widget.dart';
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
 import '../../blocs/uploadImage/upload_image_bloc.dart';
@@ -52,14 +51,9 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              statusWidgets.renderWidgets(
-                  fetchQualityManagementDetailsModel, context, qmCommentsMap),
-              if (fetchQualityManagementDetailsModel.data.isNeedReInspection ==
-                  '1')
-                ReInspectionWidget(
-                    fetchQualityManagementDetailsModel:
-                        fetchQualityManagementDetailsModel,
-                    qmCommentsMap: qmCommentsMap),
+              if (isFromAddComments == false)
+                statusWidgets.renderWidgets(
+                    fetchQualityManagementDetailsModel, context, qmCommentsMap),
               QualityManagementCommonCommentsSection(
                   onPhotosUploaded: (List<dynamic> uploadList) {
                     qmCommentsMap['pickedImage'] = uploadList;

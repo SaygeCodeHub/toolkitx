@@ -29,7 +29,7 @@ class StatusWidgets {
                   onTextFieldChanged: (String value) {
                     qmCommentsMap['immediateaction'] = value;
                   }),
-              const SizedBox(height: tinySpacing),
+              const SizedBox(height: xxTinierSpacing),
               Text('Root Cause Analysis',
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w500)),
@@ -39,7 +39,7 @@ class StatusWidgets {
                   onTextFieldChanged: (String value) {
                     qmCommentsMap['rootcause'] = value;
                   }),
-              const SizedBox(height: tinySpacing)
+              const SizedBox(height: xxTinierSpacing)
             ],
           );
         } else {
@@ -60,7 +60,7 @@ class StatusWidgets {
                   onTextFieldChanged: (String value) {
                     qmCommentsMap['proposaldescription'] = value;
                   }),
-              const SizedBox(height: tinySpacing),
+              const SizedBox(height: xxTinierSpacing),
               Text('Disposition',
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w500)),
@@ -70,7 +70,7 @@ class StatusWidgets {
                   onTextFieldChanged: (String value) {
                     qmCommentsMap['disposition'] = value;
                   }),
-              const SizedBox(height: tinySpacing)
+              const SizedBox(height: xxTinierSpacing)
             ],
           );
         } else {
@@ -91,7 +91,7 @@ class StatusWidgets {
                   onTextFieldChanged: (String value) {
                     qmCommentsMap['correctiveaction'] = value;
                   }),
-              const SizedBox(height: tinySpacing)
+              const SizedBox(height: xxTinierSpacing)
             ],
           );
         } else {
@@ -110,7 +110,7 @@ class StatusWidgets {
               TextFieldWidget(onTextFieldChanged: (String value) {
                 qmCommentsMap['correctivemeasuresby'] = value;
               }),
-              const SizedBox(height: tinySpacing),
+              const SizedBox(height: xxTinierSpacing),
               Text('Corrective Action Taken Completion Date',
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w500)),
@@ -118,7 +118,7 @@ class StatusWidgets {
               DatePickerTextField(onDateChanged: (String date) {
                 qmCommentsMap['correctivecompletiondate'] = date;
               }),
-              const SizedBox(height: tinySpacing),
+              const SizedBox(height: xxTinierSpacing),
               Text('Procedure/Drawing Modification?',
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w500)),
@@ -131,8 +131,44 @@ class StatusWidgets {
         } else {
           return const SizedBox.shrink();
         }
+      case '7':
+        if (fetchQualityManagementDetailsModel.data.isShowAdditionalInfo ==
+            '1') {
+          return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Reinspection By',
+                    style: Theme.of(context).textTheme.small.copyWith(
+                        color: AppColor.black, fontWeight: FontWeight.w500)),
+                const SizedBox(height: xxTinierSpacing),
+                TextFieldWidget(onTextFieldChanged: (String value) {
+                  qmCommentsMap['reinspectionby'] = value;
+                }),
+                const SizedBox(height: xxTinierSpacing),
+                Text('Reinspection Date',
+                    style: Theme.of(context).textTheme.small.copyWith(
+                        color: AppColor.black, fontWeight: FontWeight.w500)),
+                const SizedBox(height: xxTinierSpacing),
+                DatePickerTextField(onDateChanged: (String date) {
+                  qmCommentsMap['reinspectiondate'] = date;
+                }),
+                const SizedBox(height: xxTinierSpacing),
+                Text('Reinspection Result',
+                    style: Theme.of(context).textTheme.small.copyWith(
+                        color: AppColor.black, fontWeight: FontWeight.w500)),
+                const SizedBox(height: xxTinierSpacing),
+                TextFieldWidget(
+                    maxLines: 5,
+                    onTextFieldChanged: (String value) {
+                      qmCommentsMap['reinspectionresult'] = value;
+                    }),
+                const SizedBox(height: xxTinierSpacing)
+              ]);
+        } else {
+          return const SizedBox.shrink();
+        }
       default:
-        return const Text('No data found');
+        return const Text('');
     }
   }
 }

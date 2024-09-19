@@ -122,7 +122,7 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
                 ]).then((_) => context.read<QualityManagementBloc>().add(
                 FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
-          if (value == 'Reinspection') {
+          if (value == DatabaseUtil.getText('NeedReinspection')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(

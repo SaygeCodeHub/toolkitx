@@ -70,6 +70,7 @@ class QMDetailsData {
   final List<Log> logs;
   final String isNeedReInspection;
   final String isShowAdditionalInfo;
+  final String refNo;
 
   QMDetailsData(
       {required this.logs,
@@ -106,7 +107,8 @@ class QMDetailsData {
       required this.commentslist,
       required this.customfields,
       required this.isNeedReInspection,
-      required this.isShowAdditionalInfo});
+      required this.isShowAdditionalInfo,
+      required this.refNo});
 
   factory QMDetailsData.fromJson(Map<String, dynamic> json) => QMDetailsData(
       id: json["id"] ?? '',
@@ -154,7 +156,8 @@ class QMDetailsData {
           ? []
           : List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
       isNeedReInspection: json['isneedreinspection'] ?? '0',
-      isShowAdditionalInfo: json['isshowadditionalinfo'] ?? '0');
+      isShowAdditionalInfo: json['isshowadditionalinfo'] ?? '0',
+      refNo: json['refno'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -191,7 +194,8 @@ class QMDetailsData {
         "customfields": List<dynamic>.from(customfields.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs.map((x) => x.toJson())),
         "isneedreinspection": isNeedReInspection,
-        "isshowadditionalinfo": isShowAdditionalInfo
+        "isshowadditionalinfo": isShowAdditionalInfo,
+        "refno": refNo
       };
 }
 

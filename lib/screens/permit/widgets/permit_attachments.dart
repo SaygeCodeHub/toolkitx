@@ -20,7 +20,6 @@ import '../../../utils/global.dart';
 import '../../../utils/incident_view_image_util.dart';
 import '../../../widgets/custom_card.dart';
 import '../../chat/file_viewer.dart';
-import '../../chat/widgets/document_viewer_screen.dart';
 import '../../chat/widgets/view_attached_image_widget.dart';
 
 class PermitAttachments extends StatelessWidget {

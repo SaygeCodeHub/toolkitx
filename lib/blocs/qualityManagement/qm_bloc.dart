@@ -190,12 +190,13 @@ class QualityManagementBloc
         if (fetchQualityManagementDetailsModel.data.nextStatus == '4') {
           popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
         }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '7') {
+          popUpMenuItems.add(DatabaseUtil.getText('NeedReinspection'));
+        }
         if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
         }
-        if (fetchQualityManagementDetailsModel.data.isNeedReInspection == '1') {
-          popUpMenuItems.add('Reinspection');
-        }
+
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
         emit(QualityManagementDetailsFetched(
             fetchQualityManagementDetailsModel:
