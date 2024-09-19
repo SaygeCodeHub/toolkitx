@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tickets2/add_ticket2_screen.dart';
 
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_event.dart';
@@ -11,6 +12,7 @@ import '../../../../configs/app_dimensions.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../data/models/checklist/workforce/workforce_questions_list_model.dart';
 import '../../../../utils/constants/string_constants.dart';
+import '../../../../utils/database_utils.dart';
 import '../../../../widgets/custom_card.dart';
 import '../../../../widgets/secondary_button.dart';
 import '../../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -135,7 +137,7 @@ class QuestionListSectionBody extends StatelessWidget {
                               arguments:
                                   questionList[index].queresponseid.toString());
                         },
-                        textValue: StringConstants.kAddImages)),
+                        textValue: StringConstants.kAddComment)),
                 const SizedBox(width: tiniestSpacing),
                 Expanded(
                   child: SecondaryButton(
@@ -144,7 +146,17 @@ class QuestionListSectionBody extends StatelessWidget {
                             TodoAssignedByMeAndToMeListScreen.routeName);
                       },
                       textValue: StringConstants.kAddTodo),
-                )
+                ),
+                const SizedBox(width: tiniestSpacing),
+                Expanded(
+                  child: SecondaryButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, AddTicket2Screen.routeName,
+                          arguments: questionList[index].queresponseid);
+                    },
+                    textValue: DatabaseUtil.getText('ticket_addticket'),
+                  ),
+                ),
               ]),
             ]),
           ));

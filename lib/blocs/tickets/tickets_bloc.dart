@@ -136,7 +136,7 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       FetchTicketDetails event, Emitter<TicketsStates> emit) async {
     ticketTabIndex = event.ticketTabIndex;
     emit(TicketDetailsFetching());
-    // try {
+    try {
     List popUpMenuItemsList = [
       DatabaseUtil.getText('AddComments'),
       DatabaseUtil.getText('AddDocuments'),
@@ -200,9 +200,9 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       emit(TicketDetailsNotFetched(
           errorMessage: fetchTicketDetailsModel.message));
     }
-    // } catch (e) {
-    //   emit(TicketDetailsNotFetched(errorMessage: e.toString()));
-    // }
+    } catch (e) {
+      emit(TicketDetailsNotFetched(errorMessage: e.toString()));
+    }
   }
 
   Future<FutureOr<void>> _saveTicket(

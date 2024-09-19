@@ -25,6 +25,7 @@ import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
 import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import 'package:toolkit/blocs/tickets2/tickets2_bloc.dart';
 import 'package:toolkit/blocs/trips/trip_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
@@ -236,6 +237,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => TripBloc()),
           BlocProvider(lazy: true, create: (context) => MeetingRoomBloc()),
           BlocProvider(lazy: true, create: (context) => TankManagementBloc()),
+          BlocProvider(lazy: true, create: (context) => Tickets2Bloc()),
         ],
         child: GestureDetector(
             onTap: () {
