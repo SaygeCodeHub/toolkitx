@@ -9,7 +9,8 @@ class Ticket2DistributionTile extends StatefulWidget {
   final List distList;
   final Map saveTicketMap;
 
-  const Ticket2DistributionTile({super.key, required this.saveTicketMap, required this.distList});
+  const Ticket2DistributionTile(
+      {super.key, required this.saveTicketMap, required this.distList});
 
   @override
   State<Ticket2DistributionTile> createState() =>
@@ -17,7 +18,6 @@ class Ticket2DistributionTile extends StatefulWidget {
 }
 
 class _Ticket2DistributionTileState extends State<Ticket2DistributionTile> {
-
   bool _isExpanded = false;
   List selectedNameList = [];
   List selectedValueList = [];
@@ -63,13 +63,14 @@ class _Ticket2DistributionTileState extends State<Ticket2DistributionTile> {
                     itemCount: widget.distList.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: tinierSpacing),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: tinierSpacing),
                         child: CheckboxListTile(
                             checkColor: AppColor.white,
                             activeColor: AppColor.deepBlue,
                             contentPadding: EdgeInsets.zero,
-                            value:
-                                selectedValueList.contains(widget.distList[index].id),
+                            value: selectedValueList
+                                .contains(widget.distList[index].id),
                             title: Text(widget.distList[index].listname,
                                 style: Theme.of(context)
                                     .textTheme
@@ -77,7 +78,9 @@ class _Ticket2DistributionTileState extends State<Ticket2DistributionTile> {
                                     .copyWith(fontWeight: FontWeight.w600)),
                             controlAffinity: ListTileControlAffinity.trailing,
                             onChanged: (isChecked) {
-                              checkboxSelected(isChecked, widget.distList[index].listname,
+                              checkboxSelected(
+                                  isChecked,
+                                  widget.distList[index].listname,
                                   widget.distList[index].id);
                               setState(() {});
                             }),

@@ -78,23 +78,23 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       FetchTicket2Master event, Emitter<Tickets2States> emit) async {
     emit(Ticket2MasterFetching());
     try {
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    FetchTicket2MasterModel fetchTicket2MasterModel = await _ticketsRepository
-        .fetchTicket2Master(hashCode, event.responsequeid);
-    if (fetchTicket2MasterModel.status == 200) {
-      String desc = '';
-      if (fetchTicket2MasterModel.data[3].isNotEmpty) {
-        for (var item in fetchTicket2MasterModel.data[3]) {
-          desc = item.text;
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchTicket2MasterModel fetchTicket2MasterModel = await _ticketsRepository
+          .fetchTicket2Master(hashCode, event.responsequeid);
+      if (fetchTicket2MasterModel.status == 200) {
+        String desc = '';
+        if (fetchTicket2MasterModel.data[3].isNotEmpty) {
+          for (var item in fetchTicket2MasterModel.data[3]) {
+            desc = item.text;
+          }
         }
+        emit(Ticket2MasterFetched(
+            fetchTicket2MasterModel: fetchTicket2MasterModel, desc: desc));
+      } else {
+        emit(Ticket2MasterNotFetched(
+            errorMessage: fetchTicket2MasterModel.message));
       }
-      emit(Ticket2MasterFetched(
-          fetchTicket2MasterModel: fetchTicket2MasterModel, desc: desc));
-    } else {
-      emit(Ticket2MasterNotFetched(
-          errorMessage: fetchTicket2MasterModel.message));
-    }
     } catch (e) {
       emit(Ticket2MasterNotFetched(errorMessage: e.toString()));
     }

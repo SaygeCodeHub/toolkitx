@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
 import 'package:toolkit/data/models/pdf_generation_model.dart';
@@ -35,6 +37,7 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
   @override
   Future<SaveIncidentAndQMCommentsModel> saveComments(
       Map saveCommentsMap) async {
+    print('post body ${jsonEncode(saveCommentsMap)}');
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}qaincident/savecomments", saveCommentsMap);
     return SaveIncidentAndQMCommentsModel.fromJson(response);

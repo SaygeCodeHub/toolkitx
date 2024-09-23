@@ -25,10 +25,10 @@ class SaveTicket2Model {
       );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": data.toJson(),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": data.toJson(),
+      };
 }
 
 class Data {

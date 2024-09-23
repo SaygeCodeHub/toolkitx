@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
 import 'package:toolkit/data/models/client/save_user_device_model.dart';
 import 'package:toolkit/repositories/client/client_repository.dart';
@@ -18,6 +20,8 @@ class ClientRepositoryImpl extends ClientRepository {
 
   @override
   Future<HomeScreenModel> fetchHomeScreen(Map processClientMap) async {
+    print('home screen data ${"${ApiConstants.baseUrl}common/processclient"}');
+    print('home screen data map ${jsonEncode(processClientMap)}');
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}common/processclient", processClientMap);
     return HomeScreenModel.fromJson(response);
