@@ -101,11 +101,11 @@ class EditAnswerUtil {
         return UploadImageMenu(
             imagePickerBloc: ImagePickerBloc(),
             onUploadImageResponse: (List<dynamic> uploadImageList) {
-          answerList[index]["answer"] = uploadImageList
-              .toString()
-              .replaceAll("[", "")
-              .replaceAll("]", "");
-        });
+              answerList[index]["answer"] = uploadImageList
+                  .toString()
+                  .replaceAll("[", "")
+                  .replaceAll("]", "");
+            });
       case 7:
         return TextFieldWidget(
             textInputType: TextInputType.number,

@@ -712,12 +712,13 @@ abstract class StringConstants {
   static const String kEditSelected = "Edit Selected";
   static const String kSubmitResponse = "Submit Response";
   static const String kTank = "Tank";
+  static const String kLastUpdatedAt = "Last Updated At";
   static const String kProduct = "Product";
   static const String kTruckNo = "Truck No";
   static const String kEntryDateTime = "EntryDate Time";
   static const String kEntryWeight = "Entry Weight (Kg)";
   static const String kExitDateTime = "Exit DateTime";
-  static const String kExitWeight = "ExitWeight(Kg)";
+  static const String kExitWeight = "Exit Weight(Kg)";
   static const String kTankInitialWeight = "Tank Initial Weight (Kg)";
   static const String kTankInitialLevel = "Tank Initial Level (mm)";
   static const String kTankFinalWeight = "Tank Final Weight (Kg)";
@@ -737,7 +738,7 @@ abstract class StringConstants {
   static const String kStartDateTime = "Start DateTime";
   static const String kEndDateTime = "End DateTime";
   static const String kTitle = "Title";
-  static const String kScheduledDate = "Schedule dDate";
+  static const String kScheduledDate = "Scheduled Date";
   static const String kCustomer = "Customer";
   static const String kContract = "Contract";
   static const String kQuantityCbm = "Quantity (cbm)";

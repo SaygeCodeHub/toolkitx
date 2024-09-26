@@ -15,10 +15,12 @@ class TankManagementChecklistTab extends StatefulWidget {
   final String nominationId;
 
   @override
-  _TankManagementChecklistTabState createState() => _TankManagementChecklistTabState();
+  _TankManagementChecklistTabState createState() =>
+      _TankManagementChecklistTabState();
 }
 
-class _TankManagementChecklistTabState extends State<TankManagementChecklistTab> {
+class _TankManagementChecklistTabState
+    extends State<TankManagementChecklistTab> {
   @override
   void initState() {
     super.initState();
@@ -26,7 +28,8 @@ class _TankManagementChecklistTabState extends State<TankManagementChecklistTab>
   }
 
   void _fetchChecklist() {
-    context.read<TankManagementBloc>().add(FetchNominationChecklist(nominationId: widget.nominationId, tabIndex: 0));
+    context.read<TankManagementBloc>().add(FetchNominationChecklist(
+        nominationId: widget.nominationId, tabIndex: 0));
   }
 
   void _navigateAndRefresh(String routeName, Map arguments) async {
@@ -62,33 +65,37 @@ class _TankManagementChecklistTabState extends State<TankManagementChecklistTab>
                             color: AppColor.black)),
                     subtitle: data[index].cansubmitresponse == '1'
                         ? InkWell(
-                      onTap: () {
-                        _navigateAndRefresh(SubmitTankChecklistScreen.routeName, tankChecklistMap);
-                      },
-                      child: Text(StringConstants.kSubmitResponse,
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: AppColor.deepBlue)),
-                    )
+                            onTap: () {
+                              _navigateAndRefresh(
+                                  SubmitTankChecklistScreen.routeName,
+                                  tankChecklistMap);
+                            },
+                            child: Text(StringConstants.kSubmitResponse,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .xSmall
+                                    .copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColor.deepBlue)),
+                          )
                         : data[index].canviewresponse == '1'
-                        ? InkWell(
-                      onTap: () {
-                        _navigateAndRefresh(TankViewResponseScreen.routeName, tankChecklistMap);
-                      },
-                      child: Text(
-                        StringConstants.kViewResponse,
-                        style: Theme.of(context)
-                            .textTheme
-                            .xSmall
-                            .copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.deepBlue),
-                      ),
-                    )
-                        : const SizedBox.shrink()),
+                            ? InkWell(
+                                onTap: () {
+                                  _navigateAndRefresh(
+                                      TankViewResponseScreen.routeName,
+                                      tankChecklistMap);
+                                },
+                                child: Text(
+                                  StringConstants.kViewResponse,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColor.deepBlue),
+                                ),
+                              )
+                            : const SizedBox.shrink()),
               );
             },
             separatorBuilder: (context, index) {

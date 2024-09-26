@@ -128,8 +128,8 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
                       UploadImageMenu(
                           imagePickerBloc: ImagePickerBloc(),
                           onUploadImageResponse: (List uploadImageList) {
-                        todoMap['pickedImage'] = uploadImageList;
-                      })
+                            todoMap['pickedImage'] = uploadImageList;
+                          })
                     ]))));
   }
 }

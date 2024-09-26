@@ -93,10 +93,10 @@ class TankChecklistQuestionUtil {
             });
       case 6:
         return UploadImageMenu(
-          imagePickerBloc: ImagePickerBloc(),
+            imagePickerBloc: ImagePickerBloc(),
             onUploadImageResponse: (List<dynamic> uploadImageList) {
-          answerList[index]["answer"] = uploadImageList.join(',');
-        });
+              answerList[index]["answer"] = uploadImageList.join(',');
+            });
       case 7:
         return TextFieldWidget(
             textInputType: TextInputType.number,

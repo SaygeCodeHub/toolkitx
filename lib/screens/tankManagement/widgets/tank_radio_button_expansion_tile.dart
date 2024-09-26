@@ -4,6 +4,7 @@ import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_question
 import '../../../../configs/app_color.dart';
 import '../../../../utils/database_utils.dart';
 import '../../../../widgets/expansion_tile_border.dart';
+import '../../../configs/app_spacing.dart';
 
 typedef RadioButtonCallBack = Function(String radioId, String radioValue);
 
@@ -59,7 +60,8 @@ class _TankRadioButtonExpansionTileState
                       widget.answerModelList[widget.index].queoptions!.length,
                   itemBuilder: (BuildContext context, int listIndex) {
                     return RadioListTile(
-                        contentPadding: EdgeInsets.zero,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: xxxTinierSpacing),
                         dense: true,
                         activeColor: AppColor.deepBlue,
                         controlAffinity: ListTileControlAffinity.trailing,

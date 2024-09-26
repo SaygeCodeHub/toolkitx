@@ -48,8 +48,8 @@ class TankAddImageCommentScreen extends StatelessWidget {
                 if (state is TankCheckListCommentsFetching) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is TankCheckListCommentsFetched) {
-                  saveQuestionCommentsMap["comments"] =
-                      state.fetchTankChecklistCommentsModel.data!.optioncomment;
+                  saveQuestionCommentsMap["comments"] = state
+                      .fetchTankChecklistCommentsModel.data!.additionalcomment!;
                   return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -119,7 +119,8 @@ class TankAddImageCommentScreen extends StatelessWidget {
                               onUploadImageResponse: (List uploadImageList) {
                                 saveQuestionCommentsMap["pickedImage"] =
                                     uploadImageList;
-                              }, imagePickerBloc: ImagePickerBloc(),
+                              },
+                              imagePickerBloc: ImagePickerBloc(),
                             ),
                             // const SizedBox(height: xxTinySpacing),
                           ]));

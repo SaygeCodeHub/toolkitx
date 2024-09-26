@@ -212,8 +212,10 @@ class Data {
         tanknames: json["tanknames"] ?? '',
         nominationo: json["nominationo"] ?? '',
         announcetext: json["announcetext"] ?? '',
-        approvelist: json["approvelist"] == null ? [] : List<Approvelist>.from(
-            json["approvelist"].map((x) => Approvelist.fromJson(x))),
+        approvelist: json["approvelist"] == null
+            ? []
+            : List<Approvelist>.from(
+                json["approvelist"].map((x) => Approvelist.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

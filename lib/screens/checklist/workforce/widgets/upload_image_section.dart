@@ -22,7 +22,7 @@ class UploadImageMenu extends StatefulWidget {
   final ImagePickerBloc imagePickerBloc;
 
   const UploadImageMenu({
-    Key? key,
+    super.key,
     required this.onUploadImageResponse,
     required this.imagePickerBloc,
     this.onSign,
@@ -32,7 +32,7 @@ class UploadImageMenu extends StatefulWidget {
     this.isUpload = false,
     this.isFromCertificate = false,
     this.editedImageList = const [],
-  }) : super(key: key);
+  });
 
   @override
   _UploadImageMenuState createState() => _UploadImageMenuState();
@@ -62,7 +62,7 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
         BlocBuilder<ImagePickerBloc, ImagePickerState>(
           bloc: _imagePickerBloc,
           buildWhen: (previousState, currentState) =>
-          currentState is PickingImage ||
+              currentState is PickingImage ||
               currentState is ImagePicked ||
               currentState is FailedToPickImage ||
               currentState is ImagesFetched,
@@ -122,4 +122,3 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
     );
   }
 }
-

@@ -54,7 +54,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
       } else {
         final pickedFile = await _imagePicker.pickImage(
             source:
-            (isCamera == true) ? ImageSource.camera : ImageSource.gallery,
+                (isCamera == true) ? ImageSource.camera : ImageSource.gallery,
             imageQuality: 25);
         if (pickedFile != null) {
           if (pickedImagesList.length > 5) {
@@ -67,7 +67,7 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
               pickedImagesList: pickedImagesList,
               imageCount: incrementImageCount,
               clientId:
-              await _customerCache.getClientId(CacheKeys.clientId) ?? ''));
+                  await _customerCache.getClientId(CacheKeys.clientId) ?? ''));
         }
       }
     } catch (e) {

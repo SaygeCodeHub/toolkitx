@@ -1,4 +1,4 @@
-import 'package:document_viewer/document_viewer.dart';
+// import 'package:document_viewer/document_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -13,9 +13,7 @@ class DocumentViewerScreen extends StatelessWidget {
     return Scaffold(
       appBar: const GenericAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(xxxSmallestSpacing),
-        child: DocumentViewer(filePath: documentPath),
-      ),
+          padding: const EdgeInsets.all(xxxSmallestSpacing), child: Text('')),
     );
   }
 }

@@ -135,9 +135,9 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String date, String time) {
                     if (isFromEdit) {
                       switchingScheduleMap["instructionreceiveddate"] =
-                      date != '' ? date : data.instructionreceiveddate;
+                          date != '' ? date : data.instructionreceiveddate;
                       switchingScheduleMap["instructionreceivedtime"] =
-                      time != '' ? time : data.instructionreceivedtime;
+                          time != '' ? time : data.instructionreceivedtime;
                     } else {
                       switchingScheduleMap["instructionreceiveddate"] = date;
                       switchingScheduleMap["instructionreceivedtime"] = time;
@@ -171,9 +171,9 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String date, String time) {
                     if (isFromEdit) {
                       switchingScheduleMap["carriedoutdate"] =
-                      date != '' ? date : data.carriedoutdate;
+                          date != '' ? date : data.carriedoutdate;
                       switchingScheduleMap["carriedouttime"] =
-                      time != '' ? time : data.carriedouttime;
+                          time != '' ? time : data.carriedouttime;
                     } else {
                       switchingScheduleMap["carriedoutdate"] = date;
                       switchingScheduleMap["carriedouttime"] = time;
@@ -191,9 +191,9 @@ class AddAndEditSwitchingInstructionBody extends StatelessWidget {
                   callBackFunctionForDateTime: (String date, String time) {
                     if (isFromEdit) {
                       switchingScheduleMap["carriedoutconfirmeddate"] =
-                      date != '' ? date : data.carriedoutconfirmeddate;
+                          date != '' ? date : data.carriedoutconfirmeddate;
                       switchingScheduleMap["carriedoutconfirmedtime"] =
-                      time != '' ? time : data.carriedoutconfirmedtime;
+                          time != '' ? time : data.carriedoutconfirmedtime;
                     } else {
                       switchingScheduleMap["carriedoutconfirmeddate"] = date;
                       switchingScheduleMap["carriedoutconfirmedtime"] = time;

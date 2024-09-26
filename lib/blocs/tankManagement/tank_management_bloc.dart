@@ -91,23 +91,23 @@ class TankManagementBloc
       FetchTankManagementDetails event,
       Emitter<TankManagementState> emit) async {
     emit(TankManagementDetailsFetching());
-    try {
-      String? hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    // try {
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
 
-      FetchTankManagementDetailsModel fetchTankManagementDetailsModel =
-          await _tankManagementRepository.fetchTankManagementDetails(
-              event.nominationId, hashCode);
-      if (fetchTankManagementDetailsModel.status == 200) {
-        emit(TankManagementDetailsFetched(
-            fetchTankManagementDetailsModel: fetchTankManagementDetailsModel));
-      } else {
-        emit(TankManagementDetailsNotFetched(
-            errorMessage: fetchTankManagementDetailsModel.message));
-      }
-    } catch (e) {
-      emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
+    FetchTankManagementDetailsModel fetchTankManagementDetailsModel =
+        await _tankManagementRepository.fetchTankManagementDetails(
+            event.nominationId, hashCode);
+    if (fetchTankManagementDetailsModel.status == 200) {
+      emit(TankManagementDetailsFetched(
+          fetchTankManagementDetailsModel: fetchTankManagementDetailsModel));
+    } else {
+      emit(TankManagementDetailsNotFetched(
+          errorMessage: fetchTankManagementDetailsModel.message));
     }
+    // } catch (e) {
+    //   emit(TankManagementDetailsNotFetched(errorMessage: e.toString()));
+    // }
   }
 
   Future<FutureOr<void>> _fetchTmsNominationData(
@@ -197,7 +197,7 @@ class TankManagementBloc
           "executionid": event.tankChecklistMap['executionId'],
           "userid": await _customerCache.getUserId(CacheKeys.userId),
           "isdraft": (event.isDraft == true) ? "1" : "0",
-          "questions": answerList,
+          "questions": submitList,
           "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
         };
         SubmitNominationChecklistModel submitNominationChecklistModel =
@@ -217,6 +217,7 @@ class TankManagementBloc
               errorMessage:
                   DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
         } else {
+          print('submit list $submitList');
           Map tankChecklistMap = {
             "executionid": event.tankChecklistMap['executionId'],
             "userid": await _customerCache.getUserId(CacheKeys.userId),

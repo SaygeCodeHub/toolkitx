@@ -138,7 +138,7 @@ class _SignaturePadState extends State<SignaturePad> {
                     }))),
       (newSign == false)
           ? UploadImageMenu(
-          imagePickerBloc: ImagePickerBloc(),
+              imagePickerBloc: ImagePickerBloc(),
               onUploadImageResponse: (List uploadImageList) {},
               isSignature: true,
               removeSignPad: () {

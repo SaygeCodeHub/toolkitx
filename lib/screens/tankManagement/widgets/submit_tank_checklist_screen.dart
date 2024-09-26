@@ -121,20 +121,20 @@ class SubmitTankChecklistScreen extends StatelessWidget {
                                             const SizedBox(
                                                 height: tiniestSpacing),
                                             Visibility(
-                                              visible:
-                                                  questionList[index].title ==
-                                                      "Abdampftemperatur",
-                                              child: Text(
-                                                  '${DatabaseUtil.getText('RangeMessage')} ${questionList[index].minval} ${DatabaseUtil.getText('to')} ${questionList[index].maxval}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .xSmall
-                                                      .copyWith(
-                                                          color:
-                                                              AppColor.errorRed,
-                                                          fontWeight:
-                                                              FontWeight.w400)),
-                                            ),
+                                                visible:
+                                                    questionList[index].title ==
+                                                        "Abdampftemperatur",
+                                                child: Text(
+                                                    '${DatabaseUtil.getText('RangeMessage')} ${questionList[index].minval} ${DatabaseUtil.getText('to')} ${questionList[index].maxval}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .xSmall
+                                                        .copyWith(
+                                                            color: AppColor
+                                                                .errorRed,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400))),
                                             const SizedBox(
                                                 height: tiniestSpacing),
                                             SecondaryButton(
@@ -149,7 +149,7 @@ class SubmitTankChecklistScreen extends StatelessWidget {
                                                               .toString());
                                                 },
                                                 textValue:
-                                                    StringConstants.kAddImages),
+                                                    StringConstants.kAddImages)
                                           ])));
                             },
                             separatorBuilder:

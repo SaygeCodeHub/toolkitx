@@ -44,25 +44,25 @@ class PickImageWidget extends StatelessWidget {
         SecondaryButton(
             onPressed: imageMap['imageCount'] != 6
                 ? () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return UploadAlertDialog(
-                      isSignature: imageMap['isSignature'],
-                      onCamera: () {
-                        imagePickerBloc.isCamera = true;
-                        imagePickerBloc.add(PickImage());
-                        Navigator.pop(context);
-                      },
-                      onDevice: () {
-                        imagePickerBloc.isCamera = false;
-                        imagePickerBloc.add(PickImage());
-                        Navigator.pop(context);
-                      },
-                      onSign: imageMap['onSign'],
-                    );
-                  });
-            }
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return UploadAlertDialog(
+                            isSignature: imageMap['isSignature'],
+                            onCamera: () {
+                              imagePickerBloc.isCamera = true;
+                              imagePickerBloc.add(PickImage());
+                              Navigator.pop(context);
+                            },
+                            onDevice: () {
+                              imagePickerBloc.isCamera = false;
+                              imagePickerBloc.add(PickImage());
+                              Navigator.pop(context);
+                            },
+                            onSign: imageMap['onSign'],
+                          );
+                        });
+                  }
                 : null,
             textValue: (imageMap['isSignature'] == false)
                 ? StringConstants.kUpload
@@ -71,4 +71,3 @@ class PickImageWidget extends StatelessWidget {
     );
   }
 }
-

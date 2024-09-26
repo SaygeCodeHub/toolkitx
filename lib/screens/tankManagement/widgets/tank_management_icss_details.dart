@@ -77,6 +77,12 @@ class TankManagementICSSDetails extends StatelessWidget {
       case '2':
       case '3':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(StringConstants.kLastUpdatedAt,
+              style: Theme.of(context).textTheme.xSmall.copyWith(
+                  color: AppColor.black, fontWeight: FontWeight.bold)),
+          const SizedBox(height: tiniestSpacing),
+          Text(icssData.updateddate),
+          const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kTank,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
@@ -113,7 +119,7 @@ class TankManagementICSSDetails extends StatelessWidget {
           const SizedBox(height: tiniestSpacing),
           Text(icssData.exitdate),
           const SizedBox(height: xxxSmallestSpacing),
-          Text(StringConstants.kExitDateTime,
+          Text(StringConstants.kExitWeight,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
@@ -177,6 +183,12 @@ class TankManagementICSSDetails extends StatelessWidget {
       case '5':
       case '1':
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(StringConstants.kLastUpdatedAt,
+              style: Theme.of(context).textTheme.xSmall.copyWith(
+                  color: AppColor.black, fontWeight: FontWeight.bold)),
+          const SizedBox(height: tiniestSpacing),
+          Text(icssData.updateddate),
+          const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kTank,
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
