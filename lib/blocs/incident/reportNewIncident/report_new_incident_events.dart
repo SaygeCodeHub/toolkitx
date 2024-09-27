@@ -37,9 +37,12 @@ class ReportNewIncidentLocationListChange extends ReportNewIncidentEvent {}
 class ReportIncidentSiteListChange extends ReportNewIncidentEvent {
   final String selectSiteName;
   final int siteId;
+  final String locationId;
 
   ReportIncidentSiteListChange(
-      {required this.selectSiteName, required this.siteId});
+      {required this.selectSiteName,
+      required this.siteId,
+      required this.locationId});
 }
 
 class ReportNewIncidentLocationChange extends ReportNewIncidentEvent {
@@ -111,8 +114,9 @@ class IncidentRemoveInjuredPersonDetails extends ReportNewIncidentEvent {
 
 class FetchIncidentLocations extends ReportNewIncidentEvent {
   final int siteId;
+  final String locationId;
 
-  FetchIncidentLocations({required this.siteId});
+  FetchIncidentLocations(this.locationId, {required this.siteId});
 }
 
 class SelectLocationId extends ReportNewIncidentEvent {
@@ -123,6 +127,8 @@ class SelectLocationId extends ReportNewIncidentEvent {
 
 class FetchIncidentAssetsList extends ReportNewIncidentEvent {
   final List<Asset> assetList;
+  final String selectedAsset;
 
-  FetchIncidentAssetsList({required this.assetList});
+  FetchIncidentAssetsList(
+      {required this.assetList, required this.selectedAsset});
 }

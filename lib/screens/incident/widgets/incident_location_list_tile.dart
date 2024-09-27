@@ -30,6 +30,7 @@ class IncidentLocationListTile extends StatelessWidget {
         builder: (context, state) {
           if (state is ReportNewIncidentLocationSelected) {
             addIncidentMap['location_name'] = state.selectLocationName;
+            print('selected location name ${state.selectLocationName}');
             return Column(
               children: [
                 ListTile(
@@ -41,8 +42,8 @@ class IncidentLocationListTile extends StatelessWidget {
                               builder: (context) => IncidentLocationList(
                                   fetchIncidentMasterModel:
                                       state.fetchIncidentMasterModel,
-                                  selectLocationName:
-                                      state.selectLocationName)));
+                                  selectLocationName: state.selectLocationName,
+                                  addIncidentMap: addIncidentMap)));
                     },
                     title: Text(DatabaseUtil.getText('Location'),
                         style: Theme.of(context)

@@ -12,6 +12,7 @@ import '../../../data/models/incident/fetch_incident_master_model.dart';
 import '../../../data/models/incident/save_report_new_incident_model.dart';
 import '../../../data/models/incident/save_report_new_incident_photos_model.dart';
 import '../../../repositories/incident/incident_repository.dart';
+import '../../../screens/incident/category_screen.dart';
 
 class ReportNewIncidentBloc
     extends Bloc<ReportNewIncidentEvent, ReportNewIncidentStates> {
@@ -172,12 +173,13 @@ class ReportNewIncidentBloc
 
     if (event.siteId != 0) {
       siteId = event.siteId;
-      add(FetchIncidentLocations(siteId: event.siteId));
+      add(FetchIncidentLocations(siteId: event.siteId, event.locationId));
     }
   }
 
   _reportIncidentLocation(ReportNewIncidentLocationChange event,
       Emitter<ReportNewIncidentStates> emit) {
+    event.selectLocationName;
     emit(ReportNewIncidentLocationSelected(
         fetchIncidentMasterModel: fetchIncidentMasterModel,
         selectLocationName: event.selectLocationName));
@@ -336,45 +338,62 @@ class ReportNewIncidentBloc
 
   Future<FutureOr<void>> _fetchIncidentLocations(FetchIncidentLocations event,
       Emitter<ReportNewIncidentStates> emit) async {
-    // try {
+    locationList.clear();
     emit(IncidentLocationsFetching());
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    FetchIncidentLocationModel fetchIncidentLocationModel =
-        await _incidentRepository.fetchIncidentLocation(hashCode, event.siteId);
-    if (fetchIncidentLocationModel.status == 200) {
-      emit(IncidentLocationsFetched(
-          fetchIncidentLocationModel: fetchIncidentLocationModel));
-      locationList = fetchIncidentLocationModel.data;
-    } else {
-      emit(IncidentLocationsNotFetched(
-          errorMessage: fetchIncidentLocationModel.message));
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchIncidentLocationModel fetchIncidentLocationModel =
+          await _incidentRepository.fetchIncidentLocation(
+              hashCode, event.siteId);
+      if (fetchIncidentLocationModel.status == 200) {
+        emit(IncidentLocationsFetched(
+            fetchIncidentLocationModel: fetchIncidentLocationModel));
+        locationList.addAll(fetchIncidentLocationModel.data);
+        (CategoryScreen.isFromEdit)
+            ? add(SelectLocationId(locationId: event.locationId))
+            : null;
+      } else {
+        emit(IncidentLocationsNotFetched(
+            errorMessage: fetchIncidentLocationModel.message));
+      }
+    } catch (e) {
+      emit(IncidentLocationsNotFetched(errorMessage: e.toString()));
     }
-    // }  catch (e) {
-    //   emit(IncidentLocationsNotFetched(errorMessage: e.toString()));
-    // }
   }
 
   FutureOr<void> _selectLocationId(
       SelectLocationId event, Emitter<ReportNewIncidentStates> emit) {
     try {
       if (event.locationId != '') {
-        var location = locationList
-            .firstWhere((location) => location.id == event.locationId!);
-        List<Asset> assetList = [];
-        if (location.assets.isNotEmpty) {
-          assetList = List<Asset>.from(location.assets);
-          add(FetchIncidentAssetsList(assetList: assetList));
+        if (locationList.isNotEmpty) {
+          int locId = (event.locationId.runtimeType == String)
+              ? int.parse(event.locationId)
+              : event.locationId;
+          var location =
+              locationList.firstWhere((location) => location.id == locId);
+          List<Asset> assetList = [];
+          if (location.assets.isNotEmpty) {
+            assetList = List<Asset>.from(location.assets);
+            add(FetchIncidentAssetsList(
+                assetList: assetList, selectedAsset: selectedAsset));
+          } else {
+            selectedAsset = '';
+            add(FetchIncidentAssetsList(assetList: [], selectedAsset: ''));
+          }
         }
+      } else {
+        selectedAsset = '';
+        add(ReportNewIncidentLocationChange(selectLocationName: ''));
+        emit(IncidentAssetListFetched(assetList: []));
       }
     } catch (e) {
-      print("Error $e");
+      rethrow;
     }
   }
 
   FutureOr<void> _fetchIncidentAssetsList(
       FetchIncidentAssetsList event, Emitter<ReportNewIncidentStates> emit) {
-    selectedAsset = '';
     emit(IncidentAssetListFetched(assetList: event.assetList));
   }
 }

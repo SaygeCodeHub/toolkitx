@@ -5,7 +5,6 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../file_viewer.dart';
-import 'document_viewer_screen.dart';
 
 class AttachmentDocumentWidget extends StatelessWidget {
   final String docPath;
