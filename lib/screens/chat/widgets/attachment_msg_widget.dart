@@ -17,6 +17,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database/database_util.dart';
 import 'chat_subtitle.dart';
@@ -25,6 +26,10 @@ class AttachmentMsgWidget extends StatelessWidget {
   final Map messageData;
 
   const AttachmentMsgWidget({super.key, required this.messageData});
+
+  String getDecryptedMessage(String message) {
+    return EncryptData.decryptAES(message);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,7 @@ class AttachmentMsgWidget extends StatelessWidget {
             (messageData['quotemsg'].toString().length >
                     messageData['msg'].toString().length)
                 ? messageData['quotemsg'].toString()
-                : messageData['msg'].toString());
+                : getDecryptedMessage(messageData['msg'].toString()));
         margin = (constraints.maxWidth - textWidth) / 2;
       }
       return Padding(
@@ -58,7 +63,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                                 context,
                                 messageData['msg_type'] ?? '',
                                 messageData['isReceiver'],
-                                messageData['msg'],
+                                getDecryptedMessage(
+                                    messageData['msg'].toString()),
                                 messageData['msg_status']))
                         : Align(
                             alignment: Alignment.centerRight,
@@ -67,7 +73,8 @@ class AttachmentMsgWidget extends StatelessWidget {
                                 context,
                                 messageData['msg_type'],
                                 messageData['isReceiver'],
-                                messageData['msg'],
+                                getDecryptedMessage(
+                                    messageData['msg'].toString()),
                                 messageData['msg_status'])),
                     ChatSubtitle(messageData: messageData)
                   ]),
@@ -115,7 +122,9 @@ class AttachmentMsgWidget extends StatelessWidget {
                                                       messageData['msg_type'] ??
                                                           '',
                                                       messageData['isReceiver'],
-                                                      messageData['msg'],
+                                                      getDecryptedMessage(
+                                                          messageData['msg']
+                                                              .toString()),
                                                       messageData[
                                                           'msg_status']))
                                               : Align(
@@ -127,7 +136,9 @@ class AttachmentMsgWidget extends StatelessWidget {
                                                       context,
                                                       messageData['msg_type'],
                                                       messageData['isReceiver'],
-                                                      messageData['msg'],
+                                                      getDecryptedMessage(
+                                                          messageData['msg']
+                                                              .toString()),
                                                       messageData[
                                                           'msg_status'])),
                                         ]))))
@@ -163,10 +174,10 @@ class AttachmentMsgWidget extends StatelessWidget {
                         String? hashCode =
                             await customerCache.getHashCode(CacheKeys.hashcode);
                         String url =
-                            '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${messageData['msg'].toString()}&hashcode=$hashCode';
+                            '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${getDecryptedMessage(messageData['msg'].toString())}&hashcode=$hashCode';
                         DateTime imageName = DateTime.now();
-                        String attachmentExtension =
-                            getFileName(messageData['msg'].toString());
+                        String attachmentExtension = getFileName(
+                            getDecryptedMessage(messageData['msg'].toString()));
                         bool downloadProcessComplete =
                             await downloadFileFromUrl(
                                 url,

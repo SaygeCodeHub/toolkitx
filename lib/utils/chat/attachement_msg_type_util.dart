@@ -31,7 +31,8 @@ class AttachementMsgTypeUtil {
                 Image.file(fit: BoxFit.fitHeight, height: 50, width: 50,
                     errorBuilder: (BuildContext context, Object exception,
                         StackTrace? stackTrace) {
-                  return Text('Failed to load image: $exception');
+                  return Flexible(
+                      child: Text('Failed to load image: $exception'));
                 }, File(mediaPath)),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

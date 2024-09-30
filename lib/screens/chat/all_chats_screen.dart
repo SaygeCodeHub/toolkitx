@@ -13,11 +13,14 @@ import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
 import '../../configs/app_dimensions.dart';
+import '../../utils/chat/encrypt_decrypt_message.dart';
 
 class AllChatsScreen extends StatelessWidget {
   static const routeName = 'AllChatsScreen';
+  final EncryptDecryptChatMessage encryptDecryptChatMessage =
+      EncryptDecryptChatMessage();
 
-  const AllChatsScreen({super.key});
+  AllChatsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +43,6 @@ class AllChatsScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          print(
-                              'group name ${snapshot.data![index].groupName}');
                           return CustomCard(
                               child: ListTile(
                                   onTap: () async {
@@ -67,8 +68,7 @@ class AllChatsScreen extends StatelessWidget {
                                               kChatIconRadius),
                                           color: AppColor.deepBlue),
                                       child: Icon(
-                                          (snapshot.data![index].isGroup ==
-                                                  true)
+                                          (snapshot.data![index].isGroup == true)
                                               ? Icons.people
                                               : Icons.person,
                                           color: AppColor.ghostWhite,
@@ -119,12 +119,37 @@ class AllChatsScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Flexible(
-                                                  child: messageText(
-                                                      snapshot
-                                                          .data![index].message,
-                                                      snapshot.data![index]
-                                                          .messageType)),
+                                              FutureBuilder(
+                                                  future:
+                                                      encryptDecryptChatMessage
+                                                          .decryptMessage(
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .message),
+                                                  builder:
+                                                      (BuildContext context,
+                                                          AsyncSnapshot<dynamic>
+                                                              snap) {
+                                                    if (snap.connectionState ==
+                                                            ConnectionState
+                                                                .waiting ||
+                                                        snap.connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    } else if (snap.hasError) {
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    } else {
+                                                      return Flexible(
+                                                          child: messageText(
+                                                              snap.data,
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .messageType));
+                                                    }
+                                                  }),
                                               Visibility(
                                                   visible: snapshot.data![index]
                                                           .unreadMsgCount >

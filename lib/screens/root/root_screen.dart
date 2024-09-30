@@ -82,12 +82,12 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     const HomeScreen(),
     const CurrentLocationScreen(),
     const NotificationScreen(),
-    const AllChatsScreen(),
+    AllChatsScreen(),
     const ProfileScreen()
   ];
   final List<Widget> _offlineWidgetOptions = [
     const HomeScreen(),
-    const AllChatsScreen(),
+    AllChatsScreen(),
   ];
 
   @override

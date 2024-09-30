@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchWorkOrderRolesModel fetchWorkOrderRolesModelFromJson(String str) => FetchWorkOrderRolesModel.fromJson(json.decode(str));
+FetchWorkOrderRolesModel fetchWorkOrderRolesModelFromJson(String str) =>
+    FetchWorkOrderRolesModel.fromJson(json.decode(str));
 
-String fetchWorkOrderRolesModelToJson(FetchWorkOrderRolesModel data) => json.encode(data.toJson());
+String fetchWorkOrderRolesModelToJson(FetchWorkOrderRolesModel data) =>
+    json.encode(data.toJson());
 
 class FetchWorkOrderRolesModel {
   final int status;
@@ -15,17 +17,18 @@ class FetchWorkOrderRolesModel {
     required this.data,
   });
 
-  factory FetchWorkOrderRolesModel.fromJson(Map<String, dynamic> json) => FetchWorkOrderRolesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
-  );
+  factory FetchWorkOrderRolesModel.fromJson(Map<String, dynamic> json) =>
+      FetchWorkOrderRolesModel(
+        status: json["Status"],
+        message: json["Message"],
+        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -40,14 +43,14 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    groupId: json["group_id"] ?? '',
-    groupName: json["group_name"] ?? '',
-    groupOcc: json["group_occ"] ?? '',
-  );
+        groupId: json["group_id"] ?? '',
+        groupName: json["group_name"] ?? '',
+        groupOcc: json["group_occ"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "group_id": groupId,
-    "group_name": groupName,
-    "group_occ": groupOcc,
-  };
+        "group_id": groupId,
+        "group_name": groupName,
+        "group_occ": groupOcc,
+      };
 }
