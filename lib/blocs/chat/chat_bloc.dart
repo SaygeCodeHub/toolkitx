@@ -315,9 +315,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 unreadMsgCount: item['unreadCount'] ?? 0,
                 groupName: groupData['group_name'] ?? '',
                 groupId: groupData['group_id'] ?? '',
-                groupPurpose: groupData['purpose'] ?? '');
+                groupPurpose: groupData['purpose'] ?? '',
+                isertedToDb: true);
             individualChatList.add(chat);
           } else {
+            emit(ShowDataFetchedFromList());
             DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
                 item['latest_msgTime'],
                 isUtc: true);
@@ -333,7 +335,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 unreadMsgCount: item['unreadCount'] ?? 0,
                 groupName: item['group_name'] ?? '',
                 groupId: item['group_id'] ?? '',
-                groupPurpose: item['purpose'] ?? '');
+                groupPurpose: item['purpose'] ?? '',
+                isertedToDb: true);
             individualChatList.add(chat);
           }
         }

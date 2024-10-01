@@ -636,7 +636,7 @@ class AppRoutes {
       case ChatMessagingScreen.routeName:
         return _createRoute(const ChatMessagingScreen());
       case AllChatsScreen.routeName:
-        return _createRoute(AllChatsScreen());
+        return _createRoute(const AllChatsScreen());
       case ViewAttachedImageWidget.routeName:
         return _createRoute(ViewAttachedImageWidget(
             attachmentPath: settings.arguments.toString()));

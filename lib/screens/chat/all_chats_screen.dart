@@ -6,21 +6,18 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/screens/chat/widgets/all_chat_floating_button.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-
 import '../../configs/app_dimensions.dart';
-import '../../utils/chat/encrypt_decrypt_message.dart';
 
 class AllChatsScreen extends StatelessWidget {
   static const routeName = 'AllChatsScreen';
-  final EncryptDecryptChatMessage encryptDecryptChatMessage =
-      EncryptDecryptChatMessage();
 
-  AllChatsScreen({super.key});
+  const AllChatsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,9 @@ class AllChatsScreen extends StatelessWidget {
         body: StreamBuilder<List<ChatData>>(
             stream: context.read<ChatBloc>().allChatsStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.data != null) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: leftRightMargin, horizontal: leftRightMargin),
@@ -43,6 +42,8 @@ class AllChatsScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          print(
+                              'chat list screen data ${snapshot.data![index].toMap()}');
                           return CustomCard(
                               child: ListTile(
                                   onTap: () async {
@@ -68,7 +69,8 @@ class AllChatsScreen extends StatelessWidget {
                                               kChatIconRadius),
                                           color: AppColor.deepBlue),
                                       child: Icon(
-                                          (snapshot.data![index].isGroup == true)
+                                          (snapshot.data![index].isGroup ==
+                                                  true)
                                               ? Icons.people
                                               : Icons.person,
                                           color: AppColor.ghostWhite,
@@ -119,37 +121,13 @@ class AllChatsScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              FutureBuilder(
-                                                  future:
-                                                      encryptDecryptChatMessage
-                                                          .decryptMessage(
-                                                              snapshot
-                                                                  .data![index]
-                                                                  .message),
-                                                  builder:
-                                                      (BuildContext context,
-                                                          AsyncSnapshot<dynamic>
-                                                              snap) {
-                                                    if (snap.connectionState ==
-                                                            ConnectionState
-                                                                .waiting ||
-                                                        snap.connectionState ==
-                                                            ConnectionState
-                                                                .waiting) {
-                                                      return const SizedBox
-                                                          .shrink();
-                                                    } else if (snap.hasError) {
-                                                      return const SizedBox
-                                                          .shrink();
-                                                    } else {
-                                                      return Flexible(
-                                                          child: messageText(
-                                                              snap.data,
-                                                              snapshot
-                                                                  .data![index]
-                                                                  .messageType));
-                                                    }
-                                                  }),
+                                              Flexible(
+                                                  child: messageText(
+                                                      EncryptData.decryptAES(
+                                                          snapshot.data![index]
+                                                              .message),
+                                                      snapshot.data![index]
+                                                          .messageType)),
                                               Visibility(
                                                   visible: snapshot.data![index]
                                                           .unreadMsgCount >
@@ -185,8 +163,10 @@ class AllChatsScreen extends StatelessWidget {
                         separatorBuilder: (context, index) {
                           return const SizedBox(height: xxTinierSpacing);
                         }));
+              } else if (snapshot.hasError) {
+                return const Text('Has error');
               } else {
-                return const SizedBox.shrink();
+                return const Text('Inside else! No data.');
               }
             }));
   }

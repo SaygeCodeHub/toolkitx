@@ -4,7 +4,6 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/screens/chat/widgets/quote_message_reply_container.dart';
-import 'package:toolkit/utils/chat/encrypt_decrypt_message.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -12,10 +11,8 @@ import 'chat_subtitle.dart';
 
 class MsgTextWidget extends StatelessWidget {
   final Map messageData;
-  final EncryptDecryptChatMessage encryptDecryptChatMessage =
-      EncryptDecryptChatMessage();
 
-  MsgTextWidget({super.key, required this.messageData});
+  const MsgTextWidget({super.key, required this.messageData});
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +57,9 @@ class MsgTextWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FutureBuilder<String>(
-                      future: encryptDecryptChatMessage
-                          .decryptMessage(messageData['msg'].toString()),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox.shrink();
-                        } else {
-                          return Flexible(child: Text(snapshot.data ?? ''));
-                        }
-                      },
-                    ),
+                    Flexible(
+                        child: Text(EncryptData.decryptAES(
+                            messageData['msg'].toString()))),
                     const SizedBox(height: tiniestSpacing),
                     if (messageData['msg_status'] != '1')
                       const Icon(Icons.timer, size: kMessageTimerIconSize)
@@ -115,20 +103,9 @@ class MsgTextWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            FutureBuilder<String>(
-                              future: encryptDecryptChatMessage.decryptMessage(
-                                  messageData['msg'].toString()),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const SizedBox
-                                      .shrink(); // Show a loader while decrypting
-                                } else {
-                                  return Flexible(
-                                      child: Text(snapshot.data ?? ''));
-                                }
-                              },
-                            ),
+                            Flexible(
+                                child: Text(EncryptData.decryptAES(
+                                    messageData['msg'].toString()))),
                             const SizedBox(height: tiniestSpacing),
                             if (messageData['msg_status'] != '1')
                               const Align(

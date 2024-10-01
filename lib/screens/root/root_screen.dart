@@ -109,6 +109,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<ClientBloc>().add(FetchChatMessages());
     context.read<ChatBloc>().add(FetchChatsList());
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {

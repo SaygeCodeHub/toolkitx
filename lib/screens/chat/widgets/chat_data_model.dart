@@ -25,6 +25,7 @@ class ChatData {
   int unreadMsgCount;
   String dateTime;
   int latestMsgTime;
+  bool isertedToDb;
 
   ChatData(
       {this.rId = '',
@@ -49,7 +50,8 @@ class ChatData {
       this.pickedMedia = '',
       this.unreadMsgCount = 0,
       this.dateTime = '',
-      this.latestMsgTime = 0})
+      this.latestMsgTime = 0,
+      this.isertedToDb = false})
       : members = members ?? [];
 
   List<Map<String, dynamic>> membersToMap() {
@@ -74,7 +76,8 @@ class ChatData {
       'messageType': messageType,
       'pickedMedia': pickedMedia,
       'unreadMsgCount': unreadMsgCount,
-      'dateTime': dateTime
+      'dateTime': dateTime,
+      'db_inserted': isertedToDb
     };
   }
 
