@@ -458,7 +458,7 @@ class Tab7 {
   final String id;
   final String number;
   final String title;
-  final String status;
+  final dynamic status;
   final List<Instruction> instructions;
 
   Tab7({
@@ -495,12 +495,12 @@ class Instruction {
   final String instructionreceivedbyname;
   final String controlengineername;
   final String safetykeynumber;
-  final int permitswitchingscheduleid;
-  final int instructionreceivedby;
-  final int controlengineerid;
+  final dynamic permitswitchingscheduleid;
+  final dynamic instructionreceivedby;
+  final dynamic controlengineerid;
   final String permitid;
-  final int sortorder;
-  final int ismanual;
+  final dynamic sortorder;
+  final dynamic ismanual;
   final String canexecute;
   final String instructionreceiveddatetime;
   final String instructionreceiveddate;
@@ -539,29 +539,29 @@ class Instruction {
   });
 
   factory Instruction.fromJson(Map<String, dynamic> json) => Instruction(
-        id: json["id"],
-        location: json["location"],
-        equipmentuid: json["equipmentuid"],
-        operation: json["operation"],
-        instructionreceivedbyname: json["instructionreceivedbyname"],
+        id: json["id"] ?? '',
+        location: json["location"] ?? "",
+        equipmentuid: json["equipmentuid"] ?? "",
+        operation: json["operation"] ?? "",
+        instructionreceivedbyname: json["instructionreceivedbyname"] ?? '',
         controlengineername: json["controlengineername"] ?? '',
         safetykeynumber: json["safetykeynumber"] ?? '',
-        permitswitchingscheduleid: json["permitswitchingscheduleid"],
-        instructionreceivedby: json["instructionreceivedby"] ?? 0,
-        controlengineerid: json["controlengineerid"] ?? 0,
-        permitid: json["permitid"],
-        sortorder: json["sortorder"],
-        ismanual: json["ismanual"],
-        canexecute: json["canexecute"],
-        instructionreceiveddatetime: json["instructionreceiveddatetime"],
-        instructionreceiveddate: json["instructionreceiveddate"],
-        instructionreceivedtime: json["instructionreceivedtime"],
-        carriedoutdatetime: json["carriedoutdatetime"],
-        carriedoutdate: json["carriedoutdate"],
-        carriedouttime: json["carriedouttime"],
-        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"],
-        carriedoutconfirmeddate: json["carriedoutconfirmeddate"],
-        carriedoutconfirmedtime: json["carriedoutconfirmedtime"],
+        permitswitchingscheduleid: json["permitswitchingscheduleid"] ?? '',
+        instructionreceivedby: json["instructionreceivedby"] ?? '',
+        controlengineerid: json["controlengineerid"] ?? '',
+        permitid: json["permitid"] ?? '',
+        sortorder: json["sortorder"] ?? '',
+        ismanual: json["ismanual"] ?? '',
+        canexecute: json["canexecute"] ?? '',
+        instructionreceiveddatetime: json["instructionreceiveddatetime"] ?? "",
+        instructionreceiveddate: json["instructionreceiveddate"] ?? "",
+        instructionreceivedtime: json["instructionreceivedtime"] ?? "",
+        carriedoutdatetime: json["carriedoutdatetime"] ?? "",
+        carriedoutdate: json["carriedoutdate"] ?? "",
+        carriedouttime: json["carriedouttime"] ?? "",
+        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"] ?? "",
+        carriedoutconfirmeddate: json["carriedoutconfirmeddate"] ?? "",
+        carriedoutconfirmedtime: json["carriedoutconfirmedtime"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

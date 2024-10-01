@@ -71,6 +71,7 @@ abstract class StringConstants {
   static const String kAddMore = 'Add More';
   static const String kDelete = 'Delete';
   static const String kAddImages = 'Add Images/Comment';
+  static const String kAddComment = 'Add Comment';
   static const String kErrorImageUpload =
       'Cannot upload image! Please try again!';
   static const String kErrorPickImage = 'Failed to pick image';
@@ -292,11 +293,13 @@ abstract class StringConstants {
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
   static const String kPrintPermit = 'Print Permit';
+  static const String kExportPermit = 'Transfer Permit';
   static const String kClosePermit = 'Cancel Permit';
   static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
+  static const String kImportFile = 'Import File';
   static const String kSAP = 'SAP';
   static const String kCP = "CP";
   static const String kEditSafetyDocument = 'Edit Safety Document';
@@ -632,7 +635,9 @@ abstract class StringConstants {
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =
-      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
+  static const String kNotGrantedPermitOffline =
+      "You are not granted any permits to use offline";
   static const String kOpenTicket = "Open Ticket";
   static const String kApproveOfDev2 = "Approve for Dev2";
   static const String kBackToApprove = "Back to Approve";

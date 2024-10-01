@@ -90,6 +90,7 @@ class DatabaseHelper {
         CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -128,6 +129,7 @@ class DatabaseHelper {
     CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -176,12 +178,14 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> insertOfflinePermit(OfflinePermitDatum data) async {
+  Future<void> insertOfflinePermit(
+      OfflinePermitDatum data, int statusId) async {
     final Database db = await database;
     await db.insert(
       'OfflinePermit',
       {
         'permitId': data.id,
+        'permitId2': data.id2,
         'listpage': jsonEncode(data.listpage.toJson()),
         'tab1': jsonEncode(data.tab1.toJson()),
         'tab2': jsonEncode(data.tab2.toJson()),
@@ -191,7 +195,7 @@ class DatabaseHelper {
         'tab6': jsonEncode(data.tab6),
         'tab7': jsonEncode(data.tab7.map((e) => e.toJson()).toList()),
         'html': jsonEncode(data.html),
-        'statusId': data.listpage.statusid
+        'statusId': statusId
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -199,14 +203,14 @@ class DatabaseHelper {
 
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
-    try {
-      DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
-      sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
-      await db.insert('chat_messages', sendMessageMap,
-          conflictAlgorithm: ConflictAlgorithm.ignore);
-    } catch (e) {
-      rethrow;
-    }
+    // try {
+    DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
+    sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
+    await db.insert('chat_messages', sendMessageMap,
+        conflictAlgorithm: ConflictAlgorithm.ignore);
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   Future<Map<String, dynamic>> getLastMessage() async {
@@ -323,7 +327,6 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getChatUsersList(String clientId) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
-
     messages = await db.rawQuery(
         'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)))  AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId  union select distinct rid, rtype, employee_name, (select msg from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId)) AS unreadCount from chat_messages where rtype=3  and clientid = $clientId');
     if (messages.isNotEmpty) {
@@ -423,7 +426,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
     final List<Map<String, dynamic>> result = await db.rawQuery(
-        'SELECT listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit');
+        'SELECT permitId,listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit ORDER BY permitId2 DESC');
     return result;
   }
 
@@ -431,11 +434,12 @@ class DatabaseHelper {
       String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-        'SELECT tab1, tab2, tab3, tab4, tab5, tab6, tab7, html FROM OfflinePermit WHERE permitId = ?',
+        'SELECT listPage, tab1, tab2, tab3, tab4, tab5, tab6, tab7, html FROM OfflinePermit WHERE permitId = ?',
         [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = {
+        "listPage": jsonDecode(result['listPage']),
         "tab1": jsonDecode(result['tab1']),
         "tab2": jsonDecode(result['tab2']),
         "tab3": jsonDecode(result['tab3']),
@@ -453,6 +457,7 @@ class DatabaseHelper {
 
   Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
+
     final List<Map<String, dynamic>> results = await db.rawQuery(
         'SELECT html FROM OfflinePermit WHERE permitId = ?', [permitId]);
     if (results.isNotEmpty) {
@@ -507,6 +512,12 @@ class DatabaseHelper {
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
+  }
+
+  Future<void> deletePermitOfflineAction(String permitId) async {
+    final db = await database;
+    await db.delete('OfflinePermitAction',
+        where: 'permitId = ?', whereArgs: [permitId]);
   }
 
   Future<void> updateStatusId(String permitId, int updatedStatus) async {
@@ -816,6 +827,8 @@ class DatabaseHelper {
     String updatedListPageJson = jsonEncode(tab7);
     await db.update('OfflinePermit', {'tab7': updatedListPageJson},
         where: 'permitId = ?', whereArgs: [permitId]);
+    await insertOfflinePermitAction(
+        permitId, 'switching_schedule', {}, "", null);
   }
 
   Future<int> getSSFromInstructionIndex(instId, permitId) async {
@@ -1051,5 +1064,22 @@ class DatabaseHelper {
       }
     }
     await updateTab7(permitId, temp);
+  }
+
+  Future<Map<String, dynamic>?> fetchOfflinePermit(String permitId) async {
+    final Database db = await database;
+    try {
+      List<Map<String, dynamic>> fetchOfflinePermits = await db.rawQuery(
+        'SELECT * FROM OfflinePermit WHERE permitId = ?',
+        [permitId],
+      );
+      if (fetchOfflinePermits.isNotEmpty) {
+        return fetchOfflinePermits.first;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -66,87 +66,91 @@ class IncidentDetailsDatum {
   final List<Customfield>? customfields;
   final List<Linkedpermit>? linkedpermits;
   final List<Log>? logs;
+  final String assetid;
+  final String assetname;
 
-  IncidentDetailsDatum({
-    required this.id,
-    required this.eventdatetime,
-    required this.status,
-    required this.description,
-    required this.site,
-    this.location,
-    this.companyid,
-    required this.responsiblePerson,
-    required this.reporteddatetime,
-    this.category,
-    this.classification,
-    this.created,
-    this.createdworkforceby,
-    this.createduserby,
-    this.lastupdated,
-    required this.createdbyname,
-    required this.sitename,
-    required this.locationname,
-    required this.companyname,
-    required this.categorynames,
-    this.injuredpeoplecount,
-    this.emailist,
-    required this.statusText,
-    this.nextStatus,
-    this.canEdit,
-    this.canResolve,
-    required this.files,
-    this.createdby,
-    this.maplinks,
-    this.commentslist,
-    this.injuredpersonlist,
-    this.customfields,
-    this.linkedpermits,
-    this.logs,
-  });
+  IncidentDetailsDatum(
+      {required this.id,
+      required this.eventdatetime,
+      required this.status,
+      required this.description,
+      required this.site,
+      this.location,
+      this.companyid,
+      required this.responsiblePerson,
+      required this.reporteddatetime,
+      this.category,
+      this.classification,
+      this.created,
+      this.createdworkforceby,
+      this.createduserby,
+      this.lastupdated,
+      required this.createdbyname,
+      required this.sitename,
+      required this.locationname,
+      required this.companyname,
+      required this.categorynames,
+      this.injuredpeoplecount,
+      this.emailist,
+      required this.statusText,
+      this.nextStatus,
+      this.canEdit,
+      this.canResolve,
+      required this.files,
+      this.createdby,
+      this.maplinks,
+      this.commentslist,
+      this.injuredpersonlist,
+      this.customfields,
+      this.linkedpermits,
+      this.logs,
+      required this.assetid,
+      required this.assetname});
 
   factory IncidentDetailsDatum.fromJson(Map<String, dynamic> json) =>
       IncidentDetailsDatum(
-        id: json["id"],
-        eventdatetime: json["eventdatetime"],
-        status: json["status"],
-        description: json["description"],
-        site: json["site"],
-        location: json["location"],
-        companyid: json["companyid"],
-        responsiblePerson: json["responsible_person"],
-        reporteddatetime: json["reporteddatetime"],
-        category: json["category"],
-        classification: json["classification"],
-        created: json["created"],
-        createdworkforceby: json["createdworkforceby"],
-        createduserby: json["createduserby"],
-        lastupdated: json["lastupdated"],
-        createdbyname: json["createdbyname"],
-        sitename: json["sitename"],
-        locationname: json["locationname"],
-        companyname: json["companyname"],
-        categorynames: json["categorynames"],
-        injuredpeoplecount: json["injuredpeoplecount"],
-        emailist: json["emailist"],
-        statusText: json["status_text"],
-        nextStatus: json["next_status"],
-        canEdit: json["can_edit"],
-        canResolve: json["can_resolve"],
-        files: json["files"],
-        createdby: json["createdby"],
-        maplinks: List<Maplink>.from(
-            json["maplinks"].map((x) => Maplink.fromJson(x))),
-        commentslist: List<Commentslist>.from(
-            json["commentslist"].map((x) => Commentslist.fromJson(x))),
-        injuredpersonlist: List<Injuredpersonlist>.from(
-            json["injuredpersonlist"]
-                .map((x) => Injuredpersonlist.fromJson(x))),
-        customfields: List<Customfield>.from(
-            json["customfields"].map((x) => Customfield.fromJson(x))),
-        linkedpermits: List<Linkedpermit>.from(
-            json["linkedpermits"].map((x) => Linkedpermit.fromJson(x))),
-        logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
-      );
+          id: json["id"],
+          eventdatetime: json["eventdatetime"],
+          status: json["status"],
+          description: json["description"],
+          site: json["site"],
+          location: json["location"],
+          companyid: json["companyid"],
+          responsiblePerson: json["responsible_person"],
+          reporteddatetime: json["reporteddatetime"],
+          category: json["category"],
+          classification: json["classification"],
+          created: json["created"],
+          createdworkforceby: json["createdworkforceby"],
+          createduserby: json["createduserby"],
+          lastupdated: json["lastupdated"],
+          createdbyname: json["createdbyname"],
+          sitename: json["sitename"],
+          locationname: json["locationname"],
+          companyname: json["companyname"],
+          categorynames: json["categorynames"],
+          injuredpeoplecount: json["injuredpeoplecount"],
+          emailist: json["emailist"],
+          statusText: json["status_text"],
+          nextStatus: json["next_status"],
+          canEdit: json["can_edit"],
+          canResolve: json["can_resolve"],
+          files: json["files"],
+          createdby: json["createdby"],
+          maplinks: List<Maplink>.from(
+              json["maplinks"].map((x) => Maplink.fromJson(x))),
+          commentslist: List<Commentslist>.from(
+              json["commentslist"].map((x) => Commentslist.fromJson(x))),
+          injuredpersonlist:
+              List<Injuredpersonlist>.from(json["injuredpersonlist"]
+                  .map((x) => Injuredpersonlist.fromJson(x))),
+          customfields: List<Customfield>.from(
+              json["customfields"].map((x) => Customfield.fromJson(x))),
+          linkedpermits: List<Linkedpermit>.from(
+              json["linkedpermits"].map((x) => Linkedpermit.fromJson(x))),
+          logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+          assetid: json['assetid'] ?? '',
+          assetname: json['assetname'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -187,6 +191,8 @@ class IncidentDetailsDatum {
         "linkedpermits":
             List<dynamic>.from(linkedpermits!.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs!.map((x) => x.toJson())),
+        "assetid": assetid,
+        "assetname": assetname
       };
 }
 

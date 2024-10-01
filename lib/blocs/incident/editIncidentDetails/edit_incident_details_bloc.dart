@@ -36,6 +36,7 @@ class EditIncidentDetailsBloc
         "responsible_person": editIncidentDetailsMap['responsible_person'],
         "site_name": editIncidentDetailsMap['site_name'],
         "location_name": editIncidentDetailsMap['location_name'],
+        "assetid": editIncidentDetailsMap['assetid'],
         "category": editIncidentDetailsMap['category'],
         "reporteddatetime": editIncidentDetailsMap['reporteddatetime'],
         "customfields": editIncidentDetailsMap['customfields'],

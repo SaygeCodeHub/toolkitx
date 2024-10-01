@@ -76,6 +76,9 @@ class OnLineModules extends StatelessWidget {
                     crossAxisCount: 3,
                     crossAxisSpacing: xxTinierSpacing),
                 itemBuilder: (BuildContext context, int index) {
+                  print('module key ${state.availableModules[index].key}');
+                  print(
+                      'module name ${state.availableModules[index].moduleName}');
                   return InkWell(
                       borderRadius: BorderRadius.circular(kCardRadius),
                       onTap: () => navigateToModule(

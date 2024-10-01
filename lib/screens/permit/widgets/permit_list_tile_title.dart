@@ -30,6 +30,11 @@ class PermitListTileTitle extends StatelessWidget {
             (allPermitDatum.actionCount > 0)
                 ? const Icon(Icons.pending_actions_rounded,
                     size: kImageHeight, color: AppColor.orange)
+                : const SizedBox.shrink(),
+            const SizedBox(width: tinierSpacing),
+            (allPermitDatum.isDownloaded!)
+                ? const Icon(Icons.download_done,
+                    size: kImageHeight, color: AppColor.green)
                 : const SizedBox.shrink()
           ]),
           Text(allPermitDatum.status!,

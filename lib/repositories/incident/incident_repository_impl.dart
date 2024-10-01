@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/incident/edit_incident_details_model.dart';
+import 'package:toolkit/data/models/incident/fetch_incident_location_model.dart';
 
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
@@ -136,5 +137,13 @@ class IncidentRepositoryImpl extends IncidentRepository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}incident/savecomments", saveCommentsMap);
     return SaveIncidentAndQMCommentsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchIncidentLocationModel> fetchIncidentLocation(
+      String hashCode, int siteId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}incident/GetLocationBySite?hashcode=$hashCode&siteid=$siteId");
+    return FetchIncidentLocationModel.fromJson(response);
   }
 }

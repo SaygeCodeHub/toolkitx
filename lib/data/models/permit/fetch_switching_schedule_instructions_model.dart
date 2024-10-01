@@ -46,7 +46,7 @@ class PermitSwithcingScheduleInstructionDatum {
   final String carriedoutdatetime;
   final String carriedoutconfirmeddatetime;
   final String safetykeynumber;
-  final int ismanual;
+  final dynamic ismanual;
   final String canexecute;
 
   PermitSwithcingScheduleInstructionDatum({

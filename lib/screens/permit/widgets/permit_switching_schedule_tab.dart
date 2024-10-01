@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
@@ -42,8 +43,11 @@ class PermitSwitchingScheduleTab extends StatelessWidget {
                   child: ListTile(
                       onTap: () {
                         Navigator.pushNamed(context,
-                            PermitSwitchingScheduleTableScreen.routeName,
-                            arguments: permitDetailsModel.data.tab7[index].id);
+                                PermitSwitchingScheduleTableScreen.routeName,
+                                arguments:
+                                    permitDetailsModel.data.tab7[index].id)
+                            .then((_) => SystemChrome.setPreferredOrientations(
+                                [DeviceOrientation.portraitUp]));
                       },
                       title: Text(permitDetailsModel.data.tab7[index].number,
                           style: Theme.of(context).textTheme.small.copyWith(

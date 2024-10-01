@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
@@ -26,7 +27,7 @@ class QuoteMessageReplyContainer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4)),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(messageData['quotemsg'].toString(),
+              Text(EncryptData.decryptAES(messageData['quotemsg'].toString()),
                   style: Theme.of(context)
                       .textTheme
                       .xSmall

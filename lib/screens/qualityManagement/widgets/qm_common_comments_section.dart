@@ -24,13 +24,12 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
   final int imageIndex;
 
   const QualityManagementCommonCommentsSection(
-      {Key? key,
+      {super.key,
       required this.onPhotosUploaded,
       required this.onTextFieldValue,
       this.fetchQualityManagementDetailsModel,
       required this.qmCommentsMap,
-      required this.imageIndex})
-      : super(key: key);
+      required this.imageIndex});
 
   @override
   Widget build(BuildContext context) {

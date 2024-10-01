@@ -82,12 +82,12 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     const HomeScreen(),
     const CurrentLocationScreen(),
     const NotificationScreen(),
-    const AllChatsScreen(),
+    AllChatsScreen(),
     const ProfileScreen()
   ];
   final List<Widget> _offlineWidgetOptions = [
     const HomeScreen(),
-    const AllChatsScreen(),
+    AllChatsScreen(),
   ];
 
   @override
@@ -109,6 +109,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<ClientBloc>().add(FetchChatMessages());
     context.read<ChatBloc>().add(FetchChatsList());
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {

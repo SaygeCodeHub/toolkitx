@@ -49,11 +49,12 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  true
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Edit')) {
             ReportNewQA.isFromEdit = true;
@@ -70,51 +71,67 @@ class QualityManagementPopUpMenuScreen extends StatelessWidget {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Acknowledge')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('DefineMitigation')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ApproveMitigation')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('ImplementMitigation')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(
-                    context, QualityManagementAddCommentsScreen.routeName,
-                    arguments: fetchQualityManagementDetailsModel)
-                .then((_) => context.read<QualityManagementBloc>().add(
-                    FetchQualityManagementDetails(
-                        qmId: qmId, initialIndex: 0)));
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
+          }
+          if (value == DatabaseUtil.getText('NeedReinspection')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
+            Navigator.pushNamed(
+                context, QualityManagementAddCommentsScreen.routeName,
+                arguments: [
+                  fetchQualityManagementDetailsModel,
+                  false
+                ]).then((_) => context.read<QualityManagementBloc>().add(
+                FetchQualityManagementDetails(qmId: qmId, initialIndex: 0)));
           }
           if (value == DatabaseUtil.getText('Markasresolved')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();

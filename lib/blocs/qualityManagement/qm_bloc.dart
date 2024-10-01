@@ -190,9 +190,13 @@ class QualityManagementBloc
         if (fetchQualityManagementDetailsModel.data.nextStatus == '4') {
           popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
         }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '7') {
+          popUpMenuItems.add(DatabaseUtil.getText('NeedReinspection'));
+        }
         if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
         }
+
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
         emit(QualityManagementDetailsFetched(
             fetchQualityManagementDetailsModel:
@@ -265,7 +269,20 @@ class QualityManagementBloc
           "hashcode": hashCode,
           "status": saveCommentMap['status'] ?? '',
           "comments": saveCommentMap['comments'],
-          "classification": saveCommentMap['classification'] ?? ''
+          "classification": saveCommentMap['classification'] ?? '',
+          "immediateaction": saveCommentMap['immediateaction'] ?? '',
+          "rootcause": saveCommentMap['rootcause'] ?? '',
+          "proposaldescription": saveCommentMap['proposaldescription'] ?? '',
+          "disposition": saveCommentMap['disposition'] ?? '',
+          "correctiveaction": saveCommentMap['correctiveaction'] ?? '',
+          "correctivemeasuresby": saveCommentMap['correctivemeasuresby'] ?? '',
+          "correctivecompletiondate":
+              saveCommentMap['correctivecompletiondate'] ?? '',
+          "proceduremodification":
+              saveCommentMap['proceduremodification'] ?? '',
+          "reinspectionby": saveCommentMap['reinspectionby'] ?? '',
+          "reinspectiondate": saveCommentMap['reinspectiondate'] ?? '',
+          "reinspectionresult": saveCommentMap['reinspectionresult'] ?? ''
         };
         SaveIncidentAndQMCommentsModel saveIncidentAndQMCommentsModel =
             await _qualityManagementRepository.saveComments(saveCommentsMap);

@@ -129,3 +129,5 @@ class ChatMemberNotAdded extends ChatState {
 
   ChatMemberNotAdded({required this.errorMessage});
 }
+
+class ShowDataFetchedFromList extends ChatState {}

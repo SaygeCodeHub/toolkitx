@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
 import 'package:toolkit/data/models/permit/add_permit_switching_schedule_model.dart';
 import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/delete_switching_schedule_model.dart';
+import 'package:toolkit/data/models/permit/export_permit_log_model.dart';
 import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
 import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
@@ -28,6 +29,7 @@ import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/surrender_permit_model.dart';
+import '../../data/models/permit/sync_switching_schedule_model.dart';
 
 abstract class PermitRepository {
   Future<AllPermitModel> getAllPermits(
@@ -51,6 +53,8 @@ abstract class PermitRepository {
       String hashCode, String permitId, String role);
 
   Future<OpenClosePermitModel> openPermit(Map openPermitMap);
+
+  Future<ExportPermitLogModel> exportPermitLog(Map exportPermitLogMap);
 
   Future<OpenClosePermitModel> requestPermit(Map requestPermitMap);
 
@@ -85,7 +89,7 @@ abstract class PermitRepository {
   Future<SyncTransferCpPermitModel> syncTransferCp(Map syncTransferCpMap);
 
   Future<FetchSwitchingScheduleInstructionsModel>
-      fetchSwitchingScheduleInstructions(String scheduleId);
+      fetchSwitchingScheduleInstructions(String scheduleId, String role);
 
   Future<UpdatePermitSwitchingScheduleModel> updatePermitSwitchingSchedule(
       Map editSwitchingScheduleMap);
@@ -110,4 +114,7 @@ abstract class PermitRepository {
 
   Future<FetchSwitchingScheduleDetailsModel> fetchSwitchingScheduleDetails(
       String instructionId, String hashCode);
+
+  Future<SwitchingScheduleModel> syncSwitchingSchedule(
+      Map syncSwitchingScheduleMap);
 }

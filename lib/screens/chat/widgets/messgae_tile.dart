@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../widgets/custom_snackbar.dart';
 import 'attachment_msg_widget.dart';
@@ -18,7 +19,8 @@ class MessageTile extends StatelessWidget {
     return GestureDetector(
         onLongPress: () {
           if (messageData['msg_type']) {
-            Clipboard.setData(ClipboardData(text: messageData['msg']));
+            Clipboard.setData(ClipboardData(
+                text: EncryptData.decryptAES(messageData["msg"])));
             showCustomSnackBar(
                 context, StringConstants.kMsgCopyToClipboard, '');
           }
@@ -27,7 +29,7 @@ class MessageTile extends StatelessWidget {
           String quoteMsg = '';
           switch (messageData['msg_type']) {
             case '1':
-              quoteMsg = messageData["msg"].toString();
+              quoteMsg = EncryptData.decryptAES(messageData["msg"]);
               break;
             case '2':
               quoteMsg = "Image";

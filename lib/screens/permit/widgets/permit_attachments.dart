@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -19,7 +20,6 @@ import '../../../utils/global.dart';
 import '../../../utils/incident_view_image_util.dart';
 import '../../../widgets/custom_card.dart';
 import '../../chat/file_viewer.dart';
-import '../../chat/widgets/document_viewer_screen.dart';
 import '../../chat/widgets/view_attached_image_widget.dart';
 
 class PermitAttachments extends StatelessWidget {
@@ -106,13 +106,14 @@ class PermitAttachments extends StatelessWidget {
                                               } else if (filename
                                                   .toLowerCase()
                                                   .endsWith('.pdf')) {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DocumentViewerScreen(
-                                                                documentPath:
-                                                                    filePath)));
+                                                OpenFile.open(filename);
+                                                // Navigator.push(
+                                                //     context,
+                                                //     MaterialPageRoute(
+                                                //         builder: (context) =>
+                                                //             DocumentViewerScreen(
+                                                //                 documentPath:
+                                                //                     filePath)));
                                               } else {
                                                 await fileViewer.viewFile(
                                                     context, filePath);
