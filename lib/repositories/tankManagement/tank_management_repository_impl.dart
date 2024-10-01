@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:toolkit/data/models/tankManagement/fetch_nomination_checklist_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_checklist_comments_model.dart';
 import 'package:toolkit/data/models/tankManagement/fetch_tank_management_details_model.dart';
@@ -25,8 +23,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<FetchTankManagementDetailsModel> fetchTankManagementDetails(
       String nominationId, String hashCode) async {
-    print(
-        'fetchTankManagementDetails ${"${ApiConstants.baseUrl}nomination/getnomination?nominationid=$nominationId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}nomination/getnomination?nominationid=$nominationId&hashcode=$hashCode");
     return FetchTankManagementDetailsModel.fromJson(response);
@@ -35,8 +31,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<FetchTmsNominationDataModel> fetchTmsNominationData(
       String nominationId, String hashCode) async {
-    print(
-        'fetchTmsNominationData ${"${ApiConstants.baseUrl}nomination/gettmsnominationdata?nominationid=$nominationId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}nomination/gettmsnominationdata?nominationid=$nominationId&hashcode=$hashCode");
     return FetchTmsNominationDataModel.fromJson(response);
@@ -45,8 +39,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<FetchNominationChecklistModel> fetchNominationChecklist(
       String nominationId, String hashCode, String userId) async {
-    print(
-        'fetchTmsNominationData ${"${ApiConstants.baseUrl}nomination/gettmsnominationdata?nominationid=$nominationId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}nomination/getnominationchecklist?nominationid=$nominationId&hashcode=$hashCode&userid=$userId");
     return FetchNominationChecklistModel.fromJson(response);
@@ -55,9 +47,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<SubmitNominationChecklistModel> saveNominationChecklist(
       Map tankChecklistMap) async {
-    print('saveNominationChecklist map ${jsonEncode(tankChecklistMap)}');
-    print(
-        'saveNominationChecklist url ${"${ApiConstants.baseUrl}nomination/SaveNominationChecklist"}');
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}nomination/SaveNominationChecklist",
         tankChecklistMap);
@@ -67,8 +56,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<FetchTankChecklistQuestionModel> fetchTankQuestionsList(
       String scheduleId, String userId, String hashCode) async {
-    print(
-        'fetchTankQuestionsList ${"${ApiConstants.baseUrl}checklist/getquestions?scheduleid=$scheduleId&userid=$userId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}checklist/getquestions?scheduleid=$scheduleId&userid=$userId&hashcode=$hashCode");
     return FetchTankChecklistQuestionModel.fromJson(response);
@@ -77,8 +64,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<FetchTankChecklistCommentsModel> fetchTankChecklistComments(
       String questionId, String hashCode) async {
-    print(
-        'fetchTankChecklistComments ${"${ApiConstants.baseUrl}checklist/getquestionresponsecomments?queresponseid=$questionId&hashcode=$hashCode"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}checklist/getquestionresponsecomments?queresponseid=$questionId&hashcode=$hashCode");
     return FetchTankChecklistCommentsModel.fromJson(response);
@@ -87,9 +72,6 @@ class TankManagementRepositoryImpl extends TankManagementRepository {
   @override
   Future<SaveTankQuestionCommentsModel> saveTankQuestionComments(
       Map tankCommentsMap) async {
-    print('saveTankQuestionComments map ${jsonEncode(tankCommentsMap)}');
-    print(
-        'saveTankQuestionComments url ${"${ApiConstants.baseUrl}checklist/SaveQuestionResponseComments"}');
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}checklist/SaveQuestionResponseComments",
         tankCommentsMap);

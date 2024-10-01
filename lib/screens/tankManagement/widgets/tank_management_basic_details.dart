@@ -34,7 +34,7 @@ class TankManagementBasicDetails extends StatelessWidget {
               style: Theme.of(context).textTheme.xSmall.copyWith(
                   color: AppColor.black, fontWeight: FontWeight.bold)),
           const SizedBox(height: tiniestSpacing),
-          Text(data.status),
+          Text(data.statusText),
           const SizedBox(height: xxxSmallestSpacing),
           Text(StringConstants.kTitle,
               style: Theme.of(context).textTheme.xSmall.copyWith(

@@ -217,7 +217,6 @@ class TankManagementBloc
               errorMessage:
                   DatabaseUtil.getText('Pleaseanswerthemandatoryquestion')));
         } else {
-          print('submit list $submitList');
           Map tankChecklistMap = {
             "executionid": event.tankChecklistMap['executionId'],
             "userid": await _customerCache.getUserId(CacheKeys.userId),
