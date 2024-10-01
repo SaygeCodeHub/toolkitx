@@ -80,7 +80,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchHomeScreenData event, Emitter<ClientStates> emit) async {
     emit(HomeScreenFetching());
     try {
-      List permissionsList = [];
       int badgeCount = 0;
       String timeZoneCode =
           (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
@@ -102,7 +101,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
             CacheKeys.userId2, homeScreenModel.data!.userid2);
-        permissionsList =
+        final permissionsList =
             homeScreenModel.data!.permission.replaceAll(' ', '').split(',');
         List availableModules = [];
         permissionsList.add('safetyNotice');
@@ -156,23 +155,26 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         });
         if (fetchChatMessagesModel.data.isNotEmpty) {
           for (var item in fetchChatMessagesModel.data) {
+            final chatMsgJson = item.msgJson.toJson();
             Map<String, dynamic> chatDetailsMap = {
-              'rid': item.msgJson.toJson()['rid'],
-              'rtype': item.msgJson.toJson()['rtype'],
-              'sid': item.msgJson.toJson()['sid'],
-              'stype': item.msgJson.toJson()['stype'],
-              "msg_id": item.msgJson.toJson()['msg_id'],
-              "quote_msg_id": "",
-              "msg_type": item.msgJson.toJson()['msg_type'],
-              "msg_time": item.msgJson.toJson()['msg_time'],
-              "msg": item.msgJson.toJson()['msg'],
+              'rid': chatMsgJson['rid'],
+              'rtype': chatMsgJson['rtype'],
+              'sid': chatMsgJson['sid'],
+              'stype': chatMsgJson['stype'],
+              "msg_id": chatMsgJson['msg_id'],
+              "quote_msg_id": chatMsgJson['quote_msg_id'],
+              "msg_type": chatMsgJson['msg_type'],
+              "msg_time": chatMsgJson['msg_time'],
+              "msg": chatMsgJson['msg'],
               "sid_2": "2",
               "stype_2": "1",
               "msg_status": '1',
               "isMessageUnread": 1,
               "employee_name": item.userName,
               "sender_name": item.senderName,
-              'isReceiver': 1
+              'isReceiver': 1,
+              'isGroup': (chatMsgJson['rtype'] == '3') ? 1 : 0,
+              'clientid': chatMsgJson['clientid']
             };
             await _databaseHelper.insertMessage(chatDetailsMap).then((result) {
               if (chatScreenName == ChatMessagingScreen.routeName) {

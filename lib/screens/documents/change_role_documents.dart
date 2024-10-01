@@ -33,7 +33,8 @@ class ChangeRoleDocumentsScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is DocumentRoleSelected) {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, DocumentsListScreen.routeName,
+                Navigator.pushReplacementNamed(
+                    context, DocumentsListScreen.routeName,
                     arguments: false);
               }
             },

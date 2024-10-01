@@ -25,6 +25,7 @@ import 'package:toolkit/di/app_module.dart';
 import 'package:toolkit/repositories/chatBox/chat_box_repository.dart';
 import 'package:toolkit/repositories/uploadImage/upload_image_repository.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/utils/chat/encrypt_decrypt_message.dart';
 import '../../data/models/chatBox/fetch_all_groups_chat_model.dart';
 import '../../utils/database/database_util.dart';
 
@@ -35,6 +36,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   final ChatData chatData = getIt<ChatData>();
+  final EncryptDecryptChatMessage _encryptDecryptChatMessage =
+      EncryptDecryptChatMessage();
   Map<String, dynamic> chatDetailsMap = {};
   Map<String, dynamic> groupDataMap = {};
   final List<Map<String, dynamic>> messagesList = [];
@@ -173,7 +176,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       Random random = Random();
       int randomValue = random.nextInt(100000);
       String messageId = '${dateTime.millisecondsSinceEpoch}$randomValue';
-      // String msg = EncryptData.encryptValue
+      event.sendMessageMap['message'] = await _encryptDecryptChatMessage
+          .encryptMessage(event.sendMessageMap['message'] ?? '');
       Map<String, dynamic> sendMessageMap = {
         "msg_id": messageId,
         "quote_msg_id": event.sendMessageMap['quote_msg_id'] ?? '',
@@ -191,9 +195,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             : (event.sendMessageMap['isReceiver'] == 1)
                 ? event.sendMessageMap['stype']
                 : event.sendMessageMap['rtype'] ?? '',
+        "msg": event.sendMessageMap['message'] ?? '',
         "msg_type": event.sendMessageMap['message_type'] ?? '',
         "msg_time": dateTime.toUtc().toString(),
-        "msg": event.sendMessageMap['message'] ?? '',
         "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
         "sid_2": 2,
         "stype_2": "3",
@@ -257,7 +261,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       messagesList
         ..clear()
         ..addAll(messages);
-
       _chatScreenMessagesStreamController.sink.add(messagesList);
       if (chatDetailsMap['isMedia'] == false) {
         emit(ShowChatMessagingTextField(replyToMessage: ''));
@@ -312,9 +315,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 unreadMsgCount: item['unreadCount'] ?? 0,
                 groupName: groupData['group_name'] ?? '',
                 groupId: groupData['group_id'] ?? '',
-                groupPurpose: groupData['purpose'] ?? '');
+                groupPurpose: groupData['purpose'] ?? '',
+                isertedToDb: true);
             individualChatList.add(chat);
           } else {
+            emit(ShowDataFetchedFromList());
             DateTime msgDate = DateTime.fromMillisecondsSinceEpoch(
                 item['latest_msgTime'],
                 isUtc: true);
@@ -330,7 +335,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
                 unreadMsgCount: item['unreadCount'] ?? 0,
                 groupName: item['group_name'] ?? '',
                 groupId: item['group_id'] ?? '',
-                groupPurpose: item['purpose'] ?? '');
+                groupPurpose: item['purpose'] ?? '',
+                isertedToDb: true);
             individualChatList.add(chat);
           }
         }

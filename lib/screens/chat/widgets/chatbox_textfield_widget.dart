@@ -95,7 +95,6 @@ class _ChatBoxTextFieldWidgetState extends State<ChatBoxTextFieldWidget> {
                             context
                                 .read<ChatBloc>()
                                 .chatDetailsMap['message_type'] = '1';
-
                             context.read<ChatBloc>().add(SendChatMessage(
                                 sendMessageMap:
                                     context.read<ChatBloc>().chatDetailsMap));

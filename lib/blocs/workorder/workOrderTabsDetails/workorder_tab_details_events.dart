@@ -291,3 +291,11 @@ class UpdateWorkOrderItem extends WorkOrderTabsDetailsEvent {
 
   UpdateWorkOrderItem({required this.workOrderItemMap});
 }
+
+class FetchWorkOrderRoles extends WorkOrderTabsDetailsEvent {}
+
+class SelectWorkOrderRole extends WorkOrderTabsDetailsEvent {
+  final String roleId;
+
+  SelectWorkOrderRole({required this.roleId});
+}

@@ -19,6 +19,7 @@ class NotificationUtil {
     await pushNotifications.requestPermission();
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('notification message data ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message).then((result) {
           if (chatScreenName == ChatMessagingScreen.routeName) {
@@ -72,7 +73,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   if (message.data['ischatmsg'] == '1') {
     Map<String, dynamic> messageData = {
       'rid': message.data['rid'] ?? '',
-      'msg': message.data['chatmsg'] ?? '',
+      'msg': message.data['chatmsg'],
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
       'msg_id': message.data['id'],

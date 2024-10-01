@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
 import 'package:toolkit/blocs/workorder/workorder_states.dart';
+import 'package:toolkit/screens/workorder/workorder_role_screen.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
@@ -16,11 +18,15 @@ class WorkOrderListScreen extends StatelessWidget {
   final bool isFromHome;
 
   WorkOrderListScreen({super.key, this.isFromHome = false});
+
   static int pageNo = 1;
   final addWorkOrderMap = {};
 
   @override
   Widget build(BuildContext context) {
+    isFromHome
+        ? context.read<WorkOrderTabDetailsBloc>().roleId = ""
+        : context.read<WorkOrderTabDetailsBloc>().roleId;
     pageNo = 1;
     context.read<WorkOrderBloc>().hasReachedMax = false;
     context.read<WorkOrderBloc>().data.clear();
@@ -56,12 +62,15 @@ class WorkOrderListScreen extends StatelessWidget {
               }, builder: (context, state) {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
-                      secondaryOnPress: () {},
+                      secondaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, WorkOrderRoleScreen.routeName);
+                      },
                       primaryOnPress: () {
                         Navigator.pushNamed(
                             context, WorkOrderFilterScreen.routeName);
                       },
-                      secondaryVisible: false,
+                      secondaryVisible: true,
                       isEnabled: true,
                       clearVisible: state.filterMap.isNotEmpty,
                       clearOnPress: () {

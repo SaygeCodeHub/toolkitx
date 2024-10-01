@@ -16,6 +16,7 @@ import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
 import '../../../utils/workforce_checklist_edit_answer_util.dart';
 import '../../../widgets/custom_card.dart';
+import '../../tickets2/add_ticket2_screen.dart';
 import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import 'add_image_and_comments_screen.dart';
 
@@ -176,7 +177,7 @@ class EditAnswerListScreen extends StatelessWidget {
                                                           },
                                                           textValue:
                                                               StringConstants
-                                                                  .kAddImages),
+                                                                  .kAddComment),
                                                     ),
                                                     const SizedBox(
                                                         width: tiniestSpacing),
@@ -190,7 +191,27 @@ class EditAnswerListScreen extends StatelessWidget {
                                                             },
                                                             textValue:
                                                                 StringConstants
-                                                                    .kAddTodo))
+                                                                    .kAddTodo)),
+                                                    const SizedBox(
+                                                        width: tiniestSpacing),
+                                                    Expanded(
+                                                      child: SecondaryButton(
+                                                        onPressed: () {
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              AddTicket2Screen
+                                                                  .routeName,
+                                                              arguments: state
+                                                                  .answerModelList[
+                                                                      index]
+                                                                  .queresponseid
+                                                                  .toString());
+                                                        },
+                                                        textValue: DatabaseUtil
+                                                            .getText(
+                                                                'ticket_addticket'),
+                                                      ),
+                                                    ),
                                                   ])
                                             ])));
                               },
