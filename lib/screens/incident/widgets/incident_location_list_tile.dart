@@ -30,7 +30,6 @@ class IncidentLocationListTile extends StatelessWidget {
         builder: (context, state) {
           if (state is ReportNewIncidentLocationSelected) {
             addIncidentMap['location_name'] = state.selectLocationName;
-            print('selected location name ${state.selectLocationName}');
             return Column(
               children: [
                 ListTile(

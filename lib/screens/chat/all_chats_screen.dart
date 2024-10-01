@@ -42,8 +42,6 @@ class AllChatsScreen extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          print(
-                              'chat list screen data ${snapshot.data![index].toMap()}');
                           return CustomCard(
                               child: ListTile(
                                   onTap: () async {

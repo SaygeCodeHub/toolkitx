@@ -12,7 +12,6 @@ import '../../../data/models/incident/fetch_incident_master_model.dart';
 import '../../../data/models/incident/save_report_new_incident_model.dart';
 import '../../../data/models/incident/save_report_new_incident_photos_model.dart';
 import '../../../repositories/incident/incident_repository.dart';
-import '../../../screens/incident/category_screen.dart';
 
 class ReportNewIncidentBloc
     extends Bloc<ReportNewIncidentEvent, ReportNewIncidentStates> {
@@ -350,9 +349,9 @@ class ReportNewIncidentBloc
         emit(IncidentLocationsFetched(
             fetchIncidentLocationModel: fetchIncidentLocationModel));
         locationList.addAll(fetchIncidentLocationModel.data);
-        (CategoryScreen.isFromEdit)
-            ? add(SelectLocationId(locationId: event.locationId))
-            : null;
+        if (event.locationId.isNotEmpty) {
+          add(SelectLocationId(locationId: event.locationId));
+        }
       } else {
         emit(IncidentLocationsNotFetched(
             errorMessage: fetchIncidentLocationModel.message));

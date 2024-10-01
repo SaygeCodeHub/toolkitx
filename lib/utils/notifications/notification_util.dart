@@ -19,7 +19,6 @@ class NotificationUtil {
     await pushNotifications.requestPermission();
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('notification message data ${message.data}');
       if (message.data['ischatmsg'] == '1') {
         await _storeMessageInDatabase(message).then((result) {
           if (chatScreenName == ChatMessagingScreen.routeName) {
