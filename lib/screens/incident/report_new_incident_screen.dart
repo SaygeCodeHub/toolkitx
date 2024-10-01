@@ -31,12 +31,15 @@ class ReportNewIncidentScreen extends StatelessWidget {
   const ReportNewIncidentScreen(
       {super.key, required this.addAndEditIncidentMap});
 
-  @override
-  Widget build(BuildContext context) {
-    List dateTimeList = addAndEditIncidentMap['eventdatetime']
+  List dateTimeList() {
+    return addAndEditIncidentMap['eventdatetime']
         .toString()
         .replaceAll(' ', ',')
         .split(',');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
@@ -74,7 +77,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                         replacement: Text(
                             (addAndEditIncidentMap['eventdatetime'] == null)
                                 ? ""
-                                : dateTimeList[0]),
+                                : dateTimeList()[0]),
                         child: DatePickerTextField(
                           hintText: StringConstants.kSelectDate,
                           onDateChanged: (String date) {
@@ -95,7 +98,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                         replacement: Text(
                             (addAndEditIncidentMap['eventdatetime'] == null)
                                 ? ""
-                                : dateTimeList[1]),
+                                : dateTimeList()[1]),
                         child: TimePickerTextField(
                           hintText: StringConstants.kSelectTime,
                           onTimeChanged: (String time) {

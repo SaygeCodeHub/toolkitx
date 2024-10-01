@@ -6,12 +6,12 @@ import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/screens/chat/widgets/all_chat_floating_button.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-
 import '../../configs/app_dimensions.dart';
 
 class AllChatsScreen extends StatelessWidget {
@@ -31,7 +31,9 @@ class AllChatsScreen extends StatelessWidget {
         body: StreamBuilder<List<ChatData>>(
             stream: context.read<ChatBloc>().allChatsStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.data != null) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: leftRightMargin, horizontal: leftRightMargin),
@@ -41,7 +43,7 @@ class AllChatsScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           print(
-                              'group name ${snapshot.data![index].groupName}');
+                              'chat list screen data ${snapshot.data![index].toMap()}');
                           return CustomCard(
                               child: ListTile(
                                   onTap: () async {
@@ -121,8 +123,9 @@ class AllChatsScreen extends StatelessWidget {
                                             children: [
                                               Flexible(
                                                   child: messageText(
-                                                      snapshot
-                                                          .data![index].message,
+                                                      EncryptData.decryptAES(
+                                                          snapshot.data![index]
+                                                              .message),
                                                       snapshot.data![index]
                                                           .messageType)),
                                               Visibility(
@@ -160,8 +163,10 @@ class AllChatsScreen extends StatelessWidget {
                         separatorBuilder: (context, index) {
                           return const SizedBox(height: xxTinierSpacing);
                         }));
+              } else if (snapshot.hasError) {
+                return const Text('Has error');
               } else {
-                return const SizedBox.shrink();
+                return const Text('Inside else! No data.');
               }
             }));
   }

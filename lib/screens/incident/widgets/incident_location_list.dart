@@ -12,18 +12,20 @@ import '../../../widgets/generic_app_bar.dart';
 class IncidentLocationList extends StatelessWidget {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
   final String selectLocationName;
+  final Map addIncidentMap;
 
-  const IncidentLocationList(
-      {Key? key,
-      required this.fetchIncidentMasterModel,
-      required this.selectLocationName})
-      : super(key: key);
+  const IncidentLocationList({
+    Key? key,
+    required this.fetchIncidentMasterModel,
+    required this.selectLocationName,
+    required this.addIncidentMap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('siteid===========>${context.read<ReportNewIncidentBloc>().siteId}');
     context.read<ReportNewIncidentBloc>().add(FetchIncidentLocations(
-        siteId: context.read<ReportNewIncidentBloc>().siteId));
+        siteId: context.read<ReportNewIncidentBloc>().siteId,
+        addIncidentMap['locationid'] ?? ''));
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSelectLocation),
         body: Padding(
@@ -60,6 +62,9 @@ class IncidentLocationList extends StatelessWidget {
                                   .add(ReportNewIncidentLocationChange(
                                     selectLocationName: data[index].name,
                                   ));
+                              context
+                                  .read<ReportNewIncidentBloc>()
+                                  .selectedAsset = '';
                               context.read<ReportNewIncidentBloc>().add(
                                   SelectLocationId(locationId: data[index].id));
                               Navigator.pop(context);

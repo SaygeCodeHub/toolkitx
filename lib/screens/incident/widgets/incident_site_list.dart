@@ -6,16 +6,19 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/fetch_incident_master_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_app_bar.dart';
 
 class IncidentSiteList extends StatelessWidget {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
   final String selectSiteName;
+  final String locationId;
 
   const IncidentSiteList(
       {super.key,
       required this.fetchIncidentMasterModel,
-      required this.selectSiteName});
+      required this.selectSiteName,
+      required this.locationId});
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +54,17 @@ class IncidentSiteList extends StatelessWidget {
                                 context.read<ReportNewIncidentBloc>().add(
                                     ReportIncidentSiteListChange(
                                         selectSiteName: fetchIncidentMasterModel
-                                            .incidentMasterDatum![0][index]
-                                            .name!,
-                                        siteId: fetchIncidentMasterModel
-                                            .incidentMasterDatum![0][index]
-                                            .id!));
+                                                .incidentMasterDatum![0][index]
+                                                .name ??
+                                            '',
+                                        siteId: (value !=
+                                                DatabaseUtil.getText('Other'))
+                                            ? fetchIncidentMasterModel
+                                                .incidentMasterDatum![0][index]
+                                                .id!
+                                            : 0,
+                                        locationId: ''));
+
                                 Navigator.pop(context);
                               });
                         }),
