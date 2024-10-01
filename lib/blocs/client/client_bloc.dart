@@ -80,7 +80,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchHomeScreenData event, Emitter<ClientStates> emit) async {
     emit(HomeScreenFetching());
     try {
-      List permissionsList = [];
       int badgeCount = 0;
       String timeZoneCode =
           (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
