@@ -349,9 +349,7 @@ class ReportNewIncidentBloc
         emit(IncidentLocationsFetched(
             fetchIncidentLocationModel: fetchIncidentLocationModel));
         locationList.addAll(fetchIncidentLocationModel.data);
-        if (event.locationId.isNotEmpty) {
-          add(SelectLocationId(locationId: event.locationId));
-        }
+        add(SelectLocationId(locationId: event.locationId));
       } else {
         emit(IncidentLocationsNotFetched(
             errorMessage: fetchIncidentLocationModel.message));

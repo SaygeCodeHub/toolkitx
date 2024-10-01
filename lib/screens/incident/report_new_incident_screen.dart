@@ -109,7 +109,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: xxTinySpacing),
-                      Text(StringConstants.kDetailedDescription,
+                      Text(StringConstants.kSummaryOfIncident,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall

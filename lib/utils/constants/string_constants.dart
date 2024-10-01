@@ -236,6 +236,7 @@ abstract class StringConstants {
   static const String kPleaseSelectTime = 'Please Select Time!';
   static const String kPleaseAddSignature = 'Please add signature!';
   static const String kDetailedDescription = 'Detailed description of facts';
+  static const String kSummaryOfIncident = 'Summary of Incident';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
   static const String kSite = 'Site';

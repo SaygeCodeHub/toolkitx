@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/incident/incident_details_model.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../utils/database_utils.dart';
@@ -61,7 +62,7 @@ class IncidentDetails extends StatelessWidget {
                 style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
             Text(
-              DatabaseUtil.getText('IncidentDetails'),
+              StringConstants.kSummaryOfIncident,
               style: Theme.of(context)
                   .textTheme
                   .medium
