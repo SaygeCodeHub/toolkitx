@@ -10,6 +10,7 @@ import 'package:toolkit/data/models/encrypt_class.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
 import 'package:toolkit/screens/chat/widgets/all_chat_floating_button.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import '../../configs/app_dimensions.dart';
@@ -32,7 +33,7 @@ class AllChatsScreen extends StatelessWidget {
             stream: context.read<ChatBloc>().allChatsStream,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.data != null) {
                 return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -162,9 +163,11 @@ class AllChatsScreen extends StatelessWidget {
                           return const SizedBox(height: xxTinierSpacing);
                         }));
               } else if (snapshot.hasError) {
-                return const Text('Has error');
+                return const Center(
+                    child: Text(StringConstants.kSomethingWentWrong));
               } else {
-                return const Text('Inside else! No data.');
+                return const Center(
+                    child: Text(StringConstants.kSomethingWentWrong));
               }
             }));
   }

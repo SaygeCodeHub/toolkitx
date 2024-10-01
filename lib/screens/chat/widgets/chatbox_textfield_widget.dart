@@ -8,6 +8,7 @@ import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../utils/global.dart';
 
 class ChatBoxTextFieldWidget extends StatefulWidget {
   final String replyToMessage;
@@ -85,7 +86,7 @@ class _ChatBoxTextFieldWidgetState extends State<ChatBoxTextFieldWidget> {
                                 },
                                 decoration: const InputDecoration.collapsed(
                                     hintText: StringConstants.kSendMessage)))),
-                    ChooseMediaWidget(),
+                    if (isNetworkEstablished) ChooseMediaWidget(),
                     IconButton(
                         icon: const Icon(Icons.send_rounded),
                         onPressed: () {
