@@ -26,8 +26,9 @@ class IncidentStatusScreen extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
 
   IncidentStatusScreen(
-      {Key? key, required this.incidentId, required this.incidentDetailsModel})
-      : super(key: key);
+      {super.key,
+      required this.incidentId,
+      required this.incidentDetailsModel});
   final Map incidentCommentsMap = {};
 
   @override
@@ -55,7 +56,8 @@ class IncidentStatusScreen extends StatelessWidget {
                     onTextFieldValue: (String textValue) {
                       incidentCommentsMap['comments'] = textValue;
                     },
-                    incidentCommentsMap: incidentCommentsMap)
+                    incidentCommentsMap: incidentCommentsMap,
+                    showStatusControl: true)
               ]))),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),

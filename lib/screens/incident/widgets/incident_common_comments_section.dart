@@ -6,6 +6,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/incident_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/incident/incident_popup_menu_status.dart';
 import '../../../widgets/generic_text_field.dart';
 import '../../checklist/workforce/widgets/upload_image_section.dart';
 import 'incident_classification_expansion_tile.dart';
@@ -18,20 +19,25 @@ class IncidentCommonCommentsSection extends StatelessWidget {
   final TextFieldListCallBack onTextFieldValue;
   final IncidentDetailsModel? incidentDetailsModel;
   final Map incidentCommentsMap;
+  final bool showStatusControl;
 
   const IncidentCommonCommentsSection(
-      {Key? key,
+      {super.key,
       required this.onPhotosUploaded,
       required this.onTextFieldValue,
       this.incidentDetailsModel,
-      required this.incidentCommentsMap})
-      : super(key: key);
+      required this.incidentCommentsMap,
+      required this.showStatusControl});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          if (showStatusControl &&
+              incidentDetailsModel!.data!.isShowAdditionalInfo == '1')
+            IncidentPopUpMenuStatusWidgets().renderWidgets(
+                incidentDetailsModel!, context, incidentCommentsMap),
           Visibility(
             visible: incidentDetailsModel!.data!.nextStatus == '1',
             child: Text(DatabaseUtil.getText('Classification'),

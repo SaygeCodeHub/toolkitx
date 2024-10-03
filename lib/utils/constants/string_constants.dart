@@ -25,6 +25,24 @@ abstract class StringConstants {
   static const String kNoLogs = 'No logs!'; //
   static const String kNoItems = 'No items!'; //
   static const String kNoLoto = 'No loto!'; //
+  static const String kSuspectedCause = 'Suspected Cause'; //
+  static const String kRootCause = 'Root Cause'; //
+  static const String kLessonsLearnt = 'Lessons Learnt'; //
+  static const String kPreventiveActions = 'Preventive Actions'; //
+  static const String kIncidentSuspectedCauseValidation =
+      'Please fill suspected cause!'; //
+  static const String kIncidentRootCauseLessonValidation =
+      'Please fill root cause & lessons learnt!'; //
+  static const String kIncidentPreliminaryRecommendationValidation =
+      'Please fill preliminary recommendations!'; //
+  static const String kIncidentCompletedCorrectiveActionsValidation =
+      'Please fill completed corrective actions!'; //
+  static const String kIncidentPreventiveActionsValidation =
+      'Please fill preventive actions!'; //
+  static const String kPreliminaryRecommendation =
+      'Preliminary Recommendation'; //
+  static const String kCompletedCorrectiveActions =
+      'Completed Corrective Actions'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
