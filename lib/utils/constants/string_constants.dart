@@ -773,4 +773,11 @@ abstract class StringConstants {
   static const String kCountryOfOrigin = "Country of Origin";
   static const String kCountryOfProduction = "Country of Production";
   static const String kDestinationTank = "Destination Tank";
+  static const String kOutGoingInvoice = "OutGoing Invoice";
+  static const String kInComingInvoice = "InComing Invoice";
+  static const String kBankStatement = "Bank Statement";
+  static const String kAccounting = "Accounting";
+  static const String kOutGoingInvoiceList = "Outgoing Invoice List";
+  static const String kInComingInvoiceList = "Incoming Invoice List";
+  static const String kBankStatementList = "Bank Statement List";
 }

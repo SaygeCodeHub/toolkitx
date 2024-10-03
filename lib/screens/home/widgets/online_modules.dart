@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
@@ -322,6 +323,11 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, TankManagementListScreen.routeName).then(
             (_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'accounting':
+        // globalBloc.add(UpdateCount(type: 'accounting'));
+        Navigator.pushNamed(context, AccountingScreen.routeName).then((_) =>
+            clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
     }
   }
