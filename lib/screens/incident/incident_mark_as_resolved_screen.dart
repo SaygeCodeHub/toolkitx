@@ -44,9 +44,8 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(children: [
-            if (incidentDetailsModel.data!.isShowAdditionalInfo == '1')
-              IncidentPopUpMenuStatusWidgets().renderMarkAsResolvedControl(
-                  incidentDetailsModel, context, incidentCommentsMap),
+            IncidentPopUpMenuStatusWidgets().renderMarkAsResolvedControl(
+                incidentDetailsModel, context, incidentCommentsMap),
             IncidentCommonCommentsSection(
                 onPhotosUploaded: (List uploadList) {
                   incidentCommentsMap['file_name'] = uploadList
