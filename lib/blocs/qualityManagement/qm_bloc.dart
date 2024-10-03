@@ -263,6 +263,7 @@ class QualityManagementBloc
         emit(QualityManagementCommentsNotSaved(
             commentsNotSaved: DatabaseUtil.getText('CommentsInsert')));
       } else {
+        print('save qa comments $saveCommentMap');
         Map saveCommentsMap = {
           "userid": userid,
           "incidentid": encryptQmId,

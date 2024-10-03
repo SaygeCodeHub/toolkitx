@@ -206,7 +206,8 @@ class IncidentDetailsBloc
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
       print('add comment bloc $saveCommentMap');
-      if (isValidControlValue(saveCommentMap['suspectedcause']) &&
+      if (!event.isFromAddComment &&
+          isValidControlValue(saveCommentMap['suspectedcause']) &&
           isValidControlValue(saveCommentMap['rootcause']) &&
           isValidControlValue(saveCommentMap['lessonslearnt']) &&
           isValidControlValue(saveCommentMap['preliminaryrecommendation']) &&

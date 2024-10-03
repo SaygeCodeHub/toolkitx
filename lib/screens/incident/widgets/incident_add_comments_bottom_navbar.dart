@@ -46,7 +46,8 @@ class IncidentAddCommentsBottomNavbar extends StatelessWidget {
                 if (incidentCommentsMap['comments'] != null ||
                     incidentCommentsMap['comments'] != '') {
                   context.read<IncidentDetailsBloc>().add(SaveIncidentComments(
-                      saveCommentsMap: incidentCommentsMap));
+                      saveCommentsMap: incidentCommentsMap,
+                      isFromAddComment: true));
                 }
               } else if (state is ImageCouldNotUpload) {
                 GenericLoadingPopUp.dismiss(context);
@@ -93,7 +94,8 @@ class IncidentAddCommentsBottomNavbar extends StatelessWidget {
                     } else {
                       context.read<IncidentDetailsBloc>().add(
                           SaveIncidentComments(
-                              saveCommentsMap: incidentCommentsMap));
+                              saveCommentsMap: incidentCommentsMap,
+                              isFromAddComment: true));
                     }
                   }
                 },

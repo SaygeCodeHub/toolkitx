@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:toolkit/data/models/incident/edit_incident_details_model.dart';
 import 'package:toolkit/data/models/incident/fetch_incident_location_model.dart';
 
@@ -134,6 +136,7 @@ class IncidentRepositoryImpl extends IncidentRepository {
   @override
   Future<SaveIncidentAndQMCommentsModel> saveComments(
       Map saveCommentsMap) async {
+    print('incident impl ${jsonEncode(saveCommentsMap)}');
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}incident/savecomments", saveCommentsMap);
     return SaveIncidentAndQMCommentsModel.fromJson(response);
