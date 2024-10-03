@@ -19,6 +19,7 @@ abstract class StringConstants {
   static const String kViewDocument = 'View Document'; //
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
+  static const String kIncomingInvoiceList = 'Incoming Invoice List'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //

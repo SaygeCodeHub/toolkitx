@@ -127,6 +127,7 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/incoming_invoices_screen.dart';
 import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
@@ -765,6 +766,8 @@ class AppRoutes {
             AddTicket2Screen(responsequeid: settings.arguments.toString()));
       case WorkOrderRoleScreen.routeName:
         return _createRoute(const WorkOrderRoleScreen());
+      case IncomingInvoicesScreen.routeName:
+        return _createRoute(const IncomingInvoicesScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }
