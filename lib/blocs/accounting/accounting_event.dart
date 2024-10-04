@@ -5,3 +5,9 @@ class FetchIncomingInvoices extends AccountingEvent {
 
   FetchIncomingInvoices({required this.pageNo});
 }
+
+class FetchOutgoingInvoices extends AccountingEvent {
+  final int pageNo;
+
+  FetchOutgoingInvoices({required this.pageNo});
+}

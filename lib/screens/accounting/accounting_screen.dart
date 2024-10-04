@@ -5,7 +5,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
 import 'package:toolkit/screens/accounting/incoming_invoices_screen.dart';
-import 'package:toolkit/screens/accounting/out_going_list_screen.dart';
+import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/utils/accounting_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
@@ -64,8 +64,7 @@ class AccountingScreen extends StatelessWidget {
       String equipmentModuleName, BuildContext context) {
     switch (equipmentModuleName) {
       case StringConstants.kOutGoingInvoice:
-        Navigator.pushNamed(context, OutGoingListScreen.routeName,
-            arguments: true);
+        Navigator.pushNamed(context, OutgoingListScreen.routeName);
         break;
       case StringConstants.kInComingInvoice:
         Navigator.pushNamed(context, IncomingInvoicesScreen.routeName);
