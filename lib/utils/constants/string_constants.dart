@@ -34,6 +34,12 @@ abstract class StringConstants {
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
   static const String kEditItem = 'Edit Item'; //
+  static const String kInvoiceYear = 'Invoice Year'; //
+  static const String kEntity = 'Entity'; //
+  static const String kClient = 'Client'; //
+  static const String kSelectYear = 'Select Year'; //
+  static const String kSelectEntity = 'Select Entity'; //
+  static const String kSelectClient = 'Select Client'; //
   static const String kExpenseWorkingAtNumber =
       'Working at Number cannot be empty!    '; //
   static const String kGoBack = 'Go Back'; //
@@ -222,6 +228,8 @@ abstract class StringConstants {
   static const String kDateRange = 'Date Range';
   static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
+  static const String kSelectStartDate = 'Select Start Date';
+  static const String kSelectEndDate = 'Select End Date';
   static const String kPleaseSelectDate = 'Please Select Date!';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';

@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
@@ -11,9 +12,17 @@ class AccountingRepositoryImpl implements AccountingRepository {
   final CustomerCache _customerCache = getIt<CustomerCache>();
 
   @override
-  Future<FetchIncomingInvoicesModel> fetchIncomingInvoices(int pageNo) async {
+  Future<FetchIncomingInvoicesModel> fetchIncomingInvoices(
+      int pageNo, String filter) async {
     final response = await DioClient().get(
-        '${ApiConstants.baseUrl}accounting/GetIncomingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
+        '${ApiConstants.baseUrl}accounting/GetIncomingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
     return FetchIncomingInvoicesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchIAccountingMasterModel> fetchAccountingMaster() async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/getmaster?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
+    return FetchIAccountingMasterModel.fromJson(response);
   }
 }

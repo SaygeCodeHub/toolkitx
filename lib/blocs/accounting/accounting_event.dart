@@ -5,3 +5,5 @@ class FetchIncomingInvoices extends AccountingEvent {
 
   FetchIncomingInvoices({required this.pageNo});
 }
+
+class FetchAccountingMaster extends AccountingEvent {}

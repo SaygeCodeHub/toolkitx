@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
@@ -10,6 +11,8 @@ import 'package:toolkit/utils/accounting_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
+
+import '../../blocs/accounting/accounting_bloc.dart';
 
 class AccountingScreen extends StatelessWidget {
   const AccountingScreen({super.key});
@@ -68,6 +71,7 @@ class AccountingScreen extends StatelessWidget {
             arguments: true);
         break;
       case StringConstants.kInComingInvoice:
+        context.read<AccountingBloc>().accountingFilterMap.clear();
         Navigator.pushNamed(context, IncomingInvoicesScreen.routeName);
         break;
       case StringConstants.kBankStatement:

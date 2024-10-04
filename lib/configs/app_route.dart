@@ -61,6 +61,7 @@ import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/accounting/accounting_filter_screen.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
@@ -777,6 +778,8 @@ class AppRoutes {
         return _createRoute(const BankStatementListScreen());
       case IncomingInvoicesScreen.routeName:
         return _createRoute(const IncomingInvoicesScreen());
+      case AccountingFilterScreen.routeName:
+        return _createRoute(const AccountingFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

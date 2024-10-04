@@ -29,3 +29,9 @@ class FailedToFetchIncomingInvoices extends AccountingState {
 
   FailedToFetchIncomingInvoices({required this.errorMessage});
 }
+
+class FailedToFetchAccountingMaster extends AccountingState {
+  final String errorMessage;
+
+  FailedToFetchAccountingMaster({required this.errorMessage});
+}

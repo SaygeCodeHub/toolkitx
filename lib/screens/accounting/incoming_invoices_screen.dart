@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_state.dart';
-import 'package:toolkit/configs/app_theme.dart';
 
 import '../../blocs/accounting/accounting_event.dart';
-import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_card.dart';
-import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'widgets/incomingInvoicesWidgets/incoming_invoice_filter_icon.dart';
+import 'widgets/incomingInvoicesWidgets/incoming_invoices_subtitle.dart';
+import 'widgets/incomingInvoicesWidgets/incoming_invoices_title.dart';
 
 class IncomingInvoicesScreen extends StatelessWidget {
   static const routeName = 'IncomingInvoicesScreen';
@@ -33,11 +33,7 @@ class IncomingInvoicesScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              CustomIconButtonRow(
-                  primaryOnPress: () {},
-                  secondaryVisible: false,
-                  clearOnPress: () {},
-                  secondaryOnPress: () {}),
+              const IncomingInvoiceFilterIcon(),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<AccountingBloc, AccountingState>(
                   buildWhen: (previousState, currentState) =>
@@ -47,8 +43,6 @@ class IncomingInvoicesScreen extends StatelessWidget {
                       (currentState is FailedToFetchIncomingInvoices) ||
                       (currentState is IncomingInvoicesWithNoData),
                   listener: (context, state) {
-                    print(
-                        'state and reached max $state ${context.read<AccountingBloc>().incomingInvoicesReachedMax}');
                     if (state is IncomingInvoicesWithNoData &&
                         context
                             .read<AccountingBloc>()
@@ -70,9 +64,9 @@ class IncomingInvoicesScreen extends StatelessWidget {
                           child: ListView.separated(
                               physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: context
+                              itemCount: (context
                                       .read<AccountingBloc>()
-                                      .incomingInvoicesReachedMax
+                                      .incomingInvoicesReachedMax)
                                   ? state.incomingInvoices.length
                                   : state.incomingInvoices.length + 1,
                               itemBuilder: (context, index) {
@@ -81,58 +75,12 @@ class IncomingInvoicesScreen extends StatelessWidget {
                                       child: ListTile(
                                           contentPadding: const EdgeInsets.all(
                                               xxTinierSpacing),
-                                          title: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: xxTinierSpacing),
-                                              child: Text(
-                                                  state.incomingInvoices[index]
-                                                      .entity,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .small
-                                                      .copyWith(
-                                                          color: AppColor.black,
-                                                          fontWeight: FontWeight
-                                                              .w600))),
-                                          subtitle: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    state
-                                                        .incomingInvoices[index]
-                                                        .client,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .xSmall
-                                                        .copyWith(
-                                                            color:
-                                                                AppColor.grey)),
-                                                const SizedBox(
-                                                    height: tinierSpacing),
-                                                Text(
-                                                    state
-                                                        .incomingInvoices[index]
-                                                        .date,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .xSmall
-                                                        .copyWith(
-                                                            color:
-                                                                AppColor.grey)),
-                                                const SizedBox(
-                                                    height: tinierSpacing),
-                                                Text(
-                                                    state
-                                                        .incomingInvoices[index]
-                                                        .amount,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .xSmall
-                                                        .copyWith(
-                                                            color:
-                                                                AppColor.grey))
-                                              ]),
+                                          title: IncomingInvoicesTitle(
+                                              incomingInvoices: state
+                                                  .incomingInvoices[index]),
+                                          subtitle: IncomingInvoicesSubtitle(
+                                              incomingInvoices: state
+                                                  .incomingInvoices[index]),
                                           onTap: () {}));
                                 } else {
                                   context.read<AccountingBloc>().add(
