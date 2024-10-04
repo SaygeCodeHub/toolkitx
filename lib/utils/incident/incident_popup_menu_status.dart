@@ -103,7 +103,7 @@ class IncidentPopUpMenuStatusWidgets {
           TextFieldWidget(
               maxLines: 5,
               onTextFieldChanged: (String value) {
-                incidentCommentsMap['preventivecctions'] = value;
+                incidentCommentsMap['preventiveactions'] = value;
               }),
           const SizedBox(height: xxTinierSpacing)
         ],

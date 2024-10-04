@@ -212,7 +212,7 @@ class IncidentDetailsBloc
           isValidControlValue(saveCommentMap['lessonslearnt']) &&
           isValidControlValue(saveCommentMap['preliminaryrecommendation']) &&
           isValidControlValue(saveCommentMap['completedcorrectiveactions']) &&
-          isValidControlValue(saveCommentMap['preventivecctions'])) {
+          isValidControlValue(saveCommentMap['preventiveactions'])) {
         print('inside ifffffff');
         emit(IncidentCommentsNotSaved(
             commentsNotSaved:
@@ -233,7 +233,7 @@ class IncidentDetailsBloc
               saveCommentMap['preliminaryrecommendation'] ?? '',
           "completedcorrectiveactions":
               saveCommentMap['completedcorrectiveactions'] ?? '',
-          "preventivecctions": saveCommentMap['preventivecctions'] ?? ''
+          "preventiveactions": saveCommentMap['preventiveactions'] ?? ''
         };
         SaveIncidentAndQMCommentsModel saveIncidentCommentsModel =
             await _incidentRepository.saveComments(saveCommentsMap);
