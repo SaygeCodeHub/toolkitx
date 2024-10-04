@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
-import 'package:toolkit/screens/accounting/in_coming_list_screen.dart';
+import 'package:toolkit/screens/accounting/incoming_invoices_screen.dart';
 import 'package:toolkit/screens/accounting/out_going_list_screen.dart';
 import 'package:toolkit/utils/accounting_util.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -13,6 +13,7 @@ import 'package:toolkit/widgets/generic_app_bar.dart';
 
 class AccountingScreen extends StatelessWidget {
   const AccountingScreen({super.key});
+
   static const routeName = 'AccountingScreen';
 
   @override
@@ -67,7 +68,7 @@ class AccountingScreen extends StatelessWidget {
             arguments: true);
         break;
       case StringConstants.kInComingInvoice:
-        Navigator.pushNamed(context, InComingListScreen.routeName);
+        Navigator.pushNamed(context, IncomingInvoicesScreen.routeName);
         break;
       case StringConstants.kBankStatement:
         Navigator.pushNamed(context, BankStatementListScreen.routeName);
