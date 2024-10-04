@@ -5,9 +5,9 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
 
-import '../../../../configs/app_color.dart';
-import '../../../../configs/app_spacing.dart';
-import '../../../../data/models/accounting/fetch_accounting_master_model.dart';
+import '../../../configs/app_color.dart';
+import '../../../configs/app_spacing.dart';
+import '../../../data/models/accounting/fetch_accounting_master_model.dart';
 
 class AccountingEntityDropdown extends StatefulWidget {
   final void Function(String entityId) onEntityChanged;

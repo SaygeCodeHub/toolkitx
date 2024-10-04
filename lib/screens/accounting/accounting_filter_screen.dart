@@ -12,7 +12,7 @@ import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
 import '../incident/widgets/date_picker.dart';
 import 'widgets/accounting_client_dropdown.dart';
-import 'widgets/incomingInvoicesWidgets/accounting_entity_dropdown.dart';
+import 'widgets/accounting_entity_dropdown.dart';
 
 class AccountingFilterScreen extends StatelessWidget {
   static const routeName = 'IncomingInvoicesFilterScreen';
