@@ -33,7 +33,8 @@ class IncomingInvoicesScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              const IncomingInvoiceFilterIcon(),
+              const IncomingInvoiceFilterIcon(
+                  routeName: IncomingInvoicesScreen.routeName),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<AccountingBloc, AccountingState>(
                   buildWhen: (previousState, currentState) =>

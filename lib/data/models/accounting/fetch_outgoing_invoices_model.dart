@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-FetchOutgoingInvoicesModel fetchOutgoingInvoicesModelFromJson(String str) => FetchOutgoingInvoicesModel.fromJson(json.decode(str));
+FetchOutgoingInvoicesModel fetchOutgoingInvoicesModelFromJson(String str) =>
+    FetchOutgoingInvoicesModel.fromJson(json.decode(str));
 
-String fetchOutgoingInvoicesModelToJson(FetchOutgoingInvoicesModel data) => json.encode(data.toJson());
+String fetchOutgoingInvoicesModelToJson(FetchOutgoingInvoicesModel data) =>
+    json.encode(data.toJson());
 
 class FetchOutgoingInvoicesModel {
   final int status;
@@ -15,17 +17,18 @@ class FetchOutgoingInvoicesModel {
     required this.data,
   });
 
-  factory FetchOutgoingInvoicesModel.fromJson(Map<String, dynamic> json) => FetchOutgoingInvoicesModel(
-    status: json["Status"],
-    message: json["Message"],
-    data: List<OutgoingInvoicesDatum>.from(json["Data"].map((x) => OutgoingInvoicesDatum.fromJson(x))),
-  );
+  factory FetchOutgoingInvoicesModel.fromJson(Map<String, dynamic> json) =>
+      FetchOutgoingInvoicesModel(
+          status: json["Status"],
+          message: json["Message"],
+          data: List<OutgoingInvoicesDatum>.from(
+              json["Data"].map((x) => OutgoingInvoicesDatum.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "Message": message,
-    "Data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "Status": status,
+        "Message": message,
+        "Data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class OutgoingInvoicesDatum {
@@ -43,20 +46,20 @@ class OutgoingInvoicesDatum {
     required this.amount,
   });
 
-  factory OutgoingInvoicesDatum.fromJson(Map<String, dynamic> json) => OutgoingInvoicesDatum(
-    id: json["id"],
-    entity: json["entity"] ?? '',
-    client: json["client"] ?? '',
-    date: json["date"],
-    amount: json["amount"],
-  );
+  factory OutgoingInvoicesDatum.fromJson(Map<String, dynamic> json) =>
+      OutgoingInvoicesDatum(
+        id: json["id"],
+        entity: json["entity"] ?? '',
+        client: json["client"] ?? '',
+        date: json["date"] ?? '',
+        amount: json["amount"] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "entity": entity,
-    "client": client,
-    "date": date,
-    "amount": amount,
-  };
+        "id": id,
+        "entity": entity,
+        "client": client,
+        "date": date,
+        "amount": amount,
+      };
 }
-

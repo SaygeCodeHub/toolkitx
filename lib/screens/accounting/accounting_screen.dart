@@ -67,10 +67,11 @@ class AccountingScreen extends StatelessWidget {
       String equipmentModuleName, BuildContext context) {
     switch (equipmentModuleName) {
       case StringConstants.kOutGoingInvoice:
+        context.read<AccountingBloc>().outgoingFilterMap.clear();
         Navigator.pushNamed(context, OutgoingListScreen.routeName);
         break;
       case StringConstants.kInComingInvoice:
-        context.read<AccountingBloc>().accountingFilterMap.clear();
+        context.read<AccountingBloc>().incomingFilterMap.clear();
         Navigator.pushNamed(context, IncomingInvoicesScreen.routeName);
         break;
       case StringConstants.kBankStatement:

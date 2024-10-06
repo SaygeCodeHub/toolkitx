@@ -779,7 +779,9 @@ class AppRoutes {
       case IncomingInvoicesScreen.routeName:
         return _createRoute(const IncomingInvoicesScreen());
       case AccountingFilterScreen.routeName:
-        return _createRoute(const AccountingFilterScreen());
+        List args = settings.arguments as List;
+        return _createRoute(AccountingFilterScreen(
+            accountingFilterMap: args[0], currentRouteName: args[1]));
       default:
         return _createRoute(const WelcomeScreen());
     }

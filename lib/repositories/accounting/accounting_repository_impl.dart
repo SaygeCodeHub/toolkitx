@@ -22,9 +22,10 @@ class AccountingRepositoryImpl implements AccountingRepository {
   }
 
   @override
-  Future<FetchOutgoingInvoicesModel> fetchOutgoingInvoices(int pageNo) async {
+  Future<FetchOutgoingInvoicesModel> fetchOutgoingInvoices(
+      int pageNo, String filter) async {
     final response = await DioClient().get(
-        '${ApiConstants.baseUrl}accounting/GetOutgoingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
+        '${ApiConstants.baseUrl}accounting/GetOutgoingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
     return FetchOutgoingInvoicesModel.fromJson(response);
   }
 
@@ -35,4 +36,3 @@ class AccountingRepositoryImpl implements AccountingRepository {
     return FetchIAccountingMasterModel.fromJson(response);
   }
 }
-

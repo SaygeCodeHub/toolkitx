@@ -4,11 +4,11 @@ import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/blocs/accounting/accounting_state.dart';
 import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/screens/accounting/widgets/outgoing_list_tile_subtitle.dart';
-import 'package:toolkit/screens/accounting/widgets/outgoing_list_tile_title.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_invoice_filter_icon.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_list_tile_subtitle.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_list_tile_title.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_card.dart';
-import 'package:toolkit/widgets/custom_icon_button_row.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
@@ -32,83 +32,82 @@ class OutgoingListScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              CustomIconButtonRow(
-                  secondaryOnPress: () {},
-                  secondaryVisible: false,
-                  primaryOnPress: () {},
-                  clearOnPress: () {}),
+              const OutgoingInvoiceFilterIcon(
+                  routeName: OutgoingListScreen.routeName),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<AccountingBloc, AccountingState>(
-                buildWhen: (previousState, currentState) =>
-                    (currentState is FetchingOutgoingInvoices &&
-                        currentState.pageNo == 1) ||
-                    (currentState is OutgoingInvoicesFetched) ||
-                    (currentState is FailedToFetchOutgoingInvoices) ||
-                    (currentState is OutgoingInvoicesWithNoData),
-                listener: (context, state) {
-                  if (state is OutgoingInvoicesWithNoData &&
-                      context
-                          .read<AccountingBloc>()
-                          .outgoingInvoicesReachedMax) {
-                    showCustomSnackBar(
-                        context, StringConstants.kAllDataLoaded, '');
-                  }
-                },
-                builder: (context,  state) {
-                  if (state is FetchingOutgoingInvoices) {
-                    return Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 3.5),
-                      child: const CircularProgressIndicator(),
-                    ));
-                  } else if (state is OutgoingInvoicesFetched) {
-                    return Expanded(
-                      child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: context
+                  buildWhen: (previousState, currentState) =>
+                      (currentState is FetchingOutgoingInvoices &&
+                          currentState.pageNo == 1) ||
+                      (currentState is OutgoingInvoicesFetched) ||
+                      (currentState is FailedToFetchOutgoingInvoices) ||
+                      (currentState is OutgoingInvoicesWithNoData),
+                  listener: (context, state) {
+                    if (state is OutgoingInvoicesWithNoData &&
+                        context
                             .read<AccountingBloc>()
-                            .outgoingInvoicesReachedMax
-                            ? state.outgoingInvoices.length
-                            : state.outgoingInvoices.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index < state.outgoingInvoices.length) {
-                            return CustomCard(
-                              child: ListTile(
-                                contentPadding:
-                                    const EdgeInsets.all(xxTinierSpacing),
-                                title: OutgoingListTileTitle(
-                                  data:  state.outgoingInvoices[index],
+                            .outgoingInvoicesReachedMax) {
+                      showCustomSnackBar(
+                          context, StringConstants.kAllDataLoaded, '');
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is FetchingOutgoingInvoices) {
+                      return Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height / 3.5),
+                        child: const CircularProgressIndicator(),
+                      ));
+                    } else if (state is OutgoingInvoicesFetched) {
+                      return Expanded(
+                        child: ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: context
+                                  .read<AccountingBloc>()
+                                  .outgoingInvoicesReachedMax
+                              ? state.outgoingInvoices.length
+                              : state.outgoingInvoices.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index < state.outgoingInvoices.length) {
+                              return CustomCard(
+                                child: ListTile(
+                                  contentPadding:
+                                      const EdgeInsets.all(xxTinierSpacing),
+                                  title: OutgoingListTileTitle(
+                                    outgoingInvoices:
+                                        state.outgoingInvoices[index],
+                                  ),
+                                  subtitle: OutgoingListTileSubtitle(
+                                      outgoingInvoices:
+                                          state.outgoingInvoices[index]),
+                                  onTap: () {
+                                    // print('Selected ID: ${data['id']}');
+                                  },
                                 ),
-                                subtitle: OutgoingListTileSubtitle(
-                                    data: state.outgoingInvoices[index]),
-                                onTap: () {
-                                  // print('Selected ID: ${data['id']}');
-                                },
-                              ),
-                            );
-                          } else {
-                            context.read<AccountingBloc>().add(
-                                FetchOutgoingInvoices(
-                                    pageNo: state.pageNo + 1));
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(height: xxTinierSpacing);
-                        },
-                      ),
-                    );
-                  }else if (state is OutgoingInvoicesWithNoData) {
-                    return NoRecordsText(text: state.message);
-                  } else if (state is FailedToFetchIncomingInvoices) {
-                    return Text(state.errorMessage);
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
+                              );
+                            } else {
+                              context.read<AccountingBloc>().add(
+                                  FetchOutgoingInvoices(
+                                      pageNo: state.pageNo + 1));
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: xxTinierSpacing);
+                          },
+                        ),
+                      );
+                    } else if (state is OutgoingInvoicesWithNoData) {
+                      return NoRecordsText(text: state.message);
+                    } else if (state is FailedToFetchIncomingInvoices) {
+                      return Text(state.errorMessage);
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }),
               const SizedBox(height: xxTinySpacing)
             ])));
   }

@@ -15,13 +15,14 @@ import 'accounting_state.dart';
 class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
-  final Map accountingFilterMap = {};
+  final Map incomingFilterMap = {};
+  final Map outgoingFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
-    final List<OutgoingInvoicesDatum> outgoingInvoices = [];
+  final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   bool incomingInvoicesReachedMax = false;
+  bool outgoingInvoicesReachedMax = false;
   FetchIAccountingMasterModel fetchIAccountingMasterModel =
       FetchIAccountingMasterModel();
-  bool outgoingInvoicesReachedMax = false;
 
   AccountingBloc() : super(AccountingInitial()) {
     on<FetchIncomingInvoices>(_fetchIncomingInvoices);
@@ -36,7 +37,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     try {
       FetchIncomingInvoicesModel fetchIncomingInvoicesModel =
           await _accountingRepository.fetchIncomingInvoices(
-              event.pageNo, jsonEncode(accountingFilterMap));
+              event.pageNo, jsonEncode(incomingFilterMap));
       incomingInvoicesReachedMax = fetchIncomingInvoicesModel.data.isEmpty;
       if (fetchIncomingInvoicesModel.status == 200) {
         if (fetchIncomingInvoicesModel.data.isNotEmpty) {
@@ -59,11 +60,14 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     }
   }
 
-  Future<void> _fetchOutgoingInvoices(FetchOutgoingInvoices event, Emitter<AccountingState> emit) async {
+  Future<void> _fetchOutgoingInvoices(
+      FetchOutgoingInvoices event, Emitter<AccountingState> emit) async {
     emit(FetchingOutgoingInvoices(pageNo: event.pageNo));
+    outgoingInvoices.clear();
     try {
       FetchOutgoingInvoicesModel fetchOutgoingInvoicesModel =
-      await _accountingRepository.fetchOutgoingInvoices(event.pageNo);
+          await _accountingRepository.fetchOutgoingInvoices(
+              event.pageNo, jsonEncode(outgoingFilterMap));
       outgoingInvoicesReachedMax = fetchOutgoingInvoicesModel.data.isEmpty;
       if (fetchOutgoingInvoicesModel.status == 200) {
         if (fetchOutgoingInvoicesModel.data.isNotEmpty) {
