@@ -117,9 +117,10 @@ class AccountingFilterScreen extends StatelessWidget {
                           Navigator.pop(context);
                           switch (currentRouteName) {
                             case 'IncomingInvoicesScreen':
-                              context
-                                  .read<AccountingBloc>()
-                                  .add(FetchIncomingInvoices(pageNo: 1));
+                              context.read<AccountingBloc>().incomingInvoices.clear();
+                              context.read<AccountingBloc>().add(
+                                  FetchIncomingInvoices(
+                                      pageNo: 1, isFilterEnabled: true));
                               break;
                             case 'OutGoingListScreen':
                               context
@@ -128,11 +129,7 @@ class AccountingFilterScreen extends StatelessWidget {
                               break;
                           }
                         }
-                        context.read<AccountingBloc>().incomingInvoices.clear();
-                        Navigator.pop(context);
-                        context.read<AccountingBloc>().add(
-                            FetchIncomingInvoices(
-                                pageNo: 1, isFilterEnabled: true));
+
                       },
                       textValue: DatabaseUtil.getText('Apply'))
                 ])),

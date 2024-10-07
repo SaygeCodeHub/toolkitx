@@ -784,7 +784,6 @@ class AppRoutes {
         List args = settings.arguments as List;
         return _createRoute(AccountingFilterScreen(
             accountingFilterMap: args[0], currentRouteName: args[1]));
-        return _createRoute(const AccountingFilterScreen());
       case ManageAccountingIncomingInvoice.routeName:
         return _createRoute(const ManageAccountingIncomingInvoice());
       case ManageAccountingIncomingInvoiceSection.routeName:
