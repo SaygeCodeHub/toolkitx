@@ -123,10 +123,11 @@ class AccountingFilterScreen extends StatelessWidget {
                   const SizedBox(height: xxxSmallerSpacing),
                   PrimaryButton(
                       onPressed: () {
+                        context.read<AccountingBloc>().incomingInvoices.clear();
                         Navigator.pop(context);
-                        context
-                            .read<AccountingBloc>()
-                            .add(FetchIncomingInvoices(pageNo: 1));
+                        context.read<AccountingBloc>().add(
+                            FetchIncomingInvoices(
+                                pageNo: 1, isFilterEnabled: true));
                       },
                       textValue: DatabaseUtil.getText('Apply'))
                 ])),

@@ -10,6 +10,7 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'manage_accounting_incoming_invoice.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoice_filter_icon.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoices_subtitle.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoices_title.dart';
@@ -26,7 +27,11 @@ class IncomingInvoicesScreen extends StatelessWidget {
         appBar:
             const GenericAppBar(title: StringConstants.kIncomingInvoiceList),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(
+                  context, ManageAccountingIncomingInvoice.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -40,10 +45,11 @@ class IncomingInvoicesScreen extends StatelessWidget {
                       (currentState is FetchingIncomingInvoices &&
                           currentState.pageNo == 1) ||
                       (currentState is IncomingInvoicesFetched) ||
-                      (currentState is FailedToFetchIncomingInvoices) ||
-                      (currentState is IncomingInvoicesWithNoData),
+                      (currentState is IncomingInvoicesWithNoData) ||
+                      (currentState is NoRecordsFoundForFilter) ||
+                      (currentState is FailedToFetchIncomingInvoices),
                   listener: (context, state) {
-                    if (state is IncomingInvoicesWithNoData &&
+                    if (state is IncomingInvoicesFetched &&
                         context
                             .read<AccountingBloc>()
                             .incomingInvoicesReachedMax) {
@@ -95,8 +101,12 @@ class IncomingInvoicesScreen extends StatelessWidget {
                               }));
                     } else if (state is IncomingInvoicesWithNoData) {
                       return NoRecordsText(text: state.message);
+                    } else if (state is NoRecordsFoundForFilter) {
+                      return Expanded(
+                          child: Center(child: Text(state.message)));
                     } else if (state is FailedToFetchIncomingInvoices) {
-                      return Text(state.errorMessage);
+                      return Expanded(
+                          child: Center(child: Text(state.errorMessage)));
                     } else {
                       return const SizedBox.shrink();
                     }
