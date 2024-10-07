@@ -71,9 +71,9 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
               event.pageNo, jsonEncode(outgoingFilterMap));
       outgoingInvoicesReachedMax = fetchOutgoingInvoicesModel.data.isEmpty;
       if (fetchOutgoingInvoicesModel.status == 200) {
-          outgoingInvoices.addAll(fetchOutgoingInvoicesModel.data);
-          emit(OutgoingInvoicesFetched(
-              outgoingInvoices: outgoingInvoices, pageNo: event.pageNo));
+        outgoingInvoices.addAll(fetchOutgoingInvoicesModel.data);
+        emit(OutgoingInvoicesFetched(
+            outgoingInvoices: outgoingInvoices, pageNo: event.pageNo));
       } else if (fetchOutgoingInvoicesModel.status == 204) {
         if (event.isFilterEnabled) {
           emit(NoRecordsFoundForFilter(

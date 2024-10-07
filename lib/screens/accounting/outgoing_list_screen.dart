@@ -102,11 +102,10 @@ class OutgoingListScreen extends StatelessWidget {
                       );
                     } else if (state is OutgoingInvoicesWithNoData) {
                       return NoRecordsText(text: state.message);
-                    }else if (state is NoRecordsFoundForFilter) {
+                    } else if (state is NoRecordsFoundForFilter) {
                       return Expanded(
                           child: Center(child: Text(state.message)));
-                    }
-                    else if (state is FailedToFetchIncomingInvoices) {
+                    } else if (state is FailedToFetchIncomingInvoices) {
                       return Expanded(
                           child: Center(child: Text(state.errorMessage)));
                     } else {

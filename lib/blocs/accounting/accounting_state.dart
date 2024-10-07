@@ -63,7 +63,7 @@ class OutgoingInvoicesWithNoData extends AccountingState {
   final String message;
   final int pageNo;
 
-  OutgoingInvoicesWithNoData( {required this.message,required this.pageNo});
+  OutgoingInvoicesWithNoData({required this.message, required this.pageNo});
 }
 
 class FailedToFetchOutgoingInvoices extends AccountingState {
