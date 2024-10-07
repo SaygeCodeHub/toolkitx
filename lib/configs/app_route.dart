@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/accounting/accounting_screen.dart';
-import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/bank_statement_screen.dart';
 import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
@@ -61,6 +61,7 @@ import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/accounting/bank_statement_filter_screen.dart';
 import '../screens/accounting/manage_accounting_incoming_invoice.dart';
 import '../screens/accounting/accounting_filter_screen.dart';
 import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
@@ -776,8 +777,8 @@ class AppRoutes {
         return _createRoute(const AccountingScreen());
       case OutgoingListScreen.routeName:
         return _createRoute(const OutgoingListScreen());
-      case BankStatementListScreen.routeName:
-        return _createRoute(const BankStatementListScreen());
+      case BankStatementScreen.routeName:
+        return _createRoute(const BankStatementScreen());
       case IncomingInvoicesScreen.routeName:
         return _createRoute(const IncomingInvoicesScreen());
       case AccountingFilterScreen.routeName:
@@ -788,6 +789,8 @@ class AppRoutes {
         return _createRoute(const ManageAccountingIncomingInvoice());
       case ManageAccountingIncomingInvoiceSection.routeName:
         return _createRoute(const ManageAccountingIncomingInvoiceSection());
+      case BankStatementFilterScreen.routeName:
+        return _createRoute(const BankStatementFilterScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

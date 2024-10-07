@@ -8,6 +8,7 @@ import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dar
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../../data/models/accounting/fetch_bank_statements_model.dart';
 import '../../di/app_module.dart';
 import 'accounting_event.dart';
 import 'accounting_state.dart';
@@ -17,17 +18,21 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       getIt<AccountingRepository>();
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
+  final Map bankStatementFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
+  final List<BankStatementsDatum> bankStatements = [];
   bool incomingInvoicesReachedMax = false;
   bool outgoingInvoicesReachedMax = false;
-  FetchIAccountingMasterModel fetchIAccountingMasterModel =
-      FetchIAccountingMasterModel();
+  bool bankStatementsReachedMax = false;
+  FetchAccountingMasterModel fetchIAccountingMasterModel =
+      FetchAccountingMasterModel();
 
   AccountingBloc() : super(AccountingInitial()) {
     on<FetchIncomingInvoices>(_fetchIncomingInvoices);
     on<FetchAccountingMaster>(_fetchAccountingMaster);
     on<FetchOutgoingInvoices>(_fetchOutgoingInvoices);
+    on<FetchBankStatements>(_fetchBankStatements);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -48,7 +53,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
               message: StringConstants.kNoRecordsFilter));
         } else if (incomingInvoices.isEmpty && event.pageNo == 1) {
           emit(IncomingInvoicesWithNoData(
-              message: StringConstants.kNoRecordsFound, pageNo: event.pageNo));
+              message: StringConstants.kNoRecordsFound));
         } else {
           emit(IncomingInvoicesFetched(
               incomingInvoices: incomingInvoices, pageNo: event.pageNo));
@@ -102,6 +107,37 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       if (fetchIAccountingMasterModel.status != 200 ||
           fetchIAccountingMasterModel.status != 204) {
         emit(FailedToFetchAccountingMaster(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchBankStatements(
+      FetchBankStatements event, Emitter<AccountingState> emit) async {
+    emit(FetchingBankStatements(pageNo: event.pageNo));
+    try {
+      FetchBankStatementsModel fetchBankStatementsModel =
+          await _accountingRepository.fetchBankStatements(event.pageNo, '');
+      bankStatementsReachedMax = fetchBankStatementsModel.data.isEmpty;
+      if (fetchBankStatementsModel.status == 200) {
+        bankStatements.addAll(fetchBankStatementsModel.data);
+        emit(BankStatementsFetched(
+            bankStatements: bankStatements, pageNo: event.pageNo));
+      } else if (fetchBankStatementsModel.status == 204) {
+        if (event.isFilterEnabled) {
+          emit(NoRecordsFoundForFilter(
+              message: StringConstants.kNoRecordsFilter));
+        } else if (outgoingInvoices.isEmpty && event.pageNo == 1) {
+          emit(BankStatementsWithNoData(
+              message: StringConstants.kNoRecordsFound));
+        } else {
+          emit(BankStatementsFetched(
+              bankStatements: bankStatements, pageNo: event.pageNo));
+        }
+      } else {
+        emit(FailedToFetchBankStatements(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
     } catch (e) {

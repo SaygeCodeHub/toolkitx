@@ -4,7 +4,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/bank_statement_screen.dart';
 import 'package:toolkit/screens/accounting/incoming_invoices_screen.dart';
 import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/utils/accounting_util.dart';
@@ -76,7 +76,9 @@ class AccountingScreen extends StatelessWidget {
         Navigator.pushNamed(context, IncomingInvoicesScreen.routeName);
         break;
       case StringConstants.kBankStatement:
-        Navigator.pushNamed(context, BankStatementListScreen.routeName);
+        context.read<AccountingBloc>().bankStatementFilterMap.clear();
+        context.read<AccountingBloc>().bankStatements.clear();
+        Navigator.pushNamed(context, BankStatementScreen.routeName);
         break;
     }
   }

@@ -20,6 +20,7 @@ abstract class StringConstants {
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kIncomingInvoiceList = 'Incoming Invoice List'; //
+  static const String kBankStatementList = 'Bank Statement List'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //
@@ -53,8 +54,10 @@ abstract class StringConstants {
   static const String kNameOfHotel = 'Name of hotel :'; //
   static const String kEditItem = 'Edit Item'; //
   static const String kInvoiceYear = 'Invoice Year'; //
+  static const String kYear = 'Year'; //
   static const String kEntity = 'Entity'; //
   static const String kClient = 'Client'; //
+  static const String kBank = 'Bank'; //
   static const String kSelectYear = 'Select Year'; //
   static const String kSelectEntity = 'Select Entity'; //
   static const String kSelectClient = 'Select Client'; //
@@ -806,5 +809,4 @@ abstract class StringConstants {
   static const String kAccounting = "Accounting";
   static const String kOutGoingInvoiceList = "Outgoing Invoice List";
   static const String kInComingInvoiceList = "Incoming Invoice List";
-  static const String kBankStatementList = "Bank Statement List";
 }

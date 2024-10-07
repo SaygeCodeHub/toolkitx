@@ -15,3 +15,10 @@ class FetchOutgoingInvoices extends AccountingEvent {
 }
 
 class FetchAccountingMaster extends AccountingEvent {}
+
+class FetchBankStatements extends AccountingEvent {
+  final int pageNo;
+  final bool isFilterEnabled;
+
+  FetchBankStatements({required this.pageNo, this.isFilterEnabled = false});
+}

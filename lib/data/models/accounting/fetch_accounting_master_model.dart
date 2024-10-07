@@ -1,12 +1,12 @@
-class FetchIAccountingMasterModel {
+class FetchAccountingMasterModel {
   final int? status;
   final String? message;
   final List<List<AccountingMasterDatum>>? data;
 
-  FetchIAccountingMasterModel({this.status, this.message, this.data});
+  FetchAccountingMasterModel({this.status, this.message, this.data});
 
-  factory FetchIAccountingMasterModel.fromJson(Map<String, dynamic> json) =>
-      FetchIAccountingMasterModel(
+  factory FetchAccountingMasterModel.fromJson(Map<String, dynamic> json) =>
+      FetchAccountingMasterModel(
           status: json["Status"],
           message: json["Message"],
           data: List<List<AccountingMasterDatum>>.from((json["Data"] == null)

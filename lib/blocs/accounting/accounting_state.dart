@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/accounting/fetch_bank_statements_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
@@ -22,9 +23,8 @@ class IncomingInvoicesFetched extends AccountingState {
 
 class IncomingInvoicesWithNoData extends AccountingState {
   final String message;
-  final int pageNo;
 
-  IncomingInvoicesWithNoData({required this.message, required this.pageNo});
+  IncomingInvoicesWithNoData({required this.message});
 }
 
 class NoRecordsFoundForFilter extends AccountingState {
@@ -70,4 +70,29 @@ class FailedToFetchOutgoingInvoices extends AccountingState {
   final String errorMessage;
 
   FailedToFetchOutgoingInvoices({required this.errorMessage});
+}
+
+class FetchingBankStatements extends AccountingState {
+  final int pageNo;
+
+  FetchingBankStatements({required this.pageNo});
+}
+
+class BankStatementsFetched extends AccountingState {
+  final List<BankStatementsDatum> bankStatements;
+  final int pageNo;
+
+  BankStatementsFetched({required this.bankStatements, required this.pageNo});
+}
+
+class BankStatementsWithNoData extends AccountingState {
+  final String message;
+
+  BankStatementsWithNoData({required this.message});
+}
+
+class FailedToFetchBankStatements extends AccountingState {
+  final String errorMessage;
+
+  FailedToFetchBankStatements({required this.errorMessage});
 }
