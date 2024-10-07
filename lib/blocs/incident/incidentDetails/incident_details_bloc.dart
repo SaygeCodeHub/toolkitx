@@ -224,7 +224,7 @@ class IncidentDetailsBloc
           "incidentid": saveCommentMap['incidentId'],
           "hashcode": hashCode,
           "status": saveCommentMap['status'] ?? '',
-          "comments": saveCommentMap['comments'],
+          "comments": saveCommentMap['comments'] ?? '',
           "classification": saveCommentMap['classification'] ?? '',
           "suspectedcause": saveCommentMap['suspectedcause'] ?? '',
           "rootcause": saveCommentMap['rootcause'] ?? '',
