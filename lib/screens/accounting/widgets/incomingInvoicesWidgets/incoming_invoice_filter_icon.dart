@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/accounting/incoming_invoices_screen.dart';
 
 import '../../../../blocs/accounting/accounting_bloc.dart';
 import '../../../../blocs/accounting/accounting_event.dart';
@@ -8,7 +9,9 @@ import '../../../../widgets/custom_icon_button_row.dart';
 import '../../accounting_filter_screen.dart';
 
 class IncomingInvoiceFilterIcon extends StatelessWidget {
-  const IncomingInvoiceFilterIcon({super.key});
+  final String routeName;
+
+  const IncomingInvoiceFilterIcon({super.key, required this.routeName});
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +30,17 @@ class IncomingInvoiceFilterIcon extends StatelessWidget {
         if (state is IncomingInvoicesFetched) {
           return CustomIconButtonRow(
               primaryOnPress: () {
-                Navigator.pushNamed(context, AccountingFilterScreen.routeName);
+                Navigator.pushNamed(context, AccountingFilterScreen.routeName,
+                    arguments: [
+                      context.read<AccountingBloc>().incomingFilterMap,
+                      IncomingInvoicesScreen.routeName
+                    ]);
               },
               secondaryVisible: false,
               clearVisible:
-                  context.read<AccountingBloc>().accountingFilterMap.isNotEmpty,
+                  context.read<AccountingBloc>().incomingFilterMap.isNotEmpty,
               clearOnPress: () {
-                context.read<AccountingBloc>().accountingFilterMap.clear();
+                context.read<AccountingBloc>().incomingFilterMap.clear();
                 context.read<AccountingBloc>().incomingInvoicesReachedMax =
                     false;
                 context
@@ -44,13 +51,17 @@ class IncomingInvoiceFilterIcon extends StatelessWidget {
         } else if (state is NoRecordsFoundForFilter) {
           return CustomIconButtonRow(
               primaryOnPress: () {
-                Navigator.pushNamed(context, AccountingFilterScreen.routeName);
+                Navigator.pushNamed(context, AccountingFilterScreen.routeName,
+                    arguments: [
+                      context.read<AccountingBloc>().incomingFilterMap,
+                      IncomingInvoicesScreen.routeName
+                    ]);
               },
               secondaryVisible: false,
               clearVisible:
-                  context.read<AccountingBloc>().accountingFilterMap.isNotEmpty,
+                  context.read<AccountingBloc>().incomingFilterMap.isNotEmpty,
               clearOnPress: () {
-                context.read<AccountingBloc>().accountingFilterMap.clear();
+                context.read<AccountingBloc>().incomingFilterMap.clear();
                 context
                     .read<AccountingBloc>()
                     .add(FetchIncomingInvoices(pageNo: 1));

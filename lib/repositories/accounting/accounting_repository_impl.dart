@@ -1,5 +1,7 @@
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
+
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
 
@@ -17,6 +19,14 @@ class AccountingRepositoryImpl implements AccountingRepository {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetIncomingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
     return FetchIncomingInvoicesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchOutgoingInvoicesModel> fetchOutgoingInvoices(
+      int pageNo, String filter) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetOutgoingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
+    return FetchOutgoingInvoicesModel.fromJson(response);
   }
 
   @override

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -14,15 +15,19 @@ import 'accounting_state.dart';
 class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
-  final Map accountingFilterMap = {};
+  final Map incomingFilterMap = {};
+  final Map outgoingFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
+  final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   bool incomingInvoicesReachedMax = false;
+  bool outgoingInvoicesReachedMax = false;
   FetchIAccountingMasterModel fetchIAccountingMasterModel =
       FetchIAccountingMasterModel();
 
   AccountingBloc() : super(AccountingInitial()) {
     on<FetchIncomingInvoices>(_fetchIncomingInvoices);
     on<FetchAccountingMaster>(_fetchAccountingMaster);
+    on<FetchOutgoingInvoices>(_fetchOutgoingInvoices);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -31,7 +36,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     try {
       FetchIncomingInvoicesModel fetchIncomingInvoicesModel =
           await _accountingRepository.fetchIncomingInvoices(
-              event.pageNo, jsonEncode(accountingFilterMap));
+              event.pageNo, jsonEncode(incomingFilterMap));
       incomingInvoicesReachedMax = fetchIncomingInvoicesModel.data.isEmpty;
       if (fetchIncomingInvoicesModel.status == 200) {
         incomingInvoices.addAll(fetchIncomingInvoicesModel.data);
@@ -50,6 +55,38 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         }
       } else {
         emit(FailedToFetchIncomingInvoices(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _fetchOutgoingInvoices(
+      FetchOutgoingInvoices event, Emitter<AccountingState> emit) async {
+    emit(FetchingOutgoingInvoices(pageNo: event.pageNo));
+    try {
+      FetchOutgoingInvoicesModel fetchOutgoingInvoicesModel =
+          await _accountingRepository.fetchOutgoingInvoices(
+              event.pageNo, jsonEncode(outgoingFilterMap));
+      outgoingInvoicesReachedMax = fetchOutgoingInvoicesModel.data.isEmpty;
+      if (fetchOutgoingInvoicesModel.status == 200) {
+        outgoingInvoices.addAll(fetchOutgoingInvoicesModel.data);
+        emit(OutgoingInvoicesFetched(
+            outgoingInvoices: outgoingInvoices, pageNo: event.pageNo));
+      } else if (fetchOutgoingInvoicesModel.status == 204) {
+        if (event.isFilterEnabled) {
+          emit(NoRecordsFoundForFilter(
+              message: StringConstants.kNoRecordsFilter));
+        } else if (outgoingInvoices.isEmpty && event.pageNo == 1) {
+          emit(OutgoingInvoicesWithNoData(
+              message: StringConstants.kNoRecordsFound, pageNo: event.pageNo));
+        } else {
+          emit(OutgoingInvoicesFetched(
+              outgoingInvoices: outgoingInvoices, pageNo: event.pageNo));
+        }
+      } else {
+        emit(FailedToFetchOutgoingInvoices(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
     } catch (e) {
