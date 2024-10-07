@@ -120,9 +120,11 @@ class AccountingFilterScreen extends StatelessWidget {
                               context.read<AccountingBloc>().incomingInvoices.clear();
                               context.read<AccountingBloc>().add(
                                   FetchIncomingInvoices(
-                                      pageNo: 1, isFilterEnabled: true));
+                                      pageNo: 1, isFilterEnabled: true),
+                              );
                               break;
                             case 'OutGoingListScreen':
+                              context.read<AccountingBloc>().outgoingInvoices.clear();
                               context
                                   .read<AccountingBloc>()
                                   .add(FetchOutgoingInvoices(pageNo: 1));

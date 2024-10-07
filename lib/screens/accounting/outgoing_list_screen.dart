@@ -43,7 +43,7 @@ class OutgoingListScreen extends StatelessWidget {
                       (currentState is FailedToFetchOutgoingInvoices) ||
                       (currentState is OutgoingInvoicesWithNoData),
                   listener: (context, state) {
-                    if (state is OutgoingInvoicesWithNoData &&
+                    if (state is OutgoingInvoicesFetched &&
                         context
                             .read<AccountingBloc>()
                             .outgoingInvoicesReachedMax) {
@@ -102,8 +102,13 @@ class OutgoingListScreen extends StatelessWidget {
                       );
                     } else if (state is OutgoingInvoicesWithNoData) {
                       return NoRecordsText(text: state.message);
-                    } else if (state is FailedToFetchIncomingInvoices) {
-                      return Text(state.errorMessage);
+                    }else if (state is NoRecordsFoundForFilter) {
+                      return Expanded(
+                          child: Center(child: Text(state.message)));
+                    }
+                    else if (state is FailedToFetchIncomingInvoices) {
+                      return Expanded(
+                          child: Center(child: Text(state.errorMessage)));
                     } else {
                       return const SizedBox.shrink();
                     }

@@ -9,8 +9,9 @@ class FetchIncomingInvoices extends AccountingEvent {
 
 class FetchOutgoingInvoices extends AccountingEvent {
   final int pageNo;
+  final bool isFilterEnabled;
 
-  FetchOutgoingInvoices({required this.pageNo});
+  FetchOutgoingInvoices({required this.pageNo, this.isFilterEnabled = false});
 }
 
 class FetchAccountingMaster extends AccountingEvent {}
