@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:toolkit/data/models/incident/save_incident_comments_files_model.dart';
 import 'package:toolkit/data/models/incident/save_incident_comments_model.dart';
 import 'package:toolkit/data/models/pdf_generation_model.dart';
@@ -29,8 +27,6 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
   @override
   Future<FetchQualityManagementDetailsModel> fetchQualityManagementDetails(
       String qmId, String hashCode, String userId, String role) async {
-    print(
-        'impl of qa ${"${ApiConstants.baseUrl}qaincident/getincident?incidentid=$qmId&hashcode=$hashCode&userid=$userId&role=$role"}');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}qaincident/getincident?incidentid=$qmId&hashcode=$hashCode&userid=$userId&role=$role");
     return FetchQualityManagementDetailsModel.fromJson(response);
@@ -39,7 +35,6 @@ class QualityManagementRepositoryImpl extends QualityManagementRepository {
   @override
   Future<SaveIncidentAndQMCommentsModel> saveComments(
       Map saveCommentsMap) async {
-    print('impl save comments ${jsonEncode(saveCommentsMap)}');
     final response = await DioClient().post(
         "${ApiConstants.baseUrl}qaincident/savecomments", saveCommentsMap);
     return SaveIncidentAndQMCommentsModel.fromJson(response);

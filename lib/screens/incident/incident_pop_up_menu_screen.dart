@@ -51,7 +51,8 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
                     incidentId: incidentId,
                     incidentDetailsModel: incidentDetailsModel,
                     showStatusControl: false,
-                    isFromAddComment: true)));
+                    isFromAddComment: true,
+                    showClassification: false)));
           }
           if (value == DatabaseUtil.getText('EditIncident')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();

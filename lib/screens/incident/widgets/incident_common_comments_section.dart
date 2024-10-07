@@ -20,6 +20,7 @@ class IncidentCommonCommentsSection extends StatelessWidget {
   final IncidentDetailsModel? incidentDetailsModel;
   final Map incidentCommentsMap;
   final bool showStatusControl;
+  final bool showClassification;
 
   const IncidentCommonCommentsSection(
       {super.key,
@@ -27,7 +28,8 @@ class IncidentCommonCommentsSection extends StatelessWidget {
       required this.onTextFieldValue,
       this.incidentDetailsModel,
       required this.incidentCommentsMap,
-      required this.showStatusControl});
+      required this.showStatusControl,
+      required this.showClassification});
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +41,18 @@ class IncidentCommonCommentsSection extends StatelessWidget {
             IncidentPopUpMenuStatusWidgets().renderWidgets(
                 incidentDetailsModel!, context, incidentCommentsMap),
           Visibility(
-            visible: incidentDetailsModel!.data!.nextStatus == '1',
+            visible: (incidentDetailsModel!.data!.nextStatus == '1' &&
+                showClassification),
             child: Text(DatabaseUtil.getText('Classification'),
                 style: Theme.of(context).textTheme.small.copyWith(
                     color: AppColor.black, fontWeight: FontWeight.w500)),
           ),
-          (incidentDetailsModel!.data!.nextStatus == '1')
+          (incidentDetailsModel!.data!.nextStatus == '1' && showClassification)
               ? const SizedBox.shrink()
               : const SizedBox(height: xxTinierSpacing),
           Visibility(
-              visible: incidentDetailsModel!.data!.nextStatus == '1',
+              visible: (incidentDetailsModel!.data!.nextStatus == '1' &&
+                  showClassification),
               child: IncidentClassificationExpansionTile(
                   incidentCommentsMap: incidentCommentsMap)),
           const SizedBox(height: xxTinierSpacing),

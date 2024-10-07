@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../data/cache/cache_keys.dart';
@@ -205,20 +206,19 @@ class IncidentDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
-      print('add comment bloc $saveCommentMap');
-      if (!event.isFromAddComment &&
+      log('saveCommentMap $saveCommentMap');
+      if (saveCommentMap['status'] != '3' &&
+          !event.isFromAddComment &&
           isValidControlValue(saveCommentMap['suspectedcause']) &&
           isValidControlValue(saveCommentMap['rootcause']) &&
           isValidControlValue(saveCommentMap['lessonslearnt']) &&
           isValidControlValue(saveCommentMap['preliminaryrecommendation']) &&
           isValidControlValue(saveCommentMap['completedcorrectiveactions']) &&
           isValidControlValue(saveCommentMap['preventiveactions'])) {
-        print('inside ifffffff');
         emit(IncidentCommentsNotSaved(
             commentsNotSaved:
                 validatedStatusControlMessage(saveCommentMap['status'])));
       } else {
-        print('inside elseeee');
         Map saveCommentsMap = {
           "userid": userid,
           "incidentid": saveCommentMap['incidentId'],

@@ -57,7 +57,8 @@ class IncidentStatusScreen extends StatelessWidget {
                       incidentCommentsMap['comments'] = textValue;
                     },
                     incidentCommentsMap: incidentCommentsMap,
-                    showStatusControl: true)
+                    showStatusControl: true,
+                    showClassification: true)
               ]))),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),

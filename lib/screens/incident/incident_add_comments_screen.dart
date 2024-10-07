@@ -14,13 +14,15 @@ class IncidentAddCommentsScreen extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
   final bool showStatusControl;
   final bool isFromAddComment;
+  final bool showClassification;
 
   IncidentAddCommentsScreen(
       {super.key,
       required this.incidentId,
       required this.incidentDetailsModel,
       required this.showStatusControl,
-      this.isFromAddComment = false});
+      this.isFromAddComment = false,
+      required this.showClassification});
 
   final Map incidentCommentsMap = {};
 
@@ -47,7 +49,8 @@ class IncidentAddCommentsScreen extends StatelessWidget {
                     },
                     incidentCommentsMap: incidentCommentsMap,
                     incidentDetailsModel: incidentDetailsModel,
-                    showStatusControl: showStatusControl)
+                    showStatusControl: showStatusControl,
+                    showClassification: showClassification)
               ]))),
       bottomNavigationBar: IncidentAddCommentsBottomNavbar(
           incidentCommentsMap: incidentCommentsMap,
