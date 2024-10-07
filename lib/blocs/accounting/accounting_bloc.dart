@@ -33,24 +33,26 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   FutureOr<void> _fetchIncomingInvoices(
       FetchIncomingInvoices event, Emitter<AccountingState> emit) async {
     emit(FetchingIncomingInvoices(pageNo: event.pageNo));
-    incomingInvoices.clear();
     try {
       FetchIncomingInvoicesModel fetchIncomingInvoicesModel =
           await _accountingRepository.fetchIncomingInvoices(
               event.pageNo, jsonEncode(incomingFilterMap));
       incomingInvoicesReachedMax = fetchIncomingInvoicesModel.data.isEmpty;
       if (fetchIncomingInvoicesModel.status == 200) {
-        if (fetchIncomingInvoicesModel.data.isNotEmpty) {
-          incomingInvoices.addAll(fetchIncomingInvoicesModel.data);
+        incomingInvoices.addAll(fetchIncomingInvoicesModel.data);
+        emit(IncomingInvoicesFetched(
+            incomingInvoices: incomingInvoices, pageNo: event.pageNo));
+      } else if (fetchIncomingInvoicesModel.status == 204) {
+        if (event.isFilterEnabled) {
+          emit(NoRecordsFoundForFilter(
+              message: StringConstants.kNoRecordsFilter));
+        } else if (incomingInvoices.isEmpty && event.pageNo == 1) {
+          emit(IncomingInvoicesWithNoData(
+              message: StringConstants.kNoRecordsFound, pageNo: event.pageNo));
+        } else {
           emit(IncomingInvoicesFetched(
               incomingInvoices: incomingInvoices, pageNo: event.pageNo));
-        } else {
-          emit(FailedToFetchIncomingInvoices(
-              errorMessage: StringConstants.kNoRecordsFound));
         }
-      } else if (fetchIncomingInvoicesModel.status == 204) {
-        emit(IncomingInvoicesWithNoData(
-            message: StringConstants.kNoRecordsFound));
       } else {
         emit(FailedToFetchIncomingInvoices(
             errorMessage: StringConstants.kSomethingWentWrong));

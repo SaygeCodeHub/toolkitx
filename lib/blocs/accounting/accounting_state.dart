@@ -22,8 +22,15 @@ class IncomingInvoicesFetched extends AccountingState {
 
 class IncomingInvoicesWithNoData extends AccountingState {
   final String message;
+  final int pageNo;
 
-  IncomingInvoicesWithNoData({required this.message});
+  IncomingInvoicesWithNoData({required this.message, required this.pageNo});
+}
+
+class NoRecordsFoundForFilter extends AccountingState {
+  final String message;
+
+  NoRecordsFoundForFilter({required this.message});
 }
 
 class FailedToFetchIncomingInvoices extends AccountingState {

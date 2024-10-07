@@ -28,7 +28,6 @@ class AccountingFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("name======>$currentRouteName");
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kApplyFilter),
       body: SingleChildScrollView(
@@ -129,6 +128,11 @@ class AccountingFilterScreen extends StatelessWidget {
                               break;
                           }
                         }
+                        context.read<AccountingBloc>().incomingInvoices.clear();
+                        Navigator.pop(context);
+                        context.read<AccountingBloc>().add(
+                            FetchIncomingInvoices(
+                                pageNo: 1, isFilterEnabled: true));
                       },
                       textValue: DatabaseUtil.getText('Apply'))
                 ])),
