@@ -127,7 +127,7 @@ class AccountingFilterScreen extends StatelessWidget {
                               context.read<AccountingBloc>().outgoingInvoices.clear();
                               context
                                   .read<AccountingBloc>()
-                                  .add(FetchOutgoingInvoices(pageNo: 1));
+                                  .add(FetchOutgoingInvoices(pageNo: 1, isFilterEnabled: true));
                               break;
                           }
                         }
