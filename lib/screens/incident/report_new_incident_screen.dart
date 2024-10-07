@@ -28,6 +28,7 @@ class ReportNewIncidentScreen extends StatelessWidget {
   static String eventDate = '';
   static int imageIndex = 0;
   static String clientId = '';
+  static String showReportAnonymously = '';
 
   const ReportNewIncidentScreen(
       {super.key, required this.addAndEditIncidentMap});
@@ -63,8 +64,9 @@ class ReportNewIncidentScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      IncidentReportAnonymousExpansionTile(
-                          addIncidentMap: addAndEditIncidentMap),
+                      if (showReportAnonymously != '0')
+                        IncidentReportAnonymousExpansionTile(
+                            addIncidentMap: addAndEditIncidentMap),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kDateOfIncident,
                           style: Theme.of(context)
