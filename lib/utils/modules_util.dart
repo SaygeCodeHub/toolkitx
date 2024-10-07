@@ -29,11 +29,11 @@ abstract class ModulesUtil {
         offLineSupport: true,
         key: 'ptw',
         notificationKey: 'permit'),
-    // ModulesModel(
-    //     moduleName: 'Accounting',
-    //     moduleImage: '${kBaseImagePath}accounting.png',
-    //     key: 'accounting',
-    //     notificationKey: 'accounting'),
+    ModulesModel(
+        moduleName: 'Accounting',
+        moduleImage: '${kBaseImagePath}accounting.png',
+        key: 'accounting',
+        notificationKey: 'accounting'),
     ModulesModel(
         moduleName: 'TimeVacation',
         moduleImage: '${kBaseImagePath}holiday.png',

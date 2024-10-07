@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
@@ -13,6 +14,8 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
+import '../../../blocs/accounting/accounting_bloc.dart';
+import '../../../blocs/accounting/accounting_event.dart';
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
 import '../../../blocs/client/client_states.dart';
@@ -49,6 +52,7 @@ class OnLineModules extends StatelessWidget {
         .add(FetchHomeScreenData(isFirstTime: isFirstTime));
     final globalBloc = context.read<GlobalBloc>();
     final clientBloc = context.read<ClientBloc>();
+    final accountingBloc = context.read<AccountingBloc>();
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||
@@ -83,7 +87,8 @@ class OnLineModules extends StatelessWidget {
                           state.availableModules[index].moduleName,
                           context,
                           globalBloc,
-                          clientBloc),
+                          clientBloc,
+                          accountingBloc),
                       child: CustomCard(
                           color: AppColor.transparent,
                           elevation: kZeroElevation,
@@ -160,7 +165,8 @@ class OnLineModules extends StatelessWidget {
         });
   }
 
-  navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc) {
+  navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc,
+      AccountingBloc accountingBloc) {
     switch (moduleKey) {
       case 'ptw':
         globalBloc.add(UpdateCount(type: 'permit'));
@@ -322,6 +328,12 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, TankManagementListScreen.routeName).then(
             (_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'accounting':
+        // globalBloc.add(UpdateCount(type: 'accounting'));
+        accountingBloc.add(FetchAccountingMaster());
+        Navigator.pushNamed(context, AccountingScreen.routeName).then((_) =>
+            clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
     }
   }

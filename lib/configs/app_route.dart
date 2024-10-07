@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
+import 'package:toolkit/screens/accounting/accounting_screen.dart';
+import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/out_going_list_screen.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -58,6 +61,9 @@ import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/accounting/manage_accounting_incoming_invoice.dart';
+import '../screens/accounting/accounting_filter_screen.dart';
+import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
@@ -127,6 +133,7 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/accounting/incoming_invoices_screen.dart';
 import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
@@ -765,6 +772,20 @@ class AppRoutes {
             AddTicket2Screen(responsequeid: settings.arguments.toString()));
       case WorkOrderRoleScreen.routeName:
         return _createRoute(const WorkOrderRoleScreen());
+      case AccountingScreen.routeName:
+        return _createRoute(const AccountingScreen());
+      case OutGoingListScreen.routeName:
+        return _createRoute(OutGoingListScreen());
+      case BankStatementListScreen.routeName:
+        return _createRoute(const BankStatementListScreen());
+      case IncomingInvoicesScreen.routeName:
+        return _createRoute(const IncomingInvoicesScreen());
+      case AccountingFilterScreen.routeName:
+        return _createRoute(const AccountingFilterScreen());
+      case ManageAccountingIncomingInvoice.routeName:
+        return _createRoute(const ManageAccountingIncomingInvoice());
+      case ManageAccountingIncomingInvoiceSection.routeName:
+        return _createRoute(const ManageAccountingIncomingInvoiceSection());
       default:
         return _createRoute(const WelcomeScreen());
     }
