@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dar
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
@@ -35,6 +36,13 @@ class AccountingRepositoryImpl implements AccountingRepository {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/getmaster?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
     return FetchIAccountingMasterModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchMasterDataEntryModel> fetchMasterDataEntry(int entityId) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetMasterDataEntity?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&entityid=$entityId');
+    return FetchMasterDataEntryModel.fromJson(response);
   }
 
   @override

@@ -79,6 +79,34 @@ class FailedToFetchOutgoingInvoices extends AccountingState {
   FailedToFetchOutgoingInvoices({required this.errorMessage});
 }
 
+class AccountingNewEntitySelecting extends AccountingState {}
+
+class AccountingNewEntitySelected extends AccountingState {
+  final FetchMasterDataEntryModel fetchMasterDataEntryModel;
+
+  AccountingNewEntitySelected({required this.fetchMasterDataEntryModel});
+}
+
+class AccountingNewEntityNotSelected extends AccountingState {
+  final String errorMessage;
+
+  AccountingNewEntityNotSelected({required this.errorMessage});
+}
+
+class AccountingProjectListFetching extends AccountingState {}
+
+class AccountingProjectListFetched extends AccountingState {
+  final List<Project> projectList;
+
+  AccountingProjectListFetched({required this.projectList});
+}
+
+class AccountingProjectListNotFetched extends AccountingState {
+  final String errorMessage;
+
+  AccountingProjectListNotFetched({required this.errorMessage});
+}
+
 class InvoiceCurrencySelected extends AccountingState {
   final String selectedCurrency;
 
