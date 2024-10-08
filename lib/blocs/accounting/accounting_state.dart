@@ -100,3 +100,13 @@ class AccountingProjectListNotFetched extends AccountingState {
 
   AccountingProjectListNotFetched({required this.errorMessage});
 }
+
+class OutgoingInvoiceSaving extends AccountingState {}
+
+class OutgoingInvoiceSaved extends AccountingState {}
+
+class OutgoingInvoiceNotSaved extends AccountingState {
+  final String errorMessage;
+
+  OutgoingInvoiceNotSaved({required this.errorMessage});
+}

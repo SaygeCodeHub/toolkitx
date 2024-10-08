@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/save_outgoing_invoice_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -14,6 +17,7 @@ import 'accounting_event.dart';
 import 'accounting_state.dart';
 
 class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
+  final CustomerCache _customerCache = getIt<CustomerCache>();
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
   final Map incomingFilterMap = {};
@@ -34,6 +38,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<FetchOutgoingInvoices>(_fetchOutgoingInvoices);
     on<FetchMasterDataEntity>(_fetchMasterDataEntity);
     on<SelectClientId>(_selectClientId);
+    on<SaveOutgoingInvoice>(_saveOutgoingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -159,6 +164,41 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } on Exception catch (e) {
       emit(AccountingProjectListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> _saveOutgoingInvoice(SaveOutgoingInvoice event, Emitter<AccountingState> emit) async {
+    emit(OutgoingInvoiceSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map outgoingInvoiceMap ={
+          "id": "",
+          "userid": userId,
+          "hashcode": hashCode,
+          "files" : "",
+          "purposename": "xxx",
+          "entity": 9,
+          "client": 3,
+          "project": 4,
+          "date": "08.10.2024",
+          "comments": "xxx",
+          "invoiceamount": 100,
+          "other": "Other",
+          "othercurrency": 13,
+          "otherinvoiceamount": 200
+      };
+      SaveOutgoingInvoiceModel  saveOutgoingInvoiceModel= await _accountingRepository.saveOutgoingInvoice(outgoingInvoiceMap);
+      if(saveOutgoingInvoiceModel.status == 200){
+        emit(OutgoingInvoiceSaved());
+      }
+      else{
+        emit(OutgoingInvoiceNotSaved(errorMessage: saveOutgoingInvoiceModel.message));
+      }
+    } on Exception catch (e) {
+      emit(OutgoingInvoiceNotSaved(errorMessage: e.toString()));
+
     }
   }
 }

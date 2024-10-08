@@ -27,3 +27,10 @@ class SelectClientId extends AccountingEvent {
 
   SelectClientId({required this.clientId});
 }
+
+class SaveOutgoingInvoice extends AccountingEvent {
+  final Map outgoingInvoiceMap;
+
+  SaveOutgoingInvoice({required this.outgoingInvoiceMap});
+}
+
