@@ -1,6 +1,7 @@
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
+import '../../data/models/accounting/fetch_master_data_entry_model.dart';
 
 abstract class AccountingState {}
 

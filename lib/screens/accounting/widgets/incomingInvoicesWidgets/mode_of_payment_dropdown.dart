@@ -9,7 +9,6 @@ import '../../../../blocs/accounting/accounting_state.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../data/enums/accounting/accounting_bank_payment_mode_enum.dart';
 import '../../../../utils/constants/string_constants.dart';
-import 'billable_dropdown.dart';
 import 'credit_card_dropdown.dart';
 
 class ModeOfPaymentDropdown extends StatelessWidget {

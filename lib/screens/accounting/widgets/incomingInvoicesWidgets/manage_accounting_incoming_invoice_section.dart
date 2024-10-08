@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 
 import '../../../../blocs/accounting/accounting_bloc.dart';
-import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
-import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
-import '../../../../configs/app_dimensions.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/generic_app_bar.dart';
 import '../../../../widgets/primary_button.dart';
-import '../../../../widgets/secondary_button.dart';
-import '../../../checklist/workforce/widgets/upload_image_section.dart';
 import '../invoice_currency_dropdown.dart';
 import 'mode_of_payment_dropdown.dart';
 
