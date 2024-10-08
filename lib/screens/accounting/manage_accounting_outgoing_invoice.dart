@@ -105,9 +105,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                         .textTheme
                         .xSmall
                         .copyWith(fontWeight: FontWeight.w600)),
-                const SizedBox(height: xxxTinierSpacing),
-                // BillableDropdown(onBillableChanged: (String selectedValue) {}),
-                const SizedBox(height: xxTinySpacing)
+                const SizedBox(height: xxxTinierSpacing)
               ],
             ),
           ),
