@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -19,15 +20,20 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map outgoingFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
+  List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
+  List<ClientDatum> clientList = [];
   bool incomingInvoicesReachedMax = false;
   bool outgoingInvoicesReachedMax = false;
   FetchIAccountingMasterModel fetchIAccountingMasterModel =
       FetchIAccountingMasterModel();
+  int entityId = 0;
 
   AccountingBloc() : super(AccountingInitial()) {
     on<FetchIncomingInvoices>(_fetchIncomingInvoices);
     on<FetchAccountingMaster>(_fetchAccountingMaster);
     on<FetchOutgoingInvoices>(_fetchOutgoingInvoices);
+    on<FetchMasterDataEntity>(_fetchMasterDataEntity);
+    on<SelectClientId>(_selectClientId);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -106,6 +112,53 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> _fetchMasterDataEntity(
+      FetchMasterDataEntity event, Emitter<AccountingState> emit) async {
+    emit(AccountingNewEntitySelecting());
+    clientList.clear();
+    try {
+      FetchMasterDataEntryModel fetchMasterDataEntryModel =
+          await _accountingRepository.fetchMasterDataEntry(event.entityId);
+      if (fetchMasterDataEntryModel.status == 200) {
+        clientList.addAll(
+            fetchMasterDataEntryModel.data.expand((list) => list).toList());
+        emit(AccountingNewEntitySelected(
+            fetchMasterDataEntryModel: fetchMasterDataEntryModel));
+      } else {
+        emit(AccountingNewEntityNotSelected(
+            errorMessage:
+                fetchMasterDataEntryModel.message ?? "Unknown error occurred"));
+      }
+    } on Exception catch (e) {
+      emit(AccountingNewEntityNotSelected(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectClientId(
+      SelectClientId event, Emitter<AccountingState> emit) {
+    emit(AccountingProjectListFetching());
+    try {
+      if (event.clientId != '') {
+        if (clientList.isNotEmpty) {
+          var client =
+              clientList.firstWhere((client) => client.id == event.clientId);
+          List<Project> projectList = [];
+          if (client.projects != null && client.projects!.isNotEmpty) {
+            projectList = List<Project>.from(client.projects!);
+            emit(AccountingProjectListFetched(projectList: projectList));
+          } else {
+            emit(AccountingProjectListFetched(projectList: []));
+          }
+        }
+      } else {
+        emit(AccountingProjectListNotFetched(
+            errorMessage: "Client ID is empty"));
+      }
+    } on Exception catch (e) {
+      emit(AccountingProjectListNotFetched(errorMessage: e.toString()));
     }
   }
 }

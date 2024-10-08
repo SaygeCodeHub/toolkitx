@@ -15,3 +15,15 @@ class FetchOutgoingInvoices extends AccountingEvent {
 }
 
 class FetchAccountingMaster extends AccountingEvent {}
+
+class FetchMasterDataEntity extends AccountingEvent {
+  final int entityId;
+
+  FetchMasterDataEntity({required this.entityId});
+}
+
+class SelectClientId extends AccountingEvent {
+  final dynamic clientId;
+
+  SelectClientId({required this.clientId});
+}

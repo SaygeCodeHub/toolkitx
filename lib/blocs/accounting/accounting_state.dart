@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
@@ -70,4 +71,32 @@ class FailedToFetchOutgoingInvoices extends AccountingState {
   final String errorMessage;
 
   FailedToFetchOutgoingInvoices({required this.errorMessage});
+}
+
+class AccountingNewEntitySelecting extends AccountingState {}
+
+class AccountingNewEntitySelected extends AccountingState {
+  final FetchMasterDataEntryModel fetchMasterDataEntryModel;
+
+  AccountingNewEntitySelected({required this.fetchMasterDataEntryModel});
+}
+
+class AccountingNewEntityNotSelected extends AccountingState {
+  final String errorMessage;
+
+  AccountingNewEntityNotSelected({required this.errorMessage});
+}
+
+class AccountingProjectListFetching extends AccountingState {}
+
+class AccountingProjectListFetched extends AccountingState {
+  final List<Project> projectList;
+
+  AccountingProjectListFetched({required this.projectList});
+}
+
+class AccountingProjectListNotFetched extends AccountingState {
+  final String errorMessage;
+
+  AccountingProjectListNotFetched({required this.errorMessage});
 }
