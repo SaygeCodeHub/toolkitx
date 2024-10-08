@@ -61,7 +61,7 @@ import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
-import '../screens/accounting/manage_accounting_incoming_invoice.dart';
+import '../screens/accounting/manage_accounting_incoming_invoice_screen.dart';
 import '../screens/accounting/accounting_filter_screen.dart';
 import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
 import '../screens/assets/assets_details_screen.dart';
@@ -784,8 +784,8 @@ class AppRoutes {
         List args = settings.arguments as List;
         return _createRoute(AccountingFilterScreen(
             accountingFilterMap: args[0], currentRouteName: args[1]));
-      case ManageAccountingIncomingInvoice.routeName:
-        return _createRoute(const ManageAccountingIncomingInvoice());
+      case ManageAccountingIncomingInvoiceScreen.routeName:
+        return _createRoute(const ManageAccountingIncomingInvoiceScreen());
       case ManageAccountingIncomingInvoiceSection.routeName:
         return _createRoute(const ManageAccountingIncomingInvoiceSection());
       default:

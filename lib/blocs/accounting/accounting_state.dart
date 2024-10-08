@@ -45,6 +45,13 @@ class FailedToFetchAccountingMaster extends AccountingState {
   FailedToFetchAccountingMaster({required this.errorMessage});
 }
 
+class PaymentModeSelected extends AccountingState {
+  final String paymentModeId;
+  final String paymentMode;
+
+  PaymentModeSelected({required this.paymentModeId, required this.paymentMode});
+}
+
 class FetchingOutgoingInvoices extends AccountingState {
   final int pageNo;
 
@@ -70,4 +77,27 @@ class FailedToFetchOutgoingInvoices extends AccountingState {
   final String errorMessage;
 
   FailedToFetchOutgoingInvoices({required this.errorMessage});
+}
+
+class InvoiceCurrencySelected extends AccountingState {
+  final String selectedCurrency;
+
+  InvoiceCurrencySelected({required this.selectedCurrency});
+}
+
+class CurrencySelected extends AccountingState {
+  final String currencyId;
+  final String currency;
+
+  CurrencySelected({required this.currencyId, required this.currency});
+}
+
+class CreatingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceCreated extends AccountingState {}
+
+class FailedToCreateIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToCreateIncomingInvoice({required this.errorMessage});
 }
