@@ -54,6 +54,7 @@ class CurrencyDropdown extends StatelessWidget {
                             style: Theme.of(context).textTheme.xSmall),
                         children: [
                           ListView.builder(
+                              physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: currency.length,
                               itemBuilder: (context, index) {
@@ -67,9 +68,10 @@ class CurrencyDropdown extends StatelessWidget {
                                       context.read<AccountingBloc>().add(
                                           SelectCurrency(
                                               currency:
-                                                  currency[index].id.toString(),
-                                              currencyId:
-                                                  currency[index].currency));
+                                                  currency[index].currency,
+                                              currencyId: currency[index]
+                                                  .id
+                                                  .toString()));
                                       onCurrencySelected(
                                           currency[index].id.toString());
                                     });

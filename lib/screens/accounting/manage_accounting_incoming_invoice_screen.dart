@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/billable_dropdown.dart';
+import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/incoming_invoice_payment_currency_dropdowns.dart';
 import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/manage_incoming_invoice_bottom_bar.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -57,25 +58,6 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                             .read<AccountingBloc>()
                             .manageIncomingInvoiceMap['entity'] = selectedValue;
                       }),
-                      const SizedBox(height: xxTinySpacing),
-                      Text(StringConstants.kClient,
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      BillableDropdown(
-                          onBillableChanged: (String selectedValue) {}),
-                      const SizedBox(height: xxTinySpacing),
-                      Text('Project',
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      BillableDropdown(
-                          onBillableChanged: (String selectedValue) {}),
-                      const SizedBox(height: xxTinySpacing),
                       Text('Invoice Date',
                           style: Theme.of(context)
                               .textTheme
@@ -101,7 +83,8 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                               .manageIncomingInvoiceMap['purposename'] = value;
                         },
                       ),
-                      const SizedBox(height: xxTinySpacing)
+                      const SizedBox(height: xxTinySpacing),
+                      const IncomingInvoicePaymentCurrencyDropdowns()
                     ]))));
   }
 }
