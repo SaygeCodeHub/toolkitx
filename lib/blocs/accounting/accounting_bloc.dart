@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
@@ -22,6 +23,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       getIt<AccountingRepository>();
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
+  final Map manageIncomingInvoiceMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
@@ -38,6 +40,10 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<FetchOutgoingInvoices>(_fetchOutgoingInvoices);
     on<FetchMasterDataEntity>(_fetchMasterDataEntity);
     on<SelectClientId>(_selectClientId);
+    on<SelectPaymentMode>(_selectPaymentMode);
+    on<SelectInvoiceCurrency>(_selectInvoiceCurrency);
+    on<SelectCurrency>(_selectCurrency);
+    on<CreateIncomingInvoice>(_createIncomingInvoice);
     on<SaveOutgoingInvoice>(_saveOutgoingInvoice);
   }
 
@@ -110,7 +116,11 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     try {
       fetchIAccountingMasterModel =
           await _accountingRepository.fetchAccountingMaster();
-      if (fetchIAccountingMasterModel.status != 200 ||
+      if (fetchIAccountingMasterModel.data != null) {
+        fetchIAccountingMasterModel.data![3]
+            .add(AccountingMasterDatum.fromJson({"name": 'Other'}));
+      }
+      if (fetchIAccountingMasterModel.status != 200 &&
           fetchIAccountingMasterModel.status != 204) {
         emit(FailedToFetchAccountingMaster(
             errorMessage: StringConstants.kSomethingWentWrong));
@@ -164,6 +174,46 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } on Exception catch (e) {
       emit(AccountingProjectListNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectPaymentMode(
+      SelectPaymentMode event, Emitter<AccountingState> emit) async {
+    emit(PaymentModeSelected(
+        paymentModeId: event.paymentModeId, paymentMode: event.paymentMode));
+  }
+
+  FutureOr<void> _selectInvoiceCurrency(
+      SelectInvoiceCurrency event, Emitter<AccountingState> emit) async {
+    emit(InvoiceCurrencySelected(selectedCurrency: event.selectedCurrency));
+  }
+
+  FutureOr<void> _selectCurrency(
+      SelectCurrency event, Emitter<AccountingState> emit) {
+    emit(CurrencySelected(
+        currencyId: event.currencyId, currency: event.currency));
+  }
+
+  FutureOr<void> _createIncomingInvoice(
+      CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
+    emit(CreatingIncomingInvoice());
+    try {
+      CreateIncomingInvoiceModel createIncomingInvoiceModel =
+          await _accountingRepository
+              .createIncomingInvoice(manageIncomingInvoiceMap);
+      if (createIncomingInvoiceModel.status == 200) {
+        if (createIncomingInvoiceModel.message == '1') {
+          emit(IncomingInvoiceCreated());
+        } else {
+          emit(FailedToCreateIncomingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToCreateIncomingInvoice(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 

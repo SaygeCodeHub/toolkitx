@@ -1,3 +1,4 @@
+import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
@@ -45,9 +46,16 @@ class AccountingRepositoryImpl implements AccountingRepository {
   Future<FetchMasterDataEntryModel> fetchMasterDataEntry(int entityId) async {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetMasterDataEntity?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&entityid=$entityId');
-    print(
-        "url======>${ApiConstants.baseUrl}accounting/GetMasterDataEntity?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&entityid=$entityId");
     return FetchMasterDataEntryModel.fromJson(response);
+  }
+
+  @override
+  Future<CreateIncomingInvoiceModel> createIncomingInvoice(
+      Map createIncomingInvoiceMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/SaveIncomingInvoice',
+        createIncomingInvoiceMap);
+    return CreateIncomingInvoiceModel.fromJson(response);
   }
 
   @override

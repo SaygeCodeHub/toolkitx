@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
-import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/billable_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/client_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/project_dropdown.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
@@ -106,9 +105,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                         .textTheme
                         .xSmall
                         .copyWith(fontWeight: FontWeight.w600)),
-                const SizedBox(height: xxxTinierSpacing),
-                BillableDropdown(onBillableChanged: (String selectedValue) {}),
-                const SizedBox(height: xxTinySpacing)
+                const SizedBox(height: xxxTinierSpacing)
               ],
             ),
           ),

@@ -84,8 +84,11 @@ abstract class StringConstants {
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
   static const String kCamera = 'Camera';
+  static const String kImage = 'Image';
   static const String kOther = 'Other';
   static const String kDevice = 'Device';
+  static const String kGallery = 'Gallery';
+  static const String kDocument = 'Document';
   static const String kUploadFrom = 'Upload From';
   static const String kEnterReason = 'Enter Reason';
   static const String kType = 'Type';

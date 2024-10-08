@@ -1,7 +1,7 @@
-import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
+import '../../data/models/accounting/fetch_master_data_entry_model.dart';
 
 abstract class AccountingState {}
 
@@ -44,6 +44,13 @@ class FailedToFetchAccountingMaster extends AccountingState {
   final String errorMessage;
 
   FailedToFetchAccountingMaster({required this.errorMessage});
+}
+
+class PaymentModeSelected extends AccountingState {
+  final String paymentModeId;
+  final String paymentMode;
+
+  PaymentModeSelected({required this.paymentModeId, required this.paymentMode});
 }
 
 class FetchingOutgoingInvoices extends AccountingState {
@@ -99,6 +106,29 @@ class AccountingProjectListNotFetched extends AccountingState {
   final String errorMessage;
 
   AccountingProjectListNotFetched({required this.errorMessage});
+}
+
+class InvoiceCurrencySelected extends AccountingState {
+  final String selectedCurrency;
+
+  InvoiceCurrencySelected({required this.selectedCurrency});
+}
+
+class CurrencySelected extends AccountingState {
+  final String currencyId;
+  final String currency;
+
+  CurrencySelected({required this.currencyId, required this.currency});
+}
+
+class CreatingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceCreated extends AccountingState {}
+
+class FailedToCreateIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToCreateIncomingInvoice({required this.errorMessage});
 }
 
 class OutgoingInvoiceSaving extends AccountingState {}

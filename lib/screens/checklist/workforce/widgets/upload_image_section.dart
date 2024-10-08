@@ -48,11 +48,11 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
     _imagePickerBloc.add(FetchImages());
   }
 
-  @override
-  void dispose() {
-    _imagePickerBloc.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _imagePickerBloc.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
