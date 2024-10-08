@@ -12,10 +12,18 @@ import 'widgets/incident_common_comments_section.dart';
 class IncidentAddCommentsScreen extends StatelessWidget {
   final String incidentId;
   final IncidentDetailsModel incidentDetailsModel;
+  final bool showStatusControl;
+  final bool isFromAddComment;
+  final bool showClassification;
 
   IncidentAddCommentsScreen(
-      {Key? key, required this.incidentId, required this.incidentDetailsModel})
-      : super(key: key);
+      {super.key,
+      required this.incidentId,
+      required this.incidentDetailsModel,
+      required this.showStatusControl,
+      this.isFromAddComment = false,
+      required this.showClassification});
+
   final Map incidentCommentsMap = {};
 
   @override
@@ -33,18 +41,21 @@ class IncidentAddCommentsScreen extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Column(children: [
                 IncidentCommonCommentsSection(
-                  onPhotosUploaded: (List uploadList) {
-                    incidentCommentsMap['file_name'] = uploadList;
-                  },
-                  onTextFieldValue: (String textValue) {
-                    incidentCommentsMap['comments'] = textValue;
-                  },
-                  incidentCommentsMap: incidentCommentsMap,
-                  incidentDetailsModel: incidentDetailsModel,
-                )
+                    onPhotosUploaded: (List uploadList) {
+                      incidentCommentsMap['file_name'] = uploadList;
+                    },
+                    onTextFieldValue: (String textValue) {
+                      incidentCommentsMap['comments'] = textValue;
+                    },
+                    incidentCommentsMap: incidentCommentsMap,
+                    incidentDetailsModel: incidentDetailsModel,
+                    showStatusControl: showStatusControl,
+                    showClassification: showClassification)
               ]))),
       bottomNavigationBar: IncidentAddCommentsBottomNavbar(
-          incidentCommentsMap: incidentCommentsMap, incidentId: incidentId),
+          incidentCommentsMap: incidentCommentsMap,
+          incidentId: incidentId,
+          isFromAddComment: isFromAddComment),
     );
   }
 }

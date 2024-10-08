@@ -122,9 +122,16 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
                       imageLength:
                           context.read<ImagePickerBloc>().lengthOfImageList));
                 } else {
-                  context.read<QualityManagementBloc>().add(
-                      SaveQualityManagementComments(
-                          saveCommentsMap: qmCommentsMap));
+                  if (isFromAddComments) {
+                    qmCommentsMap['status'] = '';
+                    context.read<QualityManagementBloc>().add(
+                        SaveQualityManagementComments(
+                            saveCommentsMap: qmCommentsMap));
+                  } else {
+                    context.read<QualityManagementBloc>().add(
+                        SaveQualityManagementComments(
+                            saveCommentsMap: qmCommentsMap));
+                  }
                 }
               },
               textValue: StringConstants.kSave),

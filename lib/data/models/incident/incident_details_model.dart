@@ -68,6 +68,7 @@ class IncidentDetailsDatum {
   final List<Log>? logs;
   final String assetid;
   final String assetname;
+  final String isShowAdditionalInfo;
 
   IncidentDetailsDatum(
       {required this.id,
@@ -105,7 +106,8 @@ class IncidentDetailsDatum {
       this.linkedpermits,
       this.logs,
       required this.assetid,
-      required this.assetname});
+      required this.assetname,
+      required this.isShowAdditionalInfo});
 
   factory IncidentDetailsDatum.fromJson(Map<String, dynamic> json) =>
       IncidentDetailsDatum(
@@ -150,7 +152,8 @@ class IncidentDetailsDatum {
               json["linkedpermits"].map((x) => Linkedpermit.fromJson(x))),
           logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
           assetid: json['assetid'] ?? '',
-          assetname: json['assetname'] ?? '');
+          assetname: json['assetname'] ?? '',
+          isShowAdditionalInfo: json['isshowadditionalinfo'] ?? '0');
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -192,7 +195,8 @@ class IncidentDetailsDatum {
             List<dynamic>.from(linkedpermits!.map((x) => x.toJson())),
         "logs": List<dynamic>.from(logs!.map((x) => x.toJson())),
         "assetid": assetid,
-        "assetname": assetname
+        "assetname": assetname,
+        "isshowadditionalinfo": isShowAdditionalInfo
       };
 }
 
