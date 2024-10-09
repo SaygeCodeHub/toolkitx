@@ -46,11 +46,14 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String value) {
-                        context
-                            .read<AccountingBloc>()
-                            .manageIncomingInvoiceMap['invoiceamount'] = value;
-                      }),
+                      TextFieldWidget(
+                          textInputType: TextInputType.number,
+                          onTextFieldChanged: (String value) {
+                            context
+                                    .read<AccountingBloc>()
+                                    .manageIncomingInvoiceMap['invoiceamount'] =
+                                value;
+                          }),
                       const SizedBox(height: xxTinySpacing),
                       if (context
                               .read<AccountingBloc>()
@@ -70,12 +73,14 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                               .read<AccountingBloc>()
                               .manageIncomingInvoiceMap['other'] ==
                           'Other')
-                        TextFieldWidget(onTextFieldChanged: (String value) {
-                          context
-                                  .read<AccountingBloc>()
-                                  .manageIncomingInvoiceMap[
-                              'otherinvoiceamount'] = value;
-                        }),
+                        TextFieldWidget(
+                            textInputType: TextInputType.number,
+                            onTextFieldChanged: (String value) {
+                              context
+                                      .read<AccountingBloc>()
+                                      .manageIncomingInvoiceMap[
+                                  'otherinvoiceamount'] = value;
+                            }),
                       if (context
                               .read<AccountingBloc>()
                               .manageIncomingInvoiceMap['other'] ==
@@ -89,6 +94,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
                           maxLines: 5,
+                          textInputAction: TextInputAction.done,
                           onTextFieldChanged: (String value) {
                             context
                                 .read<AccountingBloc>()

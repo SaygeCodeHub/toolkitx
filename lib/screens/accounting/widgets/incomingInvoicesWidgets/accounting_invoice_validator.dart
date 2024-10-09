@@ -102,13 +102,19 @@ void validateFormAndProceed(BuildContext context) {
           .manageIncomingInvoiceMap['otherinvoiceamount'])) {
     showCustomSnackBar(
         context, showValidationMessage('otherinvoiceamount'), '');
-  } else if (validateForm(
-      context.read<AccountingBloc>().manageIncomingInvoiceMap['files'])) {
-    showCustomSnackBar(context, showValidationMessage('files'), '');
   } else {
-    context.read<UploadImageBloc>().add(UploadImage(
-        images:
-            context.read<AccountingBloc>().manageIncomingInvoiceMap['files'],
-        imageLength: context.read<ImagePickerBloc>().lengthOfImageList));
+    if (context
+            .read<AccountingBloc>()
+            .manageIncomingInvoiceMap['files']
+            .isEmpty ||
+        context.read<AccountingBloc>().manageIncomingInvoiceMap['files'] ==
+            '') {
+      showCustomSnackBar(context, showValidationMessage('files'), '');
+    } else {
+      context.read<UploadImageBloc>().add(UploadImage(
+          images:
+              context.read<AccountingBloc>().manageIncomingInvoiceMap['files'],
+          imageLength: context.read<ImagePickerBloc>().lengthOfImageList));
+    }
   }
 }
