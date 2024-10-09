@@ -32,10 +32,13 @@ class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
-        InvoiceCurrencyDropdown(onInvoiceCurrencySelected: (String currency) {
-          context.read<AccountingBloc>().manageIncomingInvoiceMap['other'] =
-              currency;
-        }),
+        InvoiceCurrencyDropdown(
+            onInvoiceCurrencySelected: (String currency) {
+              context.read<AccountingBloc>().manageIncomingInvoiceMap['other'] =
+                  currency;
+            },
+            manageInvoiceMap:
+                context.read<AccountingBloc>().manageIncomingInvoiceMap),
         const SizedBox(height: xxTinySpacing),
       ],
     );

@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
-import 'package:toolkit/data/cache/cache_keys.dart';
-import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
@@ -23,7 +21,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
-  final CustomerCache _customerCache = getIt<CustomerCache>();
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
