@@ -131,6 +131,16 @@ class FailedToCreateIncomingInvoice extends AccountingState {
   FailedToCreateIncomingInvoice({required this.errorMessage});
 }
 
+class CreatingOutgoingInvoice extends AccountingState {}
+
+class OutgoingInvoiceCreated extends AccountingState {}
+
+class FailedToCreateOutgoingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToCreateOutgoingInvoice({required this.errorMessage});
+}
+
 class CreditCardSelected extends AccountingState {
   final String cardName;
   final String cardId;

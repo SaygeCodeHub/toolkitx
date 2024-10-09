@@ -13,9 +13,11 @@ import 'currency_dropdown.dart';
 
 class InvoiceCurrencyDropdown extends StatelessWidget {
   final void Function(String currency) onInvoiceCurrencySelected;
-
+  final Map manageInvoiceMap;
   const InvoiceCurrencyDropdown(
-      {super.key, required this.onInvoiceCurrencySelected});
+      {super.key,
+      required this.onInvoiceCurrencySelected,
+      required this.manageInvoiceMap});
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +82,7 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                             ])),
                     if (state.selectedCurrency == 'Other')
                       CurrencyDropdown(onCurrencySelected: (String currency) {
-                        context
-                                .read<AccountingBloc>()
-                                .manageIncomingInvoiceMap['othercurrency'] =
-                            currency;
+                        manageInvoiceMap['othercurrency'] = currency;
                       })
                   ]);
             } else {

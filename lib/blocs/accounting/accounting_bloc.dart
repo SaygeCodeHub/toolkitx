@@ -5,10 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
+import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -17,12 +20,14 @@ import 'accounting_event.dart';
 import 'accounting_state.dart';
 
 class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
+  final CustomerCache _customerCache = getIt<CustomerCache>();
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
+  final Map<String, dynamic> manageOutgoingInvoiceMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
@@ -44,6 +49,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<SelectInvoiceCurrency>(_selectInvoiceCurrency);
     on<SelectCurrency>(_selectCurrency);
     on<CreateIncomingInvoice>(_createIncomingInvoice);
+    on<CreateOutgoingInvoice>(_createOutgoingInvoice);
     on<SelectCreditCard>(_selectCreditCard);
   }
 
@@ -236,6 +242,34 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<void> _createOutgoingInvoice(
+      CreateOutgoingInvoice event, Emitter<AccountingState> emit) async {
+    emit(CreatingOutgoingInvoice());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      manageOutgoingInvoiceMap.addAll({
+        "id": "",
+        "userid": userId,
+        "hashcode": hashCode,
+        "purposename": "",
+        "otherinvoiceamount": 0
+      });
+      CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
+          await _accountingRepository
+              .createOutgoingInvoice(manageOutgoingInvoiceMap);
+      if (createOutgoingInvoiceModel.status == 200) {
+        emit(OutgoingInvoiceCreated());
+      } else {
+        emit(FailedToCreateOutgoingInvoice(
+            errorMessage: createOutgoingInvoiceModel.message));
+      }
+    } on Exception catch (e) {
+      emit(FailedToCreateOutgoingInvoice(errorMessage: e.toString()));
     }
   }
 
