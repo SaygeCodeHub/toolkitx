@@ -51,3 +51,10 @@ class SelectCurrency extends AccountingEvent {
 class CreateIncomingInvoice extends AccountingEvent {}
 
 class CreateOutgoingInvoice extends AccountingEvent {}
+
+class SelectCreditCard extends AccountingEvent {
+  final String cardName;
+  final String cardId;
+
+  SelectCreditCard({required this.cardName, required this.cardId});
+}

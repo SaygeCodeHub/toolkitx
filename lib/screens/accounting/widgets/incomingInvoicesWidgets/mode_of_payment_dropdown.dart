@@ -72,7 +72,12 @@ class ModeOfPaymentDropdown extends StatelessWidget {
                                       });
                                 })
                           ])),
-                  if (state.paymentModeId == '2') const CreditCardDropdown()
+                  if (state.paymentModeId == '2')
+                    CreditCardDropdown(onCreditCardSelected: (String cardId) {
+                      context
+                          .read<AccountingBloc>()
+                          .manageIncomingInvoiceMap['creditcard'] = cardId;
+                    })
                 ]);
           } else {
             return const SizedBox.shrink();

@@ -29,6 +29,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
   List<ClientDatum> clientList = [];
+  List<ClientDatum> creditCardsList = [];
   bool incomingInvoicesReachedMax = false;
   bool outgoingInvoicesReachedMax = false;
   FetchIAccountingMasterModel fetchIAccountingMasterModel =
@@ -46,6 +47,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<SelectCurrency>(_selectCurrency);
     on<CreateIncomingInvoice>(_createIncomingInvoice);
     on<CreateOutgoingInvoice>(_createOutgoingInvoice);
+    on<SelectCreditCard>(_selectCreditCard);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -135,12 +137,14 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       FetchMasterDataEntity event, Emitter<AccountingState> emit) async {
     emit(AccountingNewEntitySelecting());
     clientList.clear();
+    creditCardsList.clear();
     try {
       FetchMasterDataEntryModel fetchMasterDataEntryModel =
           await _accountingRepository.fetchMasterDataEntry(event.entityId);
       if (fetchMasterDataEntryModel.status == 200) {
         clientList.addAll(
             fetchMasterDataEntryModel.data.expand((list) => list).toList());
+        creditCardsList.addAll(fetchMasterDataEntryModel.data[1]);
         emit(AccountingNewEntitySelected(
             fetchMasterDataEntryModel: fetchMasterDataEntryModel));
       } else {
@@ -199,7 +203,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
     try {
-      print("manageIncomingInvoiceMap=====>$manageIncomingInvoiceMap");
       CreateIncomingInvoiceModel createIncomingInvoiceModel =
           await _accountingRepository
               .createIncomingInvoice(manageIncomingInvoiceMap);
@@ -243,6 +246,15 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } on Exception catch (e) {
       emit(FailedToCreateOutgoingInvoice(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectCreditCard(
+      SelectCreditCard event, Emitter<AccountingState> emit) async {
+    try {
+      emit(CreditCardSelected(cardName: event.cardName, cardId: event.cardId));
+    } catch (e) {
+      rethrow;
     }
   }
 }

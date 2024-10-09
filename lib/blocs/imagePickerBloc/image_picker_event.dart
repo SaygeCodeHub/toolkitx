@@ -12,3 +12,5 @@ class RemovePickedImage extends ImagePickerEvent {
 }
 
 class FetchImages extends ImagePickerEvent {}
+
+class PickDocument extends ImagePickerEvent {}
