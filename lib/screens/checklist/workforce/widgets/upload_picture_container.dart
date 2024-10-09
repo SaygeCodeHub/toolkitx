@@ -12,16 +12,18 @@ class UploadPictureContainer extends StatelessWidget {
   final List imagePathsList;
   final String clientId;
   final ImagePickerBloc imagePickerBloc; // Accept the bloc as a parameter
+  final String fileExtension;
 
-  const UploadPictureContainer({
-    Key? key,
-    required this.imagePathsList,
-    required this.clientId,
-    required this.imagePickerBloc, // Initialize the bloc parameter
-  }) : super(key: key);
+  const UploadPictureContainer(
+      {super.key,
+      required this.imagePathsList,
+      required this.clientId,
+      required this.imagePickerBloc, // Initialize the bloc parameter
+      this.fileExtension = ''});
 
   @override
   Widget build(BuildContext context) {
+    print('imagess $imagePathsList');
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -53,7 +55,11 @@ class UploadPictureContainer extends StatelessWidget {
                               });
                         });
                   }),
-              subtitle: Image.file(File(imagePathsList[index])));
+              subtitle: (imagePathsList[index].toString().contains('.pdf'))
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.picture_as_pdf, size: 35))
+                  : Image.file(File(imagePathsList[index])));
         });
   }
 }

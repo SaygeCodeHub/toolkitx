@@ -48,77 +48,72 @@ class _UploadImageMenuState extends State<UploadImageMenu> {
     _imagePickerBloc.add(FetchImages());
   }
 
-  // @override
-  // void dispose() {
-  //   _imagePickerBloc.close();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _imagePickerBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        BlocBuilder<ImagePickerBloc, ImagePickerState>(
-          bloc: _imagePickerBloc,
-          buildWhen: (previousState, currentState) =>
-              currentState is PickingImage ||
-              currentState is ImagePicked ||
-              currentState is FailedToPickImage ||
-              currentState is ImagesFetched,
-          builder: (context, state) {
-            if (state is PickingImage) {
-              return const Padding(
-                padding: EdgeInsets.all(xxTinierSpacing),
-                child: SizedBox(
-                    width: kProgressIndicatorTogether,
-                    height: kProgressIndicatorTogether,
-                    child: CircularProgressIndicator()),
-              );
-            } else if (state is ImagePicked) {
-              widget.onUploadImageResponse(state.pickedImagesList);
-              return PickImageWidget(
-                imageMap: {
-                  'imageCount': state.imageCount,
-                  'imageList': state.pickedImagesList,
-                  'clientId': state.clientId,
-                  'isSignature': widget.isSignature,
-                  'onSign': widget.onSign,
-                },
-                imagePickerBloc: _imagePickerBloc,
-              );
-            } else if (state is FailedToPickImage) {
-              return Text(
-                state.errText,
-                style: const TextStyle(color: AppColor.errorRed),
-              );
-            } else if (state is ImagesFetched) {
-              widget.onUploadImageResponse(state.images);
-              return PickImageWidget(
-                imageMap: {
-                  'imageCount': state.imageCount,
-                  'imageList': state.images,
-                  'clientId': state.clientId,
-                  'isSignature': widget.isSignature,
-                  'onSign': widget.onSign,
-                },
-                imagePickerBloc: _imagePickerBloc,
-              );
-            } else {
-              return PickImageWidget(
-                imageMap: {
-                  'imageCount': 0,
-                  'imageList': const [],
-                  'clientId': '',
-                  'isSignature': widget.isSignature,
-                  'onSign': widget.onSign,
-                },
-                imagePickerBloc: _imagePickerBloc,
-              );
-            }
-          },
-        )
-      ],
+    return BlocBuilder<ImagePickerBloc, ImagePickerState>(
+      bloc: _imagePickerBloc,
+      buildWhen: (previousState, currentState) =>
+          currentState is PickingImage ||
+          currentState is ImagePicked ||
+          currentState is FailedToPickImage ||
+          currentState is ImagesFetched,
+      builder: (context, state) {
+        if (state is PickingImage) {
+          return const Padding(
+            padding: EdgeInsets.all(xxTinierSpacing),
+            child: SizedBox(
+                width: kProgressIndicatorTogether,
+                height: kProgressIndicatorTogether,
+                child: CircularProgressIndicator()),
+          );
+        } else if (state is ImagePicked) {
+          widget.onUploadImageResponse(state.pickedImagesList);
+          return PickImageWidget(
+            imageMap: {
+              'imageCount': state.imageCount,
+              'imageList': state.pickedImagesList,
+              'clientId': state.clientId,
+              'isSignature': widget.isSignature,
+              'onSign': widget.onSign,
+            },
+            imagePickerBloc: _imagePickerBloc,
+          );
+        } else if (state is FailedToPickImage) {
+          return Text(
+            state.errText,
+            style: const TextStyle(color: AppColor.errorRed),
+          );
+        } else if (state is ImagesFetched) {
+          widget.onUploadImageResponse(state.images);
+          return PickImageWidget(
+            imageMap: {
+              'imageCount': state.imageCount,
+              'imageList': state.images,
+              'clientId': state.clientId,
+              'isSignature': widget.isSignature,
+              'onSign': widget.onSign,
+            },
+            imagePickerBloc: _imagePickerBloc,
+          );
+        } else {
+          return PickImageWidget(
+            imageMap: {
+              'imageCount': 0,
+              'imageList': const [],
+              'clientId': '',
+              'isSignature': widget.isSignature,
+              'onSign': widget.onSign,
+            },
+            imagePickerBloc: _imagePickerBloc,
+          );
+        }
+      },
     );
   }
 }

@@ -130,3 +130,10 @@ class FailedToCreateIncomingInvoice extends AccountingState {
 
   FailedToCreateIncomingInvoice({required this.errorMessage});
 }
+
+class CreditCardSelected extends AccountingState {
+  final String cardName;
+  final String cardId;
+
+  CreditCardSelected({required this.cardName, required this.cardId});
+}
