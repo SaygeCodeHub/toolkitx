@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/accounting/bank_statement_screen.dart';
+import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/manage_accounting_outgoing_invoice.dart';
 import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
@@ -63,8 +65,10 @@ import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/accounting/bank_statement_filter_screen.dart';
 import '../screens/accounting/manage_accounting_incoming_invoice.dart';
+import '../screens/accounting/manage_accounting_incoming_invoice_screen.dart';
 import '../screens/accounting/accounting_filter_screen.dart';
 import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
+import '../screens/accounting/widgets/outgoingInvoiceWidgets/manage_accounting_outgoing_invoice_section.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
@@ -785,12 +789,16 @@ class AppRoutes {
         List args = settings.arguments as List;
         return _createRoute(AccountingFilterScreen(
             accountingFilterMap: args[0], currentRouteName: args[1]));
-      case ManageAccountingIncomingInvoice.routeName:
-        return _createRoute(const ManageAccountingIncomingInvoice());
+      case ManageAccountingIncomingInvoiceScreen.routeName:
+        return _createRoute(const ManageAccountingIncomingInvoiceScreen());
       case ManageAccountingIncomingInvoiceSection.routeName:
         return _createRoute(const ManageAccountingIncomingInvoiceSection());
       case BankStatementFilterScreen.routeName:
         return _createRoute(const BankStatementFilterScreen());
+      case ManageAccountingIOutgoingInvoice.routeName:
+        return _createRoute(const ManageAccountingIOutgoingInvoice());
+      case ManageAccountingOutgoingInvoiceSection.routeName:
+        return _createRoute(const ManageAccountingOutgoingInvoiceSection());
       default:
         return _createRoute(const WelcomeScreen());
     }

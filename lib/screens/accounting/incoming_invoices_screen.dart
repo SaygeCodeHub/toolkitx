@@ -10,7 +10,7 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
-import 'manage_accounting_incoming_invoice.dart';
+import 'manage_accounting_incoming_invoice_screen.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoice_filter_icon.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoices_subtitle.dart';
 import 'widgets/incomingInvoicesWidgets/incoming_invoices_title.dart';
@@ -29,7 +29,7 @@ class IncomingInvoicesScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.pushNamed(
-                  context, ManageAccountingIncomingInvoice.routeName);
+                  context, ManageAccountingIncomingInvoiceScreen.routeName);
             },
             child: const Icon(Icons.add)),
         body: Padding(

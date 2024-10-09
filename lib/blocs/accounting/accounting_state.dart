@@ -2,6 +2,7 @@ import 'package:toolkit/data/models/accounting/fetch_bank_statements_model.dart'
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
+import '../../data/models/accounting/fetch_master_data_entry_model.dart';
 
 abstract class AccountingState {}
 
@@ -23,8 +24,9 @@ class IncomingInvoicesFetched extends AccountingState {
 
 class IncomingInvoicesWithNoData extends AccountingState {
   final String message;
+  final int pageNo;
 
-  IncomingInvoicesWithNoData({required this.message});
+  IncomingInvoicesWithNoData({required this.message, required this.pageNo});
 }
 
 class NoRecordsFoundForFilter extends AccountingState {
@@ -43,6 +45,13 @@ class FailedToFetchAccountingMaster extends AccountingState {
   final String errorMessage;
 
   FailedToFetchAccountingMaster({required this.errorMessage});
+}
+
+class PaymentModeSelected extends AccountingState {
+  final String paymentModeId;
+  final String paymentMode;
+
+  PaymentModeSelected({required this.paymentModeId, required this.paymentMode});
 }
 
 class FetchingOutgoingInvoices extends AccountingState {
@@ -70,6 +79,74 @@ class FailedToFetchOutgoingInvoices extends AccountingState {
   final String errorMessage;
 
   FailedToFetchOutgoingInvoices({required this.errorMessage});
+}
+
+class AccountingNewEntitySelecting extends AccountingState {}
+
+class AccountingNewEntitySelected extends AccountingState {
+  final FetchMasterDataEntryModel fetchMasterDataEntryModel;
+
+  AccountingNewEntitySelected({required this.fetchMasterDataEntryModel});
+}
+
+class AccountingNewEntityNotSelected extends AccountingState {
+  final String errorMessage;
+
+  AccountingNewEntityNotSelected({required this.errorMessage});
+}
+
+class AccountingProjectListFetching extends AccountingState {}
+
+class AccountingProjectListFetched extends AccountingState {
+  final List<Project> projectList;
+
+  AccountingProjectListFetched({required this.projectList});
+}
+
+class AccountingProjectListNotFetched extends AccountingState {
+  final String errorMessage;
+
+  AccountingProjectListNotFetched({required this.errorMessage});
+}
+
+class InvoiceCurrencySelected extends AccountingState {
+  final String selectedCurrency;
+
+  InvoiceCurrencySelected({required this.selectedCurrency});
+}
+
+class CurrencySelected extends AccountingState {
+  final String currencyId;
+  final String currency;
+
+  CurrencySelected({required this.currencyId, required this.currency});
+}
+
+class CreatingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceCreated extends AccountingState {}
+
+class FailedToCreateIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToCreateIncomingInvoice({required this.errorMessage});
+}
+
+class CreatingOutgoingInvoice extends AccountingState {}
+
+class OutgoingInvoiceCreated extends AccountingState {}
+
+class FailedToCreateOutgoingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToCreateOutgoingInvoice({required this.errorMessage});
+}
+
+class CreditCardSelected extends AccountingState {
+  final String cardName;
+  final String cardId;
+
+  CreditCardSelected({required this.cardName, required this.cardId});
 }
 
 class FetchingBankStatements extends AccountingState {

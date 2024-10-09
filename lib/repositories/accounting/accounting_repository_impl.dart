@@ -1,8 +1,11 @@
+import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_bank_statements_model.dart';
 
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
+import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
 
@@ -43,5 +46,30 @@ class AccountingRepositoryImpl implements AccountingRepository {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetBankStatements?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
     return FetchBankStatementsModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchMasterDataEntryModel> fetchMasterDataEntry(int entityId) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetMasterDataEntity?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&entityid=$entityId');
+    return FetchMasterDataEntryModel.fromJson(response);
+  }
+
+  @override
+  Future<CreateIncomingInvoiceModel> createIncomingInvoice(
+      Map createIncomingInvoiceMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/SaveIncomingInvoice',
+        createIncomingInvoiceMap);
+    return CreateIncomingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<CreateOutgoingInvoiceModel> createOutgoingInvoice(
+      Map outgoingInvoiceMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/SaveOutgoingInvoice',
+        outgoingInvoiceMap);
+    return CreateOutgoingInvoiceModel.fromJson(response);
   }
 }

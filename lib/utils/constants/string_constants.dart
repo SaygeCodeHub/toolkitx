@@ -87,8 +87,11 @@ abstract class StringConstants {
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
   static const String kCamera = 'Camera';
+  static const String kImage = 'Image';
   static const String kOther = 'Other';
   static const String kDevice = 'Device';
+  static const String kGallery = 'Gallery';
+  static const String kDocument = 'Document';
   static const String kUploadFrom = 'Upload From';
   static const String kEnterReason = 'Enter Reason';
   static const String kType = 'Type';
@@ -809,4 +812,9 @@ abstract class StringConstants {
   static const String kAccounting = "Accounting";
   static const String kOutGoingInvoiceList = "Outgoing Invoice List";
   static const String kInComingInvoiceList = "Incoming Invoice List";
+  static const String kBankStatementList = "Bank Statement List";
+  static const String kEntityClientProjectInvoiceDAteCanNotBeEmpty =
+      "Entity ,Client ,Project ,Invoice Date can not be empty";
+  static const String kAmountAttachedDocumentsCanNotBeEmpty =
+      "Amount , Attached Documents can not be empty";
 }

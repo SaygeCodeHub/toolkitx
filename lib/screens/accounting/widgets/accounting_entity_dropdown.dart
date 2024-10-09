@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
+import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
@@ -25,7 +26,6 @@ class _AccountingEntityDropdownState extends State<AccountingEntityDropdown> {
   List entityList = [];
   String selectedEntity = StringConstants.kSelectEntity;
   String selectedEntityId = '';
-
   getEntityName(String entity, List entityList) {
     if (entity.isNotEmpty) {
       var element = entityList.firstWhere(
@@ -76,6 +76,9 @@ class _AccountingEntityDropdownState extends State<AccountingEntityDropdown> {
                               selectedEntity = entityList[index].name;
                               selectedEntityId =
                                   entityList[index].id.toString();
+                              context.read<AccountingBloc>().add(
+                                  FetchMasterDataEntity(
+                                      entityId: int.parse(selectedEntityId)));
                             });
                             widget.onEntityChanged(selectedEntityId);
                           });

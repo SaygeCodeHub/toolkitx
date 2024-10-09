@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/blocs/accounting/accounting_state.dart';
 import 'package:toolkit/configs/app_spacing.dart';
+import 'package:toolkit/screens/accounting/manage_accounting_outgoing_invoice.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_invoice_filter_icon.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_list_tile_subtitle.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/outgoing_list_tile_title.dart';
@@ -25,7 +26,11 @@ class OutgoingListScreen extends StatelessWidget {
         appBar:
             const GenericAppBar(title: StringConstants.kOutGoingInvoiceList),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(
+                  context, ManageAccountingIOutgoingInvoice.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
