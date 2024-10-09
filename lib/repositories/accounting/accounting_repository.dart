@@ -14,14 +14,13 @@ abstract class AccountingRepository {
   Future<FetchIncomingInvoicesModel> fetchIncomingInvoices(
       int pageNo, String filter);
 
-  Future<FetchIAccountingMasterModel> fetchAccountingMaster();
+  Future<FetchAccountingMasterModel> fetchAccountingMaster();
   Future<FetchMasterDataEntryModel> fetchMasterDataEntry(int entityId);
   Future<CreateOutgoingInvoiceModel> createOutgoingInvoice(
       Map outgoingInvoiceMap);
 
   Future<CreateIncomingInvoiceModel> createIncomingInvoice(
       Map createIncomingInvoiceMap);
-  Future<FetchAccountingMasterModel> fetchAccountingMaster();
   Future<FetchBankStatementsModel> fetchBankStatements(
       int pageNo, String filter);
 }

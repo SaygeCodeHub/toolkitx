@@ -38,8 +38,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   bool bankStatementsReachedMax = false;
   FetchAccountingMasterModel fetchIAccountingMasterModel =
       FetchAccountingMasterModel();
-  FetchIAccountingMasterModel fetchIAccountingMasterModel =
-      FetchIAccountingMasterModel();
   int entityId = 0;
 
   AccountingBloc() : super(AccountingInitial()) {
@@ -75,7 +73,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
               message: StringConstants.kNoRecordsFilter));
         } else if (incomingInvoices.isEmpty && event.pageNo == 1) {
           emit(IncomingInvoicesWithNoData(
-              message: StringConstants.kNoRecordsFound));
+              message: StringConstants.kNoRecordsFound, pageNo: event.pageNo));
         } else {
           emit(IncomingInvoicesFetched(
               incomingInvoices: incomingInvoices, pageNo: event.pageNo));
