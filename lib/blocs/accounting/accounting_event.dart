@@ -50,9 +50,4 @@ class SelectCurrency extends AccountingEvent {
 
 class CreateIncomingInvoice extends AccountingEvent {}
 
-class SaveOutgoingInvoice extends AccountingEvent {
-  final Map outgoingInvoiceMap;
-
-  SaveOutgoingInvoice({required this.outgoingInvoiceMap});
-}
-
+class CreateOutgoingInvoice extends AccountingEvent {}

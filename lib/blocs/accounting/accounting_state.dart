@@ -131,12 +131,12 @@ class FailedToCreateIncomingInvoice extends AccountingState {
   FailedToCreateIncomingInvoice({required this.errorMessage});
 }
 
-class OutgoingInvoiceSaving extends AccountingState {}
+class CreatingOutgoingInvoice extends AccountingState {}
 
-class OutgoingInvoiceSaved extends AccountingState {}
+class OutgoingInvoiceCreated extends AccountingState {}
 
-class OutgoingInvoiceNotSaved extends AccountingState {
+class FailedToCreateOutgoingInvoice extends AccountingState {
   final String errorMessage;
 
-  OutgoingInvoiceNotSaved({required this.errorMessage});
+  FailedToCreateOutgoingInvoice({required this.errorMessage});
 }

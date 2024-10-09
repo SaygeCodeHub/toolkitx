@@ -65,6 +65,7 @@ import '../data/models/qualityManagement/fetch_qm_details_model.dart';
 import '../screens/accounting/manage_accounting_incoming_invoice_screen.dart';
 import '../screens/accounting/accounting_filter_screen.dart';
 import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
+import '../screens/accounting/widgets/outgoingInvoiceWidgets/manage_accounting_outgoing_invoice_section.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
@@ -791,6 +792,8 @@ class AppRoutes {
         return _createRoute(const ManageAccountingIncomingInvoiceSection());
       case ManageAccountingIOutgoingInvoice.routeName:
         return _createRoute(const ManageAccountingIOutgoingInvoice());
+      case ManageAccountingOutgoingInvoiceSection.routeName:
+        return _createRoute(const ManageAccountingOutgoingInvoiceSection());
       default:
         return _createRoute(const WelcomeScreen());
     }

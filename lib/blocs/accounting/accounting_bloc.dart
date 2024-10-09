@@ -9,7 +9,7 @@ import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dar
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
-import 'package:toolkit/data/models/accounting/save_outgoing_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
@@ -24,6 +24,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
+  final Map manageOutgoingInvoiceMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
@@ -44,7 +45,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<SelectInvoiceCurrency>(_selectInvoiceCurrency);
     on<SelectCurrency>(_selectCurrency);
     on<CreateIncomingInvoice>(_createIncomingInvoice);
-    on<SaveOutgoingInvoice>(_saveOutgoingInvoice);
+    on<CreateOutgoingInvoice>(_createOutgoingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -198,6 +199,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
     try {
+      print("manageIncomingInvoiceMap=====>$manageIncomingInvoiceMap");
       CreateIncomingInvoiceModel createIncomingInvoiceModel =
           await _accountingRepository
               .createIncomingInvoice(manageIncomingInvoiceMap);
@@ -217,38 +219,30 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     }
   }
 
-  Future<void> _saveOutgoingInvoice(SaveOutgoingInvoice event, Emitter<AccountingState> emit) async {
-    emit(OutgoingInvoiceSaving());
+  Future<void> _createOutgoingInvoice(
+      CreateOutgoingInvoice event, Emitter<AccountingState> emit) async {
+    emit(CreatingOutgoingInvoice());
     try {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      Map outgoingInvoiceMap ={
-          "id": "",
-          "userid": userId,
-          "hashcode": hashCode,
-          "files" : "",
-          "purposename": "xxx",
-          "entity": 9,
-          "client": 3,
-          "project": 4,
-          "date": "08.10.2024",
-          "comments": "xxx",
-          "invoiceamount": 100,
-          "other": "Other",
-          "othercurrency": 13,
-          "otherinvoiceamount": 200
-      };
-      SaveOutgoingInvoiceModel  saveOutgoingInvoiceModel= await _accountingRepository.saveOutgoingInvoice(outgoingInvoiceMap);
-      if(saveOutgoingInvoiceModel.status == 200){
-        emit(OutgoingInvoiceSaved());
-      }
-      else{
-        emit(OutgoingInvoiceNotSaved(errorMessage: saveOutgoingInvoiceModel.message));
+      manageOutgoingInvoiceMap.addAll({
+        "id": "",
+        "userid": userId,
+        "hashcode": hashCode,
+      });
+      CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
+          await _accountingRepository
+              .createOutgoingInvoice(manageOutgoingInvoiceMap);
+      print("status=========>${createOutgoingInvoiceModel.status}");
+      if (createOutgoingInvoiceModel.status == 200) {
+        emit(OutgoingInvoiceCreated());
+      } else {
+        emit(FailedToCreateOutgoingInvoice(
+            errorMessage: createOutgoingInvoiceModel.message));
       }
     } on Exception catch (e) {
-      emit(OutgoingInvoiceNotSaved(errorMessage: e.toString()));
-
+      emit(FailedToCreateOutgoingInvoice(errorMessage: e.toString()));
     }
   }
 }
