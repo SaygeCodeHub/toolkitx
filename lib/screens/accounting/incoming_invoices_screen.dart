@@ -28,6 +28,7 @@ class IncomingInvoicesScreen extends StatelessWidget {
             const GenericAppBar(title: StringConstants.kIncomingInvoiceList),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              context.read<AccountingBloc>().manageIncomingInvoiceMap.clear();
               Navigator.pushNamed(
                   context, ManageAccountingIncomingInvoiceScreen.routeName);
             },

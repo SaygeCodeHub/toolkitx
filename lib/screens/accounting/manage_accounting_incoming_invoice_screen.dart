@@ -55,8 +55,9 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                       BillableDropdown(
                           onBillableChanged: (String selectedValue) {
                         context
-                            .read<AccountingBloc>()
-                            .manageIncomingInvoiceMap['entity'] = selectedValue;
+                                .read<AccountingBloc>()
+                                .manageIncomingInvoiceMap['billable'] =
+                            selectedValue;
                       }),
                       Text('Invoice Date',
                           style: Theme.of(context)

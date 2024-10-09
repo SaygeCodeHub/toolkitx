@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
@@ -39,7 +37,6 @@ class QualityManagementAddCommentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     qmCommentsMap['status'] =
         fetchQualityManagementDetailsModel.data.nextStatus;
-    log('next status ${fetchQualityManagementDetailsModel.data.nextStatus}');
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('Comments')),
       body: Padding(

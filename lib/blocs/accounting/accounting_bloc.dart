@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/data/cache/cache_keys.dart';
+import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
@@ -17,6 +19,7 @@ import 'accounting_state.dart';
 class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final AccountingRepository _accountingRepository =
       getIt<AccountingRepository>();
+  final CustomerCache _customerCache = getIt<CustomerCache>();
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
@@ -197,9 +200,29 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
     try {
+      Map createIncomingInvoiceMap = {
+        "entity": manageIncomingInvoiceMap['entity'] ?? '',
+        "billable": manageIncomingInvoiceMap['billable'] ?? '',
+        "client": manageIncomingInvoiceMap['client'] ?? '',
+        "project": manageIncomingInvoiceMap['project'] ?? '',
+        "date": manageIncomingInvoiceMap['date'] ?? '',
+        "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
+        "mode": manageIncomingInvoiceMap['mode'] ?? '',
+        "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
+        "other": manageIncomingInvoiceMap['other'] ?? '',
+        "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
+        "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
+        "otherinvoiceamount":
+            manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
+        "comments": manageIncomingInvoiceMap['comments'] ?? '',
+        "files": manageIncomingInvoiceMap['files'] ?? '',
+        "id": "",
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      };
       CreateIncomingInvoiceModel createIncomingInvoiceModel =
           await _accountingRepository
-              .createIncomingInvoice(manageIncomingInvoiceMap);
+              .createIncomingInvoice(createIncomingInvoiceMap);
       if (createIncomingInvoiceModel.status == 200) {
         if (createIncomingInvoiceModel.message == '1') {
           emit(IncomingInvoiceCreated());

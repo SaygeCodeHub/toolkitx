@@ -12,9 +12,10 @@ import '../../../utils/constants/string_constants.dart';
 import 'currency_dropdown.dart';
 
 class InvoiceCurrencyDropdown extends StatelessWidget {
-  final void Function(String currency) onCurrencySelected;
+  final void Function(String currency) onInvoiceCurrencySelected;
 
-  const InvoiceCurrencyDropdown({super.key, required this.onCurrencySelected});
+  const InvoiceCurrencyDropdown(
+      {super.key, required this.onInvoiceCurrencySelected});
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +63,17 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                                 .textTheme
                                                 .xSmall),
                                         onTap: () {
+                                          context
+                                                      .read<AccountingBloc>()
+                                                      .manageIncomingInvoiceMap[
+                                                  'other'] =
+                                              invoiceCurrency[index].name;
                                           context.read<AccountingBloc>().add(
                                               SelectInvoiceCurrency(
                                                   selectedCurrency:
                                                       invoiceCurrency[index]
                                                           .name));
-                                          onCurrencySelected(
+                                          onInvoiceCurrencySelected(
                                               invoiceCurrency[index].name);
                                         });
                                   })
@@ -78,10 +84,6 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                 .read<AccountingBloc>()
                                 .manageIncomingInvoiceMap['othercurrency'] =
                             currency;
-                        context
-                                .read<AccountingBloc>()
-                                .manageIncomingInvoiceMap['other'] =
-                            state.selectedCurrency;
                       })
                   ]);
             } else {
