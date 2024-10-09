@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/blocs/accounting/accounting_state.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -19,6 +21,9 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    String invoiceAmount = '';
+    List<dynamic> uploadedDocuments = [];
     return Scaffold(
         appBar: const GenericAppBar(title: 'Add Incoming Invoice'),
         bottomNavigationBar: BottomAppBar(
@@ -52,11 +57,20 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
                 },
                 child: PrimaryButton(
                     onPressed: () {
-                      context
-                          .read<AccountingBloc>()
-                          .add(CreateOutgoingInvoice());
-                      print(
-                          "inMap========>${context.read<AccountingBloc>().manageOutgoingInvoiceMap}");
+                      if (formKey.currentState!.validate()) {
+                        if (invoiceAmount.isNotEmpty &&
+                            uploadedDocuments.isNotEmpty) {
+                          context
+                              .read<AccountingBloc>()
+                              .add(CreateOutgoingInvoice());
+                        } else {
+                          showCustomSnackBar(
+                              context,
+                              StringConstants
+                                  .kAmountAttachedDocumentsCanNotBeEmpty,
+                              '');
+                        }
+                      }
                     },
                     textValue: StringConstants.kSave),
               ),
@@ -70,41 +84,58 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
               top: xxTinySpacing),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                    (context
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                      (context
+                                  .read<AccountingBloc>()
+                                  .fetchIAccountingMasterModel
+                                  .data !=
+                              null)
+                          ? 'Amount(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
+                          : 'Amount',
+                      style: Theme.of(context)
+                          .textTheme
+                          .xSmall
+                          .copyWith(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: xxxTinierSpacing),
+                  TextFieldWidget(onTextFieldChanged: (String value) {
+                    invoiceAmount = value;
+                    context
+                        .read<AccountingBloc>()
+                        .manageOutgoingInvoiceMap['invoiceamount'] = value;
+                  }),
+                  Text('Comments',
+                      style: Theme.of(context)
+                          .textTheme
+                          .xSmall
+                          .copyWith(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: xxxTinierSpacing),
+                  TextFieldWidget(
+                      maxLines: 5,
+                      onTextFieldChanged: (String value) {
+                        context
+                            .read<AccountingBloc>()
+                            .manageOutgoingInvoiceMap['comments'] = value;
+                      }),
+                  AttachDocumentWidget(
+                      onUploadDocument: (List<dynamic> uploadDocList) {
+                        uploadedDocuments = uploadDocList;
+
+                        context
                                 .read<AccountingBloc>()
-                                .fetchIAccountingMasterModel
-                                .data !=
-                            null)
-                        ? 'Amount(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
-                        : 'Amount',
-                    style: Theme.of(context)
-                        .textTheme
-                        .xSmall
-                        .copyWith(fontWeight: FontWeight.w600)),
-                const SizedBox(height: xxxTinierSpacing),
-                TextFieldWidget(onTextFieldChanged: (String value) {
-                  context
-                      .read<AccountingBloc>()
-                      .manageOutgoingInvoiceMap['invoiceamount'] = value;
-                }),
-                Text('Comments',
-                    style: Theme.of(context)
-                        .textTheme
-                        .xSmall
-                        .copyWith(fontWeight: FontWeight.w600)),
-                const SizedBox(height: xxxTinierSpacing),
-                TextFieldWidget(
-                    maxLines: 5,
-                    onTextFieldChanged: (String value) {
-                      context
-                          .read<AccountingBloc>()
-                          .manageOutgoingInvoiceMap['comments'] = value;
-                    }),
-              ],
+                                .manageOutgoingInvoiceMap['files'] =
+                            uploadDocList
+                                .toString()
+                                .replaceAll("[", "")
+                                .replaceAll("]", "");
+                      },
+                      imagePickerBloc: ImagePickerBloc())
+                ],
+              ),
             ),
           ),
         ));

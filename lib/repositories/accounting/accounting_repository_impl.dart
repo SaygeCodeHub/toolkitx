@@ -21,9 +21,6 @@ class AccountingRepositoryImpl implements AccountingRepository {
       int pageNo, String filter) async {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetIncomingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}');
-    print(
-        "url======>${ApiConstants.baseUrl}accounting/GetIncomingInvoices?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&filter=$filter&pageno=$pageNo&userid=${await _customerCache.getUserId(CacheKeys.userId)}");
-
     return FetchIncomingInvoicesModel.fromJson(response);
   }
 
@@ -62,9 +59,8 @@ class AccountingRepositoryImpl implements AccountingRepository {
   Future<CreateOutgoingInvoiceModel> createOutgoingInvoice(
       Map outgoingInvoiceMap) async {
     final response = await DioClient().post(
-        '${ApiConstants.baseUrl}accounting/CreateOutgoingInvoice',
+        '${ApiConstants.baseUrl}accounting/SaveOutgoingInvoice',
         outgoingInvoiceMap);
-    print(response);
     return CreateOutgoingInvoiceModel.fromJson(response);
   }
 }

@@ -24,7 +24,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
-  final Map manageOutgoingInvoiceMap = {};
+  final Map<String, dynamic> manageOutgoingInvoiceMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
@@ -233,11 +233,12 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         "id": "",
         "userid": userId,
         "hashcode": hashCode,
+        "purposename": "",
+        "otherinvoiceamount": 0
       });
       CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
           await _accountingRepository
               .createOutgoingInvoice(manageOutgoingInvoiceMap);
-      print("status=========>${createOutgoingInvoiceModel.status}");
       if (createOutgoingInvoiceModel.status == 200) {
         emit(OutgoingInvoiceCreated());
       } else {
