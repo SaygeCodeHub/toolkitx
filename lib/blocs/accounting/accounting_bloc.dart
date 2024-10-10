@@ -253,16 +253,25 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      manageOutgoingInvoiceMap.addAll({
+      Map createInvoiceMap = {
         "id": "",
         "userid": userId,
         "hashcode": hashCode,
+        "files": manageOutgoingInvoiceMap['files'] ?? "",
         "purposename": "",
-        "otherinvoiceamount": 0
-      });
+        "entity": manageOutgoingInvoiceMap['entity'] ?? "",
+        "client": manageOutgoingInvoiceMap['client'] ?? "",
+        "project": manageOutgoingInvoiceMap['project'] ?? "",
+        "date": manageOutgoingInvoiceMap['date'] ?? "",
+        "comments": manageOutgoingInvoiceMap['comments'] ?? "",
+        "invoiceamount": manageOutgoingInvoiceMap['invoiceamount'] ?? "",
+        "other": manageIncomingInvoiceMap['other'] ?? "",
+        "othercurrency": manageOutgoingInvoiceMap['othercurrency'] ?? "",
+        "otherinvoiceamount": ""
+      };
+      print("map=====>$createInvoiceMap");
       CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
-          await _accountingRepository
-              .createOutgoingInvoice(manageOutgoingInvoiceMap);
+          await _accountingRepository.createOutgoingInvoice(createInvoiceMap);
       if (createOutgoingInvoiceModel.status == 200) {
         emit(OutgoingInvoiceCreated());
       } else {
@@ -309,8 +318,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     }
   }
 
-
-  Future<void> _deleteOutgoingInvoice(DeleteOutgoingInvoice event, Emitter<AccountingState> emit) async {
+  Future<void> _deleteOutgoingInvoice(
+      DeleteOutgoingInvoice event, Emitter<AccountingState> emit) async {
     emit(DeletingOutgoingInvoice());
     try {
       DeleteOutgoingInvoiceModel deleteOutgoingInvoiceModel =

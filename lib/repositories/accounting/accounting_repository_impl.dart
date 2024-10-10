@@ -76,7 +76,8 @@ class AccountingRepositoryImpl implements AccountingRepository {
   }
 
   @override
-  Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(Map deleteOutgoingInvoiceMap) async {
+  Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(
+      Map deleteOutgoingInvoiceMap) async {
     final response = await DioClient().post(
         '${ApiConstants.baseUrl}accounting/DeleteOutgoingInvoice',
         deleteOutgoingInvoiceMap);

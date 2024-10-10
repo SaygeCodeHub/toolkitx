@@ -57,7 +57,6 @@ class OutgoingListScreen extends StatelessWidget {
                           context, StringConstants.kAllDataLoaded, '');
                     }
 
-
                     if (state is DeletingOutgoingInvoice) {
                       ProgressBar.show(context);
                     } else if (state is OutgoingInvoiceDeleted) {

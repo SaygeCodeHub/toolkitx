@@ -38,7 +38,7 @@ class OutgoingListTileTitle extends StatelessWidget {
                         builder: (context) {
                           return AndroidPopUp(
                               titleValue:
-                              'Are you sure you want to delete this invoice?',
+                                  'Are you sure you want to delete this invoice?',
                               contentValue: '',
                               onPrimaryButton: () {
                                 Navigator.pop(context);
