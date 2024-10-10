@@ -25,7 +25,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
-  final Map<String, dynamic> manageOutgoingInvoiceMap = {};
+  final Map manageOutgoingInvoiceMap = {};
   final Map bankStatementFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
@@ -33,6 +33,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
   List<ClientDatum> clientList = [];
   List<ClientDatum> creditCardsList = [];
+  List<ClientDatum> bankList = [];
   bool incomingInvoicesReachedMax = false;
   bool outgoingInvoicesReachedMax = false;
   bool bankStatementsReachedMax = false;
@@ -143,7 +144,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     emit(FetchingBankStatements(pageNo: event.pageNo));
     try {
       FetchBankStatementsModel fetchBankStatementsModel =
-          await _accountingRepository.fetchBankStatements(event.pageNo, '');
+          await _accountingRepository.fetchBankStatements(
+              event.pageNo, jsonEncode(bankStatementFilterMap));
       bankStatementsReachedMax = fetchBankStatementsModel.data.isEmpty;
       if (fetchBankStatementsModel.status == 200) {
         bankStatements.addAll(fetchBankStatementsModel.data);
@@ -181,6 +183,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         clientList.addAll(
             fetchMasterDataEntryModel.data.expand((list) => list).toList());
         creditCardsList.addAll(fetchMasterDataEntryModel.data[1]);
+        bankList.addAll(fetchMasterDataEntryModel.data[2]);
         emit(AccountingNewEntitySelected(
             fetchMasterDataEntryModel: fetchMasterDataEntryModel));
       } else {

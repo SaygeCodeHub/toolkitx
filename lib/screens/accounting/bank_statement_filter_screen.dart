@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
+import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/bank_dropdown.dart';
 import 'package:toolkit/widgets/custom_year_picker_dropdown.dart';
 
 import '../../blocs/accounting/accounting_bloc.dart';
@@ -55,11 +56,13 @@ class BankStatementFilterScreen extends StatelessWidget {
                           .xSmall
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxTinierSpacing),
-                  // AccountingClientDropdown(
-                  //     onClientChanged: (String clientId) {
-                  //       accountingFilterMap['client'] = clientId;
-                  //     },
-                  //     selectedClient: accountingFilterMap['client'] ?? ''),
+                  BankDropdown(
+                    onBankChanged: (String selectedBank) {
+                      context
+                          .read<AccountingBloc>()
+                          .bankStatementFilterMap['bank'] = selectedBank;
+                    },
+                  ),
                   const SizedBox(height: xxTinySpacing),
                   Text(StringConstants.kYear,
                       style: Theme.of(context)

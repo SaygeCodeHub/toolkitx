@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/bank_statement_filter_icon.dart';
 
 import '../../blocs/accounting/accounting_bloc.dart';
 import '../../blocs/accounting/accounting_state.dart';
@@ -10,11 +11,9 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_card.dart';
-import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
-import 'bank_statement_filter_screen.dart';
 
 class BankStatementScreen extends StatelessWidget {
   static const routeName = 'BankStatementScreen';
@@ -34,71 +33,7 @@ class BankStatementScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: xxTinierSpacing),
             child: Column(children: [
-              BlocBuilder<AccountingBloc, AccountingState>(
-                buildWhen: (previousState, currentState) {
-                  if (currentState is FetchingBankStatements) {
-                    return true;
-                  } else if (currentState is BankStatementsFetched) {
-                    return true;
-                  } else if (currentState is NoRecordsFoundForFilter) {
-                    return true;
-                  }
-                  return false;
-                },
-                builder: (context, state) {
-                  if (state is BankStatementsFetched) {
-                    return CustomIconButtonRow(
-                        primaryOnPress: () {
-                          Navigator.pushNamed(
-                              context, BankStatementFilterScreen.routeName);
-                        },
-                        secondaryVisible: false,
-                        clearVisible: context
-                            .read<AccountingBloc>()
-                            .incomingFilterMap
-                            .isNotEmpty,
-                        clearOnPress: () {
-                          context
-                              .read<AccountingBloc>()
-                              .incomingFilterMap
-                              .clear();
-                          context
-                              .read<AccountingBloc>()
-                              .incomingInvoicesReachedMax = false;
-                          context
-                              .read<AccountingBloc>()
-                              .add(FetchIncomingInvoices(pageNo: 1));
-                        },
-                        secondaryOnPress: () {});
-                  } else if (state is NoRecordsFoundForFilter) {
-                    return CustomIconButtonRow(
-                        primaryOnPress: () {
-                          Navigator.pushNamed(
-                              context, BankStatementFilterScreen.routeName);
-                        },
-                        secondaryVisible: false,
-                        clearVisible: context
-                            .read<AccountingBloc>()
-                            .incomingFilterMap
-                            .isNotEmpty,
-                        clearOnPress: () {
-                          context
-                              .read<AccountingBloc>()
-                              .incomingFilterMap
-                              .clear();
-                          context
-                              .read<AccountingBloc>()
-                              .incomingInvoicesReachedMax = false;
-                          context
-                              .read<AccountingBloc>()
-                              .add(FetchIncomingInvoices(pageNo: 1));
-                        },
-                        secondaryOnPress: () {});
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              ),
+              const BankStatementFilterIcon(),
               const SizedBox(height: xxTinierSpacing),
               BlocConsumer<AccountingBloc, AccountingState>(
                   buildWhen: (previousState, currentState) =>

@@ -149,6 +149,13 @@ class CreditCardSelected extends AccountingState {
   CreditCardSelected({required this.cardName, required this.cardId});
 }
 
+class BankSelected extends AccountingState {
+  final String bankName;
+  final String bankId;
+
+  BankSelected({required this.bankName, required this.bankId});
+}
+
 class FetchingBankStatements extends AccountingState {
   final int pageNo;
 

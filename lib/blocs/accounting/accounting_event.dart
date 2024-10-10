@@ -59,6 +59,13 @@ class SelectCreditCard extends AccountingEvent {
   SelectCreditCard({required this.cardName, required this.cardId});
 }
 
+class SelectBank extends AccountingEvent {
+  final String bankName;
+  final String bankId;
+
+  SelectBank({required this.bankName, required this.bankId});
+}
+
 class FetchBankStatements extends AccountingEvent {
   final int pageNo;
   final bool isFilterEnabled;
