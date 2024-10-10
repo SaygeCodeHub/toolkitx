@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
@@ -25,7 +26,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map incomingFilterMap = {};
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
-  final Map<String, dynamic> manageOutgoingInvoiceMap = {};
+  final Map manageOutgoingInvoiceMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
   List<FetchMasterDataEntryModel> fetchedMasterDataList = [];
@@ -50,6 +51,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<CreateOutgoingInvoice>(_createOutgoingInvoice);
     on<SelectCreditCard>(_selectCreditCard);
     on<DeleteIncomingInvoice>(_deleteIncomingInvoice);
+    on<DeleteOutgoingInvoice>(_deleteOutgoingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -300,6 +302,32 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         }
       } else {
         emit(FailedToDeleteIncomingInvoice(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+  Future<void> _deleteOutgoingInvoice(DeleteOutgoingInvoice event, Emitter<AccountingState> emit) async {
+    emit(DeletingOutgoingInvoice());
+    try {
+      DeleteOutgoingInvoiceModel deleteOutgoingInvoiceModel =
+          await _accountingRepository.deleteOutgoingInvoice({
+        "id": event.invoiceId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (deleteOutgoingInvoiceModel.status == 200) {
+        if (deleteOutgoingInvoiceModel.message == '1') {
+          emit(OutgoingInvoiceDeleted());
+        } else {
+          emit(FailedToDeleteOutgoingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToDeleteOutgoingInvoice(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
     } catch (e) {

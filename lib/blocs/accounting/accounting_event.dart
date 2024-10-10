@@ -64,3 +64,9 @@ class DeleteIncomingInvoice extends AccountingEvent {
 
   DeleteIncomingInvoice({required this.invoiceId});
 }
+
+class DeleteOutgoingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  DeleteOutgoingInvoice({required this.invoiceId});
+}

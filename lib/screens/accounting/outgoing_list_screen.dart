@@ -13,6 +13,7 @@ import 'package:toolkit/widgets/custom_card.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_no_records_text.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 class OutgoingListScreen extends StatelessWidget {
   const OutgoingListScreen({super.key});
@@ -54,6 +55,20 @@ class OutgoingListScreen extends StatelessWidget {
                             .outgoingInvoicesReachedMax) {
                       showCustomSnackBar(
                           context, StringConstants.kAllDataLoaded, '');
+                    }
+
+
+                    if (state is DeletingOutgoingInvoice) {
+                      ProgressBar.show(context);
+                    } else if (state is OutgoingInvoiceDeleted) {
+                      ProgressBar.dismiss(context);
+                      context.read<AccountingBloc>().outgoingInvoices.clear();
+                      context
+                          .read<AccountingBloc>()
+                          .add(FetchOutgoingInvoices(pageNo: 1));
+                    } else if (state is FailedToDeleteOutgoingInvoice) {
+                      ProgressBar.dismiss(context);
+                      showCustomSnackBar(context, state.errorMessage, '');
                     }
                   },
                   builder: (context, state) {

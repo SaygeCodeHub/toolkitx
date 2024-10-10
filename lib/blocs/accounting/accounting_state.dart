@@ -157,3 +157,13 @@ class FailedToDeleteIncomingInvoice extends AccountingState {
 
   FailedToDeleteIncomingInvoice({required this.errorMessage});
 }
+
+class DeletingOutgoingInvoice extends AccountingState {}
+
+class OutgoingInvoiceDeleted extends AccountingState {}
+
+class FailedToDeleteOutgoingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToDeleteOutgoingInvoice({required this.errorMessage});
+}
