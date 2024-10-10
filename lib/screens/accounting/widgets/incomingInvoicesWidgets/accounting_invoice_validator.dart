@@ -17,11 +17,11 @@ String showValidationMessage(String key) {
   const String addMessage = 'Please add';
   switch (key) {
     case 'entity':
-      return '$selectMessage entity';
-    case 'billable':
-      return '$selectMessage billable';
+      return '$selectMessage entity & billable';
+    case 'client':
+      return '$selectMessage client & project';
     case 'date':
-      return 'Please add invoice date';
+      return '$addMessage invoice date';
     case 'purposename':
       return '$addMessage purpose of payment';
     case 'mode':
@@ -47,7 +47,7 @@ void validateAndProceed(BuildContext context) {
       validateForm(context
           .read<AccountingBloc>()
           .manageIncomingInvoiceMap['billable'])) {
-    showCustomSnackBar(context, 'Please select entity & billable', '');
+    showCustomSnackBar(context, showValidationMessage('entity'), '');
   } else if (context
               .read<AccountingBloc>()
               .manageIncomingInvoiceMap['billable'] ==
@@ -56,7 +56,7 @@ void validateAndProceed(BuildContext context) {
           context.read<AccountingBloc>().manageIncomingInvoiceMap['client']) &&
       validateForm(
           context.read<AccountingBloc>().manageIncomingInvoiceMap['project'])) {
-    showCustomSnackBar(context, 'Please select client & project', '');
+    showCustomSnackBar(context, showValidationMessage('client'), '');
   } else if (validateForm(
       context.read<AccountingBloc>().manageIncomingInvoiceMap['date'])) {
     showCustomSnackBar(context, showValidationMessage('date'), '');

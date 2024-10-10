@@ -147,3 +147,13 @@ class CreditCardSelected extends AccountingState {
 
   CreditCardSelected({required this.cardName, required this.cardId});
 }
+
+class DeletingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceDeleted extends AccountingState {}
+
+class FailedToDeleteIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToDeleteIncomingInvoice({required this.errorMessage});
+}

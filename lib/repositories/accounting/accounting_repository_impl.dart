@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/delete_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
@@ -62,5 +63,14 @@ class AccountingRepositoryImpl implements AccountingRepository {
         '${ApiConstants.baseUrl}accounting/SaveOutgoingInvoice',
         outgoingInvoiceMap);
     return CreateOutgoingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteIncomingInvoiceModel> deleteIncomingInvoice(
+      Map deleteIncomingInvoiceMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/DeleteIncomingInvoice',
+        deleteIncomingInvoiceMap);
+    return DeleteIncomingInvoiceModel.fromJson(response);
   }
 }

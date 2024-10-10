@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/mode_of_payment_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/invoice_currency_dropdown.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../../blocs/accounting/accounting_bloc.dart';
 
@@ -15,7 +16,7 @@ class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Mode of payment',
+        Text(StringConstants.kModeOfPayment,
             style: Theme.of(context)
                 .textTheme
                 .xSmall
@@ -26,7 +27,7 @@ class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
               paymentMode;
         }),
         const SizedBox(height: xxTinySpacing),
-        Text('Invoice Currency',
+        Text(StringConstants.kInvoiceCurrency,
             style: Theme.of(context)
                 .textTheme
                 .xSmall

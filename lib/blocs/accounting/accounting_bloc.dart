@@ -13,6 +13,7 @@ import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dar
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../../data/models/accounting/delete_incoming_invoice_model.dart';
 import '../../di/app_module.dart';
 import 'accounting_event.dart';
 import 'accounting_state.dart';
@@ -48,6 +49,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<CreateIncomingInvoice>(_createIncomingInvoice);
     on<CreateOutgoingInvoice>(_createOutgoingInvoice);
     on<SelectCreditCard>(_selectCreditCard);
+    on<DeleteIncomingInvoice>(_deleteIncomingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -274,6 +276,32 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       SelectCreditCard event, Emitter<AccountingState> emit) async {
     try {
       emit(CreditCardSelected(cardName: event.cardName, cardId: event.cardId));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _deleteIncomingInvoice(
+      DeleteIncomingInvoice event, Emitter<AccountingState> emit) async {
+    emit(DeletingIncomingInvoice());
+    try {
+      DeleteIncomingInvoiceModel deleteIncomingInvoiceModel =
+          await _accountingRepository.deleteIncomingInvoice({
+        "id": event.invoiceId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (deleteIncomingInvoiceModel.status == 200) {
+        if (deleteIncomingInvoiceModel.message == '1') {
+          emit(IncomingInvoiceDeleted());
+        } else {
+          emit(FailedToDeleteIncomingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToDeleteIncomingInvoice(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
     } catch (e) {
       rethrow;
     }

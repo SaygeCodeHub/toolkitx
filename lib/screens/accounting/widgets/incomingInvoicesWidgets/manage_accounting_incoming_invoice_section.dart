@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import '../../../../blocs/accounting/accounting_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
@@ -21,7 +22,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
     context.read<PickAndUploadImageBloc>().isInitialUpload = true;
     context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
-        appBar: const GenericAppBar(title: 'Add Incoming Invoice'),
+        appBar: const GenericAppBar(title: StringConstants.kAddIncomingInvoice),
         bottomNavigationBar: const CreateIncomingInvoiceBottomBar(),
         body: Padding(
             padding: const EdgeInsets.only(
@@ -39,8 +40,8 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                                       .fetchIAccountingMasterModel
                                       .data !=
                                   null)
-                              ? 'Amount(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
-                              : 'Amount',
+                              ? '${StringConstants.kAmount}(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
+                              : StringConstants.kAmount,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -59,7 +60,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                               .read<AccountingBloc>()
                               .manageIncomingInvoiceMap['other'] ==
                           'Other')
-                        Text('Amount(Other)',
+                        Text(StringConstants.kAmountOther,
                             style: Theme.of(context)
                                 .textTheme
                                 .xSmall
@@ -86,7 +87,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                               .manageIncomingInvoiceMap['other'] ==
                           'Other')
                         const SizedBox(height: xxTinySpacing),
-                      Text('Comments',
+                      Text(StringConstants.kcomments,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall

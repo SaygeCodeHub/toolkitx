@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
 import '../../../../configs/app_color.dart';
+import '../../../../configs/app_dimensions.dart';
 import '../../../../configs/app_spacing.dart';
 import '../../../../data/models/accounting/fetch_incoming_invoices_model.dart';
 
@@ -19,15 +20,22 @@ class IncomingInvoicesSubtitle extends StatelessWidget {
               .xSmall
               .copyWith(color: AppColor.grey)),
       const SizedBox(height: tinierSpacing),
-      Text(incomingInvoices.date,
+      Text(incomingInvoices.amount,
           style: Theme.of(context)
               .textTheme
               .xSmall
               .copyWith(color: AppColor.grey)),
       const SizedBox(height: tinierSpacing),
-      Text(incomingInvoices.amount,
-          style:
-              Theme.of(context).textTheme.xSmall.copyWith(color: AppColor.grey))
+      Row(children: [
+        Image.asset("assets/icons/calendar.png",
+            height: kIconSize, width: kIconSize),
+        const SizedBox(width: tiniestSpacing),
+        Text(incomingInvoices.date,
+            style: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(color: AppColor.grey))
+      ])
     ]);
   }
 }

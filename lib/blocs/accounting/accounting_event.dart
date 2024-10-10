@@ -58,3 +58,9 @@ class SelectCreditCard extends AccountingEvent {
 
   SelectCreditCard({required this.cardName, required this.cardId});
 }
+
+class DeleteIncomingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  DeleteIncomingInvoice({required this.invoiceId});
+}
