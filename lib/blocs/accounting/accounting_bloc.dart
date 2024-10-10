@@ -269,7 +269,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         "othercurrency": manageOutgoingInvoiceMap['othercurrency'] ?? "",
         "otherinvoiceamount": ""
       };
-      print("map=====>$createInvoiceMap");
       CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
           await _accountingRepository.createOutgoingInvoice(createInvoiceMap);
       if (createOutgoingInvoiceModel.status == 200) {
