@@ -114,6 +114,20 @@ class DatabaseHelper {
           UNIQUE(permitId, actionText)
         );
   ''');
+
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
+          id INTEGER PRIMARY KEY,
+          workorderid TEXT UNIQUE,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          statusId INTEGER
+        );
+  ''');
       },
     );
   }
@@ -154,6 +168,39 @@ class DatabaseHelper {
           UNIQUE(permitId, actionText)
         );
   ''');
+  }
+
+  Future<void> recreateOfflineWorkOrderTable() async {
+    final Database db = await database;
+
+    await db.execute('DROP TABLE IF EXISTS OfflineWorkOrder');
+    // await db.execute('DROP TABLE IF EXISTS OfflinePermitAction');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
+          id INTEGER PRIMARY KEY,
+          workorderid TEXT UNIQUE,
+          listPage TEXT,
+          tab1 TEXT,
+          tab2 TEXT,
+          tab3 TEXT,
+          tab4 TEXT,
+          tab5 TEXT,
+          statusId INTEGER
+        );
+  ''');
+
+    //   await db.execute('''
+    //       CREATE TABLE IF NOT EXISTS OfflinePermitAction (
+    //        id INTEGER PRIMARY KEY,
+    //         permitId TEXT,
+    //         actionText TEXT,
+    //         actionJson TEXT,
+    //         actionDateTime TEXT,
+    //         sign TEXT,
+    //         UNIQUE(permitId, actionText)
+    //       );
+    // ''');
   }
 
   Future<bool> insertOfflinePermitAction(String permitId, String actionText,

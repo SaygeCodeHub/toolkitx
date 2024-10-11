@@ -48,3 +48,13 @@ class WorkOrderStatusSelected extends WorkOrderStates {
 
   WorkOrderStatusSelected({required this.value});
 }
+
+class FetchingWorkOrderOfflineData extends WorkOrderStates {}
+
+class WorkOrderOfflineDataFetched extends WorkOrderStates {}
+
+class WorkOrderOfflineDataNotFetched extends WorkOrderStates {
+  final String errorMessage;
+
+  WorkOrderOfflineDataNotFetched({required this.errorMessage});
+}

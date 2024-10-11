@@ -11,6 +11,7 @@ import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart
 import 'package:toolkit/data/models/workorder/fetch_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_misc_cost_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_workorder_offline_data_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
@@ -252,5 +253,11 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}workorder/getroles?hashcode=$hashCode&userid=$userId");
     return FetchWorkOrderRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderOfflineDataModel> fetchWorkOrderOfflineData() async {
+    final response = await DioClient().get("${ApiConstants.baseUrl}workorder/");
+    return FetchWorkOrderOfflineDataModel.fromJson();
   }
 }

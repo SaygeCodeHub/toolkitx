@@ -62,6 +62,12 @@ class WorkOrderListScreen extends StatelessWidget {
               }, builder: (context, state) {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
+                      downloadVisible: true,
+                      onDownloadPress: () {
+                        context
+                            .read<WorkOrderBloc>()
+                            .add(FetchWorkOrderOfflineData());
+                      },
                       secondaryOnPress: () {
                         Navigator.pushNamed(
                             context, WorkOrderRoleScreen.routeName);

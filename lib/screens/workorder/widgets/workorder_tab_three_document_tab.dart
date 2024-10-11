@@ -9,6 +9,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/database_utils.dart';
+import '../../../utils/global.dart';
 import '../../../widgets/android_pop_up.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
@@ -45,26 +46,29 @@ class WorkOrderTabThreeDocumentTab extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: AppColor.black,
                             overflow: TextOverflow.ellipsis)),
-                    trailing: CustomIconButton(
-                        icon: Icons.delete,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AndroidPopUp(
-                                    titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
-                                    contentValue: '',
-                                    onPrimaryButton: () {
-                                      context
-                                          .read<WorkOrderTabDetailsBloc>()
-                                          .add(WorkOrderDeleteDocument(
-                                              docId: data.documents[index].id));
-                                      Navigator.pop(context);
-                                    });
-                              });
-                        },
-                        size: kEditAndDeleteIconTogether),
+                    trailing: (isNetworkEstablished)
+                        ? CustomIconButton(
+                            icon: Icons.delete,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AndroidPopUp(
+                                        titleValue: DatabaseUtil.getText(
+                                            'DeleteRecord'),
+                                        contentValue: '',
+                                        onPrimaryButton: () {
+                                          context
+                                              .read<WorkOrderTabDetailsBloc>()
+                                              .add(WorkOrderDeleteDocument(
+                                                  docId: data
+                                                      .documents[index].id));
+                                          Navigator.pop(context);
+                                        });
+                                  });
+                            },
+                            size: kEditAndDeleteIconTogether)
+                        : const SizedBox.shrink(),
                     subtitle: Padding(
                         padding: const EdgeInsets.only(top: tinierSpacing),
                         child: Column(

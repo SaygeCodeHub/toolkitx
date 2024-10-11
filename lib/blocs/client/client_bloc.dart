@@ -61,6 +61,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       SelectClient event, Emitter<ClientStates> emit) async {
     if (event.isFromProfile) {
       await _databaseHelper.recreateOfflinePermitTable();
+      await _databaseHelper.recreateOfflineWorkOrderTable();
     }
     _customerCache.setApiKey(CacheKeys.apiKey, event.apiKey);
     _customerCache.setClientId(CacheKeys.clientId, event.hashKey);

@@ -62,6 +62,7 @@ abstract class ModulesUtil {
     ModulesModel(
         moduleName: 'WorkOrder',
         moduleImage: '${kBaseImagePath}workOrder.png',
+        offLineSupport: true,
         key: 'workorder',
         notificationKey: 'workorder'),
     ModulesModel(
