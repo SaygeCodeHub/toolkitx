@@ -20,7 +20,7 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const GenericAppBar(title: 'Add Incoming Invoice'),
+        appBar: const GenericAppBar(title: StringConstants.kAddIncomingInvoice),
         bottomNavigationBar: const ManageIncomingInvoiceBottomBar(),
         body: Padding(
             padding: const EdgeInsets.only(
@@ -46,7 +46,7 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                           },
                           selectedEntity: ''),
                       const SizedBox(height: xxTinySpacing),
-                      Text('Billable',
+                      Text(StringConstants.kBillable,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -55,10 +55,11 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                       BillableDropdown(
                           onBillableChanged: (String selectedValue) {
                         context
-                            .read<AccountingBloc>()
-                            .manageIncomingInvoiceMap['entity'] = selectedValue;
+                                .read<AccountingBloc>()
+                                .manageIncomingInvoiceMap['billable'] =
+                            selectedValue;
                       }),
-                      Text('Invoice Date',
+                      Text(StringConstants.kInvoiceDate,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -70,7 +71,7 @@ class ManageAccountingIncomingInvoiceScreen extends StatelessWidget {
                             .manageIncomingInvoiceMap['date'] = date;
                       }),
                       const SizedBox(height: xxTinySpacing),
-                      Text('Purpose of payment',
+                      Text(StringConstants.kPurposeOfPayment,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall

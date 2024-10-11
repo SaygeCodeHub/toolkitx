@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_state.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/accounting/accounting_event.dart';
 import '../../configs/app_spacing.dart';
@@ -28,6 +29,7 @@ class IncomingInvoicesScreen extends StatelessWidget {
             const GenericAppBar(title: StringConstants.kIncomingInvoiceList),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              context.read<AccountingBloc>().manageIncomingInvoiceMap.clear();
               Navigator.pushNamed(
                   context, ManageAccountingIncomingInvoiceScreen.routeName);
             },
@@ -56,6 +58,19 @@ class IncomingInvoicesScreen extends StatelessWidget {
                             .incomingInvoicesReachedMax) {
                       showCustomSnackBar(
                           context, StringConstants.kAllDataLoaded, '');
+                    }
+
+                    if (state is DeletingIncomingInvoice) {
+                      ProgressBar.show(context);
+                    } else if (state is IncomingInvoiceDeleted) {
+                      ProgressBar.dismiss(context);
+                      context.read<AccountingBloc>().incomingInvoices.clear();
+                      context
+                          .read<AccountingBloc>()
+                          .add(FetchIncomingInvoices(pageNo: 1));
+                    } else if (state is FailedToDeleteIncomingInvoice) {
+                      ProgressBar.dismiss(context);
+                      showCustomSnackBar(context, state.errorMessage, '');
                     }
                   },
                   builder: (context, state) {

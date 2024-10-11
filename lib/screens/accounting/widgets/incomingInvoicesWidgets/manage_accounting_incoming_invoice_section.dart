@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
-
 import '../../../../blocs/accounting/accounting_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../../configs/app_spacing.dart';
-import '../../../../utils/constants/string_constants.dart';
 import '../../../../widgets/generic_app_bar.dart';
-import '../../../../widgets/primary_button.dart';
 import '../attach_document_widget.dart';
+import 'create_incoming_invoice_bottombar.dart';
 
 class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
   static const routeName = 'ManageAccountingIncomingInvoiceSection';
@@ -19,26 +19,11 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<ImagePickerBloc>().add(PickImageInitial());
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
-        appBar: const GenericAppBar(title: 'Add Incoming Invoice'),
-        bottomNavigationBar: BottomAppBar(
-            child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: StringConstants.kBack),
-            ),
-            const SizedBox(width: xxTinierSpacing),
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {}, textValue: StringConstants.kSave),
-            ),
-          ],
-        )),
+        appBar: const GenericAppBar(title: StringConstants.kAddIncomingInvoice),
+        bottomNavigationBar: const CreateIncomingInvoiceBottomBar(),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -55,31 +40,54 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                                       .fetchIAccountingMasterModel
                                       .data !=
                                   null)
-                              ? 'Amount(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
-                              : 'Amount',
+                              ? '${StringConstants.kAmount}(${context.read<AccountingBloc>().fetchIAccountingMasterModel.data![3][0].name})'
+                              : StringConstants.kAmount,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String value) {
-                        context
-                            .read<AccountingBloc>()
-                            .manageIncomingInvoiceMap['invoiceamount'] = value;
-                      }),
+                      TextFieldWidget(
+                          textInputType: TextInputType.number,
+                          onTextFieldChanged: (String value) {
+                            context
+                                    .read<AccountingBloc>()
+                                    .manageIncomingInvoiceMap['invoiceamount'] =
+                                value;
+                          }),
                       const SizedBox(height: xxTinySpacing),
-                      Text('Amount(Other)',
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
-                      TextFieldWidget(onTextFieldChanged: (String value) {
-                        context.read<AccountingBloc>().manageIncomingInvoiceMap[
-                            'otherinvoiceamount'] = value;
-                      }),
-                      const SizedBox(height: xxTinySpacing),
-                      Text('Comments',
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        Text(StringConstants.kAmountOther,
+                            style: Theme.of(context)
+                                .textTheme
+                                .xSmall
+                                .copyWith(fontWeight: FontWeight.w600)),
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        const SizedBox(height: xxxTinierSpacing),
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        TextFieldWidget(
+                            textInputType: TextInputType.number,
+                            onTextFieldChanged: (String value) {
+                              context
+                                      .read<AccountingBloc>()
+                                      .manageIncomingInvoiceMap[
+                                  'otherinvoiceamount'] = value;
+                            }),
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        const SizedBox(height: xxTinySpacing),
+                      Text(StringConstants.kcomments,
                           style: Theme.of(context)
                               .textTheme
                               .xSmall
@@ -87,6 +95,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                       const SizedBox(height: xxxTinierSpacing),
                       TextFieldWidget(
                           maxLines: 5,
+                          textInputAction: TextInputAction.done,
                           onTextFieldChanged: (String value) {
                             context
                                 .read<AccountingBloc>()
@@ -98,10 +107,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                             context
                                     .read<AccountingBloc>()
                                     .manageIncomingInvoiceMap['files'] =
-                                uploadDocList
-                                    .toString()
-                                    .replaceAll("[", "")
-                                    .replaceAll("]", "");
+                                uploadDocList;
                           },
                           imagePickerBloc: ImagePickerBloc())
                     ]))));

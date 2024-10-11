@@ -25,7 +25,7 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
     String invoiceAmount = '';
     List<dynamic> uploadedDocuments = [];
     return Scaffold(
-        appBar: const GenericAppBar(title: 'Add Incoming Invoice'),
+        appBar: const GenericAppBar(title: 'Add Outgoing Invoice'),
         bottomNavigationBar: BottomAppBar(
             child: Row(
           children: [

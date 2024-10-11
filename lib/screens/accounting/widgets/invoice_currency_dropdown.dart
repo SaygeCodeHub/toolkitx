@@ -12,11 +12,11 @@ import '../../../utils/constants/string_constants.dart';
 import 'currency_dropdown.dart';
 
 class InvoiceCurrencyDropdown extends StatelessWidget {
-  final void Function(String currency) onCurrencySelected;
+  final void Function(String currency) onInvoiceCurrencySelected;
   final Map manageInvoiceMap;
   const InvoiceCurrencyDropdown(
       {super.key,
-      required this.onCurrencySelected,
+      required this.onInvoiceCurrencySelected,
       required this.manageInvoiceMap});
 
   @override
@@ -65,12 +65,17 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                                 .textTheme
                                                 .xSmall),
                                         onTap: () {
+                                          context
+                                                      .read<AccountingBloc>()
+                                                      .manageIncomingInvoiceMap[
+                                                  'other'] =
+                                              invoiceCurrency[index].name;
                                           context.read<AccountingBloc>().add(
                                               SelectInvoiceCurrency(
                                                   selectedCurrency:
                                                       invoiceCurrency[index]
                                                           .name));
-                                          onCurrencySelected(
+                                          onInvoiceCurrencySelected(
                                               invoiceCurrency[index].name);
                                         });
                                   })
@@ -78,7 +83,6 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                     if (state.selectedCurrency == 'Other')
                       CurrencyDropdown(onCurrencySelected: (String currency) {
                         manageInvoiceMap['othercurrency'] = currency;
-                        manageInvoiceMap['other'] = state.selectedCurrency;
                       })
                   ]);
             } else {

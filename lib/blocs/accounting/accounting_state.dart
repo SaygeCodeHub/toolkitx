@@ -180,3 +180,23 @@ class FailedToFetchBankStatements extends AccountingState {
 
   FailedToFetchBankStatements({required this.errorMessage});
 }
+
+class DeletingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceDeleted extends AccountingState {}
+
+class FailedToDeleteIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToDeleteIncomingInvoice({required this.errorMessage});
+}
+
+class DeletingOutgoingInvoice extends AccountingState {}
+
+class OutgoingInvoiceDeleted extends AccountingState {}
+
+class FailedToDeleteOutgoingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToDeleteOutgoingInvoice({required this.errorMessage});
+}

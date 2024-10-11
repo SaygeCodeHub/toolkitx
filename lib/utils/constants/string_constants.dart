@@ -19,6 +19,14 @@ abstract class StringConstants {
   static const String kViewDocument = 'View Document'; //
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
+  static const String kAddIncomingInvoice = 'Add Incoming Invoice'; //
+  static const String kBillable = 'Billable'; //
+  static const String kInvoiceDate = 'Invoice Date'; //
+  static const String kPurposeOfPayment = 'Purpose of payment'; //
+  static const String kModeOfPayment = 'Mode of payment'; //
+  static const String kInvoiceCurrency = 'Invoice Currency'; //
+  static const String kAmount = 'Amount'; //
+  static const String kAmountOther = 'Amount(Other)'; //
   static const String kIncomingInvoiceList = 'Incoming Invoice List'; //
   static const String kBankStatementList = 'Bank Statement List'; //
   static const String kNoChecklist = 'No checklist!'; //

@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/cache/customer_cache.dart';
+import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
@@ -14,6 +15,7 @@ import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/models/accounting/fetch_bank_statements_model.dart';
+import '../../data/models/accounting/delete_incoming_invoice_model.dart';
 import '../../di/app_module.dart';
 import 'accounting_event.dart';
 import 'accounting_state.dart';
@@ -54,6 +56,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<CreateIncomingInvoice>(_createIncomingInvoice);
     on<CreateOutgoingInvoice>(_createOutgoingInvoice);
     on<SelectCreditCard>(_selectCreditCard);
+    on<DeleteIncomingInvoice>(_deleteIncomingInvoice);
+    on<DeleteOutgoingInvoice>(_deleteOutgoingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -242,9 +246,29 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
     try {
+      Map createIncomingInvoiceMap = {
+        "entity": manageIncomingInvoiceMap['entity'] ?? '',
+        "billable": manageIncomingInvoiceMap['billable'] ?? '',
+        "client": manageIncomingInvoiceMap['client'] ?? '',
+        "project": manageIncomingInvoiceMap['project'] ?? '',
+        "date": manageIncomingInvoiceMap['date'] ?? '',
+        "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
+        "mode": manageIncomingInvoiceMap['mode'] ?? '',
+        "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
+        "other": manageIncomingInvoiceMap['other'] ?? '',
+        "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
+        "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
+        "otherinvoiceamount":
+            manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
+        "comments": manageIncomingInvoiceMap['comments'] ?? '',
+        "files": manageIncomingInvoiceMap['files'] ?? '',
+        "id": "",
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      };
       CreateIncomingInvoiceModel createIncomingInvoiceModel =
           await _accountingRepository
-              .createIncomingInvoice(manageIncomingInvoiceMap);
+              .createIncomingInvoice(createIncomingInvoiceMap);
       if (createIncomingInvoiceModel.status == 200) {
         if (createIncomingInvoiceModel.message == '1') {
           emit(IncomingInvoiceCreated());
@@ -268,16 +292,24 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      manageOutgoingInvoiceMap.addAll({
+      Map createInvoiceMap = {
         "id": "",
         "userid": userId,
         "hashcode": hashCode,
+        "files": manageOutgoingInvoiceMap['files'] ?? "",
         "purposename": "",
-        "otherinvoiceamount": 0
-      });
+        "entity": manageOutgoingInvoiceMap['entity'] ?? "",
+        "client": manageOutgoingInvoiceMap['client'] ?? "",
+        "project": manageOutgoingInvoiceMap['project'] ?? "",
+        "date": manageOutgoingInvoiceMap['date'] ?? "",
+        "comments": manageOutgoingInvoiceMap['comments'] ?? "",
+        "invoiceamount": manageOutgoingInvoiceMap['invoiceamount'] ?? "",
+        "other": manageIncomingInvoiceMap['other'] ?? "",
+        "othercurrency": manageOutgoingInvoiceMap['othercurrency'] ?? "",
+        "otherinvoiceamount": ""
+      };
       CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
-          await _accountingRepository
-              .createOutgoingInvoice(manageOutgoingInvoiceMap);
+          await _accountingRepository.createOutgoingInvoice(createInvoiceMap);
       if (createOutgoingInvoiceModel.status == 200) {
         emit(OutgoingInvoiceCreated());
       } else {
@@ -293,6 +325,58 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       SelectCreditCard event, Emitter<AccountingState> emit) async {
     try {
       emit(CreditCardSelected(cardName: event.cardName, cardId: event.cardId));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _deleteIncomingInvoice(
+      DeleteIncomingInvoice event, Emitter<AccountingState> emit) async {
+    emit(DeletingIncomingInvoice());
+    try {
+      DeleteIncomingInvoiceModel deleteIncomingInvoiceModel =
+          await _accountingRepository.deleteIncomingInvoice({
+        "id": event.invoiceId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (deleteIncomingInvoiceModel.status == 200) {
+        if (deleteIncomingInvoiceModel.message == '1') {
+          emit(IncomingInvoiceDeleted());
+        } else {
+          emit(FailedToDeleteIncomingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToDeleteIncomingInvoice(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _deleteOutgoingInvoice(
+      DeleteOutgoingInvoice event, Emitter<AccountingState> emit) async {
+    emit(DeletingOutgoingInvoice());
+    try {
+      DeleteOutgoingInvoiceModel deleteOutgoingInvoiceModel =
+          await _accountingRepository.deleteOutgoingInvoice({
+        "id": event.invoiceId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (deleteOutgoingInvoiceModel.status == 200) {
+        if (deleteOutgoingInvoiceModel.message == '1') {
+          emit(OutgoingInvoiceDeleted());
+        } else {
+          emit(FailedToDeleteOutgoingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToDeleteOutgoingInvoice(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
     } catch (e) {
       rethrow;
     }

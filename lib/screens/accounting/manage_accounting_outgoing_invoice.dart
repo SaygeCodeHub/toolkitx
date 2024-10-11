@@ -143,7 +143,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
                   InvoiceCurrencyDropdown(
-                    onCurrencySelected: (String currency) {
+                    onInvoiceCurrencySelected: (String currency) {
                       context
                           .read<AccountingBloc>()
                           .manageOutgoingInvoiceMap['othercurrency'] = currency;
