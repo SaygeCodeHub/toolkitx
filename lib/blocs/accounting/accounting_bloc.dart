@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -28,6 +29,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   final Map outgoingFilterMap = {};
   final Map manageIncomingInvoiceMap = {};
   final Map manageOutgoingInvoiceMap = {};
+  final Map manageBankStatementMap = {};
   final Map bankStatementFilterMap = {};
   final List<IncomingInvoicesDatum> incomingInvoices = [];
   final List<OutgoingInvoicesDatum> outgoingInvoices = [];
@@ -58,6 +60,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<SelectCreditCard>(_selectCreditCard);
     on<DeleteIncomingInvoice>(_deleteIncomingInvoice);
     on<DeleteOutgoingInvoice>(_deleteOutgoingInvoice);
+    on<SelectBank>(_selectBank);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -188,6 +191,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
             fetchMasterDataEntryModel.data.expand((list) => list).toList());
         creditCardsList.addAll(fetchMasterDataEntryModel.data[1]);
         bankList.addAll(fetchMasterDataEntryModel.data[2]);
+        log('bank list bloc ${bankList[0].bankname}');
         emit(AccountingNewEntitySelected(
             fetchMasterDataEntryModel: fetchMasterDataEntryModel));
       } else {
@@ -380,5 +384,9 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  FutureOr<void> _selectBank(SelectBank event, Emitter<AccountingState> emit) {
+    emit(BankSelected(bankName: event.bankName, bankId: event.bankId));
   }
 }

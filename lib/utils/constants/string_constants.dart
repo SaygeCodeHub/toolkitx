@@ -20,8 +20,11 @@ abstract class StringConstants {
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kAddIncomingInvoice = 'Add Incoming Invoice'; //
+  static const String kAddBankStatement = 'Add Bank Statement'; //
   static const String kBillable = 'Billable'; //
   static const String kInvoiceDate = 'Invoice Date'; //
+  static const String kStatementMonth = 'Statement Month'; //
+  static const String kStatementYear = 'Statement Year'; //
   static const String kPurposeOfPayment = 'Purpose of payment'; //
   static const String kModeOfPayment = 'Mode of payment'; //
   static const String kInvoiceCurrency = 'Invoice Currency'; //

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
-import 'package:toolkit/blocs/accounting/accounting_state.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../../../../blocs/accounting/accounting_state.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_spacing.dart';
-import '../../../../utils/constants/string_constants.dart';
 
 class BankDropdown extends StatefulWidget {
   final void Function(String selectedBank) onBankChanged;
@@ -19,62 +19,53 @@ class BankDropdown extends StatefulWidget {
 }
 
 class _BankDropdownState extends State<BankDropdown> {
-  String selectedText = '';
-  String selectedValue = '';
-
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
-        child: ExpansionTile(
-            maintainState: true,
-            key: GlobalKey(),
-            title: Text(
-                (selectedText.isEmpty) ? StringConstants.kSelect : selectedText,
-                style: Theme.of(context).textTheme.xSmall),
-            children: [
-              BlocBuilder<AccountingBloc, AccountingState>(
-                buildWhen: (previousState, currentState) =>
-                    currentState is AccountingNewEntitySelecting ||
-                    currentState is AccountingNewEntitySelected ||
-                    currentState is AccountingNewEntityNotSelected,
-                builder: (context, state) {
-                  if (state is AccountingNewEntitySelecting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is AccountingNewEntitySelected) {
-                    var flattenedData = state.fetchMasterDataEntryModel.data
-                        .expand((clientList) => clientList)
-                        .toList();
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: flattenedData.length,
-                        itemBuilder: (context, index) {
-                          var clientDatum = flattenedData[index];
-                          return ListTile(
-                              contentPadding:
-                                  const EdgeInsets.only(left: xxxTinierSpacing),
-                              title: Text(
-                                  clientDatum.bankname ?? 'Unknown Bank',
-                                  style: Theme.of(context).textTheme.xSmall),
-                              onTap: () {
-                                setState(() {
-                                  selectedText =
-                                      clientDatum.bankname ?? 'Unknown Bank';
-                                  selectedValue = clientDatum.id.toString();
-                                  context.read<AccountingBloc>().add(
-                                      SelectClientId(clientId: clientDatum.id));
+    context.read<AccountingBloc>().add(SelectBank(bankName: '', bankId: ''));
+    return BlocBuilder<AccountingBloc, AccountingState>(
+      buildWhen: (previous, current) => current is BankSelected,
+      builder: (context, state) {
+        if (state is BankSelected) {
+          if (context.read<AccountingBloc>().bankList.isEmpty) {
+            return Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: AppColor.transparent),
+                child: ExpansionTile(
+                    maintainState: true,
+                    key: GlobalKey(),
+                    title: Text(
+                        (state.bankName.isEmpty)
+                            ? StringConstants.kSelect
+                            : state.bankName,
+                        style: Theme.of(context).textTheme.xSmall),
+                    children: [
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount:
+                              context.read<AccountingBloc>().bankList.length,
+                          itemBuilder: (context, index) {
+                            var bank =
+                                context.read<AccountingBloc>().bankList[index];
+                            return ListTile(
+                                contentPadding: const EdgeInsets.only(
+                                    left: xxxTinierSpacing),
+                                title: Text(bank.bankname ?? '',
+                                    style: Theme.of(context).textTheme.xSmall),
+                                onTap: () {
+                                  context.read<AccountingBloc>().add(SelectBank(
+                                      bankName: bank.bankname ?? '',
+                                      bankId: bank.id.toString()));
+                                  widget.onBankChanged(bank.id.toString());
                                 });
-                                widget.onBankChanged(selectedValue);
-                              });
-                        });
-                  } else if (state is AccountingNewEntityNotSelected) {
-                    return const Center(
-                        child: Text(StringConstants.kNoRecordsFound));
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
-              )
-            ]));
+                          })
+                    ]));
+          } else {
+            return const SizedBox.shrink();
+          }
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
   }
 }

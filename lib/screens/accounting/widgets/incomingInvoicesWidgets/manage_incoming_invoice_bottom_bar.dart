@@ -7,10 +7,6 @@ import 'accounting_invoice_validator.dart';
 class ManageIncomingInvoiceBottomBar extends StatelessWidget {
   const ManageIncomingInvoiceBottomBar({super.key});
 
-  bool validateForm(dynamic value) {
-    return value == null || value.toString().isEmpty;
-  }
-
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(

@@ -1,3 +1,4 @@
+import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
@@ -16,7 +17,7 @@ abstract class AccountingRepository {
   Future<FetchIncomingInvoicesModel> fetchIncomingInvoices(
       int pageNo, String filter);
 
-  Future<FetchIAccountingMasterModel> fetchAccountingMaster();
+  Future<FetchAccountingMasterModel> fetchAccountingMaster();
 
   Future<FetchMasterDataEntryModel> fetchMasterDataEntry(int entityId);
 
@@ -31,6 +32,7 @@ abstract class AccountingRepository {
 
   Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(
       Map deleteOutgoingInvoiceMap);
+
   Future<FetchBankStatementsModel> fetchBankStatements(
       int pageNo, String filter);
 }

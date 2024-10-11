@@ -14,6 +14,7 @@ import '../../widgets/custom_card.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'manage_bank_statement_screen.dart';
 
 class BankStatementScreen extends StatelessWidget {
   static const routeName = 'BankStatementScreen';
@@ -26,7 +27,10 @@ class BankStatementScreen extends StatelessWidget {
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kBankStatementList),
         floatingActionButton: FloatingActionButton(
-            onPressed: () {}, child: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.pushNamed(context, ManageBankStatementScreen.routeName);
+            },
+            child: const Icon(Icons.add)),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
