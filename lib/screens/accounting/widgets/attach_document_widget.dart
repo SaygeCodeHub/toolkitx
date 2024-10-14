@@ -12,11 +12,13 @@ import 'attach_document_section.dart';
 class AttachDocumentWidget extends StatefulWidget {
   final void Function(List uploadDocList) onUploadDocument;
   final ImagePickerBloc imagePickerBloc;
+  final List<dynamic> initialImages;
 
   const AttachDocumentWidget(
       {super.key,
       required this.onUploadDocument,
-      required this.imagePickerBloc});
+      required this.imagePickerBloc,
+        this.initialImages = const [],});
 
   @override
   State<AttachDocumentWidget> createState() => _AttachDocumentWidgetState();

@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
+import 'package:toolkit/screens/accounting/edit_outgoing_invoice_screen.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_icon_button.dart';
 
@@ -12,6 +13,7 @@ import '../../../../configs/app_spacing.dart';
 
 class OutgoingListTileTitle extends StatelessWidget {
   final OutgoingInvoicesDatum outgoingInvoices;
+
 
   const OutgoingListTileTitle({super.key, required this.outgoingInvoices});
 
@@ -28,7 +30,10 @@ class OutgoingListTileTitle extends StatelessWidget {
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w600)),
               const Spacer(),
-              CustomIconButton(icon: Icons.edit, onPressed: () {}, size: 20),
+              CustomIconButton(icon: Icons.edit, onPressed: () {
+                Navigator.pushNamed(context, EditOutgoingInvoiceScreen.routeName);
+                context.read<AccountingBloc>().add(FetchOutgoingInvoice(invoiceId: outgoingInvoices.id));
+              }, size: 20),
               const SizedBox(width: xxTinierSpacing),
               CustomIconButton(
                   icon: Icons.delete,

@@ -62,7 +62,7 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
                             uploadedDocuments.isNotEmpty) {
                           context
                               .read<AccountingBloc>()
-                              .add(CreateOutgoingInvoice());
+                              .add(CreateOutgoingInvoice(outgoingInvoiceId: ''));
                         } else {
                           showCustomSnackBar(
                               context,
