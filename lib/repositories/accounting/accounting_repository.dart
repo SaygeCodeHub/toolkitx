@@ -32,6 +32,5 @@ abstract class AccountingRepository {
   Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(
       Map deleteOutgoingInvoiceMap);
 
-  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(
-      String invoiceId);
+  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(String invoiceId);
 }

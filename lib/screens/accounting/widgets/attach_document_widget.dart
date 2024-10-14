@@ -14,11 +14,12 @@ class AttachDocumentWidget extends StatefulWidget {
   final ImagePickerBloc imagePickerBloc;
   final List<dynamic> initialImages;
 
-  const AttachDocumentWidget(
-      {super.key,
-      required this.onUploadDocument,
-      required this.imagePickerBloc,
-        this.initialImages = const [],});
+  const AttachDocumentWidget({
+    super.key,
+    required this.onUploadDocument,
+    required this.imagePickerBloc,
+    this.initialImages = const [],
+  });
 
   @override
   State<AttachDocumentWidget> createState() => _AttachDocumentWidgetState();

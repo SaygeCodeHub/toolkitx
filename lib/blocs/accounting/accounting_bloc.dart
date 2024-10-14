@@ -257,7 +257,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map createInvoiceMap = {
-        "id": event.outgoingInvoiceId ,
+        "id": event.outgoingInvoiceId,
         "userid": userId,
         "hashcode": hashCode,
         "files": manageOutgoingInvoiceMap['files'] ?? "",
@@ -277,8 +277,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       if (createOutgoingInvoiceModel.status == 200) {
         if (createOutgoingInvoiceModel.message == '1') {
           emit(OutgoingInvoiceCreated());
-        }
-        else {
+        } else {
           emit(FailedToCreateOutgoingInvoice(
               errorMessage: createOutgoingInvoiceModel.message));
         }
@@ -362,32 +361,29 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       String? clientId =
           await _customerCache.getUserId(CacheKeys.clientId) ?? '';
       var outgoingInvoiceData = fetchOutgoingInvoiceModel.data;
-      manageOutgoingInvoiceMap["id"] = outgoingInvoiceData.id ;
-      manageOutgoingInvoiceMap["entity"] = outgoingInvoiceData.entityid ;
+      manageOutgoingInvoiceMap["id"] = outgoingInvoiceData.id;
+      manageOutgoingInvoiceMap["entity"] = outgoingInvoiceData.entityid;
       manageOutgoingInvoiceMap["client"] = outgoingInvoiceData.clientid;
       manageOutgoingInvoiceMap["project"] = outgoingInvoiceData.projectid;
-      manageOutgoingInvoiceMap["date"] =
-          outgoingInvoiceData.invoicedate;
+      manageOutgoingInvoiceMap["date"] = outgoingInvoiceData.invoicedate;
       manageOutgoingInvoiceMap["comments"] = outgoingInvoiceData.comments;
       manageOutgoingInvoiceMap["files"] = outgoingInvoiceData.files;
       manageOutgoingInvoiceMap["othercurrency"] =
-          outgoingInvoiceData.othercurrency ;
+          outgoingInvoiceData.othercurrency;
       manageOutgoingInvoiceMap["invoiceamount"] =
           outgoingInvoiceData.invoiceamount;
       manageOutgoingInvoiceMap["otherinvoiceamount"] =
           outgoingInvoiceData.otherinvoiceamount;
       manageOutgoingInvoiceMap["entityname"] = outgoingInvoiceData.entityname;
       manageOutgoingInvoiceMap["clientname"] = outgoingInvoiceData.clientname;
-      manageOutgoingInvoiceMap["projectname"] =
-          outgoingInvoiceData.projectname;
+      manageOutgoingInvoiceMap["projectname"] = outgoingInvoiceData.projectname;
       manageOutgoingInvoiceMap["othercurrencyname"] =
           outgoingInvoiceData.othercurrencyname;
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
       // "clientId": state.clientId
       if (fetchOutgoingInvoiceModel.status == 200) {
-        emit(OutgoingInvoiceFetched(
-            clientId: clientId));
+        emit(OutgoingInvoiceFetched(clientId: clientId));
       } else {
         emit(FailedToFetchOutgoingInvoice(
             errorMessage: fetchOutgoingInvoiceModel.message));

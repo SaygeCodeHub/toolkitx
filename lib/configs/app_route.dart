@@ -798,10 +798,9 @@ class AppRoutes {
         return _createRoute(const ManageAccountingOutgoingInvoiceSection());
       case EditOutgoingInvoiceScreen.routeName:
         return _createRoute(const EditOutgoingInvoiceScreen());
-        case EditOutgoingInvoiceSection.routeName:
+      case EditOutgoingInvoiceSection.routeName:
         return _createRoute(EditOutgoingInvoiceSection(
-            clientId: settings.arguments.toString())
-        );
+            clientId: settings.arguments.toString()));
       default:
         return _createRoute(const WelcomeScreen());
     }

@@ -78,6 +78,5 @@ class DeleteOutgoingInvoice extends AccountingEvent {
 class FetchOutgoingInvoice extends AccountingEvent {
   final String invoiceId;
 
-
   FetchOutgoingInvoice({required this.invoiceId});
 }

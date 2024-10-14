@@ -13,7 +13,8 @@ class ClientDropdown extends StatefulWidget {
   final void Function(String selectedValue) onClientChanged;
   final String initialValue;
 
-  const ClientDropdown({super.key, required this.onClientChanged,this.initialValue = ''});
+  const ClientDropdown(
+      {super.key, required this.onClientChanged, this.initialValue = ''});
 
   @override
   State<ClientDropdown> createState() => _ClientDropdownState();
@@ -27,7 +28,6 @@ class _ClientDropdownState extends State<ClientDropdown> {
   void initState() {
     super.initState();
     selectedText = widget.initialValue;
-
   }
 
   @override
@@ -43,7 +43,7 @@ class _ClientDropdownState extends State<ClientDropdown> {
             children: [
               BlocBuilder<AccountingBloc, AccountingState>(
                 buildWhen: (previousState, currentState) =>
-                currentState is AccountingNewEntitySelecting ||
+                    currentState is AccountingNewEntitySelecting ||
                     currentState is AccountingNewEntitySelected ||
                     currentState is AccountingNewEntityNotSelected,
                 builder: (context, state) {
@@ -60,7 +60,7 @@ class _ClientDropdownState extends State<ClientDropdown> {
                           var clientDatum = flattenedData[index];
                           return ListTile(
                               contentPadding:
-                              const EdgeInsets.only(left: xxxTinierSpacing),
+                                  const EdgeInsets.only(left: xxxTinierSpacing),
                               title: Text(clientDatum.name ?? 'Unknown Client',
                                   style: Theme.of(context).textTheme.xSmall),
                               onTap: () {

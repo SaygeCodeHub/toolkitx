@@ -14,7 +14,6 @@ import '../../../../configs/app_spacing.dart';
 class OutgoingListTileTitle extends StatelessWidget {
   final OutgoingInvoicesDatum outgoingInvoices;
 
-
   const OutgoingListTileTitle({super.key, required this.outgoingInvoices});
 
   @override
@@ -30,10 +29,15 @@ class OutgoingListTileTitle extends StatelessWidget {
                   style: Theme.of(context).textTheme.small.copyWith(
                       color: AppColor.black, fontWeight: FontWeight.w600)),
               const Spacer(),
-              CustomIconButton(icon: Icons.edit, onPressed: () {
-                Navigator.pushNamed(context, EditOutgoingInvoiceScreen.routeName);
-                context.read<AccountingBloc>().add(FetchOutgoingInvoice(invoiceId: outgoingInvoices.id));
-              }, size: 20),
+              CustomIconButton(
+                  icon: Icons.edit,
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, EditOutgoingInvoiceScreen.routeName);
+                    context.read<AccountingBloc>().add(
+                        FetchOutgoingInvoice(invoiceId: outgoingInvoices.id));
+                  },
+                  size: 20),
               const SizedBox(width: xxTinierSpacing),
               CustomIconButton(
                   icon: Icons.delete,

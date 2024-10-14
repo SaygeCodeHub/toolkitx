@@ -24,9 +24,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
   static const routeName = "EditOutgoingInvoiceSection";
   final String clientId;
 
-  const EditOutgoingInvoiceSection(
-      {super.key, required this.clientId});
-
+  const EditOutgoingInvoiceSection({super.key, required this.clientId});
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +66,19 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         if (context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['invoiceamount'].isNotEmpty &&
+                                .read<AccountingBloc>()
+                                .manageOutgoingInvoiceMap['invoiceamount']
+                                .isNotEmpty &&
                             context
                                 .read<AccountingBloc>()
-                                .manageOutgoingInvoiceMap["files"].isNotEmpty) {
-                          context
-                              .read<AccountingBloc>()
-                              .add(CreateOutgoingInvoice(outgoingInvoiceId:  context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['id']??""));
+                                .manageOutgoingInvoiceMap["files"]
+                                .isNotEmpty) {
+                          context.read<AccountingBloc>().add(
+                              CreateOutgoingInvoice(
+                                  outgoingInvoiceId: context
+                                          .read<AccountingBloc>()
+                                          .manageOutgoingInvoiceMap['id'] ??
+                                      ""));
                         } else {
                           showCustomSnackBar(
                               context,
@@ -125,8 +126,9 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                           .manageOutgoingInvoiceMap['invoiceamount'] = value;
                     },
                     value: context
-                        .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['invoiceamount']?? '',
+                            .read<AccountingBloc>()
+                            .manageOutgoingInvoiceMap['invoiceamount'] ??
+                        '',
                   ),
                   Text('Comments',
                       style: Theme.of(context)
@@ -142,8 +144,9 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                           .manageOutgoingInvoiceMap['comments'] = value;
                     },
                     value: context
-                        .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['comments']?? '',
+                            .read<AccountingBloc>()
+                            .manageOutgoingInvoiceMap['comments'] ??
+                        '',
                   ),
                   const SizedBox(height: xxxTinierSpacing),
                   Text(DatabaseUtil.getText('viewimage'),
@@ -154,14 +157,19 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                   const SizedBox(height: xxxTinierSpacing),
                   Visibility(
                     visible: context
-                        .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['files'] != null,
+                            .read<AccountingBloc>()
+                            .manageOutgoingInvoiceMap['files'] !=
+                        null,
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: (context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['files'] ?? '').split(',').length ?? 0,
+                                        .read<AccountingBloc>()
+                                        .manageOutgoingInvoiceMap['files'] ??
+                                    '')
+                                .split(',')
+                                .length ??
+                            0,
                         itemBuilder: (context, index) {
                           return InkWell(
                               splashColor: AppColor.transparent,
@@ -169,15 +177,13 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                               onTap: () {
                                 // print("clientId==>${clientId}");
                                 // print("fileslist =======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['files']}");
-                                if(clientId != '') {
+                                if (clientId != '') {
                                   // print(
                                   //     "Url==>${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context
                                   //         .read<AccountingBloc>()
                                   //         .manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}");
                                   launchUrlString(
-                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context
-                                          .read<AccountingBloc>()
-                                          .manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                                       mode: LaunchMode.externalApplication);
                                 }
                                 // else{
@@ -188,11 +194,11 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                                 padding: const EdgeInsets.only(
                                     bottom: xxxTinierSpacing),
                                 child: Text(
-                                    ViewImageUtil.viewImageList(
-                                        context
-                                            .read<AccountingBloc>()
-                                            .manageOutgoingInvoiceMap['files'] ??
-                                            '')[index],
+                                    ViewImageUtil.viewImageList(context
+                                                .read<AccountingBloc>()
+                                                .manageOutgoingInvoiceMap[
+                                            'files'] ??
+                                        '')[index],
                                     style: const TextStyle(
                                         color: AppColor.deepBlue)),
                               ));
@@ -210,7 +216,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                               .replaceAll("]", "");
                     },
                     imagePickerBloc: ImagePickerBloc(),
-                      initialImages: uploadedDocuments,
+                    initialImages: uploadedDocuments,
                   )
                 ],
               ),

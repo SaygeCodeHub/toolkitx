@@ -173,7 +173,8 @@ class FetchingOutgoingInvoice extends AccountingState {}
 class OutgoingInvoiceFetched extends AccountingState {
   final String clientId;
 
-  OutgoingInvoiceFetched({required this.clientId,
+  OutgoingInvoiceFetched({
+    required this.clientId,
   });
 }
 

@@ -86,11 +86,11 @@ class AccountingRepositoryImpl implements AccountingRepository {
   }
 
   @override
-  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(String invoiceId) async {
+  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(
+      String invoiceId) async {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetOutgoingInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&invoiceid=$invoiceId');
 
     return FetchOutgoingInvoiceModel.fromJson(response);
   }
-
 }

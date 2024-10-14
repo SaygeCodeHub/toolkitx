@@ -20,7 +20,10 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
   const InvoiceCurrencyDropdown(
       {super.key,
       required this.onInvoiceCurrencySelected,
-      required this.manageInvoiceMap,  this.initialCurrency='',  this.initialOtherCurrencyName='',  this.initialOtherCurrency=''});
+      required this.manageInvoiceMap,
+      this.initialCurrency = '',
+      this.initialOtherCurrencyName = '',
+      this.initialOtherCurrency = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,6 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                     : state.selectedCurrency,
                                 style: Theme.of(context).textTheme.xSmall),
                             children: [
-
                               ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: invoiceCurrency.length,
@@ -85,10 +87,12 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                   })
                             ])),
                     if (state.selectedCurrency == 'Other')
-                      CurrencyDropdown(onCurrencySelected: (String currency) {
-                        manageInvoiceMap['othercurrency'] = currency;
-                      },initialOtherCurrencyName: initialOtherCurrencyName,
-                          initialOtherCurrency:initialOtherCurrency)
+                      CurrencyDropdown(
+                          onCurrencySelected: (String currency) {
+                            manageInvoiceMap['othercurrency'] = currency;
+                          },
+                          initialOtherCurrencyName: initialOtherCurrencyName,
+                          initialOtherCurrency: initialOtherCurrency)
                   ]);
             } else {
               return const SizedBox.shrink();

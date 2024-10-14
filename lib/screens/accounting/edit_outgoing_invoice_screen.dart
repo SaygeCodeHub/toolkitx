@@ -24,7 +24,7 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-String clientId ="";
+    String clientId = "";
 
     return Scaffold(
         appBar: const GenericAppBar(title: 'Edit Outgoing Invoice'),
@@ -44,19 +44,21 @@ String clientId ="";
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     if (context
-                        .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['entity'].isNotEmpty &&
+                            .read<AccountingBloc>()
+                            .manageOutgoingInvoiceMap['entity']
+                            .isNotEmpty &&
                         context
                             .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap["client"].isNotEmpty &&
+                            .manageOutgoingInvoiceMap["client"]
+                            .isNotEmpty &&
                         context
                             .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['project'].isNotEmpty &&
+                            .manageOutgoingInvoiceMap['project']
+                            .isNotEmpty &&
                         context
                             .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap["date"].isNotEmpty
-
-                    ) {
+                            .manageOutgoingInvoiceMap["date"]
+                            .isNotEmpty) {
                       Navigator.pushNamed(
                           context, EditOutgoingInvoiceSection.routeName,
                           arguments: clientId);
@@ -97,7 +99,7 @@ String clientId ="";
                       child: const CircularProgressIndicator(),
                     ));
                   } else if (state is OutgoingInvoiceFetched) {
-                     clientId = state.clientId;
+                    clientId = state.clientId;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -113,9 +115,10 @@ String clientId ="";
                                 .read<AccountingBloc>()
                                 .manageOutgoingInvoiceMap['entity'] = entity;
                           },
-                          selectedEntity:  context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['entity']?? '',
+                          selectedEntity: context
+                                  .read<AccountingBloc>()
+                                  .manageOutgoingInvoiceMap['entity'] ??
+                              '',
                         ),
                         const SizedBox(height: xxTinySpacing),
                         Text(StringConstants.kClient,
@@ -131,8 +134,9 @@ String clientId ="";
                                 .manageOutgoingInvoiceMap['client'] = client;
                           },
                           initialValue: context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['clientname']?? '',
+                                  .read<AccountingBloc>()
+                                  .manageOutgoingInvoiceMap['clientname'] ??
+                              '',
                         ),
                         const SizedBox(height: xxTinySpacing),
                         Text('Project',
@@ -147,9 +151,10 @@ String clientId ="";
                                 .read<AccountingBloc>()
                                 .manageOutgoingInvoiceMap['project'] = project;
                           },
-                          initialValue:  context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['projectname']?? '',
+                          initialValue: context
+                                  .read<AccountingBloc>()
+                                  .manageOutgoingInvoiceMap['projectname'] ??
+                              '',
                         ),
                         const SizedBox(height: xxTinySpacing),
                         Text('Invoice Date',
@@ -165,8 +170,9 @@ String clientId ="";
                                 .manageOutgoingInvoiceMap['date'] = date;
                           },
                           editDate: context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['date']?? '',
+                                  .read<AccountingBloc>()
+                                  .manageOutgoingInvoiceMap['date'] ??
+                              '',
                         ),
                         const SizedBox(height: xxTinySpacing),
                         Text('Invoice Currency',
@@ -185,19 +191,25 @@ String clientId ="";
                             manageInvoiceMap: context
                                 .read<AccountingBloc>()
                                 .manageOutgoingInvoiceMap,
-                            initialCurrency:
-                            context.read<AccountingBloc>().manageOutgoingInvoiceMap[
-                            'othercurrencyname'] == "" ?
-                            context.read<AccountingBloc>().manageOutgoingInvoiceMap[
-                            'defaultcurrency'] : 'Other',
-                            initialOtherCurrencyName:
-                            context.read<AccountingBloc>().manageOutgoingInvoiceMap[
-                            'othercurrencyname'] ??
+                            initialCurrency: context
+                                            .read<AccountingBloc>()
+                                            .manageOutgoingInvoiceMap[
+                                        'othercurrencyname'] ==
+                                    ""
+                                ? context
+                                    .read<AccountingBloc>()
+                                    .manageOutgoingInvoiceMap['defaultcurrency']
+                                : 'Other',
+                            initialOtherCurrencyName: context
+                                        .read<AccountingBloc>()
+                                        .manageOutgoingInvoiceMap[
+                                    'othercurrencyname'] ??
                                 '',
                             initialOtherCurrency: context
-                                .read<AccountingBloc>()
-                                .manageOutgoingInvoiceMap[
-                            'othercurrencyname']?? ''),
+                                        .read<AccountingBloc>()
+                                        .manageOutgoingInvoiceMap[
+                                    'othercurrencyname'] ??
+                                ''),
                       ],
                     );
                   } else if (state is FailedToFetchOutgoingInvoice) {
