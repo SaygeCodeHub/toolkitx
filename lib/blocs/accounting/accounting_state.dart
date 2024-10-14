@@ -183,3 +183,19 @@ class FailedToFetchOutgoingInvoice extends AccountingState {
 
   FailedToFetchOutgoingInvoice({required this.errorMessage});
 }
+
+class FetchingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceFetched extends AccountingState {
+  final String clientId;
+
+  IncomingInvoiceFetched({
+    required this.clientId,
+  });
+}
+
+class FailedToFetchIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToFetchIncomingInvoice({required this.errorMessage});
+}

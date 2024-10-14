@@ -80,3 +80,9 @@ class FetchOutgoingInvoice extends AccountingEvent {
 
   FetchOutgoingInvoice({required this.invoiceId});
 }
+
+class FetchIncomingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  FetchIncomingInvoice({required this.invoiceId});
+}

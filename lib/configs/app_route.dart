@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/edit_incoming_invoice_screen.dart';
 import 'package:toolkit/screens/accounting/edit_outgoing_invoice_screen.dart';
 import 'package:toolkit/screens/accounting/manage_accounting_outgoing_invoice.dart';
 import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
@@ -801,6 +802,8 @@ class AppRoutes {
       case EditOutgoingInvoiceSection.routeName:
         return _createRoute(EditOutgoingInvoiceSection(
             clientId: settings.arguments.toString()));
+      case EditIncomingInvoiceScreen.routeName:
+        return _createRoute(const EditIncomingInvoiceScreen());
       default:
         return _createRoute(const WelcomeScreen());
     }

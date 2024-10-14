@@ -7,6 +7,7 @@ import 'package:toolkit/data/cache/customer_cache.dart';
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoice_model.dart';
@@ -55,6 +56,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<DeleteIncomingInvoice>(_deleteIncomingInvoice);
     on<DeleteOutgoingInvoice>(_deleteOutgoingInvoice);
     on<FetchOutgoingInvoice>(_fetchOutgoingInvoice);
+    on<FetchIncomingInvoice>(_fetchIncomingInvoice);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -381,15 +383,74 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           outgoingInvoiceData.othercurrencyname;
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
-      // "clientId": state.clientId
       if (fetchOutgoingInvoiceModel.status == 200) {
-        emit(OutgoingInvoiceFetched(clientId: clientId));
+        if (fetchOutgoingInvoiceModel.message == '1') {
+          emit(OutgoingInvoiceFetched(clientId: clientId));
+        } else {
+          emit(FailedToFetchOutgoingInvoice(
+              errorMessage: fetchOutgoingInvoiceModel.message));
+        }
       } else {
         emit(FailedToFetchOutgoingInvoice(
             errorMessage: fetchOutgoingInvoiceModel.message));
       }
     } on Exception catch (e) {
       emit(FailedToFetchOutgoingInvoice(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> _fetchIncomingInvoice(
+      FetchIncomingInvoice event, Emitter<AccountingState> emit) async {
+    emit(FetchingIncomingInvoice());
+    try {
+      FetchIncomingInvoiceModel fetchIncomingInvoiceModel =
+          await _accountingRepository.fetchIncomingInvoice(event.invoiceId);
+      String? clientId =
+          await _customerCache.getUserId(CacheKeys.clientId) ?? '';
+      var incomingInvoiceData = fetchIncomingInvoiceModel.data;
+      // print("data=====>${fetchIncomingInvoiceModel.data.toJson()}");
+      manageIncomingInvoiceMap["id"] = incomingInvoiceData.id;
+      manageIncomingInvoiceMap["entity"] = incomingInvoiceData.entityid;
+      manageIncomingInvoiceMap['billable'] = incomingInvoiceData.billable;
+      manageIncomingInvoiceMap["client"] = incomingInvoiceData.clientid;
+      manageIncomingInvoiceMap["project"] = incomingInvoiceData.projectid;
+      manageIncomingInvoiceMap["date"] = incomingInvoiceData.invoicedate;
+      manageIncomingInvoiceMap["purposeid"] = incomingInvoiceData.purposeid;
+      manageIncomingInvoiceMap["modeid"] = incomingInvoiceData.modeid;
+      manageIncomingInvoiceMap["comments"] = incomingInvoiceData.comments;
+      manageIncomingInvoiceMap["files"] = incomingInvoiceData.files;
+      manageIncomingInvoiceMap['purposename'] = incomingInvoiceData.purposename;
+      manageIncomingInvoiceMap["othercurrency"] =
+          incomingInvoiceData.othercurrency;
+      manageIncomingInvoiceMap["invoiceamount"] =
+          incomingInvoiceData.invoiceamount;
+      manageIncomingInvoiceMap["otherinvoiceamount"] =
+          incomingInvoiceData.otherinvoiceamount;
+      manageIncomingInvoiceMap["creditcardid"] =
+          incomingInvoiceData.creditcardid;
+      manageIncomingInvoiceMap["entityname"] = incomingInvoiceData.entityname;
+      manageIncomingInvoiceMap["clientname"] = incomingInvoiceData.clientname;
+      manageIncomingInvoiceMap["projectname"] = incomingInvoiceData.projectname;
+      manageIncomingInvoiceMap["othercurrencyname"] =
+          incomingInvoiceData.othercurrencyname;
+      manageIncomingInvoiceMap["creditcardname"] =
+          incomingInvoiceData.creditcardname;
+      manageIncomingInvoiceMap["defaultcurrency"] =
+          incomingInvoiceData.defaultcurrency;
+      // print("manageincoming=====>${manageIncomingInvoiceMap}");
+      if (fetchIncomingInvoiceModel.status == 200) {
+        if (fetchIncomingInvoiceModel.message == '1') {
+          emit(IncomingInvoiceFetched(clientId: clientId));
+        } else {
+          emit(FailedToFetchIncomingInvoice(
+              errorMessage: fetchIncomingInvoiceModel.message));
+        }
+      } else {
+        emit(FailedToFetchIncomingInvoice(
+            errorMessage: fetchIncomingInvoiceModel.message));
+      }
+    } on Exception catch (e) {
+      emit(FailedToFetchIncomingInvoice(errorMessage: e.toString()));
     }
   }
 }
