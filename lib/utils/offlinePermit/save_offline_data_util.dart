@@ -3,8 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_bloc.dart';
 import 'package:toolkit/blocs/permit/permit_events.dart';
 
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
+import '../../screens/workorder/workorder_add_comments_screen.dart';
+
 class SaveOfflineDataUtil {
-  void saveData(String status, Map saveOfflineDataMap, BuildContext context) {
+  void savePermitData(
+      String status, Map saveOfflineDataMap, BuildContext context) {
     switch (status) {
       case 'ClearPermitScreen':
         context.read<PermitBloc>().add(SaveClearPermit(
@@ -39,6 +44,32 @@ class SaveOfflineDataUtil {
         context.read<PermitBloc>().add(ChangePermitCP(
             changePermitCPMap: saveOfflineDataMap,
             permitId: saveOfflineDataMap['permitid']));
+        break;
+    }
+  }
+
+  void saveWorkOrderData(
+      String screen, Map saveOfflineDataMap, BuildContext context) {
+    switch (screen) {
+      case WorkOrderAddCommentsScreen.routeName:
+        context
+            .read<WorkOrderTabDetailsBloc>()
+            .add(SaveWorkOrderComments(addCommentsMap: saveOfflineDataMap));
+        break;
+      case 'StartScreen':
+        context
+            .read<WorkOrderTabDetailsBloc>()
+            .add(StartWorkOrder(startWorkOrderMap: saveOfflineDataMap));
+        break;
+      case 'CompleteScreen':
+        context
+            .read<WorkOrderTabDetailsBloc>()
+            .add(CompleteWorkOrder(completeWorkOrderMap: saveOfflineDataMap));
+        break;
+      case 'AcceptScreen':
+        context.read<WorkOrderTabDetailsBloc>().add(AcceptWorkOrder(
+            workOrderId: saveOfflineDataMap['workorderId'] ?? '',
+            acceptOfflineMap: saveOfflineDataMap));
         break;
     }
   }

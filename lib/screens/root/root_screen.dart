@@ -6,6 +6,8 @@ import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/blocs/client/client_events.dart';
 import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
@@ -32,6 +34,7 @@ class RootScreen extends StatefulWidget {
   static const routeName = 'RootScreen';
   final bool isFromClientList;
   static bool onceCall = true;
+  static bool workOrderSyncOnline = true;
 
   const RootScreen({super.key, required this.isFromClientList});
 
@@ -115,6 +118,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
         listener: (context, state) {
       if (state is NoNetwork) {
         RootScreen.onceCall = true;
+        RootScreen.workOrderSyncOnline = true;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -123,10 +127,17 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
             ModalRoute.withName('/'));
       } else {
         context.read<ChatBloc>().add(FetchChatMessage());
+        if (RootScreen.workOrderSyncOnline) {
+          print('RootScreen.workOrderSyncOnline');
+          context
+              .read<WorkOrderTabDetailsBloc>()
+              .add(SyncWorkOrderOfflineDataWithOnline());
+        }
         if (RootScreen.onceCall == true) {
           context.read<PermitBloc>().add(PermitInternetActions());
         }
         RootScreen.onceCall = false;
+        RootScreen.workOrderSyncOnline = false;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

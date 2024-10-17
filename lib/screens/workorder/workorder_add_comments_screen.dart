@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
@@ -54,13 +55,14 @@ class WorkOrderAddCommentsScreen extends StatelessWidget {
                           addCommentsMap['comments'] = textValue;
                         }),
                     const SizedBox(height: xxTinierSpacing),
-                    UploadImageMenu(
-                      imagePickerBloc: ImagePickerBloc(),
-                      isUpload: true,
-                      onUploadImageResponse: (List uploadImageList) {
-                        addCommentsMap['pickedImage'] = uploadImageList;
-                      },
-                    ),
+                    if (isNetworkEstablished)
+                      UploadImageMenu(
+                        imagePickerBloc: ImagePickerBloc(),
+                        isUpload: true,
+                        onUploadImageResponse: (List uploadImageList) {
+                          addCommentsMap['pickedImage'] = uploadImageList;
+                        },
+                      ),
                   ],
                 ),
               ),

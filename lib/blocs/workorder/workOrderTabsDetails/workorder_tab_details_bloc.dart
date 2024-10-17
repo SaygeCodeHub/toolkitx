@@ -11,7 +11,9 @@ import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart'
 import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
 import 'package:toolkit/repositories/workorder/workorder_reposiotry.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/database/database_util.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
 import '../../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
 import '../../../data/enums/workorder_priority_enum.dart';
@@ -49,6 +51,7 @@ class WorkOrderTabDetailsBloc
     extends Bloc<WorkOrderTabsDetailsEvent, WorkOrderTabDetailsStates> {
   final WorkOrderRepository _workOrderRepository = getIt<WorkOrderRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
   bool docListReachedMax = false;
   String roleId = '';
   int pageNo = 1;
@@ -99,7 +102,7 @@ class WorkOrderTabDetailsBloc
     on<DeleteWorkOrderSingleMiscCost>(_deleteSingleMiscCost);
     on<AssignWorkForce>(_assignWorkForce);
     on<EditWorkOrderWorkForce>(_editWorkForce);
-    on<SaveWorkOrderComments>(_saveDocuments);
+    on<SaveWorkOrderComments>(_saveComments);
     on<SaveWorkOrderDocuments>(_saveWorkOrderDocuments);
     on<DeleteWorkOrderWorkForce>(_deleteWorkForce);
     on<AssignWorkOrderParts>(_assignWorkOrderParts);
@@ -107,12 +110,14 @@ class WorkOrderTabDetailsBloc
     on<UpdateWorkOrderItem>(_updateWorkOrderItem);
     on<FetchWorkOrderRoles>(_fetchWorkOrderRoles);
     on<SelectWorkOrderRole>(_selectWorkOrderRole);
+    on<SaveWorOrderOfflineData>(_saveOfflineData);
+    on<SyncWorkOrderOfflineDataWithOnline>(_syncDataOnline);
   }
 
   int tabIndex = 0;
   int toggleSwitchIndex = 0;
   String clientId = '';
-  static List popUpMenuItemsList = [];
+  List popUpMenuItemsList = [];
   Map workOrderDetailsMap = {};
   bool assignWorkForceListReachedMax = false;
   List<AssignWorkForceDatum> assignWorkForceDatum = [];
@@ -130,93 +135,176 @@ class WorkOrderTabDetailsBloc
       String? getClientId =
           await _customerCache.getClientId(CacheKeys.clientId);
       clientId = getClientId!;
-      popUpMenuItemsList = [
-        DatabaseUtil.getText('Edit'),
-        DatabaseUtil.getText('CreateSimillar'),
-        DatabaseUtil.getText('AddParts'),
-        DatabaseUtil.getText('AddDocuments'),
-        DatabaseUtil.getText('AddMiscCost'),
-        DatabaseUtil.getText('AddDowntime'),
-        DatabaseUtil.getText('AddComment')
-      ];
-      FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
-          await _workOrderRepository.fetchWorkOrderDetails(
-              hashCode!, event.workOrderId, roleId);
       workOrderId = event.workOrderId;
-      tabIndex = event.initialTabIndex;
-      if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
-        popUpMenuItemsList.insert(2, DatabaseUtil.getText('assign_workforce'));
+      if (isNetworkEstablished) {
+        popUpMenuItemsList = [
+          DatabaseUtil.getText('Edit'),
+          DatabaseUtil.getText('CreateSimillar'),
+          DatabaseUtil.getText('AddParts'),
+          DatabaseUtil.getText('AddDocuments'),
+          DatabaseUtil.getText('AddMiscCost'),
+          DatabaseUtil.getText('AddDowntime'),
+          DatabaseUtil.getText('AddComment')
+        ];
+        FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
+            await _workOrderRepository.fetchWorkOrderDetails(
+                hashCode!, event.workOrderId, roleId);
+        tabIndex = event.initialTabIndex;
+        if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
+          popUpMenuItemsList.insert(
+              2, DatabaseUtil.getText('assign_workforce'));
+        }
+        if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
+          popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
+        }
+        if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+          popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
+        }
+        if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
+          popUpMenuItemsList.insert(9, DatabaseUtil.getText('Reject'));
+        }
+        if (fetchWorkOrderDetailsModel.data.isstart == '1') {
+          popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
+        }
+        if (fetchWorkOrderDetailsModel.data.ishold == '1') {
+          popUpMenuItemsList.insert(5, DatabaseUtil.getText('Hold'));
+        }
+        if (fetchWorkOrderDetailsModel.data.iscomplete == '1') {
+          popUpMenuItemsList.insert(6, DatabaseUtil.getText('Complete'));
+        }
+        List customFieldList = [];
+        for (int i = 0;
+            i < fetchWorkOrderDetailsModel.data.customfields.length;
+            i++) {
+          customFieldList.add({
+            'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
+            'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
+          });
+        }
+        workOrderDetailsMap = {
+          'companyid': fetchWorkOrderDetailsModel.data.companyid,
+          'locationid': fetchWorkOrderDetailsModel.data.locationid,
+          'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
+          'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
+          'type': fetchWorkOrderDetailsModel.data.type,
+          'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
+          'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
+          'category': fetchWorkOrderDetailsModel.data.category,
+          'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
+          'origination': fetchWorkOrderDetailsModel.data.origination,
+          'originationid': fetchWorkOrderDetailsModel.data.originationid,
+          'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
+          'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
+          'subject': fetchWorkOrderDetailsModel.data.subject,
+          'description': fetchWorkOrderDetailsModel.data.description,
+          'workorderId': fetchWorkOrderDetailsModel.data.id,
+          'customfields': customFieldList,
+          "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
+          "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
+          "plannedfinishdate":
+              fetchWorkOrderDetailsModel.data.plannedfinishdate,
+          "plannedfinishtime":
+              fetchWorkOrderDetailsModel.data.plannedfinishtime,
+          "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
+          "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
+          "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
+          "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
+          "service": fetchWorkOrderDetailsModel.data.service,
+          "vendor": fetchWorkOrderDetailsModel.data.vendorname,
+          "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
+        };
+        emit(WorkOrderTabDetailsFetched(
+            fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
+            tabInitialIndex: tabIndex,
+            clientId: clientId,
+            popUpMenuList: popUpMenuItemsList,
+            workOrderDetailsMap: workOrderDetailsMap));
+        add(WorkOrderToggleSwitchIndex(
+            fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
+            tabInitialIndex: tabIndex,
+            toggleIndex: 0));
+      } else {
+        FetchWorkOrderTabDetailsModel fetchWorkOrderTabDetailsModel =
+            await fetchWorkOrderDetailsOffline();
+        if (fetchWorkOrderTabDetailsModel.data.toJson().isNotEmpty) {
+          emit(WorkOrderTabDetailsFetched(
+              fetchWorkOrderDetailsModel: fetchWorkOrderTabDetailsModel,
+              tabInitialIndex: tabIndex,
+              clientId: clientId,
+              popUpMenuList: popUpMenuItemsList,
+              workOrderDetailsMap: workOrderDetailsMap));
+          add(WorkOrderToggleSwitchIndex(
+              fetchWorkOrderDetailsModel: fetchWorkOrderTabDetailsModel,
+              tabInitialIndex: tabIndex,
+              toggleIndex: 0));
+        } else {
+          emit(WorkOrderTabDetailsNotFetched(
+              tabDetailsNotFetched: StringConstants.kSomethingWentWrong));
+        }
       }
-      if (fetchWorkOrderDetailsModel.data.isstarttender == '1') {
-        popUpMenuItemsList.insert(7, DatabaseUtil.getText('StartTender'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Accept'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isacceptreject == '1') {
-        popUpMenuItemsList.insert(9, DatabaseUtil.getText('Reject'));
-      }
-      if (fetchWorkOrderDetailsModel.data.isstart == '1') {
-        popUpMenuItemsList.insert(8, DatabaseUtil.getText('Start'));
-      }
-      if (fetchWorkOrderDetailsModel.data.ishold == '1') {
-        popUpMenuItemsList.insert(5, DatabaseUtil.getText('Hold'));
-      }
-      if (fetchWorkOrderDetailsModel.data.iscomplete == '1') {
-        popUpMenuItemsList.insert(6, DatabaseUtil.getText('Complete'));
-      }
-      List customFieldList = [];
-      for (int i = 0;
-          i < fetchWorkOrderDetailsModel.data.customfields.length;
-          i++) {
-        customFieldList.add({
-          'id': fetchWorkOrderDetailsModel.data.customfields[i].fieldid,
-          'value': fetchWorkOrderDetailsModel.data.customfields[i].fieldvalue
-        });
-      }
-      workOrderDetailsMap = {
-        'companyid': fetchWorkOrderDetailsModel.data.companyid,
-        'locationid': fetchWorkOrderDetailsModel.data.locationid,
-        'locationnames': fetchWorkOrderDetailsModel.data.locationnames,
-        'contractorname': fetchWorkOrderDetailsModel.data.contractorname,
-        'type': fetchWorkOrderDetailsModel.data.type,
-        'workordertype': fetchWorkOrderDetailsModel.data.workordertype,
-        'priorityid': fetchWorkOrderDetailsModel.data.priorityid,
-        'category': fetchWorkOrderDetailsModel.data.category,
-        'categoryid': fetchWorkOrderDetailsModel.data.categoryid,
-        'origination': fetchWorkOrderDetailsModel.data.origination,
-        'originationid': fetchWorkOrderDetailsModel.data.originationid,
-        'costcenterid': fetchWorkOrderDetailsModel.data.costcenterid,
-        'costcenter': fetchWorkOrderDetailsModel.data.costcenter,
-        'subject': fetchWorkOrderDetailsModel.data.subject,
-        'description': fetchWorkOrderDetailsModel.data.description,
-        'workorderId': fetchWorkOrderDetailsModel.data.id,
-        'customfields': customFieldList,
-        "plannedstartdate": fetchWorkOrderDetailsModel.data.plannedstartdate,
-        "plannedstarttime": fetchWorkOrderDetailsModel.data.plannedstarttime,
-        "plannedfinishdate": fetchWorkOrderDetailsModel.data.plannedfinishdate,
-        "plannedfinishtime": fetchWorkOrderDetailsModel.data.plannedfinishtime,
-        "measure": fetchWorkOrderDetailsModel.data.safetymeasure,
-        "specialwork": fetchWorkOrderDetailsModel.data.specialwork,
-        "specialworknames": fetchWorkOrderDetailsModel.data.specialworknames,
-        "measurenames": fetchWorkOrderDetailsModel.data.safetymeasurenames,
-        "service": fetchWorkOrderDetailsModel.data.service,
-        "vendor": fetchWorkOrderDetailsModel.data.vendorname,
-        "quan": fetchWorkOrderDetailsModel.data.quan.toString(),
-      };
-      emit(WorkOrderTabDetailsFetched(
-          fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
-          tabInitialIndex: tabIndex,
-          clientId: clientId,
-          popUpMenuList: popUpMenuItemsList,
-          workOrderDetailsMap: workOrderDetailsMap));
-      add(WorkOrderToggleSwitchIndex(
-          fetchWorkOrderDetailsModel: fetchWorkOrderDetailsModel,
-          tabInitialIndex: tabIndex,
-          toggleIndex: 0));
     } catch (e) {
       emit(WorkOrderTabDetailsNotFetched(tabDetailsNotFetched: e.toString()));
     }
+  }
+
+  String showStatusText(int statusId) {
+    switch (statusId) {
+      case 1:
+        return "Created";
+      case 3:
+        return "Assigned";
+      case 4:
+        return "Accepted";
+      case 5:
+        return "Started";
+      case 6:
+        return "On Hold";
+      case 7:
+        return "Completed";
+      case 8:
+        return "Closed";
+      case 9:
+        return "Cancelled";
+      case 31:
+        return "Approved";
+      case 32:
+        return "Rejected";
+      default:
+        return '';
+    }
+  }
+
+  FutureOr<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetailsOffline() async {
+    popUpMenuItemsList = [DatabaseUtil.getText('AddComment')];
+    final workOrderDetailsMap =
+        await _databaseHelper.fetchWorkOrdersDetails(workOrderId);
+    final workOrderDetailsData =
+        WorkOrderDetailsData.fromJson(workOrderDetailsMap)
+          ..status = showStatusText(
+              await _databaseHelper.fetchWorkOrderStatusId(workOrderId));
+    final fetchWorkOrderTabDetailsModel = FetchWorkOrderTabDetailsModel(
+        status: 200, message: '', data: workOrderDetailsData);
+    final data = fetchWorkOrderTabDetailsModel.data;
+    int status = await _databaseHelper.fetchWorkOrderStatusId(workOrderId);
+    if (status == 4 || status == 6) {
+      data.isstart = '1';
+    } else if (status == 5 || status == 6) {
+      data.iscomplete = '1';
+    } else if (status == 31) {
+      data.isacceptreject = '1';
+    }
+    popUpMenuItemsList.clear();
+    popUpMenuItemsList = [DatabaseUtil.getText('AddComment')];
+    if (data.isacceptreject == '1') {
+      popUpMenuItemsList.add(DatabaseUtil.getText('Accept'));
+    }
+    if (data.isstart == '1') {
+      popUpMenuItemsList.add(DatabaseUtil.getText('Start'));
+    }
+    if (data.iscomplete == '1') {
+      popUpMenuItemsList.add(DatabaseUtil.getText('Complete'));
+    }
+    return fetchWorkOrderTabDetailsModel;
   }
 
   _toggleSwitchIndexChanged(WorkOrderToggleSwitchIndex event,
@@ -591,16 +679,32 @@ class WorkOrderTabDetailsBloc
       Map acceptWorkOrderMap = {
         "woid": event.workOrderId,
         "userid": userId,
-        "hashcode": hashCode
+        "hashcode": hashCode,
+        "user_name": event.acceptOfflineMap['user_name'] ?? '',
+        "user_sign": event.acceptOfflineMap['user_sign'] ?? '',
+        "sync_date":
+            '${event.acceptOfflineMap['user_date'] ?? ''} ${event.acceptOfflineMap['user_time'] ?? ''}'
       };
-      AcceptWorkOrderModel acceptWorkOrderModel =
-          await _workOrderRepository.acceptWorkOrder(acceptWorkOrderMap);
-      if (acceptWorkOrderModel.status == 200) {
-        emit(WorkOrderAccepted(acceptWorkOrderModel: acceptWorkOrderModel));
+      if (isNetworkEstablished) {
+        AcceptWorkOrderModel acceptWorkOrderModel =
+            await _workOrderRepository.acceptWorkOrder(acceptWorkOrderMap);
+        if (acceptWorkOrderModel.status == 200) {
+          emit(WorkOrderAccepted(acceptWorkOrderModel: acceptWorkOrderModel));
+        } else {
+          emit(WorkOrderNotAccepted(
+              workOrderNotAccepted:
+                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        }
       } else {
-        emit(WorkOrderNotAccepted(
-            workOrderNotAccepted:
-                DatabaseUtil.getText('some_unknown_error_please_try_again')));
+        acceptWorkOrderMap['woid'] = workOrderId;
+        add(SaveWorOrderOfflineData(offlineMap: {
+          'workOrderId': workOrderId,
+          'actionKey': 'accept',
+          'workOrderMap': acceptWorkOrderMap,
+          'signature': event.acceptOfflineMap['user_sign'],
+          'date_time':
+              '${event.acceptOfflineMap['user_date']} ${event.acceptOfflineMap['user_time']}'
+        }));
       }
     } catch (e) {
       emit(WorkOrderNotAccepted(workOrderNotAccepted: e.toString()));
@@ -771,21 +875,36 @@ class WorkOrderTabDetailsBloc
             workOrderNotStarted: DatabaseUtil.getText('InsertDateTime')));
       } else {
         Map startWorkOrderMap = {
-          "woid": event.startWorkOrderMap['workorderId'],
+          "woid": event.startWorkOrderMap['workorderId'] ?? workOrderId,
           "userid": userId,
           "date": event.startWorkOrderMap['date'],
           "time": event.startWorkOrderMap['time'],
           "comments": event.startWorkOrderMap['comments'],
-          "hashcode": hashCode
+          "hashcode": hashCode,
+          "user_name": event.startWorkOrderMap['user_name'] ?? '',
+          "user_sign": event.startWorkOrderMap['user_sign'] ?? '',
+          "sync_date":
+              '${event.startWorkOrderMap['user_date'] ?? ''} ${event.startWorkOrderMap['user_time'] ?? ''}'
         };
-        StartWorkOrderModel startWorkOrderModel =
-            await _workOrderRepository.startWorkOrder(startWorkOrderMap);
-        if (startWorkOrderModel.status == 200) {
-          emit(WorkOderStarted(startWorkOrderModel: startWorkOrderModel));
+        if (isNetworkEstablished) {
+          StartWorkOrderModel startWorkOrderModel =
+              await _workOrderRepository.startWorkOrder(startWorkOrderMap);
+          if (startWorkOrderModel.status == 200) {
+            emit(WorkOderStarted(startWorkOrderModel: startWorkOrderModel));
+          } else {
+            emit(WorkOderNotStarted(
+                workOrderNotStarted: DatabaseUtil.getText(
+                    'some_unknown_error_please_try_again')));
+          }
         } else {
-          emit(WorkOderNotStarted(
-              workOrderNotStarted:
-                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+          add(SaveWorOrderOfflineData(offlineMap: {
+            'workOrderId': workOrderId,
+            'actionKey': 'start',
+            'workOrderMap': startWorkOrderMap,
+            'signature': event.startWorkOrderMap['user_sign'],
+            'date_time':
+                '${event.startWorkOrderMap['user_date']} ${event.startWorkOrderMap['user_time']}'
+          }));
         }
       }
     } catch (e) {
@@ -941,7 +1060,7 @@ class WorkOrderTabDetailsBloc
     }
   }
 
-  FutureOr<void> _saveDocuments(SaveWorkOrderComments event,
+  FutureOr<void> _saveComments(SaveWorkOrderComments event,
       Emitter<WorkOrderTabDetailsStates> emit) async {
     emit(SavingWorkOrderComments());
     try {
@@ -953,22 +1072,39 @@ class WorkOrderTabDetailsBloc
       } else {
         Map saveWorkOrderCommentsMap = {
           "userid": userId,
-          "workorderid":
-              WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] ?? '',
+          "workorderid": workOrderId,
           "hashcode": hashCode,
           "comments":
-              WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? ''
+              WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? '',
+          "user_name": event.addCommentsMap['user_name'] ?? '',
+          "user_sign": event.addCommentsMap['user_sign'] ?? '',
+          "sync_date":
+              '${event.addCommentsMap['user_date'] ?? ''} ${event.addCommentsMap['user_time'] ?? ''}'
         };
-        SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
-            await _workOrderRepository
-                .saveWorkOrderComments(saveWorkOrderCommentsMap);
-        if (saveWorkOrderCommentsModel.status == 200) {
-          emit(WorkOrderCommentsSaved(
-              saveWorkOrderCommentsModel: saveWorkOrderCommentsModel));
+        if (isNetworkEstablished) {
+          SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
+              await _workOrderRepository
+                  .saveWorkOrderComments(saveWorkOrderCommentsMap);
+          if (saveWorkOrderCommentsModel.status == 200) {
+            emit(WorkOrderCommentsSaved(
+                saveWorkOrderCommentsModel: saveWorkOrderCommentsModel));
+          } else {
+            emit(WorkOrderCommentsNotSaved(
+                commentsNotSaved: DatabaseUtil.getText(
+                    'some_unknown_error_please_try_again')));
+          }
         } else {
-          emit(WorkOrderCommentsNotSaved(
-              commentsNotSaved:
-                  DatabaseUtil.getText('some_unknown_error_please_try_again')));
+          add(SaveWorOrderOfflineData(offlineMap: {
+            'workOrderId': workOrderId,
+            'ownername': event.addCommentsMap['user_name'] ?? '',
+            'created':
+                '${event.addCommentsMap['user_date']}${event.addCommentsMap['user_time']}',
+            'actionKey': 'add_comment',
+            'workOrderMap': saveWorkOrderCommentsMap,
+            'signature': event.addCommentsMap['user_sign'],
+            'date_time':
+                '${event.addCommentsMap['user_date']} ${event.addCommentsMap['user_time']}'
+          }));
         }
       }
     } catch (e) {
@@ -1110,15 +1246,31 @@ class WorkOrderTabDetailsBloc
           "date": event.completeWorkOrderMap['date'],
           "time": event.completeWorkOrderMap['time'],
           "comments": event.completeWorkOrderMap['comments'],
-          "hashcode": hashCode
+          "hashcode": hashCode,
+          "user_name": event.completeWorkOrderMap['user_name'] ?? '',
+          "user_sign": event.completeWorkOrderMap['user_sign'] ?? '',
+          "sync_date":
+              '${event.completeWorkOrderMap['user_date'] ?? ''} ${event.completeWorkOrderMap['user_time'] ?? ''}'
         };
-        CompleteWorkOrderModel completeWorkOrderModel =
-            await _workOrderRepository.completeWorkOrder(completeWorkOrderMap);
-        if (completeWorkOrderModel.message == '1') {
-          emit(WorkOrderCompleted());
+        if (isNetworkEstablished) {
+          CompleteWorkOrderModel completeWorkOrderModel =
+              await _workOrderRepository
+                  .completeWorkOrder(completeWorkOrderMap);
+          if (completeWorkOrderModel.message == '1') {
+            emit(WorkOrderCompleted());
+          } else {
+            emit(WorkOrderNotCompleted(
+                errorMessage: completeWorkOrderModel.message));
+          }
         } else {
-          emit(WorkOrderNotCompleted(
-              errorMessage: completeWorkOrderModel.message));
+          add(SaveWorOrderOfflineData(offlineMap: {
+            'workOrderId': workOrderId,
+            'actionKey': 'complete',
+            'workOrderMap': completeWorkOrderMap,
+            'signature': event.completeWorkOrderMap['user_sign'],
+            'date_time':
+                '${event.completeWorkOrderMap['user_date']} ${event.completeWorkOrderMap['user_time']}'
+          }));
         }
       }
     } catch (e) {
@@ -1177,5 +1329,110 @@ class WorkOrderTabDetailsBloc
       SelectWorkOrderRole event, Emitter<WorkOrderTabDetailsStates> emit) {
     roleId = event.roleId;
     emit(WorkOrderRoleSelected());
+  }
+
+  FutureOr<void> _saveOfflineData(SaveWorOrderOfflineData event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    try {
+      bool isDataInserted = await _databaseHelper.insertOfflineWorkOrderAction(
+          event.offlineMap['workOrderId'],
+          event.offlineMap['actionKey'],
+          event.offlineMap['workOrderMap'],
+          event.offlineMap['signature'],
+          event.offlineMap['date_time']);
+      int statusId = await _databaseHelper.fetchWorkOrderStatusId(workOrderId);
+      if (isDataInserted) {
+        switch (event.offlineMap['actionKey']) {
+          case 'add_comment':
+            await _databaseHelper
+                .addCommentToWorkOrder(event.offlineMap['workOrderId'], {
+              'ownername': event.offlineMap['ownername'],
+              'created': event.offlineMap['date_time'],
+              'files': '',
+              'comments': event.offlineMap['workOrderMap']['comments']
+            });
+            break;
+          case 'start':
+            await _databaseHelper.updateWorkOrderStatusId(
+                event.offlineMap['workOrderId'], 5);
+            await _databaseHelper.updateWorkOrderStatus(
+                event.offlineMap['workOrderId'], showStatusText(5));
+            await _databaseHelper.updateWorkOrderActionStatus(
+                event.offlineMap['workOrderId'], 'start', statusId);
+            break;
+          case 'accept':
+            await _databaseHelper.updateWorkOrderStatusId(
+                event.offlineMap['workOrderId'], 4);
+            await _databaseHelper.updateWorkOrderStatus(
+                event.offlineMap['workOrderId'], showStatusText(4));
+            await _databaseHelper.updateWorkOrderActionStatus(
+                event.offlineMap['workOrderId'], 'accept', statusId);
+            break;
+          case 'complete':
+            await _databaseHelper.updateWorkOrderStatusId(
+                event.offlineMap['workOrderId'], 7);
+            await _databaseHelper.updateWorkOrderStatus(
+                event.offlineMap['workOrderId'], showStatusText(7));
+            await _databaseHelper.updateWorkOrderActionStatus(
+                event.offlineMap['workOrderId'], 'complete', statusId);
+        }
+        emit(WorkOrderOfflineDataSaved(
+            message: StringConstants.kDataSavedSuccessfully,
+            workOrderId: event.offlineMap['workOrderId']));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _syncDataOnline(SyncWorkOrderOfflineDataWithOnline event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    try {
+      List<Map<String, dynamic>> workOrderActions =
+          await _databaseHelper.fetchAllOfflineWorkOrderAction();
+      if (workOrderActions.isNotEmpty) {
+        for (var action in workOrderActions) {
+          switch (action['actionText']) {
+            case 'add_comment':
+              SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
+                  await _workOrderRepository
+                      .saveWorkOrderComments(jsonDecode(action['actionJson']));
+              if (saveWorkOrderCommentsModel.status == 200) {
+                await _databaseHelper
+                    .deleteOfflineWorkOrderAction(action['id']!);
+              }
+              break;
+            case 'start':
+              StartWorkOrderModel startWorkOrderModel =
+                  await _workOrderRepository
+                      .startWorkOrder(jsonDecode(action['actionJson']));
+              if (startWorkOrderModel.message == '1') {
+                await _databaseHelper
+                    .deleteOfflineWorkOrderAction(action['id']!);
+              }
+              break;
+            case 'accept':
+              AcceptWorkOrderModel acceptWorkOrderModel =
+                  await _workOrderRepository
+                      .acceptWorkOrder(jsonDecode(action['actionJson']));
+              if (acceptWorkOrderModel.message == '1') {
+                await _databaseHelper
+                    .deleteOfflineWorkOrderAction(action['id']!);
+              }
+              break;
+            case 'complete':
+              CompleteWorkOrderModel completeWorkOrderModel =
+                  await _workOrderRepository
+                      .completeWorkOrder(jsonDecode(action['actionJson']));
+              if (completeWorkOrderModel.message == '1') {
+                await _databaseHelper
+                    .deleteOfflineWorkOrderAction(action['id']!);
+              }
+          }
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

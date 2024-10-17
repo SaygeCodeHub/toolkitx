@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/workorder/widgets/offline/workorder_sap_model.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/uploadImage/upload_image_bloc.dart';
@@ -15,10 +17,13 @@ import '../../../widgets/custom_snackbar.dart';
 import '../../../widgets/generic_loading_popup.dart';
 import '../../../widgets/primary_button.dart';
 import '../../../widgets/progress_bar.dart';
+import '../workorder_add_comments_screen.dart';
+import 'offline/workorder_sign_as_user_screen.dart';
 
 class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
   const WorkOrderSaveCommentsBottomBar(
       {super.key, required this.addCommentsMap});
+
   final Map addCommentsMap;
 
   @override
@@ -77,16 +82,32 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    if (addCommentsMap['pickedImage'] != null &&
-                        addCommentsMap['pickedImage'].isNotEmpty) {
-                      context.read<UploadImageBloc>().add(UploadImage(
-                          images: addCommentsMap['pickedImage'],
-                          imageLength: context
-                              .read<ImagePickerBloc>()
-                              .lengthOfImageList));
+                    if (isNetworkEstablished) {
+                      if (addCommentsMap['pickedImage'] != null &&
+                          addCommentsMap['pickedImage'].isNotEmpty) {
+                        context.read<UploadImageBloc>().add(UploadImage(
+                            images: addCommentsMap['pickedImage'],
+                            imageLength: context
+                                .read<ImagePickerBloc>()
+                                .lengthOfImageList));
+                      }
+                      context.read<WorkOrderTabDetailsBloc>().add(
+                          SaveWorkOrderComments(
+                              addCommentsMap: addCommentsMap));
+                    } else {
+                      if (addCommentsMap['comments'] == null ||
+                          addCommentsMap['comments'] == '') {
+                        showCustomSnackBar(
+                            context, StringConstants.kPleaseAddComments, '');
+                      } else {
+                        Navigator.pushNamed(
+                            context, WorkOrderSignAsUserScreen.routeName,
+                            arguments: WorkOrderSapModel(
+                                sapMap: addCommentsMap,
+                                previousScreen:
+                                    WorkOrderAddCommentsScreen.routeName));
+                      }
                     }
-                    context.read<WorkOrderTabDetailsBloc>().add(
-                        SaveWorkOrderComments(addCommentsMap: addCommentsMap));
                   },
                   textValue: StringConstants.kSave),
             ),

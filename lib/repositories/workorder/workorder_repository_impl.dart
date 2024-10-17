@@ -11,12 +11,12 @@ import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart
 import 'package:toolkit/data/models/workorder/fetch_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_misc_cost_model.dart';
-import 'package:toolkit/data/models/workorder/fetch_workorder_offline_data_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/manage_downtime_model.dart';
+import 'package:toolkit/data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 import 'package:toolkit/data/models/workorder/reject_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_workorder_documents_model.dart';
@@ -256,8 +256,10 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
   }
 
   @override
-  Future<FetchWorkOrderOfflineDataModel> fetchWorkOrderOfflineData() async {
-    final response = await DioClient().get("${ApiConstants.baseUrl}workorder/");
-    return FetchWorkOrderOfflineDataModel.fromJson();
+  Future<FetchOfflineWorkOrderDataModel> fetchWorkOrderOfflineData(
+      String hashCode, String role) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/GetWorkorderAllDetailsForOffline?pageno=1&hashcode=$hashCode&role=$role");
+    return FetchOfflineWorkOrderDataModel.fromJson(response);
   }
 }

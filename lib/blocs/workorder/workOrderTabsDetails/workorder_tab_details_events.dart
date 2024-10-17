@@ -145,8 +145,9 @@ class ManageWorkOrderMiscCost extends WorkOrderTabsDetailsEvent {
 
 class AcceptWorkOrder extends WorkOrderTabsDetailsEvent {
   final String workOrderId;
+  final Map acceptOfflineMap;
 
-  AcceptWorkOrder({required this.workOrderId});
+  AcceptWorkOrder({required this.workOrderId, required this.acceptOfflineMap});
 }
 
 class HoldWorkOrder extends WorkOrderTabsDetailsEvent {
@@ -299,3 +300,11 @@ class SelectWorkOrderRole extends WorkOrderTabsDetailsEvent {
 
   SelectWorkOrderRole({required this.roleId});
 }
+
+class SaveWorOrderOfflineData extends WorkOrderTabsDetailsEvent {
+  final Map offlineMap;
+
+  SaveWorOrderOfflineData({required this.offlineMap});
+}
+
+class SyncWorkOrderOfflineDataWithOnline extends WorkOrderTabsDetailsEvent {}

@@ -44,8 +44,9 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.black)),
                           const Spacer(),
-                          WorkOrderItemTabDeleteButton(
-                              itemId: data.items[index].id),
+                          if (isNetworkEstablished)
+                            WorkOrderItemTabDeleteButton(
+                                itemId: data.items[index].id),
                           const SizedBox(width: xxxTinierSpacing),
                           if (isNetworkEstablished)
                             CustomIconButton(

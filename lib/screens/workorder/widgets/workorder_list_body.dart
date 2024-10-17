@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/workorder/widgets/workorder_list_card.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
+import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../../blocs/workorder/workorder_bloc.dart';
 import '../../../blocs/workorder/workorder_events.dart';
@@ -14,7 +16,7 @@ import '../../../widgets/generic_no_records_text.dart';
 import '../workorder_list_screen.dart';
 
 class WorkOrderListBody extends StatelessWidget {
-  const WorkOrderListBody({Key? key}) : super(key: key);
+  const WorkOrderListBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class WorkOrderListBody extends StatelessWidget {
         buildWhen: (previousState, currentState) =>
             ((currentState is WorkOrdersFetched) ||
                 (currentState is FetchingWorkOrders &&
-                    WorkOrderListScreen.pageNo == 1)),
+                    WorkOrderListScreen.pageNo == 1) ||
+                (currentState is WorkOrdersNotFetched)),
         listener: (context, state) {
           if (state is WorkOrdersFetched) {
             if (state.fetchWorkOrdersModel.status == 204) {
@@ -30,8 +33,18 @@ class WorkOrderListBody extends StatelessWidget {
               showCustomSnackBar(context, StringConstants.kAllDataLoaded, '');
             }
           }
+          if (state is FetchingWorkOrderOfflineData) {
+            ProgressBar.show(context);
+          } else if (state is WorkOrderOfflineDataFetched) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, StringConstants.kOfflineDataReady, '');
+          } else if (state is WorkOrderOfflineDataNotFetched) {
+            ProgressBar.dismiss(context);
+            showCustomSnackBar(context, StringConstants.kOfflineWoFailed, '');
+          }
         },
         builder: (context, state) {
+          print('state $state');
           if (state is FetchingWorkOrders) {
             return Center(
                 child: Padding(
@@ -84,9 +97,21 @@ class WorkOrderListBody extends StatelessWidget {
                 return NoRecordsText(
                     text: DatabaseUtil.getText('no_records_found'));
               }
+            } else {
+              return const SizedBox.shrink();
             }
+          } else if (state is WorkOrdersNotFetched) {
+            if (isNetworkEstablished) {
+              return NoRecordsText(
+                  text: DatabaseUtil.getText('no_records_found'));
+            } else {
+              return const NoRecordsText(
+                  text: StringConstants.kOfflineWoFailed);
+            }
+          } else {
+            return NoRecordsText(
+                text: DatabaseUtil.getText('no_records_found'));
           }
-          return const SizedBox.shrink();
         });
   }
 }

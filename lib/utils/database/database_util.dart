@@ -1,11 +1,13 @@
 import 'dart:convert';
+
 import 'dart:math';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:toolkit/data/models/encrypt_class.dart';
+import 'package:toolkit/data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 
 import '../../data/enums/offlinePermit/instruction_operstions_enum.dart';
 import '../../data/models/chatBox/fetch_employees_model.dart';
+import '../../data/models/encrypt_class.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 
 class DatabaseHelper {
@@ -118,16 +120,25 @@ class DatabaseHelper {
         await db.execute('''
         CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
           id INTEGER PRIMARY KEY,
-          workorderid TEXT UNIQUE,
+          workOrderId TEXT UNIQUE,
+          workOrderId2 INTEGER,
           listPage TEXT,
-          tab1 TEXT,
-          tab2 TEXT,
-          tab3 TEXT,
-          tab4 TEXT,
-          tab5 TEXT,
+          wodetails TEXT,
           statusId INTEGER
         );
   ''');
+
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS OfflineWorkOrderAction (
+           id INTEGER PRIMARY KEY,
+           workOrderId TEXT,
+           actionText TEXT,
+           actionJson TEXT,
+           actionDateTime TEXT,
+           sign TEXT,
+           UNIQUE(workOrderId, actionText)
+          );
+   ''');
       },
     );
   }
@@ -174,33 +185,193 @@ class DatabaseHelper {
     final Database db = await database;
 
     await db.execute('DROP TABLE IF EXISTS OfflineWorkOrder');
-    // await db.execute('DROP TABLE IF EXISTS OfflinePermitAction');
+    await db.execute('DROP TABLE IF EXISTS OfflineWorkOrderAction');
 
     await db.execute('''
         CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
           id INTEGER PRIMARY KEY,
           workorderid TEXT UNIQUE,
           listPage TEXT,
-          tab1 TEXT,
-          tab2 TEXT,
-          tab3 TEXT,
-          tab4 TEXT,
-          tab5 TEXT,
+          wodetails TEXT,
           statusId INTEGER
         );
   ''');
 
-    //   await db.execute('''
-    //       CREATE TABLE IF NOT EXISTS OfflinePermitAction (
-    //        id INTEGER PRIMARY KEY,
-    //         permitId TEXT,
-    //         actionText TEXT,
-    //         actionJson TEXT,
-    //         actionDateTime TEXT,
-    //         sign TEXT,
-    //         UNIQUE(permitId, actionText)
-    //       );
-    // ''');
+    await db.execute('''
+          CREATE TABLE IF NOT EXISTS OfflineWorkOrderAction (
+            id INTEGER PRIMARY KEY,
+            workOrderId TEXT,
+            actionText TEXT,
+            actionJson TEXT,
+            actionDateTime TEXT,
+            sign TEXT,
+            UNIQUE(workOrderId, actionText)
+          );
+    ''');
+  }
+
+  Future<void> insertOfflineWorkOrders(
+      WorkOrderOfflineDatum data, int statusId) async {
+    final Database db = await database;
+    await db.insert(
+        'OfflineWorkOrder',
+        {
+          'workOrderId': data.id,
+          'workOrderId2': data.id2,
+          'listPage': jsonEncode(data.listpage.toJson()),
+          'wodetails': jsonEncode(data.wodetails.toJson()),
+          'statusId': statusId
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<Map<String, dynamic>>> fetchAllWorkOrders() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT workOrderId,listPage,(SELECT count(OfflineWorkOrderAction.id) FROM OfflineWorkOrderAction WHERE OfflineWorkOrderAction.workOrderId = OfflineWorkOrder.workOrderId) AS actionCount FROM OfflineWorkOrder ORDER BY workOrderId2 DESC');
+    return result;
+  }
+
+  Future<Map<String, dynamic>> fetchWorkOrdersDetails(
+      String workOrderId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> detailsList = await db.rawQuery('''
+      SELECT wodetails 
+      FROM OfflineWorkOrder 
+      WHERE workOrderId = ?
+    ''', [workOrderId]);
+    if (detailsList.isNotEmpty) {
+      final Map<String, dynamic> detailsMap = detailsList.first;
+      Map<String, dynamic> returnMap = jsonDecode(detailsMap['wodetails']);
+      return returnMap;
+    } else {
+      return {};
+    }
+  }
+
+  Future<int> fetchWorkOrderStatusId(String workOrderId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+        'SELECT statusId FROM OfflineWorkOrder WHERE workOrderId = ?',
+        [workOrderId]);
+    return results.first['statusId'];
+  }
+
+  Future<void> addCommentToWorkOrder(
+      String workOrderId, Map<String, dynamic> newComment) async {
+    final db = await database;
+    print('workOrderId $workOrderId');
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT wodetails FROM OfflineWorkOrder WHERE workOrderId = ?',
+        [workOrderId]);
+    if (result.isNotEmpty) {
+      String wodetailsStr = result[0]['wodetails'];
+      Map<String, dynamic> wodetailsJson = jsonDecode(wodetailsStr);
+      if (wodetailsJson.containsKey('comments') &&
+          wodetailsJson['comments'] is List) {
+        wodetailsJson['comments'].add(newComment);
+      } else {
+        wodetailsJson['comments'] = [newComment];
+      }
+      String updatedWoDetailsStr = jsonEncode(wodetailsJson);
+      await db.rawUpdate(
+          'UPDATE OfflineWorkOrder SET wodetails = ? WHERE workOrderId = ?',
+          [updatedWoDetailsStr, workOrderId]);
+    }
+  }
+
+  Future<bool> insertOfflineWorkOrderAction(String permitId, String actionText,
+      Map actionJson, String sign, String? actionDateTime) async {
+    final Database db = await database;
+    try {
+      int result = await db.insert(
+          'OfflineWorkOrderAction',
+          {
+            'workOrderId': permitId,
+            'actionText': actionText,
+            'actionJson': jsonEncode(actionJson),
+            'actionDateTime':
+                actionDateTime ?? DateTime.now().toUtc().toString(),
+            'sign': sign
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace);
+
+      return result > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> updateWorkOrderStatusId(
+      String workOrderId, int updatedStatus) async {
+    final db = await database;
+    await db.update('OfflineWorkOrder', {'statusId': updatedStatus},
+        where: 'workOrderId = ?', whereArgs: [workOrderId]);
+  }
+
+  Future<void> updateWorkOrderStatus(
+      String workOrderId, String updatedStatus) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflineWorkOrder',
+        columns: ['listPage'],
+        where: 'workOrderId = ?',
+        whereArgs: [workOrderId]);
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      listPageMap['status'] = updatedStatus;
+      String updatedListPageJson = jsonEncode(listPageMap);
+      await db.update('OfflineWorkOrder', {'listPage': updatedListPageJson},
+          where: 'workOrderId = ?', whereArgs: [workOrderId]);
+    }
+  }
+
+  Future<void> updateWorkOrderActionStatus(
+      String workOrderId, String updatedStatus, int statusId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflineWorkOrder',
+        columns: ['wodetails'],
+        where: 'workOrderId = ?',
+        whereArgs: [workOrderId]);
+    if (result.isNotEmpty) {
+      String detailsJson = result.first['wodetails'];
+      Map<String, dynamic> detailsMap = jsonDecode(detailsJson);
+      switch (updatedStatus) {
+        case 'start':
+          if (statusId == 5 || statusId == 6) {
+            detailsMap['isstart'] = '0';
+            detailsMap['iscomplete'] = '1';
+          }
+          break;
+        case 'accept':
+          if (statusId == 4 || statusId == 6) {
+            detailsMap['isstart'] = '1';
+            detailsMap['isacceptreject'] = '0';
+          }
+          break;
+        case 'complete':
+          detailsMap['iscomplete'] = '0';
+      }
+      String updatedDetailsJson = jsonEncode(detailsMap);
+      await db.update('OfflineWorkOrder', {'wodetails': updatedDetailsJson},
+          where: 'workOrderId = ?', whereArgs: [workOrderId]);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchAllOfflineWorkOrderAction() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT * FROM OfflineWorkOrderAction');
+    if (result.isEmpty) {
+      return [];
+    } else {
+      return result;
+    }
+  }
+
+  Future<void> deleteOfflineWorkOrderAction(int id) async {
+    final db = await database;
+    await db.delete('OfflineWorkOrderAction', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<bool> insertOfflinePermitAction(String permitId, String actionText,

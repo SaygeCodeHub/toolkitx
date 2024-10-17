@@ -5,6 +5,7 @@ import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
 import 'package:toolkit/blocs/workorder/workorder_states.dart';
 import 'package:toolkit/screens/workorder/workorder_role_screen.dart';
+import 'package:toolkit/utils/global.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
@@ -35,15 +36,17 @@ class WorkOrderListScreen extends StatelessWidget {
         .add(FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              WorkOrderFormScreenOne.isSimilarWorkOrder = false;
-              WorkOrderFormScreenOne.isFromEdit = false;
-              Navigator.pushReplacementNamed(
-                  context, WorkOrderFormScreenOne.routeName,
-                  arguments: addWorkOrderMap);
-            },
-            child: const Icon(Icons.add)),
+        floatingActionButton: (isNetworkEstablished)
+            ? FloatingActionButton(
+                onPressed: () {
+                  WorkOrderFormScreenOne.isSimilarWorkOrder = false;
+                  WorkOrderFormScreenOne.isFromEdit = false;
+                  Navigator.pushReplacementNamed(
+                      context, WorkOrderFormScreenOne.routeName,
+                      arguments: addWorkOrderMap);
+                },
+                child: const Icon(Icons.add))
+            : const SizedBox.shrink(),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -62,7 +65,7 @@ class WorkOrderListScreen extends StatelessWidget {
               }, builder: (context, state) {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
-                      downloadVisible: true,
+                      downloadVisible: (isNetworkEstablished),
                       onDownloadPress: () {
                         context
                             .read<WorkOrderBloc>()
@@ -76,7 +79,8 @@ class WorkOrderListScreen extends StatelessWidget {
                         Navigator.pushNamed(
                             context, WorkOrderFilterScreen.routeName);
                       },
-                      secondaryVisible: true,
+                      secondaryVisible: (isNetworkEstablished),
+                      primaryVisible: (isNetworkEstablished),
                       isEnabled: true,
                       clearVisible: state.filterMap.isNotEmpty,
                       clearOnPress: () {

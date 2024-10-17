@@ -37,32 +37,34 @@ class WorkOrderDatum {
   final String woname;
   final String contractorname;
   final String type;
-  final String status;
+  String status;
   final String schedule;
   final String subject;
   final int istender;
 
-  WorkOrderDatum({
-    required this.id,
-    required this.woname,
-    required this.contractorname,
-    required this.type,
-    required this.status,
-    required this.schedule,
-    required this.subject,
-    required this.istender,
-  });
+  final int actionCount;
+
+  WorkOrderDatum(
+      {required this.id,
+      required this.woname,
+      required this.contractorname,
+      required this.type,
+      required this.status,
+      required this.schedule,
+      required this.subject,
+      required this.istender,
+      required this.actionCount});
 
   factory WorkOrderDatum.fromJson(Map<String, dynamic> json) => WorkOrderDatum(
-        id: json["id"],
-        woname: json["woname"],
-        contractorname: json["contractorname"],
-        type: json["type"],
-        status: json["status"],
-        schedule: json["schedule"],
-        subject: json["subject"],
-        istender: json["istender"],
-      );
+      id: json["id"],
+      woname: json["woname"],
+      contractorname: json["contractorname"],
+      type: json["type"],
+      status: json["status"],
+      schedule: json["schedule"],
+      subject: json["subject"],
+      istender: json["istender"],
+      actionCount: json["actionCount"] ?? 0);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -73,5 +75,6 @@ class WorkOrderDatum {
         "schedule": schedule,
         "subject": subject,
         "istender": istender,
+        "actionCount": actionCount
       };
 }

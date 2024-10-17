@@ -28,8 +28,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
   final String workOrderId;
 
-  const WorkOrderDetailsTabScreen({Key? key, required this.workOrderId})
-      : super(key: key);
+  const WorkOrderDetailsTabScreen({super.key, required this.workOrderId});
 
   @override
   Widget build(BuildContext context) {
@@ -196,9 +195,13 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
                           WorkOrderTabThreeDetails(
                               data: state.fetchWorkOrderDetailsModel.data,
                               tabIndex: 2),
-                          WorkOrderTabFourDetails(
-                              data: state.fetchWorkOrderDetailsModel.data,
-                              tabIndex: 3),
+                          (state.fetchWorkOrderDetailsModel.data.logs
+                                  .isNotEmpty)
+                              ? WorkOrderTabFourDetails(
+                                  data: state.fetchWorkOrderDetailsModel.data,
+                                  tabIndex: 3)
+                              : const Center(
+                                  child: Text(StringConstants.kNoDataFound)),
                           WorkOrderTabFiveDetails(
                               data: state.fetchWorkOrderDetailsModel.data,
                               tabIndex: 4,
