@@ -79,9 +79,6 @@ class CreateIncomingInvoiceBottomBar extends StatelessWidget {
           Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    context
-                        .read<AccountingBloc>()
-                        .add(FetchIncomingInvoices(pageNo: 1));
                     validateFormAndProceed(context, isFromEdit);
                   },
                   textValue: StringConstants.kSave)),

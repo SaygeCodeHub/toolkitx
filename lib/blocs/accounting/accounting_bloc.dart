@@ -211,7 +211,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   FutureOr<void> _createIncomingInvoice(
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
-    // try {
+    try {
     Map createIncomingInvoiceMap = {
       "entity": manageIncomingInvoiceMap['entity'] ?? '',
       "billable": manageIncomingInvoiceMap['billable'] ?? '',
@@ -246,9 +246,9 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       emit(FailedToCreateIncomingInvoice(
           errorMessage: StringConstants.kSomethingWentWrong));
     }
-    // } catch (e) {
-    //   rethrow;
-    // }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> _createOutgoingInvoice(
@@ -384,13 +384,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
       if (fetchOutgoingInvoiceModel.status == 200) {
-        // if (fetchOutgoingInvoiceModel.message == '1') {
+
         emit(OutgoingInvoiceFetched(clientId: clientId));
-        //   }
-        // else {
-        //     emit(FailedToFetchOutgoingInvoice(
-        //         errorMessage: fetchOutgoingInvoiceModel.message));
-        //   }
       } else {
         emit(FailedToFetchOutgoingInvoice(
             errorMessage: fetchOutgoingInvoiceModel.message));
