@@ -211,44 +211,44 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   FutureOr<void> _createIncomingInvoice(
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
-    try {
-      Map createIncomingInvoiceMap = {
-        "entity": manageIncomingInvoiceMap['entity'] ?? '',
-        "billable": manageIncomingInvoiceMap['billable'] ?? '',
-        "client": manageIncomingInvoiceMap['client'] ?? '',
-        "project": manageIncomingInvoiceMap['project'] ?? '',
-        "date": manageIncomingInvoiceMap['date'] ?? '',
-        "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
-        "mode": manageIncomingInvoiceMap['mode'] ?? '',
-        "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
-        "other": manageIncomingInvoiceMap['other'] ?? '',
-        "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
-        "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
-        "otherinvoiceamount":
-            manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
-        "comments": manageIncomingInvoiceMap['comments'] ?? '',
-        "files": manageIncomingInvoiceMap['files'] ?? '',
-        "id": "",
-        "userid": await _customerCache.getUserId(CacheKeys.userId),
-        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
-      };
-      CreateIncomingInvoiceModel createIncomingInvoiceModel =
-          await _accountingRepository
-              .createIncomingInvoice(createIncomingInvoiceMap);
-      if (createIncomingInvoiceModel.status == 200) {
-        if (createIncomingInvoiceModel.message == '1') {
-          emit(IncomingInvoiceCreated());
-        } else {
-          emit(FailedToCreateIncomingInvoice(
-              errorMessage: StringConstants.kSomethingWentWrong));
-        }
+    // try {
+    Map createIncomingInvoiceMap = {
+      "entity": manageIncomingInvoiceMap['entity'] ?? '',
+      "billable": manageIncomingInvoiceMap['billable'] ?? '',
+      "client": manageIncomingInvoiceMap['client'] ?? '',
+      "project": manageIncomingInvoiceMap['project'] ?? '',
+      "date": manageIncomingInvoiceMap['date'] ?? '',
+      "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
+      "mode": manageIncomingInvoiceMap['mode'] ?? '',
+      "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
+      "other": manageIncomingInvoiceMap['other'] ?? '',
+      "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
+      "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
+      "otherinvoiceamount":
+          manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
+      "comments": manageIncomingInvoiceMap['comments'] ?? '',
+      "files": manageIncomingInvoiceMap['files'] ?? '',
+      "id": event.incomingInvoiceId,
+      "userid": await _customerCache.getUserId(CacheKeys.userId),
+      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+    };
+    CreateIncomingInvoiceModel createIncomingInvoiceModel =
+        await _accountingRepository
+            .createIncomingInvoice(createIncomingInvoiceMap);
+    if (createIncomingInvoiceModel.status == 200) {
+      if (createIncomingInvoiceModel.message == '1') {
+        emit(IncomingInvoiceCreated());
       } else {
         emit(FailedToCreateIncomingInvoice(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
-    } catch (e) {
-      rethrow;
+    } else {
+      emit(FailedToCreateIncomingInvoice(
+          errorMessage: StringConstants.kSomethingWentWrong));
     }
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
   Future<void> _createOutgoingInvoice(
@@ -384,12 +384,13 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
       if (fetchOutgoingInvoiceModel.status == 200) {
-        if (fetchOutgoingInvoiceModel.message == '1') {
-          emit(OutgoingInvoiceFetched(clientId: clientId));
-        } else {
-          emit(FailedToFetchOutgoingInvoice(
-              errorMessage: fetchOutgoingInvoiceModel.message));
-        }
+        // if (fetchOutgoingInvoiceModel.message == '1') {
+        emit(OutgoingInvoiceFetched(clientId: clientId));
+        //   }
+        // else {
+        //     emit(FailedToFetchOutgoingInvoice(
+        //         errorMessage: fetchOutgoingInvoiceModel.message));
+        //   }
       } else {
         emit(FailedToFetchOutgoingInvoice(
             errorMessage: fetchOutgoingInvoiceModel.message));
@@ -408,7 +409,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       String? clientId =
           await _customerCache.getUserId(CacheKeys.clientId) ?? '';
       var incomingInvoiceData = fetchIncomingInvoiceModel.data;
-      // print("data=====>${fetchIncomingInvoiceModel.data.toJson()}");
       manageIncomingInvoiceMap["id"] = incomingInvoiceData.id;
       manageIncomingInvoiceMap["entity"] = incomingInvoiceData.entityid;
       manageIncomingInvoiceMap['billable'] = incomingInvoiceData.billable;
@@ -416,18 +416,19 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageIncomingInvoiceMap["project"] = incomingInvoiceData.projectid;
       manageIncomingInvoiceMap["date"] = incomingInvoiceData.invoicedate;
       manageIncomingInvoiceMap["purposeid"] = incomingInvoiceData.purposeid;
-      manageIncomingInvoiceMap["modeid"] = incomingInvoiceData.modeid;
+      manageIncomingInvoiceMap["mode"] = incomingInvoiceData.modeid;
       manageIncomingInvoiceMap["comments"] = incomingInvoiceData.comments;
-      manageIncomingInvoiceMap["files"] = incomingInvoiceData.files;
+      manageIncomingInvoiceMap["edit_files"] = incomingInvoiceData.files;
       manageIncomingInvoiceMap['purposename'] = incomingInvoiceData.purposename;
+      manageIncomingInvoiceMap['other'] =
+          incomingInvoiceData.othercurrencyname.isNotEmpty ? 'other' : '';
       manageIncomingInvoiceMap["othercurrency"] =
           incomingInvoiceData.othercurrency;
       manageIncomingInvoiceMap["invoiceamount"] =
           incomingInvoiceData.invoiceamount;
       manageIncomingInvoiceMap["otherinvoiceamount"] =
           incomingInvoiceData.otherinvoiceamount;
-      manageIncomingInvoiceMap["creditcardid"] =
-          incomingInvoiceData.creditcardid;
+      manageIncomingInvoiceMap["creditcard"] = incomingInvoiceData.creditcardid;
       manageIncomingInvoiceMap["entityname"] = incomingInvoiceData.entityname;
       manageIncomingInvoiceMap["clientname"] = incomingInvoiceData.clientname;
       manageIncomingInvoiceMap["projectname"] = incomingInvoiceData.projectname;
@@ -437,14 +438,9 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           incomingInvoiceData.creditcardname;
       manageIncomingInvoiceMap["defaultcurrency"] =
           incomingInvoiceData.defaultcurrency;
-      // print("manageincoming=====>${manageIncomingInvoiceMap}");
+      manageIncomingInvoiceMap["clientid"] = clientId;
       if (fetchIncomingInvoiceModel.status == 200) {
-        if (fetchIncomingInvoiceModel.message == '1') {
-          emit(IncomingInvoiceFetched(clientId: clientId));
-        } else {
-          emit(FailedToFetchIncomingInvoice(
-              errorMessage: fetchIncomingInvoiceModel.message));
-        }
+        emit(IncomingInvoiceFetched(clientId: clientId));
       } else {
         emit(FailedToFetchIncomingInvoice(
             errorMessage: fetchIncomingInvoiceModel.message));

@@ -48,7 +48,11 @@ class SelectCurrency extends AccountingEvent {
   SelectCurrency({required this.currencyId, required this.currency});
 }
 
-class CreateIncomingInvoice extends AccountingEvent {}
+class CreateIncomingInvoice extends AccountingEvent {
+  final String incomingInvoiceId;
+
+  CreateIncomingInvoice({required this.incomingInvoiceId});
+}
 
 class CreateOutgoingInvoice extends AccountingEvent {
   final String outgoingInvoiceId;

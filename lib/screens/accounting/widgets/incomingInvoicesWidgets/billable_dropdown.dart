@@ -11,7 +11,7 @@ class BillableDropdown extends StatefulWidget {
   final String initialValue;
 
   const BillableDropdown(
-      {super.key, required this.onBillableChanged, this.initialValue = ''});
+      {super.key, required this.onBillableChanged, required this.initialValue});
 
   @override
   State<BillableDropdown> createState() => _BillableDropdownState();
@@ -20,11 +20,18 @@ class BillableDropdown extends StatefulWidget {
 class _BillableDropdownState extends State<BillableDropdown> {
   String selectedText = '';
   String selectedValue = '';
-
   @override
   void initState() {
     super.initState();
-    selectedText = widget.initialValue;
+    final initialBillable = widget.initialValue;
+    if (initialBillable.isNotEmpty) {
+      final billableEnum = AccountingBillableEnum.values.firstWhere(
+        (element) => element.billValue == initialBillable,
+        orElse: () => AccountingBillableEnum.no,
+      );
+      selectedText = billableEnum.billText;
+      selectedValue = billableEnum.billValue;
+    }
   }
 
   @override

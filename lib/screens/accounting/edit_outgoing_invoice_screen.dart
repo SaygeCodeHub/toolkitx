@@ -213,8 +213,7 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
                       ],
                     );
                   } else if (state is FailedToFetchOutgoingInvoice) {
-                    return Expanded(
-                        child: Center(child: Text(state.errorMessage)));
+                    return Center(child: Text(state.errorMessage));
                   } else {
                     return const SizedBox.shrink();
                   }

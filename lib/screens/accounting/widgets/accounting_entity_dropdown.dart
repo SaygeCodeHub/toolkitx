@@ -13,9 +13,13 @@ import '../../../data/models/accounting/fetch_accounting_master_model.dart';
 class AccountingEntityDropdown extends StatefulWidget {
   final void Function(String entityId) onEntityChanged;
   final String selectedEntity;
+  final bool isFromEdit;
 
   const AccountingEntityDropdown(
-      {super.key, required this.onEntityChanged, required this.selectedEntity});
+      {super.key,
+      required this.onEntityChanged,
+      required this.selectedEntity,
+      this.isFromEdit = false});
 
   @override
   State<AccountingEntityDropdown> createState() =>
@@ -42,6 +46,10 @@ class _AccountingEntityDropdownState extends State<AccountingEntityDropdown> {
 
   @override
   void initState() {
+    if (widget.isFromEdit) {
+      context.read<AccountingBloc>().add(
+          FetchMasterDataEntity(entityId: int.parse(widget.selectedEntity)));
+    }
     if (context.read<AccountingBloc>().fetchIAccountingMasterModel.data !=
         null) {
       entityList =

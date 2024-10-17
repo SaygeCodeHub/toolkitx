@@ -5,7 +5,8 @@ import '../../../../widgets/primary_button.dart';
 import 'accounting_invoice_validator.dart';
 
 class ManageIncomingInvoiceBottomBar extends StatelessWidget {
-  const ManageIncomingInvoiceBottomBar({super.key});
+  final bool isFromEdit;
+  const ManageIncomingInvoiceBottomBar({super.key, required this.isFromEdit});
 
   bool validateForm(dynamic value) {
     return value == null || value.toString().isEmpty;
@@ -26,7 +27,7 @@ class ManageIncomingInvoiceBottomBar extends StatelessWidget {
           Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    validateAndProceed(context);
+                    validateAndProceed(context, isFromEdit);
                   },
                   textValue: StringConstants.kNext))
         ],

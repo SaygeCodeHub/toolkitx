@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import '../../../../blocs/accounting/accounting_bloc.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../../blocs/uploadImage/upload_image_bloc.dart';
@@ -41,7 +41,7 @@ String showValidationMessage(String key) {
   }
 }
 
-void validateAndProceed(BuildContext context) {
+void validateAndProceed(BuildContext context, bool isFromEdit) {
   if (validateForm(
           context.read<AccountingBloc>().manageIncomingInvoiceMap['entity']) ||
       validateForm(context
@@ -79,18 +79,25 @@ void validateAndProceed(BuildContext context) {
           .manageIncomingInvoiceMap['othercurrency'])) {
     showCustomSnackBar(context, showValidationMessage('othercurrency'), '');
   } else {
-    context
-        .read<AccountingBloc>()
-        .manageIncomingInvoiceMap['otherinvoiceamount'] = '';
-    context.read<AccountingBloc>().manageIncomingInvoiceMap['invoiceamount'] =
-        '';
-    context.read<AccountingBloc>().manageIncomingInvoiceMap['files'] = '';
-    Navigator.pushNamed(
-        context, ManageAccountingIncomingInvoiceSection.routeName);
+    if (isFromEdit) {
+      Navigator.pushNamed(
+          context, ManageAccountingIncomingInvoiceSection.routeName,
+          arguments: isFromEdit);
+    } else {
+      context
+          .read<AccountingBloc>()
+          .manageIncomingInvoiceMap['otherinvoiceamount'] = '';
+      context.read<AccountingBloc>().manageIncomingInvoiceMap['invoiceamount'] =
+          '';
+      context.read<AccountingBloc>().manageIncomingInvoiceMap['files'] = '';
+      Navigator.pushNamed(
+          context, ManageAccountingIncomingInvoiceSection.routeName,
+          arguments: isFromEdit);
+    }
   }
 }
 
-void validateFormAndProceed(BuildContext context) {
+void validateFormAndProceed(BuildContext context, bool isFromEdit) {
   if (validateForm(context
       .read<AccountingBloc>()
       .manageIncomingInvoiceMap['invoiceamount'])) {
@@ -102,6 +109,23 @@ void validateFormAndProceed(BuildContext context) {
           .manageIncomingInvoiceMap['otherinvoiceamount'])) {
     showCustomSnackBar(
         context, showValidationMessage('otherinvoiceamount'), '');
+  }
+  if (isFromEdit) {
+    if (context.read<AccountingBloc>().manageIncomingInvoiceMap['files'] ==
+            null ||
+        context.read<AccountingBloc>().manageIncomingInvoiceMap['files'] ==
+            []) {
+      context.read<AccountingBloc>().add(CreateIncomingInvoice(
+          incomingInvoiceId:
+              context.read<AccountingBloc>().manageIncomingInvoiceMap['id'] ??
+                  ''));
+      context.read<AccountingBloc>().add(FetchOutgoingInvoices(pageNo: 1));
+    } else {
+      context.read<UploadImageBloc>().add(UploadImage(
+          images:
+              context.read<AccountingBloc>().manageIncomingInvoiceMap['files'],
+          imageLength: context.read<ImagePickerBloc>().lengthOfImageList));
+    }
   } else {
     if (context
             .read<AccountingBloc>()

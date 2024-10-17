@@ -31,7 +31,8 @@ class IncomingInvoicesScreen extends StatelessWidget {
             onPressed: () {
               context.read<AccountingBloc>().manageIncomingInvoiceMap.clear();
               Navigator.pushNamed(
-                  context, ManageAccountingIncomingInvoiceScreen.routeName);
+                  context, ManageAccountingIncomingInvoiceScreen.routeName,
+                  arguments: false);
             },
             child: const Icon(Icons.add)),
         body: Padding(

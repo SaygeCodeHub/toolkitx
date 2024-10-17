@@ -9,7 +9,10 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../blocs/accounting/accounting_bloc.dart';
 
 class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
-  const IncomingInvoicePaymentCurrencyDropdowns({super.key});
+  final bool isFromEdit;
+
+  const IncomingInvoicePaymentCurrencyDropdowns(
+      {super.key, required this.isFromEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +25,17 @@ class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
-        ModeOfPaymentDropdown(onPaymentModeSelected: (String paymentMode) {
-          context.read<AccountingBloc>().manageIncomingInvoiceMap['mode'] =
-              paymentMode;
-        }),
+        ModeOfPaymentDropdown(
+            onPaymentModeSelected: (String paymentMode) {
+              context.read<AccountingBloc>().manageIncomingInvoiceMap['mode'] =
+                  paymentMode;
+            },
+            initialPaymentMode: isFromEdit
+                ? context
+                    .read<AccountingBloc>()
+                    .manageIncomingInvoiceMap['mode']
+                : '',
+            isFromEdit: isFromEdit),
         const SizedBox(height: xxTinySpacing),
         Text(StringConstants.kInvoiceCurrency,
             style: Theme.of(context)
@@ -39,7 +49,29 @@ class IncomingInvoicePaymentCurrencyDropdowns extends StatelessWidget {
                   currency;
             },
             manageInvoiceMap:
-                context.read<AccountingBloc>().manageIncomingInvoiceMap),
+                context.read<AccountingBloc>().manageIncomingInvoiceMap,
+            initialCurrency: isFromEdit
+                ? context
+                            .read<AccountingBloc>()
+                            .manageIncomingInvoiceMap['othercurrencyname'] ==
+                        ""
+                    ? context
+                        .read<AccountingBloc>()
+                        .manageIncomingInvoiceMap['defaultcurrency']
+                    : 'Other'
+                : '',
+            initialOtherCurrencyName: isFromEdit
+                ? context
+                        .read<AccountingBloc>()
+                        .manageIncomingInvoiceMap['othercurrencyname'] ??
+                    ''
+                : '',
+            initialOtherCurrency: isFromEdit
+                ? context
+                        .read<AccountingBloc>()
+                        .manageIncomingInvoiceMap['othercurrencyname'] ??
+                    ''
+                : ''),
         const SizedBox(height: xxTinySpacing),
       ],
     );
