@@ -372,6 +372,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["files"] = outgoingInvoiceData.files;
       manageOutgoingInvoiceMap["othercurrency"] =
           outgoingInvoiceData.othercurrency;
+      manageOutgoingInvoiceMap['other'] =
+      outgoingInvoiceData.othercurrencyname.isNotEmpty ? 'other' : '';
       manageOutgoingInvoiceMap["invoiceamount"] =
           outgoingInvoiceData.invoiceamount;
       manageOutgoingInvoiceMap["otherinvoiceamount"] =

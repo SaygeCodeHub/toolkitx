@@ -7,6 +7,7 @@ import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -53,9 +54,9 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                     ProgressBar.dismiss(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    context
-                        .read<AccountingBloc>()
-                        .add(FetchOutgoingInvoices(pageNo: 1));
+                    Navigator.pushReplacementNamed(
+                        context, OutgoingListScreen.routeName);
+                    context.read<AccountingBloc>().outgoingInvoices.clear();
                   } else if (state is FailedToCreateOutgoingInvoice) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(
@@ -64,6 +65,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                 },
                 child: PrimaryButton(
                     onPressed: () {
+
                       if (formKey.currentState!.validate()) {
                         if (context
                                 .read<AccountingBloc>()
