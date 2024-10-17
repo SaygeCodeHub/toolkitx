@@ -212,40 +212,40 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       CreateIncomingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingIncomingInvoice());
     try {
-    Map createIncomingInvoiceMap = {
-      "entity": manageIncomingInvoiceMap['entity'] ?? '',
-      "billable": manageIncomingInvoiceMap['billable'] ?? '',
-      "client": manageIncomingInvoiceMap['client'] ?? '',
-      "project": manageIncomingInvoiceMap['project'] ?? '',
-      "date": manageIncomingInvoiceMap['date'] ?? '',
-      "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
-      "mode": manageIncomingInvoiceMap['mode'] ?? '',
-      "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
-      "other": manageIncomingInvoiceMap['other'] ?? '',
-      "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
-      "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
-      "otherinvoiceamount":
-          manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
-      "comments": manageIncomingInvoiceMap['comments'] ?? '',
-      "files": manageIncomingInvoiceMap['files'] ?? '',
-      "id": event.incomingInvoiceId,
-      "userid": await _customerCache.getUserId(CacheKeys.userId),
-      "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
-    };
-    CreateIncomingInvoiceModel createIncomingInvoiceModel =
-        await _accountingRepository
-            .createIncomingInvoice(createIncomingInvoiceMap);
-    if (createIncomingInvoiceModel.status == 200) {
-      if (createIncomingInvoiceModel.message == '1') {
-        emit(IncomingInvoiceCreated());
+      Map createIncomingInvoiceMap = {
+        "entity": manageIncomingInvoiceMap['entity'] ?? '',
+        "billable": manageIncomingInvoiceMap['billable'] ?? '',
+        "client": manageIncomingInvoiceMap['client'] ?? '',
+        "project": manageIncomingInvoiceMap['project'] ?? '',
+        "date": manageIncomingInvoiceMap['date'] ?? '',
+        "purposename": manageIncomingInvoiceMap['purposename'] ?? '',
+        "mode": manageIncomingInvoiceMap['mode'] ?? '',
+        "creditcard": manageIncomingInvoiceMap['creditcard'] ?? '',
+        "other": manageIncomingInvoiceMap['other'] ?? '',
+        "othercurrency": manageIncomingInvoiceMap['othercurrency'] ?? '',
+        "invoiceamount": manageIncomingInvoiceMap['invoiceamount'] ?? '',
+        "otherinvoiceamount":
+            manageIncomingInvoiceMap['otherinvoiceamount'] ?? '',
+        "comments": manageIncomingInvoiceMap['comments'] ?? '',
+        "files": manageIncomingInvoiceMap['files'] ?? '',
+        "id": event.incomingInvoiceId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      };
+      CreateIncomingInvoiceModel createIncomingInvoiceModel =
+          await _accountingRepository
+              .createIncomingInvoice(createIncomingInvoiceMap);
+      if (createIncomingInvoiceModel.status == 200) {
+        if (createIncomingInvoiceModel.message == '1') {
+          emit(IncomingInvoiceCreated());
+        } else {
+          emit(FailedToCreateIncomingInvoice(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       } else {
         emit(FailedToCreateIncomingInvoice(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
-    } else {
-      emit(FailedToCreateIncomingInvoice(
-          errorMessage: StringConstants.kSomethingWentWrong));
-    }
     } catch (e) {
       rethrow;
     }
@@ -373,7 +373,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["othercurrency"] =
           outgoingInvoiceData.othercurrency;
       manageOutgoingInvoiceMap['other'] =
-      outgoingInvoiceData.othercurrencyname.isNotEmpty ? 'other' : '';
+          outgoingInvoiceData.othercurrencyname.isNotEmpty ? 'other' : '';
       manageOutgoingInvoiceMap["invoiceamount"] =
           outgoingInvoiceData.invoiceamount;
       manageOutgoingInvoiceMap["otherinvoiceamount"] =
@@ -386,7 +386,6 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
       if (fetchOutgoingInvoiceModel.status == 200) {
-
         emit(OutgoingInvoiceFetched(clientId: clientId));
       } else {
         emit(FailedToFetchOutgoingInvoice(

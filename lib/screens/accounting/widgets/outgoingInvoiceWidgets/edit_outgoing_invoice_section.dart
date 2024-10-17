@@ -65,7 +65,6 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                 },
                 child: PrimaryButton(
                     onPressed: () {
-
                       if (formKey.currentState!.validate()) {
                         if (context
                                 .read<AccountingBloc>()
