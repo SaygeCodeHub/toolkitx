@@ -15,7 +15,18 @@ class QualityManagementListTileSubtitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(data.description, style: Theme.of(context).textTheme.xSmall),
+      RichText(
+          text: TextSpan(
+              text: '[${data.categoryname}] ',
+              style: Theme.of(context)
+                  .textTheme
+                  .xSmall
+                  .copyWith(color: AppColor.black, fontWeight: FontWeight.w500),
+              children: [
+            TextSpan(
+                text: data.description,
+                style: Theme.of(context).textTheme.xSmall)
+          ])),
       const SizedBox(height: tinierSpacing),
       Text(data.location,
           style: Theme.of(context)

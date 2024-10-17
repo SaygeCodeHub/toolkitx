@@ -1,4 +1,5 @@
 import '../../data/models/incident/edit_incident_details_model.dart';
+import '../../data/models/incident/fetch_incident_location_model.dart';
 import '../../data/models/incident/fetch_incident_master_model.dart';
 import '../../data/models/incident/fetch_incidents_list_model.dart';
 import '../../data/models/incident/fetch_permit_to_link_model.dart';
@@ -52,4 +53,7 @@ abstract class IncidentRepository {
 
   Future<SaveIncidentAndQMCommentsFilesModel> saveCommentsFiles(
       Map saveCommentsFilesMap);
+
+  Future<FetchIncidentLocationModel> fetchIncidentLocation(
+      String hashCode, int siteId);
 }

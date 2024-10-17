@@ -9,6 +9,7 @@ import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../blocs/documents/documents_bloc.dart';
 import '../../blocs/documents/documents_states.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
@@ -99,6 +100,7 @@ class AddDocumentCommentsScreen extends StatelessWidget {
                 }),
             const SizedBox(height: tinySpacing),
             UploadImageMenu(
+              imagePickerBloc: ImagePickerBloc(),
               isUpload: true,
               onUploadImageResponse: (List uploadLotoPhotosList) {
                 saveDocumentCommentsMap['files'] = uploadLotoPhotosList

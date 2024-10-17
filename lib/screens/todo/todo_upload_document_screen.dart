@@ -8,13 +8,18 @@ import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
 import 'package:toolkit/widgets/primary_button.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../blocs/todo/todo_bloc.dart';
 import '../../blocs/todo/todo_event.dart';
 import '../../blocs/todo/todo_states.dart';
+import '../../blocs/uploadImage/upload_image_bloc.dart';
+import '../../blocs/uploadImage/upload_image_event.dart';
+import '../../blocs/uploadImage/upload_image_state.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/todo/fetch_todo_document_master_model.dart';
+import '../../widgets/generic_loading_popup.dart';
 import '../../widgets/progress_bar.dart';
 import 'widgets/todo_documnet_type_list_tile.dart';
 
@@ -36,26 +41,60 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
         appBar: GenericAppBar(
           title: DatabaseUtil.getText('AddAction'),
         ),
-        bottomNavigationBar: BlocListener<ToDoBloc, ToDoStates>(
-          listener: (context, state) {
-            if (state is UploadingToDoDocument) {
-              ProgressBar.show(context);
-            } else if (state is ToDoDocumentUploaded) {
-              ProgressBar.dismiss(context);
-              Navigator.pop(context);
-              context.read<ToDoBloc>().add(FetchToDoDetailsAndDocumentDetails(
-                  todoId: todoMap['todoId'], selectedIndex: 0));
-            } else if (state is ToDoDocumentNotUploaded) {
-              ProgressBar.dismiss(context);
-              showCustomSnackBar(context, state.documentNotUploaded, '');
-            }
-          },
-          child: BottomAppBar(
-            child: PrimaryButton(
-                onPressed: () {
+        bottomNavigationBar: MultiBlocListener(
+          listeners: [
+            BlocListener<ToDoBloc, ToDoStates>(
+              listener: (context, state) {
+                if (state is UploadingToDoDocument) {
+                  ProgressBar.show(context);
+                } else if (state is ToDoDocumentUploaded) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  context.read<ToDoBloc>().add(
+                      FetchToDoDetailsAndDocumentDetails(
+                          todoId: todoMap['todoId'], selectedIndex: 0));
+                } else if (state is ToDoDocumentNotUploaded) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.documentNotUploaded, '');
+                }
+              },
+            ),
+            BlocListener<UploadImageBloc, UploadImageState>(
+              listener: (context, state) {
+                if (state is UploadingImage) {
+                  GenericLoadingPopUp.show(
+                      context, StringConstants.kUploadFiles);
+                } else if (state is ImageUploaded) {
+                  GenericLoadingPopUp.dismiss(context);
+                  todoMap['files'] = state.images
+                      .toString()
+                      .replaceAll('[', '')
+                      .replaceAll(']', '')
+                      .replaceAll(' ', '');
                   context
                       .read<ToDoBloc>()
                       .add(ToDoUploadDocument(todoMap: todoMap));
+                } else if (state is ImageCouldNotUpload) {
+                  GenericLoadingPopUp.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
+              },
+            ),
+          ],
+          child: BottomAppBar(
+            child: PrimaryButton(
+                onPressed: () {
+                  if (todoMap['pickedImage'] != null &&
+                      todoMap['pickedImage'].isNotEmpty) {
+                    context.read<UploadImageBloc>().add(UploadImage(
+                        images: todoMap['pickedImage'],
+                        imageLength:
+                            context.read<ImagePickerBloc>().lengthOfImageList));
+                  } else {
+                    context
+                        .read<ToDoBloc>()
+                        .add(ToDoUploadDocument(todoMap: todoMap));
+                  }
                 },
                 textValue: StringConstants.kSave),
           ),
@@ -86,19 +125,11 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
                           todoMap: todoMap,
                           todoFilterMap: todoFilterMap ?? {}),
                       const SizedBox(height: xxTinySpacing),
-                      Text(DatabaseUtil.getText('UploadPhotos'),
-                          style: Theme.of(context)
-                              .textTheme
-                              .xSmall
-                              .copyWith(fontWeight: FontWeight.w600)),
-                      const SizedBox(height: xxxTinierSpacing),
                       UploadImageMenu(
+                          imagePickerBloc: ImagePickerBloc(),
                           onUploadImageResponse: (List uploadImageList) {
-                        todoMap['files'] = uploadImageList
-                            .toString()
-                            .replaceAll("[", "")
-                            .replaceAll("]", "");
-                      })
+                            todoMap['pickedImage'] = uploadImageList;
+                          })
                     ]))));
   }
 }

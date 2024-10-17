@@ -107,7 +107,8 @@ class TicketDetailsScreen extends StatelessWidget {
                       tabBarViewWidgets: [
                         TicketDetailsTab(ticketData: data),
                         TicketCommentsTab(ticketData: data),
-                        TicketDocumentsTab(ticketData: data),
+                        TicketDocumentsTab(
+                            ticketData: data, clientId: state.clientId),
                         TicketLogTab(ticketData: data),
                       ])
                 ]);

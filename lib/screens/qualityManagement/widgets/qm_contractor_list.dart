@@ -37,16 +37,16 @@ class QualityManagementContractorList extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount:
-                            fetchQualityManagementMasterModel.data![5].length,
+                            fetchQualityManagementMasterModel.data![6].length,
                         itemBuilder: (context, index) {
                           return RadioListTile(
                               contentPadding: EdgeInsets.zero,
                               activeColor: AppColor.deepBlue,
                               controlAffinity: ListTileControlAffinity.trailing,
                               title: Text(fetchQualityManagementMasterModel
-                                  .data![5][index].groupName),
+                                  .data![6][index].groupName),
                               value: fetchQualityManagementMasterModel
-                                  .data![5][index].groupId!
+                                  .data![6][index].groupId!
                                   .toString(),
                               groupValue: selectContractorId,
                               onChanged: (value) {
@@ -54,10 +54,10 @@ class QualityManagementContractorList extends StatelessWidget {
                                     ReportNewQualityManagementContractorListChange(
                                         selectContractorName:
                                             fetchQualityManagementMasterModel
-                                                .data![5][index].groupName,
+                                                .data![6][index].groupName,
                                         selectContractorId:
                                             fetchQualityManagementMasterModel
-                                                .data![5][index].groupId!
+                                                .data![6][index].groupId!
                                                 .toString()));
                                 Navigator.pop(context);
                               });

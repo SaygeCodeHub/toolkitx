@@ -6,17 +6,19 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/incident/fetch_incident_master_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/database_utils.dart';
 import '../../../widgets/generic_app_bar.dart';
 
 class IncidentSiteList extends StatelessWidget {
   final FetchIncidentMasterModel fetchIncidentMasterModel;
   final String selectSiteName;
+  final String locationId;
 
   const IncidentSiteList(
-      {Key? key,
+      {super.key,
       required this.fetchIncidentMasterModel,
-      required this.selectSiteName})
-      : super(key: key);
+      required this.selectSiteName,
+      required this.locationId});
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +51,20 @@ class IncidentSiteList extends StatelessWidget {
                               onChanged: (value) {
                                 value = fetchIncidentMasterModel
                                     .incidentMasterDatum![0][index].name!;
-                                context
-                                    .read<ReportNewIncidentBloc>()
-                                    .add(ReportIncidentSiteListChange(
-                                      selectSiteName: fetchIncidentMasterModel
-                                          .incidentMasterDatum![0][index].name!,
-                                    ));
+                                context.read<ReportNewIncidentBloc>().add(
+                                    ReportIncidentSiteListChange(
+                                        selectSiteName: fetchIncidentMasterModel
+                                                .incidentMasterDatum![0][index]
+                                                .name ??
+                                            '',
+                                        siteId: (value !=
+                                                DatabaseUtil.getText('Other'))
+                                            ? fetchIncidentMasterModel
+                                                .incidentMasterDatum![0][index]
+                                                .id!
+                                            : 0,
+                                        locationId: ''));
+
                                 Navigator.pop(context);
                               });
                         }),

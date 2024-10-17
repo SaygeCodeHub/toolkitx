@@ -9,6 +9,8 @@ import 'package:toolkit/screens/loto/widgets/remove_loto_dialog.dart';
 import 'package:toolkit/screens/loto/widgets/start_loto_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_qr_scanner.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../utils/database_utils.dart';
 import '../../../widgets/android_pop_up.dart';
 import '../loto_assign_team_screen.dart';
@@ -47,6 +49,11 @@ class LotoPopupMenuButton extends StatelessWidget {
                     },
                     onPressed: () {
                       if (code == decryptedLocation) {
+                        context
+                            .read<ImagePickerBloc>()
+                            .pickedImagesList
+                            .clear();
+                        context.read<ImagePickerBloc>().add(PickImageInitial());
                         StartLotoScreen.isFromStartRemoveLoto = isFromRemove;
                         Navigator.pushReplacementNamed(
                                 context, StartLotoScreen.routeName)
@@ -75,6 +82,8 @@ class LotoPopupMenuButton extends StatelessWidget {
                     },
                   )));
     } else {
+      context.read<ImagePickerBloc>().pickedImagesList.clear();
+      context.read<ImagePickerBloc>().add(PickImageInitial());
       StartLotoScreen.isFromStartRemoveLoto = isFromRemove;
       Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) => {
             context.read<LotoDetailsBloc>().add(FetchLotoDetails(
@@ -93,7 +102,7 @@ class LotoPopupMenuButton extends StatelessWidget {
             context.read<LotoDetailsBloc>().lotoWorkforceReachedMax = false;
             LotoAssignWorkforceScreen.pageNo = 1;
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
-                    arguments: fetchLotoDetailsModel.data.id)
+                    arguments: "0")
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
                           lotoTabIndex:
@@ -110,6 +119,8 @@ class LotoPopupMenuButton extends StatelessWidget {
                     });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
+            context.read<ImagePickerBloc>().pickedImagesList.clear();
+            context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName)
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
@@ -134,7 +145,8 @@ class LotoPopupMenuButton extends StatelessWidget {
           }
           if (value ==
               DatabaseUtil.getText('assign_workforce_for_remove_loto')) {
-            Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName)
+            Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
+                    arguments: "1")
                 .then((_) => {
                       context.read<LotoDetailsBloc>().add(FetchLotoDetails(
                           lotoTabIndex: 0,

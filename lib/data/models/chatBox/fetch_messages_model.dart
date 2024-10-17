@@ -31,16 +31,32 @@ class FetchChatMessagesModel {
 
 class FetchChatMessagesDatum {
   final MsgJson msgJson;
+  final int rid;
+  final int rType;
+  final String userName;
+  final String senderName;
 
-  FetchChatMessagesDatum({required this.msgJson});
+  FetchChatMessagesDatum(
+      {required this.rid,
+      required this.rType,
+      required this.userName,
+      required this.msgJson,
+      required this.senderName});
 
   factory FetchChatMessagesDatum.fromJson(Map<String, dynamic> json) =>
       FetchChatMessagesDatum(
-        msgJson: MsgJson.fromJson(json["msg_json"]),
-      );
+          msgJson: MsgJson.fromJson(json["msg_json"]),
+          rid: json['rid'] ?? 0,
+          rType: json['rtype'] ?? 0,
+          userName: json['username'] ?? '',
+          senderName: json['sendername'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "msg_json": msgJson.toJson(),
+        'rid': rid,
+        'rtype': rType,
+        'username': userName,
+        'senderName': senderName
       };
 }
 
@@ -57,6 +73,7 @@ class MsgJson {
   final String sid2;
   final String stype2;
   final int isReceiver;
+  final String clientId;
 
   MsgJson(
       {required this.msgId,
@@ -70,7 +87,8 @@ class MsgJson {
       required this.msg,
       required this.sid2,
       required this.stype2,
-      this.isReceiver = 0});
+      this.isReceiver = 0,
+      required this.clientId});
 
   factory MsgJson.fromJson(Map<String, dynamic> json) => MsgJson(
       msgId: json["msg_id"] ?? '',
@@ -85,7 +103,8 @@ class MsgJson {
       msg: json["msg"] ?? '',
       sid2: json["sid_2"] ?? '',
       stype2: json["stype_2"] ?? '',
-      isReceiver: json['isReceiver'] ?? 1);
+      isReceiver: json['isReceiver'] ?? 1,
+      clientId: json['clientid'] ?? '');
 
   Map<String, dynamic> toJson() => {
         "msg_id": msgId,
@@ -99,6 +118,7 @@ class MsgJson {
         "msg": msg,
         "sid_2": sid2,
         "stype_2": stype2,
-        "isReceiver": isReceiver
+        "isReceiver": isReceiver,
+        'clientid': clientId
       };
 }

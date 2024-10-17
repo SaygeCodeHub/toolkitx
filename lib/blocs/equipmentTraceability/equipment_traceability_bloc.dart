@@ -243,8 +243,8 @@ class EquipmentTraceabilityBloc
         "userid": userId,
         "hashcode": hashCode,
         "equipmentid": equipmentId,
-        "latitude": "",
-        "longitude": ""
+        "latitude": event.equipmentSaveLocationMap['latitude'],
+        "longitude": event.equipmentSaveLocationMap['longitude']
       };
       EquipmentSaveLocationModel equipmentSaveLocationModel =
           await _equipmentTraceabilityRepo

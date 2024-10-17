@@ -48,33 +48,32 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   FutureOr _fetchWorkOrders(
       FetchWorkOrders event, Emitter<WorkOrderStates> emit) async {
     emit(FetchingWorkOrders());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (!hasReachedMax) {
-        if (event.isFromHome == true) {
-          add(WorkOrderClearFilter());
-          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-              .fetchWorkOrders(event.pageNo, hashCode!, '{}');
-          for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
-            workOrderId = fetchWorkOrdersModel.data[i].id;
-          }
-          data.addAll(fetchWorkOrdersModel.data);
-          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
-          emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
-        } else {
-          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-              .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
-          data.addAll(fetchWorkOrdersModel.data);
-          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
-          emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel,
-              filterMap: filtersMap));
-        }
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+
+    if (event.isFromHome == true) {
+      add(WorkOrderClearFilter());
+      FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+          .fetchWorkOrders(event.pageNo, hashCode!, '{}');
+      for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
+        workOrderId = fetchWorkOrdersModel.data[i].id;
       }
-    } catch (e) {
-      emit(WorkOrdersNotFetched(listNotFetched: e.toString()));
+      data.addAll(fetchWorkOrdersModel.data);
+      hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+      emit(WorkOrdersFetched(
+          fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
+    } else {
+      FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+          .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
+      data.addAll(fetchWorkOrdersModel.data);
+      hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+      emit(WorkOrdersFetched(
+          fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: filtersMap));
     }
+
+    // } catch (e) {
+    //   emit(WorkOrdersNotFetched(listNotFetched: e.toString()));
+    // }
   }
 
   FutureOr _fetchMaster(

@@ -11,12 +11,12 @@ class FetchLotoDetails extends LotoDetailsEvent {
 
 class FetchLotoAssignWorkforce extends LotoDetailsEvent {
   final int pageNo;
-  final String isRemove;
+  final String isRemoveOperation;
   final String workforceName;
 
   FetchLotoAssignWorkforce(
       {required this.pageNo,
-      required this.isRemove,
+      required this.isRemoveOperation,
       required this.workforceName});
 }
 
@@ -43,8 +43,10 @@ class FetchLotoAssignTeam extends LotoDetailsEvent {
 
 class SearchLotoAssignWorkForce extends LotoDetailsEvent {
   final bool isWorkforceSearched;
+  final String isRemoveOperation;
 
-  SearchLotoAssignWorkForce({required this.isWorkforceSearched});
+  SearchLotoAssignWorkForce(
+      {required this.isWorkforceSearched, required this.isRemoveOperation});
 }
 
 class StartLotoEvent extends LotoDetailsEvent {}
@@ -91,8 +93,10 @@ class AddLotoComment extends LotoDetailsEvent {
 
 class FetchLotoChecklistQuestions extends LotoDetailsEvent {
   final String checkListId;
+  final String isRemoveOperation;
 
-  FetchLotoChecklistQuestions({this.checkListId = ""});
+  FetchLotoChecklistQuestions(
+      {this.checkListId = "", required this.isRemoveOperation});
 }
 
 class SelectAnswer extends LotoDetailsEvent {
@@ -100,6 +104,13 @@ class SelectAnswer extends LotoDetailsEvent {
   final String text;
 
   SelectAnswer({required this.id, required this.text});
+}
+
+class SelectOption extends LotoDetailsEvent {
+  final int id;
+  final String text;
+
+  SelectOption({required this.id, required this.text});
 }
 
 class SaveLotoChecklist extends LotoDetailsEvent {}

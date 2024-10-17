@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 
@@ -35,7 +36,7 @@ abstract class WorkOrderRepository {
       String hashCode, String userId);
 
   Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
-      String hashCode, String workOrderId);
+      String hashCode, String workOrderId, String role);
 
   Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
 
@@ -94,4 +95,7 @@ abstract class WorkOrderRepository {
   Future<CompleteWorkOrderModel> completeWorkOrder(Map completeWorkOrderMap);
 
   Future<UpdateWorkOrderItemModel> updateWorkOrderItem(Map workOrderItemMap);
+
+  Future<FetchWorkOrderRolesModel> fetchWorkOrderRoles(
+      String hashCode, String userId);
 }

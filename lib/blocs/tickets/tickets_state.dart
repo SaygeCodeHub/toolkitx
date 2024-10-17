@@ -64,9 +64,12 @@ class TicketDetailsFetching extends TicketsStates {}
 class TicketDetailsFetched extends TicketsStates {
   final FetchTicketDetailsModel fetchTicketDetailsModel;
   final List ticketPopUpMenu;
+  final String clientId;
 
   TicketDetailsFetched(
-      {required this.fetchTicketDetailsModel, required this.ticketPopUpMenu});
+      {required this.fetchTicketDetailsModel,
+      required this.ticketPopUpMenu,
+      required this.clientId});
 }
 
 class TicketDetailsNotFetched extends TicketsStates {

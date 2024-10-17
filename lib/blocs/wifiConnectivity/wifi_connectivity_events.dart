@@ -7,3 +7,5 @@ class NotifyNetworkStatus extends WifiConnectivityEvent {
 
   NotifyNetworkStatus({this.isConnected = false});
 }
+
+class ObserveUserLocation extends WifiConnectivityEvent {}

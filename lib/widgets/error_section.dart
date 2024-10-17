@@ -7,8 +7,7 @@ class GenericReloadButton extends StatelessWidget {
   final String textValue;
 
   const GenericReloadButton(
-      {Key? key, required this.onPressed, required this.textValue})
-      : super(key: key);
+      {super.key, required this.onPressed, required this.textValue});
 
   @override
   Widget build(BuildContext context) {

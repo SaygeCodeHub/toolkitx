@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/screens/permit/permit_list_screen.dart';
 import 'package:toolkit/screens/permit/widgets/permit_comments.dart';
+import 'package:toolkit/screens/permit/widgets/permit_switching_schedule_tab.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/permit_util.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -41,10 +42,10 @@ class PermitDetailsScreen extends StatelessWidget {
             onPressed: () {
               PermitListScreen.page = 1;
               context.read<PermitBloc>().permitListData = [];
-              context
-                  .read<PermitBloc>()
-                  .add(const GetAllPermits(isFromHome: false, page: 1));
               Navigator.pop(context);
+              Navigator.pushReplacementNamed(
+                  context, PermitListScreen.routeName,
+                  arguments: false);
             },
             actions: [
               BlocBuilder<PermitBloc, PermitStates>(
@@ -96,6 +97,14 @@ class PermitDetailsScreen extends StatelessWidget {
                 showCustomSnackBar(
                     context, DatabaseUtil.getText('something_went_wrong'), '');
               }
+              if (state is GeneratingTextFile) {
+                ProgressBar.show(context);
+              } else if (state is TextFileGenerated) {
+                ProgressBar.dismiss(context);
+              } else if (state is FailedToGenerateTextFile) {
+                ProgressBar.dismiss(context);
+                showCustomSnackBar(context, state.errorMessage, '');
+              }
             },
             buildWhen: (previousState, currentState) =>
                 currentState is FetchingPermitDetails ||
@@ -146,7 +155,7 @@ class PermitDetailsScreen extends StatelessWidget {
                           height: kDividerHeight, thickness: kDividerWidth),
                       const SizedBox(height: xxTinierSpacing),
                       CustomTabBarView(
-                          lengthOfTabs: 6,
+                          lengthOfTabs: 7,
                           tabBarViewIcons: PermitUtil().tabBarViewIcons,
                           tabBarViewWidgets: [
                             PermitDetails(
@@ -158,9 +167,14 @@ class PermitDetailsScreen extends StatelessWidget {
                             CustomTimeline(
                                 permitDetailsModel: state.permitDetailsModel),
                             PermitAttachments(
-                                permitDetailsModel: state.permitDetailsModel),
+                                permitDetailsModel: state.permitDetailsModel,
+                                clientId: state.clientId,
+                                userType: state.userType),
                             PermitComments(
-                                permitDetailsModel: state.permitDetailsModel)
+                                permitDetailsModel: state.permitDetailsModel),
+                            PermitSwitchingScheduleTab(
+                                permitDetailsModel: state.permitDetailsModel,
+                                permitId: permitId)
                           ])
                     ]));
               } else {

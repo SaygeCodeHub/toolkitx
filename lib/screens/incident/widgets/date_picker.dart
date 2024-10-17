@@ -19,14 +19,14 @@ class DatePickerTextField extends StatefulWidget {
   final DateTime? minimumDate;
 
   const DatePickerTextField({
-    Key? key,
+    super.key,
     this.initialDate,
     this.maxDate,
     this.editDate = '',
     this.hintText,
     this.minimumDate,
     required this.onDateChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<DatePickerTextField> createState() => _DatePickerTextFieldState();

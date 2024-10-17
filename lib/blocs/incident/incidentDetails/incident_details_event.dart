@@ -35,8 +35,10 @@ class SaveLikedPermits extends IncidentDetailsEvent {
 
 class SaveIncidentComments extends IncidentDetailsEvent {
   final Map saveCommentsMap;
+  final bool isFromAddComment;
 
-  SaveIncidentComments({required this.saveCommentsMap});
+  SaveIncidentComments(
+      {required this.isFromAddComment, required this.saveCommentsMap});
 }
 
 class SaveIncidentCommentsFiles extends IncidentDetailsEvent {

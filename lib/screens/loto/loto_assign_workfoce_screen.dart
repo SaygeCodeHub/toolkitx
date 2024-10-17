@@ -13,22 +13,26 @@ import '../../widgets/custom_icon_button.dart';
 class LotoAssignWorkforceScreen extends StatelessWidget {
   static const routeName = 'LotoAssignWorkforceScreen';
   static String workforceName = '';
-  static String isRemove = "0";
+  final String isRemoveOperation;
   static int pageNo = 1;
   static bool isWorkforceSearched = false;
   static TextEditingController workforceNameController =
       TextEditingController();
-  const LotoAssignWorkforceScreen({super.key});
+
+  const LotoAssignWorkforceScreen({super.key, required this.isRemoveOperation});
 
   @override
   Widget build(BuildContext context) {
     pageNo = 1;
     context.read<LotoDetailsBloc>().add(FetchLotoAssignWorkforce(
-        pageNo: pageNo, isRemove: isRemove, workforceName: ''));
+        pageNo: pageNo,
+        isRemoveOperation: isRemoveOperation,
+        workforceName: ''));
     context.read<LotoDetailsBloc>().lotoWorkforceReachedMax = false;
     context.read<LotoDetailsBloc>().assignWorkforceDatum = [];
-    context.read<LotoDetailsBloc>().add(
-        SearchLotoAssignWorkForce(isWorkforceSearched: isWorkforceSearched));
+    context.read<LotoDetailsBloc>().add(SearchLotoAssignWorkForce(
+        isWorkforceSearched: isWorkforceSearched,
+        isRemoveOperation: isRemoveOperation));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText("assign_workforce")),
       body: Padding(
@@ -73,7 +77,9 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                                   context.read<LotoDetailsBloc>().add(
                                       SearchLotoAssignWorkForce(
                                           isWorkforceSearched:
-                                              isWorkforceSearched));
+                                              isWorkforceSearched,
+                                          isRemoveOperation:
+                                              isRemoveOperation));
                                 }
                               },
                               icon: (state.isWorkforceSearched == false)
@@ -99,7 +105,7 @@ class LotoAssignWorkforceScreen extends StatelessWidget {
                       fillColor: AppColor.white)),
             ),
             const SizedBox(height: tinySpacing),
-            const LotoAssignWorkforceBody(),
+            LotoAssignWorkforceBody(isRemoveOperation: isRemoveOperation),
           ],
         ),
       ),

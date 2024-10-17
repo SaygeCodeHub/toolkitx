@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/checklist/workforce/rejectReason/workforce_checklist_reject_reason_event.dart';
 import 'package:toolkit/blocs/checklist/workforce/rejectReason/workforce_checklist_reject_reason_states.dart';
+import 'package:toolkit/data/models/checklist/workforce/fetch_checklist_workforce_documents_model.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../../data/cache/cache_keys.dart';
@@ -21,6 +22,7 @@ class WorkForceCheckListSaveRejectBloc extends Bloc<
     on<CheckListFetchRejectReasons>(_fetchChecklistRejectReason);
     on<CheckListSelectRejectReasons>(_selectRejectReason);
     on<CheckListSaveRejectReasons>(_saveRejectReasons);
+    on<FetchChecklistWorkforceDocuments>(_fetchChecklistWorkforceDocuments);
   }
 
   FutureOr<void> _fetchChecklistRejectReason(CheckListFetchRejectReasons event,
@@ -73,6 +75,32 @@ class WorkForceCheckListSaveRejectBloc extends Bloc<
       }
     } catch (e) {
       emit(CheckListRejectReasonsNotSaved(message: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchChecklistWorkforceDocuments(
+      FetchChecklistWorkforceDocuments event,
+      Emitter<WorkForceCheckListRejectReasonStates> emit) async {
+    emit(ChecklistWorkforceDocumentsFetching());
+    try {
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      FetchChecklistWorkforceDocumentsModel
+          fetchChecklistWorkforceDocumentsModel = await _workForceRepository
+              .fetchChecklistViewDocuments(event.checklistId, hashCode);
+      if (fetchChecklistWorkforceDocumentsModel.status == 200) {
+        emit(ChecklistWorkforceDocumentsFetched(
+            fetchChecklistWorkforceDocumentsModel:
+                fetchChecklistWorkforceDocumentsModel,
+            clientId: clientId));
+      } else {
+        emit(ChecklistWorkforceDocumentsNotFetched(
+            errorMessage: fetchChecklistWorkforceDocumentsModel.message));
+      }
+    } catch (e) {
+      emit(ChecklistWorkforceDocumentsNotFetched(errorMessage: e.toString()));
     }
   }
 }

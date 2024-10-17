@@ -60,9 +60,10 @@ class LotoDetailsScreen extends StatelessWidget {
               } else if (state is LotoWorkforceDeleted) {
                 ProgressBar.dismiss(context);
                 Navigator.pushReplacementNamed(
-                    context, LotoDetailsScreen.routeName);
+                    context, LotoDetailsScreen.routeName,
+                    arguments: lotoId);
                 showCustomSnackBar(
-                    context, StringConstants.kWorkforceDeleted, '');
+                    context, StringConstants.kWorkforceRemoved, '');
               } else if (state is LotoWorkforceNotDeleted) {
                 ProgressBar.dismiss(context);
                 showCustomSnackBar(context, state.errorMessage, '');

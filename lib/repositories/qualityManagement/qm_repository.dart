@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
+
 import '../../data/models/incident/save_incident_comments_files_model.dart';
 import '../../data/models/incident/save_incident_comments_model.dart';
 import '../../data/models/pdf_generation_model.dart';
@@ -41,4 +43,7 @@ abstract class QualityManagementRepository {
 
   Future<FetchQualityManagementRolesModel> fetchQualityManagementRoles(
       String hashCode, String userId);
+
+  Future<FetchCustomFieldsByKeyModel> fetchCustomFieldsByKey(
+      String moduleName, String categoryId, String hashCode);
 }

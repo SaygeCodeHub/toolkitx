@@ -21,13 +21,19 @@ class AssetsWarrantyTab extends StatelessWidget {
               .copyWith(fontWeight: FontWeight.w500, color: AppColor.grey)),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kWarrantyStart,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.warrantystart,
           style: Theme.of(context).textTheme.smallTextGrey),
       const SizedBox(height: xxxSmallestSpacing),
       Text(StringConstants.kWarrantyEnd,
-          style: Theme.of(context).textTheme.smallTextBlack),
+          style: Theme.of(context)
+              .textTheme
+              .xSmall
+              .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
       const SizedBox(height: tiniestSpacing),
       Text(data.warrantyend, style: Theme.of(context).textTheme.smallTextGrey),
     ]);

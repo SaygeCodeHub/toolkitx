@@ -21,19 +21,19 @@ class WorkForceListBloc extends Bloc<FetchWorkForceList, WorkForceListStates> {
   FutureOr<void> _fetchList(
       FetchWorkForceList event, Emitter<WorkForceListStates> emit) async {
     emit(FetchingList());
-    try {
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
-      WorkforceGetCheckListModel workforceGetCheckListModel =
-          await _workForceRepository.fetchWorkforceList(userId, hashCode);
-      for (int i = 0; i < workforceGetCheckListModel.data!.length; i++) {
-        checkListMap['isDraft'] = workforceGetCheckListModel.data![i].isdraft;
-        checkListMap['isRejected'] =
-            workforceGetCheckListModel.data![i].isrejected;
-      }
-      emit(ListFetched(workforceGetCheckListModel: workforceGetCheckListModel));
-    } catch (e) {
-      emit(ListNotFetched());
+    // try {
+    String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
+    String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+    WorkforceGetCheckListModel workforceGetCheckListModel =
+        await _workForceRepository.fetchWorkforceList(userId, hashCode);
+    for (int i = 0; i < workforceGetCheckListModel.data!.length; i++) {
+      checkListMap['isDraft'] = workforceGetCheckListModel.data![i].isdraft;
+      checkListMap['isRejected'] =
+          workforceGetCheckListModel.data![i].isrejected;
     }
+    emit(ListFetched(workforceGetCheckListModel: workforceGetCheckListModel));
+    // } catch (e) {
+    //   emit(ListNotFetched());
+    // }
   }
 }

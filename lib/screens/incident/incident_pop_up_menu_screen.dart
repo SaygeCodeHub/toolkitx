@@ -22,12 +22,11 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
 
   const IncidentDetailsPopUpMenu(
-      {Key? key,
+      {super.key,
       required this.popUpMenuItems,
       required this.incidentId,
       required this.incidentDetailsMap,
-      required this.incidentDetailsModel})
-      : super(key: key);
+      required this.incidentDetailsModel});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
@@ -50,7 +49,10 @@ class IncidentDetailsPopUpMenu extends StatelessWidget {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => IncidentAddCommentsScreen(
                     incidentId: incidentId,
-                    incidentDetailsModel: incidentDetailsModel)));
+                    incidentDetailsModel: incidentDetailsModel,
+                    showStatusControl: false,
+                    isFromAddComment: true,
+                    showClassification: false)));
           }
           if (value == DatabaseUtil.getText('EditIncident')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();

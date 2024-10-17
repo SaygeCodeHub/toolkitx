@@ -28,6 +28,7 @@ class WorkForceQuestionsScreen extends StatelessWidget {
               if (state is QuestionsListFetched) {
                 state.allChecklistDataMap["name"] =
                     state.getQuestionListModel.data!.name.toString();
+                checklistDataMap['name'] = state.allChecklistDataMap["name"];
                 return Text(state.getQuestionListModel.data!.name.toString());
               } else {
                 return const SizedBox();

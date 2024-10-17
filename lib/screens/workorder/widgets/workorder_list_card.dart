@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -21,8 +19,7 @@ class WorkOrderListCard extends StatelessWidget {
       child: ListTile(
         onTap: () {
           Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
-                  arguments:
-                      context.read<WorkOrderTabDetailsBloc>().workOrderId)
+                  arguments: data.id)
               .then((value) => Navigator.pushReplacementNamed(
                   context, WorkOrderListScreen.routeName,
                   arguments: false));

@@ -34,11 +34,13 @@ class CertificateListBloc
     try {
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       FetchCertificatesModel fetchCertificatesModel =
           await _certificateRepository.fetchCertificatesRepository(
               event.pageNo, hashCode!, userId!);
       emit(FetchedCertificateList(
-          fetchCertificatesModel: fetchCertificatesModel));
+          fetchCertificatesModel: fetchCertificatesModel, clientId: clientId));
     } catch (e) {
       emit(CertificateListError(errorMsg: e.toString()));
     }

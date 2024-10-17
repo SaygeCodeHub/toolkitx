@@ -26,8 +26,9 @@ class IncidentStatusScreen extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
 
   IncidentStatusScreen(
-      {Key? key, required this.incidentId, required this.incidentDetailsModel})
-      : super(key: key);
+      {super.key,
+      required this.incidentId,
+      required this.incidentDetailsModel});
   final Map incidentCommentsMap = {};
 
   @override
@@ -55,7 +56,9 @@ class IncidentStatusScreen extends StatelessWidget {
                     onTextFieldValue: (String textValue) {
                       incidentCommentsMap['comments'] = textValue;
                     },
-                    incidentCommentsMap: incidentCommentsMap)
+                    incidentCommentsMap: incidentCommentsMap,
+                    showStatusControl: true,
+                    showClassification: true)
               ]))),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(xxTinierSpacing),
@@ -95,7 +98,8 @@ class IncidentStatusScreen extends StatelessWidget {
                 if (incidentCommentsMap['comments'] != null ||
                     incidentCommentsMap['comments'] != '') {
                   context.read<IncidentDetailsBloc>().add(SaveIncidentComments(
-                      saveCommentsMap: incidentCommentsMap));
+                      saveCommentsMap: incidentCommentsMap,
+                      isFromAddComment: false));
                 }
               } else if (state is ImageCouldNotUpload) {
                 GenericLoadingPopUp.dismiss(context);
@@ -113,7 +117,8 @@ class IncidentStatusScreen extends StatelessWidget {
                           context.read<ImagePickerBloc>().lengthOfImageList));
                 } else {
                   context.read<IncidentDetailsBloc>().add(SaveIncidentComments(
-                      saveCommentsMap: incidentCommentsMap));
+                      saveCommentsMap: incidentCommentsMap,
+                      isFromAddComment: false));
                 }
               },
               textValue: StringConstants.kSave),

@@ -1,4 +1,6 @@
+import 'package:toolkit/data/models/chatBox/fetch_all_groups_chat_model.dart';
 import 'package:toolkit/data/models/chatBox/fetch_employees_model.dart';
+import 'package:toolkit/data/models/chatBox/fetch_group_info_model.dart';
 
 abstract class ChatState {}
 
@@ -48,4 +50,84 @@ class EmployeesListSearched extends ChatState {
 
 class ChatMessagingTextFieldHidden extends ChatState {}
 
-class ShowChatMessagingTextField extends ChatState {}
+class ShowChatMessagingTextField extends ChatState {
+  String replyToMessage;
+
+  ShowChatMessagingTextField({this.replyToMessage = ''});
+}
+
+class AllGroupsFetching extends ChatState {}
+
+class AllGroupsFetched extends ChatState {
+  final AllGroupChatListModel allGroupChatListModel;
+
+  AllGroupsFetched({required this.allGroupChatListModel});
+}
+
+class AllGroupsNotFetched extends ChatState {
+  final String errorMessage;
+
+  AllGroupsNotFetched({required this.errorMessage});
+}
+
+class GroupDetailsFetching extends ChatState {}
+
+class GroupDetailsFetched extends ChatState {
+  final FetchGroupInfoModel fetchGroupInfoModel;
+  final String apiKey;
+
+  GroupDetailsFetched(
+      {required this.fetchGroupInfoModel, required this.apiKey});
+}
+
+class GroupDetailsNotFetched extends ChatState {
+  final String errorMessage;
+
+  GroupDetailsNotFetched({required this.errorMessage});
+}
+
+class ChatMemberRemoving extends ChatState {}
+
+class ChatMemberRemoved extends ChatState {
+  final bool isExitGroup;
+
+  ChatMemberRemoved({required this.isExitGroup});
+}
+
+class ChatMemberNotRemoved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotRemoved({required this.errorMessage});
+}
+
+class SavingChatMemberAsAdmin extends ChatState {}
+
+class ChatMemberAsAdminSaved extends ChatState {}
+
+class ChatMemberAsAdminNotSaved extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotSaved({required this.errorMessage});
+}
+
+class ChatMemberAsAdminDismissing extends ChatState {}
+
+class ChatMemberAsAdminDismissed extends ChatState {}
+
+class ChatMemberAsAdminNotDismissed extends ChatState {
+  final String errorMessage;
+
+  ChatMemberAsAdminNotDismissed({required this.errorMessage});
+}
+
+class ChatMemberAdding extends ChatState {}
+
+class ChatMemberAdded extends ChatState {}
+
+class ChatMemberNotAdded extends ChatState {
+  final String errorMessage;
+
+  ChatMemberNotAdded({required this.errorMessage});
+}
+
+class ShowDataFetchedFromList extends ChatState {}

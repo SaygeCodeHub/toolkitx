@@ -34,7 +34,7 @@ class QualityManagementCustomFields extends StatelessWidget {
                         right: tinierSpacing,
                         top: tiniestSpacing,
                         bottom: tiniestSpacing),
-                    title: Text('${data.customfields[index].title}?',
+                    title: Text(data.customfields[index].title,
                         style: Theme.of(context).textTheme.small.copyWith(
                             fontWeight: FontWeight.w700,
                             color: AppColor.mediumBlack)),

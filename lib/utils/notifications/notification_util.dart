@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
@@ -9,60 +11,28 @@ import '../database/database_util.dart';
 
 class NotificationUtil {
   final pushNotifications = FirebaseMessaging.instance;
-  final CustomerCache _customerCache = getIt<CustomerCache>();
+  static final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
+  final chatBloc = ChatBloc();
 
   Future<void> initNotifications() async {
     await pushNotifications.requestPermission();
-
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       if (message.data['ischatmsg'] == '1') {
-        await _storeMessageInDatabase(message);
-        if (_isMessageForCurrentChat(message)) {
-          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-            'sid': message.data['sid'] ?? '',
-            'rid': message.data['rid'] ?? '',
-            'rtype': message.data['rtype'] ?? '',
-            'stype': message.data['stype'] ?? '',
-            "employee_name": message.data['username'],
-            'showCount': 0,
-            'currentSenderId': message.data['sid'] ?? '',
-            'currentReceiverId': message.data['rid'] ?? '',
-            'isGroup': (message.data['rtype'] == '3') ? true : false,
-            'isCurrentUser': true
-          }));
-        } else {
-          ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-            'sid': ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
-            'rid': ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
-            'rtype': message.data['rtype'] ?? '',
-            'stype': message.data['stype'] ?? '',
-            "employee_name": message.data['username'],
-            'showCount': 0,
-            'currentSenderId':
-                ChatBloc().chatDetailsMap['sid'] ?? message.data['sid'],
-            'currentReceiverId':
-                ChatBloc().chatDetailsMap['rid'] ?? message.data['rid'],
-            'isGroup': (message.data['rtype'] == '3') ? true : false,
-            'isCurrentUser': false
-          }));
-        }
+        await _storeMessageInDatabase(message).then((result) {
+          if (chatScreenName == ChatMessagingScreen.routeName) {
+            chatBloc.add(RebuildChatMessagingScreen(
+                employeeDetailsMap: chatBloc.chatDetailsMap));
+          } else {
+            chatBloc.add(FetchChatsList());
+          }
+        }).catchError((error) {});
       }
       if (message.data['ischatgrouprequest'] == '1') {
-        ChatBloc().add(FetchGroupInfo(groupId: message.data['group_id']));
+        chatBloc.add(FetchGroupInfo(groupId: message.data['group_id']));
       }
     });
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-  }
-
-  bool _isMessageForCurrentChat(RemoteMessage message) {
-    if (message.data.isNotEmpty) {
-      String senderId = message.data['sid'];
-      bool isMessageForCurrentChat =
-          senderId == ChatBloc().chatDetailsMap['sid'];
-      return isMessageForCurrentChat;
-    }
-    return false;
   }
 
   Future<void> _storeMessageInDatabase(RemoteMessage message) async {
@@ -79,9 +49,11 @@ class NotificationUtil {
       'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
+      'clientid': message.data['clientid']
     };
     await _databaseHelper.insertMessage(messageData);
   }
@@ -97,30 +69,26 @@ class NotificationUtil {
 }
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  await _storeBackgroundMessageInDatabase(message);
-}
-
-Future<void> _storeBackgroundMessageInDatabase(RemoteMessage message) async {
-  try {
+  if (message.data['ischatmsg'] == '1') {
     Map<String, dynamic> messageData = {
-      'rid': message.data['rid'],
-      'msg': message.data['chatmsg'] ?? '',
+      'rid': message.data['rid'] ?? '',
+      'msg': message.data['chatmsg'],
       'msg_time': DateTime.parse(message.data['time']).toIso8601String(),
       'isReceiver': 1,
       'msg_id': message.data['id'],
       'rtype': message.data['rtype'],
-      'quote_msg_id': message.data['quotemsg'] ?? '',
+      'quote_msg_id': message.data['quotemsg'],
       'sid': message.data['sid'],
       'stype': message.data['stype'],
-      'employee_name': message.data['username'] ?? '',
+      'employee_name': message.data['username'],
       'msg_type': message.data['type'],
       'msg_status': '1',
-      'showCount': 0,
+      'isMessageUnread': 1,
       'isGroup': (message.data['rtype'] == '3') ? 1 : 0,
-      'attachementExtension': 'pdf'
+      'attachementExtension': 'pdf',
+      'sender_name': message.data['sendername'],
+      'clientid': message.data['clientid']
     };
     await DatabaseHelper().insertMessage(messageData);
-  } catch (e) {
-    rethrow;
   }
 }
