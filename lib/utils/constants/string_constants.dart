@@ -20,6 +20,7 @@ abstract class StringConstants {
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
   static const String kAddIncomingInvoice = 'Add Incoming Invoice'; //
+  static const String kEditIncomingInvoice = 'Edit Incoming Invoice'; //
   static const String kAddBankStatement = 'Add Bank Statement'; //
   static const String kBillable = 'Billable'; //
   static const String kInvoiceDate = 'Invoice Date'; //
@@ -823,6 +824,7 @@ abstract class StringConstants {
   static const String kAccounting = "Accounting";
   static const String kOutGoingInvoiceList = "Outgoing Invoice List";
   static const String kInComingInvoiceList = "Incoming Invoice List";
+  static const String kBankStatementList = "Bank Statement List";
   static const String kEntityClientProjectInvoiceDAteCanNotBeEmpty =
       "Entity ,Client ,Project ,Invoice Date can not be empty";
   static const String kAmountAttachedDocumentsCanNotBeEmpty =

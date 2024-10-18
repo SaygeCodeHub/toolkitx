@@ -1,7 +1,9 @@
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
 
@@ -32,6 +34,10 @@ abstract class AccountingRepository {
 
   Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(
       Map deleteOutgoingInvoiceMap);
+
+  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(String invoiceId);
+
+  Future<FetchIncomingInvoiceModel> fetchIncomingInvoice(String invoiceId);
 
   Future<FetchBankStatementsModel> fetchBankStatements(
       int pageNo, String filter);

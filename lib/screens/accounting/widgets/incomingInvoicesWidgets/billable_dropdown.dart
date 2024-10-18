@@ -8,8 +8,10 @@ import 'incoming_invoice_client_project_section.dart';
 
 class BillableDropdown extends StatefulWidget {
   final void Function(String selectedValue) onBillableChanged;
+  final String initialValue;
 
-  const BillableDropdown({super.key, required this.onBillableChanged});
+  const BillableDropdown(
+      {super.key, required this.onBillableChanged, required this.initialValue});
 
   @override
   State<BillableDropdown> createState() => _BillableDropdownState();
@@ -18,6 +20,19 @@ class BillableDropdown extends StatefulWidget {
 class _BillableDropdownState extends State<BillableDropdown> {
   String selectedText = '';
   String selectedValue = '';
+  @override
+  void initState() {
+    super.initState();
+    final initialBillable = widget.initialValue;
+    if (initialBillable.isNotEmpty) {
+      final billableEnum = AccountingBillableEnum.values.firstWhere(
+        (element) => element.billValue == initialBillable,
+        orElse: () => AccountingBillableEnum.no,
+      );
+      selectedText = billableEnum.billText;
+      selectedValue = billableEnum.billValue;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

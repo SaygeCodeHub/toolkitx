@@ -60,9 +60,8 @@ class ManageAccountingOutgoingInvoiceSection extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         if (invoiceAmount.isNotEmpty &&
                             uploadedDocuments.isNotEmpty) {
-                          context
-                              .read<AccountingBloc>()
-                              .add(CreateOutgoingInvoice());
+                          context.read<AccountingBloc>().add(
+                              CreateOutgoingInvoice(outgoingInvoiceId: ''));
                         } else {
                           showCustomSnackBar(
                               context,

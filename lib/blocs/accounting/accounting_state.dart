@@ -200,3 +200,35 @@ class FailedToDeleteOutgoingInvoice extends AccountingState {
 
   FailedToDeleteOutgoingInvoice({required this.errorMessage});
 }
+
+class FetchingOutgoingInvoice extends AccountingState {}
+
+class OutgoingInvoiceFetched extends AccountingState {
+  final String clientId;
+
+  OutgoingInvoiceFetched({
+    required this.clientId,
+  });
+}
+
+class FailedToFetchOutgoingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToFetchOutgoingInvoice({required this.errorMessage});
+}
+
+class FetchingIncomingInvoice extends AccountingState {}
+
+class IncomingInvoiceFetched extends AccountingState {
+  final String clientId;
+
+  IncomingInvoiceFetched({
+    required this.clientId,
+  });
+}
+
+class FailedToFetchIncomingInvoice extends AccountingState {
+  final String errorMessage;
+
+  FailedToFetchIncomingInvoice({required this.errorMessage});
+}

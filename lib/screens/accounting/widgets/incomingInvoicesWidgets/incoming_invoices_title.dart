@@ -4,6 +4,7 @@ import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
+import 'package:toolkit/screens/accounting/manage_accounting_incoming_invoice_screen.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_icon_button.dart';
 
@@ -26,7 +27,20 @@ class IncomingInvoicesTitle extends StatelessWidget {
                 style: Theme.of(context).textTheme.small.copyWith(
                     color: AppColor.black, fontWeight: FontWeight.w600)),
             const Spacer(),
-            CustomIconButton(icon: Icons.edit, onPressed: () {}, size: 20),
+            CustomIconButton(
+                icon: Icons.edit,
+                onPressed: () {
+                  context
+                      .read<AccountingBloc>()
+                      .manageIncomingInvoiceMap
+                      .remove('files');
+                  Navigator.pushNamed(
+                      context, ManageAccountingIncomingInvoiceScreen.routeName,
+                      arguments: true);
+                  context.read<AccountingBloc>().add(
+                      FetchIncomingInvoice(invoiceId: incomingInvoices.id));
+                },
+                size: 20),
             const SizedBox(width: xxTinierSpacing),
             CustomIconButton(
                 icon: Icons.delete,

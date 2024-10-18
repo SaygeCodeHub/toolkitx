@@ -57,7 +57,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                       showCustomSnackBar(
                           context,
                           StringConstants
-                              .kEntityClientProjectInvoiceDAteCanNotBeEmpty,
+                              .kEntityClientProjectInvoiceDateCanNotBeEmpty,
                           '');
                     }
                   }
@@ -90,7 +90,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                       selectedEntity = entity;
                       context
                           .read<AccountingBloc>()
-                          .manageOutgoingInvoiceMap['entity'] = entity;
+                          .manageOutgoingInvoiceMap['entityId'] = entity;
                     },
                     selectedEntity: '',
                   ),

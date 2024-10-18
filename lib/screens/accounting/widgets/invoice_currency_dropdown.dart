@@ -14,16 +14,22 @@ import 'currency_dropdown.dart';
 class InvoiceCurrencyDropdown extends StatelessWidget {
   final void Function(String currency) onInvoiceCurrencySelected;
   final Map manageInvoiceMap;
+  final String initialCurrency;
+  final String initialOtherCurrencyName;
+  final String initialOtherCurrency;
   const InvoiceCurrencyDropdown(
       {super.key,
       required this.onInvoiceCurrencySelected,
-      required this.manageInvoiceMap});
+      required this.manageInvoiceMap,
+      this.initialCurrency = '',
+      this.initialOtherCurrencyName = '',
+      this.initialOtherCurrency = ''});
 
   @override
   Widget build(BuildContext context) {
     context
         .read<AccountingBloc>()
-        .add(SelectInvoiceCurrency(selectedCurrency: ''));
+        .add(SelectInvoiceCurrency(selectedCurrency: initialCurrency));
     return BlocBuilder<AccountingBloc, AccountingState>(
         buildWhen: (previousState, currentState) =>
             currentState is InvoiceCurrencySelected,
@@ -81,9 +87,12 @@ class InvoiceCurrencyDropdown extends StatelessWidget {
                                   })
                             ])),
                     if (state.selectedCurrency == 'Other')
-                      CurrencyDropdown(onCurrencySelected: (String currency) {
-                        manageInvoiceMap['othercurrency'] = currency;
-                      })
+                      CurrencyDropdown(
+                          onCurrencySelected: (String currency) {
+                            manageInvoiceMap['othercurrency'] = currency;
+                          },
+                          initialOtherCurrencyName: initialOtherCurrencyName,
+                          initialOtherCurrency: initialOtherCurrency)
                   ]);
             } else {
               return const SizedBox.shrink();
