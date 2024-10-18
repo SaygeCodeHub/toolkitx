@@ -16,43 +16,62 @@ class BankDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AccountingBloc>().add(SelectBank(bankName: '', bankId: ''));
+    context.read<AccountingBloc>().add(SelectBank(
+        bankName: '',
+        bankId: context.read<AccountingBloc>().manageBankStatementMap['bank'] ??
+            ''));
     return BlocBuilder<AccountingBloc, AccountingState>(
-      buildWhen: (previous, current) => current is BankSelected,
+      buildWhen: (previous, current) =>
+          current is AccountingNewEntitySelected || current is BankSelected,
       builder: (context, state) {
-        if (state is BankSelected) {
-          return Theme(
-              data: Theme.of(context)
-                  .copyWith(dividerColor: AppColor.transparent),
-              child: ExpansionTile(
-                  maintainState: true,
-                  key: GlobalKey(),
-                  title: Text(
-                      (state.bankName.isEmpty)
-                          ? StringConstants.kSelect
-                          : state.bankName,
-                      style: Theme.of(context).textTheme.xSmall),
-                  children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount:
-                            context.read<AccountingBloc>().bankList.length,
-                        itemBuilder: (context, index) {
-                          var bank =
-                              context.read<AccountingBloc>().bankList[index];
-                          return ListTile(
-                              contentPadding:
-                                  const EdgeInsets.only(left: xxxTinierSpacing),
-                              title: Text(bank.bankname ?? '',
-                                  style: Theme.of(context).textTheme.xSmall),
-                              onTap: () {
-                                context.read<AccountingBloc>().add(SelectBank(
-                                    bankName: bank.bankname ?? '',
-                                    bankId: bank.id.toString()));
-                                onBankChanged(bank.id.toString());
-                              });
-                        })
-                  ]));
+        if (state is BankSelected || state is AccountingNewEntitySelected) {
+          final selectedBankName =
+              state is BankSelected && state.bankName.isNotEmpty
+                  ? state.bankName
+                  : StringConstants.kSelect;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(StringConstants.kBank,
+                  style: Theme.of(context)
+                      .textTheme
+                      .xSmall
+                      .copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(height: xxxTinierSpacing),
+              Theme(
+                  data: Theme.of(context)
+                      .copyWith(dividerColor: AppColor.transparent),
+                  child: ExpansionTile(
+                      maintainState: true,
+                      key: GlobalKey(),
+                      title: Text(selectedBankName,
+                          style: Theme.of(context).textTheme.xSmall),
+                      children: [
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:
+                                context.read<AccountingBloc>().bankList.length,
+                            itemBuilder: (context, index) {
+                              var bank = context
+                                  .read<AccountingBloc>()
+                                  .bankList[index];
+                              return ListTile(
+                                  contentPadding: const EdgeInsets.only(
+                                      left: xxxTinierSpacing),
+                                  title: Text(bank.bankname ?? '',
+                                      style:
+                                          Theme.of(context).textTheme.xSmall),
+                                  onTap: () {
+                                    context.read<AccountingBloc>().add(
+                                        SelectBank(
+                                            bankName: bank.bankname ?? '',
+                                            bankId: bank.id.toString()));
+                                    onBankChanged(bank.id.toString());
+                                  });
+                            })
+                      ])),
+            ],
+          );
         } else {
           return const SizedBox.shrink();
         }

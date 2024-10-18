@@ -11,19 +11,18 @@ import '../../../../configs/app_spacing.dart';
 class UploadPictureContainer extends StatelessWidget {
   final List imagePathsList;
   final String clientId;
-  final ImagePickerBloc imagePickerBloc; // Accept the bloc as a parameter
+  final ImagePickerBloc imagePickerBloc;
   final String fileExtension;
 
   const UploadPictureContainer(
       {super.key,
       required this.imagePathsList,
       required this.clientId,
-      required this.imagePickerBloc, // Initialize the bloc parameter
+      required this.imagePickerBloc,
       this.fileExtension = ''});
 
   @override
   Widget build(BuildContext context) {
-    print('imagess $imagePathsList');
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,

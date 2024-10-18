@@ -106,3 +106,15 @@ class FetchIncomingInvoice extends AccountingEvent {
 }
 
 class ManageBankStatement extends AccountingEvent {}
+
+class FetchBankStatement extends AccountingEvent {
+  final String bankStatementId;
+
+  FetchBankStatement({required this.bankStatementId});
+}
+
+class DeleteBankStatement extends AccountingEvent {
+  final String statementId;
+
+  DeleteBankStatement({required this.statementId});
+}

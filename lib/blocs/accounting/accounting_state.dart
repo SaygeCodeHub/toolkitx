@@ -242,3 +242,23 @@ class FailedToManageBankStatement extends AccountingState {
 
   FailedToManageBankStatement({required this.errorMessage});
 }
+
+class FetchingBankStatement extends AccountingState {}
+
+class BankStatementFetched extends AccountingState {}
+
+class BankStatementNotFetched extends AccountingState {
+  final String errorMessage;
+
+  BankStatementNotFetched({required this.errorMessage});
+}
+
+class DeletingBankStatement extends AccountingState {}
+
+class BankStatementDeleted extends AccountingState {}
+
+class FailedToDeleteBankStatement extends AccountingState {
+  final String errorMessage;
+
+  FailedToDeleteBankStatement({required this.errorMessage});
+}

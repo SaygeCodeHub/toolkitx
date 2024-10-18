@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../../configs/app_spacing.dart';
 import '../../../data/enums/accounting/accounting_month_enum.dart';
@@ -26,7 +27,7 @@ class _CustomMonthPickerDropdownState extends State<CustomMonthPickerDropdown> {
       int defaultMonthIndex = int.parse(widget.defaultMonth) - 1;
       if (defaultMonthIndex >= 0 && defaultMonthIndex < 12) {
         selectedMonth =
-            AccountingMonthsEnum.values[defaultMonthIndex].toString();
+            AccountingMonthsEnum.values[0].months[defaultMonthIndex].toString();
       }
     }
     super.initState();
@@ -40,7 +41,7 @@ class _CustomMonthPickerDropdownState extends State<CustomMonthPickerDropdown> {
         maintainState: true,
         key: GlobalKey(),
         title: Text(
-          selectedMonth ?? 'Select month',
+          selectedMonth ?? StringConstants.kSelectMonth,
           style: Theme.of(context).textTheme.xSmall,
         ),
         children: List.generate(AccountingMonthsEnum.values[0].months.length,

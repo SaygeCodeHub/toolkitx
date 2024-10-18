@@ -50,12 +50,6 @@ class BankStatementFilterScreen extends StatelessWidget {
                               .bankStatementFilterMap['entity'] ??
                           ''),
                   const SizedBox(height: xxTinySpacing),
-                  Text(StringConstants.kBank,
-                      style: Theme.of(context)
-                          .textTheme
-                          .xSmall
-                          .copyWith(fontWeight: FontWeight.w600)),
-                  const SizedBox(height: xxTinierSpacing),
                   BankDropdown(
                     onBankChanged: (String selectedBank) {
                       context

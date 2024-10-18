@@ -810,7 +810,8 @@ class AppRoutes {
       // case EditIncomingInvoiceScreen.routeName:
       //   return _createRoute(const EditIncomingInvoiceScreen());
       case ManageBankStatementScreen.routeName:
-        return _createRoute(const ManageBankStatementScreen());
+        return _createRoute(
+            ManageBankStatementScreen(isFromEdit: settings.arguments as bool));
       default:
         return _createRoute(const WelcomeScreen());
     }

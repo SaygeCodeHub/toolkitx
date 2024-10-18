@@ -30,6 +30,7 @@ class _AccountingEntityDropdownState extends State<AccountingEntityDropdown> {
   List entityList = [];
   String selectedEntity = StringConstants.kSelectEntity;
   String selectedEntityId = '';
+
   getEntityName(String entity, List entityList) {
     if (entity.isNotEmpty) {
       var element = entityList.firstWhere(

@@ -24,6 +24,7 @@ class _CustomYearPickerDropdownState extends State<CustomYearPickerDropdown> {
 
   @override
   void initState() {
+    print('default year ${widget.defaultYear}');
     startYear = endYear - 11;
     if (widget.defaultYear.isNotEmpty) {
       selectedYear = int.parse(widget.defaultYear);

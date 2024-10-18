@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/delete_bank_statement_model.dart';
 import 'package:toolkit/data/models/accounting/delete_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_bank_statement_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_bank_statements_model.dart';
 
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoice_model.dart';
@@ -111,17 +111,32 @@ class AccountingRepositoryImpl implements AccountingRepository {
       String invoiceId) async {
     final response = await DioClient().get(
         '${ApiConstants.baseUrl}accounting/GetIncomingInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&invoiceid=$invoiceId');
-
     return FetchIncomingInvoiceModel.fromJson(response);
   }
 
   @override
   Future<ManageBankStatementModel> manageBankStatement(
       Map manageBankStatementMap) async {
-    print('save bank statement ${jsonEncode(manageBankStatementMap)}');
     final response = await DioClient().post(
         '${ApiConstants.baseUrl}accounting/SaveBankStatement',
         manageBankStatementMap);
     return ManageBankStatementModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchBankStatementModel> fetchBankStatement(
+      String bankStatementId) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetBankStatementInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&id=$bankStatementId');
+    return FetchBankStatementModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteBankStatementModel> deleteBankStatement(
+      Map deleteBankStatementMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/DeleteBankStatement',
+        deleteBankStatementMap);
+    return DeleteBankStatementModel.fromJson(response);
   }
 }

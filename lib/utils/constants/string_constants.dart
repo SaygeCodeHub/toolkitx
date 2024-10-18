@@ -12,6 +12,7 @@ abstract class StringConstants {
   static const String kName = 'Name'; //
   static const String kSrNo = 'SrNo'; //
   static const String kViewOptions = 'View Options'; //
+  static const String kSelectMonth = 'Select month'; //
   static const String kEdit = 'Edit'; //
   static const String kMoveUp = 'Move Up'; //
   static const String kMoveDown = 'Move Down'; //
@@ -26,6 +27,7 @@ abstract class StringConstants {
   static const String kInvoiceDate = 'Invoice Date'; //
   static const String kStatementMonth = 'Statement Month'; //
   static const String kStatementYear = 'Statement Year'; //
+  static const String kViewImage = 'View Image'; //
   static const String kPurposeOfPayment = 'Purpose of payment'; //
   static const String kModeOfPayment = 'Mode of payment'; //
   static const String kInvoiceCurrency = 'Invoice Currency'; //
@@ -664,7 +666,7 @@ abstract class StringConstants {
   static const String kInvalidCode = "Invalid Code";
   static const String kCannotUploadImage =
       "There is an issue while uploading the image. Please try again!";
-  static const String kCannotPickImage = "Can't upload more that 6 images";
+  static const String kCannotPickImage = "Can't upload more that 6 files!";
   static const String kPleaseScanRemoveLotoQR =
       "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kPleaseScanStartLotoQR =

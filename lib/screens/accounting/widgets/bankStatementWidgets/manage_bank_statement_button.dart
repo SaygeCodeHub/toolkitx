@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/validate_manage_bank_statement_form.dart';
-
 import '../../../../blocs/accounting/accounting_bloc.dart';
 import '../../../../blocs/accounting/accounting_event.dart';
 import '../../../../blocs/accounting/accounting_state.dart';
@@ -15,7 +14,9 @@ import '../../../../widgets/primary_button.dart';
 import '../../../../widgets/progress_bar.dart';
 
 class ManageBankStatementButton extends StatelessWidget {
-  const ManageBankStatementButton({super.key});
+  final bool isFromEdit;
+
+  const ManageBankStatementButton({super.key, required this.isFromEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class ManageBankStatementButton extends StatelessWidget {
               ],
               child: PrimaryButton(
                   onPressed: () {
-                    validateBankStatementFormAndProceed(context);
+                    validateBankStatementFormAndProceed(context, isFromEdit);
                   },
                   textValue: StringConstants.kSave),
             ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
@@ -17,6 +16,8 @@ import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dar
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 
+import '../../data/models/accounting/delete_bank_statement_model.dart';
+import '../../data/models/accounting/fetch_bank_statement_model.dart';
 import '../../data/models/accounting/fetch_bank_statements_model.dart';
 import '../../data/models/accounting/delete_incoming_invoice_model.dart';
 import '../../data/models/accounting/manage_bank_statement_model.dart';
@@ -48,6 +49,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   FetchAccountingMasterModel fetchIAccountingMasterModel =
       FetchAccountingMasterModel();
   int entityId = 0;
+  String clientId = '';
 
   AccountingBloc() : super(AccountingInitial()) {
     on<FetchIncomingInvoices>(_fetchIncomingInvoices);
@@ -68,6 +70,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<FetchIncomingInvoice>(_fetchIncomingInvoice);
     on<SelectBank>(_selectBank);
     on<ManageBankStatement>(_manageBankStatement);
+    on<FetchBankStatement>(_fetchBankStatement);
+    on<DeleteBankStatement>(_deleteBankStatement);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -162,6 +166,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
               event.pageNo, jsonEncode(bankStatementFilterMap));
       bankStatementsReachedMax = fetchBankStatementsModel.data.isEmpty;
       if (fetchBankStatementsModel.status == 200) {
+        clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
         bankStatements.addAll(fetchBankStatementsModel.data);
         emit(BankStatementsFetched(
             bankStatements: bankStatements, pageNo: event.pageNo));
@@ -199,10 +204,8 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
             fetchMasterDataEntryModel.data.expand((list) => list).toList());
         creditCardsList.addAll(fetchMasterDataEntryModel.data[1]);
         bankList.addAll(fetchMasterDataEntryModel.data[2]);
-        log('bank list bloc ${bankList[0].bankname}');
         emit(AccountingNewEntitySelected(
             fetchMasterDataEntryModel: fetchMasterDataEntryModel));
-        add(SelectBank(bankName: '', bankId: ''));
       } else {
         emit(AccountingNewEntityNotSelected(
             errorMessage:
@@ -517,6 +520,59 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         }
       } else {
         emit(FailedToManageBankStatement(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchBankStatement(
+      FetchBankStatement event, Emitter<AccountingState> emit) async {
+    emit(FetchingBankStatement());
+    try {
+      FetchBankStatementModel fetchBankStatementModel =
+          await _accountingRepository.fetchBankStatement(event.bankStatementId);
+      clientId = await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      if (fetchBankStatementModel.status == 200) {
+        manageBankStatementMap['entity'] =
+            fetchBankStatementModel.data.entityid;
+        manageBankStatementMap['id'] = fetchBankStatementModel.data.id;
+        manageBankStatementMap['bank'] = fetchBankStatementModel.data.bankid;
+        manageBankStatementMap['month'] =
+            fetchBankStatementModel.data.stmtMonth;
+        manageBankStatementMap['year'] = fetchBankStatementModel.data.stmtYear;
+        manageBankStatementMap['view_files'] =
+            fetchBankStatementModel.data.files;
+        emit(BankStatementFetched());
+      } else {
+        emit(BankStatementNotFetched(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _deleteBankStatement(
+      DeleteBankStatement event, Emitter<AccountingState> emit) async {
+    emit(DeletingBankStatement());
+    try {
+      DeleteBankStatementModel deleteBankStatementModel =
+          await _accountingRepository.deleteBankStatement({
+        "id": event.statementId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode)
+      });
+      if (deleteBankStatementModel.status == 200) {
+        if (deleteBankStatementModel.message == '1') {
+          emit(BankStatementDeleted());
+        } else {
+          emit(FailedToDeleteBankStatement(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
+      } else {
+        emit(FailedToDeleteBankStatement(
             errorMessage: StringConstants.kSomethingWentWrong));
       }
     } catch (e) {
