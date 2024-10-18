@@ -24,6 +24,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
     on<UnauthorizedSignIn>(_signInUnauthorized);
     on<ProcessSignOut>(_processSignOut);
   }
+
   String qrCode = '';
 
   Future<FutureOr<void>> _processSignInProcess(
@@ -49,7 +50,7 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
           emit(SignInProcessed(processSignInModel: processSignInModel));
         }
       } else {
-        emit(SignInProcessed(processSignInModel: processSignInModel));
+        emit((SignInProcessingError(errorMsg: processSignInModel.message)));
       }
     }
   }
@@ -96,6 +97,8 @@ class SignInProcessBloc extends Bloc<SignInProcessEvent, SignInProcessState> {
       if (qrCode == event.qRCode) {
         if (processSignOutModel.status == 200) {
           emit(SignOutProcessed());
+        } else {
+          emit(SignOutNotProcessed(errorMsg: processSignOutModel.message));
         }
       } else {
         emit(SignOutNotProcessed(errorMsg: processSignOutModel.message));

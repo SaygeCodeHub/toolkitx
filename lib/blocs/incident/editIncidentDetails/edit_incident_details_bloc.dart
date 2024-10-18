@@ -36,6 +36,7 @@ class EditIncidentDetailsBloc
         "responsible_person": editIncidentDetailsMap['responsible_person'],
         "site_name": editIncidentDetailsMap['site_name'],
         "location_name": editIncidentDetailsMap['location_name'],
+        "assetid": editIncidentDetailsMap['assetid'],
         "category": editIncidentDetailsMap['category'],
         "reporteddatetime": editIncidentDetailsMap['reporteddatetime'],
         "customfields": editIncidentDetailsMap['customfields'],
@@ -45,7 +46,7 @@ class EditIncidentDetailsBloc
       };
       EditIncidentDetailsModel editIncidentDetailsModel =
           await _incidentRepository.editIncidentDetails(editIncidentDetails);
-      (editIncidentDetailsMap['filenames'] != null)
+      (editIncidentDetailsMap['ImageString'] != null)
           ? add(SaveEditIncidentDetailsPhotos(
               editIncidentDetailsMap: editIncidentDetailsMap))
           : null;
@@ -65,7 +66,7 @@ class EditIncidentDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveIncidentPhotosMap = {
         "incidentid": editIncidentDetailsMap['incidentId'],
-        "filenames": editIncidentDetailsMap['filenames'],
+        "filenames": editIncidentDetailsMap['ImageString'],
         "hashcode": hashCode
       };
       SaveReportNewIncidentPhotosModel saveReportNewIncidentPhotosModel =

@@ -146,6 +146,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       String? hashCode =
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       FetchTicketDetailsModel fetchTicketDetailsModel = await _ticketsRepository
           .fetchTicketDetails(hashCode, event.ticketId, userId);
       ticketId = event.ticketId;
@@ -195,7 +197,8 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
       if (fetchTicketDetailsModel.status == 200) {
         emit(TicketDetailsFetched(
             fetchTicketDetailsModel: fetchTicketDetailsModel,
-            ticketPopUpMenu: popUpMenuItemsList));
+            ticketPopUpMenu: popUpMenuItemsList,
+            clientId: clientId));
       } else {
         emit(TicketDetailsNotFetched(
             errorMessage: fetchTicketDetailsModel.message));
@@ -213,12 +216,19 @@ class TicketsBloc extends Bloc<TicketsEvents, TicketsStates> {
           await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
       event.saveTicketMap['userid'] =
           await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      SaveTicketModel saveTicketModel =
-          await _ticketsRepository.saveTicketModel(event.saveTicketMap);
-      if (saveTicketModel.status == 200) {
-        emit(TicketSaved(saveTicketModel: saveTicketModel));
+      if (event.saveTicketMap['header'] != null &&
+          event.saveTicketMap['application'] != null &&
+          event.saveTicketMap['priority'] != null &&
+          event.saveTicketMap['description'] != null) {
+        SaveTicketModel saveTicketModel =
+            await _ticketsRepository.saveTicketModel(event.saveTicketMap);
+        if (saveTicketModel.status == 200) {
+          emit(TicketSaved(saveTicketModel: saveTicketModel));
+        } else {
+          emit(TicketNotSaved(errorMessage: saveTicketModel.message));
+        }
       } else {
-        emit(TicketNotSaved(errorMessage: saveTicketModel.message));
+        emit(TicketNotSaved(errorMessage: StringConstants.kAllFieldsMandatory));
       }
     } catch (e) {
       emit(TicketNotSaved(errorMessage: e.toString()));

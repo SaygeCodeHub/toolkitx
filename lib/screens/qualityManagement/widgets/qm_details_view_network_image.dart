@@ -29,20 +29,20 @@ class QualityManagementViewNetworkImage extends StatelessWidget {
             crossAxisCount: 4,
             crossAxisSpacing: tinierSpacing,
             mainAxisSpacing: tinierSpacing),
-        itemCount: ViewImageUtil.viewImageList(data.files).length,
+        itemCount: ViewImageUtil.viewImageList(data.files!).length,
         itemBuilder: (context, index) {
           return InkWell(
               splashColor: AppColor.transparent,
               highlightColor: AppColor.transparent,
               onTap: () {
                 launchUrlString(
-                    '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(data.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                    '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(data.files!)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                     mode: LaunchMode.inAppWebView);
               },
               child: CachedNetworkImage(
                   height: kCachedNetworkImageHeight,
                   imageUrl:
-                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(data.files)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(data.files!)[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                   placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: AppColor.paleGrey,
                       highlightColor: AppColor.white,

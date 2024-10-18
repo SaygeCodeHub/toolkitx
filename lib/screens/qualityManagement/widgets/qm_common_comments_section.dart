@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -23,13 +24,12 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
   final int imageIndex;
 
   const QualityManagementCommonCommentsSection(
-      {Key? key,
+      {super.key,
       required this.onPhotosUploaded,
       required this.onTextFieldValue,
       this.fetchQualityManagementDetailsModel,
       required this.qmCommentsMap,
-      required this.imageIndex})
-      : super(key: key);
+      required this.imageIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +64,8 @@ class QualityManagementCommonCommentsSection extends StatelessWidget {
                 onTextFieldValue(textValue);
               }),
           const SizedBox(height: xxTinierSpacing),
-          Text(StringConstants.kUploadPhoto,
-              style: Theme.of(context).textTheme.small.copyWith(
-                  color: AppColor.black, fontWeight: FontWeight.w500)),
-          const SizedBox(height: xxTinierSpacing),
           UploadImageMenu(
+            imagePickerBloc: ImagePickerBloc(),
             isUpload: true,
             onUploadImageResponse: (List uploadImageList) {
               onPhotosUploaded(uploadImageList);

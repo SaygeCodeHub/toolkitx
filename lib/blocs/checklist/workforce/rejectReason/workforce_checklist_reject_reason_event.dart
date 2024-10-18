@@ -19,3 +19,10 @@ class CheckListSaveRejectReasons extends WorkForceCheckListRejectReasonEvent {
   CheckListSaveRejectReasons(
       {required this.allCheckListDataMap, required this.reason});
 }
+
+class FetchChecklistWorkforceDocuments
+    extends WorkForceCheckListRejectReasonEvent {
+  final String checklistId;
+
+  FetchChecklistWorkforceDocuments({required this.checklistId});
+}

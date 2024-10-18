@@ -45,40 +45,48 @@ class AllPermitDatum {
   final dynamic npwStatus;
   final String? startdate;
   final String? enddate;
+  final int actionCount;
+  bool? isDownloaded;
 
-  AllPermitDatum(
-      {this.id,
-      this.id2,
-      this.permit,
-      this.schedule,
-      this.location,
-      this.description,
-      this.status,
-      this.expired,
-      this.pname,
-      this.pcompany,
-      this.emergency,
-      this.npiStatus,
-      this.npwStatus,
-      this.startdate,
-      this.enddate});
+  AllPermitDatum({
+    this.id,
+    this.id2,
+    this.permit,
+    this.schedule,
+    this.location,
+    this.description,
+    this.status,
+    this.expired,
+    this.pname,
+    this.pcompany,
+    this.emergency,
+    this.npiStatus,
+    this.npwStatus,
+    this.startdate,
+    this.enddate,
+    this.actionCount = 0,
+    this.isDownloaded = false,
+  });
 
   factory AllPermitDatum.fromJson(Map<String, dynamic> json) => AllPermitDatum(
-      id: json["id"],
-      id2: json["id2"],
-      permit: json["permit"],
-      schedule: json["schedule"],
-      location: json["location"],
-      description: json["description"],
-      status: json["status"],
-      expired: json["expired"],
-      pname: json["pname"],
-      pcompany: json["pcompany"],
-      emergency: json["emergency"],
-      npiStatus: json["npi_status"],
-      npwStatus: json["npw_status"],
-      startdate: json["startdate"],
-      enddate: json["enddate"]);
+        id: json["id"],
+        id2: json["id2"],
+        permit: json["permit"],
+        schedule: json["schedule"],
+        location: json["location"],
+        description: json["description"],
+        status: json["status"],
+        expired: json["expired"],
+        pname: json["pname"],
+        pcompany: json["pcompany"],
+        emergency: json["emergency"],
+        npiStatus: json["npi_status"],
+        npwStatus: json["npw_status"],
+        startdate: json["startdate"],
+        enddate: json["enddate"],
+        actionCount: json["actionCount"] ?? 0,
+        isDownloaded: json["isDownloaded"] ?? false,
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -95,6 +103,8 @@ class AllPermitDatum {
         "npi_status": npiStatus,
         "npw_status": npwStatus,
         "startdate": startdate,
-        "enddate": enddate
+        "enddate": enddate,
+        "actionCount": actionCount,
+        "isDownloaded": isDownloaded
       };
 }

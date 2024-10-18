@@ -10,6 +10,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
+import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 import '../../configs/app_color.dart';
@@ -43,6 +44,7 @@ class _ProcessSignInScreenState extends State<ProcessSignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const GenericAppBar(),
       body: Column(
         children: <Widget>[
           Expanded(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_bloc.dart';
+import 'package:toolkit/blocs/permit/permit_events.dart';
+import 'package:toolkit/blocs/permit/permit_states.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -20,6 +24,8 @@ class TransferPermitOfflineScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PermitBloc>().add(
+        FetchDataForChangePermitCP(permitId: permitDetailsModel.data.tab1.id));
     return Scaffold(
       appBar:
           const GenericAppBar(title: StringConstants.kTransferComponentPerson),
@@ -28,30 +34,61 @@ class TransferPermitOfflineScreen extends StatelessWidget {
             left: leftRightMargin,
             right: leftRightMargin,
             top: xxTinierSpacing),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(StringConstants.kPermitNo,
-                  style: Theme.of(context).textTheme.xSmall.copyWith(
-                      fontWeight: FontWeight.w500, color: AppColor.black)),
-              const SizedBox(height: tiniestSpacing),
-              TextFieldWidget(
-                  value: permitDetailsModel.data.tab1.permit,
-                  readOnly: true,
-                  onTextFieldChanged: (textField) {}),
-              const SizedBox(height: xxTinierSpacing),
-              Text(StringConstants.kControlPerson,
-                  style: Theme.of(context).textTheme.xSmall.copyWith(
-                      fontWeight: FontWeight.w500, color: AppColor.black)),
-              const SizedBox(height: tiniestSpacing),
-              TextFieldWidget(onTextFieldChanged: (textField) {
-                saveTransferMap['controlPerson'] = textField;
-              }),
-              const SizedBox(height: xxTinierSpacing),
-            ],
-          ),
+        child: BlocBuilder<PermitBloc, PermitStates>(
+          buildWhen: (previousState, currentState) =>
+              currentState is DataForChangePermitCPFetched ||
+              currentState is DataForChangePermitCPNotFetched,
+          builder: (context, state) {
+            if (state is DataForChangePermitCPFetched) {
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: context.read<PermitBloc>().showTransferWarning,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.errorRed)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(xxTinierSpacing),
+                          child: Text(
+                            StringConstants.kPermitTransferWarning,
+                            style: TextStyle(color: AppColor.errorRed),
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: xxTinierSpacing),
+                    Text(StringConstants.kPermitNo,
+                        style: Theme.of(context).textTheme.xSmall.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.black)),
+                    const SizedBox(height: tiniestSpacing),
+                    TextFieldWidget(
+                        value: permitDetailsModel.data.tab1.permit,
+                        readOnly: true,
+                        onTextFieldChanged: (textField) {}),
+                    const SizedBox(height: xxTinierSpacing),
+                    Text(StringConstants.kControlPerson,
+                        style: Theme.of(context).textTheme.xSmall.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColor.black)),
+                    const SizedBox(height: tiniestSpacing),
+                    TextFieldWidget(onTextFieldChanged: (textField) {
+                      saveTransferMap['controlPerson'] = textField;
+                    }),
+                    const SizedBox(height: xxTinierSpacing),
+                  ],
+                ),
+              );
+            } else if (state is DataForChangePermitCPNotFetched) {
+              return Center(child: Text(state.errorMessage));
+            } else {
+              return const SizedBox.shrink();
+            }
+          },
         ),
       ),
       bottomNavigationBar: Padding(

@@ -12,6 +12,7 @@ import '../../blocs/uploadImage/upload_image_state.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/incident/incident_details_model.dart';
 import '../../utils/constants/string_constants.dart';
+import '../../utils/incident/incident_popup_menu_status.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/generic_loading_popup.dart';
@@ -43,19 +44,22 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(children: [
+            IncidentPopUpMenuStatusWidgets().renderMarkAsResolvedControl(
+                incidentDetailsModel, context, incidentCommentsMap),
             IncidentCommonCommentsSection(
-              onPhotosUploaded: (List uploadList) {
-                incidentCommentsMap['file_name'] = uploadList
-                    .toString()
-                    .replaceAll("[", '')
-                    .replaceAll(']', '');
-              },
-              onTextFieldValue: (String textValue) {
-                incidentCommentsMap['comments'] = textValue;
-              },
-              incidentCommentsMap: incidentCommentsMap,
-              incidentDetailsModel: incidentDetailsModel,
-            ),
+                onPhotosUploaded: (List uploadList) {
+                  incidentCommentsMap['file_name'] = uploadList
+                      .toString()
+                      .replaceAll("[", '')
+                      .replaceAll(']', '');
+                },
+                onTextFieldValue: (String textValue) {
+                  incidentCommentsMap['comments'] = textValue;
+                },
+                incidentCommentsMap: incidentCommentsMap,
+                incidentDetailsModel: incidentDetailsModel,
+                showStatusControl: false,
+                showClassification: false),
           ]),
         ),
       ),
@@ -93,8 +97,9 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
                   .replaceAll(' ', '');
               if (incidentCommentsMap['comments'] != null ||
                   incidentCommentsMap['comments'] != '') {
-                context.read<IncidentDetailsBloc>().add(
-                    SaveIncidentComments(saveCommentsMap: incidentCommentsMap));
+                context.read<IncidentDetailsBloc>().add(SaveIncidentComments(
+                    saveCommentsMap: incidentCommentsMap,
+                    isFromAddComment: false));
               }
             } else if (state is ImageCouldNotUpload) {
               GenericLoadingPopUp.dismiss(context);
@@ -114,7 +119,8 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
                           context.read<ImagePickerBloc>().lengthOfImageList));
                 } else {
                   context.read<IncidentDetailsBloc>().add(SaveIncidentComments(
-                      saveCommentsMap: incidentCommentsMap));
+                      saveCommentsMap: incidentCommentsMap,
+                      isFromAddComment: false));
                 }
               },
               textValue: StringConstants.kSave),

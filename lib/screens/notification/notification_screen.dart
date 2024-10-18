@@ -12,6 +12,7 @@ import 'package:toolkit/screens/qualityManagement/qm_details_screen.dart';
 import 'package:toolkit/screens/safetyNotice/safety_notice_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/todo/todo_details_and_document_details_screen.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_details_tab_screen.dart';
 import 'package:toolkit/widgets/custom_card.dart';
 
@@ -150,12 +151,20 @@ class NotificationScreen extends StatelessWidget {
         Navigator.pushNamed(context, DocumentsListScreen.routeName,
             arguments: true);
         break;
-      case 'safetyNotice':
+      case 'safetynotice':
         Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName,
             arguments: redirectionKey);
         break;
       case 'tickets':
         Navigator.pushNamed(context, TicketDetailsScreen.routeName,
+            arguments: redirectionKey);
+        break;
+      case 'hf':
+        Navigator.pushNamed(context, TripsDetailsScreen.routeName,
+            arguments: redirectionKey);
+        break;
+      case 'wf_trips':
+        Navigator.pushNamed(context, TripsDetailsScreen.routeName,
             arguments: redirectionKey);
         break;
     }

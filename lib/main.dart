@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/blocs/LogBook/logbook_bloc.dart';
+import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/blocs/assets/assets_bloc.dart';
 import 'package:toolkit/blocs/calendar/calendar_bloc.dart';
 import 'package:toolkit/blocs/certificates/cerficatesList/certificate_list_bloc.dart';
@@ -19,10 +20,13 @@ import 'package:toolkit/blocs/expense/expense_bloc.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/blocs/leavesAndHolidays/leaves_and_holidays_bloc.dart';
 import 'package:toolkit/blocs/location/location_bloc.dart';
+import 'package:toolkit/blocs/meetingRoom/meeting_room_bloc.dart';
 import 'package:toolkit/blocs/searchTextField/search_text_field_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/SignInAssignToMe/sign_in_assign_to_me_bloc.dart';
 import 'package:toolkit/blocs/signInQRCode/signInLocationDetails/sign_in_location_details_bloc.dart';
+import 'package:toolkit/blocs/tankManagement/tank_management_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import 'package:toolkit/blocs/tickets2/tickets2_bloc.dart';
 import 'package:toolkit/blocs/trips/trip_bloc.dart';
 import 'package:toolkit/blocs/uploadImage/upload_image_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
@@ -92,6 +96,7 @@ void main() async {
   await _initDependencies();
   await _initFirebase();
   runApp(const MyApp());
+  ClientBloc().callOnce = true;
 }
 
 _initApp() async {
@@ -231,6 +236,10 @@ class MyApp extends StatelessWidget {
           BlocProvider(lazy: true, create: (context) => NotificationBloc()),
           BlocProvider(lazy: true, create: (context) => GlobalBloc()),
           BlocProvider(lazy: true, create: (context) => TripBloc()),
+          BlocProvider(lazy: true, create: (context) => MeetingRoomBloc()),
+          BlocProvider(lazy: true, create: (context) => TankManagementBloc()),
+          BlocProvider(lazy: true, create: (context) => Tickets2Bloc()),
+          BlocProvider(lazy: true, create: (context) => AccountingBloc())
         ],
         child: GestureDetector(
             onTap: () {

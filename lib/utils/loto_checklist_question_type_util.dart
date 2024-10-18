@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/loto/widgets/loto_select_multi_checklist_answer.dart';
+import 'package:toolkit/screens/loto/widgets/type_three_expansion_tile.dart';
+import '../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../configs/app_color.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
@@ -18,7 +20,7 @@ class LotoChecklistQuestionTypeUtil {
   var valueOfA = 0.0;
 
   Widget fetchSwitchCaseWidget(
-      type, questionId, queoptions, answerList, context) {
+      type, questionId, queoptions, answerList, context, index, startLotoMap) {
     switch (type) {
       case 1:
         return TextFieldWidget(
@@ -26,7 +28,8 @@ class LotoChecklistQuestionTypeUtil {
             maxLength: 250,
             textInputAction: TextInputAction.done,
             onTextFieldChanged: (String textValue) {
-              answerList.add({"questionid": questionId, "answer": textValue});
+              answerList[index]['questionid'] = questionId;
+              answerList[index]['answer'] = textValue;
             });
       case 2:
         return TextFieldWidget(
@@ -34,37 +37,42 @@ class LotoChecklistQuestionTypeUtil {
             maxLength: 250,
             textInputAction: TextInputAction.done,
             onTextFieldChanged: (String textValue) {
-              answerList.add({"questionid": questionId, "answer": textValue});
+              answerList[index]['questionid'] = questionId;
+              answerList[index]['answer'] = textValue;
             });
       case 3:
-        return AnswerOptionExpansionTile(
+        return TypeThreeExpansionTile(
           queOptionList: queoptions,
           startLotoMap: StartLotoScreen.startLotoMap,
           questionId: questionId,
+          answerList: answerList,
         );
       case 4:
         return AnswerOptionExpansionTile(
           queOptionList: queoptions,
           startLotoMap: StartLotoScreen.startLotoMap,
           questionId: questionId,
+          answerList: answerList,
         );
       case 5:
         return LotoSelectMultiChecklistAnswer(
           queoptions: queoptions,
-          selectedAnswerList: answerList,
           onCreatedForChanged: (List<dynamic> id) {
-            answerList.add({"questionid": questionId, "answer": id});
+            answerList[index]['questionid'] = questionId;
+            answerList[index]['answer'] = id
+                .toString()
+                .replaceAll("[", "")
+                .replaceAll("]", "")
+                .replaceAll(' ', '');
           },
         );
       case 6:
         return UploadImageMenu(
+          imagePickerBloc: ImagePickerBloc(),
           isFromCertificate: true,
           onUploadImageResponse: (List<dynamic> imageList) {
-            answerList.add({
-              "questionid": questionId,
-              "answer":
-                  imageList.toString().replaceAll("[", "").replaceAll("]", "")
-            });
+            startLotoMap['pickedImage'] = imageList;
+            startLotoMap['questionid'] = questionId;
           },
         );
       case 7:
@@ -75,8 +83,8 @@ class LotoChecklistQuestionTypeUtil {
                 textInputType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 onTextFieldChanged: (String textValue) {
-                  answerList
-                      .add({"questionid": questionId, "answer": textValue});
+                  answerList[index]['questionid'] = questionId;
+                  answerList[index]['answer'] = textValue;
                 }),
             const SizedBox(height: tiniestSpacing),
             Text(StringConstants.kPleaseEnterYourAnswer50Bis200,
@@ -125,10 +133,8 @@ class LotoChecklistQuestionTypeUtil {
                             "valueA": valueOfA,
                             "valueB": double.parse(textField).toDouble(),
                           };
-                          answerList.add({
-                            "questionid": questionId,
-                            "answer": jsonEncode(value)
-                          });
+                          answerList[index]['questionid'] = questionId;
+                          answerList[index]['answer'] = jsonEncode(value);
                         }))
               ])
         ]);
@@ -136,14 +142,16 @@ class LotoChecklistQuestionTypeUtil {
         return DatePickerTextField(
           hintText: StringConstants.kSelectDate,
           onDateChanged: (String date) {
-            answerList.add({"questionid": questionId, "answer": date});
+            answerList[index]['questionid'] = questionId;
+            answerList[index]['answer'] = date;
           },
         );
       case 11:
         return TimePickerTextField(
             hintText: StringConstants.kSelectTime,
             onTimeChanged: (String time) {
-              answerList.add({"questionid": questionId, "answer": time});
+              answerList[index]['questionid'] = questionId;
+              answerList[index]['answer'] = time;
             });
       default:
         return Container();

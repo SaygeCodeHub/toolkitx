@@ -21,14 +21,12 @@ class _AttachmentPreviewScreenState extends State<AttachmentPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-          vertical: xxxTinySpacing, horizontal: xxTinierSpacing),
-      child: SingleChildScrollView(
-        child: MediaTypeUtil().showMediaWidget(
-            context.read<ChatBloc>().chatDetailsMap['mediaType'],
-            {'file': chatData.fileName},
-            context),
-      ),
-    );
+        padding: const EdgeInsets.symmetric(
+            vertical: xxxTinySpacing, horizontal: xxTinierSpacing),
+        child: SingleChildScrollView(
+            child: MediaTypeUtil().showMediaWidget(
+                context.read<ChatBloc>().chatDetailsMap['mediaType'],
+                {'file': chatData.fileName},
+                context)));
   }
 }

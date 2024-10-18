@@ -18,4 +18,6 @@ class CacheKeys {
   static const userName = "userName ";
   static const timeZoneOffset = "timeZoneOffset ";
   static const fcmToken = "fcmToken";
+  static const receiverId = "receiverId";
+  static const receiverType = "receiverType";
 }

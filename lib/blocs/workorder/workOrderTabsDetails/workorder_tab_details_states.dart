@@ -1,4 +1,5 @@
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 
 import '../../../data/models/workorder/accpeet_workorder_model.dart';
 import '../../../data/models/workorder/delete_document_model.dart';
@@ -492,3 +493,21 @@ class WorkOrderItemNotUpdated extends WorkOrderTabDetailsStates {
 
   WorkOrderItemNotUpdated({required this.errorMessage});
 }
+
+class WorkOrderRolesFetching extends WorkOrderTabDetailsStates {}
+
+class WorkOrderRolesFetched extends WorkOrderTabDetailsStates {
+  final FetchWorkOrderRolesModel fetchWorkOrderRolesModel;
+  final String role;
+
+  WorkOrderRolesFetched(
+      {required this.fetchWorkOrderRolesModel, required this.role});
+}
+
+class WorkOrderRolesNotFetched extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderRolesNotFetched({required this.errorMessage});
+}
+
+class WorkOrderRoleSelected extends WorkOrderTabDetailsStates {}

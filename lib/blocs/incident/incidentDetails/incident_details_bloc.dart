@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../data/cache/cache_keys.dart';
 import '../../../../data/cache/customer_cache.dart';
 import '../../../../di/app_module.dart';
@@ -84,7 +85,11 @@ class IncidentDetailsBloc
           "description": incidentDetailsModel.data!.description,
           "responsible_person": incidentDetailsModel.data!.responsiblePerson,
           "site_name": incidentDetailsModel.data!.sitename,
+          "site_id": int.tryParse(incidentDetailsModel.data!.site!),
           "location_name": incidentDetailsModel.data!.locationname,
+          "locationid": incidentDetailsModel.data?.location ?? '',
+          "assetid": incidentDetailsModel.data?.assetid,
+          "assetname": incidentDetailsModel.data?.assetname,
           "category": incidentDetailsModel.data!.category,
           "reporteddatetime": incidentDetailsModel.data!.reporteddatetime,
           "customfields": customFieldList,
@@ -189,6 +194,10 @@ class IncidentDetailsBloc
     }
   }
 
+  bool isValidControlValue(dynamic value) {
+    return value == null || value.toString().isEmpty;
+  }
+
   FutureOr<void> _saveComments(
       SaveIncidentComments event, Emitter<IncidentDetailsStates> emit) async {
     emit(SavingIncidentComments());
@@ -196,18 +205,33 @@ class IncidentDetailsBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userid = await _customerCache.getUserId(CacheKeys.userId);
       Map saveCommentMap = event.saveCommentsMap;
-      if (saveCommentMap['comments'] == null ||
-          saveCommentMap['comments'].isEmpty) {
+      if (saveCommentMap['status'] != '3' &&
+          !event.isFromAddComment &&
+          isValidControlValue(saveCommentMap['suspectedcause']) &&
+          isValidControlValue(saveCommentMap['rootcause']) &&
+          isValidControlValue(saveCommentMap['lessonslearnt']) &&
+          isValidControlValue(saveCommentMap['preliminaryrecommendation']) &&
+          isValidControlValue(saveCommentMap['completedcorrectiveactions']) &&
+          isValidControlValue(saveCommentMap['preventiveactions'])) {
         emit(IncidentCommentsNotSaved(
-            commentsNotSaved: DatabaseUtil.getText('CommentsInsert')));
+            commentsNotSaved:
+                validatedStatusControlMessage(saveCommentMap['status'])));
       } else {
         Map saveCommentsMap = {
           "userid": userid,
           "incidentid": saveCommentMap['incidentId'],
           "hashcode": hashCode,
           "status": saveCommentMap['status'] ?? '',
-          "comments": saveCommentMap['comments'],
-          "classification": saveCommentMap['classification'] ?? ''
+          "comments": saveCommentMap['comments'] ?? '',
+          "classification": saveCommentMap['classification'] ?? '',
+          "suspectedcause": saveCommentMap['suspectedcause'] ?? '',
+          "rootcause": saveCommentMap['rootcause'] ?? '',
+          "lessonslearnt": saveCommentMap['lessonslearnt'] ?? '',
+          "preliminaryrecommendation":
+              saveCommentMap['preliminaryrecommendation'] ?? '',
+          "completedcorrectiveactions":
+              saveCommentMap['completedcorrectiveactions'] ?? '',
+          "preventiveactions": saveCommentMap['preventiveactions'] ?? ''
         };
         SaveIncidentAndQMCommentsModel saveIncidentCommentsModel =
             await _incidentRepository.saveComments(saveCommentsMap);
@@ -226,6 +250,23 @@ class IncidentDetailsBloc
       }
     } catch (e) {
       emit(IncidentCommentsNotSaved(commentsNotSaved: e.toString()));
+    }
+  }
+
+  String validatedStatusControlMessage(String status) {
+    switch (status) {
+      case '0':
+        return StringConstants.kIncidentSuspectedCauseValidation;
+      case '1':
+        return StringConstants.kIncidentRootCauseLessonValidation;
+      case '2':
+        return StringConstants.kIncidentPreliminaryRecommendationValidation;
+      case '4':
+        return StringConstants.kCompletedCorrectiveActions;
+      case '5':
+        return StringConstants.kIncidentPreventiveActionsValidation;
+      default:
+        return StringConstants.kSomethingWentWrong;
     }
   }
 

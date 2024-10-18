@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
+import 'package:toolkit/blocs/imagePickerBloc/image_picker_event.dart';
 import 'package:toolkit/blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
+import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/qualityManagement/widgets/qm_category_expansion_tile.dart';
+import 'package:toolkit/utils/constants/api_constants.dart';
+import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
+import 'package:toolkit/utils/incident_view_image_util.dart';
 import 'package:toolkit/widgets/error_section.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../blocs/qualityManagement/qm_bloc.dart';
 import '../../blocs/qualityManagement/qm_events.dart';
@@ -17,19 +25,20 @@ import '../incident/widgets/date_picker.dart';
 import '../incident/widgets/time_picker.dart';
 import 'widgets/qm_bottom_navigation_bar.dart';
 import 'widgets/qm_contractor_list_tile.dart';
-import 'widgets/qm_edit_view_image.dart';
 import 'widgets/qm_report_anonymously_expansion_tile.dart';
 
 class ReportNewQA extends StatelessWidget {
   static const routeName = 'ReportNewQA';
   static bool isFromEdit = false;
 
-  const ReportNewQA({Key? key}) : super(key: key);
+  const ReportNewQA({super.key});
+
   static Map reportAndEditQMMap = {};
   static String eventDate = '';
 
   @override
   Widget build(BuildContext context) {
+    context.read<ImagePickerBloc>().add(PickImageInitial());
     context
         .read<QualityManagementBloc>()
         .add(FetchQualityManagementMaster(reportNewQAMap: reportAndEditQMMap));
@@ -55,6 +64,28 @@ class ReportNewQA extends StatelessWidget {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(DatabaseUtil.getText('Category'),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .xSmall
+                                      .copyWith(fontWeight: FontWeight.w600)),
+                              const SizedBox(height: xxxTinierSpacing),
+                              Visibility(
+                                  visible: ReportNewQA.isFromEdit != true &&
+                                      reportAndEditQMMap['categoryname'] ==
+                                          null,
+                                  replacement: Text(
+                                      (reportAndEditQMMap['categoryname'] ==
+                                              null)
+                                          ? ""
+                                          : reportAndEditQMMap['categoryname']
+                                              .toString()),
+                                  child: QMCategoryExpansionTile(
+                                      categoryList: state
+                                          .fetchQualityManagementMasterModel
+                                          .data![4],
+                                      categoryMap: reportAndEditQMMap)),
+                              const SizedBox(height: xxTinySpacing),
                               Text(DatabaseUtil.getText('HideMyIdentity'),
                                   style: Theme.of(context)
                                       .textTheme
@@ -137,27 +168,53 @@ class ReportNewQA extends StatelessWidget {
                                         textField;
                                   }),
                               const SizedBox(height: xxTinySpacing),
-                              QualityManagementEditViewImage(
-                                  reportAndEditQMMap: reportAndEditQMMap,
-                                  clientId: state.clientId),
+                              Visibility(
+                                visible: isFromEdit == true,
+                                child: Text(DatabaseUtil.getText('viewimage'),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .xSmall
+                                        .copyWith(fontWeight: FontWeight.w600)),
+                              ),
+                              const SizedBox(height: xxxTinierSpacing),
+                              Visibility(
+                                visible: reportAndEditQMMap['files'] != null,
+                                child: ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: ViewImageUtil.viewImageList(
+                                            reportAndEditQMMap['files'] ?? '')
+                                        .length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          splashColor: AppColor.transparent,
+                                          highlightColor: AppColor.transparent,
+                                          onTap: () {
+                                            launchUrlString(
+                                                '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(reportAndEditQMMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(state.clientId)}',
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: xxxTinierSpacing),
+                                            child: Text(
+                                                ViewImageUtil.viewImageList(
+                                                    reportAndEditQMMap[
+                                                            'files'] ??
+                                                        '')[index],
+                                                style: const TextStyle(
+                                                    color: AppColor.deepBlue)),
+                                          ));
+                                    }),
+                              ),
                               const SizedBox(height: xxTinySpacing),
-                              Text(StringConstants.kUploadPhoto,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .xSmall
-                                      .copyWith(fontWeight: FontWeight.w600)),
-                              const SizedBox(height: xxTinierSpacing),
                               UploadImageMenu(
-                                editedImageList: reportAndEditQMMap['files']
-                                    .toString()
-                                    .split(","),
+                                imagePickerBloc: ImagePickerBloc(),
                                 isUpload: true,
                                 onUploadImageResponse: (List uploadImageList) {
-                                  reportAndEditQMMap['filenames'] =
-                                      uploadImageList
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
+                                  reportAndEditQMMap['pickedImage'] =
+                                      uploadImageList;
                                 },
                               ),
                               const SizedBox(height: xxTinySpacing),

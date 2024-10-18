@@ -8,8 +8,10 @@ class FetchingCertificateList extends CertificateListState {}
 
 class FetchedCertificateList extends CertificateListState {
   final FetchCertificatesModel fetchCertificatesModel;
+  final String clientId;
 
-  FetchedCertificateList({required this.fetchCertificatesModel});
+  FetchedCertificateList(
+      {required this.fetchCertificatesModel, required this.clientId});
 }
 
 class CertificateListError extends CertificateListState {

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import '../../../blocs/safetyNotice/safety_notice_bloc.dart';
-import '../../../blocs/safetyNotice/safety_notice_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/status_tag_model.dart';
@@ -11,6 +8,7 @@ import '../../../utils/database_utils.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/status_tag.dart';
 import '../safety_notice_details_screen.dart';
+import '../safety_notice_screen.dart';
 
 class SafetyNoticeListCard extends StatelessWidget {
   final Notice noticesDatum;
@@ -25,9 +23,9 @@ class SafetyNoticeListCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName,
                   arguments: noticesDatum.id)
-              .then((value) => context
-                  .read<SafetyNoticeBloc>()
-                  .add(FetchSafetyNotices(pageNo: 1, isFromHomeScreen: false)));
+              .then((value) => Navigator.of(context).pushReplacementNamed(
+                  SafetyNoticeScreen.routeName,
+                  arguments: false));
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(

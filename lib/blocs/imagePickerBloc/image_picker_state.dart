@@ -8,11 +8,13 @@ class ImagePicked extends ImagePickerState {
   final List pickedImagesList;
   final int imageCount;
   final String clientId;
+  final String fileExtension;
 
   ImagePicked(
       {required this.clientId,
       required this.imageCount,
-      required this.pickedImagesList});
+      required this.pickedImagesList,
+      this.fileExtension = ''});
 }
 
 class FailedToPickImage extends ImagePickerState {

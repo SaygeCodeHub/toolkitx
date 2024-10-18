@@ -16,10 +16,11 @@ import '../../widgets/custom_icon_button.dart';
 class LotoAssignTeamScreen extends StatelessWidget {
   static const routeName = 'LotoAssignTeamScreen';
 
-  const LotoAssignTeamScreen({super.key});
+  const LotoAssignTeamScreen({super.key, required this.isRemoveOperation});
 
+  final String isRemoveOperation;
   static String name = '';
-  static String isRemove = '0';
+
   static int pageNo = 1;
   static bool isSearched = false;
 
@@ -28,9 +29,8 @@ class LotoAssignTeamScreen extends StatelessWidget {
     pageNo = 1;
     context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
     context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
-    context
-        .read<LotoDetailsBloc>()
-        .add(FetchLotoAssignTeam(pageNo: pageNo, isRemove: isRemove, name: ''));
+    context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
+        pageNo: pageNo, isRemove: isRemoveOperation, name: ''));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText("assign_Team")),
       body: Padding(
@@ -47,17 +47,17 @@ class LotoAssignTeamScreen extends StatelessWidget {
               context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
               context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
               context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
-                  pageNo: pageNo, isRemove: isRemove, name: name));
+                  pageNo: pageNo, isRemove: isRemoveOperation, name: name));
             }, onClear: () {
               pageNo = 1;
               context.read<LotoDetailsBloc>().lotoTeamReachedMax = false;
               context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
               name = '';
               context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
-                  pageNo: pageNo, isRemove: isRemove, name: name));
+                  pageNo: pageNo, isRemove: isRemoveOperation, name: name));
             }),
             const SizedBox(height: tinySpacing),
-            const AssignTeamList(),
+            AssignTeamList(isRemoveOperation: isRemoveOperation),
           ],
         ),
       ),
@@ -71,11 +71,10 @@ class CustomSearchTextField extends StatelessWidget {
   final void Function() onClear;
 
   CustomSearchTextField(
-      {Key? key,
+      {super.key,
       required this.onChange,
       required this.onSearch,
-      required this.onClear})
-      : super(key: key);
+      required this.onClear});
   final TextEditingController textController = TextEditingController();
 
   @override

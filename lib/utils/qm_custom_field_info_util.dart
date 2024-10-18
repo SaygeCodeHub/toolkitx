@@ -46,6 +46,7 @@ class QualityManagementCustomFieldInfoUtil {
           },
           index: index,
           addAndEditIncidentMap: addAndEditQMMap,
+          customFieldsDatum: customFieldDatum,
         );
 
       default:

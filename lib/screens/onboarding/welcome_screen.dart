@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/widgets/circle_avatar.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/widgets/circle_avatar.dart';
+
 import '../../widgets/primary_button.dart';
 import 'select_language_screen.dart';
 
@@ -14,6 +15,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBodyBehindAppBar: true,
         body: Padding(
             padding: EdgeInsets.only(
                 left: leftRightMargin,

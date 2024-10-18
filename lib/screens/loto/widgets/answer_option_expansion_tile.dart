@@ -8,12 +8,14 @@ import '../../../data/models/loto/fetch_loto_checklist_questions_model.dart';
 
 class AnswerOptionExpansionTile extends StatelessWidget {
   final Map startLotoMap;
+  final List answerList;
 
   const AnswerOptionExpansionTile(
       {super.key,
       required this.queOptionList,
       required this.startLotoMap,
-      required this.questionId});
+      required this.questionId,
+      required this.answerList});
 
   final List<QueOption> queOptionList;
   final String questionId;
@@ -23,7 +25,7 @@ class AnswerOptionExpansionTile extends StatelessWidget {
     String selectedValue = "";
     context
         .read<LotoDetailsBloc>()
-        .add(SelectAnswer(id: startLotoMap['optionid'] ?? 0, text: ''));
+        .add(SelectAnswer(id: startLotoMap['option'] ?? 0, text: ''));
     return BlocBuilder<LotoDetailsBloc, LotoDetailsState>(
         buildWhen: (previousState, currentState) =>
             currentState is AnswerSelected,
@@ -52,7 +54,7 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                     title: Text(
                                         queOptionList[listIndex].queoptiontext),
                                     onTap: () {
-                                      startLotoMap['optionid'] =
+                                      startLotoMap['option'] =
                                           queOptionList[listIndex].queoptionid;
                                       startLotoMap['optiontext'] =
                                           queOptionList[listIndex]
@@ -61,16 +63,13 @@ class AnswerOptionExpansionTile extends StatelessWidget {
                                           .queoptiontext;
                                       context.read<LotoDetailsBloc>().add(
                                           SelectAnswer(
-                                              id: startLotoMap['optionid'],
+                                              id: startLotoMap['option'],
                                               text: queOptionList[listIndex]
                                                   .queoptiontext));
-                                      context
-                                          .read<LotoDetailsBloc>()
-                                          .answerList
-                                          .add({
-                                        "questionid": questionId,
-                                        "answer": startLotoMap['optionid']
-                                      });
+                                      answerList[listIndex]["questionid"] =
+                                          questionId;
+                                      answerList[listIndex]["answer"] =
+                                          startLotoMap['option'];
                                     });
                               }))
                     ]));

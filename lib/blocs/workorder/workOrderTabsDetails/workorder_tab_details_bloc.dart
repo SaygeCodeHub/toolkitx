@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:toolkit/data/cache/cache_keys.dart';
 import 'package:toolkit/data/models/workorder/complete_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_edit_workforce_model.dart';
@@ -49,6 +50,7 @@ class WorkOrderTabDetailsBloc
   final WorkOrderRepository _workOrderRepository = getIt<WorkOrderRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   bool docListReachedMax = false;
+  String roleId = '';
   int pageNo = 1;
   String partName = '';
   String workOrderWorkforceName = '';
@@ -103,6 +105,8 @@ class WorkOrderTabDetailsBloc
     on<AssignWorkOrderParts>(_assignWorkOrderParts);
     on<CompleteWorkOrder>(_completeWorkOrder);
     on<UpdateWorkOrderItem>(_updateWorkOrderItem);
+    on<FetchWorkOrderRoles>(_fetchWorkOrderRoles);
+    on<SelectWorkOrderRole>(_selectWorkOrderRole);
   }
 
   int tabIndex = 0;
@@ -137,7 +141,7 @@ class WorkOrderTabDetailsBloc
       ];
       FetchWorkOrderTabDetailsModel fetchWorkOrderDetailsModel =
           await _workOrderRepository.fetchWorkOrderDetails(
-              hashCode!, event.workOrderId);
+              hashCode!, event.workOrderId, roleId);
       workOrderId = event.workOrderId;
       tabIndex = event.initialTabIndex;
       if (fetchWorkOrderDetailsModel.data.isassignedwf == '1') {
@@ -1146,5 +1150,32 @@ class WorkOrderTabDetailsBloc
     } catch (e) {
       emit(WorkOrderItemNotUpdated(errorMessage: e.toString()));
     }
+  }
+
+  Future<FutureOr<void>> _fetchWorkOrderRoles(FetchWorkOrderRoles event,
+      Emitter<WorkOrderTabDetailsStates> emit) async {
+    emit(WorkOrderRolesFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      FetchWorkOrderRolesModel fetchWorkOrderRolesModel =
+          await _workOrderRepository.fetchWorkOrderRoles(hashCode, userId);
+      if (fetchWorkOrderRolesModel.status == 200) {
+        emit(WorkOrderRolesFetched(
+            fetchWorkOrderRolesModel: fetchWorkOrderRolesModel, role: roleId));
+      } else {
+        emit(WorkOrderRolesNotFetched(
+            errorMessage: fetchWorkOrderRolesModel.message));
+      }
+    } catch (e) {
+      emit(WorkOrderRolesNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectWorkOrderRole(
+      SelectWorkOrderRole event, Emitter<WorkOrderTabDetailsStates> emit) {
+    roleId = event.roleId;
+    emit(WorkOrderRoleSelected());
   }
 }

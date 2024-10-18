@@ -80,6 +80,12 @@ class CategoryScreen extends StatelessWidget {
                                                 state.imageIndex;
                                             ReportNewIncidentScreen.clientId =
                                                 state.clientId;
+                                            ReportNewIncidentScreen
+                                                .showReportAnonymously = state
+                                                    .fetchIncidentMasterModel
+                                                    .incidentMasterDatum![9][0]
+                                                    .settingsValue ??
+                                                '';
                                             Navigator.pushNamed(
                                                 context,
                                                 ReportNewIncidentScreen

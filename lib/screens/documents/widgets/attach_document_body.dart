@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/documents/documents_details_models.dart';
 import '../../../utils/database_utils.dart';
@@ -70,6 +71,7 @@ class AttachDocumentBody extends StatelessWidget {
           hintText: DatabaseUtil.getText('dms_versionnotes')),
       const SizedBox(height: xxTinySpacing),
       UploadImageMenu(
+          imagePickerBloc: ImagePickerBloc(),
           isUpload: false,
           onUploadImageResponse: (List uploadImageList) {
             AttachDocumentScreen.attachDocumentMap['files'] = uploadImageList

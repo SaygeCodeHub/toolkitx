@@ -35,39 +35,54 @@ class PermitGetMasterModel {
 }
 
 class PermitMasterDatum {
-  final dynamic permittype;
+  final int permittype;
   final String? permittypename;
-  final int? id;
+  final int id;
   final String? location;
-  final int? parentid;
-  final String? name;
-  final dynamic parentlocationname;
-  final int? powerid;
-  final int? type;
+  final int parentid;
+  final String name;
+  final String parentlocationname;
+  final int powerid;
+  final int type;
+  final int userId;
+  final String userFullName;
+  final String userEmail;
+  final String userPhone;
+  final int appId;
 
   PermitMasterDatum({
-    this.permittype,
+    required this.permittype,
     required this.permittypename,
     required this.id,
     required this.location,
     required this.parentid,
     required this.name,
-    this.parentlocationname,
+    required this.parentlocationname,
     required this.powerid,
     required this.type,
+    required this.userId,
+    required this.userFullName,
+    required this.userEmail,
+    required this.userPhone,
+    required this.appId,
   });
 
   factory PermitMasterDatum.fromJson(Map<String, dynamic> json) =>
       PermitMasterDatum(
-        permittype: json["permittype"],
-        permittypename: json["permittypename"],
-        id: json["id"],
-        location: json["location"],
-        parentid: json["parentid"],
-        name: json["name"],
-        parentlocationname: json["parentlocationname"],
-        powerid: json["powerid"],
-        type: json["type"],
+        permittype: json["permittype"] ?? 0,
+        permittypename: json["permittypename"] ?? '',
+        id: json["id"] ?? 0,
+        location: json["location"] ?? '',
+        parentid: json["parentid"] ?? 0,
+        name: json["name"] ?? '',
+        parentlocationname: json["parentlocationname"] ?? '',
+        powerid: json["powerid"] ?? 0,
+        type: json["type"] ?? 0,
+        userId: json["user_id"] ?? 0,
+        userFullName: json["user_full_name"] ?? '',
+        userEmail: json["user_email"] ?? '',
+        userPhone: json["user_phone"] ?? '',
+        appId: json["app_id"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,5 +95,10 @@ class PermitMasterDatum {
         "parentlocationname": parentlocationname,
         "powerid": powerid,
         "type": type,
+        "user_id": userId,
+        "user_full_name": userFullName,
+        "user_email": userEmail,
+        "user_phone": userPhone,
+        "app_id": appId,
       };
 }

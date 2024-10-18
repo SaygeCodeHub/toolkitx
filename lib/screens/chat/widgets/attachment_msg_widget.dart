@@ -1,153 +1,228 @@
 import 'dart:io';
-
+import 'dart:ui' as ui;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/chat/widgets/quote_message_reply_container.dart';
 import 'package:toolkit/utils/chat/attachement_msg_type_util.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../../blocs/chat/chat_bloc.dart';
 import '../../../blocs/chat/chat_event.dart';
+import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/cache/cache_keys.dart';
 import '../../../data/cache/customer_cache.dart';
+import '../../../data/models/encrypt_class.dart';
 import '../../../di/app_module.dart';
 import '../../../utils/database/database_util.dart';
+import 'chat_subtitle.dart';
 
 class AttachmentMsgWidget extends StatelessWidget {
-  final dynamic snapShot;
-  final int reversedIndex;
+  final Map messageData;
 
-  const AttachmentMsgWidget(
-      {super.key, required this.snapShot, required this.reversedIndex});
+  const AttachmentMsgWidget({super.key, required this.messageData});
+
+  String getDecryptedMessage(String message) {
+    return EncryptData.decryptAES(message);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-          right: kModuleImagePadding,
-          left: kModuleImagePadding,
-          bottom: kModuleImagePadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-              (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                  ? context.read<ChatBloc>().chatDetailsMap['employee_name'] ??
-                      ''
-                  : '',
-              style: Theme.of(context).textTheme.tinySmall,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1),
-          const SizedBox(height: xxTiniestSpacing),
-          (snapShot.data![reversedIndex]['isReceiver'] == 1)
-              ? Align(
-                  alignment: Alignment.centerLeft,
-                  child: showDownloadedImage(
-                      snapShot.data![reversedIndex]['localImagePath']
-                          .toString(),
-                      context,
-                      snapShot.data![reversedIndex]['msg_type'] ?? '',
-                      snapShot.data![reversedIndex]['isReceiver']))
-              : Align(
-                  alignment: Alignment.centerRight,
-                  child: showDownloadedImage(
-                      snapShot.data![reversedIndex]['pickedMedia'].toString(),
-                      context,
-                      snapShot.data![reversedIndex]['msg_type'],
-                      snapShot.data![reversedIndex]['isReceiver'])),
-          Align(
-            alignment: (snapShot.data![reversedIndex]['isReceiver'] == 1)
-                ? Alignment.centerLeft
-                : Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.all(tiniestSpacing),
-              child: Text(
-                  DateFormat('h:mm a').format(DateTime.parse(
-                      getTimeForUserTimeZone(context,
-                              snapShot.data?[reversedIndex]['msg_time'])
-                          .toString())),
-                  style: Theme.of(context).textTheme.smallTextBlack),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  DateTime getTimeForUserTimeZone(BuildContext context, String time) {
-    DateTime dateTime = DateTime.parse(time);
-    List offset = context
-        .read<ChatBloc>()
-        .timeZoneFormat
-        .replaceAll('+', '')
-        .replaceAll('-', '')
-        .split(':');
-    if (context.read<ChatBloc>().timeZoneFormat.contains('+')) {
-      dateTime = dateTime.toUtc().add(Duration(
-          hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
-      return dateTime;
-    } else {
-      dateTime = dateTime.toUtc().subtract(Duration(
-          hours: int.parse(offset[0]), minutes: int.parse(offset[1].trim())));
-      return dateTime;
-    }
+    return LayoutBuilder(builder: (context, constraints) {
+      double margin = 0.0;
+      if (messageData['quotemsg'] != "") {
+        double textWidth = getTextWidth(
+            context,
+            (messageData['quotemsg'].toString().length >
+                    messageData['msg'].toString().length)
+                ? messageData['quotemsg'].toString()
+                : getDecryptedMessage(messageData['msg'].toString()));
+        margin = (constraints.maxWidth - textWidth) / 2;
+      }
+      return Padding(
+          padding: const EdgeInsets.only(
+              right: kModuleImagePadding,
+              left: kModuleImagePadding,
+              bottom: kModuleImagePadding),
+          child: Visibility(
+              visible: (messageData['quotemsg'] != ""),
+              replacement: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    (messageData['isReceiver'] == 1)
+                        ? Align(
+                            alignment: Alignment.centerLeft,
+                            child: showDownloadedImage(
+                                messageData['localImagePath'].toString(),
+                                context,
+                                messageData['msg_type'] ?? '',
+                                messageData['isReceiver'],
+                                getDecryptedMessage(
+                                    messageData['msg'].toString()),
+                                messageData['msg_status']))
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: showDownloadedImage(
+                                messageData['pickedMedia'].toString(),
+                                context,
+                                messageData['msg_type'],
+                                messageData['isReceiver'],
+                                getDecryptedMessage(
+                                    messageData['msg'].toString()),
+                                messageData['msg_status'])),
+                    ChatSubtitle(messageData: messageData)
+                  ]),
+              child: Column(
+                children: [
+                  Align(
+                      alignment: (messageData['isReceiver'] == 1)
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: (messageData['isReceiver'] == 1)
+                                  ? AppColor.blueGrey
+                                  : Colors.grey[300],
+                              borderRadius:
+                                  BorderRadius.circular(xxxTinierSpacing)),
+                          margin: (messageData['isReceiver'] == 1)
+                              ? EdgeInsets.only(right: margin)
+                              : EdgeInsets.only(left: margin),
+                          child: Column(children: [
+                            QuoteMessageReplyContainer(
+                                messageData: messageData),
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: xxxTinierSpacing,
+                                    vertical: kQuoteMessageTilePadding),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SelectionArea(
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                          (messageData['isReceiver'] == 1)
+                                              ? Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: showDownloadedImage(
+                                                      messageData[
+                                                              'localImagePath']
+                                                          .toString(),
+                                                      context,
+                                                      messageData['msg_type'] ??
+                                                          '',
+                                                      messageData['isReceiver'],
+                                                      getDecryptedMessage(
+                                                          messageData['msg']
+                                                              .toString()),
+                                                      messageData[
+                                                          'msg_status']))
+                                              : Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: showDownloadedImage(
+                                                      messageData['pickedMedia']
+                                                          .toString(),
+                                                      context,
+                                                      messageData['msg_type'],
+                                                      messageData['isReceiver'],
+                                                      getDecryptedMessage(
+                                                          messageData['msg']
+                                                              .toString()),
+                                                      messageData[
+                                                          'msg_status'])),
+                                        ]))))
+                          ]))),
+                  ChatSubtitle(messageData: messageData)
+                ],
+              )));
+    });
   }
 
   Widget showDownloadedImage(String attachmentPath, BuildContext context,
-      String type, int isReceiver) {
+      String type, int isReceiver, String fileName, String msgStatus) {
     return (attachmentPath.toString() != 'null')
         ? SizedBox(
-            width: 100,
-            height: 100,
-            child: AttachementMsgTypeUtil()
-                .renderWidget(type, attachmentPath, context, isReceiver))
+            width: kChatImageSize,
+            height: kChatImageSize,
+            child: AttachementMsgTypeUtil().renderWidget(
+                type, attachmentPath, context, isReceiver, fileName, msgStatus))
         : Container(
-            width: 100,
-            height: 100,
+            width: kChatImageSize,
+            height: kChatImageSize,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
-            ),
-            child: Center(
-              child: IconButton(
-                icon: const Center(child: Icon(Icons.download)),
-                onPressed: () async {
-                  ProgressBar.show(context);
-                  final CustomerCache customerCache = getIt<CustomerCache>();
-                  String? hashCode =
-                      await customerCache.getHashCode(CacheKeys.hashcode);
-                  String url =
-                      '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${snapShot.data![reversedIndex]['msg'].toString()}&hashcode=$hashCode';
-                  DateTime imageName = DateTime.now();
-                  String attachementExtension = getFileName(
-                      snapShot.data![reversedIndex]['msg'].toString());
-                  bool downloadProcessComplete = await downloadFileFromUrl(
-                      url,
-                      "$imageName.$attachementExtension",
-                      snapShot.data![reversedIndex]['msg_id'],
-                      snapShot.data![reversedIndex]['msg_type']);
-                  if (downloadProcessComplete) {
-                    if (!context.mounted) return;
-                    ProgressBar.dismiss(context);
-                    context.read<ChatBloc>().add(RebuildChatMessagingScreen(
-                        employeeDetailsMap:
-                            context.read<ChatBloc>().chatDetailsMap));
-                  }
-                },
-              ),
-            ),
-          );
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(kRadius)),
+            child: Stack(children: [
+              Center(
+                  child: IconButton(
+                      icon: const Center(child: Icon(Icons.download)),
+                      onPressed: () async {
+                        ProgressBar.show(context);
+                        final CustomerCache customerCache =
+                            getIt<CustomerCache>();
+                        String? hashCode =
+                            await customerCache.getHashCode(CacheKeys.hashcode);
+                        String url =
+                            '${ApiConstants.baseUrl}${ApiConstants.chatDocBaseUrl}${getDecryptedMessage(messageData['msg'].toString())}&hashcode=$hashCode';
+                        DateTime imageName = DateTime.now();
+                        String attachmentExtension = getFileName(
+                            getDecryptedMessage(messageData['msg'].toString()));
+                        bool downloadProcessComplete =
+                            await downloadFileFromUrl(
+                                url,
+                                "$imageName.$attachmentExtension",
+                                messageData['msg_id'],
+                                messageData['msg_type']);
+                        if (downloadProcessComplete) {
+                          if (!context.mounted) return;
+                          ProgressBar.dismiss(context);
+                          context.read<ChatBloc>().add(
+                              RebuildChatMessagingScreen(
+                                  employeeDetailsMap:
+                                      context.read<ChatBloc>().chatDetailsMap));
+                        }
+                      })),
+              Padding(
+                  padding: const EdgeInsets.all(xxTiniestSpacing),
+                  child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: (msgStatus != '1')
+                          ? const Icon(Icons.timer,
+                              size: kDownloadImageIconSize,
+                              color: AppColor.greyBlack)
+                          : const SizedBox.shrink()))
+            ]));
   }
 }
 
-// check below code
+double getTextWidth(BuildContext context, String text) {
+  TextPainter textPainter = TextPainter();
+  if (text.length < 35) {
+    textPainter = TextPainter(
+        text: TextSpan(text: text, style: Theme.of(context).textTheme.small),
+        textDirection: ui.TextDirection.ltr);
+  } else {
+    textPainter = TextPainter(
+        text: TextSpan(
+            text: text.substring(0, 35),
+            style: Theme.of(context).textTheme.small),
+        textDirection: ui.TextDirection.ltr);
+  }
+  textPainter.layout();
+  return textPainter.width;
+}
+
 String getFileName(String filePath) {
   return filePath.split('/').last;
 }

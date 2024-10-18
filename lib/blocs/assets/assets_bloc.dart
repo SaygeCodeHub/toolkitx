@@ -315,6 +315,9 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         emit(AssetsCommentsFetched(
             fetchAssetsCommentsModel: fetchAssetsCommentsModel,
             clientId: clientId!));
+      } else {
+        emit(AssetsCommentsError(
+            errorMessage: fetchAssetsCommentsModel.message));
       }
     } catch (e) {
       emit(AssetsCommentsError(errorMessage: e.toString()));
@@ -334,11 +337,16 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
         "files": event.addAssetCommentMap["files"],
         "hashcode": hashCode
       };
-      AssetsAddCommentsModel assetsAddCommentsModel =
-          await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
-      if (assetsAddCommentsModel.status == 200) {
-        emit(AssetsCommentsAdded(
-            assetsAddCommentsModel: assetsAddCommentsModel));
+      if (event.addAssetCommentMap["comments"] != null) {
+        AssetsAddCommentsModel assetsAddCommentsModel =
+            await _assetsRepository.assetsAddCommentsRepo(addCommentMap);
+        if (assetsAddCommentsModel.status == 200) {
+          emit(AssetsCommentsAdded(
+              assetsAddCommentsModel: assetsAddCommentsModel));
+        }
+      } else {
+        emit(AssetsCommentsNotAdded(
+            errorMessage: StringConstants.kSelectComment));
       }
     } catch (e) {
       emit(AssetsCommentsNotAdded(errorMessage: e.toString()));
