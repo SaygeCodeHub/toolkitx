@@ -508,6 +508,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           await _customerCache.getUserId(CacheKeys.userId);
       manageBankStatementMap['hashcode'] =
           await _customerCache.getHashCode(CacheKeys.hashcode);
+      manageBankStatementMap.remove('view_files');
       ManageBankStatementModel manageBankStatementModel =
           await _accountingRepository
               .manageBankStatement(manageBankStatementMap);

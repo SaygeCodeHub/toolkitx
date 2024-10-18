@@ -40,10 +40,21 @@ class ManageBankStatementButton extends StatelessWidget {
                           context, StringConstants.kUploadFiles);
                     } else if (state is ImageUploaded) {
                       GenericLoadingPopUp.dismiss(context);
+                      List uploadedImages = state.images;
+                      if (uploadedImages.isNotEmpty && isFromEdit) {
+                        uploadedImages = [
+                          ...state.images,
+                          ...context
+                              .read<AccountingBloc>()
+                              .manageBankStatementMap['view_files']
+                              .toString()
+                              .split(',')
+                        ];
+                      }
                       context
                               .read<AccountingBloc>()
                               .manageBankStatementMap['files'] =
-                          state.images
+                          uploadedImages
                               .toString()
                               .replaceAll('[', '')
                               .replaceAll(']', '')
@@ -62,6 +73,11 @@ class ManageBankStatementButton extends StatelessWidget {
                     } else if (state is BankStatementManaged) {
                       ProgressBar.dismiss(context);
                       Navigator.pop(context);
+                      context.read<AccountingBloc>().bankStatements.clear();
+                      context
+                          .read<AccountingBloc>()
+                          .manageBankStatementMap
+                          .clear();
                       context
                           .read<AccountingBloc>()
                           .add(FetchBankStatements(pageNo: 1));

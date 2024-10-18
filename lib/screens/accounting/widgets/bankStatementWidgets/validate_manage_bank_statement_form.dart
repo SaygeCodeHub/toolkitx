@@ -18,16 +18,21 @@ bool validateForm(dynamic value) {
 
 validateBankStatementFormAndProceed(BuildContext context, bool isFromEdit) {
   if (isFromEdit) {
-    context.read<AccountingBloc>().manageBankStatementMap.remove('view_files');
     if (context.read<AccountingBloc>().manageBankStatementMap['files'] ==
         null) {
+      context.read<AccountingBloc>().manageBankStatementMap['files'] =
+          context.read<AccountingBloc>().manageBankStatementMap['view_files'];
       context.read<AccountingBloc>().add(ManageBankStatement());
     } else if (context
         .read<AccountingBloc>()
         .manageBankStatementMap['files']
         .isEmpty) {
+      context.read<AccountingBloc>().manageBankStatementMap['files'] =
+          context.read<AccountingBloc>().manageBankStatementMap['view_files'];
       context.read<AccountingBloc>().add(ManageBankStatement());
     } else {
+      print(
+          'heyy ${context.read<AccountingBloc>().manageBankStatementMap['files']}');
       context.read<UploadImageBloc>().add(UploadImage(
           images:
               context.read<AccountingBloc>().manageBankStatementMap['files'],
