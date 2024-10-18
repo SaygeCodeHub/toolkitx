@@ -10,6 +10,7 @@ import '../../data/models/accounting/fetch_bank_statements_model.dart';
 import '../../data/models/accounting/create_incoming_invoice_model.dart';
 import '../../data/models/accounting/delete_incoming_invoice_model.dart';
 import '../../data/models/accounting/fetch_incoming_invoices_model.dart';
+import '../../data/models/accounting/manage_bank_statement_model.dart';
 
 abstract class AccountingRepository {
   Future<FetchOutgoingInvoicesModel> fetchOutgoingInvoices(
@@ -27,6 +28,9 @@ abstract class AccountingRepository {
 
   Future<CreateIncomingInvoiceModel> createIncomingInvoice(
       Map createIncomingInvoiceMap);
+
+  Future<ManageBankStatementModel> manageBankStatement(
+      Map manageBankStatementMap);
 
   Future<DeleteIncomingInvoiceModel> deleteIncomingInvoice(
       Map deleteIncomingInvoiceMap);

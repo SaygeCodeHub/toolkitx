@@ -104,3 +104,5 @@ class FetchIncomingInvoice extends AccountingEvent {
 
   FetchIncomingInvoice({required this.invoiceId});
 }
+
+class ManageBankStatement extends AccountingEvent {}

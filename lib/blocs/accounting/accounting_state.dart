@@ -232,3 +232,13 @@ class FailedToFetchIncomingInvoice extends AccountingState {
 
   FailedToFetchIncomingInvoice({required this.errorMessage});
 }
+
+class ManagingBankStatement extends AccountingState {}
+
+class BankStatementManaged extends AccountingState {}
+
+class FailedToManageBankStatement extends AccountingState {
+  final String errorMessage;
+
+  FailedToManageBankStatement({required this.errorMessage});
+}

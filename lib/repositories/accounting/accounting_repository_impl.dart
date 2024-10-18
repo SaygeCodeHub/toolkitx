@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
@@ -10,6 +12,7 @@ import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dar
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/manage_bank_statement_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
 import '../../data/cache/cache_keys.dart';
@@ -110,5 +113,15 @@ class AccountingRepositoryImpl implements AccountingRepository {
         '${ApiConstants.baseUrl}accounting/GetIncomingInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&invoiceid=$invoiceId');
 
     return FetchIncomingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<ManageBankStatementModel> manageBankStatement(
+      Map manageBankStatementMap) async {
+    print('save bank statement ${jsonEncode(manageBankStatementMap)}');
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/SaveBankStatement',
+        manageBankStatementMap);
+    return ManageBankStatementModel.fromJson(response);
   }
 }

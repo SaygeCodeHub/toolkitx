@@ -19,6 +19,7 @@ import 'package:toolkit/utils/constants/string_constants.dart';
 
 import '../../data/models/accounting/fetch_bank_statements_model.dart';
 import '../../data/models/accounting/delete_incoming_invoice_model.dart';
+import '../../data/models/accounting/manage_bank_statement_model.dart';
 import '../../di/app_module.dart';
 import 'accounting_event.dart';
 import 'accounting_state.dart';
@@ -66,6 +67,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     on<FetchOutgoingInvoice>(_fetchOutgoingInvoice);
     on<FetchIncomingInvoice>(_fetchIncomingInvoice);
     on<SelectBank>(_selectBank);
+    on<ManageBankStatement>(_manageBankStatement);
   }
 
   FutureOr<void> _fetchIncomingInvoices(
@@ -188,6 +190,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
     emit(AccountingNewEntitySelecting());
     clientList.clear();
     creditCardsList.clear();
+    bankList.clear();
     try {
       FetchMasterDataEntryModel fetchMasterDataEntryModel =
           await _accountingRepository.fetchMasterDataEntry(event.entityId);
@@ -199,6 +202,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
         log('bank list bloc ${bankList[0].bankname}');
         emit(AccountingNewEntitySelected(
             fetchMasterDataEntryModel: fetchMasterDataEntryModel));
+        add(SelectBank(bankName: '', bankId: ''));
       } else {
         emit(AccountingNewEntityNotSelected(
             errorMessage:
@@ -490,6 +494,33 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       }
     } on Exception catch (e) {
       emit(FailedToFetchIncomingInvoice(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _manageBankStatement(
+      ManageBankStatement event, Emitter<AccountingState> emit) async {
+    emit(ManagingBankStatement());
+    try {
+      manageBankStatementMap['userid'] =
+          await _customerCache.getUserId(CacheKeys.userId);
+      manageBankStatementMap['hashcode'] =
+          await _customerCache.getHashCode(CacheKeys.hashcode);
+      ManageBankStatementModel manageBankStatementModel =
+          await _accountingRepository
+              .manageBankStatement(manageBankStatementMap);
+      if (manageBankStatementModel.status == 200) {
+        if (manageBankStatementModel.message == '1') {
+          emit(BankStatementManaged());
+        } else {
+          emit(FailedToManageBankStatement(
+              errorMessage: "Failed To create Bank Statement"));
+        }
+      } else {
+        emit(FailedToManageBankStatement(
+            errorMessage: StringConstants.kSomethingWentWrong));
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

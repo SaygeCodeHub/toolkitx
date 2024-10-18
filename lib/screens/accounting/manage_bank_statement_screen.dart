@@ -5,11 +5,15 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
 import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/bank_dropdown.dart';
+import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/manage_bank_statement_button.dart';
+import 'package:toolkit/screens/accounting/widgets/custom_month_picker_dropdown.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_year_picker_dropdown.dart';
 
 import '../../blocs/accounting/accounting_bloc.dart';
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
+import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../widgets/generic_app_bar.dart';
 
 class ManageBankStatementScreen extends StatelessWidget {
@@ -19,9 +23,11 @@ class ManageBankStatementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
+    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kAddBankStatement),
-        // bottomNavigationBar: const ManageIncomingInvoiceBottomBar(),
+        bottomNavigationBar: const ManageBankStatementButton(),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,
@@ -64,7 +70,13 @@ class ManageBankStatementScreen extends StatelessWidget {
                               .xSmall
                               .copyWith(fontWeight: FontWeight.w600)),
                       const SizedBox(height: xxxTinierSpacing),
-                      // statement month
+                      CustomMonthPickerDropdown(
+                          onMonthChanged: (String month) {
+                            context
+                                .read<AccountingBloc>()
+                                .manageBankStatementMap['month'] = month;
+                          },
+                          defaultMonth: ''),
                       const SizedBox(height: xxTinySpacing),
                       Text(StringConstants.kStatementYear,
                           style: Theme.of(context)
