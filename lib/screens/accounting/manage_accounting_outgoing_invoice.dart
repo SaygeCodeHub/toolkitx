@@ -57,7 +57,7 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                       showCustomSnackBar(
                           context,
                           StringConstants
-                              .kEntityClientProjectInvoiceDateCanNotBeEmpty,
+                              .kEntityClientProjectInvoiceDAteCanNotBeEmpty,
                           '');
                     }
                   }

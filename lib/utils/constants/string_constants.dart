@@ -824,7 +824,6 @@ abstract class StringConstants {
   static const String kAccounting = "Accounting";
   static const String kOutGoingInvoiceList = "Outgoing Invoice List";
   static const String kInComingInvoiceList = "Incoming Invoice List";
-  static const String kBankStatementList = "Bank Statement List";
   static const String kEntityClientProjectInvoiceDAteCanNotBeEmpty =
       "Entity ,Client ,Project ,Invoice Date can not be empty";
   static const String kAmountAttachedDocumentsCanNotBeEmpty =

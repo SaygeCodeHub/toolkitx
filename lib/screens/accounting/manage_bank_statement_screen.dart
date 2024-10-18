@@ -5,9 +5,6 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
 import 'package:toolkit/screens/accounting/widgets/bankStatementWidgets/bank_dropdown.dart';
-import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/incoming_invoice_payment_currency_dropdowns.dart';
-import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/manage_incoming_invoice_bottom_bar.dart';
-import 'package:toolkit/screens/accounting/widgets/incomingInvoicesWidgets/mode_of_payment_dropdown.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_year_picker_dropdown.dart';
 
@@ -24,7 +21,7 @@ class ManageBankStatementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kAddBankStatement),
-        bottomNavigationBar: const ManageIncomingInvoiceBottomBar(),
+        // bottomNavigationBar: const ManageIncomingInvoiceBottomBar(),
         body: Padding(
             padding: const EdgeInsets.only(
                 left: leftRightMargin,

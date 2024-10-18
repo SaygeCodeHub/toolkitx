@@ -66,7 +66,7 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
                       showCustomSnackBar(
                           context,
                           StringConstants
-                              .kEntityClientProjectInvoiceDateCanNotBeEmpty,
+                              .kEntityClientProjectInvoiceDAteCanNotBeEmpty,
                           '');
                     }
                   }
