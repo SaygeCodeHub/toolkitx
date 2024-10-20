@@ -119,7 +119,7 @@ void validateFormAndProceed(BuildContext context, bool isFromEdit) {
           incomingInvoiceId:
               context.read<AccountingBloc>().manageIncomingInvoiceMap['id'] ??
                   ''));
-      context.read<AccountingBloc>().add(FetchOutgoingInvoices(pageNo: 1));
+      context.read<AccountingBloc>().add(FetchIncomingInvoices(pageNo: 1));
     } else {
       context.read<UploadImageBloc>().add(UploadImage(
           images:

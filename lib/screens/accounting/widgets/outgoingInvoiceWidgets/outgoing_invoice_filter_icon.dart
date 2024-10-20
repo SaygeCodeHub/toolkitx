@@ -20,7 +20,7 @@ class OutgoingInvoiceFilterIcon extends StatelessWidget {
           return true;
         } else if (currentState is OutgoingInvoicesFetched) {
           return true;
-        } else if (currentState is OutgoingInvoicesWithNoData) {
+        } else if (currentState is NoRecordsFoundForFilter) {
           return true;
         }
         return false;
@@ -47,7 +47,7 @@ class OutgoingInvoiceFilterIcon extends StatelessWidget {
                     .add(FetchOutgoingInvoices(pageNo: 1));
               },
               secondaryOnPress: () {});
-        } else if (state is OutgoingInvoicesWithNoData) {
+        } else if (state is NoRecordsFoundForFilter) {
           return CustomIconButtonRow(
               primaryOnPress: () {
                 Navigator.pushNamed(context, AccountingFilterScreen.routeName,

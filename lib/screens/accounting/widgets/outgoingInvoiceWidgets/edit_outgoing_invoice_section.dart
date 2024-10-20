@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
-import 'package:toolkit/blocs/accounting/accounting_event.dart';
-import 'package:toolkit/blocs/accounting/accounting_state.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
 import 'package:toolkit/configs/app_color.dart';
 import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
 import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_section_bottombar.dart';
 import 'package:toolkit/utils/constants/api_constants.dart';
-import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/utils/incident_view_image_util.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/generic_text_field.dart';
-import 'package:toolkit/widgets/primary_button.dart';
-import 'package:toolkit/widgets/progress_bar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class EditOutgoingInvoiceSection extends StatelessWidget {
@@ -34,66 +28,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
 
     return Scaffold(
         appBar: const GenericAppBar(title: 'Edit Outgoing Invoice'),
-        bottomNavigationBar: BottomAppBar(
-            child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: StringConstants.kBack),
-            ),
-            const SizedBox(width: xxTinierSpacing),
-            Expanded(
-              child: BlocListener<AccountingBloc, AccountingState>(
-                listener: (context, state) {
-                  if (state is CreatingOutgoingInvoice) {
-                    ProgressBar.show(context);
-                  } else if (state is OutgoingInvoiceCreated) {
-                    ProgressBar.dismiss(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pushReplacementNamed(
-                        context, OutgoingListScreen.routeName);
-                    context.read<AccountingBloc>().outgoingInvoices.clear();
-                  } else if (state is FailedToCreateOutgoingInvoice) {
-                    ProgressBar.dismiss(context);
-                    showCustomSnackBar(
-                        context, "Failed To create Outgoing Invoice", '');
-                  }
-                },
-                child: PrimaryButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        if (context
-                                .read<AccountingBloc>()
-                                .manageOutgoingInvoiceMap['invoiceamount']
-                                .isNotEmpty &&
-                            context
-                                .read<AccountingBloc>()
-                                .manageOutgoingInvoiceMap["files"]
-                                .isNotEmpty) {
-                          context.read<AccountingBloc>().add(
-                              CreateOutgoingInvoice(
-                                  outgoingInvoiceId: context
-                                          .read<AccountingBloc>()
-                                          .manageOutgoingInvoiceMap['id'] ??
-                                      ""));
-                        } else {
-                          showCustomSnackBar(
-                              context,
-                              StringConstants
-                                  .kAmountAttachedDocumentsCanNotBeEmpty,
-                              '');
-                        }
-                      }
-                    },
-                    textValue: StringConstants.kSave),
-              ),
-            ),
-          ],
-        )),
+        bottomNavigationBar: EditOutgoingSectionBottomBar(formKey: formKey),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -159,14 +94,15 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                   Visibility(
                     visible: context
                             .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['files'] !=
+                            .manageOutgoingInvoiceMap['edit_files'] !=
                         null,
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: (context
-                                        .read<AccountingBloc>()
-                                        .manageOutgoingInvoiceMap['files'] ??
+                                            .read<AccountingBloc>()
+                                            .manageIncomingInvoiceMap[
+                                        'edit_files'] ??
                                     '')
                                 .split(',')
                                 .length ??
@@ -184,7 +120,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                                   //         .read<AccountingBloc>()
                                   //         .manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}");
                                   launchUrlString(
-                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
                                       mode: LaunchMode.externalApplication);
                                 }
                                 // else{
@@ -198,7 +134,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                                     ViewImageUtil.viewImageList(context
                                                 .read<AccountingBloc>()
                                                 .manageOutgoingInvoiceMap[
-                                            'files'] ??
+                                            'edit_files'] ??
                                         '')[index],
                                     style: const TextStyle(
                                         color: AppColor.deepBlue)),
@@ -209,12 +145,8 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                     onUploadDocument: (List<dynamic> uploadDocList) {
                       uploadedDocuments = uploadDocList;
                       context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['files'] =
-                          uploadDocList
-                              .toString()
-                              .replaceAll("[", "")
-                              .replaceAll("]", "");
+                          .read<AccountingBloc>()
+                          .manageOutgoingInvoiceMap['files'] = uploadDocList;
                     },
                     imagePickerBloc: ImagePickerBloc(),
                     initialImages: uploadedDocuments,

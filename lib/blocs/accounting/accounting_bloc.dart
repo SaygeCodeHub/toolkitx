@@ -254,42 +254,43 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
   Future<void> _createOutgoingInvoice(
       CreateOutgoingInvoice event, Emitter<AccountingState> emit) async {
     emit(CreatingOutgoingInvoice());
-    try {
-      String? hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-      Map createInvoiceMap = {
-        "id": event.outgoingInvoiceId,
-        "userid": userId,
-        "hashcode": hashCode,
-        "files": manageOutgoingInvoiceMap['files'] ?? "",
-        "purposename": "",
-        "entity": manageOutgoingInvoiceMap['entity'] ?? "",
-        "client": manageOutgoingInvoiceMap['client'] ?? "",
-        "project": manageOutgoingInvoiceMap['project'] ?? "",
-        "date": manageOutgoingInvoiceMap['date'] ?? "",
-        "comments": manageOutgoingInvoiceMap['comments'] ?? "",
-        "invoiceamount": manageOutgoingInvoiceMap['invoiceamount'] ?? "",
-        "other": manageIncomingInvoiceMap['other'] ?? "",
-        "othercurrency": manageOutgoingInvoiceMap['othercurrency'] ?? "",
-        "otherinvoiceamount": ""
-      };
-      CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
-          await _accountingRepository.createOutgoingInvoice(createInvoiceMap);
-      if (createOutgoingInvoiceModel.status == 200) {
-        if (createOutgoingInvoiceModel.message == '1') {
-          emit(OutgoingInvoiceCreated());
-        } else {
-          emit(FailedToCreateOutgoingInvoice(
-              errorMessage: createOutgoingInvoiceModel.message));
-        }
+    // try {
+    manageOutgoingInvoiceMap.remove("edit_files");
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    Map createInvoiceMap = {
+      "id": event.outgoingInvoiceId,
+      "userid": userId,
+      "hashcode": hashCode,
+      "purposename": "",
+      "entity": manageOutgoingInvoiceMap['entity'] ?? "",
+      "client": manageOutgoingInvoiceMap['client'] ?? "",
+      "project": manageOutgoingInvoiceMap['project'] ?? "",
+      "date": manageOutgoingInvoiceMap['date'] ?? "",
+      "comments": manageOutgoingInvoiceMap['comments'] ?? "",
+      "invoiceamount": manageOutgoingInvoiceMap['invoiceamount'] ?? "",
+      "other": manageIncomingInvoiceMap['other'] ?? "",
+      "othercurrency": manageOutgoingInvoiceMap['othercurrency'] ?? "",
+      "otherinvoiceamount": "",
+      "files": manageOutgoingInvoiceMap['files'] ?? "",
+    };
+    CreateOutgoingInvoiceModel createOutgoingInvoiceModel =
+        await _accountingRepository.createOutgoingInvoice(createInvoiceMap);
+    if (createOutgoingInvoiceModel.status == 200) {
+      if (createOutgoingInvoiceModel.message == '1') {
+        emit(OutgoingInvoiceCreated());
       } else {
         emit(FailedToCreateOutgoingInvoice(
             errorMessage: createOutgoingInvoiceModel.message));
       }
-    } on Exception catch (e) {
-      emit(FailedToCreateOutgoingInvoice(errorMessage: e.toString()));
+    } else {
+      emit(FailedToCreateOutgoingInvoice(
+          errorMessage: createOutgoingInvoiceModel.message));
     }
+    // } on Exception catch (e) {
+    //   emit(FailedToCreateOutgoingInvoice(errorMessage: e.toString()));
+    // }
   }
 
   FutureOr<void> _selectCreditCard(
@@ -369,7 +370,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       manageOutgoingInvoiceMap["project"] = outgoingInvoiceData.projectid;
       manageOutgoingInvoiceMap["date"] = outgoingInvoiceData.invoicedate;
       manageOutgoingInvoiceMap["comments"] = outgoingInvoiceData.comments;
-      manageOutgoingInvoiceMap["files"] = outgoingInvoiceData.files;
+      manageOutgoingInvoiceMap["edit_files"] = outgoingInvoiceData.files;
       manageOutgoingInvoiceMap["othercurrency"] =
           outgoingInvoiceData.othercurrency;
       manageOutgoingInvoiceMap['other'] =

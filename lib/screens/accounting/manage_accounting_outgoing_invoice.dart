@@ -5,12 +5,10 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/invoice_currency_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/client_dropdown.dart';
-import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/manage_accounting_outgoing_invoice_section.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/manage_outgoing_invoice_bottom_bar.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/project_dropdown.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
-import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../configs/app_spacing.dart';
 import '../../widgets/generic_app_bar.dart';
@@ -24,49 +22,9 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    String selectedEntity = '';
-    String selectedClient = '';
-    String selectedProject = '';
-    String selectedDate = '';
     return Scaffold(
         appBar: const GenericAppBar(title: 'Add Outgoing Invoice'),
-        bottomNavigationBar: BottomAppBar(
-            child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: StringConstants.kBack),
-            ),
-            const SizedBox(width: xxTinierSpacing),
-            Expanded(
-              child: PrimaryButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    if (selectedEntity.isNotEmpty &&
-                        selectedClient.isNotEmpty &&
-                        selectedProject.isNotEmpty &&
-                        selectedDate.isNotEmpty) {
-                      Navigator.pushNamed(
-                        context,
-                        ManageAccountingOutgoingInvoiceSection.routeName,
-                      );
-                    } else {
-                      showCustomSnackBar(
-                          context,
-                          StringConstants
-                              .kEntityClientProjectInvoiceDateCanNotBeEmpty,
-                          '');
-                    }
-                  }
-                },
-                textValue: StringConstants.kNext,
-              ),
-            ),
-          ],
-        )),
+        bottomNavigationBar: ManageOutgoingInvoiceBottomBar(formKey: formKey),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -87,10 +45,9 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                   const SizedBox(height: xxxTinierSpacing),
                   AccountingEntityDropdown(
                     onEntityChanged: (String entity) {
-                      selectedEntity = entity;
                       context
                           .read<AccountingBloc>()
-                          .manageOutgoingInvoiceMap['entityId'] = entity;
+                          .manageOutgoingInvoiceMap['entity'] = entity;
                     },
                     selectedEntity: '',
                   ),
@@ -102,7 +59,6 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
                   ClientDropdown(onClientChanged: (String client) {
-                    selectedClient = client;
                     context
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap['client'] = client;
@@ -115,7 +71,6 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
                   ProjectDropdown(onProjectChanged: (String project) {
-                    selectedProject = project;
                     context
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap['project'] = project;
@@ -129,7 +84,6 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                   const SizedBox(height: xxxTinierSpacing),
                   DatePickerTextField(
                     onDateChanged: (String date) {
-                      selectedDate = date;
                       context
                           .read<AccountingBloc>()
                           .manageOutgoingInvoiceMap['date'] = date;

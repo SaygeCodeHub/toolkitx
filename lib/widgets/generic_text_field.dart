@@ -18,7 +18,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool readOnly;
 
   TextFieldWidget(
-      {Key? key,
+      {super.key,
       this.textInputAction,
       this.maxLength,
       this.textInputType,
@@ -27,8 +27,7 @@ class TextFieldWidget extends StatelessWidget {
       this.maxLines = 1,
       required this.onTextFieldChanged,
       this.obscureText = false,
-      this.readOnly = false})
-      : super(key: key);
+      this.readOnly = false});
 
   @override
   Widget build(BuildContext context) {

@@ -28,6 +28,7 @@ class OutgoingListScreen extends StatelessWidget {
             const GenericAppBar(title: StringConstants.kOutGoingInvoiceList),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              context.read<AccountingBloc>().manageOutgoingInvoiceMap.clear();
               Navigator.pushNamed(
                   context, ManageAccountingIOutgoingInvoice.routeName);
             },
@@ -47,7 +48,8 @@ class OutgoingListScreen extends StatelessWidget {
                           currentState.pageNo == 1) ||
                       (currentState is OutgoingInvoicesFetched) ||
                       (currentState is FailedToFetchOutgoingInvoices) ||
-                      (currentState is OutgoingInvoicesWithNoData),
+                      (currentState is OutgoingInvoicesWithNoData) ||
+                      (currentState is NoRecordsFoundForFilter),
                   listener: (context, state) {
                     if (state is OutgoingInvoicesFetched &&
                         context
