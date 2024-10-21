@@ -135,8 +135,7 @@ class DatabaseHelper {
            actionText TEXT,
            actionJson TEXT,
            actionDateTime TEXT,
-           sign TEXT,
-           UNIQUE(workOrderId, actionText)
+           sign TEXT
           );
    ''');
       },
@@ -204,8 +203,7 @@ class DatabaseHelper {
             actionText TEXT,
             actionJson TEXT,
             actionDateTime TEXT,
-            sign TEXT,
-            UNIQUE(workOrderId, actionText)
+            sign TEXT
           );
     ''');
   }
@@ -213,16 +211,20 @@ class DatabaseHelper {
   Future<void> insertOfflineWorkOrders(
       WorkOrderOfflineDatum data, int statusId) async {
     final Database db = await database;
-    await db.insert(
-        'OfflineWorkOrder',
-        {
-          'workOrderId': data.id,
-          'workOrderId2': data.id2,
-          'listPage': jsonEncode(data.listpage.toJson()),
-          'wodetails': jsonEncode(data.wodetails.toJson()),
-          'statusId': statusId
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('OfflineWorkOrder', {
+      'workOrderId': data.id,
+      'workOrderId2': data.id2,
+      'listPage': jsonEncode(data.listpage.toJson()),
+      'wodetails': jsonEncode(data.wodetails.toJson()),
+      'statusId': statusId
+    });
+  }
+
+  Future<bool> hasWorkOrderEntry(String workOrderId) async {
+    final Database db = await database;
+    final results = await db.query('OfflineWorkOrder',
+        where: 'workOrderId = ?', whereArgs: [workOrderId]);
+    return results.isNotEmpty;
   }
 
   Future<List<Map<String, dynamic>>> fetchAllWorkOrders() async {
@@ -280,26 +282,34 @@ class DatabaseHelper {
     }
   }
 
-  Future<bool> insertOfflineWorkOrderAction(String permitId, String actionText,
-      Map actionJson, String sign, String? actionDateTime) async {
+  Future<bool> insertOfflineWorkOrderAction(
+      String workOrderId,
+      String actionText,
+      Map actionJson,
+      String sign,
+      String? actionDateTime) async {
     final Database db = await database;
-    try {
-      int result = await db.insert(
-          'OfflineWorkOrderAction',
-          {
-            'workOrderId': permitId,
-            'actionText': actionText,
-            'actionJson': jsonEncode(actionJson),
-            'actionDateTime':
-                actionDateTime ?? DateTime.now().toUtc().toString(),
-            'sign': sign
-          },
-          conflictAlgorithm: ConflictAlgorithm.replace);
 
-      return result > 0;
-    } catch (e) {
-      return false;
+    if (actionText != 'add_comment') {
+      var existingRecords = await db.query('OfflineWorkOrderAction',
+          where: 'workOrderId = ? AND actionText = ?',
+          whereArgs: [workOrderId, actionText]);
+
+      if (existingRecords.isNotEmpty) {
+        print('Duplicate action for workOrderId and actionText detected.');
+        return false;
+      }
     }
+
+    int result = await db.insert('OfflineWorkOrderAction', {
+      'workOrderId': workOrderId,
+      'actionText': actionText,
+      'actionJson': jsonEncode(actionJson),
+      'actionDateTime': actionDateTime ?? DateTime.now().toUtc().toString(),
+      'sign': sign
+    });
+
+    return result > 0;
   }
 
   Future<void> updateWorkOrderStatusId(

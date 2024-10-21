@@ -33,6 +33,7 @@ class WorkOrderTabFiveDetails extends StatelessWidget {
             shrinkWrap: true,
             itemCount: data.comments.length,
             itemBuilder: (context, index) {
+              print('comments photo list ${data.comments[index].toJson()}');
               return CustomCard(
                 child: ListTile(
                   contentPadding: const EdgeInsets.only(

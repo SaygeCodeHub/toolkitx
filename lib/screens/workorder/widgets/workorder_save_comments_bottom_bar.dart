@@ -51,7 +51,9 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
                     context.read<WorkOrderTabDetailsBloc>().add(
                         WorkOrderDetails(
                             initialTabIndex: 4,
-                            workOrderId: addCommentsMap['workorderId']));
+                            workOrderId: context
+                                .read<WorkOrderTabDetailsBloc>()
+                                .workOrderId));
                   } else if (state is WorkOrderCommentsNotSaved) {
                     ProgressBar.dismiss(context);
                     showCustomSnackBar(context, state.commentsNotSaved, '');
@@ -90,10 +92,11 @@ class WorkOrderSaveCommentsBottomBar extends StatelessWidget {
                             imageLength: context
                                 .read<ImagePickerBloc>()
                                 .lengthOfImageList));
+                      } else {
+                        context.read<WorkOrderTabDetailsBloc>().add(
+                            SaveWorkOrderComments(
+                                addCommentsMap: addCommentsMap));
                       }
-                      context.read<WorkOrderTabDetailsBloc>().add(
-                          SaveWorkOrderComments(
-                              addCommentsMap: addCommentsMap));
                     } else {
                       if (addCommentsMap['comments'] == null ||
                           addCommentsMap['comments'] == '') {

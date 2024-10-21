@@ -682,8 +682,10 @@ class WorkOrderTabDetailsBloc
         "hashcode": hashCode,
         "user_name": event.acceptOfflineMap['user_name'] ?? '',
         "user_sign": event.acceptOfflineMap['user_sign'] ?? '',
-        "sync_date":
-            '${event.acceptOfflineMap['user_date'] ?? ''} ${event.acceptOfflineMap['user_time'] ?? ''}'
+        "sync_date": (event.acceptOfflineMap['user_time'] != null &&
+                event.acceptOfflineMap['user_date'] != null)
+            ? '${event.acceptOfflineMap['user_date'] ?? ''} ${event.acceptOfflineMap['user_time'] ?? ''}'
+            : ''
       };
       if (isNetworkEstablished) {
         AcceptWorkOrderModel acceptWorkOrderModel =
@@ -883,8 +885,10 @@ class WorkOrderTabDetailsBloc
           "hashcode": hashCode,
           "user_name": event.startWorkOrderMap['user_name'] ?? '',
           "user_sign": event.startWorkOrderMap['user_sign'] ?? '',
-          "sync_date":
-              '${event.startWorkOrderMap['user_date'] ?? ''} ${event.startWorkOrderMap['user_time'] ?? ''}'
+          "sync_date": (event.startWorkOrderMap['user_time'] != null &&
+                  event.startWorkOrderMap['user_date'] != null)
+              ? '${event.startWorkOrderMap['user_date'] ?? ''} ${event.startWorkOrderMap['user_time'] ?? ''}'
+              : ''
         };
         if (isNetworkEstablished) {
           StartWorkOrderModel startWorkOrderModel =
@@ -1076,10 +1080,13 @@ class WorkOrderTabDetailsBloc
           "hashcode": hashCode,
           "comments":
               WorkOrderAddCommentsScreen.addCommentsMap['comments'] ?? '',
+          "files": event.addCommentsMap['ImageString'] ?? '',
           "user_name": event.addCommentsMap['user_name'] ?? '',
           "user_sign": event.addCommentsMap['user_sign'] ?? '',
-          "sync_date":
-              '${event.addCommentsMap['user_date'] ?? ''} ${event.addCommentsMap['user_time'] ?? ''}'
+          "sync_date": (event.addCommentsMap['user_time'] != null &&
+                  event.addCommentsMap['user_date'] != null)
+              ? '${event.addCommentsMap['user_date']} ${event.addCommentsMap['user_time']}'
+              : ''
         };
         if (isNetworkEstablished) {
           SaveWorkOrderCommentsModel saveWorkOrderCommentsModel =
@@ -1249,8 +1256,10 @@ class WorkOrderTabDetailsBloc
           "hashcode": hashCode,
           "user_name": event.completeWorkOrderMap['user_name'] ?? '',
           "user_sign": event.completeWorkOrderMap['user_sign'] ?? '',
-          "sync_date":
-              '${event.completeWorkOrderMap['user_date'] ?? ''} ${event.completeWorkOrderMap['user_time'] ?? ''}'
+          "sync_date": (event.completeWorkOrderMap['user_time'] != null &&
+                  event.completeWorkOrderMap['user_date'] != null)
+              ? '${event.completeWorkOrderMap['user_date'] ?? ''} ${event.completeWorkOrderMap['user_time'] ?? ''}'
+              : ''
         };
         if (isNetworkEstablished) {
           CompleteWorkOrderModel completeWorkOrderModel =

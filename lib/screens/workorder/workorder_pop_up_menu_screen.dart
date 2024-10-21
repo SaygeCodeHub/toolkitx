@@ -184,13 +184,19 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                   WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddComment')) {
+          WorkOrderAddCommentsScreen.addCommentsMap.clear();
           context.read<ImagePickerBloc>().pickedImagesList.clear();
           context.read<ImagePickerBloc>().add(PickImageInitial());
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName)
-              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
-                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
+              .then((_) {
+            if (context.mounted) {
+              context
+                  .read<WorkOrderTabDetailsBloc>()
+                  .add(WorkOrderDetails(initialTabIndex: 0, workOrderId: woId));
+            }
+          });
         }
       },
       position: PopupMenuPosition.under,

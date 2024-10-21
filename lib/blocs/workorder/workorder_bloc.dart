@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
@@ -145,10 +144,11 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
       if (fetchOfflineWorkOrderDataModel.status == 200) {
         if (fetchOfflineWorkOrderDataModel.data.isNotEmpty) {
           for (var item in fetchOfflineWorkOrderDataModel.data) {
-            await _databaseHelper.insertOfflineWorkOrders(
-                item, item.listpage.statusid);
+            if (!await _databaseHelper.hasWorkOrderEntry(item.id)) {
+              await _databaseHelper.insertOfflineWorkOrders(
+                  item, item.listpage.statusid);
+            }
           }
-          log('offline data ${fetchOfflineWorkOrderDataModel.data}');
           emit(WorkOrderOfflineDataFetched());
         } else {
           emit(WorkOrderOfflineDataNotFetched(

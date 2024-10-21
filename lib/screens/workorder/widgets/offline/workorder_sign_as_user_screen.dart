@@ -63,8 +63,6 @@ class WorkOrderSignAsUserScreen extends StatelessWidget {
                 child: Expanded(
                     child: PrimaryButton(
                         onPressed: () {
-                          print(
-                              'orkOrderSapModel.sapMap ${workOrderSapModel.sapMap}');
                           if (workOrderSapModel.sapMap['user_name'] == null ||
                               workOrderSapModel.sapMap['user_name'] == '') {
                             showCustomSnackBar(context,
