@@ -20,8 +20,7 @@ class SignInCheckListLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInCheckListLocationDetailsCard(
-      {Key? key, required this.checkList, required this.locationId})
-      : super(key: key);
+      {super.key, required this.checkList, required this.locationId});
 
   @override
   Widget build(BuildContext context) {

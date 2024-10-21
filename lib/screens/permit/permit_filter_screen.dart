@@ -28,7 +28,7 @@ class PermitFilterScreen extends StatelessWidget {
   static bool isFromLocation = false;
   static String expenseId = '';
 
-  PermitFilterScreen({Key? key}) : super(key: key);
+  PermitFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

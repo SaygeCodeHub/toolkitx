@@ -8,8 +8,7 @@ import '../../../configs/app_color.dart';
 import '../../../utils/constants/string_constants.dart';
 
 class SafetyNoticeImageCount extends StatelessWidget {
-  const SafetyNoticeImageCount({Key? key, required this.imageLength})
-      : super(key: key);
+  const SafetyNoticeImageCount({super.key, required this.imageLength});
   final int imageLength;
 
   @override

@@ -21,8 +21,7 @@ class ClientListScreen extends StatelessWidget {
   static const routeName = 'ClientListScreen';
   final bool isFromProfile;
 
-  const ClientListScreen({Key? key, this.isFromProfile = false})
-      : super(key: key);
+  const ClientListScreen({super.key, this.isFromProfile = false});
 
   @override
   Widget build(BuildContext context) {

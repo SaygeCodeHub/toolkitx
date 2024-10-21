@@ -15,8 +15,8 @@ class AddInjuredPersonScreen extends StatelessWidget {
   static const routeName = 'AddInjuredPersonScreen';
   final Map addAndEditIncidentMap;
 
-  const AddInjuredPersonScreen({Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+  const AddInjuredPersonScreen(
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

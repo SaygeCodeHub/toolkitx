@@ -13,10 +13,9 @@ class InjuryNatureExpansionTile extends StatelessWidget {
   final Map injuredPersonDetails;
 
   const InjuryNatureExpansionTile(
-      {Key? key,
+      {super.key,
       required this.injuryNature,
-      required this.injuredPersonDetails})
-      : super(key: key);
+      required this.injuredPersonDetails});
 
   @override
   Widget build(BuildContext context) {

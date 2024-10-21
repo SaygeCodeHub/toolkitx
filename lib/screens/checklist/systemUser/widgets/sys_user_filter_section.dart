@@ -15,7 +15,7 @@ import '../../../../widgets/generic_text_field.dart';
 import '../../../../widgets/primary_button.dart';
 
 class FilterSection extends StatelessWidget {
-  const FilterSection({Key? key}) : super(key: key);
+  const FilterSection({super.key});
   static Map filterDataMap = {};
   static bool isFromLocation = false;
   static String expenseId = '';

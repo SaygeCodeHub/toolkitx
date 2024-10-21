@@ -9,8 +9,7 @@ import '../../../utils/database_utils.dart';
 class PermitDetails extends StatelessWidget {
   final PermitDetailsModel permitDetailsModel;
 
-  const PermitDetails({Key? key, required this.permitDetailsModel})
-      : super(key: key);
+  const PermitDetails({super.key, required this.permitDetailsModel});
 
   @override
   Widget build(BuildContext context) {

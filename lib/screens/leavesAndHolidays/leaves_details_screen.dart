@@ -14,7 +14,7 @@ import 'widgtes/leaves_details_card.dart';
 class LeavesDetailsScreen extends StatefulWidget {
   static const routeName = 'LeavesDetailsScreen';
 
-  const LeavesDetailsScreen({Key? key}) : super(key: key);
+  const LeavesDetailsScreen({super.key});
 
   @override
   State<LeavesDetailsScreen> createState() => _LeavesDetailsScreenState();

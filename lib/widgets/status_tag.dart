@@ -8,7 +8,7 @@ import '../data/models/status_tag_model.dart';
 class StatusTag extends StatelessWidget {
   final List<StatusTagModel>? tags;
 
-  const StatusTag({Key? key, required this.tags}) : super(key: key);
+  const StatusTag({super.key, required this.tags});
 
   @override
   Widget build(BuildContext context) {

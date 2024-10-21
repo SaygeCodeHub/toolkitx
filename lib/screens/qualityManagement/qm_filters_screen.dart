@@ -19,7 +19,7 @@ import 'widgets/qm_status_filter.dart';
 class QualityManagementFilterScreen extends StatelessWidget {
   static const routeName = 'QualityManagementFilterScreen';
 
-  QualityManagementFilterScreen({Key? key}) : super(key: key);
+  QualityManagementFilterScreen({super.key});
   final Map qmFilterMap = {};
 
   @override

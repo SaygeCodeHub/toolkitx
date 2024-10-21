@@ -20,8 +20,7 @@ class ToDoAssignedToMeSubtitle extends StatelessWidget {
   final Map todoMap;
 
   const ToDoAssignedToMeSubtitle(
-      {Key? key, required this.assignToMeListDatum, required this.todoMap})
-      : super(key: key);
+      {super.key, required this.assignToMeListDatum, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

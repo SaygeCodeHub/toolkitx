@@ -7,8 +7,9 @@ import '../../../data/models/tickets/fetch_ticket_master_model.dart';
 
 class PriorityExpansionTile extends StatelessWidget {
   const PriorityExpansionTile(
-      {Key? key, required this.ticketMasterDatum, required this.saveTicketMap})
-      : super(key: key);
+      {super.key,
+      required this.ticketMasterDatum,
+      required this.saveTicketMap});
   final List<List<TicketMasterDatum>> ticketMasterDatum;
   final Map saveTicketMap;
 

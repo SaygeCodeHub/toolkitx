@@ -23,8 +23,7 @@ class SignInLoToLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInLoToLocationDetailsCard(
-      {Key? key, required this.loTo, required this.locationId})
-      : super(key: key);
+      {super.key, required this.loTo, required this.locationId});
 
   @override
   Widget build(BuildContext context) {

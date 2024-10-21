@@ -24,8 +24,9 @@ class WorkOrderFilterBody extends StatelessWidget {
   final List<List<WorkOrderMasterDatum>> workOderDatum;
 
   const WorkOrderFilterBody(
-      {Key? key, required this.workOrderFilterMap, required this.workOderDatum})
-      : super(key: key);
+      {super.key,
+      required this.workOrderFilterMap,
+      required this.workOderDatum});
 
   @override
   Widget build(BuildContext context) {

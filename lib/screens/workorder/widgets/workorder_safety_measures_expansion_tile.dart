@@ -13,8 +13,7 @@ class WorkOrderSafetyMeasuresExpansionTile extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const WorkOrderSafetyMeasuresExpansionTile(
-      {Key? key, required this.data, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.data, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

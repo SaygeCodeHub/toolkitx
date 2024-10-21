@@ -29,8 +29,10 @@ class ToDoUploadDocumentScreen extends StatelessWidget {
   final Map? todoFilterMap;
 
   const ToDoUploadDocumentScreen(
-      {Key? key, required this.todoMap, required this.data, this.todoFilterMap})
-      : super(key: key);
+      {super.key,
+      required this.todoMap,
+      required this.data,
+      this.todoFilterMap});
 
   @override
   Widget build(BuildContext context) {

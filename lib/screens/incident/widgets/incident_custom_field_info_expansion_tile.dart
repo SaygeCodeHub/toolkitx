@@ -17,11 +17,10 @@ class IncidentReportCustomFiledInfoExpansionTile extends StatelessWidget {
   final Map addAndEditIncidentMap;
 
   const IncidentReportCustomFiledInfoExpansionTile(
-      {Key? key,
+      {super.key,
       required this.onCustomFieldChanged,
       required this.index,
-      required this.addAndEditIncidentMap})
-      : super(key: key);
+      required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

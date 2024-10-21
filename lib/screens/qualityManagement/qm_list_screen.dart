@@ -24,8 +24,7 @@ class QualityManagementListScreen extends StatefulWidget {
   static const routeName = 'QualityManagementListScreen';
   final bool isFromHome;
 
-  const QualityManagementListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  const QualityManagementListScreen({super.key, this.isFromHome = false});
 
   @override
   State<QualityManagementListScreen> createState() =>
@@ -183,16 +182,19 @@ class _QualityManagementListScreenState
                                                     context,
                                                     QualityManagementDetailsScreen
                                                         .routeName,
-                                                    arguments: qmListData[index]
-                                                        .id)
-                                                .then((_) => context
+                                                    arguments:
+                                                        qmListData[index].id)
+                                                .then((_) {
+                                              if (context.mounted) {
+                                                context
                                                     .read<
                                                         QualityManagementBloc>()
                                                     .add(
                                                         FetchQualityManagementList(
                                                             pageNo: 1,
-                                                            isFromHome:
-                                                                false)));
+                                                            isFromHome: false));
+                                              }
+                                            });
                                           }));
                                 },
                                 separatorBuilder: (context, index) {

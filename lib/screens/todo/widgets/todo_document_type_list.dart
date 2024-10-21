@@ -15,11 +15,10 @@ class ToDoDocumentTypeList extends StatelessWidget {
   final Map todoFilterMap;
 
   const ToDoDocumentTypeList(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.documentTypeId,
-      required this.todoFilterMap})
-      : super(key: key);
+      required this.todoFilterMap});
 
   @override
   Widget build(BuildContext context) {

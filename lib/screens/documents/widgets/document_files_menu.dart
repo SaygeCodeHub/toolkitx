@@ -18,11 +18,10 @@ class DocumentsFilesMenu extends StatelessWidget {
   static Map documentFileMap = {};
 
   const DocumentsFilesMenu(
-      {Key? key,
+      {super.key,
       required this.popUpMenuItems,
       required this.fileData,
-      required this.documentDetailsModel})
-      : super(key: key);
+      required this.documentDetailsModel});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
     return PopupMenuItem(
@@ -45,9 +44,11 @@ class DocumentsFilesMenu extends StatelessWidget {
             AttachDocumentScreen.isFromUploadVersion = true;
             Navigator.pushNamed(context, AttachDocumentScreen.routeName,
                     arguments: documentDetailsModel)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           } else if (popUpMenuItems[value] == DatabaseUtil.getText('Delete')) {
             showDialog(
                 context: context,

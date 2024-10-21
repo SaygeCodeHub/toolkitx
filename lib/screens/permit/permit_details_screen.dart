@@ -31,8 +31,7 @@ class PermitDetailsScreen extends StatelessWidget {
   final String permitId;
   static const routeName = 'PermitDetailsScreen';
 
-  const PermitDetailsScreen({Key? key, required this.permitId})
-      : super(key: key);
+  const PermitDetailsScreen({super.key, required this.permitId});
 
   @override
   Widget build(BuildContext context) {

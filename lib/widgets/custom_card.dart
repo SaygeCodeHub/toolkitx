@@ -9,14 +9,13 @@ class CustomCard extends StatelessWidget {
   final Color? shadowColor;
 
   const CustomCard(
-      {Key? key,
+      {super.key,
       this.color,
       this.elevation,
       this.shape,
       this.margin,
       this.child,
-      this.shadowColor})
-      : super(key: key);
+      this.shadowColor});
 
   @override
   Widget build(BuildContext context) {

@@ -17,8 +17,7 @@ class LocationListTile extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const LocationListTile(
-      {Key? key, required this.data, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.data, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

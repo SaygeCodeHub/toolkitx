@@ -16,9 +16,9 @@ class QualityManagementContractorListTile extends StatelessWidget {
   static String contractorName = '';
 
   const QualityManagementContractorListTile({
-    Key? key,
+    super.key,
     required this.reportNewQAMap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

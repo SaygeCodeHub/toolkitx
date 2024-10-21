@@ -18,13 +18,13 @@ import 'widgets/profile_options.dart';
 class ProfileScreen extends StatelessWidget {
   static const routeName = 'ProfileScreen';
 
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     context.read<ProfileBloc>().add(FetchUserProfile());
     return PopScope(
-        onPopInvoked: (pop) async {
+        onPopInvokedWithResult: (pop, _) async {
           return;
         },
         child: Scaffold(

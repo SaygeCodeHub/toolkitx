@@ -15,8 +15,7 @@ import '../../configs/app_spacing.dart';
 class GetNotesCertificateScreen extends StatelessWidget {
   static const routeName = 'GetNotesCertificateScreen';
 
-  const GetNotesCertificateScreen({Key? key, required this.getNotesMap})
-      : super(key: key);
+  const GetNotesCertificateScreen({super.key, required this.getNotesMap});
   final Map getNotesMap;
   static int pageNo = 1;
 

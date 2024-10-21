@@ -14,7 +14,7 @@ import '../permit_list_screen.dart';
 import 'permit_list_card.dart';
 
 class PermitListTile extends StatelessWidget {
-  const PermitListTile({Key? key}) : super(key: key);
+  const PermitListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

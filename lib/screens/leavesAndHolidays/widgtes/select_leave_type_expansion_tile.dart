@@ -15,8 +15,7 @@ class SelectLeaveTypeExpansionTile extends StatelessWidget {
   final Map applyForLeaveMap;
 
   const SelectLeaveTypeExpansionTile(
-      {Key? key, required this.data, required this.applyForLeaveMap})
-      : super(key: key);
+      {super.key, required this.data, required this.applyForLeaveMap});
 
   @override
   Widget build(BuildContext context) {

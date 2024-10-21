@@ -12,8 +12,7 @@ import '../../../widgets/progress_bar.dart';
 
 class EditWorkOrderWorkForceBottomBar extends StatelessWidget {
   const EditWorkOrderWorkForceBottomBar(
-      {Key? key, required this.editWorkOrderWorkForceMap})
-      : super(key: key);
+      {super.key, required this.editWorkOrderWorkForceMap});
   final Map editWorkOrderWorkForceMap;
 
   @override

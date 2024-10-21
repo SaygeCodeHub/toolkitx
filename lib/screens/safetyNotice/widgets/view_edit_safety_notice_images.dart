@@ -14,7 +14,7 @@ import '../../../utils/incident_view_image_util.dart';
 import '../add_and_edit_safety_notice_screen.dart';
 
 class ViewEditSafetyNoticeImages extends StatelessWidget {
-  const ViewEditSafetyNoticeImages({Key? key}) : super(key: key);
+  const ViewEditSafetyNoticeImages({super.key});
 
   @override
   Widget build(BuildContext context) {

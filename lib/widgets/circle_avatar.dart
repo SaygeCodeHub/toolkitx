@@ -9,11 +9,10 @@ class CircleAvatarWidget extends StatelessWidget {
   final Color? backgroundColor;
 
   const CircleAvatarWidget(
-      {Key? key,
+      {super.key,
       this.radius,
       required this.imagePath,
-      this.backgroundColor = AppColor.blueGrey})
-      : super(key: key);
+      this.backgroundColor = AppColor.blueGrey});
 
   @override
   Widget build(BuildContext context) {

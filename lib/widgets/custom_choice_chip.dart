@@ -9,11 +9,10 @@ class CustomChoiceChip extends StatelessWidget {
   final Function(bool) onSelected;
 
   const CustomChoiceChip(
-      {Key? key,
+      {super.key,
       required this.label,
       required this.selected,
-      required this.onSelected})
-      : super(key: key);
+      required this.onSelected});
 
   @override
   Widget build(BuildContext context) {

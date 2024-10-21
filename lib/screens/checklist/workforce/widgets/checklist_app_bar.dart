@@ -5,12 +5,11 @@ import '../../../../configs/app_dimensions.dart';
 
 class ChecklistAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChecklistAppBar(
-      {Key? key,
+      {super.key,
       required this.title,
       this.leading,
       this.actions,
-      this.onPressed})
-      : super(key: key);
+      this.onPressed});
   final Widget title;
   final Widget? leading;
   final List<Widget>? actions;

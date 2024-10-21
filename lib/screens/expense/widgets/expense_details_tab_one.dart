@@ -29,11 +29,10 @@ class ExpenseDetailsTabOne extends StatelessWidget {
   static List itemMasterList = [];
 
   const ExpenseDetailsTabOne(
-      {Key? key,
+      {super.key,
       required this.tabIndex,
       required this.expenseDetailsData,
-      required this.expenseId})
-      : super(key: key);
+      required this.expenseId});
   static Map manageItemsMap = {};
 
   @override

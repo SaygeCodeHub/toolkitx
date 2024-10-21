@@ -30,9 +30,13 @@ class LotoListTile extends StatelessWidget {
                         arguments: context.read<LotoListBloc>().data[index].id)
                     .then((_) => {
                           LotoListScreen.pageNo = 1,
-                          context.read<LotoListBloc>().data.clear(),
-                          context.read<LotoListBloc>().add(FetchLotoList(
-                              pageNo: LotoListScreen.pageNo, isFromHome: false))
+                          if (context.mounted)
+                            {
+                              context.read<LotoListBloc>().data.clear(),
+                              context.read<LotoListBloc>().add(FetchLotoList(
+                                  pageNo: LotoListScreen.pageNo,
+                                  isFromHome: false))
+                            }
                         });
               },
               title: Text(context.read<LotoListBloc>().data[index].name,

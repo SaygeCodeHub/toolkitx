@@ -19,8 +19,7 @@ class WorkOrderTabThreeDocumentTab extends StatelessWidget {
   final String clientId;
 
   const WorkOrderTabThreeDocumentTab(
-      {Key? key, required this.data, required this.clientId})
-      : super(key: key);
+      {super.key, required this.data, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

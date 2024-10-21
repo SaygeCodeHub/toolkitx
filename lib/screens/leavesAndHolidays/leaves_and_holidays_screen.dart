@@ -24,7 +24,7 @@ import 'widgtes/leaves_and_holidays_list_body.dart';
 class LeavesAndHolidaysScreen extends StatelessWidget {
   static const routeName = 'LeavesAndHolidaysScreen';
 
-  const LeavesAndHolidaysScreen({Key? key}) : super(key: key);
+  const LeavesAndHolidaysScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

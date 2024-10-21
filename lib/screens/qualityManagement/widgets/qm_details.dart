@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
@@ -14,11 +13,10 @@ class QualityManagementDetails extends StatelessWidget {
   final String clientId;
 
   const QualityManagementDetails(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.initialIndex,
-      required this.clientId})
-      : super(key: key);
+      required this.clientId});
 
   @override
   Widget build(BuildContext context) {

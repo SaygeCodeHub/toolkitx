@@ -13,8 +13,7 @@ import '../workorder_add_and_edit_down_time_screen.dart';
 class WorkOrderTabThreeShowDowntimeTab extends StatelessWidget {
   final WorkOrderDetailsData data;
 
-  const WorkOrderTabThreeShowDowntimeTab({Key? key, required this.data})
-      : super(key: key);
+  const WorkOrderTabThreeShowDowntimeTab({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

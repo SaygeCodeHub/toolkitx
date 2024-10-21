@@ -21,8 +21,7 @@ class ToDoDetailsAndDocumentDetailsScreen extends StatelessWidget {
   final String todoId;
   static Map todoMap = {};
 
-  const ToDoDetailsAndDocumentDetailsScreen({Key? key, required this.todoId})
-      : super(key: key);
+  const ToDoDetailsAndDocumentDetailsScreen({super.key, required this.todoId});
 
   @override
   Widget build(BuildContext context) {

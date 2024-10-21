@@ -16,9 +16,9 @@ class IncidentContractorListTile extends StatelessWidget {
   static String contractorName = '';
 
   const IncidentContractorListTile({
-    Key? key,
+    super.key,
     required this.addIncidentMap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -29,8 +29,7 @@ class QualityManagementDetailsScreen extends StatelessWidget {
   final String qmId;
   static String refNo = '';
 
-  const QualityManagementDetailsScreen({Key? key, required this.qmId})
-      : super(key: key);
+  const QualityManagementDetailsScreen({super.key, required this.qmId});
 
   @override
   Widget build(BuildContext context) {

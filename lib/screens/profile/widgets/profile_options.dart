@@ -13,7 +13,7 @@ import '../../onboarding/select_time_zone_screen.dart';
 import '../select_change_password_screen.dart';
 
 class ProfileOptions extends StatelessWidget {
-  const ProfileOptions({Key? key}) : super(key: key);
+  const ProfileOptions({super.key});
 
   void profileOptionsSwitchCase(context, index) async {
     switch (index) {

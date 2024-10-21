@@ -17,10 +17,9 @@ class LocationDetailsLoToBody extends StatelessWidget {
   final bool locationLoToListReachedMax;
 
   const LocationDetailsLoToBody(
-      {Key? key,
+      {super.key,
       required this.locationLoTos,
-      required this.locationLoToListReachedMax})
-      : super(key: key);
+      required this.locationLoToListReachedMax});
 
   @override
   Widget build(BuildContext context) {

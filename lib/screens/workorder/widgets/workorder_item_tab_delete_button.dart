@@ -11,8 +11,7 @@ import '../../../widgets/custom_icon_button.dart';
 class WorkOrderItemTabDeleteButton extends StatelessWidget {
   final String itemId;
 
-  const WorkOrderItemTabDeleteButton({Key? key, required this.itemId})
-      : super(key: key);
+  const WorkOrderItemTabDeleteButton({super.key, required this.itemId});
 
   @override
   Widget build(BuildContext context) {

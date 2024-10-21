@@ -12,10 +12,10 @@ class ToDoCreatedForListTile extends StatefulWidget {
   final List<ToDoMasterDatum> data;
 
   const ToDoCreatedForListTile({
-    Key? key,
+    super.key,
     required this.todoMap,
     required this.data,
-  }) : super(key: key);
+  });
 
   @override
   State<ToDoCreatedForListTile> createState() => _ToDoCreatedForListTileState();

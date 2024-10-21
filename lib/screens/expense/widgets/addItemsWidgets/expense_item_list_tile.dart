@@ -14,8 +14,7 @@ class ExpenseItemListTile extends StatelessWidget {
   final String itemId;
   final String itemName;
 
-  const ExpenseItemListTile({Key? key, this.itemId = '', this.itemName = ''})
-      : super(key: key);
+  const ExpenseItemListTile({super.key, this.itemId = '', this.itemName = ''});
 
   @override
   Widget build(BuildContext context) {

@@ -50,6 +50,8 @@ dependencies:
   open_file: ^3.3.2
   csv:
   flutter_document_picker: ^5.2.3
+  webview_flutter_android: ^4.0.0
+  webview_flutter_wkwebview: ^3.16.0
 
 dev_dependencies:
   flutter_test:

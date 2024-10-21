@@ -22,8 +22,7 @@ class SafetyNoticeAddAndEditBottomAppBar extends StatelessWidget {
   static bool compareLength = false;
 
   const SafetyNoticeAddAndEditBottomAppBar(
-      {Key? key, required this.manageSafetyNoticeMap})
-      : super(key: key);
+      {super.key, required this.manageSafetyNoticeMap});
 
   @override
   Widget build(BuildContext context) {

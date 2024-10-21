@@ -20,8 +20,7 @@ class SelectLanguageScreen extends StatelessWidget {
   static const routeName = 'SelectLanguageScreen';
   final bool isFromProfile;
 
-  const SelectLanguageScreen({Key? key, this.isFromProfile = false})
-      : super(key: key);
+  const SelectLanguageScreen({super.key, this.isFromProfile = false});
 
   @override
   Widget build(BuildContext context) {

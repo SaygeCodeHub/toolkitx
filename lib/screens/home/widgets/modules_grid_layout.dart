@@ -7,7 +7,7 @@ import 'offline_modules.dart';
 import 'online_modules.dart';
 
 class ModulesGridLayout extends StatelessWidget {
-  const ModulesGridLayout({Key? key}) : super(key: key);
+  const ModulesGridLayout({super.key});
 
   @override
   Widget build(BuildContext context) {

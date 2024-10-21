@@ -25,8 +25,9 @@ class IncidentMarkAsResolvedScreen extends StatelessWidget {
   final IncidentDetailsModel incidentDetailsModel;
 
   IncidentMarkAsResolvedScreen(
-      {Key? key, required this.incidentId, required this.incidentDetailsModel})
-      : super(key: key);
+      {super.key,
+      required this.incidentId,
+      required this.incidentDetailsModel});
   final Map incidentCommentsMap = {};
 
   @override

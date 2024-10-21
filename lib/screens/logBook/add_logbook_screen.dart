@@ -16,7 +16,7 @@ import 'report_new_logbook_screen.dart';
 class AddLogBookScreen extends StatelessWidget {
   static const routeName = 'AddLogBookScreen';
 
-  const AddLogBookScreen({Key? key}) : super(key: key);
+  const AddLogBookScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

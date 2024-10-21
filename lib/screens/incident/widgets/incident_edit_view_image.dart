@@ -18,8 +18,7 @@ class IncidentEditViewImage extends StatelessWidget {
   final String clientId;
 
   const IncidentEditViewImage(
-      {Key? key, required this.addAndEditIncidentMap, required this.clientId})
-      : super(key: key);
+      {super.key, required this.addAndEditIncidentMap, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

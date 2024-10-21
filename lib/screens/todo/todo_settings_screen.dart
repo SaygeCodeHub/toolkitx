@@ -17,7 +17,7 @@ class ToDoSettingsScreen extends StatelessWidget {
   static const routeName = 'ToDoSettingsScreen';
   final Map todoMap;
 
-  const ToDoSettingsScreen({Key? key, required this.todoMap}) : super(key: key);
+  const ToDoSettingsScreen({super.key, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

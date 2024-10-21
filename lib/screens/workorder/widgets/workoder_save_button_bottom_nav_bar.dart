@@ -10,8 +10,9 @@ class WorkOrderSaveButtonBottomNavBar extends StatelessWidget {
   final bool? isSaveVisible;
 
   const WorkOrderSaveButtonBottomNavBar(
-      {Key? key, required this.workOrderDetailsMap, this.isSaveVisible = false})
-      : super(key: key);
+      {super.key,
+      required this.workOrderDetailsMap,
+      this.isSaveVisible = false});
 
   @override
   Widget build(BuildContext context) {

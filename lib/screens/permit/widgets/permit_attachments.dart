@@ -98,11 +98,13 @@ class PermitAttachments extends StatelessWidget {
                                                   filename
                                                       .toLowerCase()
                                                       .endsWith('.gif')) {
-                                                Navigator.pushNamed(
-                                                    context,
-                                                    ViewAttachedImageWidget
-                                                        .routeName,
-                                                    arguments: filePath);
+                                                if (context.mounted) {
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      ViewAttachedImageWidget
+                                                          .routeName,
+                                                      arguments: filePath);
+                                                }
                                               } else if (filename
                                                   .toLowerCase()
                                                   .endsWith('.pdf')) {
@@ -115,8 +117,10 @@ class PermitAttachments extends StatelessWidget {
                                                 //                 documentPath:
                                                 //                     filePath)));
                                               } else {
-                                                await fileViewer.viewFile(
-                                                    context, filePath);
+                                                if (context.mounted) {
+                                                  await fileViewer.viewFile(
+                                                      context, filePath);
+                                                }
                                               }
                                             }
                                           },
@@ -182,8 +186,10 @@ class PermitAttachments extends StatelessWidget {
         if (messageValue is String) {
           String downloadUrl = messageValue;
           String finalUrl = '${ApiConstants.baseDocUrl}$downloadUrl';
-          showCustomSnackBar(context, 'File downloaded successfully', '');
-          await downloadImage(finalUrl, filename, context);
+          if (context.mounted) {
+            showCustomSnackBar(context, 'File downloaded successfully', '');
+            await downloadImage(finalUrl, filename, context);
+          }
         } else {
           throw Exception('Invalid message value: $messageValue');
         }

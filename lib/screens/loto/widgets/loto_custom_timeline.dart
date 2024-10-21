@@ -8,8 +8,7 @@ import '../../../data/models/loto/loto_details_model.dart';
 class LotoCustomTimeLine extends StatelessWidget {
   final FetchLotoDetailsModel fetchLotoDetailsModel;
 
-  const LotoCustomTimeLine({Key? key, required this.fetchLotoDetailsModel})
-      : super(key: key);
+  const LotoCustomTimeLine({super.key, required this.fetchLotoDetailsModel});
 
   @override
   Widget build(BuildContext context) {

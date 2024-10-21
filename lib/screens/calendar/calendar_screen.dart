@@ -17,7 +17,7 @@ import 'widgets/calendar_list_view.dart';
 class CalendarScreen extends StatefulWidget {
   static const routeName = 'CalendarScreen';
 
-  const CalendarScreen({Key? key}) : super(key: key);
+  const CalendarScreen({super.key});
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();

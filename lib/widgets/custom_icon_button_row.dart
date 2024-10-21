@@ -17,7 +17,7 @@ class CustomIconButtonRow extends StatelessWidget {
   final void Function()? onDownloadPress;
 
   const CustomIconButtonRow(
-      {Key? key,
+      {super.key,
       this.primaryIcon = Icons.filter_alt_outlined,
       this.secondaryIcon = Icons.settings_outlined,
       required this.primaryOnPress,
@@ -29,8 +29,7 @@ class CustomIconButtonRow extends StatelessWidget {
       this.clearVisible = false,
       required this.clearOnPress,
       this.onDownloadPress,
-      this.textValue = StringConstants.kClearFilter})
-      : super(key: key);
+      this.textValue = StringConstants.kClearFilter});
 
   @override
   Widget build(BuildContext context) {

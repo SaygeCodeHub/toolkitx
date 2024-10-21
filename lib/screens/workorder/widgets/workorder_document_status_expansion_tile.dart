@@ -12,7 +12,7 @@ import '../../../widgets/expansion_tile_border.dart';
 import '../workorder_assign_document_screen.dart';
 
 class WorkOrderDocumentStatusExpansionTile extends StatelessWidget {
-  const WorkOrderDocumentStatusExpansionTile({Key? key}) : super(key: key);
+  const WorkOrderDocumentStatusExpansionTile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -12,11 +12,10 @@ class ToDoDetailsTab extends StatelessWidget {
   final Map todoMap;
 
   const ToDoDetailsTab(
-      {Key? key,
+      {super.key,
       required this.initialIndex,
       required this.todoDetails,
-      required this.todoMap})
-      : super(key: key);
+      required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

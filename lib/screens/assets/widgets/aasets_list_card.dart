@@ -11,7 +11,9 @@ import '../assets_details_screen.dart';
 
 class AssetsListCard extends StatelessWidget {
   const AssetsListCard({super.key, required this.data});
+
   final AssetsListDatum data;
+
   @override
   Widget build(BuildContext context) {
     return CustomCard(
@@ -22,9 +24,13 @@ class AssetsListCard extends StatelessWidget {
             Navigator.pushNamed(context, AssetsDetailsScreen.routeName)
                 .then((_) => {
                       AssetsListScreen.pageNo = 1,
-                      context.read<AssetsBloc>().assetsDatum.clear(),
-                      context.read<AssetsBloc>().add(FetchAssetsList(
-                          pageNo: AssetsListScreen.pageNo, isFromHome: false))
+                      if (context.mounted)
+                        {
+                          context.read<AssetsBloc>().assetsDatum.clear(),
+                          context.read<AssetsBloc>().add(FetchAssetsList(
+                              pageNo: AssetsListScreen.pageNo,
+                              isFromHome: false))
+                        }
                     });
           },
           title: Text(data.name,

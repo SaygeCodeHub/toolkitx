@@ -97,11 +97,14 @@ class ExpenseItemDetailTab extends StatelessWidget {
                                                     .routeName,
                                                 arguments: expenseDetailsData
                                                     .itemlist[index].id)
-                                            .then((value) => context
-                                                .read<ExpenseBloc>()
-                                                .add(FetchExpenseDetails(
+                                            .then((value) {
+                                          if (context.mounted) {
+                                            context.read<ExpenseBloc>().add(
+                                                FetchExpenseDetails(
                                                     tabIndex: 2,
-                                                    expenseId: expenseId)));
+                                                    expenseId: expenseId));
+                                          }
+                                        });
                                       },
                                       textValue: DatabaseUtil.getText('Edit')))
                             ];

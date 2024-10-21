@@ -8,9 +8,9 @@ import '../../../data/models/tickets/fetch_ticket_details_model.dart';
 
 class TicketLogTab extends StatelessWidget {
   const TicketLogTab({
-    Key? key,
+    super.key,
     required this.ticketData,
-  }) : super(key: key);
+  });
   final TicketData ticketData;
 
   @override

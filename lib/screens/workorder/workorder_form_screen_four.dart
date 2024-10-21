@@ -11,8 +11,7 @@ class WorkOrderFormScreenFour extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreenFour';
   final Map workOrderDetailsMap;
 
-  const WorkOrderFormScreenFour({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderFormScreenFour({super.key, required this.workOrderDetailsMap});
   static List customFieldList = [];
 
   @override

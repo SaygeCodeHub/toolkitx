@@ -15,9 +15,9 @@ import '../widgets/checklist_app_bar.dart';
 
 class EditHeaderScreen extends StatelessWidget {
   static const routeName = 'EditHeaderScreen';
-
-  EditHeaderScreen({Key? key}) : super(key: key);
   final List editHeaderList = [];
+
+  EditHeaderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

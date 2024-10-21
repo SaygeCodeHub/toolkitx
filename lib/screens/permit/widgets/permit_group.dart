@@ -12,8 +12,7 @@ import '../../../widgets/status_tag.dart';
 class PermitGroup extends StatelessWidget {
   final PermitDetailsModel permitDetailsModel;
 
-  const PermitGroup({Key? key, required this.permitDetailsModel})
-      : super(key: key);
+  const PermitGroup({super.key, required this.permitDetailsModel});
 
   @override
   Widget build(BuildContext context) {

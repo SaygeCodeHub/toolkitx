@@ -10,9 +10,9 @@ import '../../../widgets/expansion_tile_border.dart';
 
 class TicketBugExpansionTile extends StatelessWidget {
   const TicketBugExpansionTile({
-    Key? key,
+    super.key,
     required this.saveTicketMap,
-  }) : super(key: key);
+  });
   final Map saveTicketMap;
 
   @override

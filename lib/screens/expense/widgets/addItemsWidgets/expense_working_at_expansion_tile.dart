@@ -14,9 +14,10 @@ import '../expense_details_tab_one.dart';
 import 'expense_edit_items_screen.dart';
 
 class ExpenseWorkingAtExpansionTile extends StatelessWidget {
-  const ExpenseWorkingAtExpansionTile({Key? key}) : super(key: key);
   static String workingAt = '';
   static String workingAtValue = '';
+
+  const ExpenseWorkingAtExpansionTile({super.key});
 
   @override
   Widget build(BuildContext context) {

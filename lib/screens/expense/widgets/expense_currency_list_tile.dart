@@ -16,8 +16,7 @@ import 'expense_currency_list.dart';
 class ExpenseCurrencyListTile extends StatelessWidget {
   final List<List<ExpenseMasterDatum>> data;
 
-  const ExpenseCurrencyListTile({Key? key, required this.data})
-      : super(key: key);
+  const ExpenseCurrencyListTile({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

@@ -68,9 +68,11 @@ class GroupChatScreen extends StatelessWidget {
                                     Navigator.pushNamed(context,
                                             ChatMessagingScreen.routeName)
                                         .whenComplete(() {
-                                      context
-                                          .read<ChatBloc>()
-                                          .add(FetchAllGroups());
+                                      if (context.mounted) {
+                                        context
+                                            .read<ChatBloc>()
+                                            .add(FetchAllGroups());
+                                      }
                                     });
                                   },
                                   leading: Container(
@@ -133,12 +135,14 @@ class GroupChatScreen extends StatelessWidget {
                                           Navigator.pushNamed(context,
                                                   ChatMessagingScreen.routeName)
                                               .whenComplete(() {
-                                            context
-                                                .read<ChatBloc>()
-                                                .add(FetchChatsList());
+                                            if (context.mounted) {
+                                              context
+                                                  .read<ChatBloc>()
+                                                  .add(FetchChatsList());
+                                            }
                                           });
                                         },
-                                        child: Text('Send Message'),
+                                        child: const Text('Send Message'),
                                       )
                                     ],
                                   ),

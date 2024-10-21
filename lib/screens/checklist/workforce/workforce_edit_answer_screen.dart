@@ -24,8 +24,7 @@ class EditAnswerListScreen extends StatelessWidget {
   static const routeName = 'EditAnswerListScreen';
   final Map checklistDataMap;
 
-  const EditAnswerListScreen({Key? key, required this.checklistDataMap})
-      : super(key: key);
+  const EditAnswerListScreen({super.key, required this.checklistDataMap});
 
   @override
   Widget build(BuildContext context) {

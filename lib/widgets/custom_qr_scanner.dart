@@ -11,8 +11,7 @@ typedef CreatedForStringCallBack = Function(String qrCode);
 
 class CustomQRCodeScanner extends StatefulWidget {
   const CustomQRCodeScanner(
-      {Key? key, this.onPressed, required this.onCaptured})
-      : super(key: key);
+      {super.key, this.onPressed, required this.onCaptured});
   final Function()? onPressed;
   final CreatedForStringCallBack onCaptured;
 

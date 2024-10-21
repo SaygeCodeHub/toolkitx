@@ -14,8 +14,7 @@ class ToDoSettingsSendNotificationExpansionTile extends StatelessWidget {
   final Map todoMap;
 
   const ToDoSettingsSendNotificationExpansionTile(
-      {Key? key, required this.todoMap})
-      : super(key: key);
+      {super.key, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

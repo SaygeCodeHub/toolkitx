@@ -17,10 +17,9 @@ class AddInjuredPersonBody extends StatelessWidget {
   final Map addAndEditIncidentMap;
 
   const AddInjuredPersonBody(
-      {Key? key,
+      {super.key,
       required this.injuredPersonsList,
-      required this.addAndEditIncidentMap})
-      : super(key: key);
+      required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

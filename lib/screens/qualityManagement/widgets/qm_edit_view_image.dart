@@ -18,8 +18,7 @@ class QualityManagementEditViewImage extends StatelessWidget {
   final String clientId;
 
   const QualityManagementEditViewImage(
-      {Key? key, required this.reportAndEditQMMap, required this.clientId})
-      : super(key: key);
+      {super.key, required this.reportAndEditQMMap, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

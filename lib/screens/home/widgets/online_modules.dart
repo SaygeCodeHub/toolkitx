@@ -43,7 +43,7 @@ import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 class OnLineModules extends StatelessWidget {
   static bool isFirstTime = true;
 
-  const OnLineModules({Key? key}) : super(key: key);
+  const OnLineModules({super.key});
 
   @override
   Widget build(BuildContext context) {

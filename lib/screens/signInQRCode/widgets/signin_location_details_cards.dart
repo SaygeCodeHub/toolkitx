@@ -15,8 +15,7 @@ import 'sign_in_workorder_location_details_card.dart';
 class SignInLocationDetailsCards extends StatelessWidget {
   final String locationId;
 
-  const SignInLocationDetailsCards({Key? key, required this.locationId})
-      : super(key: key);
+  const SignInLocationDetailsCards({super.key, required this.locationId});
 
   @override
   Widget build(BuildContext context) {

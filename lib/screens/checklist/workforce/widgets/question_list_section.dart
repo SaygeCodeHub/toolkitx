@@ -11,8 +11,8 @@ import 'question_list_section_body.dart';
 
 class QuestionsListSection extends StatelessWidget {
   const QuestionsListSection({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

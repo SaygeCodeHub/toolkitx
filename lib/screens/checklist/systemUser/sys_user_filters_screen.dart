@@ -11,7 +11,7 @@ import '../../../blocs/checklist/systemUser/checkList/sys_user_checklist_event.d
 class FiltersScreen extends StatelessWidget {
   static const routeName = 'FiltersScreen';
 
-  const FiltersScreen({Key? key}) : super(key: key);
+  const FiltersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

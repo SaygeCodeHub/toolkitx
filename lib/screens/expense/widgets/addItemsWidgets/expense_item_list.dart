@@ -15,9 +15,9 @@ import 'expense_edit_items_screen.dart';
 class ExpenseItemList extends StatelessWidget {
   final Map itemMap;
   static String itemId = '';
-
-  const ExpenseItemList({Key? key, required this.itemMap}) : super(key: key);
   static List<List<ItemMasterDatum>> fetchItemMaster = [];
+
+  const ExpenseItemList({super.key, required this.itemMap});
 
   @override
   Widget build(BuildContext context) {

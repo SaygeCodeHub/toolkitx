@@ -22,8 +22,7 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
   final int tabIndex;
 
   const WorkOrderTabTwoDetails(
-      {Key? key, required this.data, required this.tabIndex})
-      : super(key: key);
+      {super.key, required this.data, required this.tabIndex});
 
   @override
   Widget build(BuildContext context) {

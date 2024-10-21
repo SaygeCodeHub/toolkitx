@@ -18,7 +18,8 @@ import 'safety_notice_details_screen.dart';
 class SafetyNoticeHistoryScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeHistoryScreen';
 
-  const SafetyNoticeHistoryScreen({Key? key}) : super(key: key);
+  const SafetyNoticeHistoryScreen({super.key});
+
   static int pageNo = 1;
 
   @override
@@ -69,9 +70,12 @@ class SafetyNoticeHistoryScreen extends StatelessWidget {
                               Navigator.pushNamed(context,
                                       SafetyNoticeDetailsScreen.routeName,
                                       arguments: state.historyDatum[index].id)
-                                  .then((value) =>
-                                      Navigator.pushReplacementNamed(context,
-                                          SafetyNoticeHistoryScreen.routeName));
+                                  .then((value) {
+                                if (context.mounted) {
+                                  Navigator.pushReplacementNamed(context,
+                                      SafetyNoticeHistoryScreen.routeName);
+                                }
+                              });
                             },
                             contentPadding:
                                 const EdgeInsets.all(xxTinierSpacing),

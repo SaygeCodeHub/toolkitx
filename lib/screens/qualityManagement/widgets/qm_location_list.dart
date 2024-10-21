@@ -13,10 +13,9 @@ class QualityManagementLocationList extends StatelessWidget {
   final String selectLocationName;
 
   const QualityManagementLocationList(
-      {Key? key,
+      {super.key,
       required this.fetchQualityManagementMasterModel,
-      required this.selectLocationName})
-      : super(key: key);
+      required this.selectLocationName});
 
   @override
   Widget build(BuildContext context) {

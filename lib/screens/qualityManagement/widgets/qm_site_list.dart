@@ -13,10 +13,9 @@ class QualityManagementSiteList extends StatelessWidget {
   final String selectSiteName;
 
   const QualityManagementSiteList(
-      {Key? key,
+      {super.key,
       required this.fetchQualityManagementMasterModel,
-      required this.selectSiteName})
-      : super(key: key);
+      required this.selectSiteName});
 
   @override
   Widget build(BuildContext context) {

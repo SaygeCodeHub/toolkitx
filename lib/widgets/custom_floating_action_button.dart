@@ -7,8 +7,7 @@ class CustomFloatingActionButton extends StatelessWidget {
   final void Function() onPressed;
 
   const CustomFloatingActionButton(
-      {Key? key, required this.textValue, required this.onPressed})
-      : super(key: key);
+      {super.key, required this.textValue, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

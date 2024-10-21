@@ -30,9 +30,11 @@ class AssetsManageDownTimeScreen extends StatelessWidget {
                         context, AssetsAddAndEditDowntimeScreen.routeName,
                         arguments: "")
                     .then((_) => {
-                          context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
-                              assetId: context.read<AssetsBloc>().assetId,
-                              pageNo: pageNo))
+                          if (context.mounted)
+                            context.read<AssetsBloc>().add(
+                                FetchAssetsGetDownTime(
+                                    assetId: context.read<AssetsBloc>().assetId,
+                                    pageNo: pageNo))
                         });
               },
               child: const Icon(Icons.add),

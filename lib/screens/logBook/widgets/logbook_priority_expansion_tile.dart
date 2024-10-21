@@ -13,8 +13,7 @@ class LogBookPriorityExpansionTile extends StatelessWidget {
   final Map reportNewLogBookMap;
 
   const LogBookPriorityExpansionTile(
-      {Key? key, required this.reportNewLogBookMap})
-      : super(key: key);
+      {super.key, required this.reportNewLogBookMap});
 
   @override
   Widget build(BuildContext context) {

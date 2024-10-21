@@ -13,7 +13,7 @@ import 'widgets/workorder_filter_body.dart';
 class WorkOrderFilterScreen extends StatelessWidget {
   static const routeName = 'WorkOrderFilterScreen';
 
-  const WorkOrderFilterScreen({Key? key}) : super(key: key);
+  const WorkOrderFilterScreen({super.key});
   static Map workOrderFilterMap = {};
   static bool isFromLocation = false;
   static String expenseId = '';

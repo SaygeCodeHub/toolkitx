@@ -14,7 +14,7 @@ import '../../../../widgets/error_section.dart';
 import 'sys_user_fetch_pdf_section.dart';
 
 class WorkForceListSection extends StatelessWidget {
-  const WorkForceListSection({Key? key}) : super(key: key);
+  const WorkForceListSection({super.key});
 
   @override
   Widget build(BuildContext context) {

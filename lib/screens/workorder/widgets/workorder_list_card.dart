@@ -11,7 +11,7 @@ import '../workorder_list_screen.dart';
 class WorkOrderListCard extends StatelessWidget {
   final WorkOrderDatum data;
 
-  const WorkOrderListCard({Key? key, required this.data}) : super(key: key);
+  const WorkOrderListCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,13 @@ class WorkOrderListCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
                   arguments: data.id)
-              .then((value) => Navigator.pushReplacementNamed(
+              .then((value) {
+            if (context.mounted) {
+              Navigator.pushReplacementNamed(
                   context, WorkOrderListScreen.routeName,
-                  arguments: false));
+                  arguments: false);
+            }
+          });
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(

@@ -14,8 +14,7 @@ class IncidentReportedAuthorityExpansionTile extends StatelessWidget {
   final Map addIncidentMap;
 
   const IncidentReportedAuthorityExpansionTile(
-      {Key? key, required this.addIncidentMap})
-      : super(key: key);
+      {super.key, required this.addIncidentMap});
 
   @override
   Widget build(BuildContext context) {

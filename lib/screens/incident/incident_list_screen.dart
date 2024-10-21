@@ -26,8 +26,7 @@ class IncidentListScreen extends StatefulWidget {
   static const routeName = 'IncidentListScreen';
   final bool isFromHome;
 
-  const IncidentListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  const IncidentListScreen({super.key, this.isFromHome = false});
 
   @override
   State<IncidentListScreen> createState() => _IncidentListScreenState();
@@ -195,13 +194,17 @@ class _IncidentListScreenState extends State<IncidentListScreen> {
                                                     arguments:
                                                         incidentListData[index]
                                                             .id)
-                                                .then((_) => context
+                                                .then((_) {
+                                              if (context.mounted) {
+                                                context
                                                     .read<
                                                         IncidentLisAndFilterBloc>()
                                                     .add(FetchIncidentListEvent(
                                                         isFromHome:
                                                             widget.isFromHome,
-                                                        page: 1)));
+                                                        page: 1));
+                                              }
+                                            });
                                           }));
                                 },
                                 separatorBuilder: (context, index) {

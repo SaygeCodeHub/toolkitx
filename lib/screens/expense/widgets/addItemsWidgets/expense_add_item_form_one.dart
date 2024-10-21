@@ -9,7 +9,7 @@ import 'expense_working_at_expansion_tile.dart';
 import 'expense_working_at_number_list_tile.dart';
 
 class ExpenseAddItemFormOne extends StatelessWidget {
-  const ExpenseAddItemFormOne({Key? key}) : super(key: key);
+  const ExpenseAddItemFormOne({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import '../../../configs/app_color.dart';
 import '../../../utils/constants/string_constants.dart';
 
 class QMNewReportingImageSection extends StatelessWidget {
-  const QMNewReportingImageSection({Key? key}) : super(key: key);
+  const QMNewReportingImageSection({super.key});
 
   @override
   Widget build(BuildContext context) {

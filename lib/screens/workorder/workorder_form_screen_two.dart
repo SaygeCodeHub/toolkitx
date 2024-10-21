@@ -14,8 +14,7 @@ class WorkOrderFormScreenTwo extends StatelessWidget {
   static const routeName = 'CreateWorkOrderScreenTwo';
   final Map workOrderDetailsMap;
 
-  const WorkOrderFormScreenTwo({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderFormScreenTwo({super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

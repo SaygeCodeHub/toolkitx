@@ -12,7 +12,7 @@ import '../../../widgets/expansion_tile_border.dart';
 import '../workorder_add_mis_cost_screen.dart';
 
 class WorkOrderMiscCostCurrencyExpansionTile extends StatelessWidget {
-  const WorkOrderMiscCostCurrencyExpansionTile({Key? key}) : super(key: key);
+  const WorkOrderMiscCostCurrencyExpansionTile({super.key});
 
   @override
   Widget build(BuildContext context) {

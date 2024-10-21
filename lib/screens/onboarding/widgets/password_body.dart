@@ -19,7 +19,7 @@ import 'type_expansion_tile.dart';
 class PasswordBody extends StatelessWidget {
   final Map loginMap = {};
 
-  PasswordBody({Key? key}) : super(key: key);
+  PasswordBody({super.key});
 
   @override
   Widget build(BuildContext context) {

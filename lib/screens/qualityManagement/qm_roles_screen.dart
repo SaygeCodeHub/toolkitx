@@ -15,7 +15,7 @@ import '../../widgets/generic_app_bar.dart';
 class QualityManagementRolesScreen extends StatelessWidget {
   static const routeName = 'QualityManagementRolesScreen';
 
-  const QualityManagementRolesScreen({Key? key}) : super(key: key);
+  const QualityManagementRolesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

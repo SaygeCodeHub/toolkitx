@@ -21,8 +21,7 @@ class RejectReasonsScreen extends StatelessWidget {
   static const routeName = 'RejectReasonsScreen';
   final Map checklistDataMap;
 
-  const RejectReasonsScreen({Key? key, required this.checklistDataMap})
-      : super(key: key);
+  const RejectReasonsScreen({super.key, required this.checklistDataMap});
 
   @override
   Widget build(BuildContext context) {

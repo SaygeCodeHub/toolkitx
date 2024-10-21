@@ -35,10 +35,10 @@ class UploadImageMenu extends StatefulWidget {
   });
 
   @override
-  _UploadImageMenuState createState() => _UploadImageMenuState();
+  UploadImageMenuState createState() => UploadImageMenuState();
 }
 
-class _UploadImageMenuState extends State<UploadImageMenu> {
+class UploadImageMenuState extends State<UploadImageMenu> {
   late ImagePickerBloc _imagePickerBloc;
 
   @override

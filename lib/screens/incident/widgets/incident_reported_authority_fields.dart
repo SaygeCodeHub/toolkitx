@@ -14,10 +14,9 @@ class IncidentReportedAuthorityFields extends StatelessWidget {
   final String reportIncidentAuthorityId;
 
   const IncidentReportedAuthorityFields(
-      {Key? key,
+      {super.key,
       required this.addIncidentMap,
-      required this.reportIncidentAuthorityId})
-      : super(key: key);
+      required this.reportIncidentAuthorityId});
 
   @override
   Widget build(BuildContext context) {

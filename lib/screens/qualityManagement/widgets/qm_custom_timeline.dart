@@ -11,8 +11,7 @@ class QualityManagementCustomTimeline extends StatelessWidget {
   final int initialIndex;
 
   const QualityManagementCustomTimeline(
-      {Key? key, required this.data, required this.initialIndex})
-      : super(key: key);
+      {super.key, required this.data, required this.initialIndex});
 
   @override
   Widget build(BuildContext context) {

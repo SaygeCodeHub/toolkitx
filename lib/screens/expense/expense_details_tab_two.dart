@@ -11,8 +11,7 @@ class ExpenseDetailsTabTwo extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
 
   const ExpenseDetailsTabTwo(
-      {Key? key, required this.tabIndex, required this.expenseDetailsData})
-      : super(key: key);
+      {super.key, required this.tabIndex, required this.expenseDetailsData});
 
   @override
   Widget build(BuildContext context) {

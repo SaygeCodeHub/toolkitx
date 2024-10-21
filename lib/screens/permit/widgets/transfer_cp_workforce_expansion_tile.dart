@@ -15,10 +15,9 @@ typedef CreatedForTransferCP = Function(int id, String name);
 
 class TransferCPWorkForceExpansionTile extends StatelessWidget {
   const TransferCPWorkForceExpansionTile(
-      {Key? key,
+      {super.key,
       required this.createdForTransferCp,
-      required this.getDataForCPDatum})
-      : super(key: key);
+      required this.getDataForCPDatum});
   final CreatedForTransferCP createdForTransferCp;
   final List<GetDataForCPDatum> getDataForCPDatum;
 

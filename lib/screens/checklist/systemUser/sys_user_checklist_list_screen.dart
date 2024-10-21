@@ -19,8 +19,7 @@ class SystemUserCheckListScreen extends StatefulWidget {
   static const routeName = 'SystemUserCheckListScreen';
   final bool isFromHome;
 
-  const SystemUserCheckListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  const SystemUserCheckListScreen({super.key, this.isFromHome = false});
 
   @override
   State<SystemUserCheckListScreen> createState() =>

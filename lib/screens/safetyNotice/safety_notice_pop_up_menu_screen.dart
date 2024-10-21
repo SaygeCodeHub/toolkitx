@@ -19,8 +19,7 @@ class SafetyNoticePopUpMenuScreen extends StatelessWidget {
   static Map safetyNoticeDetailsMap = {};
 
   const SafetyNoticePopUpMenuScreen(
-      {Key? key, required this.popUpMenuOptionsList})
-      : super(key: key);
+      {super.key, required this.popUpMenuOptionsList});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

@@ -23,7 +23,7 @@ class WorkOrderAddMisCostScreen extends StatelessWidget {
   static List singleMiscCostDatum = [];
   static bool isFromEdit = false;
 
-  const WorkOrderAddMisCostScreen({Key? key}) : super(key: key);
+  const WorkOrderAddMisCostScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,8 +14,7 @@ class WorkOrderCompanyExpansionTile extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const WorkOrderCompanyExpansionTile(
-      {Key? key, required this.data, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.data, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

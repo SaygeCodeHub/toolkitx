@@ -15,8 +15,7 @@ class ViewLocationDocumentsImages extends StatelessWidget {
   final String clientId;
 
   const ViewLocationDocumentsImages(
-      {Key? key, required this.fileName, required this.clientId})
-      : super(key: key);
+      {super.key, required this.fileName, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

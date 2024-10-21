@@ -28,17 +28,20 @@ class PermitListCard extends StatelessWidget {
                       .whenComplete(() {
                     if (isNetworkEstablished) {
                       PermitListScreen.page = 1;
-                      context.read<PermitBloc>().permitListData = [];
-                      context
-                          .read<PermitBloc>()
-                          .add(const GetAllPermits(isFromHome: false, page: 1));
+                      if (context.mounted) {
+                        context.read<PermitBloc>().permitListData = [];
+                        context.read<PermitBloc>().add(
+                            const GetAllPermits(isFromHome: false, page: 1));
+                      }
                     } else {
                       PermitListScreen.page = 1;
-                      context.read<PermitBloc>().permitListData = [];
-                      Navigator.pop(context);
-                      Navigator.pushReplacementNamed(
-                          context, PermitListScreen.routeName,
-                          arguments: false);
+                      if (context.mounted) {
+                        context.read<PermitBloc>().permitListData = [];
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(
+                            context, PermitListScreen.routeName,
+                            arguments: false);
+                      }
                     }
                   });
                 },

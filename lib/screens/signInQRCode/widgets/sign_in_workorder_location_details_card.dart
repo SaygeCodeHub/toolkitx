@@ -23,8 +23,7 @@ class SignInWorkOrderLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInWorkOrderLocationDetailsCard(
-      {Key? key, required this.workOrder, required this.locationId})
-      : super(key: key);
+      {super.key, required this.workOrder, required this.locationId});
 
   @override
   Widget build(BuildContext context) {

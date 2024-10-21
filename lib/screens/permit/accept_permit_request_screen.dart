@@ -24,8 +24,8 @@ class AcceptPermitRequestScreen extends StatelessWidget {
   static const routeName = 'AcceptPermitRequestScreen';
   final PermitDetailsModel permitDetailsModel;
 
-  const AcceptPermitRequestScreen({Key? key, required this.permitDetailsModel})
-      : super(key: key);
+  const AcceptPermitRequestScreen(
+      {super.key, required this.permitDetailsModel});
 
   @override
   Widget build(BuildContext context) {

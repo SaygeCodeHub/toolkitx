@@ -23,14 +23,14 @@ class DatePickerTextButton extends StatefulWidget {
   static dynamic indexOf = 1;
 
   const DatePickerTextButton({
-    Key? key,
+    super.key,
     this.initialDate,
     this.maxDate,
     this.editDate = '',
     this.text,
     this.minimumDate,
     required this.onDateChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<DatePickerTextButton> createState() => _DatePickerTextFieldState();

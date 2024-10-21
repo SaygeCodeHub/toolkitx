@@ -13,7 +13,7 @@ import '../safety_notice_screen.dart';
 import 'safety_notice_list_card.dart';
 
 class SafetyNoticeListBody extends StatelessWidget {
-  const SafetyNoticeListBody({Key? key}) : super(key: key);
+  const SafetyNoticeListBody({super.key});
 
   @override
   Widget build(BuildContext context) {

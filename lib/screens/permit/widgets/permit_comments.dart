@@ -9,8 +9,7 @@ import '../../../widgets/custom_card.dart';
 class PermitComments extends StatelessWidget {
   final PermitDetailsModel permitDetailsModel;
 
-  const PermitComments({Key? key, required this.permitDetailsModel})
-      : super(key: key);
+  const PermitComments({super.key, required this.permitDetailsModel});
 
   @override
   Widget build(BuildContext context) {

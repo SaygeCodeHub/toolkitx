@@ -20,8 +20,7 @@ class WorkOrderTabThreeDetails extends StatelessWidget {
   final int tabIndex;
 
   const WorkOrderTabThreeDetails(
-      {Key? key, required this.data, required this.tabIndex})
-      : super(key: key);
+      {super.key, required this.data, required this.tabIndex});
   static int toggleIndex = 0;
 
   @override

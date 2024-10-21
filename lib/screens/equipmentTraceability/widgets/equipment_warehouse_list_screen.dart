@@ -10,8 +10,7 @@ import '../../../../widgets/generic_app_bar.dart';
 class EquipmentWarehouseList extends StatelessWidget {
   final Map warehouseMap;
 
-  const EquipmentWarehouseList({Key? key, required this.warehouseMap})
-      : super(key: key);
+  const EquipmentWarehouseList({super.key, required this.warehouseMap});
 
   @override
   Widget build(BuildContext context) {

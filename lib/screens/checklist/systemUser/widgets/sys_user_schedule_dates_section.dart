@@ -18,8 +18,7 @@ import '../sys_user_workforce_list_screen.dart';
 class ScheduleDatesSection extends StatelessWidget {
   final String checklistId;
 
-  const ScheduleDatesSection({Key? key, required this.checklistId})
-      : super(key: key);
+  const ScheduleDatesSection({super.key, required this.checklistId});
 
   @override
   Widget build(BuildContext context) {

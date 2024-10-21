@@ -17,11 +17,10 @@ class ToDoDocumentTypeListTile extends StatelessWidget {
   final Map todoFilterMap;
 
   const ToDoDocumentTypeListTile(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.todoMap,
-      required this.todoFilterMap})
-      : super(key: key);
+      required this.todoFilterMap});
 
   @override
   Widget build(BuildContext context) {

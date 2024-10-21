@@ -9,8 +9,7 @@ import '../documents_details_screen.dart';
 class DocumentCustomTimeline extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
 
-  const DocumentCustomTimeline({Key? key, required this.documentDetailsModel})
-      : super(key: key);
+  const DocumentCustomTimeline({super.key, required this.documentDetailsModel});
 
   @override
   Widget build(BuildContext context) {

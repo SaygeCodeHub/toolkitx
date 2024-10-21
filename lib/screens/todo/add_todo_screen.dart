@@ -22,7 +22,7 @@ class AddToDoScreen extends StatelessWidget {
   static const routeName = 'AddToDoScreen';
   final Map todoMap;
 
-  const AddToDoScreen({Key? key, required this.todoMap}) : super(key: key);
+  const AddToDoScreen({super.key, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

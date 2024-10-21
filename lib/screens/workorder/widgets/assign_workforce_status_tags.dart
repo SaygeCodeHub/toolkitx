@@ -16,8 +16,7 @@ class AssignWorkForceStatusTags extends StatelessWidget {
   final int index;
 
   const AssignWorkForceStatusTags(
-      {Key? key, required this.assignWorkForceDatum, required this.index})
-      : super(key: key);
+      {super.key, required this.assignWorkForceDatum, required this.index});
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ import '../../../configs/app_dimensions.dart';
 class SelectEmployeeListTile extends StatelessWidget {
   static Map employeeMap = {};
 
-  const SelectEmployeeListTile({Key? key}) : super(key: key);
+  const SelectEmployeeListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -17,7 +17,7 @@ import 'workforce_questions_list_screen.dart';
 class WorkForceListScreen extends StatelessWidget {
   static const routeName = 'WorkForceListScreen';
 
-  const WorkForceListScreen({Key? key}) : super(key: key);
+  const WorkForceListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -127,9 +127,13 @@ class WorkForceListScreen extends StatelessWidget {
                                       arguments: context
                                           .read<WorkForceListBloc>()
                                           .checkListMap)
-                                  .then((value) => context
+                                  .then((value) {
+                                if (context.mounted) {
+                                  context
                                       .read<WorkForceListBloc>()
-                                      .add(FetchWorkForceList()));
+                                      .add(FetchWorkForceList());
+                                }
+                              });
                             }),
                       ));
                     },

@@ -24,11 +24,10 @@ class IncidentInjuredPersonTab extends StatelessWidget {
   final Map injuredPersonDetailMap = {};
 
   IncidentInjuredPersonTab(
-      {Key? key,
+      {super.key,
       required this.incidentDetailsModel,
       required this.initialIndex,
-      required this.incidentId})
-      : super(key: key);
+      required this.incidentId});
 
   @override
   Widget build(BuildContext context) {

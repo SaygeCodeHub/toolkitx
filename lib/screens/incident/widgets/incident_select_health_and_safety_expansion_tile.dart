@@ -11,8 +11,7 @@ class IncidentReportHealthAndSafetyExpansionTile extends StatelessWidget {
   final Map addIncidentMap;
 
   const IncidentReportHealthAndSafetyExpansionTile(
-      {Key? key, required this.addIncidentMap})
-      : super(key: key);
+      {super.key, required this.addIncidentMap});
   static String anonymousName = '';
 
   @override

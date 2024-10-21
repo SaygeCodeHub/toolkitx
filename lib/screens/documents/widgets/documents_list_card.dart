@@ -23,10 +23,12 @@ class DocumentsListCard extends StatelessWidget {
               context.read<DocumentsBloc>().documentId = documentsListData.id;
               Navigator.pushNamed(context, DocumentsDetailsScreen.routeName)
                   .then((_) {
-                context.read<DocumentsBloc>().documentsListDatum.clear();
-                context
-                    .read<DocumentsBloc>()
-                    .add((GetDocumentsList(page: 1, isFromHome: false)));
+                if (context.mounted) {
+                  context.read<DocumentsBloc>().documentsListDatum.clear();
+                  context
+                      .read<DocumentsBloc>()
+                      .add((GetDocumentsList(page: 1, isFromHome: false)));
+                }
               });
             },
             contentPadding: const EdgeInsets.all(xxTinierSpacing),

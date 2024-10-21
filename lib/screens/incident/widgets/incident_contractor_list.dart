@@ -14,11 +14,10 @@ class IncidentContractorList extends StatelessWidget {
   final String selectContractorName;
 
   const IncidentContractorList(
-      {Key? key,
+      {super.key,
       required this.fetchIncidentMasterModel,
       required this.selectContractorId,
-      required this.selectContractorName})
-      : super(key: key);
+      required this.selectContractorName});
 
   @override
   Widget build(BuildContext context) {

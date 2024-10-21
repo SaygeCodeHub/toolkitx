@@ -15,8 +15,7 @@ import '../expense_list_screen.dart';
 class ExpenseListBody extends StatelessWidget {
   final List expenseListDatum;
 
-  const ExpenseListBody({Key? key, required this.expenseListDatum})
-      : super(key: key);
+  const ExpenseListBody({super.key, required this.expenseListDatum});
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +34,12 @@ class ExpenseListBody extends StatelessWidget {
                       Navigator.pushNamed(
                               context, ExpenseDetailsScreen.routeName,
                               arguments: expenseListDatum[index].id)
-                          .then((_) => context.read<ExpenseBloc>().add(
-                              FetchExpenseList(pageNo: 1, isFromHome: false)));
+                          .then((_) {
+                        if (context.mounted) {
+                          context.read<ExpenseBloc>().add(
+                              FetchExpenseList(pageNo: 1, isFromHome: false));
+                        }
+                      });
                     },
                     contentPadding: const EdgeInsets.all(xxTinierSpacing),
                     title: Padding(

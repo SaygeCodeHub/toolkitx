@@ -12,8 +12,7 @@ class SafetyNoticeDetailsTabTwo extends StatelessWidget {
   final SafetyNoticeData safetyNoticeData;
 
   const SafetyNoticeDetailsTabTwo(
-      {Key? key, required this.tabIndex, required this.safetyNoticeData})
-      : super(key: key);
+      {super.key, required this.tabIndex, required this.safetyNoticeData});
 
   @override
   Widget build(BuildContext context) {

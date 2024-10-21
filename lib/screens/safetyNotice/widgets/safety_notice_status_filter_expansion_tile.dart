@@ -13,7 +13,7 @@ import '../../../widgets/expansion_tile_border.dart';
 import '../safety_notice_filter_screen.dart';
 
 class SafetyNoticeStatusFilterExpansionTile extends StatelessWidget {
-  const SafetyNoticeStatusFilterExpansionTile({Key? key}) : super(key: key);
+  const SafetyNoticeStatusFilterExpansionTile({super.key});
 
   @override
   Widget build(BuildContext context) {

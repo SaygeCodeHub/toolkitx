@@ -10,7 +10,7 @@ import '../../../widgets/custom_card.dart';
 class LeavesDetailsCard extends StatelessWidget {
   final dynamic detailsData;
 
-  const LeavesDetailsCard({Key? key, this.detailsData}) : super(key: key);
+  const LeavesDetailsCard({super.key, this.detailsData});
 
   @override
   Widget build(BuildContext context) {

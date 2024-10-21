@@ -14,8 +14,7 @@ import '../../../blocs/checklist/workforce/popUpMenu/workforce_checklist_pop_up_
 class WorkForcePopUpMenu extends StatelessWidget {
   final Map checklistDataMap;
 
-  const WorkForcePopUpMenu({Key? key, required this.checklistDataMap})
-      : super(key: key);
+  const WorkForcePopUpMenu({super.key, required this.checklistDataMap});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

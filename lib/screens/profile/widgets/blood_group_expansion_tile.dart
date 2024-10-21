@@ -12,8 +12,7 @@ import '../../../utils/constants/string_constants.dart';
 class BloodGroupExpansionTile extends StatelessWidget {
   final Map profileDetailsMap;
 
-  const BloodGroupExpansionTile({Key? key, required this.profileDetailsMap})
-      : super(key: key);
+  const BloodGroupExpansionTile({super.key, required this.profileDetailsMap});
 
   @override
   Widget build(BuildContext context) {

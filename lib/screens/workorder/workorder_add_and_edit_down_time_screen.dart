@@ -15,7 +15,7 @@ class WorkOrderAddAndEditDownTimeScreen extends StatelessWidget {
   static const routeName = 'WorkOrderAddAndEditDownTimeScreen';
   static Map addAndEditDownTimeMap = {};
 
-  const WorkOrderAddAndEditDownTimeScreen({Key? key}) : super(key: key);
+  const WorkOrderAddAndEditDownTimeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

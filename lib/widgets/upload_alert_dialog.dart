@@ -15,12 +15,11 @@ class UploadAlertDialog extends StatelessWidget {
   final bool? isSignature;
 
   const UploadAlertDialog(
-      {Key? key,
+      {super.key,
       required this.onCamera,
       required this.onDevice,
       this.isSignature = false,
-      this.onSign})
-      : super(key: key);
+      this.onSign});
 
   @override
   Widget build(BuildContext context) {

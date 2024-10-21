@@ -15,7 +15,7 @@ import 'sys_user_checklist_list_screen.dart';
 class ChangeRoleScreen extends StatelessWidget {
   static const routeName = 'ChangeRoleScreen';
 
-  const ChangeRoleScreen({Key? key}) : super(key: key);
+  const ChangeRoleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

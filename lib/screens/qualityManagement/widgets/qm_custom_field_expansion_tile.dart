@@ -18,12 +18,11 @@ class QualityManagementCustomFieldInfoExpansionTile extends StatelessWidget {
   final List<CustomFieldsDatum> customFieldsDatum;
 
   const QualityManagementCustomFieldInfoExpansionTile(
-      {Key? key,
+      {super.key,
       required this.onCustomFieldChanged,
       required this.index,
       required this.addAndEditIncidentMap,
-      required this.customFieldsDatum})
-      : super(key: key);
+      required this.customFieldsDatum});
 
   @override
   Widget build(BuildContext context) {

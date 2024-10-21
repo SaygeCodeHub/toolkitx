@@ -12,8 +12,7 @@ import '../../../widgets/expansion_tile_border.dart';
 typedef CreatedForTransfer = Function(String value);
 
 class TransferToExpansionTile extends StatelessWidget {
-  const TransferToExpansionTile({Key? key, required this.createdForTransfer})
-      : super(key: key);
+  const TransferToExpansionTile({super.key, required this.createdForTransfer});
   final CreatedForTransfer createdForTransfer;
 
   @override

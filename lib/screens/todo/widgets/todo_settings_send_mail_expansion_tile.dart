@@ -13,8 +13,7 @@ import '../../../widgets/expansion_tile_border.dart';
 class ToDoSettingsSendMailExpansionTile extends StatelessWidget {
   final Map todoMap;
 
-  const ToDoSettingsSendMailExpansionTile({Key? key, required this.todoMap})
-      : super(key: key);
+  const ToDoSettingsSendMailExpansionTile({super.key, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

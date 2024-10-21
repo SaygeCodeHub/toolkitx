@@ -17,7 +17,7 @@ class SafetyNoticeFilterScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeFilterScreen';
   static Map safetyNoticeFilterMap = {};
 
-  const SafetyNoticeFilterScreen({Key? key}) : super(key: key);
+  const SafetyNoticeFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

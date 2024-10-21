@@ -17,7 +17,7 @@ import 'widgtes/apply_for_leave_body.dart';
 class ApplyForLeaveScreen extends StatelessWidget {
   static const routeName = 'ApplyForLeaveScreen';
 
-  ApplyForLeaveScreen({Key? key}) : super(key: key);
+  ApplyForLeaveScreen({super.key});
   final Map applyForLeaveMap = {};
 
   @override

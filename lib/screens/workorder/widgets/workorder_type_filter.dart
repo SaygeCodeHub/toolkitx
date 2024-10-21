@@ -13,8 +13,9 @@ class WorkOrderTypeFilter extends StatelessWidget {
   final List<List<WorkOrderMasterDatum>> workOderDatum;
 
   const WorkOrderTypeFilter(
-      {Key? key, required this.workOrderFilterMap, required this.workOderDatum})
-      : super(key: key);
+      {super.key,
+      required this.workOrderFilterMap,
+      required this.workOderDatum});
 
   @override
   Widget build(BuildContext context) {

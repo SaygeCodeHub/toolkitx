@@ -20,8 +20,7 @@ class ToDoHistoryListScreen extends StatefulWidget {
   static const routeName = 'ToDoHistoryListScreen';
   final Map todoMap;
 
-  const ToDoHistoryListScreen({Key? key, required this.todoMap})
-      : super(key: key);
+  const ToDoHistoryListScreen({super.key, required this.todoMap});
 
   @override
   State<ToDoHistoryListScreen> createState() => _ToDoHistoryListScreenState();

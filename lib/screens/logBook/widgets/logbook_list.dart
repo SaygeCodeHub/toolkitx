@@ -20,7 +20,7 @@ class LogbookList extends StatefulWidget {
   static int page = 1;
   final List logbookData;
 
-  const LogbookList({Key? key, required this.logbookData}) : super(key: key);
+  const LogbookList({super.key, required this.logbookData});
 
   @override
   State<LogbookList> createState() => _LogbookListState();

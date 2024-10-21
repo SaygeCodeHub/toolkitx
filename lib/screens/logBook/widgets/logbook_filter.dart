@@ -12,8 +12,7 @@ class LogbookFilter extends StatelessWidget {
   final Map logbookFilterMap;
 
   const LogbookFilter(
-      {Key? key, required this.data, required this.logbookFilterMap})
-      : super(key: key);
+      {super.key, required this.data, required this.logbookFilterMap});
 
   @override
   Widget build(BuildContext context) {

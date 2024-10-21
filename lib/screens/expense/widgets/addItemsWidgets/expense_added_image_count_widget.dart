@@ -8,7 +8,7 @@ import '../../../../configs/app_color.dart';
 import '../../../../utils/constants/string_constants.dart';
 
 class ExpenseAddedImageCountWidget extends StatelessWidget {
-  const ExpenseAddedImageCountWidget({Key? key}) : super(key: key);
+  const ExpenseAddedImageCountWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

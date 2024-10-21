@@ -13,8 +13,7 @@ class WorkOrderViewDocument extends StatelessWidget {
   final String clientId;
 
   const WorkOrderViewDocument(
-      {Key? key, required this.documents, required this.clientId})
-      : super(key: key);
+      {super.key, required this.documents, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

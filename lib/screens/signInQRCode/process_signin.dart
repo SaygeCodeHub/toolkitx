@@ -19,7 +19,7 @@ class ProcessSignInScreen extends StatefulWidget {
   static const routeName = 'ProcessSignInScreen';
   static bool isSignOut = false;
 
-  const ProcessSignInScreen({Key? key}) : super(key: key);
+  const ProcessSignInScreen({super.key});
 
   @override
   State<ProcessSignInScreen> createState() => _ProcessSignInScreenState();

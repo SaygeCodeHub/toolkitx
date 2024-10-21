@@ -11,10 +11,9 @@ class IncidentCategoryBody extends StatelessWidget {
   final List categorySelectedList;
 
   const IncidentCategoryBody(
-      {Key? key,
+      {super.key,
       required this.categoryList,
-      required this.categorySelectedList})
-      : super(key: key);
+      required this.categorySelectedList});
 
   @override
   Widget build(BuildContext context) {

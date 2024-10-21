@@ -11,8 +11,7 @@ import '../../../widgets/primary_button.dart';
 import '../start_and_complete_workorder_screen.dart';
 
 class StartWorkOrderButton extends StatelessWidget {
-  const StartWorkOrderButton({Key? key, required this.isFromStart})
-      : super(key: key);
+  const StartWorkOrderButton({super.key, required this.isFromStart});
   final bool isFromStart;
 
   @override

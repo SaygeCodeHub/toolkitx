@@ -10,7 +10,7 @@ import '../../../../widgets/generic_app_bar.dart';
 class EmployeeList extends StatelessWidget {
   final Map employeeMap;
 
-  const EmployeeList({Key? key, required this.employeeMap}) : super(key: key);
+  const EmployeeList({super.key, required this.employeeMap});
 
   @override
   Widget build(BuildContext context) {

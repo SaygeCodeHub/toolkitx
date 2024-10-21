@@ -16,8 +16,7 @@ class QualityManagementViewNetworkImage extends StatelessWidget {
   final String clientId;
 
   const QualityManagementViewNetworkImage(
-      {Key? key, required this.clientId, required this.data})
-      : super(key: key);
+      {super.key, required this.clientId, required this.data});
 
   @override
   Widget build(BuildContext context) {

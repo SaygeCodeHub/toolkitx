@@ -19,8 +19,7 @@ import '../workorder_add_mis_cost_screen.dart';
 class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
   final WorkOrderDetailsData data;
 
-  const WorkOrderTabThreeMiscCostTab({Key? key, required this.data})
-      : super(key: key);
+  const WorkOrderTabThreeMiscCostTab({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

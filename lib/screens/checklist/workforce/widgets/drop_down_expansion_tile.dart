@@ -14,12 +14,11 @@ class DropDownExpansionTile extends StatefulWidget {
   final int index;
 
   const DropDownExpansionTile(
-      {Key? key,
+      {super.key,
       required this.onValueChanged,
       required this.answerModelList,
       required this.value,
-      required this.index})
-      : super(key: key);
+      required this.index});
 
   @override
   State<DropDownExpansionTile> createState() => _DropDownExpansionTileState();

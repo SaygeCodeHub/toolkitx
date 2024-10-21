@@ -12,7 +12,7 @@ import '../../../widgets/primary_button.dart';
 import '../workorder_add_and_edit_down_time_screen.dart';
 
 class WorkOrderDownTimeSaveButton extends StatelessWidget {
-  const WorkOrderDownTimeSaveButton({Key? key}) : super(key: key);
+  const WorkOrderDownTimeSaveButton({super.key});
 
   @override
   Widget build(BuildContext context) {

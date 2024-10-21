@@ -20,8 +20,7 @@ class ApprovePopUp extends StatelessWidget {
   final Map approveMap = {};
 
   ApprovePopUp(
-      {Key? key, required this.textValue, required this.responseIdList})
-      : super(key: key);
+      {super.key, required this.textValue, required this.responseIdList});
 
   @override
   Widget build(BuildContext context) {

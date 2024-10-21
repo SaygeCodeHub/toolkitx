@@ -15,11 +15,11 @@ class TankManagementChecklistTab extends StatefulWidget {
   final String nominationId;
 
   @override
-  _TankManagementChecklistTabState createState() =>
-      _TankManagementChecklistTabState();
+  TankManagementChecklistTabState createState() =>
+      TankManagementChecklistTabState();
 }
 
-class _TankManagementChecklistTabState
+class TankManagementChecklistTabState
     extends State<TankManagementChecklistTab> {
   @override
   void initState() {

@@ -13,7 +13,7 @@ import '../../../widgets/progress_bar.dart';
 import '../workorder_assign_document_screen.dart';
 
 class WorkOrderAssignDocumentsBottomAppBar extends StatelessWidget {
-  const WorkOrderAssignDocumentsBottomAppBar({Key? key}) : super(key: key);
+  const WorkOrderAssignDocumentsBottomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

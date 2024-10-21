@@ -23,7 +23,6 @@ class UploadPictureContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('imagess $imagePathsList');
     return GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,

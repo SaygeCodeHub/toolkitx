@@ -8,7 +8,7 @@ import 'widgets/date_time_section.dart';
 import 'widgets/modules_grid_layout.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

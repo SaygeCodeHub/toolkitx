@@ -9,7 +9,7 @@ import '../configs/app_spacing.dart';
 import '../utils/constants/string_constants.dart';
 
 class NoInternetScreen extends StatelessWidget {
-  const NoInternetScreen({Key? key}) : super(key: key);
+  const NoInternetScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

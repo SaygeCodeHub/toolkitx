@@ -13,7 +13,7 @@ import '../workorder_assign_document_screen.dart';
 import 'workorder_document_type_list.dart';
 
 class WorkOrderDocumentTypeListTile extends StatelessWidget {
-  const WorkOrderDocumentTypeListTile({Key? key}) : super(key: key);
+  const WorkOrderDocumentTypeListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,7 @@ import 'change_password_screen.dart';
 class SelectChangePasswordTypeScreen extends StatelessWidget {
   static const routeName = 'SelectChangePasswordTypeScreen';
 
-  const SelectChangePasswordTypeScreen({Key? key}) : super(key: key);
+  const SelectChangePasswordTypeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

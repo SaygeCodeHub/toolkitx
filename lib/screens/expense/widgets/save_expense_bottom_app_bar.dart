@@ -13,7 +13,7 @@ import '../expense_list_screen.dart';
 import '../manage_expense_form_screen.dart';
 
 class SaveExpenseBottomAppBar extends StatelessWidget {
-  const SaveExpenseBottomAppBar({Key? key}) : super(key: key);
+  const SaveExpenseBottomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

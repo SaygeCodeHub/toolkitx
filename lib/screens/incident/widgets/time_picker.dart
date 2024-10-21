@@ -18,13 +18,13 @@ class TimePickerTextField extends StatefulWidget {
   final DateTime? minimumTime;
 
   const TimePickerTextField({
-    Key? key,
+    super.key,
     this.initialDateTime,
     this.editTime = '',
     this.hintText,
     this.minimumTime,
     required this.onTimeChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<TimePickerTextField> createState() => _TimePickerTextFieldState();

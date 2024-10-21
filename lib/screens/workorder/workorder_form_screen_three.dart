@@ -15,8 +15,8 @@ class WorkOrderFormScreenThree extends StatelessWidget {
   static const routeName = 'CreateSimilarWorkOrderScreenThree';
   final Map workOrderDetailsMap;
 
-  const WorkOrderFormScreenThree({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderFormScreenThree(
+      {super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import '../../../utils/database_utils.dart';
 class LeavesSummarySubtitle extends StatelessWidget {
   final LeavesSummaryDatum data;
 
-  const LeavesSummarySubtitle({Key? key, required this.data}) : super(key: key);
+  const LeavesSummarySubtitle({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

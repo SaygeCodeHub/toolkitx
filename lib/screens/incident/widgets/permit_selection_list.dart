@@ -21,11 +21,10 @@ class PermitSelectionList extends StatefulWidget {
   final void Function() goBack;
 
   const PermitSelectionList(
-      {Key? key,
+      {super.key,
       required this.incidentId,
       required this.initialIndex,
-      required this.goBack})
-      : super(key: key);
+      required this.goBack});
 
   @override
   State<PermitSelectionList> createState() => _PermitSelectionListState();

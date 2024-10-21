@@ -18,8 +18,7 @@ class QualityManagementMarkAsResolvedScreen extends StatelessWidget {
   final FetchQualityManagementDetailsModel fetchQualityManagementDetailsModel;
 
   QualityManagementMarkAsResolvedScreen(
-      {Key? key, required this.fetchQualityManagementDetailsModel})
-      : super(key: key);
+      {super.key, required this.fetchQualityManagementDetailsModel});
   final Map qmCommentsMap = {};
   static int imageIndex = 0;
 

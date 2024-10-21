@@ -22,11 +22,10 @@ class ToDoDocumentDetailsTab extends StatelessWidget {
   final Map todoMap;
 
   const ToDoDocumentDetailsTab(
-      {Key? key,
+      {super.key,
       required this.initialIndex,
       required this.documentDetailsDatum,
-      required this.todoMap})
-      : super(key: key);
+      required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

@@ -8,8 +8,7 @@ import '../../../data/models/qualityManagement/fetch_qm_list_model.dart';
 class QualityManagementListTileTitle extends StatelessWidget {
   final QMListDatum data;
 
-  const QualityManagementListTileTitle({Key? key, required this.data})
-      : super(key: key);
+  const QualityManagementListTileTitle({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {

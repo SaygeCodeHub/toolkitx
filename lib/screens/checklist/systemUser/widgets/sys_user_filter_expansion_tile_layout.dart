@@ -16,8 +16,7 @@ typedef FilterCategoryCallBack = Function(String categoryId);
 class FilterExpansionTileLayout extends StatelessWidget {
   final FilterCategoryCallBack onCategoryChanged;
 
-  const FilterExpansionTileLayout({Key? key, required this.onCategoryChanged})
-      : super(key: key);
+  const FilterExpansionTileLayout({super.key, required this.onCategoryChanged});
 
   @override
   Widget build(BuildContext context) {

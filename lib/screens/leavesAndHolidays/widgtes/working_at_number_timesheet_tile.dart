@@ -13,7 +13,7 @@ import 'leaves_and_holidays_working_at_num_list.dart';
 class TimSheetWorkingAtNumberListTile extends StatelessWidget {
   static Map workingAtNumberMap = {};
 
-  const TimSheetWorkingAtNumberListTile({Key? key}) : super(key: key);
+  const TimSheetWorkingAtNumberListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

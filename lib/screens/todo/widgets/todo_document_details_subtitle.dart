@@ -15,8 +15,7 @@ class ToDoDocumentDetailsSubtitle extends StatelessWidget {
   final Map todoMap;
 
   const ToDoDocumentDetailsSubtitle(
-      {Key? key, required this.documentDetailsDatum, required this.todoMap})
-      : super(key: key);
+      {super.key, required this.documentDetailsDatum, required this.todoMap});
 
   @override
   Widget build(BuildContext context) {

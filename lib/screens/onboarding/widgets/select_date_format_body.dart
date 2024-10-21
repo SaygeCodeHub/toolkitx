@@ -14,8 +14,7 @@ class SelectDateFormatBody extends StatelessWidget {
   final bool isFromProfile;
 
   const SelectDateFormatBody(
-      {Key? key, required this.dateFormatString, this.isFromProfile = false})
-      : super(key: key);
+      {super.key, required this.dateFormatString, this.isFromProfile = false});
 
   @override
   Widget build(BuildContext context) {

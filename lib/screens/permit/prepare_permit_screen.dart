@@ -21,8 +21,7 @@ class PreparePermitScreen extends StatelessWidget {
   static const routeName = 'PreparePermitScreen';
   final String permitId;
 
-  const PreparePermitScreen({Key? key, required this.permitId})
-      : super(key: key);
+  const PreparePermitScreen({super.key, required this.permitId});
 
   @override
   Widget build(BuildContext context) {

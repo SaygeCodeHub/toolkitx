@@ -11,8 +11,7 @@ class LotoLocationFilterList extends StatelessWidget {
 
   final String selectLocationName;
 
-  const LotoLocationFilterList({Key? key, required this.selectLocationName})
-      : super(key: key);
+  const LotoLocationFilterList({super.key, required this.selectLocationName});
 
   @override
   Widget build(BuildContext context) {

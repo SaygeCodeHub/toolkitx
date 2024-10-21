@@ -80,13 +80,16 @@ class MyMeetingsScreen extends StatelessWidget {
                                   Navigator.pushNamed(context,
                                           MeetingDetailsScreen.routeName,
                                           arguments: data[index].bookingid)
-                                      .then((_) => context
-                                          .read<MeetingRoomBloc>()
-                                          .add(FetchMyMeetingRoom(
+                                      .then((_) {
+                                    if (context.mounted) {
+                                      context.read<MeetingRoomBloc>().add(
+                                          FetchMyMeetingRoom(
                                               date: initialDate == ''
                                                   ? DateFormat.yMMMd()
                                                       .format(DateTime.now())
-                                                  : initialDate)));
+                                                  : initialDate));
+                                    }
+                                  });
                                 },
                                 title: Text(data[index].roomname,
                                     style: Theme.of(context)

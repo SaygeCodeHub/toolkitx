@@ -14,11 +14,10 @@ class QualityManagementContractorList extends StatelessWidget {
   final String selectContractorName;
 
   const QualityManagementContractorList(
-      {Key? key,
+      {super.key,
       required this.fetchQualityManagementMasterModel,
       required this.selectContractorId,
-      required this.selectContractorName})
-      : super(key: key);
+      required this.selectContractorName});
 
   @override
   Widget build(BuildContext context) {

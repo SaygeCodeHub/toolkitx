@@ -17,7 +17,7 @@ import '../assign_workforce_screen.dart';
 import 'assign_workforce_alert_dialog.dart';
 
 class AssignWorkForceBody extends StatelessWidget {
-  const AssignWorkForceBody({Key? key}) : super(key: key);
+  const AssignWorkForceBody({super.key});
   static Map assignWorkForceMap = {};
 
   @override

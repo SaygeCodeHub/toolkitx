@@ -10,8 +10,7 @@ class WorkOrderFormThreeScreenButton extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const WorkOrderFormThreeScreenButton(
-      {Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

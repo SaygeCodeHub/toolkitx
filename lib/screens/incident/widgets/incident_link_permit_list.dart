@@ -23,11 +23,10 @@ class IncidentLinkPermitList extends StatefulWidget {
   final int initialIndex;
 
   const IncidentLinkPermitList(
-      {Key? key,
+      {super.key,
       required this.incidentDetailsModel,
       required this.incidentId,
-      required this.initialIndex})
-      : super(key: key);
+      required this.initialIndex});
 
   @override
   State<IncidentLinkPermitList> createState() => _IncidentLinkPermitListState();

@@ -17,10 +17,9 @@ class LocationDetailsWorkOrdersBody extends StatelessWidget {
   final bool workOrderLoToListReachedMax;
 
   const LocationDetailsWorkOrdersBody(
-      {Key? key,
+      {super.key,
       required this.workOrderLocations,
-      required this.workOrderLoToListReachedMax})
-      : super(key: key);
+      required this.workOrderLoToListReachedMax});
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,7 @@ import '../../../utils/modules_util.dart';
 import '../../permit/permit_list_screen.dart';
 
 class OffLineModules extends StatelessWidget {
-  const OffLineModules({Key? key}) : super(key: key);
+  const OffLineModules({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -18,13 +18,12 @@ class MultiSelectExpansionTile extends StatelessWidget {
   final String editValue;
 
   const MultiSelectExpansionTile(
-      {Key? key,
+      {super.key,
       required this.answerModelList,
       required this.index,
       required this.selectedIdList,
       required this.selectedNamesList,
-      required this.editValue})
-      : super(key: key);
+      required this.editValue});
 
   @override
   Widget build(BuildContext context) {

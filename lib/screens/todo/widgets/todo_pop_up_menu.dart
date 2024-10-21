@@ -16,7 +16,7 @@ import '../todo_upload_document_screen.dart';
 class ToDoPopUpMenu extends StatelessWidget {
   final Map todoMap;
 
-  const ToDoPopUpMenu({Key? key, required this.todoMap}) : super(key: key);
+  const ToDoPopUpMenu({super.key, required this.todoMap});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

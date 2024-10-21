@@ -21,10 +21,9 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
   final DocumentDetailsModel documentDetailsModel;
 
   const DocumentsDetailsPopUpMenu(
-      {Key? key,
+      {super.key,
       required this.popUpMenuItems,
-      required this.documentDetailsModel})
-      : super(key: key);
+      required this.documentDetailsModel});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
     return PopupMenuItem(
@@ -47,25 +46,31 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('AddComments')) {
             Navigator.pushNamed(context, AddDocumentCommentsScreen.routeName)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_attachdocument')) {
             AttachDocumentScreen.isFromUploadVersion = false;
             Navigator.pushNamed(context, AttachDocumentScreen.routeName,
                     arguments: documentDetailsModel)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_approvedocument')) {
             DocumentsApproveAndRejectScreen.isFromReject = false;
             Navigator.pushNamed(
                     context, DocumentsApproveAndRejectScreen.routeName)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('dms_closedocument')) {
             showDialog(
@@ -82,9 +87,11 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
             DocumentsApproveAndRejectScreen.isFromReject = true;
             Navigator.pushNamed(
                     context, DocumentsApproveAndRejectScreen.routeName)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           } else if (popUpMenuItems[value] ==
               DatabaseUtil.getText('withdraw')) {
             context.read<DocumentsBloc>().add(WithdrawDocument());
@@ -95,9 +102,11 @@ class DocumentsDetailsPopUpMenu extends StatelessWidget {
               DatabaseUtil.getText('dms_openforreview')) {
             Navigator.pushNamed(context, OpenDocumentForReviewScreen.routeName,
                     arguments: documentDetailsModel)
-                .then((_) => context
-                    .read<DocumentsBloc>()
-                    .add(const GetDocumentsDetails()));
+                .then((_) {
+              if (context.mounted) {
+                context.read<DocumentsBloc>().add(const GetDocumentsDetails());
+              }
+            });
           }
         },
         position: PopupMenuPosition.under,

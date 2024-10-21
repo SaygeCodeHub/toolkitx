@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
@@ -24,7 +23,7 @@ class ProfileEditScreen extends StatelessWidget {
   static const routeName = 'ProfileEditScreen';
   static Map copyProfileMap = {};
 
-  const ProfileEditScreen({Key? key}) : super(key: key);
+  const ProfileEditScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -8,6 +8,7 @@ import '../../../data/models/permit/permit_details_model.dart';
 class CustomTimeline extends StatelessWidget {
   final PermitDetailsModel permitDetailsModel;
 
+  // ignore: use_super_parameters
   const CustomTimeline({Key? key, required this.permitDetailsModel})
       : super(key: key);
 

@@ -16,9 +16,9 @@ import 'widgets/expense_status_expansion_tile.dart';
 
 class ExpenseFilterScreen extends StatelessWidget {
   static const routeName = 'ExpenseFilterScreen';
-
-  const ExpenseFilterScreen({Key? key}) : super(key: key);
   static Map expenseFilterMap = {};
+
+  const ExpenseFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

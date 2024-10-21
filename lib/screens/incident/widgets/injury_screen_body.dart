@@ -13,10 +13,9 @@ class InjuryScreenBody extends StatelessWidget {
   final Map injuredPersonDetails;
 
   const InjuryScreenBody(
-      {Key? key,
+      {super.key,
       required this.injuryNatureList,
-      required this.injuredPersonDetails})
-      : super(key: key);
+      required this.injuredPersonDetails});
 
   @override
   Widget build(BuildContext context) {

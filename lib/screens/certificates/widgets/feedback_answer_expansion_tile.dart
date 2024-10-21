@@ -14,11 +14,10 @@ class FeedbackAnswerExpansionTile extends StatefulWidget {
   final String? queId;
 
   const FeedbackAnswerExpansionTile(
-      {Key? key,
+      {super.key,
       required this.onFeedbackAnswerChecked,
       required this.editValue,
-      this.queId})
-      : super(key: key);
+      this.queId});
 
   @override
   State<FeedbackAnswerExpansionTile> createState() =>

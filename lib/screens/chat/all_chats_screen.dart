@@ -56,9 +56,13 @@ class AllChatsScreen extends StatelessWidget {
                                         ChatMessagingScreen.routeName;
                                     Navigator.pushNamed(context,
                                             ChatMessagingScreen.routeName)
-                                        .whenComplete(() => context
+                                        .whenComplete(() {
+                                      if (context.mounted) {
+                                        context
                                             .read<ChatBloc>()
-                                            .add(FetchChatsList()));
+                                            .add(FetchChatsList());
+                                      }
+                                    });
                                   },
                                   leading: Container(
                                       padding:

@@ -13,8 +13,7 @@ class ApplyForLeaveBody extends StatelessWidget {
   final List<LeavesMasterDatum> data;
 
   const ApplyForLeaveBody(
-      {Key? key, required this.applyForLeaveMap, required this.data})
-      : super(key: key);
+      {super.key, required this.applyForLeaveMap, required this.data});
 
   @override
   Widget build(BuildContext context) {

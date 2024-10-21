@@ -13,7 +13,7 @@ import '../../../../widgets/progress_bar.dart';
 class FetchPdfSection extends StatelessWidget {
   final String responseId;
 
-  const FetchPdfSection({Key? key, required this.responseId}) : super(key: key);
+  const FetchPdfSection({super.key, required this.responseId});
 
   @override
   Widget build(BuildContext context) {

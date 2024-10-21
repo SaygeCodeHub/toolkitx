@@ -19,11 +19,10 @@ class LocationDetailsLogBooksBody extends StatelessWidget {
   final String apiKey;
 
   const LocationDetailsLogBooksBody(
-      {Key? key,
+      {super.key,
       required this.locationLogBooks,
       required this.locationLogBooksListReachedMax,
-      required this.apiKey})
-      : super(key: key);
+      required this.apiKey});
 
   @override
   Widget build(BuildContext context) {

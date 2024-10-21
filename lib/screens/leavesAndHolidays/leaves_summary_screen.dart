@@ -17,7 +17,7 @@ import 'widgtes/leaves_summary_subtitle.dart';
 class LeavesSummaryScreen extends StatelessWidget {
   static const routeName = 'LeavesSummaryScreen';
 
-  const LeavesSummaryScreen({Key? key}) : super(key: key);
+  const LeavesSummaryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

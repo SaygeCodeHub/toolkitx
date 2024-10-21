@@ -19,8 +19,7 @@ import 'qm_report_anonymously_expansion_tile.dart';
 class QMNewReportingBody extends StatelessWidget {
   final Map reportNewQMMap;
 
-  const QMNewReportingBody({Key? key, required this.reportNewQMMap})
-      : super(key: key);
+  const QMNewReportingBody({super.key, required this.reportNewQMMap});
   static String eventDate = '';
 
   @override

@@ -8,7 +8,7 @@ import '../../../utils/date_util.dart';
 class DateTimeRow extends StatelessWidget {
   final AllPermitDatum allPermitDatum;
 
-  const DateTimeRow({Key? key, required this.allPermitDatum}) : super(key: key);
+  const DateTimeRow({super.key, required this.allPermitDatum});
 
   @override
   Widget build(BuildContext context) {

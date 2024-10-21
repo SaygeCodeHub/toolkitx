@@ -11,8 +11,7 @@ import '../../../widgets/custom_choice_chip.dart';
 class LogbookStatusFilter extends StatelessWidget {
   final Map logbookFilterMap;
 
-  const LogbookStatusFilter({Key? key, required this.logbookFilterMap})
-      : super(key: key);
+  const LogbookStatusFilter({super.key, required this.logbookFilterMap});
 
   @override
   Widget build(BuildContext context) {

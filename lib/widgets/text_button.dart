@@ -7,11 +7,10 @@ class CustomTextButton extends StatelessWidget {
   final Color textColor;
 
   const CustomTextButton(
-      {Key? key,
+      {super.key,
       required this.onPressed,
       required this.textValue,
-      this.textColor = AppColor.deepBlue})
-      : super(key: key);
+      this.textColor = AppColor.deepBlue});
 
   @override
   Widget build(BuildContext context) {

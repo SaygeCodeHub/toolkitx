@@ -18,8 +18,7 @@ class PermitTransferComponentScreen extends StatelessWidget {
   static const routeName = 'PermitTransferComponentScreen';
   final String permitId;
 
-  const PermitTransferComponentScreen({Key? key, required this.permitId})
-      : super(key: key);
+  const PermitTransferComponentScreen({super.key, required this.permitId});
 
   @override
   Widget build(BuildContext context) {

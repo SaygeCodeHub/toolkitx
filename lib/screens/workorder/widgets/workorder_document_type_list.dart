@@ -10,7 +10,7 @@ import '../../../widgets/generic_app_bar.dart';
 import '../workorder_assign_document_screen.dart';
 
 class WorkOrderDocumentTypeList extends StatelessWidget {
-  const WorkOrderDocumentTypeList({Key? key}) : super(key: key);
+  const WorkOrderDocumentTypeList({super.key});
 
   @override
   Widget build(BuildContext context) {

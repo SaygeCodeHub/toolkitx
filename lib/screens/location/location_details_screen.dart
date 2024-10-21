@@ -26,8 +26,7 @@ class LocationDetailsScreen extends StatelessWidget {
   final String expenseId;
   static const routeName = 'LocationDetailsScreen';
 
-  const LocationDetailsScreen({Key? key, required this.expenseId})
-      : super(key: key);
+  const LocationDetailsScreen({super.key, required this.expenseId});
 
   @override
   Widget build(BuildContext context) {

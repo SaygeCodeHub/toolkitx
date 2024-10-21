@@ -16,8 +16,7 @@ class SubmitEditAnswerButton extends StatelessWidget {
   final Map checklistDataMap;
 
   const SubmitEditAnswerButton(
-      {Key? key, required this.answerList, required this.checklistDataMap})
-      : super(key: key);
+      {super.key, required this.answerList, required this.checklistDataMap});
 
   @override
   Widget build(BuildContext context) {

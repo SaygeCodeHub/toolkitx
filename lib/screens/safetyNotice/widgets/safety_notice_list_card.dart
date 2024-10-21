@@ -13,8 +13,7 @@ import '../safety_notice_screen.dart';
 class SafetyNoticeListCard extends StatelessWidget {
   final Notice noticesDatum;
 
-  const SafetyNoticeListCard({Key? key, required this.noticesDatum})
-      : super(key: key);
+  const SafetyNoticeListCard({super.key, required this.noticesDatum});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +22,13 @@ class SafetyNoticeListCard extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(context, SafetyNoticeDetailsScreen.routeName,
                   arguments: noticesDatum.id)
-              .then((value) => Navigator.of(context).pushReplacementNamed(
+              .then((value) {
+            if (context.mounted) {
+              Navigator.of(context).pushReplacementNamed(
                   SafetyNoticeScreen.routeName,
-                  arguments: false));
+                  arguments: false);
+            }
+          });
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(

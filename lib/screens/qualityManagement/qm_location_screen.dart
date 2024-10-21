@@ -20,8 +20,7 @@ class QualityManagementLocationScreen extends StatelessWidget {
   final Map reportNewQMMap;
 
   const QualityManagementLocationScreen(
-      {Key? key, required this.reportNewQMMap})
-      : super(key: key);
+      {super.key, required this.reportNewQMMap});
 
   @override
   Widget build(BuildContext context) {

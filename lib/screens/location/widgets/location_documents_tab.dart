@@ -14,11 +14,10 @@ class LocationDocumentsTab extends StatelessWidget {
   final String clientId;
 
   const LocationDocumentsTab(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.selectedTabIndex,
-      required this.clientId})
-      : super(key: key);
+      required this.clientId});
 
   @override
   Widget build(BuildContext context) {

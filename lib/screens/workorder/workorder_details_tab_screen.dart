@@ -28,8 +28,7 @@ class WorkOrderDetailsTabScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDetailsTabScreen';
   final String workOrderId;
 
-  const WorkOrderDetailsTabScreen({Key? key, required this.workOrderId})
-      : super(key: key);
+  const WorkOrderDetailsTabScreen({super.key, required this.workOrderId});
 
   @override
   Widget build(BuildContext context) {

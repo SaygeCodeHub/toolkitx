@@ -14,10 +14,10 @@ class PickImageWidget extends StatelessWidget {
   final ImagePickerBloc imagePickerBloc; // Accept the bloc as a parameter
 
   const PickImageWidget({
-    Key? key,
+    super.key,
     required this.imageMap,
     required this.imagePickerBloc, // Initialize the bloc parameter
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -20,8 +20,7 @@ class AddImageAndCommentScreen extends StatelessWidget {
   static const routeName = 'AddImageAndCommentScreen';
   final String questionResponseId;
 
-  AddImageAndCommentScreen({Key? key, required this.questionResponseId})
-      : super(key: key);
+  AddImageAndCommentScreen({super.key, required this.questionResponseId});
   final Map saveQuestionCommentsMap = {};
 
   @override

@@ -15,11 +15,11 @@ class IncidentLocationList extends StatelessWidget {
   final Map addIncidentMap;
 
   const IncidentLocationList({
-    Key? key,
+    super.key,
     required this.fetchIncidentMasterModel,
     required this.selectLocationName,
     required this.addIncidentMap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

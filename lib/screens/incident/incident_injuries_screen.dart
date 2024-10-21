@@ -17,8 +17,7 @@ class IncidentInjuriesScreen extends StatelessWidget {
   static Map injuriesDetailsMap = {};
   static List injuriesDetailsList = [];
 
-  const IncidentInjuriesScreen({Key? key, required this.addIncidentMap})
-      : super(key: key);
+  const IncidentInjuriesScreen({super.key, required this.addIncidentMap});
 
   @override
   Widget build(BuildContext context) {

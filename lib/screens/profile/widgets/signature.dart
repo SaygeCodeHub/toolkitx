@@ -20,8 +20,7 @@ class SignaturePad extends StatefulWidget {
   final Map map;
   final String mapKey;
 
-  const SignaturePad({Key? key, required this.map, required this.mapKey})
-      : super(key: key);
+  const SignaturePad({super.key, required this.map, required this.mapKey});
 
   @override
   State<SignaturePad> createState() => _SignaturePadState();

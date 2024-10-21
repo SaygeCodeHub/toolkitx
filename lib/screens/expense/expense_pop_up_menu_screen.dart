@@ -16,10 +16,9 @@ class ExpensePopUpMenuScreen extends StatelessWidget {
   final Map manageExpenseMap;
 
   const ExpensePopUpMenuScreen(
-      {Key? key,
+      {super.key,
       required this.popUpMenuOptions,
-      required this.manageExpenseMap})
-      : super(key: key);
+      required this.manageExpenseMap});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

@@ -13,15 +13,14 @@ class AndroidPopUp extends StatelessWidget {
   final String textValue;
 
   const AndroidPopUp(
-      {Key? key,
+      {super.key,
       required this.titleValue,
       required this.contentValue,
       required this.onPrimaryButton,
       this.contentPadding,
       this.isNoVisible = true,
       this.textValue = 'Yes',
-      this.onSecondaryButton})
-      : super(key: key);
+      this.onSecondaryButton});
 
   @override
   Widget build(BuildContext context) {

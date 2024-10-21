@@ -15,8 +15,7 @@ class IncidentDetailsViewNetworkImage extends StatelessWidget {
   final String clientId;
 
   const IncidentDetailsViewNetworkImage(
-      {Key? key, required this.incidentDetailsModel, required this.clientId})
-      : super(key: key);
+      {super.key, required this.incidentDetailsModel, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

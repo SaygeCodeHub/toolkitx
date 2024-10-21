@@ -13,7 +13,7 @@ import 'widgets/sys_user_workforce_list_section.dart';
 class SysUserWorkForceListScreen extends StatelessWidget {
   static const routeName = 'SysUserWorkForceListScreen';
 
-  const SysUserWorkForceListScreen({Key? key}) : super(key: key);
+  const SysUserWorkForceListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

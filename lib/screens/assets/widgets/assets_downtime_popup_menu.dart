@@ -30,8 +30,9 @@ class AssetsDowntimePopUpMenu extends StatelessWidget {
               AssetsAddAndEditDowntimeScreen.routeName,
               arguments: downtimeId,
             ).then((_) => {
-                  context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
-                      assetId: context.read<AssetsBloc>().assetId, pageNo: 1))
+                  if (context.mounted)
+                    context.read<AssetsBloc>().add(FetchAssetsGetDownTime(
+                        assetId: context.read<AssetsBloc>().assetId, pageNo: 1))
                 });
           }
           if (value == DatabaseUtil.getText("Delete")) {

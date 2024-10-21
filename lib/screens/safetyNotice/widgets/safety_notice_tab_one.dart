@@ -12,11 +12,10 @@ class SafetyNoticeTabOne extends StatelessWidget {
   final String clientId;
 
   const SafetyNoticeTabOne(
-      {Key? key,
+      {super.key,
       required this.tabIndex,
       required this.safetyNoticeData,
-      required this.clientId})
-      : super(key: key);
+      required this.clientId});
 
   @override
   Widget build(BuildContext context) {

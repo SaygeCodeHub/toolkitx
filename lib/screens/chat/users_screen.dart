@@ -217,10 +217,12 @@ class UsersScreen extends StatelessWidget {
                                                             ChatMessagingScreen
                                                                 .routeName)
                                                         .whenComplete(() {
-                                                      context
-                                                          .read<ChatBloc>()
-                                                          .add(
-                                                              FetchChatsList());
+                                                      if (context.mounted) {
+                                                        context
+                                                            .read<ChatBloc>()
+                                                            .add(
+                                                                FetchChatsList());
+                                                      }
                                                     });
                                                   },
                                                   leading: const Icon(

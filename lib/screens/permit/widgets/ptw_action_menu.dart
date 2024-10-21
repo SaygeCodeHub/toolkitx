@@ -25,11 +25,10 @@ class PTWActionMenu extends StatelessWidget {
   final String permitId;
 
   const PTWActionMenu(
-      {Key? key,
+      {super.key,
       required this.permitDetailsModel,
       required this.popUpMenuItems,
-      required this.permitId})
-      : super(key: key);
+      required this.permitId});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, int position) {
     return PopupMenuItem(
@@ -58,15 +57,23 @@ class PTWActionMenu extends StatelessWidget {
           } else if (popUpMenuItems[value] == StringConstants.kClosePermit) {
             Navigator.pushNamed(context, ClosePermitScreen.routeName,
                     arguments: permitDetailsModel)
-                .then((value) => context
+                .then((value) {
+              if (context.mounted) {
+                context
                     .read<PermitBloc>()
-                    .add(GetPermitDetails(permitId: permitId)));
+                    .add(GetPermitDetails(permitId: permitId));
+              }
+            });
           } else if (popUpMenuItems[value] == StringConstants.kOpenPermit) {
             Navigator.pushNamed(context, OpenPermitScreen.routeName,
                     arguments: permitDetailsModel)
-                .then((value) => context
+                .then((value) {
+              if (context.mounted) {
+                context
                     .read<PermitBloc>()
-                    .add(GetPermitDetails(permitId: permitId)));
+                    .add(GetPermitDetails(permitId: permitId));
+              }
+            });
           } else if (popUpMenuItems[value] == StringConstants.kRequestPermit) {
             context.read<PermitBloc>().add(RequestPermit(permitId));
           }

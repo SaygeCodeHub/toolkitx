@@ -20,8 +20,8 @@ class RejectPopUp extends StatelessWidget {
   final List responseIdList;
   final Map rejectMap = {};
 
-  RejectPopUp({Key? key, required this.textValue, required this.responseIdList})
-      : super(key: key);
+  RejectPopUp(
+      {super.key, required this.textValue, required this.responseIdList});
 
   @override
   Widget build(BuildContext context) {

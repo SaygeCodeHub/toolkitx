@@ -20,10 +20,9 @@ class TicketsDetailsPopUpMenu extends StatelessWidget {
   final FetchTicketDetailsModel fetchTicketDetailsModel;
 
   const TicketsDetailsPopUpMenu(
-      {Key? key,
+      {super.key,
       required this.popUpMenuItems,
-      required this.fetchTicketDetailsModel})
-      : super(key: key);
+      required this.fetchTicketDetailsModel});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

@@ -17,8 +17,8 @@ import 'expense_working_at_expansion_tile.dart';
 class ExpenseWorkingAtNumberList extends StatelessWidget {
   final Map workingAtNumberMap;
 
-  const ExpenseWorkingAtNumberList({Key? key, required this.workingAtNumberMap})
-      : super(key: key);
+  const ExpenseWorkingAtNumberList(
+      {super.key, required this.workingAtNumberMap});
 
   @override
   Widget build(BuildContext context) {

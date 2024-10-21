@@ -14,7 +14,7 @@ class LogBookDetailsScreen extends StatelessWidget {
   static const routeName = 'LogBookDetailsScreen';
   final String logId;
 
-  const LogBookDetailsScreen({Key? key, required this.logId}) : super(key: key);
+  const LogBookDetailsScreen({super.key, required this.logId});
 
   @override
   Widget build(BuildContext context) {

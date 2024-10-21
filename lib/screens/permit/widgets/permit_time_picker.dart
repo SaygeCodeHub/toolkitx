@@ -18,13 +18,13 @@ class PermitTimePicker extends StatefulWidget {
   final DateTime? minimumTime;
 
   const PermitTimePicker({
-    Key? key,
+    super.key,
     this.initialDateTime,
     this.editTime = '',
     this.hintText,
     this.minimumTime,
     required this.onTimeChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<PermitTimePicker> createState() => _PermitTimePickerState();

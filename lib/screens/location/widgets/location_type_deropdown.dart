@@ -13,7 +13,7 @@ import '../../../widgets/expansion_tile_border.dart';
 import 'location_filter_screen.dart';
 
 class LocationTypeDropDown extends StatelessWidget {
-  const LocationTypeDropDown({Key? key}) : super(key: key);
+  const LocationTypeDropDown({super.key});
 
   @override
   Widget build(BuildContext context) {

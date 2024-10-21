@@ -21,8 +21,7 @@ class ThirdPartyApprovePopUp extends StatelessWidget {
   final List responseIdList;
 
   ThirdPartyApprovePopUp(
-      {Key? key, required this.textValue, required this.responseIdList})
-      : super(key: key);
+      {super.key, required this.textValue, required this.responseIdList});
   final Map thirdPartyApproveMap = {};
 
   @override

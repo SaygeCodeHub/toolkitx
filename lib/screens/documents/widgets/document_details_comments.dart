@@ -14,8 +14,7 @@ class DocumentDetailsComments extends StatelessWidget {
   final String clientId;
 
   const DocumentDetailsComments(
-      {Key? key, required this.documentDetailsModel, required this.clientId})
-      : super(key: key);
+      {super.key, required this.documentDetailsModel, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

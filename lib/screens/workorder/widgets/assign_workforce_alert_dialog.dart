@@ -11,8 +11,7 @@ import 'assign_workforce_body.dart';
 class AssignWorkForceAlertDialog extends StatelessWidget {
   final String warningMessage;
 
-  const AssignWorkForceAlertDialog({Key? key, required this.warningMessage})
-      : super(key: key);
+  const AssignWorkForceAlertDialog({super.key, required this.warningMessage});
 
   @override
   Widget build(BuildContext context) {

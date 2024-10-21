@@ -13,8 +13,7 @@ class WorkOrderCostCenterList extends StatelessWidget {
   final String costCenterId;
 
   const WorkOrderCostCenterList(
-      {Key? key, required this.costCenterId, required this.data})
-      : super(key: key);
+      {super.key, required this.costCenterId, required this.data});
 
   @override
   Widget build(BuildContext context) {

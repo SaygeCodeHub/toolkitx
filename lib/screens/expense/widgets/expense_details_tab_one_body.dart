@@ -8,8 +8,7 @@ import '../../../utils/database_utils.dart';
 class ExpenseDetailsTabOneBody extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
 
-  const ExpenseDetailsTabOneBody({Key? key, required this.expenseDetailsData})
-      : super(key: key);
+  const ExpenseDetailsTabOneBody({super.key, required this.expenseDetailsData});
 
   @override
   Widget build(BuildContext context) {

@@ -19,8 +19,7 @@ class ExpenseAddItemBottomBar extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
 
   const ExpenseAddItemBottomBar(
-      {Key? key, required this.expenseId, required this.expenseDetailsData})
-      : super(key: key);
+      {super.key, required this.expenseId, required this.expenseDetailsData});
 
   @override
   Widget build(BuildContext context) {

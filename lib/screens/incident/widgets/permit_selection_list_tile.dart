@@ -18,11 +18,10 @@ class PermitSelectionListTile extends StatelessWidget {
   final void Function(bool, int) checkPermit;
 
   const PermitSelectionListTile(
-      {Key? key,
+      {super.key,
       required this.permitLinkDatum,
       required this.index,
-      required this.checkPermit})
-      : super(key: key);
+      required this.checkPermit});
 
   @override
   Widget build(BuildContext context) {

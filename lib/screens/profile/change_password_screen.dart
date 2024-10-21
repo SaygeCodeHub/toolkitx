@@ -20,7 +20,7 @@ class ChangePasswordScreen extends StatelessWidget {
   static const routeName = 'ChangePasswordScreen';
   final Map changePasswordMap = {};
 
-  ChangePasswordScreen({Key? key}) : super(key: key);
+  ChangePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ import '../../../widgets/generic_no_records_text.dart';
 import '../workorder_list_screen.dart';
 
 class WorkOrderListBody extends StatelessWidget {
-  const WorkOrderListBody({Key? key}) : super(key: key);
+  const WorkOrderListBody({super.key});
 
   @override
   Widget build(BuildContext context) {

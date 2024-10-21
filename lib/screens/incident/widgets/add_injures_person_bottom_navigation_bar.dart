@@ -23,8 +23,7 @@ class AddInjuredPersonBottomNavBar extends StatelessWidget {
   final Map addAndEditIncidentMap;
 
   const AddInjuredPersonBottomNavBar(
-      {Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

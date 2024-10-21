@@ -19,14 +19,14 @@ class PermitDatePicker extends StatefulWidget {
   final DateTime? minimumDate;
 
   const PermitDatePicker({
-    Key? key,
+    super.key,
     this.initialDate,
     this.maxDate,
     this.editDate = '',
     this.hintText,
     this.minimumDate,
     required this.onDateChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<PermitDatePicker> createState() => _PermitDatePickerState();

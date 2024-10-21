@@ -17,7 +17,7 @@ import 'widgets/filter_status_section.dart';
 class IncidentFilterScreen extends StatelessWidget {
   static const routeName = 'IncidentFilterScreen';
 
-  IncidentFilterScreen({Key? key}) : super(key: key);
+  IncidentFilterScreen({super.key});
   final Map incidentFilterMap = {};
 
   @override

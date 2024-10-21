@@ -19,7 +19,7 @@ class CategoryScreen extends StatelessWidget {
   static bool isFromEdit = false;
   static Map addAndEditIncidentMap = {};
 
-  const CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

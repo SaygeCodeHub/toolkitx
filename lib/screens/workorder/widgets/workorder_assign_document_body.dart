@@ -12,8 +12,7 @@ class WorkOrderAssignDocumentBody extends StatelessWidget {
   final FetchWorkOrderDocumentsModel fetchWorkOrderDocumentsModel;
 
   const WorkOrderAssignDocumentBody(
-      {Key? key, required this.fetchWorkOrderDocumentsModel})
-      : super(key: key);
+      {super.key, required this.fetchWorkOrderDocumentsModel});
 
   @override
   Widget build(BuildContext context) {

@@ -19,8 +19,7 @@ class ExpenseEditItemCurrencyListTile extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
 
   const ExpenseEditItemCurrencyListTile(
-      {Key? key, required this.expenseDetailsData})
-      : super(key: key);
+      {super.key, required this.expenseDetailsData});
 
   @override
   Widget build(BuildContext context) {

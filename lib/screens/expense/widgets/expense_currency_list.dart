@@ -14,8 +14,7 @@ class ExpenseCurrencyList extends StatelessWidget {
   final Map currencyDetailsMap;
 
   const ExpenseCurrencyList(
-      {Key? key, required this.data, required this.currencyDetailsMap})
-      : super(key: key);
+      {super.key, required this.data, required this.currencyDetailsMap});
 
   @override
   Widget build(BuildContext context) {

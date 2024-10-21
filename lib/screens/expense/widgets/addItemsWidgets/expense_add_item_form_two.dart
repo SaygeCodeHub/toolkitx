@@ -13,8 +13,7 @@ import 'expense_add_item_currency_list_tile.dart';
 class ExpenseAddItemFormTwo extends StatelessWidget {
   final ExpenseDetailsData expenseDetailsData;
 
-  const ExpenseAddItemFormTwo({Key? key, required this.expenseDetailsData})
-      : super(key: key);
+  const ExpenseAddItemFormTwo({super.key, required this.expenseDetailsData});
 
   @override
   Widget build(BuildContext context) {

@@ -57,9 +57,13 @@ class SystemUserListCard extends StatelessWidget {
               Navigator.pushNamed(
                       context, SystemUserScheduleDatesScreen.routeName,
                       arguments: checkListDatum.id)
-                  .then((value) => context
+                  .then((value) {
+                if (context.mounted) {
+                  context
                       .read<SysUserCheckListBloc>()
-                      .add(FetchCheckList(isFromHome: false, page: 1)));
+                      .add(FetchCheckList(isFromHome: false, page: 1));
+                }
+              });
             }));
   }
 }

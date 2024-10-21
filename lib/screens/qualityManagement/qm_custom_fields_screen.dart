@@ -21,8 +21,7 @@ class QualityManagementCustomFieldsScreen extends StatelessWidget {
   static List customInfoFieldList = [];
 
   const QualityManagementCustomFieldsScreen(
-      {Key? key, required this.reportNewQAMap})
-      : super(key: key);
+      {super.key, required this.reportNewQAMap});
 
   @override
   Widget build(BuildContext context) {

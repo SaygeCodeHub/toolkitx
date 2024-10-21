@@ -16,8 +16,7 @@ class WorkOrderFormScreenOne extends StatelessWidget {
   static bool isSimilarWorkOrder = false;
   static bool isFromEdit = false;
 
-  const WorkOrderFormScreenOne({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderFormScreenOne({super.key, required this.workOrderDetailsMap});
   static List workOrderMasterData = [];
 
   @override

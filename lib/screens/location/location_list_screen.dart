@@ -22,8 +22,7 @@ class LocationListScreen extends StatelessWidget {
   final bool isFromHome;
   static int pageNo = 1;
 
-  const LocationListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  const LocationListScreen({super.key, this.isFromHome = false});
 
   @override
   Widget build(BuildContext context) {

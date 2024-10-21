@@ -20,11 +20,10 @@ class PopUpMenu extends StatelessWidget {
   final bool popUpMenuBuilder;
 
   const PopUpMenu(
-      {Key? key,
+      {super.key,
       required this.responseIdList,
       required this.scheduleId,
-      required this.popUpMenuBuilder})
-      : super(key: key);
+      required this.popUpMenuBuilder});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(

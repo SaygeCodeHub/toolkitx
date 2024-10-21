@@ -26,8 +26,7 @@ class ExpenseDetailsScreen extends StatelessWidget {
   static const routeName = 'ExpenseDetailsScreen';
   final String expenseId;
 
-  const ExpenseDetailsScreen({Key? key, required this.expenseId})
-      : super(key: key);
+  const ExpenseDetailsScreen({super.key, required this.expenseId});
 
   @override
   Widget build(BuildContext context) {

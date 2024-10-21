@@ -24,11 +24,10 @@ class ToDoAssignDocumentsScreen extends StatelessWidget {
   static Map addFiltersDataMap = {};
 
   const ToDoAssignDocumentsScreen(
-      {Key? key,
+      {super.key,
       required this.todoMap,
       required this.data,
-      this.isFromPopUpMenu = false})
-      : super(key: key);
+      this.isFromPopUpMenu = false});
 
   @override
   Widget build(BuildContext context) {

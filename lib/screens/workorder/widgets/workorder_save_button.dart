@@ -16,8 +16,7 @@ import '../workorder_list_screen.dart';
 class WorkOrderSaveButton extends StatelessWidget {
   final Map workOrderDetailsMap;
 
-  const WorkOrderSaveButton({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderSaveButton({super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

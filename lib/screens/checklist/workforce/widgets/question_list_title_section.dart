@@ -7,8 +7,7 @@ class QuestionListTitleSection extends StatelessWidget {
   final int index;
 
   const QuestionListTitleSection(
-      {Key? key, required this.questionList, required this.index})
-      : super(key: key);
+      {super.key, required this.questionList, required this.index});
 
   @override
   Widget build(BuildContext context) {

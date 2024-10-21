@@ -15,7 +15,7 @@ import 'expense_edit_items_screen.dart';
 class ExpenseDateList extends StatelessWidget {
   final String date;
 
-  const ExpenseDateList({Key? key, required this.date}) : super(key: key);
+  const ExpenseDateList({super.key, required this.date});
   static List<List<ItemMasterDatum>> fetchItemMaster = [];
 
   @override

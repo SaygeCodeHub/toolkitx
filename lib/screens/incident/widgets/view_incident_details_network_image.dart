@@ -15,8 +15,7 @@ class IncidentCommentViewNetworkImage extends StatelessWidget {
   final String clientId;
 
   const IncidentCommentViewNetworkImage(
-      {Key? key, required this.commentsList, required this.clientId})
-      : super(key: key);
+      {super.key, required this.commentsList, required this.clientId});
 
   @override
   Widget build(BuildContext context) {

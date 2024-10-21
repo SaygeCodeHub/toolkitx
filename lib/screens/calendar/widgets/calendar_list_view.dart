@@ -12,12 +12,12 @@ class CalendarListView extends StatelessWidget {
   final FetchCalendarEventsModel fetchCalendarEventsModel;
 
   const CalendarListView({
-    Key? key,
+    super.key,
     required this.calendarEvents,
     required this.currentDate,
     required this.eventsLoaderCount,
     required this.fetchCalendarEventsModel,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

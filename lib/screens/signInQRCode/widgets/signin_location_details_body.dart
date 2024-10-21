@@ -14,8 +14,7 @@ import 'signin_location_details_cards.dart';
 class SignInLocationDetailsBody extends StatelessWidget {
   final String locationId;
 
-  const SignInLocationDetailsBody({Key? key, required this.locationId})
-      : super(key: key);
+  const SignInLocationDetailsBody({super.key, required this.locationId});
   static int indexSelected = 0;
 
   @override

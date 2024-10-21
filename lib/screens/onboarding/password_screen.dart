@@ -15,7 +15,7 @@ class PasswordScreen extends StatelessWidget {
   static const routeName = 'PasswordScreen';
   final Map loginMap = {};
 
-  PasswordScreen({Key? key}) : super(key: key);
+  PasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

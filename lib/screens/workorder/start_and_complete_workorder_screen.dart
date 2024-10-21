@@ -13,8 +13,7 @@ import 'widgets/start_workorder_button.dart';
 class StartAndCompleteWorkOrderScreen extends StatelessWidget {
   static const routeName = 'StartAndCompleteWorkOrderScreen';
 
-  const StartAndCompleteWorkOrderScreen({Key? key, required this.isFromStart})
-      : super(key: key);
+  const StartAndCompleteWorkOrderScreen({super.key, required this.isFromStart});
   static Map startAndCompleteWorkOrderMap = {};
   final bool isFromStart;
 

@@ -11,7 +11,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../utils/date_util.dart';
 
 class DateAndTimeSection extends StatelessWidget {
-  const DateAndTimeSection({Key? key}) : super(key: key);
+  const DateAndTimeSection({super.key});
 
   @override
   Widget build(BuildContext context) {

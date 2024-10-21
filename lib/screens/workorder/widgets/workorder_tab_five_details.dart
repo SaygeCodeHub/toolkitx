@@ -14,11 +14,10 @@ class WorkOrderTabFiveDetails extends StatelessWidget {
   final String clientId;
 
   const WorkOrderTabFiveDetails(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.tabIndex,
-      required this.clientId})
-      : super(key: key);
+      required this.clientId});
 
   @override
   Widget build(BuildContext context) {

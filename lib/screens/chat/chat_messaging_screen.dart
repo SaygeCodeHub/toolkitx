@@ -44,7 +44,8 @@ class _ChatMessagingScreenState extends State<ChatMessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-        onPopInvoked: (pop) {
+        canPop: true,
+        onPopInvokedWithResult: (pop, _) {
           chatScreenName = AllChatsScreen.routeName;
         },
         child: Scaffold(

@@ -10,7 +10,7 @@ import '../../incident/widgets/time_picker.dart';
 import '../workorder_add_and_edit_down_time_screen.dart';
 
 class WorkOrderAddAndEditDownTimeBody extends StatelessWidget {
-  const WorkOrderAddAndEditDownTimeBody({Key? key}) : super(key: key);
+  const WorkOrderAddAndEditDownTimeBody({super.key});
 
   @override
   Widget build(BuildContext context) {

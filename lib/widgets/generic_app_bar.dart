@@ -4,8 +4,7 @@ import '../configs/app_dimensions.dart';
 
 class GenericAppBar extends StatelessWidget implements PreferredSizeWidget {
   const GenericAppBar(
-      {Key? key, this.title = '', this.leading, this.actions, this.onPressed})
-      : super(key: key);
+      {super.key, this.title = '', this.leading, this.actions, this.onPressed});
   final String title;
   final Widget? leading;
   final List<Widget>? actions;

@@ -18,8 +18,7 @@ class IncidentHealthAndSafetyScreen extends StatelessWidget {
   static List customInfoFieldList = [];
 
   const IncidentHealthAndSafetyScreen(
-      {Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {

@@ -81,8 +81,6 @@ class IncidentLocationScreen extends StatelessWidget {
                         context.read<ReportNewIncidentBloc>().add(
                             ReportNewIncidentSiteLocationValidation(
                                 reportNewIncidentMap: addAndEditIncidentMap));
-                        print(
-                            'widget.addAndEditIncidentMap===========>$addAndEditIncidentMap');
                       },
                       textValue: DatabaseUtil.getText('nextButtonText')),
                 )),

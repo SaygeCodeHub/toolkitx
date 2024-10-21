@@ -17,10 +17,9 @@ class LocationDetailsPermitsBody extends StatelessWidget {
   final bool locationPermitListReachedMax;
 
   const LocationDetailsPermitsBody(
-      {Key? key,
+      {super.key,
       required this.locationPermits,
-      required this.locationPermitListReachedMax})
-      : super(key: key);
+      required this.locationPermitListReachedMax});
 
   @override
   Widget build(BuildContext context) {

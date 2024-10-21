@@ -13,7 +13,7 @@ import 'loto_list_screen.dart';
 class LotoList extends StatelessWidget {
   final bool isFromHome;
 
-  const LotoList({Key? key, required this.isFromHome}) : super(key: key);
+  const LotoList({super.key, required this.isFromHome});
 
   @override
   Widget build(BuildContext context) {

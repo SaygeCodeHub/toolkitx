@@ -23,8 +23,7 @@ class SignInPermitLocationDetailsCard extends StatelessWidget {
   final String locationId;
 
   const SignInPermitLocationDetailsCard(
-      {Key? key, required this.permit, required this.locationId})
-      : super(key: key);
+      {super.key, required this.permit, required this.locationId});
 
   @override
   Widget build(BuildContext context) {

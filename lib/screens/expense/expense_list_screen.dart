@@ -19,8 +19,7 @@ class ExpenseListScreen extends StatelessWidget {
   static const routeName = 'ExpenseListScreen';
   final bool isFromHome;
 
-  const ExpenseListScreen({Key? key, this.isFromHome = false})
-      : super(key: key);
+  const ExpenseListScreen({super.key, this.isFromHome = false});
   static int pageNo = 1;
 
   @override

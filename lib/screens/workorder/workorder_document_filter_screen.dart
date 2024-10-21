@@ -19,7 +19,7 @@ import 'workorder_assign_document_screen.dart';
 class WorkOrderDocumentFilterScreen extends StatelessWidget {
   static const routeName = 'WorkOrderDocumentFilterScreen';
 
-  const WorkOrderDocumentFilterScreen({Key? key}) : super(key: key);
+  const WorkOrderDocumentFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

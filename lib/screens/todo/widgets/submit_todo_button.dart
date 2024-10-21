@@ -15,8 +15,7 @@ class SubmitToDoButton extends StatelessWidget {
   final ToDoDetailsData todoDetails;
 
   const SubmitToDoButton(
-      {Key? key, required this.todoMap, required this.todoDetails})
-      : super(key: key);
+      {super.key, required this.todoMap, required this.todoDetails});
 
   @override
   Widget build(BuildContext context) {

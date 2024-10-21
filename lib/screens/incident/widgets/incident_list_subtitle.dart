@@ -9,8 +9,7 @@ import '../../../data/models/incident/fetch_incidents_list_model.dart';
 class IncidentListSubtitle extends StatelessWidget {
   final IncidentListDatum incidentListDatum;
 
-  const IncidentListSubtitle({Key? key, required this.incidentListDatum})
-      : super(key: key);
+  const IncidentListSubtitle({super.key, required this.incidentListDatum});
 
   @override
   Widget build(BuildContext context) {

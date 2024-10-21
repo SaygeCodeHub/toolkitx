@@ -17,7 +17,7 @@ import 'widgets/save_expense_bottom_app_bar.dart';
 class ManageExpenseFormScreen extends StatelessWidget {
   static const routeName = 'ManageExpenseFormScreen';
 
-  const ManageExpenseFormScreen({Key? key}) : super(key: key);
+  const ManageExpenseFormScreen({super.key});
   static Map manageExpenseMap = {};
   static bool isFromEditOption = false;
 

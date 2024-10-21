@@ -15,12 +15,11 @@ class CustomFilterDateRangeFieldWidget extends StatelessWidget {
   final ToDateCallBack onToDateSelected;
 
   const CustomFilterDateRangeFieldWidget(
-      {Key? key,
+      {super.key,
       required this.fromDate,
       required this.toDate,
       required this.onFromDateSelected,
-      required this.onToDateSelected})
-      : super(key: key);
+      required this.onToDateSelected});
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,7 @@ class QualityManagementClassificationExpansionTile extends StatelessWidget {
   final Map qmCommentsMap;
 
   const QualityManagementClassificationExpansionTile(
-      {Key? key, required this.qmCommentsMap})
-      : super(key: key);
+      {super.key, required this.qmCommentsMap});
 
   @override
   Widget build(BuildContext context) {

@@ -16,8 +16,7 @@ class ToDoCategoryExpansionTile extends StatelessWidget {
   final List<ToDoMasterDatum> data;
 
   const ToDoCategoryExpansionTile(
-      {Key? key, required this.todoMap, required this.data})
-      : super(key: key);
+      {super.key, required this.todoMap, required this.data});
 
   @override
   Widget build(BuildContext context) {

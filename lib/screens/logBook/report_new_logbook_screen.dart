@@ -28,8 +28,7 @@ class ReportNewLogBookScreen extends StatelessWidget {
   final Map addLogbookMap;
 
   ReportNewLogBookScreen(
-      {Key? key, required this.data, required this.addLogbookMap})
-      : super(key: key);
+      {super.key, required this.data, required this.addLogbookMap});
   final Map reportNewLogBookMap = {};
 
   @override

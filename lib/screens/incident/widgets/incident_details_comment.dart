@@ -13,11 +13,10 @@ class PermitDetailsComment extends StatelessWidget {
   final int initialIndex;
 
   const PermitDetailsComment(
-      {Key? key,
+      {super.key,
       required this.incidentDetailsModel,
       required this.clientId,
-      required this.initialIndex})
-      : super(key: key);
+      required this.initialIndex});
 
   @override
   Widget build(BuildContext context) {

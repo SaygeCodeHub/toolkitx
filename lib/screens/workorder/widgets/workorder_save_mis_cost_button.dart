@@ -12,7 +12,7 @@ import '../../../widgets/primary_button.dart';
 import '../workorder_add_mis_cost_screen.dart';
 
 class WorkOrderSaveMisCostButton extends StatelessWidget {
-  const WorkOrderSaveMisCostButton({Key? key}) : super(key: key);
+  const WorkOrderSaveMisCostButton({super.key});
 
   @override
   Widget build(BuildContext context) {

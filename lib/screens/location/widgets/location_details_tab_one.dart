@@ -11,8 +11,7 @@ class LocationDetailsTabOne extends StatelessWidget {
   final int selectedTabIndex;
 
   const LocationDetailsTabOne(
-      {Key? key, required this.data, required this.selectedTabIndex})
-      : super(key: key);
+      {super.key, required this.data, required this.selectedTabIndex});
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ import '../../../widgets/expansion_tile_border.dart';
 import '../expense_filter_screen.dart';
 
 class ExpenseStatusExpansionTile extends StatelessWidget {
-  const ExpenseStatusExpansionTile({Key? key}) : super(key: key);
+  const ExpenseStatusExpansionTile({super.key});
 
   @override
   Widget build(BuildContext context) {

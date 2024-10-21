@@ -13,8 +13,7 @@ class LogBookLocationList extends StatelessWidget {
   final String locationName;
 
   const LogBookLocationList(
-      {Key? key, required this.data, required this.locationName})
-      : super(key: key);
+      {super.key, required this.data, required this.locationName});
 
   @override
   Widget build(BuildContext context) {

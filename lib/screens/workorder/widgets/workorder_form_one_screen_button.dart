@@ -11,8 +11,7 @@ import '../workorder_form_screen_two.dart';
 class WorkOrderFormOneButton extends StatelessWidget {
   final Map workOrderDetailsMap;
 
-  const WorkOrderFormOneButton({Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+  const WorkOrderFormOneButton({super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

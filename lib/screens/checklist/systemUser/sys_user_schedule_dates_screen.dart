@@ -10,8 +10,7 @@ class SystemUserScheduleDatesScreen extends StatelessWidget {
   static const routeName = 'SystemUserScheduleDatesScreen';
   final String checkListId;
 
-  const SystemUserScheduleDatesScreen({Key? key, required this.checkListId})
-      : super(key: key);
+  const SystemUserScheduleDatesScreen({super.key, required this.checkListId});
 
   @override
   Widget build(BuildContext context) {

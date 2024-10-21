@@ -10,11 +10,10 @@ class IosPopUp extends StatelessWidget {
   final void Function()? onPressed;
 
   const IosPopUp(
-      {Key? key,
+      {super.key,
       required this.titleValue,
       required this.contentValue,
-      this.onPressed})
-      : super(key: key);
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -15,8 +15,7 @@ class UserTypeExpansionTile extends StatelessWidget {
   final String usertype;
 
   const UserTypeExpansionTile(
-      {Key? key, required this.typeValue, required this.usertype})
-      : super(key: key);
+      {super.key, required this.typeValue, required this.usertype});
 
   @override
   Widget build(BuildContext context) {

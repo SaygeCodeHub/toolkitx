@@ -19,11 +19,10 @@ class ToDoAssignDocumentsFilterScreen extends StatelessWidget {
   final Map addFiltersDataMap;
 
   const ToDoAssignDocumentsFilterScreen(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.todoMap,
-      required this.addFiltersDataMap})
-      : super(key: key);
+      required this.addFiltersDataMap});
   static Map todoFilterMap = {};
 
   @override

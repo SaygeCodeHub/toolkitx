@@ -13,8 +13,7 @@ class WorkOrderSpecialWorkExpansionTile extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   WorkOrderSpecialWorkExpansionTile(
-      {Key? key, required this.data, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.data, required this.workOrderDetailsMap});
   final List selectedIdList = [];
   final List selectedNameList = [];
 

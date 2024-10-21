@@ -11,8 +11,7 @@ import '../../../widgets/custom_choice_chip.dart';
 class WorkOrderStatusFilter extends StatelessWidget {
   final Map workOrderFilterMap;
 
-  const WorkOrderStatusFilter({Key? key, required this.workOrderFilterMap})
-      : super(key: key);
+  const WorkOrderStatusFilter({super.key, required this.workOrderFilterMap});
 
   @override
   Widget build(BuildContext context) {

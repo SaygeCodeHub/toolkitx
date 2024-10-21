@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
   static const routeName = 'LoginScreen';
   final Map emailMap = {};
 
-  LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

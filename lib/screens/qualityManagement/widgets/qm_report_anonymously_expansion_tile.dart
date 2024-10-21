@@ -14,8 +14,8 @@ import '../../../widgets/expansion_tile_border.dart';
 class ReportAnonymouslyExpansionTile extends StatelessWidget {
   final Map reportNewQAMap;
 
-  const ReportAnonymouslyExpansionTile({Key? key, required this.reportNewQAMap})
-      : super(key: key);
+  const ReportAnonymouslyExpansionTile(
+      {super.key, required this.reportNewQAMap});
 
   @override
   Widget build(BuildContext context) {

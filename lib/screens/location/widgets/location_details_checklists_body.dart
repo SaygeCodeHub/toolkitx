@@ -11,8 +11,7 @@ class LocationDetailsCheckListsBody extends StatelessWidget {
   final List<LocationCheckListsDatum> checklistsLocation;
 
   const LocationDetailsCheckListsBody(
-      {Key? key, required this.checklistsLocation})
-      : super(key: key);
+      {super.key, required this.checklistsLocation});
 
   @override
   Widget build(BuildContext context) {

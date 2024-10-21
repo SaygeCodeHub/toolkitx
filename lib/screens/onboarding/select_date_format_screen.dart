@@ -15,8 +15,7 @@ class SelectDateFormatScreen extends StatelessWidget {
   static const routeName = 'SelectDateFormatScreen';
   final bool isFromProfile;
 
-  const SelectDateFormatScreen({Key? key, this.isFromProfile = false})
-      : super(key: key);
+  const SelectDateFormatScreen({super.key, this.isFromProfile = false});
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,7 @@ class WorkForceQuestionsScreen extends StatelessWidget {
   static const routeName = 'WorkForceQuestionsScreen';
   final Map checklistDataMap;
 
-  const WorkForceQuestionsScreen({Key? key, required this.checklistDataMap})
-      : super(key: key);
+  const WorkForceQuestionsScreen({super.key, required this.checklistDataMap});
 
   @override
   Widget build(BuildContext context) {

@@ -84,9 +84,13 @@ class CertificateButtonRow extends StatelessWidget {
                     ? Navigator.pushNamed(
                             context, EditCertificateFeedbackScreen.routeName,
                             arguments: certificateMap)
-                        .then((_) => context
-                            .read<CertificateListBloc>()
-                            .add(FetchCertificateList(pageNo: 1)))
+                        .then((_) {
+                        if (context.mounted) {
+                          context
+                              .read<CertificateListBloc>()
+                              .add(FetchCertificateList(pageNo: 1));
+                        }
+                      })
                     : Navigator.pushNamed(
                         context, FeedbackCertificateScreen.routeName,
                         arguments: certificateMap);

@@ -58,11 +58,12 @@ class LotoPopupMenuButton extends StatelessWidget {
                         Navigator.pushReplacementNamed(
                                 context, StartLotoScreen.routeName)
                             .then((_) => {
-                                  context.read<LotoDetailsBloc>().add(
-                                      FetchLotoDetails(
-                                          lotoTabIndex: 0,
-                                          lotoId:
-                                              fetchLotoDetailsModel.data.id))
+                                  if (context.mounted)
+                                    context.read<LotoDetailsBloc>().add(
+                                        FetchLotoDetails(
+                                            lotoTabIndex: 0,
+                                            lotoId:
+                                                fetchLotoDetailsModel.data.id))
                                 });
                       } else {
                         showDialog(
@@ -86,8 +87,9 @@ class LotoPopupMenuButton extends StatelessWidget {
       context.read<ImagePickerBloc>().add(PickImageInitial());
       StartLotoScreen.isFromStartRemoveLoto = isFromRemove;
       Navigator.pushNamed(context, StartLotoScreen.routeName).then((_) => {
-            context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                lotoTabIndex: 0, lotoId: fetchLotoDetailsModel.data.id))
+            if (context.mounted)
+              context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                  lotoTabIndex: 0, lotoId: fetchLotoDetailsModel.data.id))
           });
     }
   }
@@ -104,18 +106,20 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                     arguments: "0")
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex:
-                              context.read<LotoDetailsBloc>().lotoTabIndex,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex:
+                                context.read<LotoDetailsBloc>().lotoTabIndex,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('AddComment')) {
             Navigator.pushNamed(context, LotoAddCommentScreen.routeName)
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex: 0,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex: 0,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('UploadPhotos')) {
@@ -123,18 +127,20 @@ class LotoPopupMenuButton extends StatelessWidget {
             context.read<ImagePickerBloc>().add(PickImageInitial());
             Navigator.pushNamed(context, LotoUploadPhotosScreen.routeName)
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex: 0,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex: 0,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('assign_team')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex:
-                              context.read<LotoDetailsBloc>().lotoTabIndex,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex:
+                                context.read<LotoDetailsBloc>().lotoTabIndex,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('Start')) {
@@ -148,18 +154,20 @@ class LotoPopupMenuButton extends StatelessWidget {
             Navigator.pushNamed(context, LotoAssignWorkforceScreen.routeName,
                     arguments: "1")
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex: 0,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex: 0,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('assign_team_for_remove_loto')) {
             Navigator.pushNamed(context, LotoAssignTeamScreen.routeName)
                 .then((_) => {
-                      context.read<LotoDetailsBloc>().add(FetchLotoDetails(
-                          lotoTabIndex:
-                              context.read<LotoDetailsBloc>().lotoTabIndex,
-                          lotoId: fetchLotoDetailsModel.data.id))
+                      if (context.mounted)
+                        context.read<LotoDetailsBloc>().add(FetchLotoDetails(
+                            lotoTabIndex:
+                                context.read<LotoDetailsBloc>().lotoTabIndex,
+                            lotoId: fetchLotoDetailsModel.data.id))
                     });
           }
           if (value == DatabaseUtil.getText('Apply')) {

@@ -15,8 +15,7 @@ class IncidentClassificationExpansionTile extends StatelessWidget {
   final Map incidentCommentsMap;
 
   const IncidentClassificationExpansionTile(
-      {Key? key, required this.incidentCommentsMap})
-      : super(key: key);
+      {super.key, required this.incidentCommentsMap});
 
   @override
   Widget build(BuildContext context) {

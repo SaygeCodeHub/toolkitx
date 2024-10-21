@@ -14,7 +14,7 @@ import '../../onboarding/client_list_screen.dart';
 import '../profile_edit_screen.dart';
 
 class EditOptionsSection extends StatelessWidget {
-  const EditOptionsSection({Key? key}) : super(key: key);
+  const EditOptionsSection({super.key});
 
   @override
   Widget build(BuildContext context) {

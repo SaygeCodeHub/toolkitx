@@ -27,8 +27,7 @@ class SafetyNoticeDetailsScreen extends StatelessWidget {
   static const routeName = 'SafetyNoticeDetailsScreen';
   final String safetyNoticeId;
 
-  const SafetyNoticeDetailsScreen({Key? key, required this.safetyNoticeId})
-      : super(key: key);
+  const SafetyNoticeDetailsScreen({super.key, required this.safetyNoticeId});
 
   @override
   Widget build(BuildContext context) {

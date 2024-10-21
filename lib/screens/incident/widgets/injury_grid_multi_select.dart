@@ -11,8 +11,7 @@ import '../../../data/enums/injury_area_select_enum.dart';
 class InjuryMultiSelect extends StatelessWidget {
   final Map injuredPersonDetails;
 
-  const InjuryMultiSelect({Key? key, required this.injuredPersonDetails})
-      : super(key: key);
+  const InjuryMultiSelect({super.key, required this.injuredPersonDetails});
 
   @override
   Widget build(BuildContext context) {

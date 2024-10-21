@@ -5,8 +5,7 @@ import '../configs/app_color.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton(
-      {Key? key, required this.onPressed, required this.textValue})
-      : super(key: key);
+      {super.key, required this.onPressed, required this.textValue});
   final void Function()? onPressed;
   final String textValue;
 

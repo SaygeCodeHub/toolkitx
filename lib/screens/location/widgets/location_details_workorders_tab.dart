@@ -19,8 +19,7 @@ class LocationDetailsWorkOrdersTab extends StatelessWidget {
   final String expenseId;
 
   const LocationDetailsWorkOrdersTab(
-      {Key? key, required this.selectedTabIndex, required this.expenseId})
-      : super(key: key);
+      {super.key, required this.selectedTabIndex, required this.expenseId});
 
   @override
   Widget build(BuildContext context) {

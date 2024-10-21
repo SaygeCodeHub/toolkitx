@@ -15,8 +15,8 @@ import 'qm_site_list.dart';
 class QualityManagementSiteListTile extends StatelessWidget {
   final Map reportNewQMMap;
 
-  const QualityManagementSiteListTile({Key? key, required this.reportNewQMMap})
-      : super(key: key);
+  const QualityManagementSiteListTile(
+      {super.key, required this.reportNewQMMap});
 
   @override
   Widget build(BuildContext context) {

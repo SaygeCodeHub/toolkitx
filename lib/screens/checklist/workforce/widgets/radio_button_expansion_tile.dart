@@ -14,12 +14,11 @@ class RadioButtonExpansionTile extends StatefulWidget {
   final String editValue;
 
   const RadioButtonExpansionTile(
-      {Key? key,
+      {super.key,
       required this.answerModelList,
       required this.index,
       required this.onRadioButtonChecked,
-      required this.editValue})
-      : super(key: key);
+      required this.editValue});
 
   @override
   State<RadioButtonExpansionTile> createState() =>

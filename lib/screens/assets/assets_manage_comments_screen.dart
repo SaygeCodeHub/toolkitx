@@ -31,7 +31,10 @@ class AssetsManageCommentsScreen extends StatelessWidget {
                 context.read<ImagePickerBloc>().add(PickImageInitial());
                 Navigator.pushNamed(context, AssetsAddCommentScreen.routeName)
                     .then((_) => {
-                          context.read<AssetsBloc>().add(FetchAssetsComments())
+                          if (context.mounted)
+                            context
+                                .read<AssetsBloc>()
+                                .add(FetchAssetsComments())
                         });
               },
               child: const Icon(Icons.add),

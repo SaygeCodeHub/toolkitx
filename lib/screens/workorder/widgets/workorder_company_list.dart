@@ -15,11 +15,10 @@ class WorkOrderCompanyList extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const WorkOrderCompanyList(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.companyId,
-      required this.workOrderDetailsMap})
-      : super(key: key);
+      required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

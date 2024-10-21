@@ -12,7 +12,7 @@ class WorkOrderEditWorkForceScreen extends StatelessWidget {
 
   static Map editWorkOrderWorkForceMap = {};
 
-  const WorkOrderEditWorkForceScreen({Key? key}) : super(key: key);
+  const WorkOrderEditWorkForceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

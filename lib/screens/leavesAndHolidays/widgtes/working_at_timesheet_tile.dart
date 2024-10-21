@@ -12,7 +12,7 @@ import '../../../blocs/leavesAndHolidays/leaves_and_holidays_states.dart';
 import '../../../data/enums/timesheet_working_at_enum.dart';
 
 class WorkingAtTimeSheetTile extends StatelessWidget {
-  const WorkingAtTimeSheetTile({Key? key}) : super(key: key);
+  const WorkingAtTimeSheetTile({super.key});
   static String workingAt = '';
   static String workingAtValue = '';
 

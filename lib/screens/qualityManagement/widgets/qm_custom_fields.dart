@@ -11,8 +11,7 @@ class QualityManagementCustomFields extends StatelessWidget {
   final int initialIndex;
 
   const QualityManagementCustomFields(
-      {Key? key, required this.data, required this.initialIndex})
-      : super(key: key);
+      {super.key, required this.data, required this.initialIndex});
 
   @override
   Widget build(BuildContext context) {

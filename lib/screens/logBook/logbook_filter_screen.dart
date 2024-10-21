@@ -24,7 +24,7 @@ import 'widgets/logbook_type_filter.dart';
 class LogBookFilterScreen extends StatelessWidget {
   static const routeName = 'LogBookFilterScreen';
 
-  const LogBookFilterScreen({Key? key}) : super(key: key);
+  const LogBookFilterScreen({super.key});
   static Map logbookFilterMap = {};
   static bool isFromLocation = false;
   static String expenseId = '';

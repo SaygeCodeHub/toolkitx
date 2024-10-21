@@ -10,8 +10,7 @@ class CustomTagContainer extends StatelessWidget {
   final String textValue;
 
   const CustomTagContainer(
-      {Key? key, required this.color, required this.textValue})
-      : super(key: key);
+      {super.key, required this.color, required this.textValue});
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,7 @@ class AddAndEditSafetyNoticeScreen extends StatelessWidget {
   static Map manageSafetyNoticeMap = {};
   static bool isFromEditOption = true;
 
-  const AddAndEditSafetyNoticeScreen({Key? key}) : super(key: key);
+  const AddAndEditSafetyNoticeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

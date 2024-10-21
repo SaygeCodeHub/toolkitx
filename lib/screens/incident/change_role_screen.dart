@@ -15,7 +15,7 @@ import 'incident_list_screen.dart';
 class IncidentChangeRoleScreen extends StatelessWidget {
   static const routeName = 'IncidentChangeRoleScreen';
 
-  const IncidentChangeRoleScreen({Key? key}) : super(key: key);
+  const IncidentChangeRoleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

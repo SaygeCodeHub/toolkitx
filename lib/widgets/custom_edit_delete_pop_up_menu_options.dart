@@ -7,8 +7,7 @@ import '../utils/database_utils.dart';
 class CustomEditDeletePopUpMenuOption extends StatelessWidget {
   final Function(String) onSelected;
 
-  const CustomEditDeletePopUpMenuOption({Key? key, required this.onSelected})
-      : super(key: key);
+  const CustomEditDeletePopUpMenuOption({super.key, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {

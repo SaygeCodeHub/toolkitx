@@ -14,11 +14,10 @@ class IncidentDetails extends StatelessWidget {
   final int initialIndex;
 
   const IncidentDetails(
-      {Key? key,
+      {super.key,
       required this.incidentDetailsModel,
       required this.clientId,
-      required this.initialIndex})
-      : super(key: key);
+      required this.initialIndex});
 
   @override
   Widget build(BuildContext context) {

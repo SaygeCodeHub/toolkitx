@@ -78,9 +78,13 @@ class SafetyNoticeScreen extends StatelessWidget {
                       secondaryOnPress: () {
                         Navigator.pushNamed(
                                 context, SafetyNoticeHistoryScreen.routeName)
-                            .then((value) => Navigator.pushReplacementNamed(
+                            .then((value) {
+                          if (context.mounted) {
+                            Navigator.pushReplacementNamed(
                                 context, SafetyNoticeScreen.routeName,
-                                arguments: false));
+                                arguments: false);
+                          }
+                        });
                       },
                       secondaryIcon: Icons.history,
                       clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&

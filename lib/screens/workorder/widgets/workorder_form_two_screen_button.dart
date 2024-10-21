@@ -11,8 +11,7 @@ class WorkOrderFormTwoScreenButton extends StatelessWidget {
   final Map workOrderDetailsMap;
 
   const WorkOrderFormTwoScreenButton(
-      {Key? key, required this.workOrderDetailsMap})
-      : super(key: key);
+      {super.key, required this.workOrderDetailsMap});
 
   @override
   Widget build(BuildContext context) {

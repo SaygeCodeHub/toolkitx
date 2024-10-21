@@ -14,8 +14,7 @@ class RegisterNewLogBookTypeExpansionTile extends StatelessWidget {
   final Map reportNewLogBookMap;
 
   const RegisterNewLogBookTypeExpansionTile(
-      {Key? key, required this.data, required this.reportNewLogBookMap})
-      : super(key: key);
+      {super.key, required this.data, required this.reportNewLogBookMap});
 
   @override
   Widget build(BuildContext context) {

@@ -21,7 +21,7 @@ class AssignWorkForceScreen extends StatelessWidget {
   static TextEditingController workforceNameController =
       TextEditingController();
 
-  const AssignWorkForceScreen({Key? key}) : super(key: key);
+  const AssignWorkForceScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

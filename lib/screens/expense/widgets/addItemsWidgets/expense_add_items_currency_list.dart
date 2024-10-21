@@ -16,8 +16,7 @@ class ExpenseAddItemsCurrencyList extends StatelessWidget {
   static List<List<ItemMasterDatum>> fetchItemMaster = [];
 
   const ExpenseAddItemsCurrencyList(
-      {Key? key, required this.currencyDetailsMap})
-      : super(key: key);
+      {super.key, required this.currencyDetailsMap});
 
   @override
   Widget build(BuildContext context) {

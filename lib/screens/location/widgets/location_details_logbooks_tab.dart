@@ -19,8 +19,7 @@ class LocationDetailsLogBooksTab extends StatelessWidget {
   static int pageNo = 1;
 
   const LocationDetailsLogBooksTab(
-      {Key? key, required this.selectedTabIndex, required this.expenseId})
-      : super(key: key);
+      {super.key, required this.selectedTabIndex, required this.expenseId});
 
   @override
   Widget build(BuildContext context) {

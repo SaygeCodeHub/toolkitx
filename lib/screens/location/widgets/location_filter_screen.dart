@@ -15,7 +15,7 @@ class LocationFilterScreen extends StatelessWidget {
   static const routeName = 'LocationFilterScreen';
   static Map locationFilterMap = {};
 
-  const LocationFilterScreen({Key? key}) : super(key: key);
+  const LocationFilterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

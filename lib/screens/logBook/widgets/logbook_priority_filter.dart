@@ -10,8 +10,7 @@ import '../../../widgets/custom_choice_chip.dart';
 class LogbookPriorityFilter extends StatelessWidget {
   final Map logbookFilterMap;
 
-  const LogbookPriorityFilter({Key? key, required this.logbookFilterMap})
-      : super(key: key);
+  const LogbookPriorityFilter({super.key, required this.logbookFilterMap});
 
   @override
   Widget build(BuildContext context) {

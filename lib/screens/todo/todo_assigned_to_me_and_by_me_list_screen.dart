@@ -22,7 +22,7 @@ class TodoAssignedByMeAndToMeListScreen extends StatelessWidget {
   static int indexSelected = 0;
   final Map todoMap = {};
 
-  TodoAssignedByMeAndToMeListScreen({Key? key}) : super(key: key);
+  TodoAssignedByMeAndToMeListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

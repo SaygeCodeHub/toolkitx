@@ -12,8 +12,7 @@ class QualityManagementImpactExpansionTile extends StatelessWidget {
   final Map reportNewQMMap;
 
   const QualityManagementImpactExpansionTile(
-      {Key? key, required this.reportNewQMMap})
-      : super(key: key);
+      {super.key, required this.reportNewQMMap});
 
   @override
   Widget build(BuildContext context) {

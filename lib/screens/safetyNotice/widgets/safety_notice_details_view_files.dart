@@ -15,8 +15,7 @@ class SafetyNoticeDetailsViewFiles extends StatelessWidget {
   final String files;
 
   const SafetyNoticeDetailsViewFiles(
-      {Key? key, required this.clientId, required this.files})
-      : super(key: key);
+      {super.key, required this.clientId, required this.files});
 
   @override
   Widget build(BuildContext context) {

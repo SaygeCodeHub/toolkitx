@@ -22,7 +22,7 @@ class PermitListScreen extends StatelessWidget {
   final bool isFromHome;
   static int page = 1;
 
-  const PermitListScreen({Key? key, this.isFromHome = false}) : super(key: key);
+  const PermitListScreen({super.key, this.isFromHome = false});
 
   @override
   Widget build(BuildContext context) {
