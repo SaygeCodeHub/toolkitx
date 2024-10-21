@@ -31,8 +31,6 @@ validateBankStatementFormAndProceed(BuildContext context, bool isFromEdit) {
           context.read<AccountingBloc>().manageBankStatementMap['view_files'];
       context.read<AccountingBloc>().add(ManageBankStatement());
     } else {
-      print(
-          'heyy ${context.read<AccountingBloc>().manageBankStatementMap['files']}');
       context.read<UploadImageBloc>().add(UploadImage(
           images:
               context.read<AccountingBloc>().manageBankStatementMap['files'],
