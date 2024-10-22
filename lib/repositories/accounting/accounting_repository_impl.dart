@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
@@ -63,7 +60,6 @@ class AccountingRepositoryImpl implements AccountingRepository {
   @override
   Future<CreateOutgoingInvoiceModel> createOutgoingInvoice(
       Map outgoingInvoiceMap) async {
-    log("implmaop=====>${jsonEncode(outgoingInvoiceMap)}");
     final response = await DioClient().post(
         '${ApiConstants.baseUrl}accounting/SaveOutgoingInvoice',
         outgoingInvoiceMap);

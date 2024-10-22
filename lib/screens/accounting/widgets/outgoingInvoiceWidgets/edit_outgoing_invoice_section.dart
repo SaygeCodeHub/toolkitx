@@ -100,7 +100,7 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: (context
                                             .read<AccountingBloc>()
-                                            .manageIncomingInvoiceMap[
+                                            .manageOutgoingInvoiceMap[
                                         'edit_files'] ??
                                     '')
                                 .split(',')
@@ -111,22 +111,13 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                               splashColor: AppColor.transparent,
                               highlightColor: AppColor.transparent,
                               onTap: () {
-                                // print("clientId==>${clientId}");
-                                print(
-                                    "clientId in url=======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid']}");
-                                print(
-                                    "files =======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files']}");
                                 if (context
                                         .read<AccountingBloc>()
                                         .manageOutgoingInvoiceMap['clientid'] !=
                                     '') {
-                                  print(
-                                      "Url======>${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}");
                                   launchUrlString(
                                       '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}',
                                       mode: LaunchMode.externalApplication);
-                                } else {
-                                  print("clientId is Empty");
                                 }
                               },
                               child: Padding(

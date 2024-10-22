@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
@@ -24,15 +22,6 @@ class EditOutgoingSectionBottomBar extends StatelessWidget {
   });
 
   final GlobalKey<FormState> formKey;
-
-  //
-  // bool isInvalidField(String? value) {
-  //   return value == null || value.trim().isEmpty;
-  // }
-  //
-  // bool isInvalidFileList(List<dynamic>? files) {
-  //   return files == null || files.isEmpty;
-  // }
   bool isValidField(String? value) {
     if (value is List) {
       return value == null || value.isEmpty;
@@ -52,18 +41,6 @@ class EditOutgoingSectionBottomBar extends StatelessWidget {
             } else if (state is ImageUploaded) {
               GenericLoadingPopUp.dismiss(context);
               List uploadedImages = state.images;
-              if (uploadedImages.isNotEmpty) {
-                uploadedImages = [
-                  ...state.images,
-                  ...context
-                      .read<AccountingBloc>()
-                      .manageOutgoingInvoiceMap['edit_files']
-                      .toString()
-                      .split(',')
-                ];
-              }
-              log('uploadedImages $uploadedImages');
-              log('map ${context.read<AccountingBloc>().manageOutgoingInvoiceMap}');
               context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'] =
                   uploadedImages
                       .toString()
@@ -129,12 +106,6 @@ class EditOutgoingSectionBottomBar extends StatelessWidget {
                             .read<AccountingBloc>()
                             .manageOutgoingInvoiceMap['files'] ==
                         null) {
-                      context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['files'] =
-                          context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['edit_files'];
                       context.read<AccountingBloc>().add(CreateOutgoingInvoice(
                           outgoingInvoiceId: context
                                   .read<AccountingBloc>()
@@ -144,12 +115,6 @@ class EditOutgoingSectionBottomBar extends StatelessWidget {
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap['files']
                         .isEmpty) {
-                      context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['files'] =
-                          context
-                              .read<AccountingBloc>()
-                              .manageOutgoingInvoiceMap['edit_files'];
                       context.read<AccountingBloc>().add(CreateOutgoingInvoice(
                           outgoingInvoiceId: context
                                   .read<AccountingBloc>()
@@ -165,22 +130,6 @@ class EditOutgoingSectionBottomBar extends StatelessWidget {
                               .lengthOfImageList));
                     }
                   }
-                  //   if (context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'] ==
-                  //       null ||
-                  //       context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'] ==
-                  //           []) {
-                  //     context.read<AccountingBloc>().add(CreateOutgoingInvoice(
-                  //         outgoingInvoiceId:
-                  //         context.read<AccountingBloc>().manageOutgoingInvoiceMap['id'] ??
-                  //             ''));
-                  //     context.read<AccountingBloc>().add(FetchOutgoingInvoices(pageNo: 1));
-                  //   } else {
-                  //     print("data======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'].runtimeType}");
-                  //     context.read<UploadImageBloc>().add(UploadImage(
-                  //         images:
-                  //         context.read<AccountingBloc>().manageOutgoingInvoiceMap['files'],
-                  //         imageLength: context.read<ImagePickerBloc>().lengthOfImageList));
-                  //   }
                 },
                 textValue: StringConstants.kSave,
               ),
