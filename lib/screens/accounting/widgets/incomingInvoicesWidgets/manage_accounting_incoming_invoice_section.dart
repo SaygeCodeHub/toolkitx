@@ -187,7 +187,7 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                             itemCount: (context
                                                 .read<AccountingBloc>()
                                                 .manageIncomingInvoiceMap[
-                                            'files_edit'] ??
+                                            'edit_files'] ??
                                         '')
                                     .split(',')
                                     .length ??
@@ -197,24 +197,15 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                                   splashColor: AppColor.transparent,
                                   highlightColor: AppColor.transparent,
                                   onTap: () {
-                                    // print("clientId==>${clientId}");
-                                    // print("fileslist =======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['files']}");
                                     if (context
                                                 .read<AccountingBloc>()
                                                 .manageIncomingInvoiceMap[
                                             "clientid"] !=
                                         '') {
-                                      // print(
-                                      //     "Url==>${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context
-                                      //         .read<AccountingBloc>()
-                                      //         .manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}");
                                       launchUrlString(
                                           '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageIncomingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageIncomingInvoiceMap["clientid"])}',
                                           mode: LaunchMode.externalApplication);
                                     }
-                                    // else{
-                                    //   print("clientId is Empty");
-                                    // }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(
