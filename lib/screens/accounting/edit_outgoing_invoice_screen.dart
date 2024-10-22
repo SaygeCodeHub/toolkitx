@@ -22,12 +22,10 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    String clientId = "";
 
     return Scaffold(
         appBar: const GenericAppBar(title: 'Edit Outgoing Invoice'),
-        bottomNavigationBar:
-            EditOutgoingBottombar(formKey: formKey, clientId: clientId),
+        bottomNavigationBar: EditOutgoingBottombar(formKey: formKey),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -51,7 +49,6 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
                       child: const CircularProgressIndicator(),
                     ));
                   } else if (state is OutgoingInvoiceFetched) {
-                    clientId = state.clientId;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

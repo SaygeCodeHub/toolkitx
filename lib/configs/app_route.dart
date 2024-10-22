@@ -801,8 +801,7 @@ class AppRoutes {
       case EditOutgoingInvoiceScreen.routeName:
         return _createRoute(const EditOutgoingInvoiceScreen());
       case EditOutgoingInvoiceSection.routeName:
-        return _createRoute(EditOutgoingInvoiceSection(
-            clientId: settings.arguments.toString()));
+        return _createRoute(EditOutgoingInvoiceSection());
       // case EditIncomingInvoiceScreen.routeName:
       //   return _createRoute(const EditIncomingInvoiceScreen());
       default:

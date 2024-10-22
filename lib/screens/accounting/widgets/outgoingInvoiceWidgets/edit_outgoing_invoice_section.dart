@@ -17,9 +17,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class EditOutgoingInvoiceSection extends StatelessWidget {
   static const routeName = "EditOutgoingInvoiceSection";
-  final String clientId;
 
-  const EditOutgoingInvoiceSection({super.key, required this.clientId});
+  const EditOutgoingInvoiceSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -113,19 +112,22 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                               highlightColor: AppColor.transparent,
                               onTap: () {
                                 // print("clientId==>${clientId}");
-                                // print("fileslist =======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['files']}");
-                                if (clientId != '') {
-                                  // print(
-                                  //     "Url==>${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context
-                                  //         .read<AccountingBloc>()
-                                  //         .manageOutgoingInvoiceMap['files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}");
+                                print(
+                                    "clientId in url=======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid']}");
+                                print(
+                                    "files =======>${context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files']}");
+                                if (context
+                                        .read<AccountingBloc>()
+                                        .manageOutgoingInvoiceMap['clientid'] !=
+                                    '') {
+                                  print(
+                                      "Url======>${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}");
                                   launchUrlString(
-                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
+                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}',
                                       mode: LaunchMode.externalApplication);
+                                } else {
+                                  print("clientId is Empty");
                                 }
-                                // else{
-                                //   print("clientId is Empty");
-                                // }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(

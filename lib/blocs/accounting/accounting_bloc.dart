@@ -386,6 +386,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           outgoingInvoiceData.othercurrencyname;
       manageOutgoingInvoiceMap["defaultcurrency"] =
           outgoingInvoiceData.defaultcurrency;
+      manageOutgoingInvoiceMap["clientid"] = clientId;
       if (fetchOutgoingInvoiceModel.status == 200) {
         emit(OutgoingInvoiceFetched(clientId: clientId));
       } else {

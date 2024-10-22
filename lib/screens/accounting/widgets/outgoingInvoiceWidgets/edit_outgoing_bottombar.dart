@@ -11,11 +11,9 @@ class EditOutgoingBottombar extends StatelessWidget {
   const EditOutgoingBottombar({
     super.key,
     required this.formKey,
-    required this.clientId,
   });
 
   final GlobalKey<FormState> formKey;
-  final String clientId;
 
   bool isValidField(String? value) {
     return value != null && value.trim().isNotEmpty;
@@ -51,8 +49,7 @@ class EditOutgoingBottombar extends StatelessWidget {
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap["date"])) {
                   Navigator.pushNamed(
-                      context, EditOutgoingInvoiceSection.routeName,
-                      arguments: clientId);
+                      context, EditOutgoingInvoiceSection.routeName);
                 } else {
                   showCustomSnackBar(
                       context,
