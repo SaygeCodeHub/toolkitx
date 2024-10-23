@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_bloc.dart';
 import 'package:toolkit/configs/app_spacing.dart';
-import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/manage_accounting_outgoing_invoice_section.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_invoice_section.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 
-class ManageOutgoingInvoiceBottomBar extends StatelessWidget {
-  const ManageOutgoingInvoiceBottomBar({
+class EditOutgoingBottombar extends StatelessWidget {
+  const EditOutgoingBottombar({
     super.key,
     required this.formKey,
   });
@@ -41,17 +41,15 @@ class ManageOutgoingInvoiceBottomBar extends StatelessWidget {
                         .manageOutgoingInvoiceMap['entity']) &&
                     isValidField(context
                         .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['client']) &&
+                        .manageOutgoingInvoiceMap["client"]) &&
                     isValidField(context
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap['project']) &&
                     isValidField(context
                         .read<AccountingBloc>()
-                        .manageOutgoingInvoiceMap['date'])) {
+                        .manageOutgoingInvoiceMap["date"])) {
                   Navigator.pushNamed(
-                    context,
-                    ManageAccountingOutgoingInvoiceSection.routeName,
-                  );
+                      context, EditOutgoingInvoiceSection.routeName);
                 } else {
                   showCustomSnackBar(
                       context,

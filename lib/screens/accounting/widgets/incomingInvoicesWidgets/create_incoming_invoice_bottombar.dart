@@ -16,7 +16,9 @@ import '../../incoming_invoices_screen.dart';
 import 'accounting_invoice_validator.dart';
 
 class CreateIncomingInvoiceBottomBar extends StatelessWidget {
-  const CreateIncomingInvoiceBottomBar({super.key});
+  final bool isFromEdit;
+
+  const CreateIncomingInvoiceBottomBar({super.key, required this.isFromEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,11 @@ class CreateIncomingInvoiceBottomBar extends StatelessWidget {
                       .replaceAll('[', '')
                       .replaceAll(']', '')
                       .replaceAll(' ', '');
-              context.read<AccountingBloc>().add(CreateIncomingInvoice());
+              context.read<AccountingBloc>().add(CreateIncomingInvoice(
+                  incomingInvoiceId: context
+                          .read<AccountingBloc>()
+                          .manageIncomingInvoiceMap['id'] ??
+                      ""));
             } else if (state is ImageCouldNotUpload) {
               GenericLoadingPopUp.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');
@@ -51,6 +57,7 @@ class CreateIncomingInvoiceBottomBar extends StatelessWidget {
               Navigator.pop(context);
               Navigator.pushReplacementNamed(
                   context, IncomingInvoicesScreen.routeName);
+              context.read<AccountingBloc>().incomingInvoices.clear();
             } else if (state is FailedToCreateIncomingInvoice) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');
@@ -72,7 +79,7 @@ class CreateIncomingInvoiceBottomBar extends StatelessWidget {
           Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    validateFormAndProceed(context);
+                    validateFormAndProceed(context, isFromEdit);
                   },
                   textValue: StringConstants.kSave)),
         ],

@@ -11,8 +11,9 @@ import '../../../../utils/constants/string_constants.dart';
 
 class ProjectDropdown extends StatefulWidget {
   final void Function(String selectedValue) onProjectChanged;
-
-  const ProjectDropdown({super.key, required this.onProjectChanged});
+  final String initialValue;
+  const ProjectDropdown(
+      {super.key, required this.onProjectChanged, this.initialValue = ""});
 
   @override
   State<ProjectDropdown> createState() => _ProjectDropdownState();
@@ -21,6 +22,11 @@ class ProjectDropdown extends StatefulWidget {
 class _ProjectDropdownState extends State<ProjectDropdown> {
   String selectedText = '';
   String selectedValue = '';
+  @override
+  void initState() {
+    super.initState();
+    selectedText = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {

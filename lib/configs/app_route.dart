@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
 import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/accounting/bank_statement_list_screen.dart';
+import 'package:toolkit/screens/accounting/edit_outgoing_invoice_screen.dart';
 import 'package:toolkit/screens/accounting/manage_accounting_outgoing_invoice.dart';
 import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_invoice_section.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
@@ -789,13 +791,19 @@ class AppRoutes {
         return _createRoute(AccountingFilterScreen(
             accountingFilterMap: args[0], currentRouteName: args[1]));
       case ManageAccountingIncomingInvoiceScreen.routeName:
-        return _createRoute(const ManageAccountingIncomingInvoiceScreen());
+        return _createRoute(ManageAccountingIncomingInvoiceScreen(
+            isFromEdit: settings.arguments as bool));
       case ManageAccountingIncomingInvoiceSection.routeName:
-        return _createRoute(const ManageAccountingIncomingInvoiceSection());
+        return _createRoute(ManageAccountingIncomingInvoiceSection(
+            isFromEdit: settings.arguments as bool));
       case ManageAccountingIOutgoingInvoice.routeName:
         return _createRoute(const ManageAccountingIOutgoingInvoice());
       case ManageAccountingOutgoingInvoiceSection.routeName:
         return _createRoute(const ManageAccountingOutgoingInvoiceSection());
+      case EditOutgoingInvoiceScreen.routeName:
+        return _createRoute(const EditOutgoingInvoiceScreen());
+      case EditOutgoingInvoiceSection.routeName:
+        return _createRoute(const EditOutgoingInvoiceSection());
       case WorkOrderSignAsUserScreen.routeName:
         return _createRoute(WorkOrderSignAsUserScreen(
             workOrderSapModel: settings.arguments as WorkOrderSapModel));

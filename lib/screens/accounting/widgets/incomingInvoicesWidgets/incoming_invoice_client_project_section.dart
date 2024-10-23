@@ -23,10 +23,16 @@ class IncomingInvoiceClientProjectSection extends StatelessWidget {
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
-        ClientDropdown(onClientChanged: (String client) {
-          context.read<AccountingBloc>().manageIncomingInvoiceMap['client'] =
-              int.tryParse(client) ?? 0;
-        }),
+        ClientDropdown(
+          onClientChanged: (String client) {
+            context.read<AccountingBloc>().manageIncomingInvoiceMap['client'] =
+                int.tryParse(client) ?? 0;
+          },
+          initialValue: context
+                  .read<AccountingBloc>()
+                  .manageIncomingInvoiceMap['clientname'] ??
+              '',
+        ),
         const SizedBox(height: xxTinySpacing),
         Text('Project',
             style: Theme.of(context)
@@ -34,10 +40,16 @@ class IncomingInvoiceClientProjectSection extends StatelessWidget {
                 .xSmall
                 .copyWith(fontWeight: FontWeight.w600)),
         const SizedBox(height: xxxTinierSpacing),
-        ProjectDropdown(onProjectChanged: (String project) {
-          context.read<AccountingBloc>().manageIncomingInvoiceMap['project'] =
-              int.tryParse(project) ?? 0;
-        })
+        ProjectDropdown(
+          onProjectChanged: (String project) {
+            context.read<AccountingBloc>().manageIncomingInvoiceMap['project'] =
+                int.tryParse(project) ?? 0;
+          },
+          initialValue: context
+                  .read<AccountingBloc>()
+                  .manageIncomingInvoiceMap['projectname'] ??
+              '',
+        )
       ],
     );
   }

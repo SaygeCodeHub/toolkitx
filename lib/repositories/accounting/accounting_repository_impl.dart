@@ -1,14 +1,15 @@
 import 'package:toolkit/data/models/accounting/create_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/delete_incoming_invoice_model.dart';
+import 'package:toolkit/data/models/accounting/delete_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_accounting_master_model.dart';
-
+import 'package:toolkit/data/models/accounting/fetch_incoming_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_incoming_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_master_data_entry_model.dart';
+import 'package:toolkit/data/models/accounting/fetch_outgoing_invoice_model.dart';
 import 'package:toolkit/data/models/accounting/fetch_outgoing_invoices_model.dart';
 import 'package:toolkit/data/models/accounting/create_outgoing_invoice_model.dart';
 import 'package:toolkit/repositories/accounting/accounting_repository.dart';
 import 'package:toolkit/utils/dio_client.dart';
-
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
@@ -72,5 +73,32 @@ class AccountingRepositoryImpl implements AccountingRepository {
         '${ApiConstants.baseUrl}accounting/DeleteIncomingInvoice',
         deleteIncomingInvoiceMap);
     return DeleteIncomingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<DeleteOutgoingInvoiceModel> deleteOutgoingInvoice(
+      Map deleteOutgoingInvoiceMap) async {
+    final response = await DioClient().post(
+        '${ApiConstants.baseUrl}accounting/DeleteOutgoingInvoice',
+        deleteOutgoingInvoiceMap);
+    return DeleteOutgoingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchOutgoingInvoiceModel> fetchOutgoingInvoice(
+      String invoiceId) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetOutgoingInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&invoiceid=$invoiceId');
+
+    return FetchOutgoingInvoiceModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchIncomingInvoiceModel> fetchIncomingInvoice(
+      String invoiceId) async {
+    final response = await DioClient().get(
+        '${ApiConstants.baseUrl}accounting/GetIncomingInvoice?hashcode=${await _customerCache.getHashCode(CacheKeys.hashcode)}&invoiceid=$invoiceId');
+
+    return FetchIncomingInvoiceModel.fromJson(response);
   }
 }

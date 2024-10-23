@@ -13,14 +13,34 @@ import 'credit_card_dropdown.dart';
 
 class ModeOfPaymentDropdown extends StatelessWidget {
   final void Function(String paymentMode) onPaymentModeSelected;
+  final String initialPaymentMode;
+  final bool isFromEdit;
 
-  const ModeOfPaymentDropdown({super.key, required this.onPaymentModeSelected});
+  const ModeOfPaymentDropdown(
+      {super.key,
+      required this.onPaymentModeSelected,
+      this.initialPaymentMode = '',
+      required this.isFromEdit});
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<AccountingBloc>()
-        .add(SelectPaymentMode(paymentModeId: '', paymentMode: ''));
+    if (isFromEdit && initialPaymentMode.isNotEmpty) {
+      context.read<AccountingBloc>().add(
+            SelectPaymentMode(
+              paymentModeId: initialPaymentMode,
+              paymentMode: AccountingBankPaymentEnum.values
+                  .firstWhere(
+                    (e) => e.paymentModeId == initialPaymentMode,
+                    orElse: () => AccountingBankPaymentEnum.bank,
+                  )
+                  .paymentMode,
+            ),
+          );
+    } else if (!isFromEdit) {
+      context.read<AccountingBloc>().add(
+            SelectPaymentMode(paymentModeId: '', paymentMode: ''),
+          );
+    }
     return BlocBuilder<AccountingBloc, AccountingState>(
         buildWhen: (previousState, currentState) =>
             currentState is PaymentModeSelected,
@@ -73,11 +93,26 @@ class ModeOfPaymentDropdown extends StatelessWidget {
                                 })
                           ])),
                   if (state.paymentModeId == '2')
-                    CreditCardDropdown(onCreditCardSelected: (String cardId) {
-                      context
-                          .read<AccountingBloc>()
-                          .manageIncomingInvoiceMap['creditcard'] = cardId;
-                    })
+                    CreditCardDropdown(
+                      onCreditCardSelected: (String cardId) {
+                        context
+                            .read<AccountingBloc>()
+                            .manageIncomingInvoiceMap['creditcard'] = cardId;
+                      },
+                      initialCreditCardName: isFromEdit
+                          ? context
+                                  .read<AccountingBloc>()
+                                  .manageIncomingInvoiceMap['creditcardname'] ??
+                              ''
+                          : '',
+                      initialCreditCardId: isFromEdit
+                          ? context
+                                  .read<AccountingBloc>()
+                                  .manageIncomingInvoiceMap['creditcard'] ??
+                              ''
+                          : '',
+                      isFromEdit: isFromEdit,
+                    )
                 ]);
           } else {
             return const SizedBox.shrink();

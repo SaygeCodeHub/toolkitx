@@ -48,9 +48,17 @@ class SelectCurrency extends AccountingEvent {
   SelectCurrency({required this.currencyId, required this.currency});
 }
 
-class CreateIncomingInvoice extends AccountingEvent {}
+class CreateIncomingInvoice extends AccountingEvent {
+  final String incomingInvoiceId;
 
-class CreateOutgoingInvoice extends AccountingEvent {}
+  CreateIncomingInvoice({required this.incomingInvoiceId});
+}
+
+class CreateOutgoingInvoice extends AccountingEvent {
+  final String outgoingInvoiceId;
+
+  CreateOutgoingInvoice({required this.outgoingInvoiceId});
+}
 
 class SelectCreditCard extends AccountingEvent {
   final String cardName;
@@ -63,4 +71,22 @@ class DeleteIncomingInvoice extends AccountingEvent {
   final String invoiceId;
 
   DeleteIncomingInvoice({required this.invoiceId});
+}
+
+class DeleteOutgoingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  DeleteOutgoingInvoice({required this.invoiceId});
+}
+
+class FetchOutgoingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  FetchOutgoingInvoice({required this.invoiceId});
+}
+
+class FetchIncomingInvoice extends AccountingEvent {
+  final String invoiceId;
+
+  FetchIncomingInvoice({required this.invoiceId});
 }

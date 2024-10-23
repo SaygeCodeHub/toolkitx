@@ -11,8 +11,10 @@ import '../../../../utils/constants/string_constants.dart';
 
 class ClientDropdown extends StatefulWidget {
   final void Function(String selectedValue) onClientChanged;
+  final String initialValue;
 
-  const ClientDropdown({super.key, required this.onClientChanged});
+  const ClientDropdown(
+      {super.key, required this.onClientChanged, this.initialValue = ''});
 
   @override
   State<ClientDropdown> createState() => _ClientDropdownState();
@@ -21,6 +23,12 @@ class ClientDropdown extends StatefulWidget {
 class _ClientDropdownState extends State<ClientDropdown> {
   String selectedText = '';
   String selectedValue = '';
+
+  @override
+  void initState() {
+    super.initState();
+    selectedText = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {

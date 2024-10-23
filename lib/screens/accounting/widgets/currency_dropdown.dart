@@ -12,14 +12,19 @@ import '../../../utils/constants/string_constants.dart';
 
 class CurrencyDropdown extends StatelessWidget {
   final void Function(String currency) onCurrencySelected;
+  final String initialOtherCurrencyName;
+  final String initialOtherCurrency;
 
-  const CurrencyDropdown({super.key, required this.onCurrencySelected});
+  const CurrencyDropdown(
+      {super.key,
+      required this.onCurrencySelected,
+      this.initialOtherCurrencyName = '',
+      this.initialOtherCurrency = ''});
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<AccountingBloc>()
-        .add(SelectCurrency(currency: '', currencyId: ''));
+    context.read<AccountingBloc>().add(SelectCurrency(
+        currency: initialOtherCurrencyName, currencyId: initialOtherCurrency));
     return BlocBuilder<AccountingBloc, AccountingState>(
       buildWhen: (previousState, currentState) =>
           currentState is CurrencySelected,
