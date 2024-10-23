@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/data/enums/ticket_status_enum.dart';
-import 'package:toolkit/screens/tickets/add_ticket_comment_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_completion_date_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
@@ -13,6 +12,7 @@ import 'package:toolkit/utils/database_utils.dart';
 import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../data/models/tickets2/fetch_ticket_two_details_model.dart';
+import 'add_ticket_two_comments_screen.dart';
 
 class TicketTwoDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -34,7 +34,7 @@ class TicketTwoDetailsPopUpMenu extends StatelessWidget {
     return PopupMenuButton(
         onSelected: (value) {
           if (value == DatabaseUtil.getText('AddComments')) {
-            Navigator.pushNamed(context, AddTicketCommentScreen.routeName);
+            Navigator.pushNamed(context, AddTicketTwoCommentScreen.routeName);
           }
           if (value == DatabaseUtil.getText('AddDocuments')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();

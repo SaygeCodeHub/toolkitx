@@ -111,15 +111,15 @@ class Ticket2NotSaved extends Tickets2States {
 //   BugTypeSelected({required this.bugType, required this.bugValue});
 // }
 //
-// class Ticket2CommentSaving extends Tickets2States {}
-//
-// class Ticket2CommentSaved extends Tickets2States {}
-//
-// class Ticket2CommentNotSaved extends Tickets2States {
-//   final String errorMessage;
-//
-//   Ticket2CommentNotSaved({required this.errorMessage});
-// }
+class Ticket2CommentSaving extends Tickets2States {}
+
+class Ticket2CommentSaved extends Tickets2States {}
+
+class Ticket2CommentNotSaved extends Tickets2States {
+  final String errorMessage;
+
+  Ticket2CommentNotSaved({required this.errorMessage});
+}
 //
 // class Ticket2DocumentSaving extends Tickets2States {}
 //

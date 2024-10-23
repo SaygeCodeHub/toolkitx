@@ -2,6 +2,7 @@ import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/save_ticket2_model.dart';
+import '../../data/models/tickets2/save_ticket_2_comment_model.dart';
 
 abstract class Tickets2Repository {
   Future<FetchTicketsTwoModel> fetchTickets2(
@@ -15,7 +16,7 @@ abstract class Tickets2Repository {
 
   Future<SaveTicket2Model> saveTicket2Model(Map saveTicket2Map);
 
-  // Future<SaveTicket2CommentModel> saveTicket2Comment(Map saveCommentMap);
+  Future<SaveTicket2CommentModel> saveTicket2Comment(Map saveCommentMap);
   //
   // Future<SaveTicket2DocumentModel> saveTicket2Document(Map saveDocumentMap);
   //

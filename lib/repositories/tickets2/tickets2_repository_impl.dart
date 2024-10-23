@@ -4,6 +4,7 @@ import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/save_ticket2_model.dart';
+import '../../data/models/tickets2/save_ticket_2_comment_model.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
 
@@ -39,12 +40,12 @@ class Tickets2RepositoryImpl extends Tickets2Repository {
     return SaveTicket2Model.fromJson(response);
   }
 
-// @override
-// Future<SaveTicket2CommentModel> saveTicket2Comment(Map saveCommentMap) async {
-//   final response = await DioClient()
-//       .post("${ApiConstants.baseUrl}ticket2/savecomments", saveCommentMap);
-//   return SaveTicket2CommentModel.fromJson(response);
-// }
+  @override
+  Future<SaveTicket2CommentModel> saveTicket2Comment(Map saveCommentMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}ticket2/savecomments", saveCommentMap);
+    return SaveTicket2CommentModel.fromJson(response);
+  }
 //
 // @override
 // Future<SaveTicket2DocumentModel> saveTicket2Document(

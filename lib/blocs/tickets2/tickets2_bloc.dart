@@ -9,6 +9,7 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
+import '../../data/models/tickets2/save_ticket_2_comment_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/tickets2/tickets2_repository.dart';
 import '../../utils/constants/string_constants.dart';
@@ -32,7 +33,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     on<SaveTicket2>(_saveTicket2);
     // on<SelectPriority>(_selectPriority);
     // on<SelectBugType>(_selectBugType);
-    // on<SaveTicket2Comment>(_saveTicket2Comment);
+    on<SaveTicket2Comment>(_saveTicket2Comment);
     // on<SaveTicket2Document>(_saveTicket2Document);
     // on<UpdateTicket2Status>(_updateTicket2Status);
     // on<SaveOpenTicket2>(_saveOpenTicket2);
@@ -246,32 +247,32 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
 //   emit(BugTypeSelected(bugType: event.bugType, bugValue: event.bugValue));
 // }
 //
-// Future<FutureOr<void>> _saveTicket2Comment(
-//     SaveTicket2Comment event, Emitter<Tickets2States> emit) async {
-//   emit(Ticket2CommentSaving());
-//   try {
-//     String? hashCode =
-//         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-//     String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-//     Map saveCommentMap = {
-//       "hashcode": hashCode,
-//       "ticketid": ticketId,
-//       "comments": event.comment,
-//       "commentid": "",
-//       "userid": userId
-//     };
-//     SaveTicket2CommentModel saveTicket2CommentModel =
-//         await _ticketsRepository.saveTicket2Comment(saveCommentMap);
-//     if (saveTicket2CommentModel.message == '1') {
-//       emit(Ticket2CommentSaved());
-//     } else {
-//       emit(Ticket2CommentNotSaved(
-//           errorMessage: saveTicket2CommentModel.message));
-//     }
-//   } catch (e) {
-//     emit(Ticket2CommentNotSaved(errorMessage: e.toString()));
-//   }
-// }
+  Future<FutureOr<void>> _saveTicket2Comment(
+      SaveTicket2Comment event, Emitter<Tickets2States> emit) async {
+    emit(Ticket2CommentSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map saveCommentMap = {
+        "hashcode": hashCode,
+        "ticketid": ticketId,
+        "comments": event.comment,
+        "commentid": "",
+        "userid": userId
+      };
+      SaveTicket2CommentModel saveTicket2CommentModel =
+          await _ticketsRepository.saveTicket2Comment(saveCommentMap);
+      if (saveTicket2CommentModel.message == '1') {
+        emit(Ticket2CommentSaved());
+      } else {
+        emit(Ticket2CommentNotSaved(
+            errorMessage: saveTicket2CommentModel.message));
+      }
+    } catch (e) {
+      emit(Ticket2CommentNotSaved(errorMessage: e.toString()));
+    }
+  }
 //
 // Future<FutureOr<void>> _saveTicket2Document(
 //     SaveTicket2Document event, Emitter<Tickets2States> emit) async {
