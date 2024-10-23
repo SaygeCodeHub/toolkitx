@@ -7,10 +7,12 @@ import 'package:toolkit/data/models/tickets2/save_ticket2_model.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
+import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/tickets2/tickets2_repository.dart';
 import '../../utils/constants/string_constants.dart';
+import '../../utils/database_utils.dart';
 
 class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   final Tickets2Repository _ticketsRepository = getIt<Tickets2Repository>();
@@ -26,7 +28,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     // on<SelectTicket2Application>(_selectTicket2Application);
     // on<ApplyTickets2Filter>(_applyTickets2Filter);
     // on<ClearTickets2Filter>(_clearTickets2FilterFilter);
-    // on<FetchTicket2Details>(_fetchTicket2Details);
+    on<FetchTicket2Details>(_fetchTicket2Details);
     on<SaveTicket2>(_saveTicket2);
     // on<SelectPriority>(_selectPriority);
     // on<SelectBugType>(_selectBugType);
@@ -128,78 +130,80 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
 //   filters = {};
 // }
 //
-// Future<FutureOr<void>> _fetchTicket2Details(
-//     FetchTicket2Details event, Emitter<Tickets2States> emit) async {
-//   ticketTabIndex = event.ticketTabIndex;
-//   emit(Ticket2DetailsFetching());
-//   // try {
-//   List popUpMenuItemsList = [
-//     DatabaseUtil.getText('AddComments'),
-//     DatabaseUtil.getText('AddDocuments'),
-//     DatabaseUtil.getText('Cancel'),
-//   ];
-//
-//   String? hashCode =
-//       await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-//   String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-//   String clientId =
-//       await _customerCache.getClientId(CacheKeys.clientId) ?? '';
-//   FetchTicket2DetailsModel fetchTicket2DetailsModel = await _ticketsRepository
-//       .fetchTicket2Details(hashCode, event.ticketId, userId);
-//   ticketId = event.ticketId;
-//   if (fetchTicket2DetailsModel.data.candeferred == '1') {
-//     popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canestimateedt == '1') {
-//     popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_estimateedt'));
-//   }
-//   if (fetchTicket2DetailsModel.data.candevelopment == '1') {
-//     popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_development'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canapprovedfordevelopment == '1' ||
-//       fetchTicket2DetailsModel.data.canapprovedfordevelopmentvo == '1') {
-//     popUpMenuItemsList.insert(
-//         3, DatabaseUtil.getText('ticket_approvefordevelopment'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canwaitingfordevelopmentapproval == '1') {
-//     popUpMenuItemsList.insert(
-//         3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
-//   }
-//   if (fetchTicket2DetailsModel.data.cantesting == '1') {
-//     popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canapproved == '1') {
-//     popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canrolledout == '1') {
-//     popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canclose == '1') {
-//     popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_close'));
-//   }
-//   if (fetchTicket2DetailsModel.data.canopenticket == '1') {
-//     popUpMenuItemsList.insert(3, StringConstants.kOpenTicket);
-//   }
-//   if (fetchTicket2DetailsModel.data.canbacktoapproved == '1') {
-//     popUpMenuItemsList.insert(3, StringConstants.kBackToApprove);
-//   }
-//   if (fetchTicket2DetailsModel.data.canapproverolledout == '1') {
-//     popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
-//   }
-//
-//   if (fetchTicket2DetailsModel.status == 200) {
-//     emit(Ticket2DetailsFetched(
-//         fetchTicket2DetailsModel: fetchTicket2DetailsModel,
-//         ticketPopUpMenu: popUpMenuItemsList,
-//         clientId: clientId));
-//   } else {
-//     emit(Ticket2DetailsNotFetched(
-//         errorMessage: fetchTicket2DetailsModel.message));
-//   }
-//   // } catch (e) {
-//   //   emit(Ticket2DetailsNotFetched(errorMessage: e.toString()));
-//   // }
-// }
+  Future<FutureOr<void>> _fetchTicket2Details(
+      FetchTicket2Details event, Emitter<Tickets2States> emit) async {
+    ticketTabIndex = event.ticketTabIndex;
+    emit(Ticket2DetailsFetching());
+    // try {
+    List popUpMenuItemsList = [
+      DatabaseUtil.getText('AddComments'),
+      DatabaseUtil.getText('AddDocuments'),
+      DatabaseUtil.getText('Cancel'),
+    ];
+
+    String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+    String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+    String clientId =
+        await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+    FetchTicketTwoDetailsModel fetchTicketTwoDetailsModel =
+        await _ticketsRepository.fetchTicket2Details(
+            hashCode, event.ticketId, userId);
+    ticketId = event.ticketId;
+    if (fetchTicketTwoDetailsModel.data.candeferred == '1') {
+      popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canestimateedt == '1') {
+      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_estimateedt'));
+    }
+    if (fetchTicketTwoDetailsModel.data.candevelopment == '1') {
+      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_development'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canapprovedfordevelopment == '1' ||
+        fetchTicketTwoDetailsModel.data.canapprovedfordevelopmentvo == '1') {
+      popUpMenuItemsList.insert(
+          3, DatabaseUtil.getText('ticket_approvefordevelopment'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canwaitingfordevelopmentapproval ==
+        '1') {
+      popUpMenuItemsList.insert(
+          3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
+    }
+    if (fetchTicketTwoDetailsModel.data.cantesting == '1') {
+      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canapproved == '1') {
+      popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canrolledout == '1') {
+      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canclose == '1') {
+      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_close'));
+    }
+    if (fetchTicketTwoDetailsModel.data.canopenticket == '1') {
+      popUpMenuItemsList.insert(3, StringConstants.kOpenTicket);
+    }
+    if (fetchTicketTwoDetailsModel.data.canbacktoapproved == '1') {
+      popUpMenuItemsList.insert(3, StringConstants.kBackToApprove);
+    }
+    if (fetchTicketTwoDetailsModel.data.canapproverolledout == '1') {
+      popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
+    }
+
+    if (fetchTicketTwoDetailsModel.status == 200) {
+      emit(Ticket2DetailsFetched(
+          fetchTicketTwoDetailsModel: fetchTicketTwoDetailsModel,
+          ticketPopUpMenu: popUpMenuItemsList,
+          clientId: clientId));
+    } else {
+      emit(Ticket2DetailsNotFetched(
+          errorMessage: fetchTicketTwoDetailsModel.message));
+    }
+    // } catch (e) {
+    //   emit(Ticket2DetailsNotFetched(errorMessage: e.toString()));
+    // }
+  }
 
   Future<FutureOr<void>> _saveTicket2(
       SaveTicket2 event, Emitter<Tickets2States> emit) async {

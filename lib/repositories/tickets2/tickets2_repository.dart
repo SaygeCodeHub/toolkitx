@@ -1,4 +1,5 @@
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
+import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/save_ticket2_model.dart';
 
@@ -9,8 +10,8 @@ abstract class Tickets2Repository {
   Future<FetchTicket2MasterModel> fetchTicket2Master(
       String hashCode, String responsequeid);
   //
-  // Future<FetchTicket2DetailsModel> fetchTicket2Details(
-  //     String hashCode, String ticketId, String userId);
+  Future<FetchTicketTwoDetailsModel> fetchTicket2Details(
+      String hashCode, String ticketId, String userId);
 
   Future<SaveTicket2Model> saveTicket2Model(Map saveTicket2Map);
 

@@ -1,4 +1,5 @@
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
+import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/save_ticket2_model.dart';
 
@@ -63,24 +64,24 @@ class Ticket2MasterNotFetched extends Tickets2States {
 //   Ticket2ApplicationFilterSelected({required this.selectApplicationName});
 // }
 //
-// class Ticket2DetailsFetching extends Tickets2States {}
-//
-// class Ticket2DetailsFetched extends Tickets2States {
-//   final FetchTicket2DetailsModel fetchTicket2DetailsModel;
-//   final List ticketPopUpMenu;
-//   final String clientId;
-//
-//   Ticket2DetailsFetched(
-//       {required this.fetchTicket2DetailsModel,
-//       required this.ticketPopUpMenu,
-//       required this.clientId});
-// }
-//
-// class Ticket2DetailsNotFetched extends Tickets2States {
-//   final String errorMessage;
-//
-//   Ticket2DetailsNotFetched({required this.errorMessage});
-// }
+class Ticket2DetailsFetching extends Tickets2States {}
+
+class Ticket2DetailsFetched extends Tickets2States {
+  final FetchTicketTwoDetailsModel fetchTicketTwoDetailsModel;
+  final List ticketPopUpMenu;
+  final String clientId;
+
+  Ticket2DetailsFetched(
+      {required this.fetchTicketTwoDetailsModel,
+      required this.ticketPopUpMenu,
+      required this.clientId});
+}
+
+class Ticket2DetailsNotFetched extends Tickets2States {
+  final String errorMessage;
+
+  Ticket2DetailsNotFetched({required this.errorMessage});
+}
 
 class Ticket2Saving extends Tickets2States {}
 

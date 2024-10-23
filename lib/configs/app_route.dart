@@ -202,6 +202,7 @@ import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
+import '../screens/tickets2/ticket_two_details_screen.dart';
 import '../screens/tickets2/ticket_two_list_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
@@ -642,6 +643,9 @@ class AppRoutes {
       case TicketDetailsScreen.routeName:
         return _createRoute(
             TicketDetailsScreen(ticketId: settings.arguments.toString()));
+      case TicketTwoDetailsScreen.routeName:
+        return _createRoute(
+            TicketTwoDetailsScreen(ticketId: settings.arguments.toString()));
       case AddTicketScreen.routeName:
         return _createRoute(const AddTicketScreen());
       case AddTicketCommentScreen.routeName:

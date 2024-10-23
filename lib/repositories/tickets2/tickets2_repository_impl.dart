@@ -1,6 +1,7 @@
 import 'package:toolkit/repositories/tickets2/tickets2_repository.dart';
 
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
+import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/save_ticket2_model.dart';
 import '../../utils/constants/api_constants.dart';
@@ -23,14 +24,13 @@ class Tickets2RepositoryImpl extends Tickets2Repository {
     return FetchTicket2MasterModel.fromJson(response);
   }
 
-//
-// @override
-// Future<FetchTicket2DetailsModel> fetchTicket2Details(
-//     String hashCode, String ticketId, String userId) async {
-//   final response = await DioClient().get(
-//       "${ApiConstants.baseUrl}ticket2/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId");
-//   return FetchTicket2DetailsModel.fromJson(response);
-// }
+  @override
+  Future<FetchTicketTwoDetailsModel> fetchTicket2Details(
+      String hashCode, String ticketId, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}ticket2/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId");
+    return FetchTicketTwoDetailsModel.fromJson(response);
+  }
 
   @override
   Future<SaveTicket2Model> saveTicket2Model(Map saveTicket2Map) async {

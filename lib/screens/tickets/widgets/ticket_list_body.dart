@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
+import '../../tickets2/ticket_two_details_screen.dart';
+import '../../tickets2/ticket_two_list_screen.dart';
 
 class TicketListBody extends StatelessWidget {
   const TicketListBody({super.key, required this.ticketListDatum});
@@ -27,10 +28,10 @@ class TicketListBody extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: xxTinierSpacing),
               child: ListTile(
                 onTap: () {
-                  Navigator.pushNamed(context, TicketDetailsScreen.routeName,
+                  Navigator.pushNamed(context, TicketTwoDetailsScreen.routeName,
                           arguments: ticketListDatum[index].id)
                       .then((_) => Navigator.pushReplacementNamed(
-                          context, TicketListScreen.routeName,
+                          context, TicketTwoListScreen.routeName,
                           arguments: true));
                 },
                 title: Text(ticketListDatum[index].ticketNo,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/screens/tickets/tickets_filter_screen.dart';
-import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_list_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
@@ -13,6 +12,7 @@ import '../../configs/app_spacing.dart';
 import '../../widgets/custom_icon_button_row.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_no_records_text.dart';
+import 'add_ticket2_screen.dart';
 
 class TicketTwoListScreen extends StatelessWidget {
   static const routeName = 'TicketTwoListScreen';
@@ -33,7 +33,7 @@ class TicketTwoListScreen extends StatelessWidget {
         appBar: GenericAppBar(title: DatabaseUtil.getText('Ticket')),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, AddTicketScreen.routeName).then(
+              Navigator.pushNamed(context, AddTicket2Screen.routeName).then(
                   (_) => Navigator.pushReplacementNamed(
                       context, TicketTwoListScreen.routeName,
                       arguments: isFromHome));
