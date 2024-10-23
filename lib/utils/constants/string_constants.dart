@@ -23,6 +23,7 @@ abstract class StringConstants {
   static const String kAddIncomingInvoice = 'Add Incoming Invoice'; //
   static const String kEditIncomingInvoice = 'Edit Incoming Invoice'; //
   static const String kAddBankStatement = 'Add Bank Statement'; //
+  static const String kEditBankStatement = 'Edit Bank Statement'; //
   static const String kBillable = 'Billable'; //
   static const String kInvoiceDate = 'Invoice Date'; //
   static const String kStatementMonth = 'Statement Month'; //

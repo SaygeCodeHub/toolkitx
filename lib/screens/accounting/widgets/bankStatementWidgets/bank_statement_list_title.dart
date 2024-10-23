@@ -67,9 +67,13 @@ class BankStatementListTitle extends StatelessWidget {
             CustomIconButton(
               icon: Icons.attach_file_outlined,
               onPressed: () {
-                launchUrlString(
-                    '${ApiConstants.viewDocBaseUrl}${bankStatement.file}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().clientId)}',
-                    mode: LaunchMode.externalApplication);
+                final files = bankStatement.file.split(',');
+                final firstFile= files.isNotEmpty ? files.first : '';
+                if (firstFile.isNotEmpty) {
+                  launchUrlString(
+                      '${ApiConstants.viewDocBaseUrl}$firstFile&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().clientId)}',
+                      mode: LaunchMode.externalApplication);
+                }
               },
             ),
             const SizedBox(width: tiniestSpacing)
