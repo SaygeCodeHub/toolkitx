@@ -7,7 +7,6 @@ import 'package:toolkit/data/models/tickets/save_ticket_document_model.dart';
 import 'package:toolkit/data/models/tickets/save_ticket_model.dart';
 import 'package:toolkit/data/models/tickets/update_ticket_status_model.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
-import 'package:toolkit/utils/global.dart';
 
 import '../../utils/constants/api_constants.dart';
 import '../../utils/dio_client.dart';
@@ -31,7 +30,6 @@ class TicketsRepositoryImpl extends TicketsRepository {
   @override
   Future<FetchTicketDetailsModel> fetchTicketDetails(
       String hashCode, String ticketId, String userId) async {
-    print('moduleApiName fetchTickets $ticketManagementApi');
     final response = await DioClient().get(
         "${ApiConstants.baseUrl}ticket/getticket?hashcode=$hashCode&ticketid=$ticketId&userid=$userId");
     return FetchTicketDetailsModel.fromJson(response);

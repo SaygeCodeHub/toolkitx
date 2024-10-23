@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
+import '../../../blocs/tickets2/tickets2_bloc.dart';
+import '../../../blocs/tickets2/tickets2_event.dart';
+import '../../../blocs/tickets2/tickets2_state.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -22,13 +24,13 @@ class _Ticket2PriorityTileState extends State<Ticket2PriorityTile> {
   @override
   Widget build(BuildContext context) {
     context
-        .read<TicketsBloc>()
-        .add(SelectPriority(priorityId: 0, priorityName: ''));
-    return BlocBuilder<TicketsBloc, TicketsStates>(
+        .read<Tickets2Bloc>()
+        .add(SelectTicketTwoPriority(priorityId: 0, priorityName: ''));
+    return BlocBuilder<Tickets2Bloc, Tickets2States>(
       buildWhen: (previousState, currentState) =>
-          currentState is PrioritySelected,
+          currentState is TicketTwoPrioritySelected,
       builder: (context, state) {
-        if (state is PrioritySelected) {
+        if (state is TicketTwoPrioritySelected) {
           return Theme(
             data:
                 Theme.of(context).copyWith(dividerColor: AppColor.transparent),

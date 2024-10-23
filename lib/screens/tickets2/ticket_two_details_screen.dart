@@ -16,8 +16,11 @@ import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
+import '../../utils/ticketTwo/tickets_two_util.dart';
 import '../../utils/ticket_util.dart';
+import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
+import '../../widgets/progress_bar.dart';
 import '../../widgets/status_tag.dart';
 
 class TicketTwoDetailsScreen extends StatelessWidget {
@@ -37,17 +40,17 @@ class TicketTwoDetailsScreen extends StatelessWidget {
         actions: [
           BlocConsumer<Tickets2Bloc, Tickets2States>(
               listener: (context, state) {
-                // if (state is TicketStatusUpdating) {
-                //   ProgressBar.show(context);
-                // } else if (state is TicketStatusUpdated) {
-                //   ProgressBar.dismiss(context);
-                //   context.read<TicketsBloc>().add(FetchTicketDetails(
-                //       ticketId: context.read<TicketsBloc>().ticketId,
-                //       ticketTabIndex: 0));
-                // } else if (state is TicketStatusNotUpdated) {
-                //   ProgressBar.dismiss(context);
-                //   showCustomSnackBar(context, state.errorMessage, '');
-                // }
+                if (state is Ticket2StatusUpdating) {
+                  ProgressBar.show(context);
+                } else if (state is Ticket2StatusUpdated) {
+                  ProgressBar.dismiss(context);
+                  context.read<Tickets2Bloc>().add(FetchTicket2Details(
+                      ticketId: context.read<Tickets2Bloc>().ticket2Id,
+                      ticketTabIndex: 0));
+                } else if (state is Ticket2StatusNotUpdated) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
               },
               buildWhen: (previousState, currentState) =>
                   currentState is Ticket2DetailsFetched,
@@ -104,8 +107,8 @@ class TicketTwoDetailsScreen extends StatelessWidget {
                   const SizedBox(height: xxTinierSpacing),
                   CustomTabBarView(
                       lengthOfTabs: 4,
-                      tabBarViewIcons: TicketsUtil().tabBarViewIcons,
-                      initialIndex: context.read<TicketsBloc>().ticketTabIndex,
+                      tabBarViewIcons: TicketsTwoUtil().tabBarViewIcons,
+                      initialIndex: context.read<Tickets2Bloc>().ticketTabIndex,
                       tabBarViewWidgets: [
                         TicketTwoDetailsTab(ticketTwoData: data),
                         TicketTwoCommentsTab(ticketTwoData: data),

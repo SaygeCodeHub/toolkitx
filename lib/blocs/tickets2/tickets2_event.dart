@@ -55,18 +55,19 @@ class SaveTicket2 extends Tickets2Events {
   SaveTicket2({required this.saveTicket2Map});
 }
 
-class SelectPriority extends Tickets2Events {
+class SelectTicketTwoPriority extends Tickets2Events {
   final int priorityId;
   final String priorityName;
 
-  SelectPriority({required this.priorityId, required this.priorityName});
+  SelectTicketTwoPriority(
+      {required this.priorityId, required this.priorityName});
 }
 
-class SelectBugType extends Tickets2Events {
+class SelectTicketTwoBugType extends Tickets2Events {
   final String bugType;
   final String bugValue;
 
-  SelectBugType({required this.bugType, required this.bugValue});
+  SelectTicketTwoBugType({required this.bugType, required this.bugValue});
 }
 
 class SaveTicket2Comment extends Tickets2Events {
@@ -98,9 +99,9 @@ class SaveOpenTicket2 extends Tickets2Events {
   SaveOpenTicket2({required this.value});
 }
 
-class SelectVoValue extends Tickets2Events {
+class SelectTicketTwoVoValue extends Tickets2Events {
   final String value;
   final String vo;
 
-  SelectVoValue({required this.value, required this.vo});
+  SelectTicketTwoVoValue({required this.value, required this.vo});
 }

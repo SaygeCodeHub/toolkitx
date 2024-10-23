@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/screens/tickets/tickets_filter_screen.dart';
-import 'package:toolkit/screens/tickets/widgets/ticket_list_body.dart';
+import 'package:toolkit/screens/tickets2/ticket_two_filter_screen.dart';
+import 'package:toolkit/screens/tickets2/widgets/ticket_list_two_body.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -61,7 +61,7 @@ class TicketTwoListScreen extends StatelessWidget {
                   return CustomIconButtonRow(
                       primaryOnPress: () {
                         Navigator.pushNamed(
-                            context, TicketsFilterScreen.routeName);
+                            context, TicketTwoFilterScreen.routeName);
                       },
                       secondaryOnPress: () {},
                       secondaryVisible: false,
@@ -73,7 +73,7 @@ class TicketTwoListScreen extends StatelessWidget {
                         context.read<Tickets2Bloc>().filters.clear();
                         context.read<Tickets2Bloc>().ticketDatum.clear();
                         context.read<Tickets2Bloc>().selectApplicationName = '';
-                        // context.read<Tickets2Bloc>().add(ClearTicketsFilter());
+                        context.read<Tickets2Bloc>().add(ClearTickets2Filter());
                         context.read<Tickets2Bloc>().add(
                             FetchTickets2(pageNo: 1, isFromHome: isFromHome));
                       });
@@ -100,7 +100,7 @@ class TicketTwoListScreen extends StatelessWidget {
                     } else if (state is Tickets2Fetched) {
                       if (state.ticketData.isNotEmpty) {
                         return Expanded(
-                            child: TicketListBody(
+                            child: TicketListTwoBody(
                                 ticketListDatum: state.ticketData));
                       } else {
                         return NoRecordsText(

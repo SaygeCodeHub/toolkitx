@@ -202,9 +202,15 @@ import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
+import '../screens/tickets2/add_ticket_two_document_screen.dart';
+import '../screens/tickets2/ticket_two_completion_date_screen.dart';
 import '../screens/tickets2/ticket_two_details_screen.dart';
+import '../screens/tickets2/ticket_two_edt_hours_screen.dart';
+import '../screens/tickets2/ticket_two_filter_screen.dart';
 import '../screens/tickets2/ticket_two_list_screen.dart';
 import '../screens/tickets2/widgets/add_ticket_two_comments_screen.dart';
+import '../screens/tickets2/open_ticket_two_screen.dart';
+import '../screens/tickets2/widgets/ticket_two_application_filter_list.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -638,8 +644,13 @@ class AppRoutes {
             TicketTwoListScreen(isFromHome: settings.arguments as bool));
       case TicketsFilterScreen.routeName:
         return _createRoute(const TicketsFilterScreen());
+      case TicketTwoFilterScreen.routeName:
+        return _createRoute(const TicketTwoFilterScreen());
       case TicketApplicationFilterList.routeName:
         return _createRoute(TicketApplicationFilterList(
+            selectApplicationName: settings.arguments.toString()));
+      case TicketTwoApplicationFilterList.routeName:
+        return _createRoute(TicketTwoApplicationFilterList(
             selectApplicationName: settings.arguments.toString()));
       case TicketDetailsScreen.routeName:
         return _createRoute(
@@ -655,10 +666,18 @@ class AppRoutes {
         return _createRoute(const AddTicketTwoCommentScreen());
       case AddTicketDocumentScreen.routeName:
         return _createRoute(const AddTicketDocumentScreen());
+      case AddTicketTwoDocumentScreen.routeName:
+        return _createRoute(AddTicketTwoDocumentScreen());
       case TicketEDTHoursScreen.routeName:
         return _createRoute(const TicketEDTHoursScreen());
+      case TicketTwoEDTHoursScreen.routeName:
+        return _createRoute(const TicketTwoEDTHoursScreen());
       case TicketCompletionDateScreen.routeName:
         return _createRoute(const TicketCompletionDateScreen());
+      case TicketTwoCompletionDateScreen.routeName:
+        return _createRoute(const TicketTwoCompletionDateScreen());
+      case OpenTicketTwoScreen.routeName:
+        return _createRoute(const OpenTicketTwoScreen());
       case ChatMessagingScreen.routeName:
         return _createRoute(const ChatMessagingScreen());
       case AllChatsScreen.routeName:

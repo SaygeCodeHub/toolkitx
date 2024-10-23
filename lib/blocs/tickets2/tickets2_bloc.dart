@@ -9,7 +9,10 @@ import '../../data/cache/customer_cache.dart';
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
+import '../../data/models/tickets2/open_ticket_two_model.dart';
 import '../../data/models/tickets2/save_ticket_2_comment_model.dart';
+import '../../data/models/tickets2/save_ticket_two_documents_model.dart';
+import '../../data/models/tickets2/update_ticket_two_status_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/tickets2/tickets2_repository.dart';
 import '../../utils/constants/string_constants.dart';
@@ -24,20 +27,20 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   Tickets2Bloc() : super(Tickets2Initial()) {
     on<FetchTickets2>(_fetchTickets2);
     on<FetchTicket2Master>(_fetchTicket2Master);
-    // on<SelectTicket2StatusFilter>(_selectTicket2StatusFilter);
-    // on<SelectTicket2BugFilter>(_selectTicket2BugFilter);
-    // on<SelectTicket2Application>(_selectTicket2Application);
-    // on<ApplyTickets2Filter>(_applyTickets2Filter);
-    // on<ClearTickets2Filter>(_clearTickets2FilterFilter);
+    on<SelectTicket2StatusFilter>(_selectTicket2StatusFilter);
+    on<SelectTicket2BugFilter>(_selectTicket2BugFilter);
+    on<SelectTicket2Application>(_selectTicket2Application);
+    on<ApplyTickets2Filter>(_applyTickets2Filter);
+    on<ClearTickets2Filter>(_clearTickets2Filter);
     on<FetchTicket2Details>(_fetchTicket2Details);
     on<SaveTicket2>(_saveTicket2);
-    // on<SelectPriority>(_selectPriority);
-    // on<SelectBugType>(_selectBugType);
+    on<SelectTicketTwoPriority>(_selectPriority);
+    on<SelectTicketTwoBugType>(_selectBugType);
     on<SaveTicket2Comment>(_saveTicket2Comment);
-    // on<SaveTicket2Document>(_saveTicket2Document);
-    // on<UpdateTicket2Status>(_updateTicket2Status);
-    // on<SaveOpenTicket2>(_saveOpenTicket2);
-    // on<SelectVoValue>(_selectVoValue);
+    on<SaveTicket2Document>(_saveTicket2Document);
+    on<UpdateTicket2Status>(_updateTicket2Status);
+    on<SaveOpenTicket2>(_saveOpenTicket2);
+    on<SelectTicketTwoVoValue>(_selectVoValue);
   }
 
   String selectApplicationName = '';
@@ -45,7 +48,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   List<TicketListDatum> ticketDatum = [];
   Map filters = {};
   int ticketTabIndex = 0;
-  String ticketId = '';
+  String ticket2Id = '';
 
   Future<FutureOr<void>> _fetchTickets2(
       FetchTickets2 event, Emitter<Tickets2States> emit) async {
@@ -65,7 +68,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       } else {
         FetchTicketsTwoModel fetchTickets2Model = await _ticketsRepository
             .fetchTickets2(event.pageNo, hashCode, jsonEncode(filters));
-        ticketDatum.addAll((fetchTickets2Model.data));
+        ticketDatum.addAll(fetchTickets2Model.data);
         hasReachedMax = fetchTickets2Model.data.isEmpty;
         emit(Tickets2Fetched(
             ticketData: ticketDatum,
@@ -103,107 +106,109 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     }
   }
 
-// FutureOr<void> _selectTicket2StatusFilter(
-//     SelectTicket2StatusFilter event, Emitter<Tickets2States> emit) {
-//   emit(Ticket2StatusFilterSelected(
-//       selected: event.selected, selectedIndex: event.selectedIndex));
-// }
-//
-// FutureOr<void> _selectTicket2BugFilter(
-//     SelectTicket2BugFilter event, Emitter<Tickets2States> emit) {
-//   emit(Ticket2BugFilterSelected(
-//       selected: event.selected, selectedIndex: event.selectedIndex));
-// }
-//
-// FutureOr<void> _selectTicket2Application(
-//     SelectTicket2Application event, Emitter<Tickets2States> emit) {
-//   emit(Ticket2ApplicationFilterSelected(
-//       selectApplicationName: event.selectApplicationName));
-// }
-//
-// FutureOr<void> _applyTickets2Filter(
-//     ApplyTickets2Filter event, Emitter<Tickets2States> emit) {
-//   filters = event.ticketsFilterMap;
-// }
-//
-// FutureOr<void> _clearTickets2FilterFilter(
-//     ClearTickets2Filter event, Emitter<Tickets2States> emit) {
-//   filters = {};
-// }
-//
+  FutureOr<void> _selectTicket2StatusFilter(
+      SelectTicket2StatusFilter event, Emitter<Tickets2States> emit) {
+    emit(Ticket2StatusFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _selectTicket2BugFilter(
+      SelectTicket2BugFilter event, Emitter<Tickets2States> emit) {
+    emit(Ticket2BugFilterSelected(
+        selected: event.selected, selectedIndex: event.selectedIndex));
+  }
+
+  FutureOr<void> _selectTicket2Application(
+      SelectTicket2Application event, Emitter<Tickets2States> emit) {
+    emit(Ticket2ApplicationFilterSelected(
+        selectApplicationName: event.selectApplicationName));
+  }
+
+  FutureOr<void> _applyTickets2Filter(
+      ApplyTickets2Filter event, Emitter<Tickets2States> emit) {
+    filters = event.ticketsFilterMap;
+  }
+
+  FutureOr<void> _clearTickets2Filter(
+      ClearTickets2Filter event, Emitter<Tickets2States> emit) {
+    filters = {};
+  }
+
   Future<FutureOr<void>> _fetchTicket2Details(
       FetchTicket2Details event, Emitter<Tickets2States> emit) async {
     ticketTabIndex = event.ticketTabIndex;
     emit(Ticket2DetailsFetching());
-    // try {
-    List popUpMenuItemsList = [
-      DatabaseUtil.getText('AddComments'),
-      DatabaseUtil.getText('AddDocuments'),
-      DatabaseUtil.getText('Cancel'),
-    ];
+    try {
+      List popUpMenuItemsList = [
+        DatabaseUtil.getText('AddComments'),
+        DatabaseUtil.getText('AddDocuments'),
+        DatabaseUtil.getText('Cancel'),
+      ];
 
-    String? hashCode =
-        await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-    String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-    String clientId =
-        await _customerCache.getClientId(CacheKeys.clientId) ?? '';
-    FetchTicketTwoDetailsModel fetchTicketTwoDetailsModel =
-        await _ticketsRepository.fetchTicket2Details(
-            hashCode, event.ticketId, userId);
-    ticketId = event.ticketId;
-    if (fetchTicketTwoDetailsModel.data.candeferred == '1') {
-      popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canestimateedt == '1') {
-      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_estimateedt'));
-    }
-    if (fetchTicketTwoDetailsModel.data.candevelopment == '1') {
-      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_development'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canapprovedfordevelopment == '1' ||
-        fetchTicketTwoDetailsModel.data.canapprovedfordevelopmentvo == '1') {
-      popUpMenuItemsList.insert(
-          3, DatabaseUtil.getText('ticket_approvefordevelopment'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canwaitingfordevelopmentapproval ==
-        '1') {
-      popUpMenuItemsList.insert(
-          3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
-    }
-    if (fetchTicketTwoDetailsModel.data.cantesting == '1') {
-      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canapproved == '1') {
-      popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canrolledout == '1') {
-      popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canclose == '1') {
-      popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_close'));
-    }
-    if (fetchTicketTwoDetailsModel.data.canopenticket == '1') {
-      popUpMenuItemsList.insert(3, StringConstants.kOpenTicket);
-    }
-    if (fetchTicketTwoDetailsModel.data.canbacktoapproved == '1') {
-      popUpMenuItemsList.insert(3, StringConstants.kBackToApprove);
-    }
-    if (fetchTicketTwoDetailsModel.data.canapproverolledout == '1') {
-      popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
-    }
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      String clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      FetchTicketTwoDetailsModel fetchTicketTwoDetailsModel =
+          await _ticketsRepository.fetchTicket2Details(
+              hashCode, event.ticketId, userId);
+      ticket2Id = event.ticketId;
+      if (fetchTicketTwoDetailsModel.data.candeferred == '1') {
+        popUpMenuItemsList.insert(1, DatabaseUtil.getText('ticket_defer'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canestimateedt == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_estimateedt'));
+      }
+      if (fetchTicketTwoDetailsModel.data.candevelopment == '1') {
+        popUpMenuItemsList.insert(
+            2, DatabaseUtil.getText('ticket_development'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canapprovedfordevelopment == '1' ||
+          fetchTicketTwoDetailsModel.data.canapprovedfordevelopmentvo == '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_approvefordevelopment'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canwaitingfordevelopmentapproval ==
+          '1') {
+        popUpMenuItemsList.insert(
+            3, DatabaseUtil.getText('ticket_waitingfordevelopmentapproval'));
+      }
+      if (fetchTicketTwoDetailsModel.data.cantesting == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_testing'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canapproved == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canrolledout == '1') {
+        popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canclose == '1') {
+        popUpMenuItemsList.insert(2, DatabaseUtil.getText('ticket_close'));
+      }
+      if (fetchTicketTwoDetailsModel.data.canopenticket == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kOpenTicket);
+      }
+      if (fetchTicketTwoDetailsModel.data.canbacktoapproved == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kBackToApprove);
+      }
+      if (fetchTicketTwoDetailsModel.data.canapproverolledout == '1') {
+        popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
+      }
 
-    if (fetchTicketTwoDetailsModel.status == 200) {
-      emit(Ticket2DetailsFetched(
-          fetchTicketTwoDetailsModel: fetchTicketTwoDetailsModel,
-          ticketPopUpMenu: popUpMenuItemsList,
-          clientId: clientId));
-    } else {
-      emit(Ticket2DetailsNotFetched(
-          errorMessage: fetchTicketTwoDetailsModel.message));
+      if (fetchTicketTwoDetailsModel.status == 200) {
+        emit(Ticket2DetailsFetched(
+            fetchTicketTwoDetailsModel: fetchTicketTwoDetailsModel,
+            ticketPopUpMenu: popUpMenuItemsList,
+            clientId: clientId));
+      } else {
+        emit(Ticket2DetailsNotFetched(
+            errorMessage: fetchTicketTwoDetailsModel.message));
+      }
+    } catch (e) {
+      emit(Ticket2DetailsNotFetched(errorMessage: e.toString()));
     }
-    // } catch (e) {
-    //   emit(Ticket2DetailsNotFetched(errorMessage: e.toString()));
-    // }
   }
 
   Future<FutureOr<void>> _saveTicket2(
@@ -236,17 +241,18 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     }
   }
 
-// FutureOr<void> _selectPriority(
-//     SelectPriority event, Emitter<Tickets2States> emit) {
-//   emit(PrioritySelected(
-//       priorityId: event.priorityId, priorityName: event.priorityName));
-// }
-//
-// FutureOr<void> _selectBugType(
-//     SelectBugType event, Emitter<Tickets2States> emit) {
-//   emit(BugTypeSelected(bugType: event.bugType, bugValue: event.bugValue));
-// }
-//
+  FutureOr<void> _selectPriority(
+      SelectTicketTwoPriority event, Emitter<Tickets2States> emit) {
+    emit(TicketTwoPrioritySelected(
+        priorityId: event.priorityId, priorityName: event.priorityName));
+  }
+
+  FutureOr<void> _selectBugType(
+      SelectTicketTwoBugType event, Emitter<Tickets2States> emit) {
+    emit(TicketTwoBugTypeSelected(
+        bugType: event.bugType, bugValue: event.bugValue));
+  }
+
   Future<FutureOr<void>> _saveTicket2Comment(
       SaveTicket2Comment event, Emitter<Tickets2States> emit) async {
     emit(Ticket2CommentSaving());
@@ -256,7 +262,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
       Map saveCommentMap = {
         "hashcode": hashCode,
-        "ticketid": ticketId,
+        "ticketid": ticket2Id,
         "comments": event.comment,
         "commentid": "",
         "userid": userId
@@ -273,101 +279,109 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       emit(Ticket2CommentNotSaved(errorMessage: e.toString()));
     }
   }
+
 //
-// Future<FutureOr<void>> _saveTicket2Document(
-//     SaveTicket2Document event, Emitter<Tickets2States> emit) async {
-//   emit(Ticket2DocumentSaving());
-//   try {
-//     String? hashCode =
-//         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-//     String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-//     Map saveDocumentMap = {
-//       "filename": event.saveDocumentMap['fileName'],
-//       "ticketid": ticketId,
-//       "comments": event.saveDocumentMap['comments'],
-//       "userid": userId,
-//       "hashcode": hashCode
-//     };
-//     SaveTicket2DocumentModel saveTicket2DocumentModel =
-//         await _ticketsRepository.saveTicket2Document(saveDocumentMap);
-//     if (saveTicket2DocumentModel.message == '1') {
-//       emit(Ticket2DocumentSaved());
-//     } else {
-//       emit(Ticket2DocumentNotSaved(
-//           errorMessage: saveTicket2DocumentModel.message));
-//     }
-//   } catch (e) {
-//     emit(Ticket2DocumentNotSaved(errorMessage: e.toString()));
-//   }
-// }
-//
-// Future<FutureOr<void>> _updateTicket2Status(
-//     UpdateTicket2Status event, Emitter<Tickets2States> emit) async {
-//   emit(Ticket2StatusUpdating());
-//   try {
-//     String? hashCode =
-//         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-//     String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-//     Map updateStatusMap = {
-//       "edt": event.edtHrs,
-//       "ticketid": ticketId,
-//       "userid": userId,
-//       "status": event.status,
-//       "completiondate": event.completionDate,
-//       "hashcode": hashCode
-//     };
-//     if (event.status == "11" && event.edtHrs! <= 0) {
-//       emit(Ticket2StatusNotUpdated(
-//           errorMessage: StringConstants.kEdtShouldBeGreaterThan0));
-//     } else if (event.status == '5' && event.completionDate == '') {
-//       emit(Ticket2StatusNotUpdated(
-//           errorMessage: StringConstants.kPleaseEnterCompletionDate));
-//     } else {
-//       UpdateTicket2StatusModel updateTicket2StatusModel =
-//           await _ticketsRepository.updateTicket2Status(updateStatusMap);
-//       if (updateTicket2StatusModel.message == '1') {
-//         emit(Ticket2StatusUpdated());
-//       } else {
-//         emit(Ticket2StatusNotUpdated(
-//             errorMessage: updateTicket2StatusModel.message));
-//       }
-//     }
-//   } catch (e) {
-//     emit(Ticket2StatusNotUpdated(errorMessage: e.toString()));
-//   }
-// }
-//
-// Future<FutureOr<void>> _saveOpenTicket2(
-//     SaveOpenTicket2 event, Emitter<Tickets2States> emit) async {
-//   emit(OpenTicket2Saving());
-//   try {
-//     String? hashCode =
-//         await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-//     String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
-//     Map openTicket2Map = {
-//       "ticketid": ticketId,
-//       "userid": userId,
-//       "vo": event.value,
-//       "hashcode": hashCode
-//     };
-//     if (event.value != '') {
-//       OpenTicket2Model openTicket2Model =
-//           await _ticketsRepository.openTicket2(openTicket2Map);
-//       if (openTicket2Model.message == '1') {
-//         emit(OpenTicket2Saved());
-//       } else {
-//         emit(OpenTicket2NotSaved(errorMessage: openTicket2Model.message));
-//       }
-//     } else {
-//       emit(OpenTicket2NotSaved(errorMessage: StringConstants.kPleaseSelectVo));
-//     }
-//   } catch (e) {
-//     emit(OpenTicket2NotSaved(errorMessage: e.toString()));
-//   }
-// }
-//
-// FutureOr<void> _selectVoValue(
-//     SelectVoValue event, Emitter<Tickets2States> emit) {
-//   emit(VoValueSelected(value: event.value, vo: event.vo));
-// }
+  Future<FutureOr<void>> _saveTicket2Document(
+      SaveTicket2Document event, Emitter<Tickets2States> emit) async {
+    emit(Ticket2DocumentSaving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      if (event.saveDocumentMap['comments'] == null ||
+          event.saveDocumentMap['comments'] == '') {
+        emit(Ticket2DocumentNotSaved(
+            errorMessage: StringConstants.kPleaseAddComments));
+      } else {
+        Map saveDocumentMap = {
+          "filename": event.saveDocumentMap['fileName'],
+          "ticketid": ticket2Id,
+          "comments": event.saveDocumentMap['comments'],
+          "userid": userId,
+          "hashcode": hashCode
+        };
+        SaveTicket2DocumentModel saveTicket2DocumentModel =
+            await _ticketsRepository.saveTicket2Document(saveDocumentMap);
+        if (saveTicket2DocumentModel.message == '1') {
+          emit(Ticket2DocumentSaved());
+        } else {
+          emit(Ticket2DocumentNotSaved(
+              errorMessage: saveTicket2DocumentModel.message));
+        }
+      }
+    } catch (e) {
+      emit(Ticket2DocumentNotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _updateTicket2Status(
+      UpdateTicket2Status event, Emitter<Tickets2States> emit) async {
+    emit(Ticket2StatusUpdating());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map updateStatusMap = {
+        "edt": event.edtHrs,
+        "ticketid": ticket2Id,
+        "userid": userId,
+        "status": event.status,
+        "completiondate": event.completionDate,
+        "hashcode": hashCode
+      };
+      if (event.status == "11" && event.edtHrs! <= 0) {
+        emit(Ticket2StatusNotUpdated(
+            errorMessage: StringConstants.kEdtShouldBeGreaterThan0));
+      } else if (event.status == '5' && event.completionDate == '') {
+        emit(Ticket2StatusNotUpdated(
+            errorMessage: StringConstants.kPleaseEnterCompletionDate));
+      } else {
+        UpdateTicket2StatusModel updateTicket2StatusModel =
+            await _ticketsRepository.updateTicket2Status(updateStatusMap);
+        if (updateTicket2StatusModel.message == '1') {
+          emit(Ticket2StatusUpdated());
+        } else {
+          emit(Ticket2StatusNotUpdated(
+              errorMessage: updateTicket2StatusModel.message));
+        }
+      }
+    } catch (e) {
+      emit(Ticket2StatusNotUpdated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _saveOpenTicket2(
+      SaveOpenTicket2 event, Emitter<Tickets2States> emit) async {
+    emit(OpenTicket2Saving());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map openTicket2Map = {
+        "ticketid": ticket2Id,
+        "userid": userId,
+        "vo": event.value,
+        "hashcode": hashCode
+      };
+      if (event.value != '') {
+        OpenTicket2Model openTicket2Model =
+            await _ticketsRepository.openTicket2(openTicket2Map);
+        if (openTicket2Model.message == '1') {
+          emit(OpenTicket2Saved());
+        } else {
+          emit(OpenTicket2NotSaved(errorMessage: openTicket2Model.message));
+        }
+      } else {
+        emit(
+            OpenTicket2NotSaved(errorMessage: StringConstants.kPleaseSelectVo));
+      }
+    } catch (e) {
+      emit(OpenTicket2NotSaved(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _selectVoValue(
+      SelectTicketTwoVoValue event, Emitter<Tickets2States> emit) {
+    emit(TicketTwoVoValueSelected(value: event.value, vo: event.vo));
+  }
 }

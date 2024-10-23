@@ -109,7 +109,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
         if (permissionsList.contains('wf_calendar') != true) {
           permissionsList.add('calendar');
         }
-        print('permissionsList $permissionsList');
         for (int i = 0; i < ModulesUtil.listModulesMode.length; i++) {
           if (permissionsList.contains(ModulesUtil.listModulesMode[i].key) ==
               true) {

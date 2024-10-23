@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/blocs/tickets/tickets_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/data/enums/ticket_status_enum.dart';
-import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
-import 'package:toolkit/screens/tickets/widgets/ticket_completion_date_screen.dart';
-import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
 import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/imagePickerBloc/image_picker_event.dart';
+import '../../../blocs/tickets2/tickets2_bloc.dart';
+import '../../../blocs/tickets2/tickets2_event.dart';
+import '../../../data/enums/ticketTwo/ticket_two_status_enum.dart';
 import '../../../data/models/tickets2/fetch_ticket_two_details_model.dart';
+import '../add_ticket_two_document_screen.dart';
+import '../ticket_two_completion_date_screen.dart';
+import '../ticket_two_edt_hours_screen.dart';
 import 'add_ticket_two_comments_screen.dart';
+import '../open_ticket_two_screen.dart';
 
 class TicketTwoDetailsPopUpMenu extends StatelessWidget {
   final List popUpMenuItems;
@@ -34,83 +36,86 @@ class TicketTwoDetailsPopUpMenu extends StatelessWidget {
     return PopupMenuButton(
         onSelected: (value) {
           if (value == DatabaseUtil.getText('AddComments')) {
+            AddTicketTwoCommentScreen.comment = '';
             Navigator.pushNamed(context, AddTicketTwoCommentScreen.routeName);
           }
           if (value == DatabaseUtil.getText('AddDocuments')) {
             context.read<ImagePickerBloc>().pickedImagesList.clear();
             context.read<ImagePickerBloc>().add(PickImageInitial());
-            Navigator.pushNamed(context, AddTicketDocumentScreen.routeName);
+            Navigator.pushNamed(context, AddTicketTwoDocumentScreen.routeName);
           }
           if (value == DatabaseUtil.getText('ticket_estimateedt')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.estimateDT.value));
+                status: TicketTwoStatusEnum.estimateDT.value));
           }
           if (value ==
               DatabaseUtil.getText('ticket_waitingfordevelopmentapproval')) {
             fetchTicketTwoDetailsModel.data.isbug != '1'
-                ? Navigator.pushNamed(context, TicketEDTHoursScreen.routeName)
-                : context.read<TicketsBloc>().add(UpdateTicketStatus(
+                ? Navigator.pushNamed(
+                    context, TicketTwoEDTHoursScreen.routeName)
+                : context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                     edtHrs: 0,
                     completionDate: '',
-                    status: TicketStatusEnum.waitingForDevelopment.value));
+                    status: TicketTwoStatusEnum.waitingForDevelopment.value));
           }
           if (value == DatabaseUtil.getText('ticket_approvefordevelopment')) {
-            // context.read<TicketsBloc>().add(UpdateTicketStatus(
-            //     edtHrs: int.tryParse(fetchTicketDetailsModel.data.etd),
-            //     completionDate: '',
-            //     status: TicketStatusEnum.approveForDevelopment.value));
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
+                edtHrs: int.tryParse(fetchTicketTwoDetailsModel.data.etd),
+                completionDate: '',
+                status: TicketTwoStatusEnum.approveForDevelopment.value));
           }
           if (value == DatabaseUtil.getText('ticket_development')) {
-            Navigator.pushNamed(context, TicketCompletionDateScreen.routeName);
+            Navigator.pushNamed(
+                context, TicketTwoCompletionDateScreen.routeName);
           }
           if (value == DatabaseUtil.getText('ticket_defer')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.deferred.value));
+                status: TicketTwoStatusEnum.deferred.value));
           }
           if (value == DatabaseUtil.getText('ticket_testing')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.testing.value));
+                status: TicketTwoStatusEnum.testing.value));
           }
           if (value == DatabaseUtil.getText('approve')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.approved.value));
+                status: TicketTwoStatusEnum.approved.value));
           }
 
           if (value == DatabaseUtil.getText('ticket_rollout')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.rolledOut.value));
+                status: TicketTwoStatusEnum.rolledOut.value));
           }
 
           if (value == DatabaseUtil.getText('ticket_close')) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.closed.value));
+                status: TicketTwoStatusEnum.closed.value));
           }
           if (value == StringConstants.kOpenTicket) {
-            // Navigator.pushNamed(context, OpenTicketScreen.routeName);
+            Navigator.pushNamed(context, OpenTicketTwoScreen.routeName);
           }
           if (value == StringConstants.kBackToApprove) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.backToApprove.value));
+                status: TicketTwoStatusEnum.backToApprove.value));
           }
           if (value == StringConstants.kApproveRolledOut) {
-            context.read<TicketsBloc>().add(UpdateTicketStatus(
+            context.read<Tickets2Bloc>().add(UpdateTicket2Status(
                 edtHrs: 0,
                 completionDate: '',
-                status: TicketStatusEnum.approveRolledOut.value));
+                status: TicketTwoStatusEnum.approveRolledOut.value));
           }
         },
         position: PopupMenuPosition.under,

@@ -160,6 +160,7 @@ abstract class StringConstants {
   static const String kAssignedToMe = 'assignedtome'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
+  static const String kPleaseAttachDocument = 'Please attach document'; //
   static const String kDocumentNameValidation =
       'Please enter document name!'; //
   static const String kDocumentUploadValidation =

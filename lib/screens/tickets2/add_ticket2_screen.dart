@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/tickets/widgets/ticket_bug_expansion_tile.dart';
 import 'package:toolkit/screens/tickets2/widgets/ticket2_application_tile.dart';
 import 'package:toolkit/screens/tickets2/widgets/ticket2_distribution_tile.dart';
 import 'package:toolkit/screens/tickets2/widgets/ticket2_priority_tile.dart';
+import 'package:toolkit/screens/tickets2/widgets/ticket_two_bug_expansion_tile.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
@@ -90,7 +90,7 @@ class AddTicket2Screen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               color: AppColor.black)),
                       const SizedBox(height: tiniestSpacing),
-                      TicketBugExpansionTile(saveTicketMap: saveTicketMap),
+                      TicketTwoBugExpansionTile(saveTicketMap: saveTicketMap),
                       const SizedBox(height: xxTinierSpacing),
                       Text(DatabaseUtil.getText('Description'),
                           style: Theme.of(context).textTheme.small.copyWith(
@@ -133,8 +133,8 @@ class AddTicket2Screen extends StatelessWidget {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               context
-                  .read<TicketsBloc>()
-                  .add(FetchTickets(pageNo: 1, isFromHome: false));
+                  .read<Tickets2Bloc>()
+                  .add(FetchTickets2(pageNo: 1, isFromHome: false));
             } else if (state is Ticket2NotSaved) {
               ProgressBar.dismiss(context);
               showCustomSnackBar(context, state.errorMessage, '');

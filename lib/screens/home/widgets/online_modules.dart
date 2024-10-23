@@ -20,11 +20,11 @@ import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
 import '../../../blocs/client/client_states.dart';
 import '../../../blocs/global/global_bloc.dart';
+import '../../../blocs/tickets2/tickets2_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
-import '../../../utils/global.dart';
 import '../../../widgets/custom_card.dart';
 import '../../checklist/systemUser/sys_user_checklist_list_screen.dart';
 import '../../checklist/workforce/workforce_list_screen.dart';
@@ -55,6 +55,7 @@ class OnLineModules extends StatelessWidget {
     final globalBloc = context.read<GlobalBloc>();
     final clientBloc = context.read<ClientBloc>();
     final accountingBloc = context.read<AccountingBloc>();
+    final tickets2Bloc = context.read<Tickets2Bloc>();
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||
@@ -90,7 +91,8 @@ class OnLineModules extends StatelessWidget {
                           context,
                           globalBloc,
                           clientBloc,
-                          accountingBloc),
+                          accountingBloc,
+                          tickets2Bloc),
                       child: CustomCard(
                           color: AppColor.transparent,
                           elevation: kZeroElevation,
@@ -168,7 +170,7 @@ class OnLineModules extends StatelessWidget {
   }
 
   navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc,
-      AccountingBloc accountingBloc) {
+      AccountingBloc accountingBloc, Tickets2Bloc tickets2Bloc) {
     switch (moduleKey) {
       case 'ptw':
         globalBloc.add(UpdateCount(type: 'permit'));
@@ -306,7 +308,6 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, MyMeetingsScreen.routeName);
         break;
       case 'tickets':
-        ticketManagementApi = 'ticket';
         globalBloc.add(UpdateCount(type: 'tickets'));
         Navigator.pushNamed(context, TicketListScreen.routeName,
                 arguments: true)
@@ -314,7 +315,7 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'tickets2':
-        ticketManagementApi = 'ticket2';
+        tickets2Bloc.filters.clear();
         globalBloc.add(UpdateCount(type: 'tickets2'));
         Navigator.pushNamed(context, TicketTwoListScreen.routeName,
                 arguments: true)

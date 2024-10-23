@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -56,7 +57,7 @@ class AddTicketTwoCommentScreen extends StatelessWidget {
               ProgressBar.dismiss(context);
               Navigator.pop(context);
               context.read<Tickets2Bloc>().add(FetchTicket2Details(
-                  ticketId: context.read<Tickets2Bloc>().ticketId,
+                  ticketId: context.read<Tickets2Bloc>().ticket2Id,
                   ticketTabIndex: 0));
             } else if (state is Ticket2CommentNotSaved) {
               ProgressBar.dismiss(context);
@@ -65,9 +66,14 @@ class AddTicketTwoCommentScreen extends StatelessWidget {
           },
           child: PrimaryButton(
               onPressed: () {
-                context
-                    .read<Tickets2Bloc>()
-                    .add(SaveTicket2Comment(comment: comment));
+                if (comment.trim().isEmpty) {
+                  showCustomSnackBar(
+                      context, StringConstants.kPleaseAddComments, '');
+                } else {
+                  context
+                      .read<Tickets2Bloc>()
+                      .add(SaveTicket2Comment(comment: comment));
+                }
               },
               textValue: DatabaseUtil.getText('buttonSave')),
         ),
