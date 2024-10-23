@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
 
 import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
@@ -49,53 +50,56 @@ class WorkOrderTabTwoDetails extends StatelessWidget {
                             color: AppColor.black,
                             fontWeight: FontWeight.w600)),
                     const Spacer(),
-                    CustomIconButton(
-                        icon: Icons.delete,
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AndroidPopUp(
-                                    titleValue:
-                                        DatabaseUtil.getText('DeleteRecord'),
-                                    contentValue: '',
-                                    onPrimaryButton: () {
-                                      context
-                                          .read<WorkOrderTabDetailsBloc>()
-                                          .add(DeleteWorkOrderWorkForce(
-                                              workForceId:
-                                                  data.workforce[index].id));
-                                      Navigator.pop(context);
-                                    });
-                              });
-                        },
-                        size: kEditAndDeleteIconTogether),
-                    const SizedBox(width: xxxTinierSpacing),
-                    CustomIconButton(
-                        icon: Icons.edit,
-                        onPressed: () {
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['plannedhrs'] =
-                              data.workforce[index].plannedhrs.toString();
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['workForceName'] =
-                              data.workforce[index].name;
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['workorderId'] =
-                              data.id;
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['workForceId'] =
-                              data.workforce[index].workforceid;
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['workForceId2'] =
-                              data.workforce[index].workforceid2;
-                          WorkOrderEditWorkForceScreen
-                                  .editWorkOrderWorkForceMap['actualhrs'] =
-                              data.workforce[index].actualhrs;
-                          Navigator.pushNamed(
-                              context, WorkOrderEditWorkForceScreen.routeName);
-                        },
-                        size: kEditAndDeleteIconTogether)
+                    if (isNetworkEstablished)
+                      CustomIconButton(
+                          icon: Icons.delete,
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AndroidPopUp(
+                                      titleValue:
+                                          DatabaseUtil.getText('DeleteRecord'),
+                                      contentValue: '',
+                                      onPrimaryButton: () {
+                                        context
+                                            .read<WorkOrderTabDetailsBloc>()
+                                            .add(DeleteWorkOrderWorkForce(
+                                                workForceId:
+                                                    data.workforce[index].id));
+                                        Navigator.pop(context);
+                                      });
+                                });
+                          },
+                          size: kEditAndDeleteIconTogether),
+                    if (isNetworkEstablished)
+                      const SizedBox(width: xxxTinierSpacing),
+                    if (isNetworkEstablished)
+                      CustomIconButton(
+                          icon: Icons.edit,
+                          onPressed: () {
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap['plannedhrs'] =
+                                data.workforce[index].plannedhrs.toString();
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap[
+                                'workForceName'] = data.workforce[index].name;
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap['workorderId'] =
+                                data.id;
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap['workForceId'] =
+                                data.workforce[index].workforceid;
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap['workForceId2'] =
+                                data.workforce[index].workforceid2;
+                            WorkOrderEditWorkForceScreen
+                                    .editWorkOrderWorkForceMap['actualhrs'] =
+                                data.workforce[index].actualhrs;
+                            Navigator.pushNamed(context,
+                                WorkOrderEditWorkForceScreen.routeName);
+                          },
+                          size: kEditAndDeleteIconTogether)
                   ],
                 ),
                 subtitle: Column(

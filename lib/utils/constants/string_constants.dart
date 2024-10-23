@@ -197,6 +197,7 @@ abstract class StringConstants {
   static const String kExpenseAddItemDateAndItemValidation =
       'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
+  static const String kAddDateTime = 'Add date and time'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
   static const String kSelectVendor = 'Select vendor'; //
@@ -282,6 +283,7 @@ abstract class StringConstants {
   static const String kSelectTime = 'Select Time';
   static const String kPleaseSelectTime = 'Please Select Time!';
   static const String kPleaseAddSignature = 'Please add signature!';
+  static const String kPleaseAddComments = 'Please add comments!';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kSummaryOfIncident = 'Summary of Incident';
   static const String kPhoto = 'Photo';
@@ -322,6 +324,8 @@ abstract class StringConstants {
   static const String kEventDateValidation = 'Event date cannot be empty.'; //
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
+  static const String kOfflineWoFailed =
+      'No WO assign to you for accessing offline.';
   static const String kFailedToSaveData = 'Failed to save data!';
   static const String kNameValidation = 'Please add name!';
   static const String kDataSavedSuccessfully = 'Data saved successfully!';
@@ -352,6 +356,7 @@ abstract class StringConstants {
   static const String kCP = "CP";
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kSignAsSap = 'Sign as SAP';
+  static const String kSignAsUser = 'Sign as User';
   static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
   static const String kPermitTransferWarning =

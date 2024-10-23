@@ -73,6 +73,7 @@ class _SignaturePadState extends State<SignaturePad> {
           IconButton(
               onPressed: () {
                 signController.clear();
+                widget.map[widget.mapKey] = '';
               },
               icon: const Icon(Icons.refresh),
               iconSize: kIconSize)

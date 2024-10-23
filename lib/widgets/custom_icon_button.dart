@@ -11,13 +11,12 @@ class CustomIconButton extends StatelessWidget {
   final double? dy;
 
   const CustomIconButton(
-      {Key? key,
+      {super.key,
       required this.icon,
       required this.onPressed,
       this.size = kIconSize,
       this.dx = 0,
-      this.dy = -15})
-      : super(key: key);
+      this.dy = -15});
 
   @override
   Widget build(BuildContext context) {

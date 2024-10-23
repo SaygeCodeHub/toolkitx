@@ -6,12 +6,10 @@ import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/accounting/widgets/accounting_entity_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/invoice_currency_dropdown.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/client_dropdown.dart';
-import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_invoice_section.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_bottombar.dart';
 import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/project_dropdown.dart';
 import 'package:toolkit/screens/incident/widgets/date_picker.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
-import 'package:toolkit/widgets/primary_button.dart';
 
 import '../../configs/app_spacing.dart';
 import '../../widgets/generic_app_bar.dart';
@@ -24,58 +22,10 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    String clientId = "";
 
     return Scaffold(
         appBar: const GenericAppBar(title: 'Edit Outgoing Invoice'),
-        bottomNavigationBar: BottomAppBar(
-            child: Row(
-          children: [
-            Expanded(
-              child: PrimaryButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  textValue: StringConstants.kBack),
-            ),
-            const SizedBox(width: xxTinierSpacing),
-            Expanded(
-              child: PrimaryButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    if (context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['entity']
-                            .isNotEmpty &&
-                        context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap["client"]
-                            .isNotEmpty &&
-                        context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap['project']
-                            .isNotEmpty &&
-                        context
-                            .read<AccountingBloc>()
-                            .manageOutgoingInvoiceMap["date"]
-                            .isNotEmpty) {
-                      Navigator.pushNamed(
-                          context, EditOutgoingInvoiceSection.routeName,
-                          arguments: clientId);
-                    } else {
-                      showCustomSnackBar(
-                          context,
-                          StringConstants
-                              .kEntityClientProjectInvoiceDAteCanNotBeEmpty,
-                          '');
-                    }
-                  }
-                },
-                textValue: StringConstants.kNext,
-              ),
-            ),
-          ],
-        )),
+        bottomNavigationBar: EditOutgoingBottombar(formKey: formKey),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -99,7 +49,6 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
                       child: const CircularProgressIndicator(),
                     ));
                   } else if (state is OutgoingInvoiceFetched) {
-                    clientId = state.clientId;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

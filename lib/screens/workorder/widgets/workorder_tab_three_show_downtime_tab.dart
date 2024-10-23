@@ -6,6 +6,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
+import '../../../utils/global.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
 import '../workorder_add_and_edit_down_time_screen.dart';
@@ -55,26 +56,30 @@ class WorkOrderTabThreeShowDowntimeTab extends StatelessWidget {
                           ]),
                         ],
                       ),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        CustomIconButton(
-                            icon: Icons.delete,
-                            onPressed: () {},
-                            size: kEditAndDeleteIconTogether),
-                        const SizedBox(width: xxxTinierSpacing),
-                        CustomIconButton(
-                            icon: Icons.edit,
-                            onPressed: () {
-                              WorkOrderAddAndEditDownTimeScreen
-                                      .addAndEditDownTimeMap['downTimeId'] =
-                                  data.downtime[index].id;
-                              WorkOrderAddAndEditDownTimeScreen
-                                      .addAndEditDownTimeMap['workorderId'] =
-                                  data.id;
-                              Navigator.pushNamed(context,
-                                  WorkOrderAddAndEditDownTimeScreen.routeName);
-                            },
-                            size: kEditAndDeleteIconTogether)
-                      ])));
+                      trailing: (isNetworkEstablished)
+                          ? Row(mainAxisSize: MainAxisSize.min, children: [
+                              CustomIconButton(
+                                  icon: Icons.delete,
+                                  onPressed: () {},
+                                  size: kEditAndDeleteIconTogether),
+                              const SizedBox(width: xxxTinierSpacing),
+                              CustomIconButton(
+                                  icon: Icons.edit,
+                                  onPressed: () {
+                                    WorkOrderAddAndEditDownTimeScreen
+                                            .addAndEditDownTimeMap[
+                                        'downTimeId'] = data.downtime[index].id;
+                                    WorkOrderAddAndEditDownTimeScreen
+                                            .addAndEditDownTimeMap[
+                                        'workorderId'] = data.id;
+                                    Navigator.pushNamed(
+                                        context,
+                                        WorkOrderAddAndEditDownTimeScreen
+                                            .routeName);
+                                  },
+                                  size: kEditAndDeleteIconTogether)
+                            ])
+                          : const SizedBox.shrink()));
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: tinierSpacing);

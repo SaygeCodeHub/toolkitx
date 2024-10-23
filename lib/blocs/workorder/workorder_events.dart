@@ -28,3 +28,5 @@ class WorkOrderApplyFilter extends WorkOrderEvents {
 }
 
 class WorkOrderClearFilter extends WorkOrderEvents {}
+
+class FetchWorkOrderOfflineData extends WorkOrderEvents {}

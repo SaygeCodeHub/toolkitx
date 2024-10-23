@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
+import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
@@ -59,6 +60,7 @@ class WorkOrderRoleScreen extends StatelessWidget {
                             context
                                 .read<WorkOrderTabDetailsBloc>()
                                 .add(SelectWorkOrderRole(roleId: value!));
+                            context.read<WorkOrderBloc>().roleId = value;
                           });
                     });
               } else {

@@ -20,6 +20,7 @@ import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../data/models/workorder/hold_workorder_model.dart';
 import '../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../data/models/workorder/manage_downtime_model.dart';
+import '../../data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 import '../../data/models/workorder/reject_workorder_model.dart';
 import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../data/models/workorder/save_workorder_documents_model.dart';
@@ -98,4 +99,7 @@ abstract class WorkOrderRepository {
 
   Future<FetchWorkOrderRolesModel> fetchWorkOrderRoles(
       String hashCode, String userId);
+
+  Future<FetchOfflineWorkOrderDataModel> fetchWorkOrderOfflineData(
+      String hashCode, String role);
 }

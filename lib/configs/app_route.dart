@@ -209,6 +209,8 @@ import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
 import '../screens/trips/edit_special_request_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
+import '../screens/workorder/widgets/offline/workorder_sap_model.dart';
+import '../screens/workorder/widgets/offline/workorder_sign_as_user_screen.dart';
 import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_and_complete_workorder_screen.dart';
 import '../screens/workorder/workorder_add_comments_screen.dart';
@@ -805,6 +807,10 @@ class AppRoutes {
       case EditOutgoingInvoiceScreen.routeName:
         return _createRoute(const EditOutgoingInvoiceScreen());
       case EditOutgoingInvoiceSection.routeName:
+        return _createRoute(const EditOutgoingInvoiceSection());
+      case WorkOrderSignAsUserScreen.routeName:
+        return _createRoute(WorkOrderSignAsUserScreen(
+            workOrderSapModel: settings.arguments as WorkOrderSapModel));
         return _createRoute(EditOutgoingInvoiceSection(
             clientId: settings.arguments.toString()));
       // case EditIncomingInvoiceScreen.routeName:

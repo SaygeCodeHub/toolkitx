@@ -106,6 +106,7 @@ class PermitAttachments extends StatelessWidget {
                                               } else if (filename
                                                   .toLowerCase()
                                                   .endsWith('.pdf')) {
+                                                print('inside here $filename');
                                                 OpenFile.open(filename);
                                                 // Navigator.push(
                                                 //     context,

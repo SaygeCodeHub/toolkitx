@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_states.dart';
+import 'package:toolkit/utils/constants/string_constants.dart';
+import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
 
@@ -9,10 +11,12 @@ import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_even
 import '../../../utils/database_utils.dart';
 import '../../../widgets/primary_button.dart';
 import '../start_and_complete_workorder_screen.dart';
+import 'offline/workorder_sap_model.dart';
+import 'offline/workorder_sign_as_user_screen.dart';
 
 class StartWorkOrderButton extends StatelessWidget {
-  const StartWorkOrderButton({Key? key, required this.isFromStart})
-      : super(key: key);
+  const StartWorkOrderButton({super.key, required this.isFromStart});
+
   final bool isFromStart;
 
   @override
@@ -49,16 +53,45 @@ class StartWorkOrderButton extends StatelessWidget {
         },
         child: PrimaryButton(
             onPressed: () {
-              isFromStart == true
-                  ? context.read<WorkOrderTabDetailsBloc>().add(StartWorkOrder(
-                      startWorkOrderMap: StartAndCompleteWorkOrderScreen
-                          .startAndCompleteWorkOrderMap))
-                  : context.read<WorkOrderTabDetailsBloc>().add(
-                      CompleteWorkOrder(
-                          completeWorkOrderMap: StartAndCompleteWorkOrderScreen
-                              .startAndCompleteWorkOrderMap));
+              if (isNetworkEstablished) {
+                (isFromStart == true)
+                    ? context.read<WorkOrderTabDetailsBloc>().add(
+                        StartWorkOrder(
+                            startWorkOrderMap: StartAndCompleteWorkOrderScreen
+                                .startAndCompleteWorkOrderMap))
+                    : context.read<WorkOrderTabDetailsBloc>().add(
+                        CompleteWorkOrder(
+                            completeWorkOrderMap:
+                                StartAndCompleteWorkOrderScreen
+                                    .startAndCompleteWorkOrderMap));
+              } else {
+                if (StartAndCompleteWorkOrderScreen
+                            .startAndCompleteWorkOrderMap['date'] ==
+                        null ||
+                    StartAndCompleteWorkOrderScreen
+                            .startAndCompleteWorkOrderMap['date'] ==
+                        '' ||
+                    StartAndCompleteWorkOrderScreen
+                            .startAndCompleteWorkOrderMap['time'] ==
+                        null ||
+                    StartAndCompleteWorkOrderScreen
+                            .startAndCompleteWorkOrderMap['time'] ==
+                        '') {
+                  showCustomSnackBar(context, StringConstants.kAddDateTime, '');
+                } else {
+                  Navigator.pushNamed(
+                    context,
+                    WorkOrderSignAsUserScreen.routeName,
+                    arguments: WorkOrderSapModel(
+                        sapMap: StartAndCompleteWorkOrderScreen
+                            .startAndCompleteWorkOrderMap,
+                        previousScreen:
+                            (isFromStart) ? 'StartScreen' : 'CompleteScreen'),
+                  );
+                }
+              }
             },
-            textValue: isFromStart == true
+            textValue: (isFromStart == true)
                 ? DatabaseUtil.getText('Start')
                 : DatabaseUtil.getText('Complete')),
       ),

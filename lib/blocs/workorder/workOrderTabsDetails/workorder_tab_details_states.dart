@@ -511,3 +511,18 @@ class WorkOrderRolesNotFetched extends WorkOrderTabDetailsStates {
 }
 
 class WorkOrderRoleSelected extends WorkOrderTabDetailsStates {}
+
+class SavingWorkOrderOfflineData extends WorkOrderTabDetailsStates {}
+
+class WorkOrderOfflineDataSaved extends WorkOrderTabDetailsStates {
+  final String message;
+  final String workOrderId;
+
+  WorkOrderOfflineDataSaved({required this.message, required this.workOrderId});
+}
+
+class WorkOrderOfflineDataNotSaved extends WorkOrderTabDetailsStates {
+  final String errorMessage;
+
+  WorkOrderOfflineDataNotSaved({required this.errorMessage});
+}
