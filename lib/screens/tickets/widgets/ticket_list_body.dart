@@ -6,7 +6,6 @@ import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
 
@@ -78,13 +77,9 @@ class TicketListBody extends StatelessWidget {
                     )
                   ],
                 ),
-                trailing: SizedBox(
-                  width: kSmallSizedBoxWidth,
-                  child: Text(ticketListDatum[index].statusname,
-                      style: Theme.of(context).textTheme.xSmall.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.deepBlue)),
-                ),
+                trailing: Text(ticketListDatum[index].statusname,
+                    style: Theme.of(context).textTheme.xSmall.copyWith(
+                        fontWeight: FontWeight.w500, color: AppColor.deepBlue)),
               ),
             ));
           } else {

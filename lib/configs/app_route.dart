@@ -202,6 +202,7 @@ import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
+import '../screens/tickets2/ticket_two_list_screen.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
@@ -630,6 +631,9 @@ class AppRoutes {
       case TicketListScreen.routeName:
         return _createRoute(
             TicketListScreen(isFromHome: settings.arguments as bool));
+      case TicketTwoListScreen.routeName:
+        return _createRoute(
+            TicketTwoListScreen(isFromHome: settings.arguments as bool));
       case TicketsFilterScreen.routeName:
         return _createRoute(const TicketsFilterScreen());
       case TicketApplicationFilterList.routeName:

@@ -1,27 +1,29 @@
-part of 'tickets2_bloc.dart';
+import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
+import '../../data/models/tickets2/fetch_tickets_two_model.dart';
+import '../../data/models/tickets2/save_ticket2_model.dart';
 
 abstract class Tickets2States {}
 
 class Tickets2Initial extends Tickets2States {}
 
-// class Tickets2Fetching extends Tickets2States {}
-//
-// class Tickets2Fetched extends Tickets2States {
-//   final FetchTickets2Model fetchTickets2Model;
-//   final List<TicketListDatum> ticketData;
-//   final Map filterMap;
-//
-//   Tickets2Fetched(
-//       {required this.ticketData,
-//       required this.filterMap,
-//       required this.fetchTickets2Model});
-// }
-//
-// class Tickets2NotFetched extends Tickets2States {
-//   final String errorMessage;
-//
-//   Tickets2NotFetched({required this.errorMessage});
-// }
+class Tickets2Fetching extends Tickets2States {}
+
+class Tickets2Fetched extends Tickets2States {
+  final FetchTicketsTwoModel fetchTickets2Model;
+  final List<TicketListDatum> ticketData;
+  final Map filterMap;
+
+  Tickets2Fetched(
+      {required this.ticketData,
+      required this.filterMap,
+      required this.fetchTickets2Model});
+}
+
+class Tickets2NotFetched extends Tickets2States {
+  final String errorMessage;
+
+  Tickets2NotFetched({required this.errorMessage});
+}
 
 class Ticket2MasterFetching extends Tickets2States {}
 

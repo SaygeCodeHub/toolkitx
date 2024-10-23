@@ -24,6 +24,7 @@ import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
+import '../../../utils/global.dart';
 import '../../../widgets/custom_card.dart';
 import '../../checklist/systemUser/sys_user_checklist_list_screen.dart';
 import '../../checklist/workforce/workforce_list_screen.dart';
@@ -38,12 +39,13 @@ import '../../permit/permit_list_screen.dart';
 import '../../qualityManagement/qm_list_screen.dart';
 import '../../safetyNotice/safety_notice_screen.dart';
 import '../../signInQRCode/signin_list_screen.dart';
+import '../../tickets2/ticket_two_list_screen.dart';
 import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 
 class OnLineModules extends StatelessWidget {
   static bool isFirstTime = true;
 
-  const OnLineModules({Key? key}) : super(key: key);
+  const OnLineModules({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -304,8 +306,17 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, MyMeetingsScreen.routeName);
         break;
       case 'tickets':
+        ticketManagementApi = 'ticket';
         globalBloc.add(UpdateCount(type: 'tickets'));
         Navigator.pushNamed(context, TicketListScreen.routeName,
+                arguments: true)
+            .then((_) =>
+                clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'tickets2':
+        ticketManagementApi = 'ticket2';
+        globalBloc.add(UpdateCount(type: 'tickets2'));
+        Navigator.pushNamed(context, TicketTwoListScreen.routeName,
                 arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
@@ -329,7 +340,7 @@ class OnLineModules extends StatelessWidget {
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'accounting':
-        // globalBloc.add(UpdateCount(type: 'accounting'));
+        globalBloc.add(UpdateCount(type: 'accounting'));
         accountingBloc.add(FetchAccountingMaster());
         Navigator.pushNamed(context, AccountingScreen.routeName).then((_) =>
             clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));

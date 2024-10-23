@@ -13,6 +13,8 @@ import 'package:toolkit/widgets/progress_bar.dart';
 
 import '../../blocs/tickets/tickets_bloc.dart';
 import '../../blocs/tickets2/tickets2_bloc.dart';
+import '../../blocs/tickets2/tickets2_event.dart';
+import '../../blocs/tickets2/tickets2_state.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_spacing.dart';
 import '../../widgets/generic_text_field.dart';

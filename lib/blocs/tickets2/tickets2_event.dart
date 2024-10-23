@@ -1,5 +1,3 @@
-part of 'tickets2_bloc.dart';
-
 abstract class Tickets2Events {}
 
 class FetchTickets2 extends Tickets2Events {

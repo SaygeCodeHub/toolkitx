@@ -126,7 +126,7 @@ abstract class ModulesUtil {
         key: 'tanks',
         notificationKey: 'tanks'),
     ModulesModel(
-        moduleName: 'Ticket',
+        moduleName: 'customersupportticket',
         moduleImage: '${kBaseImagePath}ticket.png',
         key: 'tickets',
         notificationKey: 'tickets'),
@@ -145,5 +145,10 @@ abstract class ModulesUtil {
         moduleImage: '${kBaseImagePath}sign_in_qr.png',
         key: 'tracking',
         notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Ticket',
+        moduleImage: '${kBaseImagePath}ticket_2.png',
+        key: 'tickets2',
+        notificationKey: '')
   ];
 }
