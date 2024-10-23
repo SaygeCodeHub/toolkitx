@@ -25,27 +25,27 @@ class UploadImageBloc extends Bloc<UploadImageEvent, UploadImageState> {
   FutureOr<void> _uploadImage(
       UploadImage event, Emitter<UploadImageState> emit) async {
     emit(UploadingImage());
-    // try {
-    String hashCode =
-        (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
-    UploadPictureModel uploadPictureModel =
-        UploadPictureModel(status: 200, message: '', data: []);
-    List uploadList = [];
-    if (event.images.isNotEmpty) {
-      for (int i = event.imageLength; i < event.images.length; i++) {
-        uploadPictureModel = await _uploadPictureRepository.uploadImage(
-            File(event.images[i]), hashCode);
-        uploadList.addAll(uploadPictureModel.data);
+    try {
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      UploadPictureModel uploadPictureModel =
+          UploadPictureModel(status: 200, message: '', data: []);
+      List uploadList = [];
+      if (event.images.isNotEmpty) {
+        for (int i = event.imageLength; i < event.images.length; i++) {
+          uploadPictureModel = await _uploadPictureRepository.uploadImage(
+              File(event.images[i]), hashCode);
+          uploadList.addAll(uploadPictureModel.data);
+        }
+        if (uploadPictureModel.data.isNotEmpty) {
+          emit(ImageUploaded(images: uploadList));
+        } else {
+          emit(ImageCouldNotUpload(
+              errorMessage: StringConstants.kCannotUploadImage));
+        }
       }
-      if (uploadPictureModel.data.isNotEmpty) {
-        emit(ImageUploaded(images: uploadList));
-      } else {
-        emit(ImageCouldNotUpload(
-            errorMessage: StringConstants.kCannotUploadImage));
-      }
+    } catch (e) {
+      emit(ImageCouldNotUpload(errorMessage: e.toString()));
     }
-    // } catch (e) {
-    //   emit(ImageCouldNotUpload(errorMessage: e.toString()));
-    // }
   }
 }

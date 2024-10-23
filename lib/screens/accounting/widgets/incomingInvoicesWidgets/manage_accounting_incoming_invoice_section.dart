@@ -76,73 +76,40 @@ class ManageAccountingIncomingInvoiceSection extends StatelessWidget {
                             : '',
                       ),
                       const SizedBox(height: xxTinySpacing),
-                      (isFromEdit
-                              ? context
-                                          .read<AccountingBloc>()
-                                          .manageIncomingInvoiceMap[
-                                      'othercurrencyname'] !=
-                                  ''
-                              : context
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        Text(
+                          StringConstants.kAmountOther,
+                          style: Theme.of(context)
+                              .textTheme
+                              .xSmall
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        const SizedBox(height: xxTinySpacing),
+                      if (context
+                              .read<AccountingBloc>()
+                              .manageIncomingInvoiceMap['other'] ==
+                          'Other')
+                        TextFieldWidget(
+                            textInputType: TextInputType.number,
+                            onTextFieldChanged: (String value) {
+                              context
                                       .read<AccountingBloc>()
-                                      .manageIncomingInvoiceMap['other'] ==
-                                  'Other')
-                          ? Text(
-                              StringConstants.kAmountOther,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .xSmall
-                                  .copyWith(fontWeight: FontWeight.w600),
-                            )
-                          : const SizedBox.shrink(),
-                      (isFromEdit
-                              ? context
-                                          .read<AccountingBloc>()
-                                          .manageIncomingInvoiceMap[
-                                      'othercurrencyname'] !=
-                                  ''
-                              : context
-                                      .read<AccountingBloc>()
-                                      .manageIncomingInvoiceMap['other'] ==
-                                  'Other')
-                          ? const SizedBox(height: xxxTinierSpacing)
-                          : const SizedBox.shrink(),
-                      (isFromEdit
-                              ? context
-                                          .read<AccountingBloc>()
-                                          .manageIncomingInvoiceMap[
-                                      'othercurrencyname'] !=
-                                  ''
-                              : context
-                                      .read<AccountingBloc>()
-                                      .manageIncomingInvoiceMap['other'] ==
-                                  'Other')
-                          ? TextFieldWidget(
-                              textInputType: TextInputType.number,
-                              onTextFieldChanged: (String value) {
-                                context
+                                      .manageIncomingInvoiceMap[
+                                  'otherinvoiceamount'] = value;
+                            },
+                            value: isFromEdit
+                                ? context
                                         .read<AccountingBloc>()
                                         .manageIncomingInvoiceMap[
-                                    'otherinvoiceamount'] = value;
-                              },
-                              value: isFromEdit
-                                  ? context
-                                          .read<AccountingBloc>()
-                                          .manageIncomingInvoiceMap[
-                                      'otherinvoiceamount']
-                                  : '')
-                          : const SizedBox.shrink(),
-                      (isFromEdit
-                              ? context
-                                          .read<AccountingBloc>()
-                                          .manageIncomingInvoiceMap[
-                                      'othercurrencyname'] !=
-                                  ''
-                              : context
-                                      .read<AccountingBloc>()
-                                      .manageIncomingInvoiceMap['other'] ==
-                                  'Other')
-                          ? const SizedBox(height: xxTinySpacing)
-                          : Container(),
+                                    'otherinvoiceamount']
+                                : ''),
                       if (context
                               .read<AccountingBloc>()
                               .manageIncomingInvoiceMap['other'] ==

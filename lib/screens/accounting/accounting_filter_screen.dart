@@ -97,10 +97,13 @@ class AccountingFilterScreen extends StatelessWidget {
                           .xSmall
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxTinierSpacing),
-                  ClientDropdown(onClientChanged: (String client, [String? clientName] ) {
-                    accountingFilterMap['client'] = client;
-                    accountingFilterMap['clientName'] = clientName;
-                  },initialValue: accountingFilterMap['clientName'] ?? '',),
+                  ClientDropdown(
+                    onClientChanged: (String client, [String? clientName]) {
+                      accountingFilterMap['client'] = client;
+                      accountingFilterMap['clientName'] = clientName;
+                    },
+                    initialValue: accountingFilterMap['clientName'] ?? '',
+                  ),
                   const SizedBox(height: xxxSmallerSpacing),
                   PrimaryButton(
                       onPressed: () {

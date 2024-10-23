@@ -77,7 +77,8 @@ class EditOutgoingInvoiceScreen extends StatelessWidget {
                                 .copyWith(fontWeight: FontWeight.w600)),
                         const SizedBox(height: xxxTinierSpacing),
                         ClientDropdown(
-                          onClientChanged: (String client,[String? clientName]) {
+                          onClientChanged: (String client,
+                              [String? clientName]) {
                             context
                                 .read<AccountingBloc>()
                                 .manageOutgoingInvoiceMap['client'] = client;

@@ -58,7 +58,8 @@ class ManageAccountingIOutgoingInvoice extends StatelessWidget {
                           .xSmall
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxxTinierSpacing),
-                  ClientDropdown(onClientChanged: (String client, [String? clientName]) {
+                  ClientDropdown(
+                      onClientChanged: (String client, [String? clientName]) {
                     context
                         .read<AccountingBloc>()
                         .manageOutgoingInvoiceMap['client'] = client;
