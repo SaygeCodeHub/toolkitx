@@ -127,14 +127,14 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
             ModalRoute.withName('/'));
       } else {
         context.read<ChatBloc>().add(FetchChatMessage());
+        if (RootScreen.onceCall == true) {
+          context.read<PermitBloc>().add(PermitInternetActions());
+        }
         if (RootScreen.workOrderSyncOnline) {
           print('RootScreen.workOrderSyncOnline');
           context
               .read<WorkOrderTabDetailsBloc>()
               .add(SyncWorkOrderOfflineDataWithOnline());
-        }
-        if (RootScreen.onceCall == true) {
-          context.read<PermitBloc>().add(PermitInternetActions());
         }
         RootScreen.onceCall = false;
         RootScreen.workOrderSyncOnline = false;

@@ -211,20 +211,16 @@ class DatabaseHelper {
   Future<void> insertOfflineWorkOrders(
       WorkOrderOfflineDatum data, int statusId) async {
     final Database db = await database;
-    await db.insert('OfflineWorkOrder', {
-      'workOrderId': data.id,
-      'workOrderId2': data.id2,
-      'listPage': jsonEncode(data.listpage.toJson()),
-      'wodetails': jsonEncode(data.wodetails.toJson()),
-      'statusId': statusId
-    });
-  }
-
-  Future<bool> hasWorkOrderEntry(String workOrderId) async {
-    final Database db = await database;
-    final results = await db.query('OfflineWorkOrder',
-        where: 'workOrderId = ?', whereArgs: [workOrderId]);
-    return results.isNotEmpty;
+    await db.insert(
+        'OfflineWorkOrder',
+        {
+          'workOrderId': data.id,
+          'workOrderId2': data.id2,
+          'listPage': jsonEncode(data.listpage.toJson()),
+          'wodetails': jsonEncode(data.wodetails.toJson()),
+          'statusId': statusId
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<Map<String, dynamic>>> fetchAllWorkOrders() async {
@@ -262,7 +258,6 @@ class DatabaseHelper {
   Future<void> addCommentToWorkOrder(
       String workOrderId, Map<String, dynamic> newComment) async {
     final db = await database;
-    print('workOrderId $workOrderId');
     final List<Map<String, dynamic>> result = await db.rawQuery(
         'SELECT wodetails FROM OfflineWorkOrder WHERE workOrderId = ?',
         [workOrderId]);

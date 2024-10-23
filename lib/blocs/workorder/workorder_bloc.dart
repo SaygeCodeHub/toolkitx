@@ -144,10 +144,8 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
       if (fetchOfflineWorkOrderDataModel.status == 200) {
         if (fetchOfflineWorkOrderDataModel.data.isNotEmpty) {
           for (var item in fetchOfflineWorkOrderDataModel.data) {
-            if (!await _databaseHelper.hasWorkOrderEntry(item.id)) {
-              await _databaseHelper.insertOfflineWorkOrders(
-                  item, item.listpage.statusid);
-            }
+            await _databaseHelper.insertOfflineWorkOrders(
+                item, item.listpage.statusid);
           }
           emit(WorkOrderOfflineDataFetched());
         } else {
