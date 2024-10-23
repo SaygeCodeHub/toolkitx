@@ -811,8 +811,6 @@ class AppRoutes {
       case WorkOrderSignAsUserScreen.routeName:
         return _createRoute(WorkOrderSignAsUserScreen(
             workOrderSapModel: settings.arguments as WorkOrderSapModel));
-        return _createRoute(EditOutgoingInvoiceSection(
-            clientId: settings.arguments.toString()));
       // case EditIncomingInvoiceScreen.routeName:
       //   return _createRoute(const EditIncomingInvoiceScreen());
       case ManageBankStatementScreen.routeName:

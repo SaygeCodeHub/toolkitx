@@ -248,7 +248,6 @@ class OnLineModules extends StatelessWidget {
       case 'wf_calendar':
         Navigator.pushNamed(context, CalendarScreen.routeName);
         break;
-
       case 'workorder':
         globalBloc.add(UpdateCount(type: 'workorder'));
         Navigator.pushNamed(context, WorkOrderListScreen.routeName,

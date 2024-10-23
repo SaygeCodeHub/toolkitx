@@ -54,7 +54,7 @@ class EditOutgoingBottombar extends StatelessWidget {
                   showCustomSnackBar(
                       context,
                       StringConstants
-                          .kEntityClientProjectInvoiceDateCanNotBeEmpty,
+                          .kEntityClientProjectInvoiceDAteCanNotBeEmpty,
                       '');
                 }
               }
