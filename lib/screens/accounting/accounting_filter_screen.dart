@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/accounting/accounting_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/client_dropdown.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 
 import '../../blocs/accounting/accounting_bloc.dart';
@@ -12,7 +13,6 @@ import '../../widgets/custom_year_picker_dropdown.dart';
 import '../../widgets/generic_app_bar.dart';
 import '../../widgets/primary_button.dart';
 import '../incident/widgets/date_picker.dart';
-import 'widgets/accounting_client_dropdown.dart';
 import 'widgets/accounting_entity_dropdown.dart';
 
 class AccountingFilterScreen extends StatelessWidget {
@@ -97,11 +97,10 @@ class AccountingFilterScreen extends StatelessWidget {
                           .xSmall
                           .copyWith(fontWeight: FontWeight.w600)),
                   const SizedBox(height: xxTinierSpacing),
-                  AccountingClientDropdown(
-                      onClientChanged: (String clientId) {
-                        accountingFilterMap['client'] = clientId;
-                      },
-                      selectedClient: accountingFilterMap['client'] ?? ''),
+                  ClientDropdown(onClientChanged: (String client, [String? clientName] ) {
+                    accountingFilterMap['client'] = client;
+                    accountingFilterMap['clientName'] = clientName;
+                  },initialValue: accountingFilterMap['clientName'] ?? '',),
                   const SizedBox(height: xxxSmallerSpacing),
                   PrimaryButton(
                       onPressed: () {

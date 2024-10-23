@@ -111,14 +111,9 @@ class EditOutgoingInvoiceSection extends StatelessWidget {
                               splashColor: AppColor.transparent,
                               highlightColor: AppColor.transparent,
                               onTap: () {
-                                if (context
-                                        .read<AccountingBloc>()
-                                        .manageOutgoingInvoiceMap['clientid'] !=
-                                    '') {
                                   launchUrlString(
-                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'] ?? '')[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}',
+                                      '${ApiConstants.viewDocBaseUrl}${ViewImageUtil.viewImageList(context.read<AccountingBloc>().manageOutgoingInvoiceMap['edit_files'])[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().manageOutgoingInvoiceMap['clientid'])}',
                                       mode: LaunchMode.externalApplication);
-                                }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(

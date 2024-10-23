@@ -10,7 +10,7 @@ import '../../../../configs/app_spacing.dart';
 import '../../../../utils/constants/string_constants.dart';
 
 class ClientDropdown extends StatefulWidget {
-  final void Function(String selectedValue) onClientChanged;
+  final void Function(String selectedValue, [String? selectedText]) onClientChanged;
   final String initialValue;
 
   const ClientDropdown(
@@ -38,7 +38,7 @@ class _ClientDropdownState extends State<ClientDropdown> {
             maintainState: true,
             key: GlobalKey(),
             title: Text(
-                (selectedText.isEmpty) ? StringConstants.kSelect : selectedText,
+                (selectedText.isEmpty) ? StringConstants.kSelectClient : selectedText,
                 style: Theme.of(context).textTheme.xSmall),
             children: [
               BlocBuilder<AccountingBloc, AccountingState>(
@@ -71,7 +71,7 @@ class _ClientDropdownState extends State<ClientDropdown> {
                                   context.read<AccountingBloc>().add(
                                       SelectClientId(clientId: clientDatum.id));
                                 });
-                                widget.onClientChanged(selectedValue);
+                                widget.onClientChanged(selectedValue,selectedText);
                               });
                         });
                   } else if (state is AccountingNewEntityNotSelected) {

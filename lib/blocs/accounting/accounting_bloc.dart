@@ -416,7 +416,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
           await _accountingRepository.fetchOutgoingInvoice(event.invoiceId);
 
       String? clientId =
-          await _customerCache.getUserId(CacheKeys.clientId) ?? '';
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       var outgoingInvoiceData = fetchOutgoingInvoiceModel.data;
       manageOutgoingInvoiceMap["id"] = outgoingInvoiceData.id;
       manageOutgoingInvoiceMap["entity"] = outgoingInvoiceData.entityid;
@@ -459,7 +459,7 @@ class AccountingBloc extends Bloc<AccountingEvent, AccountingState> {
       FetchIncomingInvoiceModel fetchIncomingInvoiceModel =
           await _accountingRepository.fetchIncomingInvoice(event.invoiceId);
       String? clientId =
-          await _customerCache.getUserId(CacheKeys.clientId) ?? '';
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
       var incomingInvoiceData = fetchIncomingInvoiceModel.data;
       manageIncomingInvoiceMap["id"] = incomingInvoiceData.id;
       manageIncomingInvoiceMap["entity"] = incomingInvoiceData.entityid;
