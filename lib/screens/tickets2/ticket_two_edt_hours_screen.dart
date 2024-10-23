@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/data/enums/ticket_status_enum.dart';
 import 'package:toolkit/utils/database_utils.dart';
-import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -12,7 +10,6 @@ import '../../../widgets/primary_button.dart';
 import '../../blocs/tickets2/tickets2_bloc.dart';
 import '../../blocs/tickets2/tickets2_event.dart';
 import '../../data/enums/ticketTwo/ticket_two_status_enum.dart';
-import '../../utils/constants/string_constants.dart';
 
 class TicketTwoEDTHoursScreen extends StatelessWidget {
   const TicketTwoEDTHoursScreen({super.key});

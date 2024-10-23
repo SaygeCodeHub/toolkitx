@@ -5,7 +5,6 @@ import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
 import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
-import '../../blocs/tickets/tickets_bloc.dart';
 import '../../blocs/tickets2/tickets2_bloc.dart';
 import '../../blocs/tickets2/tickets2_event.dart';
 import '../../blocs/tickets2/tickets2_state.dart';
@@ -17,7 +16,6 @@ import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_loading_popup.dart';
-import '../../widgets/generic_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/progress_bar.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';

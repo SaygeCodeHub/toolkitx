@@ -17,7 +17,6 @@ import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../data/models/status_tag_model.dart';
 import '../../utils/ticketTwo/tickets_two_util.dart';
-import '../../utils/ticket_util.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/custom_tabbar_view.dart';
 import '../../widgets/progress_bar.dart';

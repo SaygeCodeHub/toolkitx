@@ -10,8 +10,6 @@ import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
-
-import '../../blocs/tickets/tickets_bloc.dart';
 import '../../blocs/tickets2/tickets2_bloc.dart';
 import '../../blocs/tickets2/tickets2_event.dart';
 import '../../blocs/tickets2/tickets2_state.dart';
