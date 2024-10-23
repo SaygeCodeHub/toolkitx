@@ -16,9 +16,11 @@ class ManageBankStatementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(isFromEdit);
     return Scaffold(
-        appBar: GenericAppBar(title: isFromEdit ?StringConstants.kEditBankStatement: StringConstants.kAddBankStatement),
+        appBar: GenericAppBar(
+            title: isFromEdit
+                ? StringConstants.kEditBankStatement
+                : StringConstants.kAddBankStatement),
         bottomNavigationBar: ManageBankStatementButton(isFromEdit: isFromEdit),
         body: BlocBuilder<AccountingBloc, AccountingState>(
           buildWhen: (previous, current) =>

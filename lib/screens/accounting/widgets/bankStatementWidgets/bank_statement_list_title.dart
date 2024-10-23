@@ -68,7 +68,7 @@ class BankStatementListTitle extends StatelessWidget {
               icon: Icons.attach_file_outlined,
               onPressed: () {
                 final files = bankStatement.file.split(',');
-                final firstFile= files.isNotEmpty ? files.first : '';
+                final firstFile = files.isNotEmpty ? files.first : '';
                 if (firstFile.isNotEmpty) {
                   launchUrlString(
                       '${ApiConstants.viewDocBaseUrl}$firstFile&code=${RandomValueGeneratorUtil.generateRandomValue(context.read<AccountingBloc>().clientId)}',
