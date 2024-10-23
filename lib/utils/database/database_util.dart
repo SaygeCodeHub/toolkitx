@@ -208,6 +208,12 @@ class DatabaseHelper {
     ''');
   }
 
+  Future<void> truncateOfflineWorkOrderTables() async {
+    final Database db = await database;
+    await db.execute('DELETE FROM OfflineWorkOrder');
+    await db.execute('DELETE FROM OfflineWorkOrderAction');
+  }
+
   Future<void> insertOfflineWorkOrders(
       WorkOrderOfflineDatum data, int statusId) async {
     final Database db = await database;

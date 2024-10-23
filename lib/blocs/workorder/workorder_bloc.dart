@@ -137,6 +137,7 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
       FetchWorkOrderOfflineData event, Emitter<WorkOrderStates> emit) async {
     emit(FetchingWorkOrderOfflineData());
     try {
+      await _databaseHelper.truncateOfflineWorkOrderTables();
       FetchOfflineWorkOrderDataModel fetchOfflineWorkOrderDataModel =
           await _workOrderRepository.fetchWorkOrderOfflineData(
               await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
