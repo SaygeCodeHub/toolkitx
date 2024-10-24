@@ -157,6 +157,7 @@ abstract class StringConstants {
   static const String kSelectDueDate = 'Please select due date!'; //
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
+  static const String kSelectDistribution = 'Please select a distribution'; //
   static const String kEditTicket = 'Edit Ticket'; //
   static const String kAffectedEquipment = 'Affected Equipment'; //
   static const String kResponsibility = 'Responsibility'; //

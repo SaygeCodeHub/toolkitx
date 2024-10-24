@@ -119,7 +119,7 @@ class TicketTwoDetailsPopUpMenu extends StatelessWidget {
                 completionDate: '',
                 status: TicketTwoStatusEnum.approveRolledOut.value));
           }
-          if (value == DatabaseUtil.getText('Edit')) {
+          if (value == StringConstants.kEditTicket) {
             Navigator.pushNamed(context, UpdateTicketTwoScreen.routeName,
                 arguments: fetchTicketTwoDetailsModel.data.id);
           }

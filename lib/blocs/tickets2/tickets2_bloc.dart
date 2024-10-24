@@ -205,7 +205,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
         popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
       }
       if (fetchTicketTwoDetailsModel.data.canedit == '1') {
-        popUpMenuItemsList.insert(4, DatabaseUtil.getText('Edit'));
+        popUpMenuItemsList.insert(4, StringConstants.kEditTicket);
       }
 
       if (fetchTicketTwoDetailsModel.status == 200) {
@@ -421,6 +421,10 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
           updateTicketTwoMap['description'] == '') {
         emit(
             TicketTwoNotUpdated(errorMessage: StringConstants.kAddDescription));
+      } else if (updateTicketTwoMap['distlist'] == null ||
+          updateTicketTwoMap['distlist'] == '') {
+        emit(TicketTwoNotUpdated(
+            errorMessage: StringConstants.kSelectDistribution));
       } else {
         Map updateTicketTwo = {
           "hashcode":
