@@ -111,6 +111,30 @@ class AddTicket2Screen extends StatelessWidget {
                       Ticket2DistributionTile(
                         saveTicketMap: saveTicketMap,
                         distList: state.fetchTicket2MasterModel.data[2],
+                      ),
+                      const SizedBox(height: xxTinierSpacing),
+                      Text('Responsibility',
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.black)),
+                      const SizedBox(height: tiniestSpacing),
+                      TextFieldWidget(
+                        maxLength: 255,
+                        onTextFieldChanged: (textField) {
+                          saveTicketMap['responsibility'] = textField;
+                        },
+                      ),
+                      const SizedBox(height: xxTinierSpacing),
+                      Text('Affected Equipment',
+                          style: Theme.of(context).textTheme.small.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.black)),
+                      const SizedBox(height: tiniestSpacing),
+                      TextFieldWidget(
+                        maxLength: 255,
+                        onTextFieldChanged: (textField) {
+                          saveTicketMap['affectedequipment'] = textField;
+                        },
                       )
                     ]),
               ),
