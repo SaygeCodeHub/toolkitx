@@ -18,12 +18,30 @@ class TicketTwoBugExpansionTile extends StatelessWidget {
 
   final Map saveTicketMap;
 
+  String getButOption() {
+    if (saveTicketMap['isbug'] != null) {
+      var ele = TicketTwoBugEnum.values
+          .firstWhere((element) => element.value == saveTicketMap['isbug']);
+      if (ele.value.isNotEmpty) {
+        return ele.option;
+      } else {
+        return TicketTwoBugEnum.no.option;
+      }
+    } else {
+      return TicketTwoBugEnum.no.option;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<Tickets2Bloc>().add(SelectTicketTwoBugType(
-        bugType: TicketTwoBugEnum.no.option,
-        bugValue: TicketTwoBugEnum.no.value));
-    saveTicketMap['isbug'] = TicketTwoBugEnum.no.value;
+        bugType: getButOption(),
+        bugValue: (saveTicketMap['isbug'] != null)
+            ? saveTicketMap['isbug']
+            : TicketTwoBugEnum.no.value));
+    (saveTicketMap['isbug'] != null)
+        ? null
+        : saveTicketMap['isbug'] = TicketTwoBugEnum.no.value;
     return Theme(
         data: Theme.of(context).copyWith(dividerColor: AppColor.transparent),
         child: BlocBuilder<Tickets2Bloc, Tickets2States>(

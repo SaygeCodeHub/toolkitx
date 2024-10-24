@@ -158,3 +158,23 @@ class TicketTwoVoValueSelected extends Tickets2States {
 
   TicketTwoVoValueSelected({required this.value, required this.vo});
 }
+
+class UpdatingTicketTwo extends Tickets2States {}
+
+class TicketTwoUpdated extends Tickets2States {}
+
+class TicketTwoNotUpdated extends Tickets2States {
+  final String errorMessage;
+
+  TicketTwoNotUpdated({required this.errorMessage});
+}
+
+class RejectingTicketTwo extends Tickets2States {}
+
+class TicketTwoRejected extends Tickets2States {}
+
+class TicketTwoNotRejected extends Tickets2States {
+  final String errorMessage;
+
+  TicketTwoNotRejected({required this.errorMessage});
+}

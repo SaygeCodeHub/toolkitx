@@ -105,3 +105,7 @@ class SelectTicketTwoVoValue extends Tickets2Events {
 
   SelectTicketTwoVoValue({required this.value, required this.vo});
 }
+
+class UpdateTicketTwo extends Tickets2Events {}
+
+class RejectTicketTwo extends Tickets2Events {}

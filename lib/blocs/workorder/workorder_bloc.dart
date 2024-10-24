@@ -55,55 +55,54 @@ class WorkOrderBloc extends Bloc<WorkOrderEvents, WorkOrderStates> {
   FutureOr _fetchWorkOrders(
       FetchWorkOrders event, Emitter<WorkOrderStates> emit) async {
     emit(FetchingWorkOrders());
-    try {
-      String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
-      if (isNetworkEstablished) {
-        if (event.isFromHome == true) {
-          add(WorkOrderClearFilter());
-          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-              .fetchWorkOrders(event.pageNo, hashCode!, '{}');
-          for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
-            workOrderId = fetchWorkOrdersModel.data[i].id;
-          }
-          data.addAll(fetchWorkOrdersModel.data);
-          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
-          emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
-        } else {
-          FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
-              .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
-          data.addAll(fetchWorkOrdersModel.data);
-          hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
-          emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel,
-              filterMap: filtersMap));
+    // try {
+    String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
+    if (isNetworkEstablished) {
+      if (event.isFromHome == true) {
+        add(WorkOrderClearFilter());
+        FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+            .fetchWorkOrders(event.pageNo, hashCode!, '{}');
+        for (int i = 0; i < fetchWorkOrdersModel.data.length; i++) {
+          workOrderId = fetchWorkOrdersModel.data[i].id;
         }
+        data.addAll(fetchWorkOrdersModel.data);
+        hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+        emit(WorkOrdersFetched(
+            fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
       } else {
-        data.clear();
-        final List fetchAllWorkOrders = [];
-        final fetchAllWorkOrdersFromDb =
-            await _databaseHelper.fetchAllWorkOrders();
-        for (var list in fetchAllWorkOrdersFromDb) {
-          var listPageJson = jsonDecode(list['listPage']);
-          listPageJson['actionCount'] = list['actionCount'];
-          fetchAllWorkOrders.add(listPageJson);
-        }
-        if (fetchAllWorkOrders.isNotEmpty) {
-          FetchWorkOrdersModel fetchWorkOrdersModel =
-              FetchWorkOrdersModel.fromJson(
-                  {'Status': 200, 'Message': '', 'Data': fetchAllWorkOrders});
-          data.addAll(fetchWorkOrdersModel.data);
-          hasReachedMax = true;
-          emit(WorkOrdersFetched(
-              fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
-        } else {
-          emit(WorkOrdersNotFetched(
-              listNotFetched: StringConstants.kSomethingWentWrong));
-        }
+        FetchWorkOrdersModel fetchWorkOrdersModel = await _workOrderRepository
+            .fetchWorkOrders(event.pageNo, hashCode!, jsonEncode(filtersMap));
+        data.addAll(fetchWorkOrdersModel.data);
+        hasReachedMax = fetchWorkOrdersModel.data.isEmpty;
+        emit(WorkOrdersFetched(
+            fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: filtersMap));
       }
-    } catch (e) {
-      emit(WorkOrdersNotFetched(listNotFetched: e.toString()));
+    } else {
+      data.clear();
+      final List fetchAllWorkOrders = [];
+      final fetchAllWorkOrdersFromDb =
+          await _databaseHelper.fetchAllWorkOrders();
+      for (var list in fetchAllWorkOrdersFromDb) {
+        var listPageJson = jsonDecode(list['listPage']);
+        listPageJson['actionCount'] = list['actionCount'];
+        fetchAllWorkOrders.add(listPageJson);
+      }
+      if (fetchAllWorkOrders.isNotEmpty) {
+        FetchWorkOrdersModel fetchWorkOrdersModel =
+            FetchWorkOrdersModel.fromJson(
+                {'Status': 200, 'Message': '', 'Data': fetchAllWorkOrders});
+        data.addAll(fetchWorkOrdersModel.data);
+        hasReachedMax = true;
+        emit(WorkOrdersFetched(
+            fetchWorkOrdersModel: fetchWorkOrdersModel, filterMap: {}));
+      } else {
+        emit(WorkOrdersNotFetched(
+            listNotFetched: StringConstants.kSomethingWentWrong));
+      }
     }
+    // } catch (e) {
+    //   emit(WorkOrdersNotFetched(listNotFetched: e.toString()));
+    // }
   }
 
   FutureOr _fetchMaster(

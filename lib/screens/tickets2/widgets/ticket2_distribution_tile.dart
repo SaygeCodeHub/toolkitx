@@ -3,6 +3,7 @@ import 'package:toolkit/configs/app_theme.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../../widgets/expansion_tile_border.dart';
 
 class Ticket2DistributionTile extends StatefulWidget {
@@ -22,6 +23,30 @@ class _Ticket2DistributionTileState extends State<Ticket2DistributionTile> {
   List selectedNameList = [];
   List selectedValueList = [];
   String name = '';
+
+  @override
+  void initState() {
+    if (widget.saveTicketMap['distlist'] != null) {
+      for (var item in widget.saveTicketMap['distlist'].toString().split(';')) {
+        var element = widget.distList.firstWhere(
+            (element) => element.id == int.parse(item),
+            orElse: () => Ticket2MasterDatum(
+                id: 0,
+                name: '',
+                priorityname: '',
+                listname: '',
+                emailaddress: '',
+                active: 0,
+                text: ''));
+
+        if (element != null) {
+          selectedValueList.add(element.id);
+          selectedNameList.add(element.listname);
+        }
+      }
+    }
+    super.initState();
+  }
 
   checkboxSelected(isChecked, name, value) {
     if (isChecked) {

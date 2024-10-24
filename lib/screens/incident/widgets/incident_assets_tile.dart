@@ -70,9 +70,6 @@ class _IncidentAssetsTileState extends State<IncidentAssetsTile> {
                                   shrinkWrap: true,
                                   itemCount: state.assetList.length,
                                   itemBuilder: (context, listIndex) {
-                                    print(
-                                        'state.assetList[listIndex] ${state.assetList[listIndex].toJson()}');
-
                                     return ListTile(
                                         contentPadding: const EdgeInsets.only(
                                             left: xxTinierSpacing),

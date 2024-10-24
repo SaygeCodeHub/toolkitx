@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/tickets2/update_ticket_two_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import 'package:toolkit/utils/database_utils.dart';
 
@@ -11,6 +12,7 @@ import '../../../blocs/tickets2/tickets2_event.dart';
 import '../../../data/enums/ticketTwo/ticket_two_status_enum.dart';
 import '../../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../add_ticket_two_document_screen.dart';
+import '../reject_ticket_two_screen.dart';
 import '../ticket_two_completion_date_screen.dart';
 import '../ticket_two_edt_hours_screen.dart';
 import '../add_ticket_two_comments_screen.dart';
@@ -116,6 +118,14 @@ class TicketTwoDetailsPopUpMenu extends StatelessWidget {
                 edtHrs: 0,
                 completionDate: '',
                 status: TicketTwoStatusEnum.approveRolledOut.value));
+          }
+          if (value == DatabaseUtil.getText('Edit')) {
+            Navigator.pushNamed(context, UpdateTicketTwoScreen.routeName,
+                arguments: fetchTicketTwoDetailsModel.data.id);
+          }
+          if (value == DatabaseUtil.getText('Reject')) {
+            context.read<Tickets2Bloc>().rejectTicketComment = '';
+            Navigator.pushNamed(context, RejectTicketTwoScreen.routeName);
           }
         },
         position: PopupMenuPosition.under,

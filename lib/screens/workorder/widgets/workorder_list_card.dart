@@ -17,7 +17,6 @@ class WorkOrderListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('data.actionCount ${data.actionCount}');
     return CustomCard(
       child: ListTile(
         onTap: () {
@@ -25,7 +24,6 @@ class WorkOrderListCard extends StatelessWidget {
                   arguments: data.id)
               .then((value) {
             if (context.mounted) {
-              print('inside here');
               context
                   .read<WorkOrderBloc>()
                   .add(FetchWorkOrders(pageNo: 1, isFromHome: false));

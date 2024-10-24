@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/tickets2/reject_ticket_two_model.dart';
+import 'package:toolkit/data/models/tickets2/update_ticket_two_model.dart';
 import 'package:toolkit/repositories/tickets2/tickets2_repository.dart';
 
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
@@ -71,5 +73,19 @@ class Tickets2RepositoryImpl extends Tickets2Repository {
     final response = await DioClient()
         .post("${ApiConstants.baseUrl}ticket2/OpenTicket", openTicket2Map);
     return OpenTicket2Model.fromJson(response);
+  }
+
+  @override
+  Future<UpdateTicketTwoModel> updateTicketTwo(Map updateTicketTwoMap) async {
+    final response = await DioClient()
+        .post("${ApiConstants.baseUrl}ticket2/Update", updateTicketTwoMap);
+    return UpdateTicketTwoModel.fromJson(response);
+  }
+
+  @override
+  Future<RejectTicketTwoModel> rejectTicketTwo(Map rejectTicketTwoMap) async {
+    final response = await DioClient().post(
+        "${ApiConstants.baseUrl}ticket2/rejectticket", rejectTicketTwoMap);
+    return RejectTicketTwoModel.fromJson(response);
   }
 }

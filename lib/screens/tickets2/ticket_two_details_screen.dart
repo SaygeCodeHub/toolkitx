@@ -50,6 +50,18 @@ class TicketTwoDetailsScreen extends StatelessWidget {
                   ProgressBar.dismiss(context);
                   showCustomSnackBar(context, state.errorMessage, '');
                 }
+
+                if (state is RejectingTicketTwo) {
+                  ProgressBar.show(context);
+                } else if (state is TicketTwoRejected) {
+                  ProgressBar.dismiss(context);
+                  Navigator.pop(context);
+                  context.read<Tickets2Bloc>().add(FetchTicket2Details(
+                      ticketId: ticketId, ticketTabIndex: 0));
+                } else if (state is TicketTwoNotRejected) {
+                  ProgressBar.dismiss(context);
+                  showCustomSnackBar(context, state.errorMessage, '');
+                }
               },
               buildWhen: (previousState, currentState) =>
                   currentState is Ticket2DetailsFetched,

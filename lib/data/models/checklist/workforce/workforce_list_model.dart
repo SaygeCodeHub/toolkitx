@@ -44,35 +44,36 @@ class GetChecklistData {
   final String subcategoryname;
   final String? location;
   final String? isrejected;
+  final String workOrders;
 
-  GetChecklistData({
-    required this.id,
-    required this.scheduleid,
-    required this.name,
-    required this.submitdate,
-    required this.overduedate,
-    required this.isdraft,
-    this.isoverdue,
-    required this.categoryname,
-    required this.subcategoryname,
-    this.location,
-    this.isrejected,
-  });
+  GetChecklistData(
+      {required this.id,
+      required this.scheduleid,
+      required this.name,
+      required this.submitdate,
+      required this.overduedate,
+      required this.isdraft,
+      this.isoverdue,
+      required this.categoryname,
+      required this.subcategoryname,
+      this.location,
+      this.isrejected,
+      required this.workOrders});
 
   factory GetChecklistData.fromJson(Map<String, dynamic> json) =>
       GetChecklistData(
-        id: json["id"] ?? '',
-        scheduleid: json["scheduleid"] ?? '',
-        name: json["name"] ?? '',
-        submitdate: json["submitdate"] ?? '',
-        overduedate: json["overduedate"] ?? '',
-        isdraft: json["isdraft"] ?? '',
-        isoverdue: json["isoverdue"] ?? '',
-        categoryname: json["categoryname"] ?? '',
-        subcategoryname: json["subcategoryname"] ?? '',
-        location: json["location"] ?? '',
-        isrejected: json["isrejected"] ?? '',
-      );
+          id: json["id"] ?? '',
+          scheduleid: json["scheduleid"] ?? '',
+          name: json["name"] ?? '',
+          submitdate: json["submitdate"] ?? '',
+          overduedate: json["overduedate"] ?? '',
+          isdraft: json["isdraft"] ?? '',
+          isoverdue: json["isoverdue"] ?? '',
+          categoryname: json["categoryname"] ?? '',
+          subcategoryname: json["subcategoryname"] ?? '',
+          location: json["location"] ?? '',
+          isrejected: json["isrejected"] ?? '',
+          workOrders: json["workorders"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -86,5 +87,6 @@ class GetChecklistData {
         "subcategoryname": subcategoryname,
         "location": location,
         "isrejected": isrejected,
+        "workorders": workOrders
       };
 }

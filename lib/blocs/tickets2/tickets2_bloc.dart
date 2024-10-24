@@ -6,12 +6,15 @@ import 'package:toolkit/blocs/tickets2/tickets2_state.dart';
 import 'package:toolkit/data/models/tickets2/save_ticket2_model.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
+import '../../data/enums/ticketTwo/ticket_two_status_enum.dart';
 import '../../data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../../data/models/tickets2/fetch_tickets_two_model.dart';
 import '../../data/models/tickets2/open_ticket_two_model.dart';
+import '../../data/models/tickets2/reject_ticket_two_model.dart';
 import '../../data/models/tickets2/save_ticket_2_comment_model.dart';
 import '../../data/models/tickets2/save_ticket_two_documents_model.dart';
+import '../../data/models/tickets2/update_ticket_two_model.dart';
 import '../../data/models/tickets2/update_ticket_two_status_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/tickets2/tickets2_repository.dart';
@@ -21,6 +24,7 @@ import '../../utils/database_utils.dart';
 class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   final Tickets2Repository _ticketsRepository = getIt<Tickets2Repository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
+  final Map updateTicketTwoMap = {};
 
   Tickets2States get initialState => Tickets2Initial();
 
@@ -41,6 +45,8 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     on<UpdateTicket2Status>(_updateTicket2Status);
     on<SaveOpenTicket2>(_saveOpenTicket2);
     on<SelectTicketTwoVoValue>(_selectVoValue);
+    on<UpdateTicketTwo>(_updateTicketTwo);
+    on<RejectTicketTwo>(_rejectTicketTwo);
   }
 
   String selectApplicationName = '';
@@ -49,6 +55,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   Map filters = {};
   int ticketTabIndex = 0;
   String ticket2Id = '';
+  String rejectTicketComment = '';
 
   Future<FutureOr<void>> _fetchTickets2(
       FetchTickets2 event, Emitter<Tickets2States> emit) async {
@@ -180,6 +187,7 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       }
       if (fetchTicketTwoDetailsModel.data.canapproved == '1') {
         popUpMenuItemsList.insert(3, DatabaseUtil.getText('approve'));
+        popUpMenuItemsList.insert(4, DatabaseUtil.getText('Reject'));
       }
       if (fetchTicketTwoDetailsModel.data.canrolledout == '1') {
         popUpMenuItemsList.insert(3, DatabaseUtil.getText('ticket_rollout'));
@@ -196,8 +204,25 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
       if (fetchTicketTwoDetailsModel.data.canapproverolledout == '1') {
         popUpMenuItemsList.insert(3, StringConstants.kApproveRolledOut);
       }
+      if (fetchTicketTwoDetailsModel.data.canedit == '1') {
+        popUpMenuItemsList.insert(4, DatabaseUtil.getText('Edit'));
+      }
 
       if (fetchTicketTwoDetailsModel.status == 200) {
+        updateTicketTwoMap['description'] =
+            fetchTicketTwoDetailsModel.data.description;
+        updateTicketTwoMap['header'] = fetchTicketTwoDetailsModel.data.header;
+        updateTicketTwoMap['priority'] =
+            fetchTicketTwoDetailsModel.data.priority;
+        updateTicketTwoMap['application'] =
+            fetchTicketTwoDetailsModel.data.application;
+        updateTicketTwoMap['responsibility'] =
+            fetchTicketTwoDetailsModel.data.responsibility;
+        updateTicketTwoMap['affectedequipment'] =
+            fetchTicketTwoDetailsModel.data.affectedEquipment;
+        updateTicketTwoMap['distlist'] =
+            fetchTicketTwoDetailsModel.data.distlist;
+        updateTicketTwoMap['isbug'] = fetchTicketTwoDetailsModel.data.isbug;
         emit(Ticket2DetailsFetched(
             fetchTicketTwoDetailsModel: fetchTicketTwoDetailsModel,
             ticketPopUpMenu: popUpMenuItemsList,
@@ -280,7 +305,6 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
     }
   }
 
-//
   Future<FutureOr<void>> _saveTicket2Document(
       SaveTicket2Document event, Emitter<Tickets2States> emit) async {
     emit(Ticket2DocumentSaving());
@@ -383,5 +407,74 @@ class Tickets2Bloc extends Bloc<Tickets2Events, Tickets2States> {
   FutureOr<void> _selectVoValue(
       SelectTicketTwoVoValue event, Emitter<Tickets2States> emit) {
     emit(TicketTwoVoValueSelected(value: event.value, vo: event.vo));
+  }
+
+  Future<FutureOr<void>> _updateTicketTwo(
+      UpdateTicketTwo event, Emitter<Tickets2States> emit) async {
+    emit(UpdatingTicketTwo());
+    try {
+      if (updateTicketTwoMap['header'] == null ||
+          updateTicketTwoMap['header'] == '') {
+        emit(TicketTwoNotUpdated(
+            errorMessage: StringConstants.kPleaseAddHeader));
+      } else if (updateTicketTwoMap['description'] == null ||
+          updateTicketTwoMap['description'] == '') {
+        emit(
+            TicketTwoNotUpdated(errorMessage: StringConstants.kAddDescription));
+      } else {
+        Map updateTicketTwo = {
+          "hashcode":
+              await _customerCache.getHashCode(CacheKeys.hashcode) ?? '',
+          "description": updateTicketTwoMap['description'],
+          "header": updateTicketTwoMap['header'],
+          "priority": updateTicketTwoMap['priority'],
+          "application": updateTicketTwoMap['application'],
+          "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
+          "isbug": updateTicketTwoMap['isbug'],
+          "id": updateTicketTwoMap['id'],
+          "responsibility": updateTicketTwoMap['responsibility'],
+          "affectedequipment": updateTicketTwoMap['affectedequipment'],
+          "distlist": updateTicketTwoMap['distlist']
+        };
+        UpdateTicketTwoModel updateTicketTwoModel =
+            await _ticketsRepository.updateTicketTwo(updateTicketTwo);
+        if (updateTicketTwoModel.message == '1') {
+          emit(TicketTwoUpdated());
+        } else {
+          emit(TicketTwoNotUpdated(errorMessage: updateTicketTwoModel.message));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _rejectTicketTwo(
+      RejectTicketTwo event, Emitter<Tickets2States> emit) async {
+    emit(RejectingTicketTwo());
+    try {
+      if (rejectTicketComment.trim().isEmpty) {
+        emit(TicketTwoNotRejected(
+            errorMessage: StringConstants.kPleaseAddComments));
+      } else {
+        Map rejectTicketTwoMap = {
+          "ticketid": ticket2Id,
+          "userid": await _customerCache.getUserId(CacheKeys.userId) ?? '',
+          "status": TicketTwoStatusEnum.development.value,
+          "comments": rejectTicketComment,
+          "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode) ?? ''
+        };
+        RejectTicketTwoModel rejectTicketTwoModel =
+            await _ticketsRepository.rejectTicketTwo(rejectTicketTwoMap);
+        if (rejectTicketTwoModel.message == '1') {
+          emit(TicketTwoRejected());
+        } else {
+          emit(
+              TicketTwoNotRejected(errorMessage: rejectTicketTwoModel.message));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

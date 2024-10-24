@@ -131,7 +131,6 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
           context.read<PermitBloc>().add(PermitInternetActions());
         }
         if (RootScreen.workOrderSyncOnline) {
-          print('RootScreen.workOrderSyncOnline');
           context
               .read<WorkOrderTabDetailsBloc>()
               .add(SyncWorkOrderOfflineDataWithOnline());

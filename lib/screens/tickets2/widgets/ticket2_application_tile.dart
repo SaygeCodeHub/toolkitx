@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_dimensions.dart';
+import 'package:toolkit/data/models/tickets2/fetch_ticket2_master_model.dart';
 import '../../../configs/app_color.dart';
 import '../../../widgets/expansion_tile_border.dart';
 
@@ -16,6 +17,28 @@ class Ticket2ApplicationTile extends StatefulWidget {
 
 class _Ticket2ApplicationTileState extends State<Ticket2ApplicationTile> {
   String appType = '';
+
+  @override
+  void initState() {
+    if (widget.saveTicketMap['application'] != null) {
+      var element = widget.appList.firstWhere(
+          (element) =>
+              element.id == int.parse(widget.saveTicketMap['application']),
+          orElse: () => Ticket2MasterDatum(
+              id: 0,
+              name: '',
+              priorityname: '',
+              listname: '',
+              emailaddress: '',
+              active: 0,
+              text: ''));
+
+      if (element != null) {
+        appType = element.name;
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

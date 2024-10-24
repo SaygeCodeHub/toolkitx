@@ -157,6 +157,9 @@ abstract class StringConstants {
   static const String kSelectDueDate = 'Please select due date!'; //
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
+  static const String kEditTicket = 'Edit Ticket'; //
+  static const String kAffectedEquipment = 'Affected Equipment'; //
+  static const String kResponsibility = 'Responsibility'; //
   static const String kAssignedToMe = 'assignedtome'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
@@ -285,6 +288,7 @@ abstract class StringConstants {
   static const String kPleaseSelectTime = 'Please Select Time!';
   static const String kPleaseAddSignature = 'Please add signature!';
   static const String kPleaseAddComments = 'Please add comments!';
+  static const String kPleaseAddHeader = 'Please add header!';
   static const String kDetailedDescription = 'Detailed description of facts';
   static const String kSummaryOfIncident = 'Summary of Incident';
   static const String kPhoto = 'Photo';

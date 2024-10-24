@@ -44,7 +44,6 @@ class WorkOrderListBody extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          print('state $state');
           if (state is FetchingWorkOrders) {
             return Center(
                 child: Padding(

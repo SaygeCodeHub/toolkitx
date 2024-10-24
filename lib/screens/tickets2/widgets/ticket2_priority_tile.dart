@@ -6,6 +6,7 @@ import '../../../blocs/tickets2/tickets2_state.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
+import '../../../data/models/tickets2/fetch_ticket2_master_model.dart';
 
 class Ticket2PriorityTile extends StatefulWidget {
   const Ticket2PriorityTile(
@@ -20,6 +21,28 @@ class Ticket2PriorityTile extends StatefulWidget {
 
 class _Ticket2PriorityTileState extends State<Ticket2PriorityTile> {
   String priorityName = '';
+
+  @override
+  void initState() {
+    if (widget.saveTicketMap['priority'] != null) {
+      var element = widget.priorityList.firstWhere(
+          (element) =>
+              element.id == int.parse(widget.saveTicketMap['priority']),
+          orElse: () => Ticket2MasterDatum(
+              id: 0,
+              name: '',
+              priorityname: '',
+              listname: '',
+              emailaddress: '',
+              active: 0,
+              text: ''));
+
+      if (element != null) {
+        priorityName = element.priorityname;
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +79,9 @@ class _Ticket2PriorityTileState extends State<Ticket2PriorityTile> {
                                       .priorityList[listIndex].priorityname),
                                   onTap: () {
                                     setState(() {
-                                      widget.saveTicketMap['priority'] =
-                                          widget.priorityList[listIndex].id;
+                                      widget.saveTicketMap['priority'] = widget
+                                          .priorityList[listIndex].id
+                                          .toString();
                                       priorityName = widget
                                           .priorityList[listIndex].priorityname;
                                     });

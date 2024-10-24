@@ -4,6 +4,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import '../../../data/models/tickets2/fetch_ticket_two_details_model.dart';
+import '../../../utils/constants/string_constants.dart';
 
 class TicketTwoDetailsTab extends StatelessWidget {
   const TicketTwoDetailsTab({
@@ -88,7 +89,7 @@ class TicketTwoDetailsTab extends StatelessWidget {
                 .xSmall
                 .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
         const SizedBox(height: tiniestSpacing),
-        Text(ticketTwoData.priority),
+        Text(ticketTwoData.priorityname),
         const SizedBox(height: xxxSmallestSpacing),
         Text(DatabaseUtil.getText('Description'),
             style: Theme.of(context)
@@ -106,6 +107,22 @@ class TicketTwoDetailsTab extends StatelessWidget {
         const SizedBox(height: tiniestSpacing),
         Text(ticketTwoData.appname),
         const SizedBox(height: xxxSmallestSpacing),
+        Text(StringConstants.kResponsibility,
+            style: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
+        const SizedBox(height: tiniestSpacing),
+        Text(ticketTwoData.responsibility),
+        const SizedBox(height: xxxSmallestSpacing),
+        Text(StringConstants.kAffectedEquipment,
+            style: Theme.of(context)
+                .textTheme
+                .xSmall
+                .copyWith(color: AppColor.black, fontWeight: FontWeight.bold)),
+        const SizedBox(height: tiniestSpacing),
+        Text(ticketTwoData.affectedEquipment),
+        const SizedBox(height: xxxSmallestSpacing)
       ]),
     );
   }
