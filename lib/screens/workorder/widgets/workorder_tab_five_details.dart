@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/utils/global.dart';
 
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -62,7 +63,8 @@ class WorkOrderTabFiveDetails extends StatelessWidget {
                           style: Theme.of(context).textTheme.xSmall),
                       const SizedBox(height: xxTinierSpacing),
                       Visibility(
-                          visible: data.comments[index].files != '',
+                          visible: (data.comments[index].files != '' &&
+                              isNetworkEstablished),
                           child: WorkOrderViewNetworkImage(
                               comment: data.comments[index],
                               clientId: clientId)),

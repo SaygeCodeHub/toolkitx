@@ -16,15 +16,17 @@ import 'incident_site_list.dart';
 class IncidentSiteListTile extends StatelessWidget {
   final Map addIncidentMap;
 
-  const IncidentSiteListTile({Key? key, required this.addIncidentMap})
-      : super(key: key);
+  const IncidentSiteListTile({super.key, required this.addIncidentMap});
 
   @override
   Widget build(BuildContext context) {
     context.read<ReportNewIncidentBloc>().add(ReportIncidentSiteListChange(
         selectSiteName: (addIncidentMap['site_name'] == null)
             ? ''
-            : addIncidentMap['site_name']));
+            : addIncidentMap['site_name'],
+        siteId:
+            (addIncidentMap['site_id'] == null) ? 0 : addIncidentMap['site_id'],
+        locationId: addIncidentMap['locationid'] ?? ''));
     return BlocBuilder<ReportNewIncidentBloc, ReportNewIncidentStates>(
         buildWhen: (previousState, currentState) =>
             currentState is ReportNewIncidentSiteSelected,
@@ -42,7 +44,9 @@ class IncidentSiteListTile extends StatelessWidget {
                               builder: (context) => IncidentSiteList(
                                   fetchIncidentMasterModel:
                                       state.fetchIncidentMasterModel,
-                                  selectSiteName: state.selectSiteName)));
+                                  selectSiteName: state.selectSiteName,
+                                  locationId:
+                                      addIncidentMap['locationid'] ?? '')));
                     },
                     title: Text(DatabaseUtil.getText('Site'),
                         style: Theme.of(context)

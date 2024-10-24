@@ -62,6 +62,7 @@ abstract class ModulesUtil {
     ModulesModel(
         moduleName: 'WorkOrder',
         moduleImage: '${kBaseImagePath}workOrder.png',
+        offLineSupport: true,
         key: 'workorder',
         notificationKey: 'workorder'),
     ModulesModel(
@@ -120,24 +121,34 @@ abstract class ModulesUtil {
         key: 'loto',
         notificationKey: 'loto'),
     ModulesModel(
-        moduleName: 'Ticket',
+        moduleName: 'tanks',
+        moduleImage: '${kBaseImagePath}tank_icon.png',
+        key: 'tanks',
+        notificationKey: 'tanks'),
+    ModulesModel(
+        moduleName: 'customersupportticket',
         moduleImage: '${kBaseImagePath}ticket.png',
         key: 'tickets',
         notificationKey: 'tickets'),
     ModulesModel(
         moduleName: 'Trips',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}trip.png',
         key: 'hf',
         notificationKey: ''),
     ModulesModel(
         moduleName: 'Trips',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}trip.png',
         key: 'wf_trips',
         notificationKey: ''),
     ModulesModel(
         moduleName: 'Signout',
-        moduleImage: '${kBaseImagePath}trips.png',
+        moduleImage: '${kBaseImagePath}sign_in_qr.png',
         key: 'tracking',
         notificationKey: ''),
+    ModulesModel(
+        moduleName: 'Ticket',
+        moduleImage: '${kBaseImagePath}ticket_2.png',
+        key: 'tickets2',
+        notificationKey: '')
   ];
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import '../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_bloc.dart';
 import '../blocs/checklist/workforce/editAnswer/workforce_checklist_edit_answer_states.dart';
+import '../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../configs/app_dimensions.dart';
 import '../configs/app_spacing.dart';
 import '../screens/checklist/workforce/widgets/drop_down_expansion_tile.dart';
@@ -98,12 +99,13 @@ class EditAnswerUtil {
             });
       case 6:
         return UploadImageMenu(
+            imagePickerBloc: ImagePickerBloc(),
             onUploadImageResponse: (List<dynamic> uploadImageList) {
-          answerList[index]["answer"] = uploadImageList
-              .toString()
-              .replaceAll("[", "")
-              .replaceAll("]", "");
-        });
+              answerList[index]["answer"] = uploadImageList
+                  .toString()
+                  .replaceAll("[", "")
+                  .replaceAll("]", "");
+            });
       case 7:
         return TextFieldWidget(
             textInputType: TextInputType.number,
@@ -190,7 +192,21 @@ class EditAnswerUtil {
 }
 
 Widget tableControl(index, answerModelList, answerList, context) {
-  Map tableData = jsonDecode(answerList[index]["answer"]);
+  Map tableData = {};
+  if (answerList[index]["answer"].isNotEmpty) {
+    tableData = jsonDecode(answerList[index]["answer"]);
+  } else {
+    List rows = [];
+    for (int j = 0; j < answerModelList[index].matrixrowcount; j++) {
+      List cols = [];
+      for (int i = 0; i < answerModelList[index].matrixcols.length; i++) {
+        cols.add('');
+      }
+      rows.add(cols);
+    }
+    tableData = {'data': rows};
+  }
+
   return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -219,10 +235,7 @@ Widget tableControl(index, answerModelList, answerList, context) {
                             height: xMediumSpacing,
                             width: kDataCellWidth,
                             child: TextFieldWidget(
-                                value: (tableData.toString() == "{}" &&
-                                        answerModelList[index].type == 8)
-                                    ? ""
-                                    : tableData["data"][j][k],
+                                value: tableData["data"][j][k],
                                 onTextFieldChanged: (String textField) {
                                   tableData["data"][j][k] = textField;
                                   answerList[index]["answer"] =

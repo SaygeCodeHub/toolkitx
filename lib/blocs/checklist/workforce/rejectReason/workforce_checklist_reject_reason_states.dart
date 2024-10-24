@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:toolkit/data/models/checklist/workforce/fetch_checklist_workforce_documents_model.dart';
 
 import '../../../../data/models/checklist/workforce/workforce_checklist_save_reject_reason_model.dart';
 import '../../../../data/models/checklist/workforce/workforce_fetch_reject_reason_model.dart';
@@ -66,4 +67,25 @@ class CheckListRejectReasonsNotSaved
 
   @override
   List<Object?> get props => [message];
+}
+
+class ChecklistWorkforceDocumentsFetching
+    extends WorkForceCheckListRejectReasonStates {}
+
+class ChecklistWorkforceDocumentsFetched
+    extends WorkForceCheckListRejectReasonStates {
+  final FetchChecklistWorkforceDocumentsModel
+      fetchChecklistWorkforceDocumentsModel;
+  final String clientId;
+
+  ChecklistWorkforceDocumentsFetched(
+      {required this.fetchChecklistWorkforceDocumentsModel,
+      required this.clientId});
+}
+
+class ChecklistWorkforceDocumentsNotFetched
+    extends WorkForceCheckListRejectReasonStates {
+  final String errorMessage;
+
+  ChecklistWorkforceDocumentsNotFetched({required this.errorMessage});
 }

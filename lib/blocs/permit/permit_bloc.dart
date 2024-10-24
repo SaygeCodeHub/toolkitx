@@ -1,29 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:toolkit/data/models/permit/accept_permit_request_model.dart';
-import 'package:toolkit/data/models/permit/change_permit_cp_model.dart';
-import 'package:toolkit/data/models/permit/fetch_clear_permit_details_model.dart';
-import 'package:toolkit/data/models/permit/fetch_data_for_change_permit_cp_model.dart';
-import 'package:toolkit/data/models/permit/fetch_data_for_open_permit_model.dart';
-import 'package:toolkit/data/models/permit/fetch_permit_basic_details_model.dart';
-import 'package:toolkit/data/models/permit/save_clear_permit_model.dart';
-import 'package:toolkit/data/models/permit/save_mark_as_prepared_model.dart';
-import 'package:toolkit/data/models/permit/save_permit_safety_notice_model.dart';
-import 'package:toolkit/data/models/permit/sync_transfer_cp_model.dart';
-
-import 'package:toolkit/utils/global.dart';
-import 'package:toolkit/data/models/permit/surrender_permit_model.dart';
-
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:toolkit/data/models/permit/export_permit_log_model.dart';
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/encrypt_class.dart';
 import '../../data/models/pdf_generation_model.dart';
+import '../../data/models/permit/accept_permit_request_model.dart';
+import '../../data/models/permit/add_permit_switching_schedule_model.dart';
 import '../../data/models/permit/all_permits_model.dart';
+import '../../data/models/permit/change_permit_cp_model.dart';
 import '../../data/models/permit/close_permit_details_model.dart';
+import '../../data/models/permit/delete_switching_schedule_model.dart';
+import '../../data/models/permit/fetch_clear_permit_details_model.dart';
+import '../../data/models/permit/fetch_data_for_change_permit_cp_model.dart';
+import '../../data/models/permit/fetch_data_for_open_permit_model.dart';
+import '../../data/models/permit/fetch_permit_basic_details_model.dart';
+import '../../data/models/permit/fetch_switching_schedule_details_model.dart';
+import '../../data/models/permit/fetch_switching_schedule_instructions_model.dart';
+import '../../data/models/permit/generate_switching_schedule_pdf_model.dart';
+import '../../data/models/permit/mark_switching_schedule_completed_model.dart';
+import '../../data/models/permit/move_down_permit_switching_schedule_model.dart';
+import '../../data/models/permit/move_up_permit_switching_schedule_model.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 import '../../data/models/permit/open_close_permit_model.dart';
 import '../../data/models/permit/open_permit_details_model.dart';
@@ -31,12 +35,20 @@ import '../../data/models/permit/permit_details_model.dart';
 import '../../data/models/permit/permit_edit_safety_document_ui_plot_model.dart';
 import '../../data/models/permit/permit_get_master_model.dart';
 import '../../data/models/permit/permit_roles_model.dart';
+import '../../data/models/permit/save_clear_permit_model.dart';
+import '../../data/models/permit/save_mark_as_prepared_model.dart';
+import '../../data/models/permit/save_permit_safety_notice_model.dart';
+import '../../data/models/permit/surrender_permit_model.dart';
+import '../../data/models/permit/sync_switching_schedule_model.dart';
+import '../../data/models/permit/sync_transfer_cp_model.dart';
+import '../../data/models/permit/update_permit_switching_schedule_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/permit/permit_repository.dart';
 import '../../utils/constants/html_constants.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database/database_util.dart';
 import '../../utils/database_utils.dart';
+import '../../utils/global.dart';
 import 'permit_events.dart';
 import 'permit_states.dart';
 
@@ -52,7 +64,11 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   bool listReachedMax = false;
   PermitBasicData? permitBasicData;
   int statusId = 0;
-  Map transferAndSurrenderMap = {};
+  bool showTransferWarning = false;
+  List<Map<String, dynamic>> getAllSwitchingScheduleData = [];
+  String permitId = '';
+  late File pickedFile;
+  String filePath = '';
 
   PermitBloc() : super(const FetchingPermitsInitial()) {
     on<GetAllPermits>(_getAllPermits);
@@ -74,7 +90,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SaveMarkAsPrepared>(_saveMarkAsPrepared);
     on<AcceptPermitRequest>(_acceptPermitRequest);
     on<FetchClearPermit>(_fetchClearPermit);
-    on<SaveClearPermit>(saveClearPermit);
+    on<SaveClearPermit>(_saveClearPermit);
     on<SavePermitEditSafetyDocument>(savePermitEditSafetyDocument);
     on<FetchDataForChangePermitCP>(_fetchDataForChangePermitCP);
     on<SelectTransferTo>(_selectTransferTo);
@@ -86,6 +102,19 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     on<SavePermitOfflineAction>(_saveOfflineData);
     on<PermitInternetActions>(_permitInternetActions);
     on<GenerateOfflinePdf>(_generateOfflinePdf);
+    on<FetchSwitchingScheduleInstructions>(_fetchSwitchingScheduleInstructions);
+    on<UpdatePermitSwitchingSchedule>(_updatePermitSwitchingSchedule);
+    on<AddPermitSwitchingSchedule>(_addPermitSwitchingSchedule);
+    on<MoveDownPermitSwitchingSchedule>(_moveDownPermitSwitchingSchedule);
+    on<MoveUpPermitSwitchingSchedule>(_moveUpPermitSwitchingSchedule);
+    on<GenerateSwitchingSchedulePdf>(_generateSwitchingSchedulePdf);
+    on<MarkSwitchingScheduleComplete>(_markSwitchingScheduleComplete);
+    on<DeletePermitSwitchingSchedule>(_deletePermitSwitchingSchedule);
+    on<FetchSwitchingScheduleDetails>(_fetchSwitchingScheduleDetails);
+    on<GenerateTextFile>(_generateTextFile);
+    on<PickFileFromStorage>(_fetchFileFromStorage);
+    on<PickFileFromStorageInitialEvent>(_fetchFileFromStorageInitial);
+    on<SaveFileData>(_saveFileData);
   }
 
   FutureOr<void> _preparePermitLocalDatabase(
@@ -96,15 +125,23 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       OfflinePermitModel offlinePermitModel =
           await _permitRepository.fetchOfflinePermit(hashCode);
       if (offlinePermitModel.status == 200) {
-        for (var datum in offlinePermitModel.data) {
-          await _databaseHelper.insertOfflinePermit(datum);
+        if (offlinePermitModel.data.isNotEmpty) {
+          for (var datum in offlinePermitModel.data) {
+            await _databaseHelper.insertOfflinePermit(
+                datum, datum.listpage.statusid);
+          }
+          emit(const PermitLocalDatabasePrepared());
+        } else {
+          emit(PreparingPermitLocalDatabaseFailed(
+              errorMessage: StringConstants.kNotGrantedPermitOffline));
         }
-        emit(const PermitLocalDatabasePrepared());
       } else {
-        emit(const PreparingPermitLocalDatabaseFailed());
+        emit(PreparingPermitLocalDatabaseFailed(
+            errorMessage: StringConstants.kOfflineFailedInDataPreparation));
       }
     } catch (e) {
-      emit(const PreparingPermitLocalDatabaseFailed());
+      emit(PreparingPermitLocalDatabaseFailed(
+          errorMessage: StringConstants.kOfflineFailedInDataPreparation));
     }
   }
 
@@ -256,8 +293,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   FutureOr<void> _getAllPermits(
       GetAllPermits event, Emitter<PermitStates> emit) async {
     try {
-      String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
-      String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
+      String hashCode =
+          (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
+      String userId = (await _customerCache.getUserId(CacheKeys.userId)) ?? '';
 
       if (!listReachedMax) {
         if (isNetworkEstablished) {
@@ -271,6 +309,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               AllPermitModel allPermitModel = await _permitRepository
                   .getAllPermits(hashCode, '', roleId, event.page);
               permitListData.addAll(allPermitModel.data);
+
+              List<Map<String, dynamic>> dbResult =
+                  await _databaseHelper.fetchPermitListOffline();
+
+              for (AllPermitDatum item in permitListData) {
+                item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+              }
               listReachedMax = allPermitModel.data.isEmpty;
               emit(AllPermitsFetched(
                   allPermitModel: allPermitModel,
@@ -282,6 +327,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _permitRepository.getAllPermits(
                     hashCode, jsonEncode(filters), roleId, event.page);
             permitListData.addAll(allPermitModel.data);
+
+            List<Map<String, dynamic>> dbResult =
+                await _databaseHelper.fetchPermitListOffline();
+
+            for (AllPermitDatum item in permitListData) {
+              item.isDownloaded = _isPermitDownload(item.id!, dbResult);
+            }
             listReachedMax = allPermitModel.data.isEmpty;
             emit(AllPermitsFetched(
                 allPermitModel: allPermitModel,
@@ -289,12 +341,18 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 permitListData: permitListData));
           }
         } else {
-          List<Map<String, dynamic>> fetchListPageData =
+          List<Map<String, dynamic>> result =
               await _databaseHelper.fetchPermitListOffline();
+          final List<Map<String, dynamic>> fetchListPageData = [];
+          for (var data in result) {
+            var listPageJson = jsonDecode(data['listPage']);
+            listPageJson['actionCount'] = data['actionCount'];
+            fetchListPageData.add(listPageJson);
+          }
           AllPermitModel allPermitModel = AllPermitModel.fromJson(
               {'Status': 200, 'Message': '', 'Data': fetchListPageData});
           permitListData.addAll(allPermitModel.data);
-          listReachedMax = allPermitModel.data.isEmpty;
+          listReachedMax = true;
           emit(AllPermitsFetched(
               allPermitModel: allPermitModel,
               filters: {},
@@ -306,9 +364,24 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     }
   }
 
+  bool _isPermitDownload(String permitId, List<Map<String, dynamic>> dbResult) {
+    for (Map<String, dynamic> result in dbResult) {
+      if (result['permitId'] == permitId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   FutureOr<void> _getPermitDetails(
       GetPermitDetails event, Emitter<PermitStates> emit) async {
-    List permitPopUpMenu = [StringConstants.kGeneratePdf];
+    List permitPopUpMenu = [
+      StringConstants.kPrintPermit,
+    ];
+    String? clientId =
+        await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+    String? userType =
+        await _customerCache.getUserType(CacheKeys.userType) ?? '';
     try {
       if (isNetworkEstablished) {
         add(FetchPermitBasicDetails(permitId: event.permitId));
@@ -347,9 +420,13 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         emit(PermitDetailsFetched(
             permitDetailsModel: permitDetailsModel,
-            permitPopUpMenu: permitPopUpMenu));
+            permitPopUpMenu: permitPopUpMenu,
+            clientId: clientId,
+            userType: userType));
       } else {
+        permitPopUpMenu.add(StringConstants.kExportPermit);
         emit(const FetchingPermitDetails());
+        permitId = event.permitId;
         Map<String, dynamic> permitDetailsMap =
             await _databaseHelper.fetchPermitDetailsOffline(event.permitId);
         statusId = await _databaseHelper.fetchPermitStatusId(event.permitId);
@@ -361,8 +438,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
             status: 200,
             message: '',
             data: PermitDetailsData.fromJson(permitDerailsData.toJson()));
-        permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
-        permitPopUpMenu.add(StringConstants.kSurrenderPermit);
         if (statusId == 16 || statusId == 7) {
           permitPopUpMenu.add(StringConstants.kOpenPermit);
         }
@@ -377,14 +452,21 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         }
         if (statusId == 2) {
           permitPopUpMenu.add(StringConstants.kAcceptPermitRequest);
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
         }
         if (statusId == 17) {
+          permitPopUpMenu.add(StringConstants.kSurrenderPermit);
+          permitPopUpMenu.add(StringConstants.kTransferComponentPerson);
           permitPopUpMenu.add(StringConstants.kClearPermit);
         }
+
         if (permitDetailsModel.toJson().isNotEmpty) {
           emit(PermitDetailsFetched(
               permitDetailsModel: permitDetailsModel,
-              permitPopUpMenu: permitPopUpMenu));
+              permitPopUpMenu: permitPopUpMenu,
+              clientId: clientId,
+              userType: userType));
         } else {
           emit(const CouldNotFetchPermitDetails());
         }
@@ -408,7 +490,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
       '0_9': 'Withdraw Permit',
       '0_10': 'Approved',
       '0_16': 'Prepared',
-      '0_17': 'Issued (Accepted)',
+      '0_17': 'Issued (Receipted)',
       '0_18': 'Cleared',
       '19_17': 'Accepted',
       '19_18': 'Request Closure',
@@ -720,9 +802,9 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_company": event.acceptPermitMap['npw_company'] ?? '',
         "npw_email": event.acceptPermitMap['npw_email'] ?? '',
         "npw_phone": event.acceptPermitMap['npw_phone'] ?? '',
-        "sync_sign": event.acceptPermitMap['user_sign'] ?? '',
+        "sync_sign": event.acceptPermitMap['npw_sign'] ?? '',
         "sync_date":
-            '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}',
+            '${event.acceptPermitMap['user_date'] ?? ''} ${event.acceptPermitMap['user_time'] ?? ''}',
       };
       if (isNetworkEstablished) {
         AcceptPermitRequestModel acceptPermitRequestModel =
@@ -737,7 +819,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         add(SavePermitOfflineAction(
             offlineDataMap: acceptPermitRequestMap,
             permitId: event.permitId,
-            signature: event.acceptPermitMap['user_sign'],
+            signature: event.acceptPermitMap['npw_sign'],
             actionKey: event.acceptPermitMap['action_key'],
             dateTime:
                 '${event.acceptPermitMap['user_date']} ${event.acceptPermitMap['user_time']}'));
@@ -936,7 +1018,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
     }
   }
 
-  FutureOr<void> saveClearPermit(
+  FutureOr<void> _saveClearPermit(
       SaveClearPermit event, Emitter<PermitStates> emit) async {
     try {
       emit(SavingClearPermit());
@@ -952,7 +1034,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         "npw_company": event.clearPermitMap['npw_company'] ?? '',
         "npw_email": event.clearPermitMap['npw_email'] ?? '',
         "npw_phone": event.clearPermitMap['npw_phone'] ?? '',
-        "sync_sign": event.clearPermitMap['user_sign'] ?? '',
+        "sync_sign": event.clearPermitMap['npw_sign'] ?? '',
         "sync_date": event.clearPermitMap['user_date'] ?? '',
       };
       if (isNetworkEstablished) {
@@ -968,7 +1050,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
         add(SavePermitOfflineAction(
             offlineDataMap: clearPermitMap,
             permitId: event.clearPermitMap['permitid'],
-            signature: event.clearPermitMap['user_sign'],
+            signature: event.clearPermitMap['npw_sign'],
             actionKey: event.clearPermitMap['action_key'],
             dateTime:
                 '${event.clearPermitMap['user_date']} ${event.clearPermitMap['user_time']}'));
@@ -1039,18 +1121,39 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _fetchDataForChangePermitCP(
       FetchDataForChangePermitCP event, Emitter<PermitStates> emit) async {
     try {
-      emit(DataForChangePermitCPFetching());
-      String hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
-      FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
-          await _permitRepository.fetchDataForChangePermitCP(
-              event.permitId, hashCode);
-      if (fetchDataForChangePermitCpModel.status == 200) {
+      if (isNetworkEstablished) {
+        emit(DataForChangePermitCPFetching());
+        String hashCode =
+            await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+        FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+            await _permitRepository.fetchDataForChangePermitCP(
+                event.permitId, hashCode);
+        if (fetchDataForChangePermitCpModel.status == 200) {
+          emit(DataForChangePermitCPFetched(
+              fetchDataForChangePermitCpModel:
+                  fetchDataForChangePermitCpModel));
+        } else {
+          emit(DataForChangePermitCPNotFetched(
+              errorMessage: fetchDataForChangePermitCpModel.message!));
+        }
+      } else {
+        Map<String, dynamic> permitHtmlMap =
+            await _databaseHelper.fetchPermitDetailsHtml(event.permitId);
+        Map<String, dynamic> populateTransferCpPermitData =
+            await _databaseHelper
+                .fetchOfflinePermitTransferData(event.permitId);
+        if (populateTransferCpPermitData.isNotEmpty) {
+          showTransferWarning =
+              (populateTransferCpPermitData['issurrender'] == '0');
+        } else {
+          showTransferWarning = (permitHtmlMap['npw_id'].toString().isNotEmpty);
+        }
+        FetchDataForChangePermitCpModel fetchDataForChangePermitCpModel =
+            FetchDataForChangePermitCpModel(status: 200, message: '', data: [
+          [GetDataForCPDatum.fromJson(permitHtmlMap)]
+        ]);
         emit(DataForChangePermitCPFetched(
             fetchDataForChangePermitCpModel: fetchDataForChangePermitCpModel));
-      } else {
-        emit(DataForChangePermitCPNotFetched(
-            errorMessage: fetchDataForChangePermitCpModel.message!));
       }
     } catch (e) {
       emit(DataForChangePermitCPNotFetched(errorMessage: e.toString()));
@@ -1081,21 +1184,22 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
   Future<FutureOr<void>> _changePermitCP(
       ChangePermitCP event, Emitter<PermitStates> emit) async {
     try {
+      Map transferMap = {};
       String hashCode = (await _customerCache.getHashCode(CacheKeys.hashcode))!;
       String userId = (await _customerCache.getUserId(CacheKeys.userId))!;
       Map changePermitCPMap = {
         "hashcode": hashCode,
-        "permitid": event.changePermitCPMap['permitId'],
+        "permitid": event.permitId,
         "userid": userId,
-        "npw": event.changePermitCPMap['npw'],
-        "sap": event.changePermitCPMap['sap'],
+        "npw": event.changePermitCPMap['npw'] ?? '',
+        "sap": event.changePermitCPMap['sap'] ?? '',
         "role": roleId,
         "controlroom": event.changePermitCPMap['controlePerson']
       };
       if (isNetworkEstablished) {
         emit(PermitCPChanging());
-        if ((event.changePermitCPMap['sap'] != '' &&
-            event.changePermitCPMap['controlePerson'] != null)) {
+        if (event.changePermitCPMap['controlePerson'] != null ||
+            event.changePermitCPMap['controlePerson'] != '') {
           ChangePermitCpModel changePermitCpModel =
               await _permitRepository.changePermitCP(changePermitCPMap);
           if (changePermitCpModel.message == '1') {
@@ -1106,40 +1210,63 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           }
         } else {
           emit(PermitCPNotChanged(
-              errorMessage: "SAP and control person can't be empty"));
+              errorMessage: StringConstants.kAllFieldsMandatory));
         }
       } else {
+        Map<String, dynamic> fetchTransferData = await _databaseHelper
+            .fetchOfflinePermitTransferData(event.permitId);
+
         Map saveTransferMap = {
           'npw_id': 0,
           'npw_name': event.changePermitCPMap['npw_name'] ?? '',
           'npw_auth': event.changePermitCPMap['npw_auth'] ?? '',
-          'npw_sign': event.changePermitCPMap['user_sign'] ?? '',
+          'npw_sign': event.changePermitCPMap['npw_sign'] ?? '',
           'date': event.changePermitCPMap['user_date'] ?? '',
           'time': event.changePermitCPMap['user_time'] ?? '',
           'user_id': 0,
           'user_name': event.changePermitCPMap['user_name'] ?? '',
           'user_sign': event.changePermitCPMap['user_sign'] ?? '',
-          'controlusername': event.changePermitCPMap['controlPerson'] ?? ''
+          'controlusername': event.changePermitCPMap['controlPerson'] ?? '',
+          'company': event.changePermitCPMap['npw_company'] ?? ''
         };
-        Map<String, dynamic> fetchTransferData = await _databaseHelper
-            .fetchOfflinePermitTransferData(event.permitId);
-        if (fetchTransferData['receiver'] != [] &&
-            fetchTransferData['receiver'] != null) {
-          transferAndSurrenderMap['reciever'] = fetchTransferData['transfer'];
-          transferAndSurrenderMap['reciever'].add(saveTransferMap);
-          transferAndSurrenderMap['isSurrender'] = '0';
-          transferAndSurrenderMap['hashcode'] =
+        Map surrenderPermitOfflineMap = {
+          "npw_id": 0,
+          "npw_name": 'Abnormal Surrender',
+          "npw_auth": '',
+          "npw_sign": '',
+          "date": event.changePermitCPMap['user_date'] ?? '',
+          "time": event.changePermitCPMap['user_time'] ?? '',
+        };
+
+        if (showTransferWarning) {
+          if (fetchTransferData['surrender'] != [] &&
+              fetchTransferData['surrender'] != null) {
+            transferMap['surrender'] = fetchTransferData['surrender'];
+            transferMap['surrender'].add(surrenderPermitOfflineMap);
+          }
+        }
+
+        if (fetchTransferData['reciever'] != [] &&
+            fetchTransferData['reciever'] != null) {
+          transferMap['reciever'] = fetchTransferData['reciever'];
+          transferMap['surrender'] = fetchTransferData['surrender'];
+          transferMap['reciever'].add(saveTransferMap);
+          transferMap['issurrender'] = '0';
+          transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         } else {
-          transferAndSurrenderMap['surrender'] = [];
-          transferAndSurrenderMap['reciever'] = [];
-          transferAndSurrenderMap['reciever'].add(saveTransferMap);
-          transferAndSurrenderMap['isSurrender'] = '0';
-          transferAndSurrenderMap['hashcode'] =
+          transferMap['surrender'] = [];
+          transferMap['reciever'] = [];
+          if (showTransferWarning) {
+            transferMap['surrender'].add(surrenderPermitOfflineMap);
+          }
+          transferMap['reciever'].add(saveTransferMap);
+          transferMap['issurrender'] = '0';
+          transferMap['hashcode'] =
               await _customerCache.getHashCode(CacheKeys.hashcode);
         }
         add(SavePermitOfflineAction(
-            offlineDataMap: transferAndSurrenderMap,
+            offlineDataMap: transferMap,
             permitId: event.permitId,
             signature: event.changePermitCPMap['npw_sign'] ?? '',
             actionKey: 'transfer_permit',
@@ -1153,21 +1280,58 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
   FutureOr<void> _surrenderPermit(
       SurrenderPermit event, Emitter<PermitStates> emit) async {
-    emit(SurrenderingPermit());
     try {
+      Map surrenderMap = {};
       String hashCode =
           (await _customerCache.getHashCode(CacheKeys.hashcode)) ?? '';
       Map surrenderPermitMap = {
         "hashcode": hashCode,
         "permitid": event.permitId,
       };
-      SurrenderPermitModel surrenderPermitModel =
-          await _permitRepository.surrenderPermit(surrenderPermitMap);
-      if (surrenderPermitModel.message == '1') {
-        emit(PermitSurrendered());
+      if (isNetworkEstablished) {
+        emit(SurrenderingPermit());
+        SurrenderPermitModel surrenderPermitModel =
+            await _permitRepository.surrenderPermit(surrenderPermitMap);
+        if (surrenderPermitModel.message == '1') {
+          emit(PermitSurrendered());
+        } else {
+          emit(PermitNotSurrender(
+              errorMessage: StringConstants.kSomethingWentWrong));
+        }
       } else {
-        emit(PermitNotSurrender(
-            errorMessage: StringConstants.kSomethingWentWrong));
+        Map surrenderPermitOfflineMap = {
+          "npw_id": 0,
+          "npw_name": event.surrenderPermitMap['npw_name'] ?? '',
+          "npw_auth": event.surrenderPermitMap['npw_auth'] ?? '',
+          "npw_sign": event.surrenderPermitMap['npw_sign'] ?? '',
+          "date": event.surrenderPermitMap['user_date'] ?? '',
+          "time": event.surrenderPermitMap['user_time'] ?? '',
+        };
+        Map<String, dynamic> fetchSurrenderData = await _databaseHelper
+            .fetchOfflinePermitSurrenderData(event.permitId);
+        if (fetchSurrenderData['surrender'] != [] &&
+            fetchSurrenderData['surrender'] != null) {
+          surrenderMap['surrender'] = fetchSurrenderData['surrender'];
+          surrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          surrenderMap['issurrender'] = '1';
+          surrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        } else {
+          surrenderMap['surrender'] = [];
+          surrenderMap['reciever'] = [];
+
+          surrenderMap['surrender'].add(surrenderPermitOfflineMap);
+          surrenderMap['issurrender'] = '1';
+          surrenderMap['hashcode'] =
+              await _customerCache.getHashCode(CacheKeys.hashcode);
+        }
+        add(SavePermitOfflineAction(
+            offlineDataMap: surrenderMap,
+            permitId: event.permitId,
+            signature: event.surrenderPermitMap['npw_sign'] ?? '',
+            actionKey: 'transfer_permit',
+            dateTime:
+                '${event.surrenderPermitMap['date']}${event.surrenderPermitMap['time']}'));
       }
     } catch (e) {
       emit(PermitNotSurrender(errorMessage: e.toString()));
@@ -1249,6 +1413,26 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']!);
               }
               break;
+            case 'switching_schedule':
+              String hashcode =
+                  await _customerCache.getHashCode(CacheKeys.hashcode) ?? "";
+              String userId =
+                  await _customerCache.getUserId(CacheKeys.userId) ?? "";
+              Map<String, dynamic> offlinePermitData = await _databaseHelper
+                  .fetchPermitDetailsOffline(action['permitId']);
+              var actionJson = offlinePermitData['tab7'];
+              Map switchingMap = {
+                "userid": userId,
+                "hashcode": hashcode,
+                "permitid": action['permitId'],
+                "actionjson": actionJson,
+              };
+              SwitchingScheduleModel syncSwitchingSchedule =
+                  await _permitRepository.syncSwitchingSchedule(switchingMap);
+              if (syncSwitchingSchedule.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']!);
+              }
+              break;
             case 'prepare_permit':
               SaveMarkAsPreparedModel saveMarkAsPreparedModel =
                   await _permitRepository
@@ -1289,21 +1473,6 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
               }
               break;
-            case 'surrender_permit':
-              Map surrenderMap = jsonDecode(action['actionJson']);
-              surrenderMap['permitid'] = await EncryptData.decryptAESPrivateKey(
-                  action['permitId'],
-                  await _customerCache.getApiKey(CacheKeys.apiKey));
-              SyncTransferCpPermitModel syncTransferCpModel =
-                  await _permitRepository.syncTransferCp(surrenderMap);
-              if (syncTransferCpModel.message == '1') {
-                await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('surrender_permit success');
-              } else {
-                log('surrender_permit error');
-              }
-              break;
             case 'transfer_permit':
               Map transferMap = jsonDecode(action['actionJson']);
               transferMap['permitid'] = await EncryptData.decryptAESPrivateKey(
@@ -1313,14 +1482,15 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
                   await _permitRepository.syncTransferCp(transferMap);
               if (syncTransferCpModel.message == '1') {
                 await _databaseHelper.deleteOfflinePermitAction(action['id']);
-
-                log('surrender_permit success');
-              } else {
-                log('surrender_permit error');
               }
               break;
-            default:
-              null;
+            case 'exportpermitlog':
+              ExportPermitLogModel exportPermitLogModel =
+                  await _permitRepository
+                      .exportPermitLog(jsonDecode(action['actionJson']));
+              if (exportPermitLogModel.message == '1') {
+                await _databaseHelper.deleteOfflinePermitAction(action['id']!);
+              }
               break;
           }
         }
@@ -1352,12 +1522,51 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
               ErrorGeneratingPdfOffline(errorMessage: 'permit type not found'));
           break;
       }
+
       htmlText = htmlText.replaceAll(
           '#permitname', offlinePermitData['tab1']['permit']);
       htmlText = htmlText.replaceAll(
           '#location', offlinePermitData['tab1']['location']);
+      htmlText =
+          htmlText.replaceAll('#enddate', offlinePermitData['html']['enddate']);
+
+      List surrenderList = [];
+      List receiverList = [];
+      for (int j = 1; j <= 4; j++) {
+        if (offlinePermitData['html']["201202_${j}_date"].length > 0) {
+          surrenderList.add({
+            "npw_id": 0,
+            "npw_name": offlinePermitData['html']["201202_${j}_name"] ?? "",
+            "npw_auth": offlinePermitData['html']["201202_${j}_authno"] ?? "",
+            "npw_sign": offlinePermitData['html']["201202_${j}_npwsign"] ?? "",
+            "date": offlinePermitData['html']["201202_${j}_date"] ?? "",
+            "time": offlinePermitData['html']["201202_${j}_time"] ?? ""
+          });
+        }
+
+        if (offlinePermitData['html']["203204_${j}_date"].length > 0) {
+          receiverList.add({
+            "npw_id": 0,
+            "npw_name": offlinePermitData['html']["203204_${j}_name"] ?? '',
+            "npw_auth": offlinePermitData['html']["203204_${j}_authno"] ?? '',
+            "npw_sign": offlinePermitData['html']["203204_${j}_npwsign"] ?? '',
+            "date": offlinePermitData['html']["203204_${j}_date"] ?? '',
+            "time": offlinePermitData['html']["203204_${j}_time"] ?? '',
+            "user_id": 0,
+            "user_name":
+                offlinePermitData['html']["203204_${j}_username"] ?? '',
+            "user_sign":
+                offlinePermitData['html']["203204_${j}_usersign"] ?? '',
+            "controlusername":
+                offlinePermitData['html']["203204_${j}_controlusername"] ?? '',
+            "company": offlinePermitData['html']["203204_${j}_company"] ?? ''
+          });
+        }
+      }
+
       List<Map<String, dynamic>> permitActionsList =
           await _databaseHelper.fetchOfflinePermitAction(event.permitId);
+      emit(GeneratingOfflinePdf());
       for (var action in permitActionsList) {
         if (action.isNotEmpty) {
           switch (action['actionText']) {
@@ -1374,7 +1583,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d1 = "${dateTime[0]}";
-              var t1 = "${dateTime[1]}";
+              String t1 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#16_time', t1);
               htmlText = htmlText.replaceAll('#16_date', d1);
@@ -1425,7 +1634,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d2 = "${dateTime[0]}";
-              var t2 = "${dateTime[1]}";
+              String t2 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#2_time', t2);
               htmlText = htmlText.replaceAll('#2_date', d2);
@@ -1498,7 +1707,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d3 = "${dateTime[0]}";
-              var t3 = "${dateTime[1]}";
+              String t3 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#32_time', t3);
               htmlText = htmlText.replaceAll('#32_date', d3);
@@ -1514,7 +1723,7 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d4 = "${dateTime[0]}";
-              var t4 = "${dateTime[1]}";
+              String t4 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#18_time', t4);
               htmlText = htmlText.replaceAll('#18_date', d4);
@@ -1587,10 +1796,28 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
 
               List dateTime = action['actionDateTime'].split(' ');
               String d5 = "${dateTime[0]}";
-              var t5 = "${dateTime[1]}";
+              String t5 = "${dateTime[1]}";
 
               htmlText = htmlText.replaceAll('#3_time', t5);
               htmlText = htmlText.replaceAll('#3_date', d5);
+              break;
+
+            case 'transfer_permit':
+              if (action['actionJson']['surrender'].length > 0) {
+                for (int j = 0;
+                    j < action['actionJson']['surrender'].length;
+                    j++) {
+                  surrenderList.add(action['actionJson']['surrender'][j]);
+                }
+              }
+              if (action['actionJson']['reciever'] != null &&
+                  action['actionJson']['reciever'].length > 0) {
+                for (int j = 0;
+                    j < action['actionJson']['reciever'].length;
+                    j++) {
+                  receiverList.add(action['actionJson']['reciever'][j]);
+                }
+              }
               break;
           }
         }
@@ -1816,10 +2043,653 @@ class PermitBloc extends Bloc<PermitEvents, PermitStates> {
           (offlinePermitData['html']['lwc_environment'] ?? ''));
       htmlText = htmlText.replaceAll('#lwc_precautions',
           (offlinePermitData['html']['lwc_precautions'] ?? ''));
+      int ind = 1;
+      for (int sIndex = 0; sIndex < surrenderList.length; sIndex++) {
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_name", surrenderList[sIndex]['npw_name']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_authno", surrenderList[sIndex]['npw_auth']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_date", surrenderList[sIndex]['date']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_time", surrenderList[sIndex]['time']);
+        htmlText = htmlText.replaceAll(
+            "#201202_${ind}_npwsign", surrenderList[sIndex]['npw_sign']);
+        ind = ind + 1;
+      }
 
+      for (int sIndex = 1; sIndex <= 4; sIndex++) {
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_name", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_authno", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_date", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_time", '');
+        htmlText = htmlText.replaceAll("#201202_${sIndex}_npwsign", '');
+      }
+
+      int ind2 = 1;
+      for (int temp = 0; temp <= receiverList.length - 1; temp++) {
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_name", receiverList[temp]['npw_name']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_authno", receiverList[temp]['npw_auth']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_date", receiverList[temp]['date']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_time", receiverList[temp]['time']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_npwsign", receiverList[temp]['npw_sign']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_username", receiverList[temp]['user_name']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_usersign", receiverList[temp]['user_sign']);
+        htmlText = htmlText.replaceAll("#203204_${ind2}_controlusername",
+            receiverList[temp]['controlusername']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_company", receiverList[temp]['company']);
+
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_date1", receiverList[temp]['date']);
+        htmlText = htmlText.replaceAll(
+            "#203204_${ind2}_time1", receiverList[temp]['time']);
+        ind2 = ind2 + 1;
+      }
+
+      for (int rIndex = 1; rIndex <= 4; rIndex++) {
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_name", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_authno", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_date", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_time", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_npwsign", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_username", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_usersign", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_controlusername", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_company", '');
+
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_date1", '');
+        htmlText = htmlText.replaceAll("#203204_${rIndex}_time1", '');
+      }
       emit(OfflinePdfGenerated(htmlContent: htmlText));
     } catch (e) {
-      log('error in generating pdf: $e');
+      emit(ErrorGeneratingPdfOffline(
+          errorMessage: StringConstants.kPDFGenerationError));
+    }
+  }
+
+  FutureOr<void> _fetchSwitchingScheduleInstructions(
+      FetchSwitchingScheduleInstructions event,
+      Emitter<PermitStates> emit) async {
+    try {
+      if (isNetworkEstablished) {
+        emit(FetchingSwitchingScheduleInstructions());
+        FetchSwitchingScheduleInstructionsModel
+            fetchSwitchingScheduleInstructionsModel = await _permitRepository
+                .fetchSwitchingScheduleInstructions(event.scheduleId, roleId);
+        if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
+          emit(SwitchingScheduleInstructionsFetched(
+              scheduleInstructionDatum:
+                  fetchSwitchingScheduleInstructionsModel.data));
+        } else {
+          emit(SwitchingScheduleInstructionsNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
+      } else {
+        List<Map<String, dynamic>> filteredInstructions =
+            await _databaseHelper.getInstructionsByScheduleId(event.scheduleId);
+        List<PermitSwithcingScheduleInstructionDatum> instructions =
+            filteredInstructions
+                .map((item) =>
+                    PermitSwithcingScheduleInstructionDatum.fromJson(item))
+                .toList();
+
+        FetchSwitchingScheduleInstructionsModel
+            fetchSwitchingScheduleInstructionsModel =
+            FetchSwitchingScheduleInstructionsModel.fromJson({
+          "Status": 200,
+          "Message": '',
+          "Data": instructions.map((i) => i.toJson()).toList(),
+        });
+        if (fetchSwitchingScheduleInstructionsModel.data.isNotEmpty) {
+          emit(SwitchingScheduleInstructionsFetched(
+              scheduleInstructionDatum:
+                  fetchSwitchingScheduleInstructionsModel.data));
+        } else {
+          emit(SwitchingScheduleInstructionsNotFetched(
+              errorMessage: StringConstants.kNoDataFound));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<FutureOr<void>> _updatePermitSwitchingSchedule(
+      UpdatePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleUpdating());
+    try {
+      Map editSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.editSwitchingScheduleMap['instructionid'],
+        "id": event.editSwitchingScheduleMap['instructionid'],
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "instructionreceivedby":
+            event.editSwitchingScheduleMap['instructionreceivedby'] ?? '',
+        "controlengineer":
+            event.editSwitchingScheduleMap['controlengineer'] ?? '',
+        "instructionreceiveddate":
+            event.editSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.editSwitchingScheduleMap['instructionreceivedtime'] ?? '',
+        "carriedoutdate":
+            event.editSwitchingScheduleMap['carriedoutdate'] ?? '',
+        "carriedouttime":
+            event.editSwitchingScheduleMap['carriedouttime'] ?? '',
+        "carriedoutconfirmeddate":
+            event.editSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+        "carriedoutconfirmedtime":
+            event.editSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+        "safetykeynumber":
+            event.editSwitchingScheduleMap['safetykeynumber'] ?? '',
+        "location": event.editSwitchingScheduleMap['location'] ?? '',
+        "equipmentuid": event.editSwitchingScheduleMap['equipmentuid'] ?? '',
+        "operation": event.editSwitchingScheduleMap['operation'] ?? '',
+        "instructionreceivedbyname":
+            event.editSwitchingScheduleMap["instructionreceivedbyname"],
+        "controlengineername":
+            event.editSwitchingScheduleMap["controlengineername"],
+        "canexecute": '1',
+        "ismanual": event.editSwitchingScheduleMap['ismanual']
+      };
+      if (isNetworkEstablished) {
+        UpdatePermitSwitchingScheduleModel updatePermitSwitchingScheduleModel =
+            await _permitRepository
+                .updatePermitSwitchingSchedule(editSwitchingScheduleMap);
+        if (updatePermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleUpdated());
+        } else {
+          emit(PermitSwitchingScheduleNotUpdated(
+              errorMessage: updatePermitSwitchingScheduleModel.message));
+        }
+      } else {
+        event.isFromMultiSelect
+            ? await _databaseHelper.editMultiSelectInstructions(
+                editSwitchingScheduleMap,
+                event.editSwitchingScheduleMap['instructionid'],
+                permitId)
+            : await _databaseHelper.editInstruction(editSwitchingScheduleMap,
+                event.editSwitchingScheduleMap['instructionid'], permitId);
+        emit(PermitSwitchingScheduleUpdated());
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotUpdated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _addPermitSwitchingSchedule(
+      AddPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleAdding());
+    try {
+      Map<String, dynamic> addSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.addSwitchingScheduleMap['instructionid'] ?? '',
+        "userid": await _customerCache.getUserId(CacheKeys.userId),
+        "location": event.addSwitchingScheduleMap['location'] ?? '',
+        "equipmentuid": event.addSwitchingScheduleMap['equipmentuid'] ?? '',
+        "operation": event.addSwitchingScheduleMap['operation'] ?? '',
+        "instructionreceivedby":
+            event.addSwitchingScheduleMap['instructionreceivedby'] ?? '',
+        "controlengineer":
+            event.addSwitchingScheduleMap['controlengineer'] ?? '',
+        "instructionreceiveddate":
+            event.addSwitchingScheduleMap['instructionreceiveddate'] ?? '',
+        "instructionreceivedtime":
+            event.addSwitchingScheduleMap['instructionreceivedtime'] ?? '',
+        "carriedoutdate": event.addSwitchingScheduleMap['carriedoutdate'] ?? '',
+        "carriedouttime": event.addSwitchingScheduleMap['carriedouttime'] ?? '',
+        "carriedoutconfirmeddate":
+            event.addSwitchingScheduleMap['carriedoutconfirmeddate'] ?? '',
+        "carriedoutconfirmedtime":
+            event.addSwitchingScheduleMap['carriedoutconfirmedtime'] ?? '',
+        "safetykeynumber":
+            event.addSwitchingScheduleMap['safetykeynumber'] ?? '',
+        "instructionreceivedbyname":
+            event.addSwitchingScheduleMap["instructionreceivedbyname"],
+        "controlengineername":
+            event.addSwitchingScheduleMap["controlengineername"],
+        "canexecute": '1',
+        "ismanual": 1
+      };
+      if (isNetworkEstablished) {
+        if (event.addSwitchingScheduleMap['location'] != null &&
+            event.addSwitchingScheduleMap['equipmentuid'] != null &&
+            event.addSwitchingScheduleMap['operation'] != null) {
+          AddPermitSwitchingScheduleModel addPermitSwitchingScheduleModel =
+              await _permitRepository
+                  .addPermitSwitchingSchedule(addSwitchingScheduleMap);
+          if (addPermitSwitchingScheduleModel.message == '1') {
+            emit(PermitSwitchingScheduleAdded());
+          } else {
+            emit(PermitSwitchingScheduleNotAdded(
+                errorMessage: addPermitSwitchingScheduleModel.message));
+          }
+        } else {
+          emit(PermitSwitchingScheduleNotAdded(
+              errorMessage:
+                  StringConstants.kLocationEquipmentOperationMandatory));
+        }
+      } else {
+        if (event.addSwitchingScheduleMap['location'] != null &&
+            event.addSwitchingScheduleMap['equipmentuid'] != null &&
+            event.addSwitchingScheduleMap['operation'] != null) {
+          String? apiKey =
+              await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+          await _databaseHelper.addInstruction(addSwitchingScheduleMap,
+              event.addSwitchingScheduleMap['instructionid'], permitId, apiKey);
+          emit(PermitSwitchingScheduleAdded());
+        } else {
+          emit(PermitSwitchingScheduleNotAdded(
+              errorMessage:
+                  StringConstants.kLocationEquipmentOperationMandatory));
+        }
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotAdded(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _moveDownPermitSwitchingSchedule(
+      MoveDownPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleMovingDown());
+    try {
+      Map moveDownSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      if (isNetworkEstablished) {
+        MoveDownPermitSwitchingScheduleModel
+            moveDownPermitSwitchingScheduleModel = await _permitRepository
+                .moveDownPermitSwitchingSchedule(moveDownSwitchingScheduleMap);
+        if (moveDownPermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleMovedDown());
+        } else {
+          emit(PermitSwitchingScheduleNotMovedDown(
+              errorMessage: moveDownPermitSwitchingScheduleModel.message));
+        }
+      } else {
+        await _databaseHelper.downInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleMovedDown());
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotMovedDown(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _moveUpPermitSwitchingSchedule(
+      MoveUpPermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleMovingUp());
+    try {
+      Map moveUpSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      if (isNetworkEstablished) {
+        MoveUpPermitSwitchingScheduleModel moveUpPermitSwitchingScheduleModel =
+            await _permitRepository
+                .moveUpPermitSwitchingSchedule(moveUpSwitchingScheduleMap);
+        if (moveUpPermitSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleMovedUp());
+        } else {
+          emit(PermitSwitchingScheduleNotMovedUp(
+              errorMessage: moveUpPermitSwitchingScheduleModel.message));
+        }
+      } else {
+        await _databaseHelper.upInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleMovedUp());
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotMovedUp(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _generateSwitchingSchedulePdf(
+      GenerateSwitchingSchedulePdf event, Emitter<PermitStates> emit) async {
+    emit(SwitchingSchedulePdfGenerating());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String? apiKey = await _customerCache.getApiKey(CacheKeys.apiKey) ?? '';
+      GenerateSwitchingSchedulePdfModel generateSwitchingSchedulePdfModel =
+          await _permitRepository.generateSwitchingSchedulePdf(
+              event.switchingScheduleId, hashCode);
+      if (generateSwitchingSchedulePdfModel.status == 200) {
+        var decrypted = EncryptData.decryptAESPrivateKey(
+            generateSwitchingSchedulePdfModel.message, apiKey);
+        emit(SwitchingSchedulePdfGenerated(
+            generateSwitchingSchedulePdfModel:
+                generateSwitchingSchedulePdfModel,
+            decryptedFile: decrypted));
+      } else {
+        emit(SwitchingSchedulePdfNotGenerated(
+            errorMessage: generateSwitchingSchedulePdfModel.message));
+      }
+    } catch (e) {
+      emit(SwitchingSchedulePdfNotGenerated(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _markSwitchingScheduleComplete(
+      MarkSwitchingScheduleComplete event, Emitter<PermitStates> emit) async {
+    emit(MarkSwitchingScheduleCompleting());
+    try {
+      Map markSwitchingScheduleCompleteMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "switchingscheduleid": event.switchingScheduleId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      MarkSwitchingScheduleCompletedModel markSwitchingScheduleCompletedModel =
+          await _permitRepository
+              .markSwitchingScheduleComplete(markSwitchingScheduleCompleteMap);
+      if (markSwitchingScheduleCompletedModel.message == '1') {
+        emit(MarkSwitchingScheduleCompleted());
+      } else {
+        emit(MarkSwitchingScheduleNotCompleted(
+            errorMessage: markSwitchingScheduleCompletedModel.message));
+      }
+    } catch (e) {
+      emit(MarkSwitchingScheduleNotCompleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _deletePermitSwitchingSchedule(
+      DeletePermitSwitchingSchedule event, Emitter<PermitStates> emit) async {
+    emit(PermitSwitchingScheduleDeleting());
+    try {
+      Map deleteSwitchingScheduleMap = {
+        "hashcode": await _customerCache.getHashCode(CacheKeys.hashcode),
+        "instructionid": event.instructionId,
+        "userid": await _customerCache.getUserId(CacheKeys.userId)
+      };
+      if (isNetworkEstablished) {
+        DeleteSwitchingScheduleModel deleteSwitchingScheduleModel =
+            await _permitRepository
+                .deleteSwitchingSchedule(deleteSwitchingScheduleMap);
+        if (deleteSwitchingScheduleModel.message == '1') {
+          emit(PermitSwitchingScheduleDeleted());
+        } else {
+          emit(PermitSwitchingScheduleNotDeleted(
+              errorMessage: deleteSwitchingScheduleModel.message));
+        }
+      } else {
+        await _databaseHelper.deleteInstruction(event.instructionId, permitId);
+        emit(PermitSwitchingScheduleDeleted());
+      }
+    } catch (e) {
+      emit(PermitSwitchingScheduleNotDeleted(errorMessage: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchSwitchingScheduleDetails(
+      FetchSwitchingScheduleDetails event, Emitter<PermitStates> emit) async {
+    emit(SwitchingScheduleDetailsFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      if (isNetworkEstablished) {
+        FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
+            await _permitRepository.fetchSwitchingScheduleDetails(
+                event.instructionId, hashCode);
+        if (fetchSwitchingScheduleDetailsModel.status == 200) {
+          emit(SwitchingScheduleDetailsFetched(
+              fetchSwitchingScheduleDetailsModel:
+                  fetchSwitchingScheduleDetailsModel));
+        } else {
+          emit(SwitchingScheduleDetailsNotFetched(
+              errorMessage: StringConstants.kNoRecordsFound));
+        }
+      } else {
+        Map instructions =
+            await _databaseHelper.getInstruction(event.instructionId, permitId);
+        FetchSwitchingScheduleDetailsModel fetchSwitchingScheduleDetailsModel =
+            FetchSwitchingScheduleDetailsModel.fromJson({
+          "Status": 200,
+          "Message": '',
+          "Data": instructions,
+        });
+        emit(SwitchingScheduleDetailsFetched(
+            fetchSwitchingScheduleDetailsModel:
+                fetchSwitchingScheduleDetailsModel));
+      }
+    } catch (e) {
+      emit(SwitchingScheduleDetailsNotFetched(errorMessage: e.toString()));
+    }
+  }
+
+  FutureOr<void> _generateTextFile(
+      GenerateTextFile event, Emitter<PermitStates> emit) async {
+    Map<String, dynamic> fetchOfflinePermitData = {};
+    try {
+      emit(GeneratingTextFile());
+      Map<String, dynamic>? fetchOfflinePermits =
+          await _databaseHelper.fetchOfflinePermit(permitId);
+      if (fetchOfflinePermits != null) {
+        fetchOfflinePermitData.addAll(fetchOfflinePermits);
+        fetchOfflinePermitData['clientid'] =
+            await _customerCache.getClientId(CacheKeys.clientId);
+        fetchOfflinePermitData['senderid'] =
+            await _customerCache.getUserId2(CacheKeys.userId2);
+        List<Map<String, dynamic>> offlinePermitActionsList = [];
+        List<Map<String, dynamic>> permitActionsList =
+            await _databaseHelper.fetchOfflinePermitAction(permitId);
+        if (permitActionsList.isNotEmpty) {
+          offlinePermitActionsList = permitActionsList;
+        }
+        fetchOfflinePermitData['actions'] =
+            jsonEncode(offlinePermitActionsList);
+        Map<String, dynamic> listPage =
+            jsonDecode(fetchOfflinePermits['listPage']);
+        String fileName = listPage['permit'];
+        await writeOfflinePermitDataToFile(
+                jsonEncode(fetchOfflinePermitData), fileName)
+            .then((_) {
+          emit(TextFileGenerated());
+        }).catchError((_) {
+          emit(FailedToGenerateTextFile(
+              errorMessage: 'Could not generate file. Please try again!'));
+        });
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> writeOfflinePermitDataToFile(
+      String jsonData, String fileName) async {
+    try {
+      if (fileName.isEmpty) {
+        fileName = 'import_file_$permitId';
+      }
+      final output = await getTemporaryDirectory();
+      final File file = File('${output.path}/$fileName.txt');
+      await file.writeAsString(jsonData);
+      await OpenFile.open(file.path);
+      filePath = file.path;
+
+      // It will be commented as per Sumit sir
+      // final directory = await getExternalStorageDirectory();
+      // final file = File('${directory!.path}/import_file_$permitId.txt');
+      // await file.writeAsString(jsonData).then((_) async {
+      //   await OpenFile.open(file.path);
+      //   filePath = file.path;
+      // });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchFileFromStorage(
+      PickFileFromStorage event, Emitter<PermitStates> emit) async {
+    try {
+      final permissionStatus = await Permission.storage.request();
+
+      if (permissionStatus == PermissionStatus.denied) {
+        openAppSettings();
+      } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
+        emit(FileFromStorageFailedToPick(
+            errorMessage:
+                "Looks like you denied permission to access the camera/storage. To choose an image, you'll need to grant permission in your app settings. Tap 'Open Settings' below and enable Camera/Storage access"));
+        return;
+      }
+
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
+      if (result != null) {
+        if (result.files.single.path != null) {
+          pickedFile = File(result.files.single.path!);
+          emit(FileFromStoragePicked(filePath: pickedFile.path));
+        } else {
+          emit(FileFromStorageFailedToPick(
+              errorMessage: 'Could not pick file. Please try again!'));
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _fetchFileFromStorageInitial(
+      PickFileFromStorageInitialEvent event, Emitter<PermitStates> emit) async {
+    try {
+      emit(PickFileFromStorageInitial());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  FutureOr<void> _saveFileData(
+      SaveFileData event, Emitter<PermitStates> emit) async {
+    emit(SavingFileData());
+    try {
+      final file = File(pickedFile.path);
+      String contents = await file.readAsString();
+      String hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      String userId = await _customerCache.getUserId(CacheKeys.userId) ?? '';
+      Map<String, dynamic> jsonData = await jsonDecode(contents);
+      String? clientId =
+          await _customerCache.getClientId(CacheKeys.clientId) ?? '';
+      if (jsonData.containsKey('clientid') == false ||
+          jsonData['clientid'] != clientId) {
+        emit(FailedToSaveFileData(errorMessage: 'Invalid File'));
+      } else {
+        if (jsonData.containsKey('listPage')) {
+          jsonData['listPage'] = jsonDecode(jsonData['listPage']);
+        }
+        if (jsonData.containsKey('tab1')) {
+          jsonData['tab1'] = jsonDecode(jsonData['tab1']);
+        }
+        if (jsonData.containsKey('tab2')) {
+          jsonData['tab2'] = jsonDecode(jsonData['tab2']);
+        }
+        if (jsonData.containsKey('tab3')) {
+          jsonData['tab3'] = jsonDecode(jsonData['tab3']);
+        }
+        if (jsonData.containsKey('tab4')) {
+          jsonData['tab4'] = jsonDecode(jsonData['tab4']);
+        }
+        if (jsonData.containsKey('tab5')) {
+          jsonData['tab5'] = jsonDecode(jsonData['tab5']);
+        }
+        if (jsonData.containsKey('tab6')) {
+          jsonData['tab6'] = jsonDecode(jsonData['tab6']);
+        }
+        if (jsonData.containsKey('tab7')) {
+          jsonData['tab7'] = jsonDecode(jsonData['tab7']);
+        }
+        if (jsonData.containsKey('html')) {
+          jsonData['html'] = jsonDecode(jsonData['html']);
+        }
+        if (jsonData.containsKey('actions')) {
+          if (jsonData['actions'] != null || jsonData['actions'] != '') {
+            if (jsonData['actions'] is String ||
+                jsonData['actions'].runtimeType == String) {
+              jsonData['actions'] = jsonDecode(jsonData['actions']);
+            }
+          } else {
+            jsonData['actions'] = [];
+          }
+        }
+        Map<String, dynamic> newJson = Map.from(jsonData);
+        if (newJson.isNotEmpty) {
+          String newpermitId = await EncryptData.encryptAESPrivateKey(
+              newJson['permitId2'].toString(),
+              await _customerCache.getApiKey(CacheKeys.apiKey));
+          newJson['permitId'] = newpermitId;
+          newJson['listPage']['id'] = newpermitId;
+          newJson['tab1']['id'] = newpermitId;
+          OfflinePermitDatum offlinePermitDatum = OfflinePermitDatum.fromJson({
+            'id': newJson['permitId'],
+            'id2': newJson['permitId2'],
+            'listpage': newJson['listPage'] ?? {},
+            'tab1': newJson['tab1'],
+            'tab2': newJson['tab2'],
+            'tab3': newJson['tab3'],
+            'tab4': newJson['tab4'],
+            'tab5': newJson['tab5'],
+            'tab6': newJson['tab6'],
+            'tab7': newJson['tab7'],
+            'html': newJson['html'],
+            'statusId': newJson['statusId'] ?? ''
+          });
+          if (offlinePermitDatum.toJson().isNotEmpty) {
+            await _databaseHelper.insertOfflinePermit(
+                offlinePermitDatum, newJson['statusId']);
+            await _databaseHelper
+                .deletePermitOfflineAction(newJson['permitId']);
+            if (newJson['actions'] != null) {
+              for (int i = 0; i < newJson['actions'].length; i++) {
+                Map actionMap = newJson['actions'][i]['actionJson'];
+                actionMap['hashcode'] = hashCode;
+                actionMap['userid'] = userId;
+                if (actionMap.containsKey('permitId')) {
+                  actionMap['permitId'] = newpermitId;
+                }
+                if (actionMap.containsKey('permitid')) {
+                  actionMap['permitid'] = newpermitId;
+                }
+                await _databaseHelper.insertOfflinePermitAction(
+                    newJson['permitId'],
+                    newJson['actions'][i]['actionText'],
+                    actionMap,
+                    newJson['actions'][i]['sign'],
+                    newJson['actions'][i]['actionDateTime']);
+              }
+            }
+            Map senderMap = {
+              "permitid": newpermitId,
+              "userid": userId,
+              "senderid": jsonData['senderid'],
+              "hashcode": hashCode
+            };
+            await _databaseHelper.insertOfflinePermitAction(
+                newJson['permitId'], 'exportpermitlog', senderMap, '', '');
+            emit(FileDataSaved());
+          } else {
+            emit(FailedToSaveFileData(errorMessage: 'Failed to save data'));
+          }
+        }
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  bool isJson(dynamic jsonString) {
+    try {
+      jsonDecode(jsonString);
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

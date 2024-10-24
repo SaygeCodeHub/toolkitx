@@ -38,7 +38,7 @@ class IncidentCustomFieldInfo extends StatelessWidget {
                         top: tiniestSpacing,
                         bottom: tiniestSpacing),
                     title: Text(
-                        '${incidentDetailsModel.data!.customfields![index].title}?',
+                        incidentDetailsModel.data!.customfields![index].title,
                         style: Theme.of(context).textTheme.small.copyWith(
                             fontWeight: FontWeight.w700,
                             color: AppColor.mediumBlack)),

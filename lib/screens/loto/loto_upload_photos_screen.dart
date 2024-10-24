@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toolkit/configs/app_theme.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../blocs/loto/loto_details/loto_details_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
-import '../../blocs/pickAndUploadImage/pick_and_upload_image_states.dart';
-import '../../configs/app_color.dart';
+import '../../blocs/uploadImage/upload_image_bloc.dart';
+import '../../blocs/uploadImage/upload_image_event.dart';
+import '../../blocs/uploadImage/upload_image_state.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/constants/string_constants.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_app_bar.dart';
+import '../../widgets/generic_loading_popup.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/progress_bar.dart';
 import '../checklist/workforce/widgets/upload_image_section.dart';
@@ -24,8 +24,6 @@ class LotoUploadPhotosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<PickAndUploadImageBloc>().isInitialUpload = true;
-    context.read<PickAndUploadImageBloc>().add(UploadInitial());
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('UploadPhotos')),
         bottomNavigationBar: Padding(
@@ -44,26 +42,57 @@ class LotoUploadPhotosScreen extends StatelessWidget {
             SizedBox(
                 height: kErrorButtonHeight,
                 width: xxSizedBoxWidth,
-                child: BlocListener<LotoDetailsBloc, LotoDetailsState>(
-                    listener: (context, state) {
-                      if (state is LotoPhotosUploading) {
-                        ProgressBar.show(context);
-                      } else if (state is LotoPhotosUploaded) {
-                        ProgressBar.dismiss(context);
-                        showCustomSnackBar(
-                            context, StringConstants.kPhotosUploaded, '');
-                        Navigator.pop(context);
-                      } else if (state is LotoPhotosNotUploaded) {
-                        ProgressBar.dismiss(context);
-                        showCustomSnackBar(context, state.getError, '');
-                      }
-                    },
-                    child: PrimaryButton(
-                        onPressed: () {
+                child: MultiBlocListener(
+                  listeners: [
+                    BlocListener<LotoDetailsBloc, LotoDetailsState>(
+                      listener: (context, state) {
+                        if (state is LotoPhotosUploading) {
+                          ProgressBar.show(context);
+                        } else if (state is LotoPhotosUploaded) {
+                          ProgressBar.dismiss(context);
+                          showCustomSnackBar(
+                              context, StringConstants.kPhotosUploaded, '');
+                          Navigator.pop(context);
+                        } else if (state is LotoPhotosNotUploaded) {
+                          ProgressBar.dismiss(context);
+                          showCustomSnackBar(context, state.getError, '');
+                        }
+                      },
+                    ),
+                    BlocListener<UploadImageBloc, UploadImageState>(
+                      listener: (context, state) {
+                        if (state is UploadingImage) {
+                          GenericLoadingPopUp.show(
+                              context, StringConstants.kUploadFiles);
+                        } else if (state is ImageUploaded) {
+                          GenericLoadingPopUp.dismiss(context);
+                          lotoUploadPhotosMap['ImageString'] = state.images
+                              .toString()
+                              .replaceAll('[', '')
+                              .replaceAll(']', '')
+                              .replaceAll(' ', '');
                           context.read<LotoDetailsBloc>().add(LotoUploadPhotos(
-                              filename: lotoUploadPhotosMap["filename"]));
-                        },
-                        textValue: DatabaseUtil.getText("Submit"))))
+                              filename: lotoUploadPhotosMap["ImageString"]));
+                        } else if (state is ImageCouldNotUpload) {
+                          GenericLoadingPopUp.dismiss(context);
+                          showCustomSnackBar(context, state.errorMessage, '');
+                        }
+                      },
+                    ),
+                  ],
+                  child: PrimaryButton(
+                      onPressed: () {
+                        if (lotoUploadPhotosMap['filename'] != null &&
+                            lotoUploadPhotosMap['filename'].isNotEmpty) {
+                          context.read<UploadImageBloc>().add(UploadImage(
+                              images: lotoUploadPhotosMap['filename'],
+                              imageLength: context
+                                  .read<ImagePickerBloc>()
+                                  .lengthOfImageList));
+                        }
+                      },
+                      textValue: DatabaseUtil.getText("Submit")),
+                ))
           ]),
         ),
         body: Padding(
@@ -72,59 +101,12 @@ class LotoUploadPhotosScreen extends StatelessWidget {
                 right: leftRightMargin,
                 top: tinySpacing),
             child: Column(children: [
-              BlocBuilder<PickAndUploadImageBloc, PickAndUploadImageStates>(
-                  buildWhen: (previousState, currentState) =>
-                      currentState is ImagePickerLoaded,
-                  builder: (context, state) {
-                    if (state is ImagePickerLoaded) {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(StringConstants.kUploadPhoto,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .small
-                                    .copyWith(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w500)),
-                            Text(
-                                '${(context.read<PickAndUploadImageBloc>().isInitialUpload == true) ? 0 : state.incrementNumber}/6',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .small
-                                    .copyWith(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w500)),
-                          ]);
-                    } else {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(StringConstants.kUploadPhoto,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .small
-                                    .copyWith(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w500)),
-                            Text('0/6',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .small
-                                    .copyWith(
-                                        color: AppColor.black,
-                                        fontWeight: FontWeight.w500)),
-                          ]);
-                    }
-                  }),
               const SizedBox(height: tinySpacing),
               UploadImageMenu(
+                imagePickerBloc: ImagePickerBloc(),
                 isUpload: true,
                 onUploadImageResponse: (List uploadLotoPhotosList) {
-                  lotoUploadPhotosMap["filename"] = uploadLotoPhotosList
-                      .toString()
-                      .replaceAll("[", "")
-                      .replaceAll("]", "");
+                  lotoUploadPhotosMap["filename"] = uploadLotoPhotosList;
                 },
               )
             ])));

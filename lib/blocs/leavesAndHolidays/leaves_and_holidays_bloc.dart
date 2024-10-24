@@ -66,18 +66,18 @@ class LeavesAndHolidaysBloc
   FutureOr _fetchLeavesSummary(
       FetchLeavesSummary event, Emitter<LeavesAndHolidaysStates> emit) async {
     emit(FetchingLeavesSummary());
-    try {
-      final String? userId = await _customerCache.getUserId(CacheKeys.userId);
-      final String? hashCode =
-          await _customerCache.getHashCode(CacheKeys.hashcode);
-      FetchLeavesSummaryModel fetchLeavesSummaryModel =
-          await _leavesAndHolidaysRepository.fetchLeavesSummary(
-              userId!, hashCode!);
-      emit(LeavesSummaryFetched(
-          fetchLeavesSummaryModel: fetchLeavesSummaryModel));
-    } catch (e) {
-      emit(LeavesSummaryNotFetched(summaryNotFetched: e.toString()));
-    }
+    // try {
+    final String? userId = await _customerCache.getUserId(CacheKeys.userId);
+    final String? hashCode =
+        await _customerCache.getHashCode(CacheKeys.hashcode);
+    FetchLeavesSummaryModel fetchLeavesSummaryModel =
+        await _leavesAndHolidaysRepository.fetchLeavesSummary(
+            userId!, hashCode!);
+    emit(
+        LeavesSummaryFetched(fetchLeavesSummaryModel: fetchLeavesSummaryModel));
+    // } catch (e) {
+    //   emit(LeavesSummaryNotFetched(summaryNotFetched: e.toString()));
+    // }
   }
 
   FutureOr _fetchLeavesDetails(

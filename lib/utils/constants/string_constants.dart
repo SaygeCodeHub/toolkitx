@@ -10,15 +10,55 @@ abstract class StringConstants {
   static const String kEmailAddress = 'Email Address';
   static const String kPassword = 'Password'; //
   static const String kName = 'Name'; //
+  static const String kSrNo = 'SrNo'; //
+  static const String kViewOptions = 'View Options'; //
+  static const String kSelectMonth = 'Select month'; //
+  static const String kEdit = 'Edit'; //
+  static const String kMoveUp = 'Move Up'; //
+  static const String kMoveDown = 'Move Down'; //
   static const String kCompanyName = 'Company Name'; //
+  static const String kViewDocument = 'View Document'; //
   static const String kAuthNumber = 'Auth/ØTCP Number'; //
   static const String kNoWorkOrder = 'No workorder!'; //
+  static const String kAddIncomingInvoice = 'Add Incoming Invoice'; //
+  static const String kEditIncomingInvoice = 'Edit Incoming Invoice'; //
+  static const String kAddBankStatement = 'Add Bank Statement'; //
+  static const String kBillable = 'Billable'; //
+  static const String kInvoiceDate = 'Invoice Date'; //
+  static const String kStatementMonth = 'Statement Month'; //
+  static const String kStatementYear = 'Statement Year'; //
+  static const String kViewImage = 'View Image'; //
+  static const String kPurposeOfPayment = 'Purpose of payment'; //
+  static const String kModeOfPayment = 'Mode of payment'; //
+  static const String kInvoiceCurrency = 'Invoice Currency'; //
+  static const String kAmount = 'Amount'; //
+  static const String kAmountOther = 'Amount(Other)'; //
+  static const String kIncomingInvoiceList = 'Incoming Invoice List'; //
+  static const String kBankStatementList = 'Bank Statement List'; //
   static const String kNoChecklist = 'No checklist!'; //
   static const String kSelectAll = 'Select All:'; //
   static const String kSelect = 'Select'; //
   static const String kNoLogs = 'No logs!'; //
   static const String kNoItems = 'No items!'; //
   static const String kNoLoto = 'No loto!'; //
+  static const String kSuspectedCause = 'Suspected Cause'; //
+  static const String kRootCause = 'Root Cause'; //
+  static const String kLessonsLearnt = 'Lessons Learnt'; //
+  static const String kPreventiveActions = 'Preventive Actions'; //
+  static const String kIncidentSuspectedCauseValidation =
+      'Please fill suspected cause!'; //
+  static const String kIncidentRootCauseLessonValidation =
+      'Please fill root cause & lessons learnt!'; //
+  static const String kIncidentPreliminaryRecommendationValidation =
+      'Please fill preliminary recommendations!'; //
+  static const String kIncidentCompletedCorrectiveActionsValidation =
+      'Please fill completed corrective actions!'; //
+  static const String kIncidentPreventiveActionsValidation =
+      'Please fill preventive actions!'; //
+  static const String kPreliminaryRecommendation =
+      'Preliminary Recommendation'; //
+  static const String kCompletedCorrectiveActions =
+      'Completed Corrective Actions'; //
   static const String kNoPermit = 'No permit!'; //
   static const String kNoDocuments = 'No documents!'; //
   static const String kNoParts = 'No items/parts!'; //
@@ -27,6 +67,14 @@ abstract class StringConstants {
   static const String kTypeOfRoom = 'Type of Room '; //
   static const String kNameOfHotel = 'Name of hotel :'; //
   static const String kEditItem = 'Edit Item'; //
+  static const String kInvoiceYear = 'Invoice Year'; //
+  static const String kYear = 'Year'; //
+  static const String kEntity = 'Entity'; //
+  static const String kClient = 'Client'; //
+  static const String kBank = 'Bank'; //
+  static const String kSelectYear = 'Select Year'; //
+  static const String kSelectEntity = 'Select Entity'; //
+  static const String kSelectClient = 'Select Client'; //
   static const String kExpenseWorkingAtNumber =
       'Working at Number cannot be empty!    '; //
   static const String kGoBack = 'Go Back'; //
@@ -53,8 +101,11 @@ abstract class StringConstants {
   static const String kWelcome = 'Welcome';
   static const String kPlannedQuantity = "Planned Quantity: ";
   static const String kCamera = 'Camera';
+  static const String kImage = 'Image';
   static const String kOther = 'Other';
   static const String kDevice = 'Device';
+  static const String kGallery = 'Gallery';
+  static const String kDocument = 'Document';
   static const String kUploadFrom = 'Upload From';
   static const String kEnterReason = 'Enter Reason';
   static const String kType = 'Type';
@@ -65,6 +116,7 @@ abstract class StringConstants {
   static const String kAddMore = 'Add More';
   static const String kDelete = 'Delete';
   static const String kAddImages = 'Add Images/Comment';
+  static const String kAddComment = 'Add Comment';
   static const String kErrorImageUpload =
       'Cannot upload image! Please try again!';
   static const String kErrorPickImage = 'Failed to pick image';
@@ -105,9 +157,14 @@ abstract class StringConstants {
   static const String kSelectDueDate = 'Please select due date!'; //
   static const String kAddHeading = 'Please add heading!'; //
   static const String kAddDescription = 'Please add description!'; //
+  static const String kSelectDistribution = 'Please select a distribution'; //
+  static const String kEditTicket = 'Edit Ticket'; //
+  static const String kAffectedEquipment = 'Affected Equipment'; //
+  static const String kResponsibility = 'Responsibility'; //
   static const String kAssignedToMe = 'assignedtome'; //
   static const String kAssignedByMe = 'assignedbyme'; //
   static const String kViewHistory = 'View History'; //
+  static const String kPleaseAttachDocument = 'Please attach document'; //
   static const String kDocumentNameValidation =
       'Please enter document name!'; //
   static const String kDocumentUploadValidation =
@@ -145,6 +202,7 @@ abstract class StringConstants {
   static const String kExpenseAddItemDateAndItemValidation =
       'Date and Item are compulsory.'; //
   static const String kEnterOtp = 'Enter OTP'; //
+  static const String kAddDateTime = 'Add date and time'; //
   static const String kAllDataLoaded = 'All Data Loaded'; //
   static const String kSelectCategory = 'Select category'; //
   static const String kSelectVendor = 'Select vendor'; //
@@ -214,6 +272,8 @@ abstract class StringConstants {
   static const String kDateRange = 'Date Range';
   static const String kEmailAndPhoneNo = 'Email & Phone';
   static const String kSelectDate = 'Select Date';
+  static const String kSelectStartDate = 'Select Start Date';
+  static const String kSelectEndDate = 'Select End Date';
   static const String kPleaseSelectDate = 'Please Select Date!';
   static const String kBis = 'bis';
   static const String kStatus = 'Status';
@@ -228,7 +288,10 @@ abstract class StringConstants {
   static const String kSelectTime = 'Select Time';
   static const String kPleaseSelectTime = 'Please Select Time!';
   static const String kPleaseAddSignature = 'Please add signature!';
+  static const String kPleaseAddComments = 'Please add comments!';
+  static const String kPleaseAddHeader = 'Please add header!';
   static const String kDetailedDescription = 'Detailed description of facts';
+  static const String kSummaryOfIncident = 'Summary of Incident';
   static const String kPhoto = 'Photo';
   static const String kSelectContractor = 'Select Contractor';
   static const String kSite = 'Site';
@@ -249,6 +312,7 @@ abstract class StringConstants {
   static const String kValidateEmptyPassword = 'Please enter password';
   static const String kSelectUserTypeValidation = 'Please select a type'; //
   static const String kSearch = 'Search'; //
+  static const String kClear = 'Clear'; //
   static const String kPermitFirstQuestion = 'First'; //
   static const String kPermitSecondQuestion = 'Second'; //
   static const String kRefresh = 'Refresh'; //
@@ -266,6 +330,8 @@ abstract class StringConstants {
   static const String kEventDateValidation = 'Event date cannot be empty.'; //
   static const String kEventTimeValidation = 'Event time cannot be empty.'; //
   static const String kSomethingWentWrong = 'Something went wrong';
+  static const String kOfflineWoFailed =
+      'No WO assign to you for accessing offline.';
   static const String kFailedToSaveData = 'Failed to save data!';
   static const String kNameValidation = 'Please add name!';
   static const String kDataSavedSuccessfully = 'Data saved successfully!';
@@ -284,15 +350,19 @@ abstract class StringConstants {
   static const String kEmergency = 'Emergency';
   static const String kKeywords = 'Keywords';
   static const String kFilter = 'Filter';
-  static const String kGeneratePdf = 'Generate PDF';
+  static const String kPrintPermit = 'Print Permit';
+  static const String kExportPermit = 'Transfer Permit';
   static const String kClosePermit = 'Cancel Permit';
   static const String kOpenPermit = 'Issue Permit';
   static const String kRequestPermit = 'Request Permit';
   static const String kPreparePermit = 'Prepare Permit';
   static const String kTransferTo = 'Transfer To';
+  static const String kImportFile = 'Import File';
   static const String kSAP = 'SAP';
+  static const String kCP = "CP";
   static const String kEditSafetyDocument = 'Edit Safety Document';
   static const String kSignAsSap = 'Sign as SAP';
+  static const String kSignAsUser = 'Sign as User';
   static const String kSignAsCp = 'Sign as CP';
   static const String kAcceptPermitRequest = 'Accept Permit Request';
   static const String kPermitTransferWarning =
@@ -532,7 +602,6 @@ abstract class StringConstants {
   static const String kSearchByOwnerName = "Search by Owner name";
   static const String kSearchByDocumentName = "Search by Document name";
   static const String kAssetDocuments = 'Asset Documents';
-  static const String kWorkforceDeleted = 'Workforce Deleted';
   static const String kScanEquipment = 'Scan Equipment';
   static const String kTransferEquipment = 'Transfer Equipment';
   static const String kTransfer = 'Transfer';
@@ -599,6 +668,8 @@ abstract class StringConstants {
   static const String kDocumentManagement = 'Document Management';
   static const String kDateTimeDescriptionContractorIsNotEmpty =
       'Incident date, time, description, contractor cannot be empty.';
+  static const String kCategoryDateTimeDescriptionContractorIsNotEmpty =
+      'Category,Incident date, time, description, contractor cannot be empty.';
   static const String kExpenseReportRejected = "Expense Report Rejected";
   static const String kExpenseReportComments = 'Please add comment first';
   static const String kYouFailed = "You've Failed";
@@ -606,7 +677,7 @@ abstract class StringConstants {
   static const String kInvalidCode = "Invalid Code";
   static const String kCannotUploadImage =
       "There is an issue while uploading the image. Please try again!";
-  static const String kCannotPickImage = "Can't upload more that 6 images";
+  static const String kCannotPickImage = "Can't upload more that 6 files!";
   static const String kPleaseScanRemoveLotoQR =
       "To open the Remove LOTO page, Please scan the ToolKitx QR code located at ";
   static const String kPleaseScanStartLotoQR =
@@ -623,7 +694,9 @@ abstract class StringConstants {
   static const String kOfflineDataReady =
       "You are ready to use the app in offline mode!";
   static const String kOfflineFailedInDataPreparation =
-      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.'; //
+      'Oops! Something did not went right while preparing for offline mode. Please try again after sometime.';
+  static const String kNotGrantedPermitOffline =
+      "You are not granted any permits to use offline";
   static const String kOpenTicket = "Open Ticket";
   static const String kApproveOfDev2 = "Approve for Dev2";
   static const String kBackToApprove = "Back to Approve";
@@ -634,4 +707,138 @@ abstract class StringConstants {
       "EDT should be greater than 0 for selected status";
   static const String kPleaseSelectVo = "Please select VO Needed to continue";
   static const String kVoNeeded = "Vo Needed";
+  static const String kPleaseWaitWhileFetchingLocation =
+      'Please wait while we fetch your current location...';
+  static const String kLocationPermissionNotGranted =
+      'Location permission not granted';
+  static const String kPDFGenerationError = 'Error in generating PDF';
+  static const String kPurposeText = "Purpose Text";
+  static const String kVessel = "Vessel";
+  static const String kDepartureDate = "Departure Date";
+  static const String kActualDepartureDate = "Actual Departure Date";
+  static const String kArrivalDate = "Arrival Date";
+  static const String kActualArrivalDate = "Actual Arrival Date";
+  static const String kDeparturePort = "Departure Port";
+  static const String kArrivalPort = "Arrival Port";
+  static const String kNotes = "Notes";
+  static const String kAddSpecialRequest = "Add Special Request";
+  static const String kEditSpecialRequest = "Edit Special Request";
+  static const String kDeleteSpecialRequest = "Delete Special Request";
+  static const String kCreatedFor = "Created For";
+  static const String kSpecialRequestType = "Special Request Type";
+  static const String kSpecialRequest = "Special Request";
+  static const String kManageSpecialRequest = "Manage Special Request";
+  static const String kSelectMembers = "Click to select members";
+  static const String kEnterGroupName = 'Please enter group name!';
+  static const String kGroupName = 'Name of Group';
+  static const String kGroupPurpose = "Purpose of the Group";
+  static const String kAddNewGroup = "Add New Group";
+  static const String kAttachmentLimit =
+      "Cannot upload attachement more than 20 mb!";
+  static const String kUploadingAttachment =
+      "Uploading attachment, please wait!";
+  static const String kUploadingAttachmentError =
+      "Something went wrong. Please try again later!";
+  static const String kSend = "Send";
+  static const String kMsgCopyToClipboard = "Message copied to clipboard";
+  static const String kSendMessage = "Send a message";
+  static const String kMarkAsComplete = "Mark as Complete";
+  static const String kGeneratePdf = "Generate Pdf";
+  static const String kNoMeetingsToday = "No Meetings today";
+  static const String kSearchRoom = "Search Room";
+  static const String kShortAgenda = 'Short Agenda';
+  static const String kLongAgenda = "Long Agenda";
+  static const String kOwner = "Owner";
+  static const String kParticipants = "Participants";
+  static const String kLoading = "Loading...";
+  static const String kShortLongAgendaParticipantMandatory =
+      'Short agenda, Long agenda, Participants are Mandatory';
+  static const String kEndsOnMandatory = "Ends on field is mandatory";
+  static const String kPleaseSelectRoom = 'Please select a room to proceed';
+  static const String kGroupAdmin = "Group Admin";
+  static const String kEquipmentUIN = "Equipment UIN";
+  static const String kOperation = "Operation";
+  static const String kInstructionReceivedBy = "Instruction Received By :";
+  static const String kInstructedDateTime = "Instructed DateTime :";
+  static const String kControlEngineer = "Control Engineer :";
+  static const String kCarriedoutDateTime = "Carriedout DateTime :";
+  static const String kCarriedoutConfirmedDateTime =
+      "Carriedout Confirmed DateTime:";
+  static const String kSafetyKeyNumber = "Safety Key Number:";
+  static const String kCarriedoutNotSimilarToCarriedoutConfirmed =
+      "Carriedout DateTime not equal to Carriedout Confirmed DateTime";
+  static const String kAdd = "Add";
+  static const String kLocationEquipmentOperationMandatory =
+      "Location, Equipment UIN and Operation fields are Mandatory";
+  static const String kIncludingVoltageLevel =
+      "Including voltage level if appropriate";
+  static const String kCategoryName = "Category Name";
+  static const String kEditSelected = "Edit Selected";
+  static const String kSubmitResponse = "Submit Response";
+  static const String kTank = "Tank";
+  static const String kLastUpdatedAt = "Last Updated At";
+  static const String kProduct = "Product";
+  static const String kTruckNo = "Truck No";
+  static const String kEntryDateTime = "EntryDate Time";
+  static const String kEntryWeight = "Entry Weight (Kg)";
+  static const String kExitDateTime = "Exit DateTime";
+  static const String kExitWeight = "Exit Weight(Kg)";
+  static const String kTankInitialWeight = "Tank Initial Weight (Kg)";
+  static const String kTankInitialLevel = "Tank Initial Level (mm)";
+  static const String kTankFinalWeight = "Tank Final Weight (Kg)";
+  static const String kTankFinalLevel = "Tank Final Level (mm)";
+  static const String kTankLevel = "Tank Level (mm)";
+  static const String kTankVolume = "Tank Volume (cbm)";
+  static const String kTankTemperature = "Tank Temperature (°C)";
+  static const String kTankMass = "Tank Mass (Kg)";
+  static const String kOpenReading = "OpenReading";
+  static const String kCloseReading = "CloseReading";
+  static const String kFlowMeterQuantityKGAsPerCompartment =
+      "FlowMeter Quantity (Kg) as per Compartment";
+  static const String kReportingTime = "Reporting Time";
+  static const String kTHAInTime = "THA In Time";
+  static const String kTHAOutTime = "THA Out Time";
+  static const String kTHAOperationCompleted = "THA Operation Completed";
+  static const String kStartDateTime = "Start DateTime";
+  static const String kEndDateTime = "End DateTime";
+  static const String kTitle = "Title";
+  static const String kScheduledDate = "Scheduled Date";
+  static const String kCustomer = "Customer";
+  static const String kContract = "Contract";
+  static const String kQuantityCbm = "Quantity (cbm)";
+  static const String kQuantityKg = "Quantity (Kg)";
+  static const String kSurveyour = "Surveyour";
+  static const String kCustomStatus = "Custom Status";
+  static const String kRFIdNumber = "RFId Number";
+  static const String kTankerName = "Tanker Name";
+  static const String kMaxCapacity = "Max Capacity";
+  static const String kSealNumber = "Seal Number (s)";
+  static const String kTop = "Top";
+  static const String kBottom = "Bottom";
+  static const String kDriverEIDName = "Driver EID/Name";
+  static const String kCarrierCompany = "Carrier Company";
+  static const String kNoOfCompartment = "No Of Compartment";
+  static const String kFlowMeterQuantityCBMPerCompartment =
+      "FlowMeter Quantity (cbm) per Compartment";
+  static const String kTruckLoadingPosition = "Truck Loading Position";
+  static const String kDriverPhone = "Driver Phone";
+  static const String kShipName = "Ship Name";
+  static const String kBerth = "Berth";
+  static const String kAgent = "Agent";
+  static const String kCaptainCarrierPerson = "Captain/Carrier Person";
+  static const String kLoadPart = "Load Part";
+  static const String kDisport = "Disport";
+  static const String kCountryOfOrigin = "Country of Origin";
+  static const String kCountryOfProduction = "Country of Production";
+  static const String kDestinationTank = "Destination Tank";
+  static const String kOutGoingInvoice = "OutGoing Invoice";
+  static const String kInComingInvoice = "InComing Invoice";
+  static const String kBankStatement = "Bank Statement";
+  static const String kAccounting = "Accounting";
+  static const String kOutGoingInvoiceList = "Outgoing Invoice List";
+  static const String kInComingInvoiceList = "Incoming Invoice List";
+  static const String kEntityClientProjectInvoiceDAteCanNotBeEmpty =
+      "Entity ,Client ,Project ,Invoice Date can not be empty";
+  static const String kAmountAttachedDocumentsCanNotBeEmpty =
+      "Amount , Attached Documents can not be empty";
 }

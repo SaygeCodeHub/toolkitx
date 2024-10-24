@@ -16,8 +16,7 @@ import 'incident_location_list.dart';
 class IncidentLocationListTile extends StatelessWidget {
   final Map addIncidentMap;
 
-  const IncidentLocationListTile({Key? key, required this.addIncidentMap})
-      : super(key: key);
+  const IncidentLocationListTile({super.key, required this.addIncidentMap});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +41,8 @@ class IncidentLocationListTile extends StatelessWidget {
                               builder: (context) => IncidentLocationList(
                                   fetchIncidentMasterModel:
                                       state.fetchIncidentMasterModel,
-                                  selectLocationName:
-                                      state.selectLocationName)));
+                                  selectLocationName: state.selectLocationName,
+                                  addIncidentMap: addIncidentMap)));
                     },
                     title: Text(DatabaseUtil.getText('Location'),
                         style: Theme.of(context)

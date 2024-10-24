@@ -16,9 +16,8 @@ class LotoViewResponseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context
-        .read<LotoDetailsBloc>()
-        .add(FetchLotoChecklistQuestions(checkListId: checklistId));
+    context.read<LotoDetailsBloc>().add(FetchLotoChecklistQuestions(
+        checkListId: checklistId, isRemoveOperation: "0"));
     return Scaffold(
       appBar: const GenericAppBar(title: "Back to Checklist"),
       body: Padding(

@@ -51,7 +51,7 @@ class WorkOrderDetailsTabOne extends StatelessWidget {
               style: Theme.of(context).textTheme.medium,
             ),
             const SizedBox(height: xxTinierSpacing),
-            Text(data.plannedfinishdate,
+            Text(data.plannedfinishdatetime,
                 style: Theme.of(context).textTheme.small),
             const SizedBox(height: tinySpacing),
             Text(

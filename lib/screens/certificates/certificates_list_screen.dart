@@ -46,6 +46,7 @@ class CertificatesListScreen extends StatelessWidget {
                                     return CertificateListCard(
                                       data: state
                                           .fetchCertificatesModel.data[index],
+                                      clientId: state.clientId,
                                     );
                                   },
                                   separatorBuilder: (context, index) {

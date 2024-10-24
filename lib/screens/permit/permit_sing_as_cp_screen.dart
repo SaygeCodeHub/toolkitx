@@ -26,7 +26,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    permitCpSapModel.sapCpMap['user_sign'] = '';
+    permitCpSapModel.sapCpMap['npw_sign'] = '';
     return Scaffold(
         appBar: const GenericAppBar(title: StringConstants.kSignAsCp),
         bottomNavigationBar: Padding(
@@ -88,13 +88,13 @@ class PermitSignAsCpScreen extends StatelessWidget {
                                 permitCpSapModel.sapCpMap['user_time'] == '') {
                               showCustomSnackBar(context,
                                   StringConstants.kPleaseSelectTime, '');
-                            } else if (permitCpSapModel.sapCpMap['user_sign'] ==
+                            } else if (permitCpSapModel.sapCpMap['npw_sign'] ==
                                     null ||
-                                permitCpSapModel.sapCpMap['user_sign'] == '') {
+                                permitCpSapModel.sapCpMap['npw_sign'] == '') {
                               showCustomSnackBar(context,
                                   StringConstants.kPleaseEnterSignature, '');
                             } else {
-                              SaveOfflineDataUtil().saveData(
+                              SaveOfflineDataUtil().savePermitData(
                                   permitCpSapModel.previousScreen,
                                   permitCpSapModel.sapCpMap,
                                   context);
@@ -182,7 +182,7 @@ class PermitSignAsCpScreen extends StatelessWidget {
                       }),
                       const SizedBox(height: xxTinySpacing),
                       SignaturePad(
-                          map: permitCpSapModel.sapCpMap, mapKey: 'user_sign'),
+                          map: permitCpSapModel.sapCpMap, mapKey: 'npw_sign'),
                       const SizedBox(height: xxTinySpacing)
                     ]))));
   }

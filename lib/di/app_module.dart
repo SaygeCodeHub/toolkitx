@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toolkit/data/models/permit/all_permits_model.dart';
 import 'package:toolkit/repositories/SignInQRCode/signin_repository_impl.dart';
+import 'package:toolkit/repositories/accounting/accounting_repository.dart';
+import 'package:toolkit/repositories/accounting/accounting_repository_impl.dart';
 import 'package:toolkit/repositories/assets/assets_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository.dart';
 import 'package:toolkit/repositories/certificates/certificates_repository_impl.dart';
@@ -16,14 +18,20 @@ import 'package:toolkit/repositories/incident/incident_repository_impl.dart';
 import 'package:toolkit/repositories/location/location_repository.dart';
 import 'package:toolkit/repositories/location/location_repository_impl.dart';
 import 'package:toolkit/repositories/login/login_repository_impl.dart';
+import 'package:toolkit/repositories/meetingRoom/meeting_room_repository.dart';
 import 'package:toolkit/repositories/profile/profile_repository_impl.dart';
+import 'package:toolkit/repositories/tankManagement/tank_management_repository.dart';
+import 'package:toolkit/repositories/tankManagement/tank_management_repository_impl.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository.dart';
 import 'package:toolkit/repositories/tickets/tickets_repository_impl.dart';
-import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+import 'package:toolkit/repositories/tickets2/tickets2_repository.dart';
+import 'package:toolkit/repositories/tickets2/tickets2_repository_impl.dart';
 
 import '../data/cache/customer_cache.dart';
 import 'package:toolkit/repositories/trips/trips_repository.dart';
 import 'package:toolkit/repositories/trips/trips_repository_impl.dart';
+import 'package:toolkit/screens/chat/widgets/chat_data_model.dart';
+
 import '../repositories/LogBook/logbook_repository.dart';
 import '../repositories/LogBook/logbook_repository_impl.dart';
 import '../repositories/SignInQRCode/signin_repository.dart';
@@ -47,6 +55,7 @@ import '../repositories/leavesAndHolidays/leaves_and_holidays_repository_impl.da
 import '../repositories/login/login_repository.dart';
 import '../repositories/loto/loto_repository.dart';
 import '../repositories/loto/loto_repository_impl.dart';
+import '../repositories/meetingRoom/meeting_room_repository_impl.dart';
 import '../repositories/notification/notification_repository.dart';
 import '../repositories/notification/notification_repository_impl.dart';
 import '../repositories/permit/permit_repository.dart';
@@ -54,6 +63,8 @@ import '../repositories/permit/permit_repository_impl.dart';
 import '../repositories/profile/profile_repository.dart';
 import '../repositories/qualityManagement/qm_repository.dart';
 import '../repositories/qualityManagement/qm_repository_impl.dart';
+import '../repositories/root/root_repository.dart';
+import '../repositories/root/root_repository_impl.dart';
 import '../repositories/safetyNotice/safety_notice_repository.dart';
 import '../repositories/safetyNotice/safety_notice_repository_impl.dart';
 import '../repositories/timeZone/time_zone_repository.dart';
@@ -116,6 +127,8 @@ configurableDependencies() {
   getIt.registerLazySingleton<ChatData>(() => ChatData());
   getIt.registerLazySingleton<EquipmentTraceabilityRepo>(
       () => EquipmentTraceabilityRepoImpl());
+  getIt.registerLazySingleton<RootRepository>(() => RootRepositoryImpl());
+
   getIt.registerLazySingleton<TicketsRepository>(() => TicketsRepositoryImpl());
   getIt.registerLazySingleton<NotificationRepository>(
       () => NotificationRepositoryImpl());
@@ -123,4 +136,12 @@ configurableDependencies() {
   getIt
       .registerLazySingleton<ChatBoxRepository>(() => CheckBoxRepositoryImpl());
   getIt.registerLazySingleton<TripsRepository>(() => TripsRepositoryImpl());
+  getIt.registerLazySingleton<TankManagementRepository>(
+      () => TankManagementRepositoryImpl());
+  getIt.registerLazySingleton<MeetingRoomRepository>(
+      () => MeetingRoomRepositoryImpl());
+  getIt.registerLazySingleton<Tickets2Repository>(
+      () => Tickets2RepositoryImpl());
+  getIt.registerLazySingleton<AccountingRepository>(
+      () => AccountingRepositoryImpl());
 }

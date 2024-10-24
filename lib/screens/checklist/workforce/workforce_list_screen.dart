@@ -73,6 +73,17 @@ class WorkForceListScreen extends StatelessWidget {
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    // workorders is only for demo purpose remove it after it. Date of demo: 6th Nov 2024
+                                    if (state.workforceGetCheckListModel
+                                        .data![index].workOrders.isNotEmpty)
+                                      Text(
+                                          state.workforceGetCheckListModel
+                                              .data![index].workOrders,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis),
+                                    if (state.workforceGetCheckListModel
+                                        .data![index].workOrders.isNotEmpty)
+                                      const SizedBox(height: xxTinierSpacing),
                                     Text(
                                       '${DatabaseUtil.getText('Assignedate')}: ${state.workforceGetCheckListModel.data![index].submitdate}  -- ${DatabaseUtil.getText('Dueon')}: ${state.workforceGetCheckListModel.data![index].overduedate}',
                                     ),

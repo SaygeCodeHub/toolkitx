@@ -43,6 +43,7 @@ class OfflinePermitDatum {
   final List<dynamic> tab4;
   final List<Tab5> tab5;
   final List<dynamic> tab6;
+  final List<Tab7> tab7;
   final Map<String, String> html;
 
   OfflinePermitDatum({
@@ -55,6 +56,7 @@ class OfflinePermitDatum {
     required this.tab4,
     required this.tab5,
     required this.tab6,
+    required this.tab7,
     required this.html,
   });
 
@@ -81,6 +83,7 @@ class OfflinePermitDatum {
             ? List<Tab5>.from(json["tab5"].map((x) => Tab5.fromJson(x)))
             : [],
         tab6: (json["tab6"] != null) ? List<dynamic>.from(json["tab6"]) : [],
+        tab7: List<Tab7>.from(json["tab7"].map((x) => Tab7.fromJson(x))),
         html: (json["html"] != null)
             ? Map.from(json["html"])
                 .map((k, v) => MapEntry<String, String>(k, v.toString()))
@@ -97,6 +100,7 @@ class OfflinePermitDatum {
         "tab4": List<dynamic>.from(tab4.map((x) => x)),
         "tab5": List<dynamic>.from(tab5.map((x) => x.toJson())),
         "tab6": List<dynamic>.from(tab6.map((x) => x)),
+        "tab7": List<dynamic>.from(tab7.map((x) => x.toJson())),
         "html": Map.from(html).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
@@ -447,5 +451,142 @@ class Tab5 {
         "name": name,
         "type": type,
         "files": files,
+      };
+}
+
+class Tab7 {
+  final String id;
+  final String number;
+  final String title;
+  final dynamic status;
+  final List<Instruction> instructions;
+
+  Tab7({
+    required this.id,
+    required this.number,
+    required this.title,
+    required this.status,
+    required this.instructions,
+  });
+
+  factory Tab7.fromJson(Map<String, dynamic> json) => Tab7(
+        id: json["id"],
+        number: json["number"],
+        title: json["title"],
+        status: json["status"],
+        instructions: List<Instruction>.from(
+            json["instructions"].map((x) => Instruction.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "number": number,
+        "title": title,
+        "status": status,
+        "instructions": List<dynamic>.from(instructions.map((x) => x.toJson())),
+      };
+}
+
+class Instruction {
+  final String id;
+  final String location;
+  final String equipmentuid;
+  final String operation;
+  final String instructionreceivedbyname;
+  final String controlengineername;
+  final String safetykeynumber;
+  final dynamic permitswitchingscheduleid;
+  final dynamic instructionreceivedby;
+  final dynamic controlengineerid;
+  final String permitid;
+  final dynamic sortorder;
+  final dynamic ismanual;
+  final String canexecute;
+  final String instructionreceiveddatetime;
+  final String instructionreceiveddate;
+  final String instructionreceivedtime;
+  final String carriedoutdatetime;
+  final String carriedoutdate;
+  final String carriedouttime;
+  final String carriedoutconfirmeddatetime;
+  final String carriedoutconfirmeddate;
+  final String carriedoutconfirmedtime;
+
+  Instruction({
+    required this.id,
+    required this.location,
+    required this.equipmentuid,
+    required this.operation,
+    required this.instructionreceivedbyname,
+    required this.controlengineername,
+    required this.safetykeynumber,
+    required this.permitswitchingscheduleid,
+    required this.instructionreceivedby,
+    required this.controlengineerid,
+    required this.permitid,
+    required this.sortorder,
+    required this.ismanual,
+    required this.canexecute,
+    required this.instructionreceiveddatetime,
+    required this.instructionreceiveddate,
+    required this.instructionreceivedtime,
+    required this.carriedoutdatetime,
+    required this.carriedoutdate,
+    required this.carriedouttime,
+    required this.carriedoutconfirmeddatetime,
+    required this.carriedoutconfirmeddate,
+    required this.carriedoutconfirmedtime,
+  });
+
+  factory Instruction.fromJson(Map<String, dynamic> json) => Instruction(
+        id: json["id"] ?? '',
+        location: json["location"] ?? "",
+        equipmentuid: json["equipmentuid"] ?? "",
+        operation: json["operation"] ?? "",
+        instructionreceivedbyname: json["instructionreceivedbyname"] ?? '',
+        controlengineername: json["controlengineername"] ?? '',
+        safetykeynumber: json["safetykeynumber"] ?? '',
+        permitswitchingscheduleid: json["permitswitchingscheduleid"] ?? '',
+        instructionreceivedby: json["instructionreceivedby"] ?? '',
+        controlengineerid: json["controlengineerid"] ?? '',
+        permitid: json["permitid"] ?? '',
+        sortorder: json["sortorder"] ?? '',
+        ismanual: json["ismanual"] ?? '',
+        canexecute: json["canexecute"] ?? '',
+        instructionreceiveddatetime: json["instructionreceiveddatetime"] ?? "",
+        instructionreceiveddate: json["instructionreceiveddate"] ?? "",
+        instructionreceivedtime: json["instructionreceivedtime"] ?? "",
+        carriedoutdatetime: json["carriedoutdatetime"] ?? "",
+        carriedoutdate: json["carriedoutdate"] ?? "",
+        carriedouttime: json["carriedouttime"] ?? "",
+        carriedoutconfirmeddatetime: json["carriedoutconfirmeddatetime"] ?? "",
+        carriedoutconfirmeddate: json["carriedoutconfirmeddate"] ?? "",
+        carriedoutconfirmedtime: json["carriedoutconfirmedtime"] ?? "",
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "location": location,
+        "equipmentuid": equipmentuid,
+        "operation": operation,
+        "instructionreceivedbyname": instructionreceivedbyname,
+        "controlengineername": controlengineername,
+        "safetykeynumber": safetykeynumber,
+        "permitswitchingscheduleid": permitswitchingscheduleid,
+        "instructionreceivedby": instructionreceivedby,
+        "controlengineerid": controlengineerid,
+        "permitid": permitid,
+        "sortorder": sortorder,
+        "ismanual": ismanual,
+        "canexecute": canexecute,
+        "instructionreceiveddatetime": instructionreceiveddatetime,
+        "instructionreceiveddate": instructionreceiveddate,
+        "instructionreceivedtime": instructionreceivedtime,
+        "carriedoutdatetime": carriedoutdatetime,
+        "carriedoutdate": carriedoutdate,
+        "carriedouttime": carriedouttime,
+        "carriedoutconfirmeddatetime": carriedoutconfirmeddatetime,
+        "carriedoutconfirmeddate": carriedoutconfirmeddate,
+        "carriedoutconfirmedtime": carriedoutconfirmedtime,
       };
 }

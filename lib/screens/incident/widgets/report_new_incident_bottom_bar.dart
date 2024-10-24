@@ -19,8 +19,7 @@ class ReportNewIncidentBottomBar extends StatelessWidget {
   final Map addAndEditIncidentMap;
 
   const ReportNewIncidentBottomBar(
-      {Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +56,11 @@ class ReportNewIncidentBottomBar extends StatelessWidget {
                         context, StringConstants.kUploadFiles);
                   } else if (state is ImageUploaded) {
                     GenericLoadingPopUp.dismiss(context);
+                    addAndEditIncidentMap['ImageString'] = state.images
+                        .toString()
+                        .replaceAll('[', '')
+                        .replaceAll(']', '')
+                        .replaceAll(' ', '');
                     context.read<ReportNewIncidentBloc>().add(
                         ReportNewIncidentDateTimeDescriptionValidation(
                             reportNewIncidentMap: addAndEditIncidentMap));
@@ -70,10 +74,10 @@ class ReportNewIncidentBottomBar extends StatelessWidget {
             child: Expanded(
               child: PrimaryButton(
                   onPressed: () {
-                    if (addAndEditIncidentMap['filenames'] != null &&
-                        addAndEditIncidentMap['filenames'].isNotEmpty) {
+                    if (addAndEditIncidentMap['pickedImage'] != null &&
+                        addAndEditIncidentMap['pickedImage'].isNotEmpty) {
                       context.read<UploadImageBloc>().add(UploadImage(
-                          images: addAndEditIncidentMap['filenames'],
+                          images: addAndEditIncidentMap['pickedImage'],
                           imageLength: context
                               .read<ImagePickerBloc>()
                               .lengthOfImageList));

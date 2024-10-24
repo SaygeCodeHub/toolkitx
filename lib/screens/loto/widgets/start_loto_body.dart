@@ -10,7 +10,9 @@ import '../../../configs/app_spacing.dart';
 import '../../../utils/database_utils.dart';
 
 class StartLotoBody extends StatelessWidget {
-  const StartLotoBody({super.key});
+  const StartLotoBody({super.key, required this.startLotoMap});
+
+  final Map startLotoMap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,9 @@ class StartLotoBody extends StatelessWidget {
                               .data!.questionlist!.length,
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
+                            List answerList =
+                                context.read<LotoDetailsBloc>().answerList;
+                            answerList.add({});
                             StartLotoScreen.saveLotoChecklistMap["questionid"] =
                                 questionList![index].id;
                             return Column(
@@ -67,10 +72,10 @@ class StartLotoBody extends StatelessWidget {
                                               .data!
                                               .questionlist![index]
                                               .queoptions,
-                                          context
-                                              .read<LotoDetailsBloc>()
-                                              .answerList,
-                                          context)
+                                          answerList,
+                                          context,
+                                          index,
+                                          startLotoMap)
                                 ]);
                           },
                           separatorBuilder: (context, index) {

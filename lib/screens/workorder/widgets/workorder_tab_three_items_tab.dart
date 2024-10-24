@@ -7,6 +7,7 @@ import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
+import '../../../utils/global.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
 import '../workorder_edit_items_screen.dart';
@@ -43,24 +44,27 @@ class WorkOrderTabThreeItemsTab extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.black)),
                           const Spacer(),
-                          WorkOrderItemTabDeleteButton(
-                              itemId: data.items[index].id),
+                          if (isNetworkEstablished)
+                            WorkOrderItemTabDeleteButton(
+                                itemId: data.items[index].id),
                           const SizedBox(width: xxxTinierSpacing),
-                          CustomIconButton(
-                              icon: Icons.edit,
-                              onPressed: () {
-                                Map assignItemMap = {
-                                  "item": data.items[index].item,
-                                  "status": data.status,
-                                  "itemid": data.items[index].itemid,
-                                  "plannedquan": data.items[index].plannedquan,
-                                  "actualquan": data.items[index].actualquan
-                                };
-                                Navigator.pushNamed(
-                                    context, WorkOrderEditItemsScreen.routeName,
-                                    arguments: assignItemMap);
-                              },
-                              size: kEditAndDeleteIconTogether)
+                          if (isNetworkEstablished)
+                            CustomIconButton(
+                                icon: Icons.edit,
+                                onPressed: () {
+                                  Map assignItemMap = {
+                                    "item": data.items[index].item,
+                                    "status": data.status,
+                                    "itemid": data.items[index].itemid,
+                                    "plannedquan":
+                                        data.items[index].plannedquan,
+                                    "actualquan": data.items[index].actualquan
+                                  };
+                                  Navigator.pushNamed(context,
+                                      WorkOrderEditItemsScreen.routeName,
+                                      arguments: assignItemMap);
+                                },
+                                size: kEditAndDeleteIconTogether)
                         ],
                       ),
                       subtitle: Padding(

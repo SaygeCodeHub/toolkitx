@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_events.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/data/models/encrypt_class.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
 import 'package:toolkit/repositories/qualityManagement/qm_repository.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../../../data/cache/customer_cache.dart';
@@ -42,6 +43,7 @@ class QualityManagementBloc
   String nextStatus = '';
   String encryptQmId = '';
   int imageNumber = 0;
+  String qaId = '';
 
   QualityManagementStates get initialState => QualityManagementInitial();
 
@@ -75,6 +77,7 @@ class QualityManagementBloc
     on<FetchQualityManagementClassificationValue>(_fetchClassification);
     on<QualityManagementClearFilter>(_clearFilter);
     on<QualityManagementApplyFilter>(_applyFilter);
+    on<FetchCustomFieldsByKey>(_fetchCustomFieldsByKey);
   }
 
   _applyFilter(QualityManagementApplyFilter event,
@@ -145,8 +148,9 @@ class QualityManagementBloc
                 .data.customfields[i].fieldvalue
           });
         }
-        imageNumber = fetchQualityManagementDetailsModel.data.files.length;
+        imageNumber = fetchQualityManagementDetailsModel.data.files!.length;
         Map editQMDetailsMap = {
+          "id": fetchQualityManagementDetailsModel.data.id,
           "description": fetchQualityManagementDetailsModel.data.description,
           "responsible_person": "",
           "site": fetchQualityManagementDetailsModel.data.site,
@@ -158,11 +162,13 @@ class QualityManagementBloc
           "companyid": fetchQualityManagementDetailsModel.data.companyid,
           "customfields": customFields,
           "incidentid": encryptQmId,
-          "files": fetchQualityManagementDetailsModel.data.files,
+          "files": fetchQualityManagementDetailsModel.data.files ?? '',
           "eventdatetime":
               fetchQualityManagementDetailsModel.data.eventdatetime,
           "severityname": fetchQualityManagementDetailsModel.data.severityname,
-          "impactname": fetchQualityManagementDetailsModel.data.impactname
+          "impactname": fetchQualityManagementDetailsModel.data.impactname,
+          "categoryid": fetchQualityManagementDetailsModel.data.categoryid,
+          "categoryname": fetchQualityManagementDetailsModel.data.categoryname
         };
 
         nextStatus = fetchQualityManagementDetailsModel.data.nextStatus;
@@ -184,9 +190,13 @@ class QualityManagementBloc
         if (fetchQualityManagementDetailsModel.data.nextStatus == '4') {
           popUpMenuItems.add(DatabaseUtil.getText('ImplementMitigation'));
         }
+        if (fetchQualityManagementDetailsModel.data.nextStatus == '7') {
+          popUpMenuItems.add(DatabaseUtil.getText('NeedReinspection'));
+        }
         if (fetchQualityManagementDetailsModel.data.canResolve == '1') {
           popUpMenuItems.add(DatabaseUtil.getText('Markasresolved'));
         }
+
         popUpMenuItems.add(DatabaseUtil.getText('GenerateReport'));
         emit(QualityManagementDetailsFetched(
             fetchQualityManagementDetailsModel:
@@ -259,7 +269,20 @@ class QualityManagementBloc
           "hashcode": hashCode,
           "status": saveCommentMap['status'] ?? '',
           "comments": saveCommentMap['comments'],
-          "classification": saveCommentMap['classification'] ?? ''
+          "classification": saveCommentMap['classification'] ?? '',
+          "immediateaction": saveCommentMap['immediateaction'] ?? '',
+          "rootcause": saveCommentMap['rootcause'] ?? '',
+          "proposaldescription": saveCommentMap['proposaldescription'] ?? '',
+          "disposition": saveCommentMap['disposition'] ?? '',
+          "correctiveaction": saveCommentMap['correctiveaction'] ?? '',
+          "correctivemeasuresby": saveCommentMap['correctivemeasuresby'] ?? '',
+          "correctivecompletiondate":
+              saveCommentMap['correctivecompletiondate'] ?? '',
+          "proceduremodification":
+              saveCommentMap['proceduremodification'] ?? '',
+          "reinspectionby": saveCommentMap['reinspectionby'] ?? '',
+          "reinspectiondate": saveCommentMap['reinspectiondate'] ?? '',
+          "reinspectionresult": saveCommentMap['reinspectionresult'] ?? ''
         };
         SaveIncidentAndQMCommentsModel saveIncidentAndQMCommentsModel =
             await _qualityManagementRepository.saveComments(saveCommentsMap);
@@ -270,7 +293,7 @@ class QualityManagementBloc
               saveIncidentAndQMCommentsFilesModel:
                   saveIncidentAndQMCommentsFilesModel,
               qmId: encryptQmId));
-          if (saveCommentMap['filenames'] != null) {
+          if (saveCommentMap['ImageString'] != null) {
             add(SaveQualityManagementCommentsFiles(
                 saveCommentsMap: saveCommentMap,
                 saveIncidentAndQMCommentsModel:
@@ -297,7 +320,7 @@ class QualityManagementBloc
         "userid": userid,
         "incidentid": encryptQmId,
         "commentid": commentId,
-        "filenames": saveFilesMap['filenames'],
+        "filenames": saveFilesMap['ImageString'],
         "hashcode": hashCode,
       };
       SaveIncidentAndQMCommentsFilesModel saveIncidentAndQMCommentsFilesModel =
@@ -421,12 +444,13 @@ class QualityManagementBloc
       ReportNewQualityManagementDateTimeDescriptionValidation event,
       Emitter<QualityManagementStates> emit) {
     reportNewQAMap = event.reportNewQAMap;
-    if (reportNewQAMap['eventdatetime'] == null ||
+    if (reportNewQAMap['categoryid'] == null ||
+        reportNewQAMap['eventdatetime'] == null ||
         reportNewQAMap['description'] == null ||
         reportNewQAMap['companyid'] == '') {
       emit(ReportNewQualityManagementDateTimeDescValidated(
-          dateTimeDescValidationMessage:
-              StringConstants.kDateTimeDescriptionContractorIsNotEmpty));
+          dateTimeDescValidationMessage: StringConstants
+              .kCategoryDateTimeDescriptionContractorIsNotEmpty));
     } else {
       emit(ReportNewQualityManagementDateTimeDescValidationComplete());
     }
@@ -485,7 +509,6 @@ class QualityManagementBloc
       ReportNewQualityManagementCustomInfoFiledExpansionChange event,
       Emitter<QualityManagementStates> emit) {
     emit(ReportNewQualityManagementCustomFieldSelected(
-        fetchQualityManagementMasterModel: fetchQualityManagementMasterModel,
         reportQMCustomInfoOptionId: event.reportQMCustomInfoOptionId!));
   }
 
@@ -498,6 +521,9 @@ class QualityManagementBloc
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       String? userType = await _customerCache.getUserType(CacheKeys.userType);
       String? userId = await _customerCache.getUserId(CacheKeys.userId);
+      if (reportNewQAMap['responsible_person'] == '1') {
+        userId = '-1';
+      }
       Map saveReportNewQMMap = {
         "eventdatetime": reportNewQAMap['eventdatetime'],
         "description": reportNewQAMap['description'],
@@ -513,6 +539,7 @@ class QualityManagementBloc
         "customfields": reportNewQAMap['customfields'] ?? '',
         "createduserby": (userType == '1') ? userId : '0',
         "createdworkforceby": (userType == '2') ? userId : '0',
+        "categoryid": reportNewQAMap['categoryid'].toString(),
         "hashcode": hashCode
       };
       SaveNewQualityManagementReportingModel
@@ -526,7 +553,7 @@ class QualityManagementBloc
             qualityManagementNotSavedMessage:
                 DatabaseUtil.getText('some_unknown_error_please_try_again')));
       }
-      (reportNewQAMap['filenames'] != null)
+      (reportNewQAMap['ImageString'] != null)
           ? add(SaveReportNewQualityManagementPhotos(
               reportNewQAMap: reportNewQAMap))
           : null;
@@ -547,8 +574,8 @@ class QualityManagementBloc
       reportNewQAMap = event.reportNewQAMap;
       String? hashCode = await _customerCache.getHashCode(CacheKeys.hashcode);
       Map saveQMPhotosMap = {
-        "incidentid": newQmId,
-        "filenames": reportNewQAMap['filenames'],
+        "incidentid": newQmId == '' ? qaId : newQmId,
+        "filenames": reportNewQAMap['ImageString'],
         "hashcode": hashCode
       };
       SaveQualityManagementPhotos saveQualityManagementPhotos =
@@ -584,11 +611,12 @@ class QualityManagementBloc
         "incidentid": encryptQmId,
         "hashcode": hashCode
       };
+      qaId = event.editQMDetailsMap['id'];
       UpdateQualityManagementDetailsModel updateQualityManagementDetailsModel =
           await _qualityManagementRepository
               .updateQualityManagementDetails(updateQMDetailsMap);
       if (updateQualityManagementDetailsModel.status == 200) {
-        (event.editQMDetailsMap['filenames'] != null)
+        (event.editQMDetailsMap['ImageString'] != null)
             ? add(SaveReportNewQualityManagementPhotos(
                 reportNewQAMap: event.editQMDetailsMap))
             : null;
@@ -603,6 +631,28 @@ class QualityManagementBloc
     } catch (e) {
       emit(QualityManagementDetailsNotUpdated(
           editDetailsNotUpdated: e.toString()));
+    }
+  }
+
+  Future<FutureOr<void>> _fetchCustomFieldsByKey(FetchCustomFieldsByKey event,
+      Emitter<QualityManagementStates> emit) async {
+    emit(CustomFieldsByKeyFetching());
+    try {
+      String? hashCode =
+          await _customerCache.getHashCode(CacheKeys.hashcode) ?? '';
+      FetchCustomFieldsByKeyModel fetchCustomFieldsByKeyModel =
+          await _qualityManagementRepository.fetchCustomFieldsByKey(
+              "qareport", event.categoryId, hashCode);
+
+      if (fetchCustomFieldsByKeyModel.status == 200) {
+        emit(CustomFieldsByKeyFetched(
+            fetchCustomFieldsByKeyModel: fetchCustomFieldsByKeyModel));
+      } else {
+        emit(CustomFieldsByKeyNotFetched(
+            errorMessage: fetchCustomFieldsByKeyModel.message));
+      }
+    } catch (e) {
+      emit(CustomFieldsByKeyNotFetched(errorMessage: e.toString()));
     }
   }
 }

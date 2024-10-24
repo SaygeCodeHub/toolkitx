@@ -17,7 +17,7 @@ import '../../widgets/generic_loading_popup.dart';
 import '../../widgets/generic_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/progress_bar.dart';
-import '../checklist/workforce/widgets/upload_image_section.dart';
+import '../accounting/widgets/attach_document_widget.dart';
 
 class AddTicketDocumentScreen extends StatelessWidget {
   const AddTicketDocumentScreen({super.key});
@@ -49,16 +49,12 @@ class AddTicketDocumentScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: xxTinierSpacing),
-              Text(DatabaseUtil.getText('upload_docs'),
-                  style: Theme.of(context).textTheme.small.copyWith(
-                      fontWeight: FontWeight.w500, color: AppColor.black)),
-              const SizedBox(height: tiniestSpacing),
-              UploadImageMenu(
-                isUpload: true,
-                onUploadImageResponse: (List uploadImageList) {
-                  saveDocumentMap['fileList'] = uploadImageList;
-                },
-              ),
+              AttachDocumentWidget(
+                  titleName: DatabaseUtil.getText('upload_docs'),
+                  onUploadDocument: (uploadDocList) {
+                    saveDocumentMap['fileList'] = uploadDocList;
+                  },
+                  imagePickerBloc: ImagePickerBloc())
             ],
           ),
         ),

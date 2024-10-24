@@ -11,6 +11,7 @@ import 'package:toolkit/utils/global.dart';
 import 'package:toolkit/widgets/custom_snackbar.dart';
 import 'package:toolkit/widgets/primary_button.dart';
 import 'package:toolkit/widgets/progress_bar.dart';
+import 'package:toolkit/widgets/view_offline_permit_screen.dart';
 import '../../blocs/permit/permit_bloc.dart';
 import '../../blocs/permit/permit_states.dart';
 import '../../configs/app_color.dart';
@@ -101,9 +102,14 @@ class AcceptPermitRequestScreen extends StatelessWidget {
               Expanded(
                   child: PrimaryButton(
                       onPressed: () {
-                        context
-                            .read<PermitBloc>()
-                            .add(GeneratePDF(permitDetailsModel.data.tab1.id));
+                        if (isNetworkEstablished) {
+                          context.read<PermitBloc>().add(
+                              GeneratePDF(permitDetailsModel.data.tab1.id));
+                        } else {
+                          Navigator.pushNamed(
+                              context, OfflineHtmlViewerScreen.routeName,
+                              arguments: permitDetailsModel.data.tab1.id);
+                        }
                       },
                       textValue: DatabaseUtil.getText('generatepdf'))),
               const SizedBox(width: xxTinierSpacing),

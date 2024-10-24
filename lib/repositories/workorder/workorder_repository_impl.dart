@@ -11,10 +11,12 @@ import 'package:toolkit/data/models/workorder/fetch_workorder_details_model.dart
 import 'package:toolkit/data/models/workorder/fetch_workorder_documents_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_master_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_misc_cost_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/hold_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_workorder_single_downtime_model.dart';
 import 'package:toolkit/data/models/workorder/manage_misc_cost_model.dart';
 import 'package:toolkit/data/models/workorder/manage_downtime_model.dart';
+import 'package:toolkit/data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 import 'package:toolkit/data/models/workorder/reject_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_new_and_similar_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/save_workorder_documents_model.dart';
@@ -49,9 +51,9 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
 
   @override
   Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
-      String hashCode, String workOrderId) async {
+      String hashCode, String workOrderId, String role) async {
     final response = await DioClient().get(
-        "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId");
+        "${ApiConstants.baseUrl}workorder/getworkorder?hashcode=$hashCode&workorderid=$workOrderId&role=$role");
     return FetchWorkOrderTabDetailsModel.fromJson(response);
   }
 
@@ -243,5 +245,21 @@ class WorkOrderRepositoryImpl extends WorkOrderRepository {
         "${ApiConstants.baseUrl}workorder/updateitemquantity",
         workOrderItemMap);
     return UpdateWorkOrderItemModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchWorkOrderRolesModel> fetchWorkOrderRoles(
+      String hashCode, String userId) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/getroles?hashcode=$hashCode&userid=$userId");
+    return FetchWorkOrderRolesModel.fromJson(response);
+  }
+
+  @override
+  Future<FetchOfflineWorkOrderDataModel> fetchWorkOrderOfflineData(
+      String hashCode, String role) async {
+    final response = await DioClient().get(
+        "${ApiConstants.baseUrl}workorder/GetWorkorderAllDetailsForOffline?pageno=1&hashcode=$hashCode&role=$role");
+    return FetchOfflineWorkOrderDataModel.fromJson(response);
   }
 }

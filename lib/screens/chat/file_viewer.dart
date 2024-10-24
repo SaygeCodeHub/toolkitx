@@ -25,6 +25,7 @@ class FileViewer {
       case 'ppt':
       case 'pptx':
       case 'xlsx':
+      case 'xls':
         _viewDocumentFile(context, file);
         break;
       default:

@@ -1,5 +1,6 @@
 import 'package:toolkit/data/models/workorder/accpeet_workorder_model.dart';
 import 'package:toolkit/data/models/workorder/fetch_assign_parts_model.dart';
+import 'package:toolkit/data/models/workorder/fetch_worokrder_roles_model.dart';
 import 'package:toolkit/data/models/workorder/update_workorder_item_model.dart';
 import 'package:toolkit/data/models/workorder/workorder_assign_parts_model.dart';
 
@@ -19,6 +20,7 @@ import '../../data/models/workorder/fetch_workorders_model.dart';
 import '../../data/models/workorder/hold_workorder_model.dart';
 import '../../data/models/workorder/manage_misc_cost_model.dart';
 import '../../data/models/workorder/manage_downtime_model.dart';
+import '../../data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 import '../../data/models/workorder/reject_workorder_model.dart';
 import '../../data/models/workorder/save_new_and_similar_workorder_model.dart';
 import '../../data/models/workorder/save_workorder_documents_model.dart';
@@ -35,7 +37,7 @@ abstract class WorkOrderRepository {
       String hashCode, String userId);
 
   Future<FetchWorkOrderTabDetailsModel> fetchWorkOrderDetails(
-      String hashCode, String workOrderId);
+      String hashCode, String workOrderId, String role);
 
   Future<DeleteItemTabItemModel> deleteItemTabItem(Map deleteItemTabItemMap);
 
@@ -94,4 +96,10 @@ abstract class WorkOrderRepository {
   Future<CompleteWorkOrderModel> completeWorkOrder(Map completeWorkOrderMap);
 
   Future<UpdateWorkOrderItemModel> updateWorkOrderItem(Map workOrderItemMap);
+
+  Future<FetchWorkOrderRolesModel> fetchWorkOrderRoles(
+      String hashCode, String userId);
+
+  Future<FetchOfflineWorkOrderDataModel> fetchWorkOrderOfflineData(
+      String hashCode, String role);
 }

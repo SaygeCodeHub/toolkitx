@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/incident/fetch_incident_location_model.dart';
+
 import '../../../data/models/incident/fetch_incident_master_model.dart';
 import '../../../data/models/incident/save_report_new_incident_model.dart';
 import '../../../data/models/incident/save_report_new_incident_photos_model.dart';
@@ -135,4 +137,24 @@ class ReportNewIncidentInjuredPersonDetailsFetched
 
   ReportNewIncidentInjuredPersonDetailsFetched(
       {required this.injuredPersonDetailsList});
+}
+
+class IncidentLocationsFetching extends ReportNewIncidentStates {}
+
+class IncidentLocationsFetched extends ReportNewIncidentStates {
+  final FetchIncidentLocationModel fetchIncidentLocationModel;
+
+  IncidentLocationsFetched({required this.fetchIncidentLocationModel});
+}
+
+class IncidentLocationsNotFetched extends ReportNewIncidentStates {
+  final String errorMessage;
+
+  IncidentLocationsNotFetched({required this.errorMessage});
+}
+
+class IncidentAssetListFetched extends ReportNewIncidentStates {
+  final List<Asset> assetList;
+
+  IncidentAssetListFetched({required this.assetList});
 }

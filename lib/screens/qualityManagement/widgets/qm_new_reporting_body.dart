@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_events.dart';
 import '../../../configs/app_spacing.dart';
@@ -88,6 +89,7 @@ class QMNewReportingBody extends StatelessWidget {
             const QMNewReportingImageSection(),
             const SizedBox(height: xxTinierSpacing),
             UploadImageMenu(
+              imagePickerBloc: ImagePickerBloc(),
               isUpload: true,
               onUploadImageResponse: (List uploadImageList) {
                 reportNewQMMap['filenames'] = uploadImageList

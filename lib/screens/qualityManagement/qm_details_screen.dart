@@ -104,9 +104,10 @@ class QualityManagementDetailsScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                          refNo == ''
-                                              ? "#QA${state.fetchQualityManagementDetailsModel.data.id}"
-                                              : refNo,
+                                          state
+                                              .fetchQualityManagementDetailsModel
+                                              .data
+                                              .refNo,
                                           style: Theme.of(context)
                                               .textTheme
                                               .medium),

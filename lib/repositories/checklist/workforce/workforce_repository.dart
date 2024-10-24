@@ -1,3 +1,5 @@
+import 'package:toolkit/data/models/checklist/workforce/fetch_checklist_workforce_documents_model.dart';
+
 import '../../../data/models/checklist/workforce/workforce_checklist_save_reject_reason_model.dart';
 import '../../../data/models/checklist/workforce/workforce_checklist_submit_answer_model.dart';
 import '../../../data/models/checklist/workforce/workforce_fetch_comment_model.dart';
@@ -24,4 +26,7 @@ abstract class WorkForceRepository {
   Future<PostRejectReasonsModel> saveRejectReasons(Map saveRejectReasonsMap);
 
   Future<SubmitQuestionModel> submitAnswer(Map submitAnswerMap);
+
+  Future<FetchChecklistWorkforceDocumentsModel> fetchChecklistViewDocuments(
+      String checklistId, String hashCode);
 }

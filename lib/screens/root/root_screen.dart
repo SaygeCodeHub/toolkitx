@@ -1,7 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
+import 'package:toolkit/blocs/client/client_events.dart';
+import 'package:toolkit/blocs/wifiConnectivity/wifi_connectivity_events.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
 import 'package:toolkit/screens/notification/notification_screen.dart';
@@ -15,8 +21,11 @@ import '../../blocs/wifiConnectivity/wifi_connectivity_states.dart';
 import '../../configs/app_color.dart';
 import '../../configs/app_dimensions.dart';
 import '../../configs/app_spacing.dart';
+import '../../data/cache/customer_cache.dart';
 import '../../di/app_module.dart';
 import '../../utils/database/database_util.dart';
+import '../../utils/global.dart';
+import '../chat/widgets/chat_data_model.dart';
 import '../home/home_screen.dart';
 import '../location/current_location_screen.dart';
 import '../profile/profile_screen.dart';
@@ -25,6 +34,7 @@ class RootScreen extends StatefulWidget {
   static const routeName = 'RootScreen';
   final bool isFromClientList;
   static bool onceCall = true;
+  static bool workOrderSyncOnline = true;
 
   const RootScreen({super.key, required this.isFromClientList});
 
@@ -35,9 +45,13 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   final DatabaseHelper databaseHelper = getIt<DatabaseHelper>();
+  final CustomerCache customerCache = getIt<CustomerCache>();
 
   @override
   void initState() {
+    widget.isFromClientList == true ? _selectedIndex = 0 : null;
+    _getCurrentUserLocation();
+    // widget.isFromClientList == true ? _selectedIndex = 0 : null;
     super.initState();
     if (widget.isFromClientList) {
       _selectedIndex = 0;
@@ -51,8 +65,18 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this); // Unregister the observer
   }
 
+  void _getCurrentUserLocation() {
+    if (!context.read<WifiConnectivityBloc>().isLocationPermissionDenied ||
+        !context.read<WifiConnectivityBloc>().locationPermissionDeniedForever) {
+      Timer.periodic(const Duration(minutes: 5), (Timer timer) {
+        context.read<WifiConnectivityBloc>().add(ObserveUserLocation());
+      });
+    }
+  }
+
   void _onItemTapped(int index) {
     setState(() {
+      chatScreenName = AllChatsScreen.routeName;
       _selectedIndex = index;
     });
   }
@@ -61,24 +85,19 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
     const HomeScreen(),
     const CurrentLocationScreen(),
     const NotificationScreen(),
-    const Text('Index 3: Chat'),
+    const AllChatsScreen(),
     const ProfileScreen()
   ];
   final List<Widget> _offlineWidgetOptions = [
     const HomeScreen(),
-    const AllChatsScreen(),
+    AllChatsScreen(),
   ];
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
-        context
-            .read<ChatBloc>()
-            .add(RebuildChatMessagingScreen(employeeDetailsMap: {
-              'rid': ChatBloc().chatDetailsMap['rid'] ?? '',
-              'sid': ChatBloc().chatDetailsMap['sid'] ?? ''
-            }));
+        context.read<ClientBloc>().add(FetchChatMessages());
         break;
       case AppLifecycleState.inactive:
         break;
@@ -93,10 +112,13 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<ClientBloc>().add(FetchChatMessages());
+    context.read<ChatBloc>().add(FetchChatsList());
     return BlocConsumer<WifiConnectivityBloc, WifiConnectivityState>(
         listener: (context, state) {
       if (state is NoNetwork) {
         RootScreen.onceCall = true;
+        RootScreen.workOrderSyncOnline = true;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -108,7 +130,13 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
         if (RootScreen.onceCall == true) {
           context.read<PermitBloc>().add(PermitInternetActions());
         }
+        if (RootScreen.workOrderSyncOnline) {
+          context
+              .read<WorkOrderTabDetailsBloc>()
+              .add(SyncWorkOrderOfflineDataWithOnline());
+        }
         RootScreen.onceCall = false;
+        RootScreen.workOrderSyncOnline = false;
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -140,7 +168,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
           _buildBottomNavigationBarItem(Icons.home, ''),
           _buildBottomNavigationBarItem(Icons.location_on, ''),
           _buildNotificationBarItem(),
-          _buildBottomNavigationBarItem(Icons.message, ''),
+          _buildChatMessageBarItem(),
           _buildBottomNavigationBarItem(Icons.person, '')
         ],
         currentIndex: _selectedIndex,
@@ -155,7 +183,7 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
         type: BottomNavigationBarType.fixed,
         items: [
           _buildBottomNavigationBarItem(Icons.home, ''),
-          _buildBottomNavigationBarItem(Icons.message, ''),
+          _buildChatMessageBarItem(),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: AppColor.deepBlue,
@@ -200,6 +228,42 @@ class _RootScreenState extends State<RootScreen> with WidgetsBindingObserver {
                       ]));
                 }
                 return const SizedBox();
+              })
+        ])),
+        label: '');
+  }
+
+  BottomNavigationBarItem _buildChatMessageBarItem() {
+    return BottomNavigationBarItem(
+        icon: Center(
+            child: Stack(alignment: Alignment.topCenter, children: [
+          const Padding(
+              padding: EdgeInsets.only(top: xxTiniestSpacing),
+              child: Icon(Icons.message)),
+          StreamBuilder<List<ChatData>>(
+              stream: context.read<ChatBloc>().allChatsStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Padding(
+                      padding: const EdgeInsets.only(
+                          left: kNotificationBadgePadding),
+                      child: Stack(alignment: Alignment.center, children: [
+                        Container(
+                            height: kNotificationBadgeSize,
+                            width: kNotificationBadgeSize,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColor.errorRed)),
+                        Text(
+                            context
+                                .read<ChatBloc>()
+                                .unreadMessageCount
+                                .toString(),
+                            style: Theme.of(context).textTheme.xxxSmall)
+                      ]));
+                } else {
+                  return const SizedBox.shrink();
+                }
               })
         ])),
         label: '');

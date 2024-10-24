@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'dart:math';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:toolkit/data/models/workorder/offline/fetch_offline_workorder_data_model.dart';
 
+import '../../data/enums/offlinePermit/instruction_operstions_enum.dart';
 import '../../data/models/chatBox/fetch_employees_model.dart';
+import '../../data/models/encrypt_class.dart';
 import '../../data/models/permit/offline_permit_model.dart';
 
 class DatabaseHelper {
@@ -44,10 +48,13 @@ class DatabaseHelper {
             localImagePath TEXT,
             pickedMedia TEXT,
             serverImagePath TEXT,
-            showCount INTEGER,
+            isMessageUnread INTEGER,
             unreadMessageCount INTEGER,
             isGroup INTEGER,
-            attachementExtension TEXT
+            attachementExtension TEXT,
+            msgTime INTEGER,
+            sender_name TEXT,
+            clientid INTEGER
           )
         ''');
         await db.execute('''
@@ -85,6 +92,7 @@ class DatabaseHelper {
         CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -92,6 +100,7 @@ class DatabaseHelper {
           tab4 TEXT,
           tab5 TEXT,
           tab6 TEXT,
+          tab7 TEXT,
           html TEXT,
           statusId INTEGER
         );
@@ -107,6 +116,28 @@ class DatabaseHelper {
           UNIQUE(permitId, actionText)
         );
   ''');
+
+        await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
+          id INTEGER PRIMARY KEY,
+          workOrderId TEXT UNIQUE,
+          workOrderId2 INTEGER,
+          listPage TEXT,
+          wodetails TEXT,
+          statusId INTEGER
+        );
+  ''');
+
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS OfflineWorkOrderAction (
+           id INTEGER PRIMARY KEY,
+           workOrderId TEXT,
+           actionText TEXT,
+           actionJson TEXT,
+           actionDateTime TEXT,
+           sign TEXT
+          );
+   ''');
       },
     );
   }
@@ -122,6 +153,7 @@ class DatabaseHelper {
     CREATE TABLE IF NOT EXISTS OfflinePermit (
           id INTEGER PRIMARY KEY,
           permitId TEXT UNIQUE,
+          permitId2 INTEGER,
           listPage TEXT,
           tab1 TEXT,
           tab2 TEXT,
@@ -129,6 +161,7 @@ class DatabaseHelper {
           tab4 TEXT,
           tab5 TEXT,
           tab6 TEXT,
+          tab7 TEXT,
           html TEXT,
           statusId INTEGER
         );
@@ -145,6 +178,211 @@ class DatabaseHelper {
           UNIQUE(permitId, actionText)
         );
   ''');
+  }
+
+  Future<void> recreateOfflineWorkOrderTable() async {
+    final Database db = await database;
+
+    await db.execute('DROP TABLE IF EXISTS OfflineWorkOrder');
+    await db.execute('DROP TABLE IF EXISTS OfflineWorkOrderAction');
+
+    await db.execute('''
+        CREATE TABLE IF NOT EXISTS OfflineWorkOrder (
+          id INTEGER PRIMARY KEY,
+          workorderid TEXT UNIQUE,
+          listPage TEXT,
+          wodetails TEXT,
+          statusId INTEGER
+        );
+  ''');
+
+    await db.execute('''
+          CREATE TABLE IF NOT EXISTS OfflineWorkOrderAction (
+            id INTEGER PRIMARY KEY,
+            workOrderId TEXT,
+            actionText TEXT,
+            actionJson TEXT,
+            actionDateTime TEXT,
+            sign TEXT
+          );
+    ''');
+  }
+
+  Future<void> truncateOfflineWorkOrderTables() async {
+    final Database db = await database;
+    await db.execute('DELETE FROM OfflineWorkOrder');
+    await db.execute('DELETE FROM OfflineWorkOrderAction');
+  }
+
+  Future<void> insertOfflineWorkOrders(
+      WorkOrderOfflineDatum data, int statusId) async {
+    final Database db = await database;
+    await db.insert(
+        'OfflineWorkOrder',
+        {
+          'workOrderId': data.id,
+          'workOrderId2': data.id2,
+          'listPage': jsonEncode(data.listpage.toJson()),
+          'wodetails': jsonEncode(data.wodetails.toJson()),
+          'statusId': statusId
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<Map<String, dynamic>>> fetchAllWorkOrders() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT workOrderId,listPage,(SELECT count(OfflineWorkOrderAction.id) FROM OfflineWorkOrderAction WHERE OfflineWorkOrderAction.workOrderId = OfflineWorkOrder.workOrderId) AS actionCount FROM OfflineWorkOrder ORDER BY workOrderId2 DESC');
+    return result;
+  }
+
+  Future<Map<String, dynamic>> fetchWorkOrdersDetails(
+      String workOrderId) async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> detailsList = await db.rawQuery('''
+      SELECT wodetails 
+      FROM OfflineWorkOrder 
+      WHERE workOrderId = ?
+    ''', [workOrderId]);
+    if (detailsList.isNotEmpty) {
+      final Map<String, dynamic> detailsMap = detailsList.first;
+      Map<String, dynamic> returnMap = jsonDecode(detailsMap['wodetails']);
+      return returnMap;
+    } else {
+      return {};
+    }
+  }
+
+  Future<int> fetchWorkOrderStatusId(String workOrderId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db.rawQuery(
+        'SELECT statusId FROM OfflineWorkOrder WHERE workOrderId = ?',
+        [workOrderId]);
+    return results.first['statusId'];
+  }
+
+  Future<void> addCommentToWorkOrder(
+      String workOrderId, Map<String, dynamic> newComment) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT wodetails FROM OfflineWorkOrder WHERE workOrderId = ?',
+        [workOrderId]);
+    if (result.isNotEmpty) {
+      String wodetailsStr = result[0]['wodetails'];
+      Map<String, dynamic> wodetailsJson = jsonDecode(wodetailsStr);
+      if (wodetailsJson.containsKey('comments') &&
+          wodetailsJson['comments'] is List) {
+        wodetailsJson['comments'].add(newComment);
+      } else {
+        wodetailsJson['comments'] = [newComment];
+      }
+      String updatedWoDetailsStr = jsonEncode(wodetailsJson);
+      await db.rawUpdate(
+          'UPDATE OfflineWorkOrder SET wodetails = ? WHERE workOrderId = ?',
+          [updatedWoDetailsStr, workOrderId]);
+    }
+  }
+
+  Future<bool> insertOfflineWorkOrderAction(
+      String workOrderId,
+      String actionText,
+      Map actionJson,
+      String sign,
+      String? actionDateTime) async {
+    final Database db = await database;
+
+    if (actionText != 'add_comment') {
+      var existingRecords = await db.query('OfflineWorkOrderAction',
+          where: 'workOrderId = ? AND actionText = ?',
+          whereArgs: [workOrderId, actionText]);
+
+      if (existingRecords.isNotEmpty) {
+        print('Duplicate action for workOrderId and actionText detected.');
+        return false;
+      }
+    }
+
+    int result = await db.insert('OfflineWorkOrderAction', {
+      'workOrderId': workOrderId,
+      'actionText': actionText,
+      'actionJson': jsonEncode(actionJson),
+      'actionDateTime': actionDateTime ?? DateTime.now().toUtc().toString(),
+      'sign': sign
+    });
+
+    return result > 0;
+  }
+
+  Future<void> updateWorkOrderStatusId(
+      String workOrderId, int updatedStatus) async {
+    final db = await database;
+    await db.update('OfflineWorkOrder', {'statusId': updatedStatus},
+        where: 'workOrderId = ?', whereArgs: [workOrderId]);
+  }
+
+  Future<void> updateWorkOrderStatus(
+      String workOrderId, String updatedStatus) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflineWorkOrder',
+        columns: ['listPage'],
+        where: 'workOrderId = ?',
+        whereArgs: [workOrderId]);
+    if (result.isNotEmpty) {
+      String listPageJson = result.first['listPage'];
+      Map<String, dynamic> listPageMap = jsonDecode(listPageJson);
+      listPageMap['status'] = updatedStatus;
+      String updatedListPageJson = jsonEncode(listPageMap);
+      await db.update('OfflineWorkOrder', {'listPage': updatedListPageJson},
+          where: 'workOrderId = ?', whereArgs: [workOrderId]);
+    }
+  }
+
+  Future<void> updateWorkOrderActionStatus(
+      String workOrderId, String updatedStatus, int statusId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query('OfflineWorkOrder',
+        columns: ['wodetails'],
+        where: 'workOrderId = ?',
+        whereArgs: [workOrderId]);
+    if (result.isNotEmpty) {
+      String detailsJson = result.first['wodetails'];
+      Map<String, dynamic> detailsMap = jsonDecode(detailsJson);
+      switch (updatedStatus) {
+        case 'start':
+          if (statusId == 5 || statusId == 6) {
+            detailsMap['isstart'] = '0';
+            detailsMap['iscomplete'] = '1';
+          }
+          break;
+        case 'accept':
+          if (statusId == 4 || statusId == 6) {
+            detailsMap['isstart'] = '1';
+            detailsMap['isacceptreject'] = '0';
+          }
+          break;
+        case 'complete':
+          detailsMap['iscomplete'] = '0';
+      }
+      String updatedDetailsJson = jsonEncode(detailsMap);
+      await db.update('OfflineWorkOrder', {'wodetails': updatedDetailsJson},
+          where: 'workOrderId = ?', whereArgs: [workOrderId]);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchAllOfflineWorkOrderAction() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result =
+        await db.rawQuery('SELECT * FROM OfflineWorkOrderAction');
+    if (result.isEmpty) {
+      return [];
+    } else {
+      return result;
+    }
+  }
+
+  Future<void> deleteOfflineWorkOrderAction(int id) async {
+    final db = await database;
+    await db.delete('OfflineWorkOrderAction', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<bool> insertOfflinePermitAction(String permitId, String actionText,
@@ -169,12 +407,14 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> insertOfflinePermit(OfflinePermitDatum data) async {
+  Future<void> insertOfflinePermit(
+      OfflinePermitDatum data, int statusId) async {
     final Database db = await database;
     await db.insert(
       'OfflinePermit',
       {
         'permitId': data.id,
+        'permitId2': data.id2,
         'listpage': jsonEncode(data.listpage.toJson()),
         'tab1': jsonEncode(data.tab1.toJson()),
         'tab2': jsonEncode(data.tab2.toJson()),
@@ -182,8 +422,9 @@ class DatabaseHelper {
         'tab4': jsonEncode(data.tab4),
         'tab5': jsonEncode(data.tab5.map((e) => e.toJson()).toList()),
         'tab6': jsonEncode(data.tab6),
+        'tab7': jsonEncode(data.tab7.map((e) => e.toJson()).toList()),
         'html': jsonEncode(data.html),
-        'statusId': data.listpage.statusid
+        'statusId': statusId
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -191,22 +432,25 @@ class DatabaseHelper {
 
   Future<void> insertMessage(Map<String, dynamic> sendMessageMap) async {
     final Database db = await database;
-    try {
-      await db.insert('chat_messages', sendMessageMap,
-          conflictAlgorithm: ConflictAlgorithm.ignore);
-    } catch (e) {
-      rethrow;
-    }
+    // try {
+    DateTime dateTime = DateTime.parse(sendMessageMap['msg_time']);
+    sendMessageMap['msgTime'] = dateTime.millisecondsSinceEpoch;
+    await db.insert('chat_messages', sendMessageMap,
+        conflictAlgorithm: ConflictAlgorithm.ignore);
+    // } catch (e) {
+    //   rethrow;
+    // }
   }
 
-  Future<List<Map<String, dynamic>>> getAllMessages() async {
+  Future<Map<String, dynamic>> getLastMessage() async {
     final Database db = await database;
-    try {
-      List<Map<String, dynamic>> allMessagesList =
-          await db.query('chat_messages');
-      return allMessagesList;
-    } catch (e) {
-      rethrow;
+    List<Map<String, dynamic>> result =
+        await db.query('chat_messages', orderBy: 'msgTime DESC', limit: 1);
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return {};
     }
   }
 
@@ -237,28 +481,6 @@ class DatabaseHelper {
       await txn.update('chat_messages',
           {'serverImagePath': serverImagePath, 'isDownloadedImage': 0},
           where: 'msg_id = ?', whereArgs: [messageId]);
-    });
-  }
-
-  Future<void> getUnreadMessageCount(
-      String currentUserId,
-      String currentSenderId,
-      String receiverId,
-      String currentReceiverId,
-      bool onChatMessagingScreen) async {
-    final Database db = await database;
-
-    await db.transaction((txn) async {
-      final unreadCount = await txn.rawQuery('''
-      SELECT COUNT(*) AS unread_for_recipient
-      FROM chat_messages
-       WHERE sid = ? AND rid = ? AND showCount = 0;
-    ''', [currentUserId, receiverId]);
-      int unreadRecipientCount =
-          unreadCount.first['unread_for_recipient'] as int;
-      await txn.update(
-          'chat_messages', {'unreadMessageCount': unreadRecipientCount},
-          where: 'sid = ? AND rid = ?', whereArgs: [currentUserId, receiverId]);
     });
   }
 
@@ -300,37 +522,47 @@ class DatabaseHelper {
         where: 'msg_id = ?', whereArgs: [msgId]);
   }
 
-  Future<List<Map<String, dynamic>>> getMessagesForEmployees(
-      String employeeIdA, String employeeIdB) async {
+  Future<void> updateUnreadMessageCount(String rid, String rtype) async {
+    final Database db = await database;
+    if (rtype == '3') {
+      await db.update('chat_messages', {'isMessageUnread': 0},
+          where: 'isMessageUnread = 1 AND rid = ? AND rtype = 3',
+          whereArgs: [rid]);
+    } else {
+      await db.update('chat_messages', {'isMessageUnread': 0},
+          where: 'isMessageUnread = 1 AND sid = ? AND stype = ?',
+          whereArgs: [rid, rtype]);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getMessagesForEmployees(String sId,
+      String sType, String rId, String rType, String clientId) async {
     final Database db = await database;
     List<Map<String, dynamic>> messages = [];
-
-    messages = await db.query(
-      'chat_messages',
-      where: '(rid = ? AND sid = ?) OR (rid = ? AND sid = ?)',
-      whereArgs: [employeeIdA, employeeIdB, employeeIdB, employeeIdA],
-    );
-
-    List<Map<String, dynamic>> updatedMessages = [];
-
-    for (var message in messages) {
-      updatedMessages.add(Map<String, dynamic>.from(message));
+    var query =
+        'select *,  ifnull((Select msg from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quotemsg,  ifnull((Select sender_name from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quote_sender from chat_messages where (((sid = $sId AND stype = $sType AND rid = $rId AND rtype = $rType) OR (sid = $rId AND stype = $rType AND rid = $sId AND rtype = $sType)) and clientid=$clientId) ORDER BY msgTime DESC';
+    if (rType == '3') {
+      query =
+          'select *, ifnull((Select msg from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quotemsg,  ifnull((Select sender_name from chat_messages c1 where c1.msg_id = chat_messages.quote_msg_id),"") AS quote_sender from chat_messages where ((rid = $rId AND rtype = $rType) and clientid=$clientId) ORDER BY msgTime DESC';
     }
-    for (var i = 0; i < updatedMessages.length; i++) {
-      if (updatedMessages[i]['employee_name'] == null ||
-          updatedMessages[i]['employee_name'].isEmpty) {
-        final nameResult = await db.query(
-          'chat_messages',
-          where: 'sid = ? OR rid = ?',
-          whereArgs: [updatedMessages[i]['sid'], updatedMessages[i]['rid']],
-        );
-        if (nameResult.isNotEmpty) {
-          updatedMessages[i]['employee_name'] =
-              nameResult.first['employee_name'];
-        }
-      }
+    messages = await db.rawQuery(query);
+    if (messages.isNotEmpty) {
+      return messages;
+    } else {
+      return [];
     }
-    return updatedMessages;
+  }
+
+  Future<List<Map<String, dynamic>>> getChatUsersList(String clientId) async {
+    final Database db = await database;
+    List<Map<String, dynamic>> messages = [];
+    messages = await db.rawQuery(
+        'select distinct sid as rid, stype as rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.sid and c.rtype=chat_messages.stype) OR (c.sid=chat_messages.sid and c.stype=chat_messages.stype)))  AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId union select distinct rid, rtype, employee_name, (select msg from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ( ((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype)) AND c.rtype in (1,2) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (((c.rid=chat_messages.rid and c.rtype=chat_messages.rtype) OR (c.sid=chat_messages.rid and c.stype=chat_messages.rtype))) AND c.rtype in (1,2) and clientid = $clientId) AS unreadCount from chat_messages where rtype in (1,2) and clientid = $clientId  union select distinct rid, rtype, employee_name, (select msg from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msg, (select msgTime from chat_messages c where ((c.rid=chat_messages.rid AND c.rtype=3) and clientid = $clientId) ORDER BY c.msgTime DESC LIMIT 1) as latest_msgTime, (select SUM(c.isMessageUnread) from chat_messages c where (c.rid=chat_messages.rid AND c.rtype=3 and clientid = $clientId)) AS unreadCount from chat_messages where rtype=3  and clientid = $clientId');
+    if (messages.isNotEmpty) {
+      return messages;
+    } else {
+      return [];
+    }
   }
 
   Future<List> getLatestMessagesForEmployees() async {
@@ -395,6 +627,17 @@ class DatabaseHelper {
     return maps;
   }
 
+  Future<Map<String, dynamic>> getGroupData(String groupId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('groups', where: 'group_id = ?', whereArgs: [groupId]);
+    if (maps.isNotEmpty) {
+      return maps.first;
+    } else {
+      return {};
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getMessagesWithStatusZero() async {
     final Database db = await database;
     List<Map<String, dynamic>> messages;
@@ -403,32 +646,36 @@ class DatabaseHelper {
     return messages;
   }
 
+  Future<void> deleteGroupChat(String rid) async {
+    final db = await database;
+    await db.delete('chat_messages',
+        where: 'rid = ? and rtype = 3', whereArgs: [rid]);
+  }
+
   Future<List<Map<String, dynamic>>> fetchPermitListOffline() async {
     final db = await database;
-    final List<Map<String, dynamic>> result =
-        await db.rawQuery('SELECT listPage FROM OfflinePermit');
-    final List<Map<String, dynamic>> permitList = [];
-    for (var data in result) {
-      permitList.add(jsonDecode(data['listPage']));
-    }
-    return permitList;
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+        'SELECT permitId,listPage,(SELECT count(OfflinePermitAction.id) FROM OfflinePermitAction WHERE OfflinePermitAction.permitId = OfflinePermit.permitId) AS actionCount FROM OfflinePermit ORDER BY permitId2 DESC');
+    return result;
   }
 
   Future<Map<String, dynamic>> fetchPermitDetailsOffline(
       String permitId) async {
     final db = await database;
     final List<Map<String, dynamic>> results = await db.rawQuery(
-        'SELECT tab1, tab2, tab3, tab4, tab5, tab6, html FROM OfflinePermit WHERE permitId = ?',
+        'SELECT listPage, tab1, tab2, tab3, tab4, tab5, tab6, tab7, html FROM OfflinePermit WHERE permitId = ?',
         [permitId]);
     if (results.isNotEmpty) {
       final Map<String, dynamic> result = results.first;
       Map<String, dynamic> returnMap = {
+        "listPage": jsonDecode(result['listPage']),
         "tab1": jsonDecode(result['tab1']),
         "tab2": jsonDecode(result['tab2']),
         "tab3": jsonDecode(result['tab3']),
         "tab4": jsonDecode(result['tab4']),
         "tab5": jsonDecode(result['tab5']),
         "tab6": jsonDecode(result['tab6']),
+        "tab7": jsonDecode(result['tab7']),
         "html": jsonDecode(result['html'])
       };
       return returnMap;
@@ -439,6 +686,7 @@ class DatabaseHelper {
 
   Future<Map<String, dynamic>> fetchPermitDetailsHtml(String permitId) async {
     final db = await database;
+
     final List<Map<String, dynamic>> results = await db.rawQuery(
         'SELECT html FROM OfflinePermit WHERE permitId = ?', [permitId]);
     if (results.isNotEmpty) {
@@ -493,6 +741,12 @@ class DatabaseHelper {
   Future<void> deleteOfflinePermitAction(int id) async {
     final db = await database;
     await db.delete('OfflinePermitAction', where: 'ID = ?', whereArgs: [id]);
+  }
+
+  Future<void> deletePermitOfflineAction(String permitId) async {
+    final db = await database;
+    await db.delete('OfflinePermitAction',
+        where: 'permitId = ?', whereArgs: [permitId]);
   }
 
   Future<void> updateStatusId(String permitId, int updatedStatus) async {
@@ -573,26 +827,24 @@ class DatabaseHelper {
     }
   }
 
-  Future<Map<String, dynamic>> fetchOfflinePermitSurrenderData(
+  Future<Map<String, dynamic>> populateTransferPermitCpData(
       String permitId) async {
     final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      'OfflinePermitAction',
-      columns: ['actionJson', 'actionText'],
-      where: 'permitId = ? AND actionText = ?',
-      whereArgs: [permitId, 'surrender_permit'],
-    );
+    List<Map<String, dynamic>> result = await db.query('OfflinePermitAction',
+        columns: ['actionJson', 'actionText'],
+        where: 'permitId = ? AND actionText = ?',
+        whereArgs: [permitId, 'transfer_permit']);
     if (result.isNotEmpty) {
-      Map<String, dynamic> fetchSurrenderData = result.first;
+      Map<String, dynamic> populateTransferCpPermitData = result.first;
       Map<String, dynamic> actionJson =
-          jsonDecode(fetchSurrenderData['actionJson']);
+          jsonDecode(populateTransferCpPermitData['actionJson']);
       return actionJson;
     } else {
-      return <String, dynamic>{};
+      return {};
     }
   }
 
-  Future<Map<String, dynamic>> fetchOfflinePermitTransferData(
+  Future<Map<String, dynamic>> fetchOfflinePermitSurrenderData(
       String permitId) async {
     final db = await database;
     List<Map<String, dynamic>> result = await db.query(
@@ -607,7 +859,456 @@ class DatabaseHelper {
           jsonDecode(fetchSurrenderData['actionJson']);
       return actionJson;
     } else {
-      return <String, dynamic>{};
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchOfflinePermitTransferData(
+      String permitId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.query(
+      'OfflinePermitAction',
+      columns: ['actionJson', 'actionText'],
+      where: 'permitId = ? AND actionText = ?',
+      whereArgs: [permitId, 'transfer_permit'],
+    );
+    if (result.isNotEmpty) {
+      Map<String, dynamic> fetchSurrenderData = result.first;
+
+      Map<String, dynamic> actionJson =
+          jsonDecode(fetchSurrenderData['actionJson']);
+      return actionJson;
+    } else {
+      return {};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getInstructionsByScheduleId(
+      String scheduleId) async {
+    final db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT permitId, tab7
+    FROM OfflinePermit
+    WHERE tab7 IS NOT NULL
+  ''');
+
+    List<Map<String, dynamic>> filteredInstructions = [];
+
+    for (var row in result) {
+      String permitId = row['permitId'];
+      String tab7Json = row['tab7'];
+      List<dynamic> tab7Data = jsonDecode(tab7Json);
+
+      List<dynamic> matchingTabs = tab7Data.where((instruction) {
+        return instruction['id'] == scheduleId;
+      }).toList();
+
+      for (var matchingTab in matchingTabs) {
+        if (matchingTab.containsKey('instructions')) {
+          List<dynamic> instructions = matchingTab['instructions'];
+
+          for (var instruction in instructions) {
+            Map<String, dynamic> instructionWithPermitId =
+                Map<String, dynamic>.from(instruction);
+            instructionWithPermitId['permitId'] = permitId;
+            filteredInstructions.add(instructionWithPermitId);
+          }
+        }
+      }
+    }
+
+    return filteredInstructions;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllTab7Data() async {
+    final db = await database; // Replace with your database reference
+    List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT tab7
+    FROM OfflinePermit
+     WHERE tab7 IS NOT NULL
+  ''');
+    return result;
+  }
+
+  Future<void> updateInstructions(
+      String instructionId,
+      Map<String, dynamic> updatedInstruction,
+      InstructionOperation operation) async {
+    List<Map<String, dynamic>> result = await getAllTab7Data();
+    bool operationCompleted = false;
+
+    if (result.isNotEmpty) {
+      // Iterate over all fetched rows
+      for (var row in result) {
+        if (row['tab7'] != null) {
+          String tab7Json = row['tab7'];
+          List<dynamic> tab7Data = jsonDecode(tab7Json);
+
+          for (var item in tab7Data) {
+            if (item['instructions'] != null) {
+              List<dynamic> instructions =
+                  List<dynamic>.from(item['instructions']);
+              List<dynamic> updatedInstructions = [];
+
+              for (var instruction in instructions) {
+                switch (operation) {
+                  case InstructionOperation.add:
+                    updatedInstructions.add(instruction);
+                    if (instruction['id'] == instructionId) {
+                      updatedInstructions.add(updatedInstruction);
+                      operationCompleted = true;
+                    }
+                    break;
+                  case InstructionOperation.edit:
+                    if (instruction['id'] == instructionId) {
+                      updatedInstructions.add(updatedInstruction);
+                      operationCompleted = true;
+                    } else {
+                      updatedInstructions.add(instruction);
+                    }
+                    break;
+                  case InstructionOperation.moveUp:
+                    // Implement move up logic
+                    updatedInstructions =
+                        _moveInstruction(instructions, instructionId, true);
+                    operationCompleted = true;
+                    break;
+                  case InstructionOperation.moveDown:
+                    // Implement move down logic
+                    updatedInstructions =
+                        _moveInstruction(instructions, instructionId, false);
+                    operationCompleted = true;
+                    break;
+                  case InstructionOperation.delete:
+                    if (instruction['id'] != instructionId) {
+                      updatedInstructions.add(instruction);
+                    } else {
+                      operationCompleted = true;
+                    }
+                    break;
+                }
+              }
+
+              // Update instructions in the item
+              item['instructions'] = updatedInstructions;
+
+              // Convert updated data to JSON
+              String updatedTab7Json = jsonEncode(tab7Data);
+              // log('updatedTab7Json $updatedTab7Json');
+              // Update the tab7 data in the database
+              final db = await database;
+              await db.rawUpdate('''
+            UPDATE OfflinePermit
+            SET tab7 = ?
+            WHERE permitId = ?  
+          ''', [updatedTab7Json, row['permitId']]);
+
+              // Exit after updating
+              if (operationCompleted) break;
+            }
+          }
+          if (operationCompleted) break;
+        }
+      }
+
+      if (!operationCompleted) {
+        throw Exception('Instruction with id $instructionId not found');
+      }
+    }
+  }
+
+  List<dynamic> _moveInstruction(
+      List<dynamic> instructions, String instructionId, bool moveUp) {
+    int index = instructions.indexWhere((inst) => inst['id'] == instructionId);
+    if (index == -1 ||
+        (moveUp && index == 0) ||
+        (!moveUp && index == instructions.length - 1)) {
+      return instructions;
+    }
+
+    var instruction = instructions.removeAt(index);
+    if (moveUp) {
+      instructions.insert(index - 1, instruction);
+    } else {
+      instructions.insert(index + 1, instruction);
+    }
+    return instructions;
+  }
+
+  //this is to show table data
+  Future<List> getAllInstructions(ssid) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline("event.permitId");
+    var temp = offlinePermitData['tab7'];
+    var inst = [];
+    for (var x = 0; x < temp.length; x++) {
+      if (temp[x].id == ssid) {
+        inst = temp[x]["instructions"];
+        return inst;
+      }
+    }
+    return inst;
+  }
+
+  // this is to update all data in tab7
+  Future<void> updateTab7(String permitId, tab7) async {
+    final db = await database;
+    String updatedListPageJson = jsonEncode(tab7);
+    await db.update('OfflinePermit', {'tab7': updatedListPageJson},
+        where: 'permitId = ?', whereArgs: [permitId]);
+    await insertOfflinePermitAction(
+        permitId, 'switching_schedule', {}, "", null);
+  }
+
+  Future<int> getSSFromInstructionIndex(instId, permitId) async {
+    var index = -1;
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    if (offlinePermitData.containsKey('tab7')) {
+      List<dynamic> temp = offlinePermitData['tab7'];
+      for (int a = 0; a < temp.length; a++) {
+        List<dynamic>? instructions = temp[a]['instructions'];
+        if (instructions != null) {
+          for (int x = 0; x < instructions.length; x++) {
+            dynamic instruction = instructions[x];
+            if (instruction['id'] == instId) {
+              index = a;
+              break;
+            }
+          }
+          if (index != -1) {
+            break;
+          }
+        }
+      }
+    }
+    return index;
+  }
+
+  Future<dynamic> addInstruction(data, instId, permitId, apiKey) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
+
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    DateTime dateTime = DateTime.now();
+    Random random = Random();
+    int randomValue = random.nextInt(100000);
+    String maxInstructionId = '${dateTime.millisecondsSinceEpoch}$randomValue';
+    data['id'] = EncryptData.encryptAESPrivateKey(maxInstructionId, apiKey);
+
+    for (var x = 0; x < instructions.length; x++) {
+      tempInstructions.add(instructions[x]);
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.add(data);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<void> upInstruction(String instId, String permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    int currentIndex = -1;
+
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        currentIndex = x;
+      }
+    }
+    if (currentIndex <= 0) return;
+    var el = instructions[currentIndex];
+    instructions[currentIndex] = instructions[currentIndex - 1];
+    instructions[currentIndex - 1] = el;
+
+    ss["instructions"] = instructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<void> downInstruction(String instId, String permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    int currentIndex = -1;
+
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        currentIndex = x;
+      }
+    }
+    var el = instructions[currentIndex];
+    instructions[currentIndex] = instructions[currentIndex + 1];
+    instructions[currentIndex + 1] = el;
+    ss["instructions"] = instructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<void> deleteInstruction(instId, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.remove(instructions[x]);
+      } else {
+        tempInstructions.add(instructions[x]);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<Map> getSSFromInstruction(instId, permitId) async {
+    var ss = {};
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    for (var a = 0; a < temp.length; a++) {
+      var instructions = temp[a]["instructions"];
+
+      if (instructions.length > 0) {
+        for (var x = 0; x < instructions.length; x++) {
+          if (instructions[x]['id'] == instId) {
+            ss = temp[a];
+            return ss;
+          }
+        }
+      }
+    }
+    return ss;
+  }
+
+  Future<Map> getInstruction(instId, permitId) async {
+    Map<String, dynamic> instruction = {};
+    var ss = await getSSFromInstruction(instId, permitId);
+    var instructions = ss["instructions"];
+    if (instructions != null && instructions.length > 0) {
+      for (var x = 0; x < instructions.length; x++) {
+        if (instructions[x]['id'] == instId) {
+          instruction = instructions[x];
+        }
+      }
+    }
+    return instruction;
+  }
+
+  Future<dynamic> editInstruction(data, instId, permitId) async {
+    data['instructionreceiveddatetime'] =
+        data['instructionreceiveddate'] + ' ' + data['instructionreceivedtime'];
+    data['carriedoutdatetime'] =
+        data['carriedoutdate'] + ' ' + data['carriedouttime'];
+    data['carriedoutconfirmeddatetime'] =
+        data['carriedoutconfirmeddate'] + ' ' + data['carriedoutconfirmedtime'];
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+    int ssIndex = await getSSFromInstructionIndex(instId, permitId);
+    var tempInstructions = [];
+    var ss = temp[ssIndex];
+    var instructions = ss["instructions"];
+    for (var x = 0; x < instructions.length; x++) {
+      if (instructions[x]['id'] == instId) {
+        tempInstructions.add(data);
+      } else {
+        tempInstructions.add(instructions[x]);
+      }
+    }
+    ss["instructions"] = tempInstructions;
+    temp[ssIndex] = ss;
+    await updateTab7(permitId, temp);
+  }
+
+  Future<dynamic> editMultiSelectInstructions(data, instIds, permitId) async {
+    Map<String, dynamic> offlinePermitData =
+        await fetchPermitDetailsOffline(permitId);
+    var temp = offlinePermitData['tab7'];
+
+    var arr = instIds.split(',');
+    for (var i = 0; i < arr.length; i++) {
+      var ssIndex = await getSSFromInstructionIndex(arr[i], permitId);
+      if (ssIndex >= 0) {
+        var ss = temp[ssIndex];
+        var instructions = ss["instructions"];
+
+        for (var x = 0; x < instructions.length; x++) {
+          if (instructions[x]['id'] == arr[i]) {
+            instructions[x]['instructionreceivedby'] = 0;
+            instructions[x]['controlengineerid'] = 0;
+            instructions[x]['instructionreceivedbyname'] =
+                data['instructionreceivedbyname'];
+            instructions[x]['controlengineername'] =
+                data['controlengineername'];
+
+            instructions[x]['instructionreceiveddate'] =
+                data['instructionreceiveddate'];
+            instructions[x]['instructionreceivedtime'] =
+                data['instructionreceivedtime'];
+
+            instructions[x]['carriedoutdate'] = data['carriedoutdate'];
+            instructions[x]['carriedouttime'] = data['carriedouttime'];
+
+            instructions[x]['carriedoutconfirmeddate'] =
+                data['carriedoutconfirmeddate'];
+            instructions[x]['carriedoutconfirmedtime'] =
+                data['carriedoutconfirmedtime'];
+
+            instructions[x]['safetykeynumber'] = data['safetykeynumber'];
+            instructions[x]['instructionreceiveddatetime'] =
+                data['instructionreceiveddate'] +
+                    ' ' +
+                    data['instructionreceivedtime'];
+            instructions[x]['carriedoutdatetime'] =
+                data['carriedoutdate'] + ' ' + data['carriedouttime'];
+            instructions[x]['carriedoutconfirmeddatetime'] =
+                data['carriedoutconfirmeddate'] +
+                    ' ' +
+                    data['carriedoutconfirmedtime'];
+          }
+        }
+      }
+    }
+    await updateTab7(permitId, temp);
+  }
+
+  Future<Map<String, dynamic>?> fetchOfflinePermit(String permitId) async {
+    final Database db = await database;
+    try {
+      List<Map<String, dynamic>> fetchOfflinePermits = await db.rawQuery(
+        'SELECT * FROM OfflinePermit WHERE permitId = ?',
+        [permitId],
+      );
+      if (fetchOfflinePermits.isNotEmpty) {
+        return fetchOfflinePermits.first;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

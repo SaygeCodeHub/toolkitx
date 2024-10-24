@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:toolkit/data/models/%20meetingRoom/fetch_search_for_rooms_model.dart';
+import 'package:toolkit/screens/accounting/accounting_screen.dart';
+import 'package:toolkit/screens/accounting/bank_statement_screen.dart';
+import 'package:toolkit/screens/accounting/edit_outgoing_invoice_screen.dart';
+import 'package:toolkit/screens/accounting/manage_accounting_outgoing_invoice.dart';
+import 'package:toolkit/screens/accounting/outgoing_list_screen.dart';
+import 'package:toolkit/screens/accounting/widgets/outgoingInvoiceWidgets/edit_outgoing_invoice_section.dart';
 import 'package:toolkit/screens/assets/add_assets_document_screen.dart';
 import 'package:toolkit/screens/certificates/get_notes_certificate_screen.dart';
 import 'package:toolkit/screens/certificates/upload_certificate_screen.dart';
 import 'package:toolkit/screens/chat/all_chats_screen.dart';
+import 'package:toolkit/screens/chat/group_details_screen.dart';
 import 'package:toolkit/screens/chat/users_screen.dart';
 import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/screens/chat/widgets/view_attached_image_widget.dart';
 import 'package:toolkit/screens/checklist/workforce/workforce_list_screen.dart';
+import 'package:toolkit/screens/checklist/workforce/workforce_view_documents_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_save_images.dart';
 import 'package:toolkit/screens/equipmentTraceability/equipment_set_parameter_screen.dart';
 import 'package:toolkit/screens/equipmentTraceability/search_equipment_details_screen.dart';
@@ -14,27 +23,53 @@ import 'package:toolkit/screens/expense/expense_reject_screen.dart';
 import 'package:toolkit/screens/incident/incident_details_screen.dart';
 import 'package:toolkit/screens/leavesAndHolidays/timesheet_checkin_screen.dart';
 import 'package:toolkit/screens/loto/loto_view_response_screen.dart';
+import 'package:toolkit/screens/meetingRoom/book_meeting_room_screen.dart';
+import 'package:toolkit/screens/meetingRoom/edit_meeting_details_screen.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_details_screen.dart';
+import 'package:toolkit/screens/meetingRoom/meeting_view_availability_screen.dart';
+import 'package:toolkit/screens/meetingRoom/month_view_screen.dart';
+import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
+import 'package:toolkit/screens/meetingRoom/search_rooms_screen.dart';
 import 'package:toolkit/screens/permit/accept_permit_request_screen.dart';
 import 'package:toolkit/screens/permit/clear_permit_screen.dart';
+import 'package:toolkit/screens/permit/add_and_edit_switching_instruction_screen.dart';
+import 'package:toolkit/screens/permit/edit_multiselect_switching_schedule_screen.dart';
 import 'package:toolkit/screens/permit/permit_edit_safety_document_screen.dart';
 import 'package:toolkit/screens/permit/permit_sign_as_sap_screen.dart';
 import 'package:toolkit/screens/permit/permit_sing_as_cp_screen.dart';
+import 'package:toolkit/screens/permit/permit_switching_schedule_table_screen.dart';
 import 'package:toolkit/screens/permit/permit_transfer_component_screen.dart';
 import 'package:toolkit/screens/permit/prepare_permit_screen.dart';
 import 'package:toolkit/screens/permit/surrender_permit_screen.dart';
 import 'package:toolkit/screens/permit/transfer_permit_offline_screen.dart';
 import 'package:toolkit/screens/signInQRCode/signin_list_screen.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_details_screen.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_list_screen.dart';
+import 'package:toolkit/screens/tankManagement/widgets/submit_tank_checklist_screen.dart';
+import 'package:toolkit/screens/tankManagement/widgets/tank_view_response_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_document_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/tickets/add_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/open_ticket_screen.dart';
 import 'package:toolkit/screens/tickets/widgets/ticket_edt_hour_screen.dart';
+import 'package:toolkit/screens/tickets2/add_ticket2_screen.dart';
+import 'package:toolkit/screens/trips/trip_details_screen.dart';
+import 'package:toolkit/screens/trips/trip_filter_screen.dart';
+import 'package:toolkit/screens/trips/add_special_request_screen.dart';
+import 'package:toolkit/screens/trips/widgets/trip_vessel_filter_list.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
+import '../data/models/ meetingRoom/fetch_meeting_details_model.dart';
 import '../data/models/documents/documents_details_models.dart';
 import '../data/models/permit/permit_details_model.dart';
 import '../data/models/permit/permit_sap_cp_model.dart';
 import '../data/models/qualityManagement/fetch_qm_details_model.dart';
+import '../screens/accounting/bank_statement_filter_screen.dart';
+import '../screens/accounting/manage_accounting_incoming_invoice_screen.dart';
+import '../screens/accounting/accounting_filter_screen.dart';
+import '../screens/accounting/manage_bank_statement_screen.dart';
+import '../screens/accounting/widgets/incomingInvoicesWidgets/manage_accounting_incoming_invoice_section.dart';
+import '../screens/accounting/widgets/outgoingInvoiceWidgets/manage_accounting_outgoing_invoice_section.dart';
 import '../screens/assets/assets_details_screen.dart';
 import '../screens/assets/assets_filter_screen.dart';
 import '../screens/assets/assets_list_screen.dart';
@@ -58,8 +93,8 @@ import '../screens/certificates/certificates_list_screen.dart';
 import '../screens/certificates/get_course_certificate_screen.dart';
 import '../screens/certificates/feedback_certificate_screen.dart';
 import '../screens/certificates/get_workforce_quiz_screen.dart';
+import '../screens/chat/group_chat_screen.dart';
 import '../screens/checklist/systemUser/sys_user_workforce_list_screen.dart';
-
 import '../screens/checklist/workforce/add_image_and_comments_screen.dart';
 import '../screens/checklist/workforce/workforce_edit_answer_screen.dart';
 import '../screens/checklist/workforce/workforce_questions_list_screen.dart';
@@ -104,6 +139,7 @@ import '../screens/incident/incident_injuries_screen.dart';
 import '../screens/incident/incident_list_screen.dart';
 import '../screens/incident/incident_location_screen.dart';
 import '../screens/incident/report_new_incident_screen.dart';
+import '../screens/accounting/incoming_invoices_screen.dart';
 import '../screens/leavesAndHolidays/apply_for_leave_screen.dart';
 import '../screens/leavesAndHolidays/leaves_and_holidays_screen.dart';
 import '../screens/leavesAndHolidays/leaves_details_screen.dart';
@@ -126,6 +162,7 @@ import '../screens/loto/loto_details_screen.dart';
 import '../screens/loto/loto_upload_photos_screen.dart';
 import '../screens/loto/loto_reject_screen.dart';
 import '../screens/loto/widgets/start_loto_screen.dart';
+import '../screens/meetingRoom/view_available_rooms_screen.dart';
 import '../screens/onboarding/client_list_screen.dart';
 import '../screens/onboarding/select_language_screen.dart';
 import '../screens/onboarding/login_screen.dart';
@@ -136,6 +173,7 @@ import '../screens/onboarding/welcome_screen.dart';
 import '../screens/permit/close_permit_screen.dart';
 import '../screens/permit/open_permit_screen.dart';
 import '../screens/permit/permit_filter_screen.dart';
+import '../screens/permit/permit_select_file_screen.dart';
 import '../screens/profile/change_password_screen.dart';
 import '../screens/profile/select_change_password_screen.dart';
 import '../screens/profile/profile_edit_screen.dart';
@@ -158,16 +196,32 @@ import '../screens/safetyNotice/safety_notice_history_screen.dart';
 import '../screens/safetyNotice/safety_notice_filter_screen.dart';
 import '../screens/safetyNotice/safety_notice_screen.dart';
 import '../screens/signInQRCode/process_signin.dart';
+import '../screens/tankManagement/widgets/tank_add_image_comment_screen.dart';
+import '../screens/tankManagement/widgets/tank_filter_screen.dart';
 import '../screens/tickets/tickets_filter_screen.dart';
 import '../screens/tickets/add_ticket_comment_screen.dart';
 import '../screens/tickets/widgets/ticket_application_filter_list.dart';
 import '../screens/tickets/widgets/ticket_completion_date_screen.dart';
+import '../screens/tickets2/add_ticket_two_document_screen.dart';
+import '../screens/tickets2/reject_ticket_two_screen.dart';
+import '../screens/tickets2/ticket_two_completion_date_screen.dart';
+import '../screens/tickets2/ticket_two_details_screen.dart';
+import '../screens/tickets2/ticket_two_edt_hours_screen.dart';
+import '../screens/tickets2/ticket_two_filter_screen.dart';
+import '../screens/tickets2/ticket_two_list_screen.dart';
+import '../screens/tickets2/add_ticket_two_comments_screen.dart';
+import '../screens/tickets2/open_ticket_two_screen.dart';
+import '../screens/tickets2/update_ticket_two_screen.dart';
+import '../screens/tickets2/widgets/ticket_two_application_filter_list.dart';
 import '../screens/todo/add_todo_screen.dart';
 import '../screens/todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 import '../screens/todo/todo_details_and_document_details_screen.dart';
 import '../screens/todo/todo_history_list_screen.dart';
 import '../screens/todo/todo_settings_screen.dart';
+import '../screens/trips/edit_special_request_screen.dart';
 import '../screens/workorder/assign_workforce_screen.dart';
+import '../screens/workorder/widgets/offline/workorder_sap_model.dart';
+import '../screens/workorder/widgets/offline/workorder_sign_as_user_screen.dart';
 import '../screens/workorder/workorder_add_parts_screen.dart';
 import '../screens/workorder/start_and_complete_workorder_screen.dart';
 import '../screens/workorder/workorder_add_comments_screen.dart';
@@ -184,6 +238,7 @@ import '../screens/workorder/workorder_filter_screen.dart';
 import '../screens/workorder/workorder_form_screen_two.dart';
 import '../screens/workorder/workorder_details_tab_screen.dart';
 import '../screens/workorder/workorder_list_screen.dart';
+import '../screens/workorder/workorder_role_screen.dart';
 import '../widgets/in_app_web_view.dart';
 import '../widgets/view_offline_permit_screen.dart';
 
@@ -344,9 +399,11 @@ class AppRoutes {
       case CalendarScreen.routeName:
         return _createRoute(const CalendarScreen());
       case QualityManagementAddCommentsScreen.routeName:
+        List args = settings.arguments as List;
         return _createRoute(QualityManagementAddCommentsScreen(
             fetchQualityManagementDetailsModel:
-                settings.arguments as FetchQualityManagementDetailsModel));
+                args[0] as FetchQualityManagementDetailsModel,
+            isFromAddComments: args[1] as bool));
       case QualityManagementFilterScreen.routeName:
         return _createRoute(QualityManagementFilterScreen());
       case WorkOrderFilterScreen.routeName:
@@ -432,7 +489,8 @@ class AppRoutes {
       case DocumentFilterScreen.routeName:
         return _createRoute(const DocumentFilterScreen());
       case LotoAssignTeamScreen.routeName:
-        return _createRoute(const LotoAssignTeamScreen());
+        return _createRoute(LotoAssignTeamScreen(
+            isRemoveOperation: settings.arguments.toString()));
       case WorkOrderAddCommentsScreen.routeName:
         return _createRoute(const WorkOrderAddCommentsScreen());
       case DocumentLocationFilterList.routeName:
@@ -444,7 +502,8 @@ class AppRoutes {
         return _createRoute(
             SafetyNoticeScreen(isFromHomeScreen: settings.arguments as bool));
       case LotoAssignWorkforceScreen.routeName:
-        return _createRoute(const LotoAssignWorkforceScreen());
+        return _createRoute(LotoAssignWorkforceScreen(
+            isRemoveOperation: settings.arguments.toString()));
       case StartLotoScreen.routeName:
         return _createRoute(const StartLotoScreen());
       case LotoUploadPhotosScreen.routeName:
@@ -582,24 +641,50 @@ class AppRoutes {
       case TicketListScreen.routeName:
         return _createRoute(
             TicketListScreen(isFromHome: settings.arguments as bool));
+      case TicketTwoListScreen.routeName:
+        return _createRoute(
+            TicketTwoListScreen(isFromHome: settings.arguments as bool));
       case TicketsFilterScreen.routeName:
         return _createRoute(const TicketsFilterScreen());
+      case TicketTwoFilterScreen.routeName:
+        return _createRoute(const TicketTwoFilterScreen());
       case TicketApplicationFilterList.routeName:
         return _createRoute(TicketApplicationFilterList(
+            selectApplicationName: settings.arguments.toString()));
+      case TicketTwoApplicationFilterList.routeName:
+        return _createRoute(TicketTwoApplicationFilterList(
             selectApplicationName: settings.arguments.toString()));
       case TicketDetailsScreen.routeName:
         return _createRoute(
             TicketDetailsScreen(ticketId: settings.arguments.toString()));
+      case TicketTwoDetailsScreen.routeName:
+        return _createRoute(
+            TicketTwoDetailsScreen(ticketId: settings.arguments.toString()));
       case AddTicketScreen.routeName:
         return _createRoute(const AddTicketScreen());
       case AddTicketCommentScreen.routeName:
         return _createRoute(const AddTicketCommentScreen());
+      case AddTicketTwoCommentScreen.routeName:
+        return _createRoute(const AddTicketTwoCommentScreen());
       case AddTicketDocumentScreen.routeName:
         return _createRoute(const AddTicketDocumentScreen());
+      case AddTicketTwoDocumentScreen.routeName:
+        return _createRoute(AddTicketTwoDocumentScreen());
+      case UpdateTicketTwoScreen.routeName:
+        return _createRoute(
+            UpdateTicketTwoScreen(ticketTwoId: settings.arguments.toString()));
+      case RejectTicketTwoScreen.routeName:
+        return _createRoute(const RejectTicketTwoScreen());
       case TicketEDTHoursScreen.routeName:
         return _createRoute(const TicketEDTHoursScreen());
+      case TicketTwoEDTHoursScreen.routeName:
+        return _createRoute(const TicketTwoEDTHoursScreen());
       case TicketCompletionDateScreen.routeName:
         return _createRoute(const TicketCompletionDateScreen());
+      case TicketTwoCompletionDateScreen.routeName:
+        return _createRoute(const TicketTwoCompletionDateScreen());
+      case OpenTicketTwoScreen.routeName:
+        return _createRoute(const OpenTicketTwoScreen());
       case ChatMessagingScreen.routeName:
         return _createRoute(const ChatMessagingScreen());
       case AllChatsScreen.routeName:
@@ -632,10 +717,14 @@ class AppRoutes {
       case SurrenderPermitScreen.routeName:
         return _createRoute(SurrenderPermitScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
-      case TripsListScreen.routeName:
-        return _createRoute(const TripsListScreen());
       case OpenTicketScreen.routeName:
         return _createRoute(const OpenTicketScreen());
+      case TripsListScreen.routeName:
+        return _createRoute(
+            TripsListScreen(isFromHome: settings.arguments as bool));
+      case TripsDetailsScreen.routeName:
+        return _createRoute(
+            TripsDetailsScreen(tripId: settings.arguments.toString()));
       case PermitSignAsSapScreen.routeName:
         return _createRoute(PermitSignAsSapScreen(
             permitCpSapModel: settings.arguments as PermitCpSapModel));
@@ -648,6 +737,122 @@ class AppRoutes {
       case TransferPermitOfflineScreen.routeName:
         return _createRoute(TransferPermitOfflineScreen(
             permitDetailsModel: settings.arguments as PermitDetailsModel));
+      case TripsFilterScreen.routeName:
+        return _createRoute(const TripsFilterScreen());
+      case TripVesselFilterList.routeName:
+        return _createRoute(
+            TripVesselFilterList(vesselName: settings.arguments.toString()));
+      case AddSpecialRequestScreen.routeName:
+        return _createRoute(
+            AddSpecialRequestScreen(tripId: settings.arguments.toString()));
+      case PermitSwitchingScheduleTableScreen.routeName:
+        return _createRoute(PermitSwitchingScheduleTableScreen(
+            scheduleId: settings.arguments.toString()));
+      case EditSpecialRequestScreen.routeName:
+        List args = settings.arguments as List<String>;
+        return _createRoute(
+            EditSpecialRequestScreen(tripId: args[0], requestId: args[1]));
+      case MyMeetingsScreen.routeName:
+        return _createRoute(const MyMeetingsScreen());
+      case MeetingDetailsScreen.routeName:
+        return _createRoute(
+            MeetingDetailsScreen(bookingId: settings.arguments.toString()));
+      case SearchRoomsScreen.routeName:
+        return _createRoute(const SearchRoomsScreen());
+      case ViewAvailableRoomsScreen.routeName:
+        return _createRoute(ViewAvailableRoomsScreen(
+            searchForRoomsDatum:
+                settings.arguments as List<SearchForRoomsDatum>));
+      case BookMeetingRoomScreen.routeName:
+        return _createRoute(
+            BookMeetingRoomScreen(bookRoomMap: settings.arguments as Map));
+      case MonthViewScreen.routeName:
+        return _createRoute(const MonthViewScreen());
+      case MeetingViewAvailabilityScreen.routeName:
+        return _createRoute(const MeetingViewAvailabilityScreen());
+      case EditMeetingDetailsScreen.routeName:
+        return _createRoute(EditMeetingDetailsScreen(
+            meetingDetailsData: settings.arguments as MeetingDetailsData));
+      case GroupChatScreen.routeName:
+        return _createRoute(const GroupChatScreen());
+      case GroupDetailsScreen.routeName:
+        return _createRoute(
+            GroupDetailsScreen(groupId: settings.arguments.toString()));
+      case AddAndEditSwitchingInstructionScreen.routeName:
+        List args = settings.arguments as List;
+        return _createRoute(AddAndEditSwitchingInstructionScreen(
+          permitSwithcingScheduleInstructionDatum: args[0],
+          isFromEdit: args[1],
+          scheduleId: args[2],
+        ));
+      case WorkForceViewDocumentsScreen.routeName:
+        return _createRoute(WorkForceViewDocumentsScreen(
+            checklistDataMap: settings.arguments as Map));
+      case EditMultiSelectSwitchingScheduleScreen.routeName:
+        List args = settings.arguments as List;
+        return _createRoute(EditMultiSelectSwitchingScheduleScreen(
+          scheduleId: args[0],
+          instructionIds: args[1],
+        ));
+      case TankManagementListScreen.routeName:
+        return _createRoute(const TankManagementListScreen());
+      case TankManagementDetailsScreen.routeName:
+        return _createRoute(TankManagementDetailsScreen(
+            nominationId: settings.arguments.toString()));
+      case SubmitTankChecklistScreen.routeName:
+        return _createRoute(SubmitTankChecklistScreen(
+            tankChecklistMap: settings.arguments as Map));
+      case TankViewResponseScreen.routeName:
+        return _createRoute(TankViewResponseScreen(
+            tankChecklistMap: settings.arguments as Map));
+      case TankAddImageCommentScreen.routeName:
+        return _createRoute(TankAddImageCommentScreen(
+            questionResponseId: settings.arguments.toString()));
+      case TankFilterScreen.routeName:
+        return _createRoute(const TankFilterScreen());
+      case PermitSelectFileScreen.routeName:
+        return _createRoute(const PermitSelectFileScreen());
+      case AddTicket2Screen.routeName:
+        return _createRoute(
+            AddTicket2Screen(responsequeid: settings.arguments.toString()));
+      case WorkOrderRoleScreen.routeName:
+        return _createRoute(const WorkOrderRoleScreen());
+      case AccountingScreen.routeName:
+        return _createRoute(const AccountingScreen());
+      case OutgoingListScreen.routeName:
+        return _createRoute(const OutgoingListScreen());
+      case BankStatementScreen.routeName:
+        return _createRoute(const BankStatementScreen());
+      case IncomingInvoicesScreen.routeName:
+        return _createRoute(const IncomingInvoicesScreen());
+      case AccountingFilterScreen.routeName:
+        List args = settings.arguments as List;
+        return _createRoute(AccountingFilterScreen(
+            accountingFilterMap: args[0], currentRouteName: args[1]));
+      case ManageAccountingIncomingInvoiceScreen.routeName:
+        return _createRoute(ManageAccountingIncomingInvoiceScreen(
+            isFromEdit: settings.arguments as bool));
+      case ManageAccountingIncomingInvoiceSection.routeName:
+        return _createRoute(ManageAccountingIncomingInvoiceSection(
+            isFromEdit: settings.arguments as bool));
+      case BankStatementFilterScreen.routeName:
+        return _createRoute(const BankStatementFilterScreen());
+      case ManageAccountingIOutgoingInvoice.routeName:
+        return _createRoute(const ManageAccountingIOutgoingInvoice());
+      case ManageAccountingOutgoingInvoiceSection.routeName:
+        return _createRoute(const ManageAccountingOutgoingInvoiceSection());
+      case EditOutgoingInvoiceScreen.routeName:
+        return _createRoute(const EditOutgoingInvoiceScreen());
+      case EditOutgoingInvoiceSection.routeName:
+        return _createRoute(const EditOutgoingInvoiceSection());
+      case WorkOrderSignAsUserScreen.routeName:
+        return _createRoute(WorkOrderSignAsUserScreen(
+            workOrderSapModel: settings.arguments as WorkOrderSapModel));
+      // case EditIncomingInvoiceScreen.routeName:
+      //   return _createRoute(const EditIncomingInvoiceScreen());
+      case ManageBankStatementScreen.routeName:
+        return _createRoute(
+            ManageBankStatementScreen(isFromEdit: settings.arguments as bool));
       default:
         return _createRoute(const WelcomeScreen());
     }

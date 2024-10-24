@@ -1,14 +1,8 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:toolkit/blocs/imagePickerBloc/image_picker_bloc.dart';
-import 'package:toolkit/utils/constants/api_constants.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
-import 'package:toolkit/utils/generic_alphanumeric_generator_util.dart';
 import 'package:toolkit/widgets/android_pop_up.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../../../configs/app_color.dart';
 import '../../../../configs/app_dimensions.dart';
@@ -17,10 +11,15 @@ import '../../../../configs/app_spacing.dart';
 class UploadPictureContainer extends StatelessWidget {
   final List imagePathsList;
   final String clientId;
+  final ImagePickerBloc imagePickerBloc;
+  final String fileExtension;
 
   const UploadPictureContainer(
-      {Key? key, required this.imagePathsList, required this.clientId})
-      : super(key: key);
+      {super.key,
+      required this.imagePathsList,
+      required this.clientId,
+      required this.imagePickerBloc,
+      this.fileExtension = ''});
 
   @override
   Widget build(BuildContext context) {
@@ -49,40 +48,17 @@ class UploadPictureContainer extends StatelessWidget {
                               contentValue: StringConstants.kDeleteImage,
                               onPrimaryButton: () {
                                 Navigator.pop(context);
-                                context.read<ImagePickerBloc>().add(
-                                    RemovePickedImage(
-                                        pickedImagesList: imagePathsList,
-                                        index: index));
+                                imagePickerBloc.add(RemovePickedImage(
+                                    pickedImagesList: imagePathsList,
+                                    index: index));
                               });
                         });
                   }),
-              subtitle: (imagePathsList[index].contains(".toolkitx"))
-                  ? Image.file(File(imagePathsList[index]))
-                  : InkWell(
-                      splashColor: AppColor.transparent,
-                      highlightColor: AppColor.transparent,
-                      onTap: () {
-                        launchUrlString(
-                            '${ApiConstants.viewDocBaseUrl}${imagePathsList[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                            mode: LaunchMode.inAppWebView);
-                      },
-                      child: CachedNetworkImage(
-                          height: kUploadImageHeight,
-                          imageUrl:
-                              '${ApiConstants.viewDocBaseUrl}${imagePathsList[index]}&code=${RandomValueGeneratorUtil.generateRandomValue(clientId)}',
-                          placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: AppColor.paleGrey,
-                              highlightColor: AppColor.white,
-                              child: Container(
-                                  height: kNetworkImageContainerTogether,
-                                  width: kNetworkImageContainerTogether,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.white,
-                                      borderRadius:
-                                          BorderRadius.circular(kCardRadius)))),
-                          errorWidget: (context, url, error) => const Icon(
-                              Icons.error_outline_sharp,
-                              size: kIconSize))));
+              subtitle: (imagePathsList[index].toString().contains('.pdf'))
+                  ? const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.picture_as_pdf, size: 35))
+                  : Image.file(File(imagePathsList[index])));
         });
   }
 }

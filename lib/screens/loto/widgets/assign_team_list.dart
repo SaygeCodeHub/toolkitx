@@ -12,7 +12,9 @@ import '../loto_assign_team_screen.dart';
 import 'loto_assign_team_card.dart';
 
 class AssignTeamList extends StatelessWidget {
-  const AssignTeamList({Key? key}) : super(key: key);
+  const AssignTeamList({super.key, required this.isRemoveOperation});
+
+  final String isRemoveOperation;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class AssignTeamList extends StatelessWidget {
           context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
               pageNo: LotoAssignTeamScreen.pageNo,
-              isRemove: LotoAssignTeamScreen.isRemove,
+              isRemove: isRemoveOperation,
               name: ''));
           showCustomSnackBar(context, StringConstants.kTeamAssigned, '');
         } else if (state is LotoAssignTeamNotSaved) {
@@ -39,7 +41,7 @@ class AssignTeamList extends StatelessWidget {
           context.read<LotoDetailsBloc>().lotoAssignTeamDatum = [];
           context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
               pageNo: LotoAssignTeamScreen.pageNo,
-              isRemove: context.read<LotoDetailsBloc>().isRemove,
+              isRemove: isRemoveOperation,
               name: ''));
           showCustomSnackBar(context, StringConstants.kTeamRemoved, '');
         } else if (state is LotoAssignTeamNotSaved) {
@@ -84,6 +86,7 @@ class AssignTeamList extends StatelessWidget {
                       lotoAssignTeamDatum: context
                           .read<LotoDetailsBloc>()
                           .lotoAssignTeamDatum[index],
+                      isRemoveOperation: isRemoveOperation,
                     );
                   } else if (!context
                       .read<LotoDetailsBloc>()
@@ -91,7 +94,7 @@ class AssignTeamList extends StatelessWidget {
                     LotoAssignTeamScreen.pageNo++;
                     context.read<LotoDetailsBloc>().add(FetchLotoAssignTeam(
                         pageNo: LotoAssignTeamScreen.pageNo,
-                        isRemove: LotoAssignTeamScreen.isRemove,
+                        isRemove: isRemoveOperation,
                         name: ''));
                     return const Padding(
                       padding: EdgeInsets.symmetric(vertical: tinierSpacing),

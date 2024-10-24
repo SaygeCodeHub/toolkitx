@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_bloc.dart';
 import 'package:toolkit/blocs/workorder/workorder_events.dart';
 import 'package:toolkit/blocs/workorder/workorder_states.dart';
+import 'package:toolkit/screens/workorder/workorder_role_screen.dart';
+import 'package:toolkit/utils/global.dart';
 import '../../configs/app_spacing.dart';
 import '../../utils/database_utils.dart';
 import '../../widgets/custom_icon_button_row.dart';
@@ -15,26 +18,35 @@ class WorkOrderListScreen extends StatelessWidget {
   static const routeName = 'WorkOrderListScreen';
   final bool isFromHome;
 
-  WorkOrderListScreen({Key? key, this.isFromHome = false}) : super(key: key);
+  WorkOrderListScreen({super.key, this.isFromHome = false});
+
   static int pageNo = 1;
   final addWorkOrderMap = {};
 
   @override
   Widget build(BuildContext context) {
+    isFromHome
+        ? context.read<WorkOrderTabDetailsBloc>().roleId = ""
+        : context.read<WorkOrderTabDetailsBloc>().roleId;
+    pageNo = 1;
+    context.read<WorkOrderBloc>().hasReachedMax = false;
+    context.read<WorkOrderBloc>().data.clear();
     context
         .read<WorkOrderBloc>()
         .add(FetchWorkOrders(pageNo: 1, isFromHome: isFromHome));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('WorkOrder')),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              WorkOrderFormScreenOne.isSimilarWorkOrder = false;
-              WorkOrderFormScreenOne.isFromEdit = false;
-              Navigator.pushReplacementNamed(
-                  context, WorkOrderFormScreenOne.routeName,
-                  arguments: addWorkOrderMap);
-            },
-            child: const Icon(Icons.add)),
+        floatingActionButton: (isNetworkEstablished)
+            ? FloatingActionButton(
+                onPressed: () {
+                  WorkOrderFormScreenOne.isSimilarWorkOrder = false;
+                  WorkOrderFormScreenOne.isFromEdit = false;
+                  Navigator.pushReplacementNamed(
+                      context, WorkOrderFormScreenOne.routeName,
+                      arguments: addWorkOrderMap);
+                },
+                child: const Icon(Icons.add))
+            : const SizedBox.shrink(),
         body: Padding(
           padding: const EdgeInsets.only(
               left: leftRightMargin,
@@ -53,12 +65,22 @@ class WorkOrderListScreen extends StatelessWidget {
               }, builder: (context, state) {
                 if (state is WorkOrdersFetched) {
                   return CustomIconButtonRow(
-                      secondaryOnPress: () {},
+                      downloadVisible: (isNetworkEstablished),
+                      onDownloadPress: () {
+                        context
+                            .read<WorkOrderBloc>()
+                            .add(FetchWorkOrderOfflineData());
+                      },
+                      secondaryOnPress: () {
+                        Navigator.pushNamed(
+                            context, WorkOrderRoleScreen.routeName);
+                      },
                       primaryOnPress: () {
                         Navigator.pushNamed(
                             context, WorkOrderFilterScreen.routeName);
                       },
-                      secondaryVisible: false,
+                      secondaryVisible: (isNetworkEstablished),
+                      primaryVisible: (isNetworkEstablished),
                       isEnabled: true,
                       clearVisible: state.filterMap.isNotEmpty,
                       clearOnPress: () {

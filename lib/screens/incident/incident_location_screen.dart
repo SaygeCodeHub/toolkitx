@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/incident/incident_health_and_safety_screen.dart';
+import 'package:toolkit/screens/incident/widgets/incident_assets_tile.dart';
 import 'package:toolkit/screens/incident/widgets/incident_location_list_tile.dart';
 import 'package:toolkit/screens/incident/widgets/incident_repported_authority_expansion_tile.dart';
 import 'package:toolkit/screens/incident/widgets/incident_site_list_tile.dart';
@@ -19,11 +20,12 @@ class IncidentLocationScreen extends StatelessWidget {
   static const routeName = 'IncidentLocationScreen';
   final Map addAndEditIncidentMap;
 
-  const IncidentLocationScreen({Key? key, required this.addAndEditIncidentMap})
-      : super(key: key);
+  const IncidentLocationScreen(
+      {super.key, required this.addAndEditIncidentMap});
 
   @override
   Widget build(BuildContext context) {
+    context.read<ReportNewIncidentBloc>().siteId = 0;
     return Scaffold(
       appBar: const GenericAppBar(title: StringConstants.kReportNewIncident),
       body: Padding(
@@ -37,6 +39,9 @@ class IncidentLocationScreen extends StatelessWidget {
                     IncidentSiteListTile(addIncidentMap: addAndEditIncidentMap),
                     IncidentLocationListTile(
                         addIncidentMap: addAndEditIncidentMap),
+                    const SizedBox(height: xxTinySpacing),
+                    IncidentAssetsTile(
+                        addAndEditIncidentMap: addAndEditIncidentMap),
                     const SizedBox(height: xxTinySpacing),
                     Text(DatabaseUtil.getText('ReportedAuthorities'),
                         style: Theme.of(context)

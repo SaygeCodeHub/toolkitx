@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-FetchQualityManagementMasterModel fetchQualityManagementRolesModelFromJson(
+FetchQualityManagementMasterModel fetchQualityManagementMasterModelFromJson(
         String str) =>
     FetchQualityManagementMasterModel.fromJson(json.decode(str));
 
@@ -40,6 +40,7 @@ class QMMasterDatum {
   final String name;
   final String location;
   final dynamic id;
+  final dynamic active;
   final dynamic type;
   final String? title;
   final dynamic ismandatory;
@@ -50,7 +51,6 @@ class QMMasterDatum {
   final dynamic minval;
   final dynamic maxval;
   final dynamic fileextension;
-  final dynamic active;
   final dynamic createdby;
   final dynamic createddate;
   final dynamic updateddate;
@@ -60,6 +60,7 @@ class QMMasterDatum {
   final dynamic moreinfoLink;
   final dynamic moduletype2;
   final dynamic rowvalue;
+  final dynamic customlisttype;
   final List<Queoption> queoptions;
   final dynamic groupId;
   final String groupName;
@@ -68,6 +69,7 @@ class QMMasterDatum {
     required this.name,
     required this.location,
     this.id,
+    this.active,
     this.type,
     this.title,
     this.ismandatory,
@@ -78,9 +80,8 @@ class QMMasterDatum {
     this.minval,
     this.maxval,
     this.fileextension,
-    required this.active,
-    required this.createdby,
-    required this.createddate,
+    this.createdby,
+    this.createddate,
     this.updateddate,
     this.moduletype,
     this.sortorder,
@@ -88,6 +89,7 @@ class QMMasterDatum {
     this.moreinfoLink,
     this.moduletype2,
     this.rowvalue,
+    this.customlisttype,
     required this.queoptions,
     required this.groupId,
     required this.groupName,
@@ -97,6 +99,7 @@ class QMMasterDatum {
         name: json["name"] ?? '',
         location: json["location"] ?? '',
         id: json["id"] ?? '',
+        active: json["active"] ?? '',
         type: json["type"] ?? '',
         title: json["title"] ?? '',
         ismandatory: json["ismandatory"] ?? '',
@@ -107,8 +110,7 @@ class QMMasterDatum {
         minval: json["minval"] ?? '',
         maxval: json["maxval"] ?? '',
         fileextension: json["fileextension"] ?? '',
-        active: json["active"] ?? '',
-        createdby: json["createdby"],
+        createdby: json["createdby"] ?? '',
         createddate: json["createddate"] ?? '',
         updateddate: json["updateddate"] ?? '',
         moduletype: json["moduletype"] ?? '',
@@ -117,6 +119,7 @@ class QMMasterDatum {
         moreinfoLink: json["moreinfo_link"] ?? '',
         moduletype2: json["moduletype_2"] ?? '',
         rowvalue: json["rowvalue"] ?? '',
+        customlisttype: json["customlisttype"],
         queoptions: json["queoptions"] == null
             ? []
             : List<Queoption>.from(
@@ -129,6 +132,7 @@ class QMMasterDatum {
         "name": name,
         "location": location,
         "id": id,
+        "active": active,
         "type": type,
         "title": title,
         "ismandatory": ismandatory,
@@ -139,16 +143,16 @@ class QMMasterDatum {
         "minval": minval,
         "maxval": maxval,
         "fileextension": fileextension,
-        "active": active,
         "createdby": createdby,
         "createddate": createddate.toIso8601String(),
-        "updateddate": updateddate,
+        "updateddate": updateddate.toIso8601String(),
         "moduletype": moduletype,
         "sortorder": sortorder,
         "moreinfo": moreinfo,
         "moreinfo_link": moreinfoLink,
         "moduletype_2": moduletype2,
         "rowvalue": rowvalue,
+        "customlisttype": customlisttype,
         "queoptions": List<dynamic>.from(queoptions.map((x) => x.toJson())),
         "group_id": groupId,
         "group_name": groupName,

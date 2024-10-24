@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_bloc.dart';
 import 'package:toolkit/blocs/qualityManagement/qm_states.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/data/models/qualityManagement/fetch_custom_fields_by_key.dart';
 import '../../../blocs/qualityManagement/qm_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
@@ -14,12 +15,14 @@ class QualityManagementCustomFieldInfoExpansionTile extends StatelessWidget {
   final CustomFieldCallBack onCustomFieldChanged;
   final int index;
   final Map addAndEditIncidentMap;
+  final List<CustomFieldsDatum> customFieldsDatum;
 
   const QualityManagementCustomFieldInfoExpansionTile(
       {Key? key,
       required this.onCustomFieldChanged,
       required this.index,
-      required this.addAndEditIncidentMap})
+      required this.addAndEditIncidentMap,
+      required this.customFieldsDatum})
       : super(key: key);
 
   @override
@@ -51,41 +54,30 @@ class QualityManagementCustomFieldInfoExpansionTile extends StatelessWidget {
                       ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: state.fetchQualityManagementMasterModel
-                              .data![4][index].queoptions.length,
+                          itemCount: customFieldsDatum[index].queoptions.length,
                           itemBuilder: (BuildContext context, int itemIndex) {
                             return RadioListTile(
                                 contentPadding: const EdgeInsets.only(
                                     left: xxxTinierSpacing),
                                 activeColor: AppColor.deepBlue,
                                 title: Text(
-                                    state
-                                        .fetchQualityManagementMasterModel
-                                        .data![4][index]
+                                    customFieldsDatum[index]
                                         .queoptions[itemIndex]
                                         .optiontext,
                                     style: Theme.of(context).textTheme.xSmall),
                                 controlAffinity:
                                     ListTileControlAffinity.trailing,
-                                value: state
-                                    .fetchQualityManagementMasterModel
-                                    .data![4][index]
+                                value: customFieldsDatum[index]
                                     .queoptions[itemIndex]
                                     .optionid
                                     .toString(),
-                                groupValue: state
-                                    .fetchQualityManagementMasterModel
-                                    .toString(),
+                                groupValue: state.reportQMCustomInfoOptionId,
                                 onChanged: (value) {
-                                  value = state
-                                      .fetchQualityManagementMasterModel
-                                      .data![4][index]
+                                  value = customFieldsDatum[index]
                                       .queoptions[itemIndex]
                                       .optionid
                                       .toString();
-                                  customFieldName = state
-                                      .fetchQualityManagementMasterModel
-                                      .data![4][index]
+                                  customFieldName = customFieldsDatum[index]
                                       .queoptions[itemIndex]
                                       .optiontext;
                                   onCustomFieldChanged(value);

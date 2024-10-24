@@ -213,3 +213,76 @@ class GenerateOfflinePdf extends PermitEvents {
 
   GenerateOfflinePdf({required this.permitId});
 }
+
+class FetchSwitchingScheduleInstructions extends PermitEvents {
+  final String scheduleId;
+
+  FetchSwitchingScheduleInstructions({required this.scheduleId});
+}
+
+class UpdatePermitSwitchingSchedule extends PermitEvents {
+  final Map editSwitchingScheduleMap;
+  final bool isFromMultiSelect;
+
+  UpdatePermitSwitchingSchedule(
+      {required this.editSwitchingScheduleMap,
+      required this.isFromMultiSelect});
+}
+
+class AddPermitSwitchingSchedule extends PermitEvents {
+  final Map addSwitchingScheduleMap;
+
+  AddPermitSwitchingSchedule({required this.addSwitchingScheduleMap});
+}
+
+class MoveDownPermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  MoveDownPermitSwitchingSchedule({required this.instructionId});
+}
+
+class MoveUpPermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  MoveUpPermitSwitchingSchedule({required this.instructionId});
+}
+
+class GenerateSwitchingSchedulePdf extends PermitEvents {
+  final String switchingScheduleId;
+
+  GenerateSwitchingSchedulePdf({required this.switchingScheduleId});
+}
+
+class MarkSwitchingScheduleComplete extends PermitEvents {
+  final String switchingScheduleId;
+
+  MarkSwitchingScheduleComplete({required this.switchingScheduleId});
+}
+
+class DeletePermitSwitchingSchedule extends PermitEvents {
+  final String instructionId;
+
+  DeletePermitSwitchingSchedule({required this.instructionId});
+}
+
+class FetchSwitchingScheduleDetails extends PermitEvents {
+  final String instructionId;
+
+  FetchSwitchingScheduleDetails({required this.instructionId});
+}
+
+class GenerateTextFile extends PermitEvents {
+  GenerateTextFile();
+}
+
+class PickFileFromStorage extends PermitEvents {
+  PickFileFromStorage();
+}
+
+class PickFileFromStorageInitialEvent extends PermitEvents {
+  PickFileFromStorageInitialEvent();
+}
+
+class SaveFileData extends PermitEvents {
+  SaveFileData();
+}

@@ -81,15 +81,15 @@ class WorkOrderDetailsData {
   final String safetymeasurenames;
   final String specialworknames;
   final String isassignedwf;
-  final String isstart;
+  String isstart;
   final String ishold;
-  final String iscomplete;
-  final String isacceptreject;
+  String iscomplete;
+  String isacceptreject;
   final String isstarttender;
   final String isstoptender;
   final String istenderacceptreject;
   final String workorder;
-  final String status;
+  String status;
   final String plannedstartdate;
   final String plannedstarttime;
   final String plannedfinishdate;
@@ -186,86 +186,104 @@ class WorkOrderDetailsData {
 
   factory WorkOrderDetailsData.fromJson(Map<String, dynamic> json) =>
       WorkOrderDetailsData(
-        id: json["id"],
-        pmid: json["pmid"],
-        locationid: json["locationid"],
-        otherlocation: json["otherlocation"],
-        subject: json["subject"],
-        priorityid: json["priorityid"],
-        categoryid: json["categoryid"],
-        statusid: json["statusid"],
-        specialtyid: json["specialtyid"],
-        parentwoid: json["parentwoid"],
-        originationid: json["originationid"],
-        contractid: json["contractid"],
-        businesslineid: json["businesslineid"],
-        costcenterid: json["costcenterid"],
-        changeid: json["changeid"],
-        accountid: json["accountid"],
-        companyid: json["companyid"],
-        projectid: json["projectid"],
-        plannedstartdatetime: json["plannedstartdatetime"],
-        plannedfinishdatetime: json["plannedfinishdatetime"],
-        description: json["description"],
-        type: json["type"],
-        otherlocationLatitude: json["otherlocation_latitude"],
-        otherlocationLongitude: json["otherlocation_longitude"],
-        cwoid: json["cwoid"],
-        created: json["created"],
-        createdby: json["createdby"],
-        updated: json["updated"],
-        updateby: json["updateby"],
-        pmplan: json["pmplan"],
-        category: json["category"],
-        workordertype: json["workordertype"],
-        projectname: json["projectname"],
-        account: json["account"],
-        contractorname: json["contractorname"],
-        costcenter: json["costcenter"],
-        contractname: json["contractname"],
-        businessline: json["businessline"],
-        origination: json["origination"],
-        worksteps: json["worksteps"],
-        safetymeasure: json["safetymeasure"],
-        specialwork: json["specialwork"],
-        istender: json["istender"],
-        locationnames: json["locationnames"],
+        id: json["id"] ?? '',
+        pmid: json["pmid"] ?? '',
+        locationid: json["locationid"] ?? '',
+        otherlocation: json["otherlocation"] ?? '',
+        subject: json["subject"] ?? '',
+        priorityid: json["priorityid"] ?? '',
+        categoryid: json["categoryid"] ?? '',
+        statusid: json["statusid"] ?? '',
+        specialtyid: json["specialtyid"] ?? '',
+        parentwoid: json["parentwoid"] ?? '',
+        originationid: json["originationid"] ?? '',
+        contractid: json["contractid"] ?? '',
+        businesslineid: json["businesslineid"] ?? '',
+        costcenterid: json["costcenterid"] ?? '',
+        changeid: json["changeid"] ?? '',
+        accountid: json["accountid"] ?? '',
+        companyid: json["companyid"] ?? '',
+        projectid: json["projectid"] ?? '',
+        plannedstartdatetime: json["plannedstartdatetime"] ?? '',
+        plannedfinishdatetime: json["plannedfinishdatetime"] ?? '',
+        description: json["description"] ?? '',
+        type: json["type"] ?? '',
+        otherlocationLatitude: json["otherlocation_latitude"] ?? '',
+        otherlocationLongitude: json["otherlocation_longitude"] ?? '',
+        cwoid: json["cwoid"] ?? '',
+        created: json["created"] ?? '',
+        createdby: json["createdby"] ?? '',
+        updated: json["updated"] ?? '',
+        updateby: json["updateby"] ?? '',
+        pmplan: json["pmplan"] ?? '',
+        category: json["category"] ?? '',
+        workordertype: json["workordertype"] ?? '',
+        projectname: json["projectname"] ?? '',
+        account: json["account"] ?? '',
+        contractorname: json["contractorname"] ?? '',
+        costcenter: json["costcenter"] ?? '',
+        contractname: json["contractname"] ?? '',
+        businessline: json["businessline"] ?? '',
+        origination: json["origination"] ?? '',
+        worksteps: json["worksteps"] ?? '',
+        safetymeasure: json["safetymeasure"] ?? '',
+        specialwork: json["specialwork"] ?? '',
+        istender: json["istender"] ?? '',
+        locationnames: json["locationnames"] ?? '',
         safetymeasurenames: json["safetymeasurenames"] ?? '',
         specialworknames: json["specialworknames"] ?? '',
-        isassignedwf: json["isassignedwf"],
-        isstart: json["isstart"],
-        ishold: json["ishold"],
-        iscomplete: json["iscomplete"],
-        isacceptreject: json["isacceptreject"],
+        isassignedwf: json["isassignedwf"] ?? '',
+        isstart: json["isstart"] ?? '',
+        ishold: json["ishold"] ?? '',
+        iscomplete: json["iscomplete"] ?? '',
+        isacceptreject: json["isacceptreject"] ?? '',
         isstarttender: json["isstarttender"] ?? '',
         isstoptender: json["isstoptender"] ?? '',
-        istenderacceptreject: json["istenderacceptreject"],
-        workorder: json["workorder"],
-        status: json["status"],
-        plannedstartdate: json["plannedstartdate"],
-        plannedstarttime: json["plannedstarttime"],
-        plannedfinishdate: json["plannedfinishdate"],
-        plannedfinishtime: json["plannedfinishtime"],
-        maplinks: List<Maplink>.from(
-            json["maplinks"].map((x) => Maplink.fromJson(x))),
-        customfields: List<Customfield>.from(
-            json["customfields"].map((x) => Customfield.fromJson(x))),
-        logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
-        comments: List<Comment>.from(
-            json["comments"].map((x) => Comment.fromJson(x))),
-        workforce: List<Workforce>.from(
-            json["workforce"].map((x) => Workforce.fromJson(x))),
-        items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-        downtime: List<Downtime>.from(
-            json["downtime"].map((x) => Downtime.fromJson(x))),
-        documents: List<Document>.from(
-            json["documents"].map((x) => Document.fromJson(x))),
+        istenderacceptreject: json["istenderacceptreject"] ?? '',
+        workorder: json["workorder"] ?? '',
+        status: json["status"] ?? '',
+        plannedstartdate: json["plannedstartdate"] ?? '',
+        plannedstarttime: json["plannedstarttime"] ?? '',
+        plannedfinishdate: json["plannedfinishdate"] ?? '',
+        plannedfinishtime: json["plannedfinishtime"] ?? '',
+        maplinks: (json["maplinks"] == null)
+            ? []
+            : List<Maplink>.from(
+                json["maplinks"].map((x) => Maplink.fromJson(x))),
+        customfields: (json["customfields"] == null)
+            ? []
+            : List<Customfield>.from(
+                json["customfields"].map((x) => Customfield.fromJson(x))),
+        logs: (json["logs"] == null)
+            ? []
+            : List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+        comments: (json["comments"] == null)
+            ? []
+            : List<Comment>.from(
+                json["comments"].map((x) => Comment.fromJson(x))),
+        workforce: (json["workforce"] == null)
+            ? []
+            : List<Workforce>.from(
+                json["workforce"].map((x) => Workforce.fromJson(x))),
+        items: (json["items"] == null)
+            ? []
+            : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+        downtime: (json["downtime"] == null)
+            ? []
+            : List<Downtime>.from(
+                json["downtime"].map((x) => Downtime.fromJson(x))),
+        documents: (json["documents"] == null)
+            ? []
+            : List<Document>.from(
+                json["documents"].map((x) => Document.fromJson(x))),
         service: json["service"] ?? '',
         vendorname: json["vendorname"] ?? '',
-        quan: json["quan"],
+        quan: json["quan"] ?? 0,
         amount: json["amount"] ?? '',
-        misccost: List<Misccost>.from(
-            json["misccost"].map((x) => Misccost.fromJson(x))),
+        misccost: (json["misccost"] == null)
+            ? []
+            : List<Misccost>.from(
+                json["misccost"].map((x) => Misccost.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -359,7 +377,7 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        ownername: json["ownername"],
+        ownername: json["ownername"] ?? '',
         created: json["created"],
         files: json["files"] ?? '',
         comments: json["comments"],

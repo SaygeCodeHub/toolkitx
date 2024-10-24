@@ -602,6 +602,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
 
   FutureOr<void> _fetchItemDetails(
       FetchExpenseItemDetails event, Emitter<ExpenseStates> emit) async {
+    String? clientId =
+        await _customerCache.getClientId(CacheKeys.clientId) ?? '';
     try {
       emit(FetchingExpenseItemDetails());
       FetchExpenseItemDetailsModel fetchExpenseItemDetailsModel =
@@ -732,7 +734,8 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseStates> {
           }
         }
         emit(ExpenseItemDetailsFetched(
-            fetchExpenseItemDetailsModel: fetchExpenseItemDetailsModel));
+            fetchExpenseItemDetailsModel: fetchExpenseItemDetailsModel,
+            clientId: clientId));
         add(FetchExpenseItemMaster(isScreenChange: isScreenChange));
       } else {
         emit(ExpenseItemDetailsNotFetched(

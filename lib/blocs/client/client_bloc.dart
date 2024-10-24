@@ -4,14 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/data/models/chatBox/fetch_messages_model.dart';
+import 'package:toolkit/screens/chat/chat_messaging_screen.dart';
 import 'package:toolkit/utils/database/database_util.dart';
 import 'package:toolkit/utils/notifications/notification_util.dart';
+
 import '../../data/cache/cache_keys.dart';
 import '../../data/cache/customer_cache.dart';
 import '../../data/models/client/client_list_model.dart';
 import '../../data/models/client/home_screen_model.dart';
 import '../../di/app_module.dart';
 import '../../repositories/client/client_repository.dart';
+import '../../utils/global.dart';
 import '../../utils/modules_util.dart';
 import 'client_events.dart';
 import 'client_states.dart';
@@ -20,6 +23,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
   final ClientRepository _clientRepository = getIt<ClientRepository>();
   final CustomerCache _customerCache = getIt<CustomerCache>();
   final DatabaseHelper _databaseHelper = getIt<DatabaseHelper>();
+  bool callOnce = false;
 
   ClientStates get initialState => ClientInitial();
 
@@ -34,6 +38,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchClientList event, Emitter<ClientStates> emit) async {
     emit(ClientListFetching());
     try {
+      callOnce = true;
       String clientDataKey =
           (await _customerCache.getClientDataKey(CacheKeys.clientDataKey))!;
       String userType = (await _customerCache.getUserType(CacheKeys.userType))!;
@@ -56,6 +61,7 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       SelectClient event, Emitter<ClientStates> emit) async {
     if (event.isFromProfile) {
       await _databaseHelper.recreateOfflinePermitTable();
+      await _databaseHelper.recreateOfflineWorkOrderTable();
     }
     _customerCache.setApiKey(CacheKeys.apiKey, event.apiKey);
     _customerCache.setClientId(CacheKeys.clientId, event.hashKey);
@@ -75,7 +81,6 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchHomeScreenData event, Emitter<ClientStates> emit) async {
     emit(HomeScreenFetching());
     try {
-      List permissionsList = [];
       int badgeCount = 0;
       String timeZoneCode =
           (await _customerCache.getTimeZoneCode(CacheKeys.timeZoneCode))!;
@@ -93,14 +98,11 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       HomeScreenModel homeScreenModel =
           await _clientRepository.fetchHomeScreen(fetchHomeScreenMap);
       if (homeScreenModel.status == 200) {
-        if (event.isFirstTime == true) {
-          add(FetchChatMessages());
-        }
         _customerCache.setUserId(
             CacheKeys.userId, homeScreenModel.data!.userid);
         _customerCache.setUserId2(
             CacheKeys.userId2, homeScreenModel.data!.userid2);
-        permissionsList =
+        final permissionsList =
             homeScreenModel.data!.permission.replaceAll(' ', '').split(',');
         List availableModules = [];
         permissionsList.add('safetyNotice');
@@ -118,7 +120,13 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
             badgeCount = badgeCount + homeScreenModel.data!.badges![i].count;
           }
         }
-
+        if (callOnce) {
+          ChatBloc().add(FetchAllGroupChats());
+          callOnce = false;
+        }
+        if (event.isFirstTime == true) {
+          add(FetchChatMessages());
+        }
         emit(HomeScreenFetched(
             homeScreenModel: homeScreenModel,
             image: clientImage,
@@ -137,9 +145,8 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
       FetchChatMessages event, Emitter<ClientStates> emit) async {
     int pageNo = 1;
     try {
-      String newToken = await NotificationUtil().getToken();
+      String? newToken = await NotificationUtil().getToken();
       bool hasMoreData = true;
-
       while (hasMoreData) {
         FetchChatMessagesModel fetchChatMessagesModel =
             await _clientRepository.fetchChatMessages({
@@ -147,14 +154,37 @@ class ClientBloc extends Bloc<ClientEvents, ClientStates> {
           'hashcode': await _customerCache.getHashCode(CacheKeys.hashcode),
           'token': newToken
         });
-
         if (fetchChatMessagesModel.data.isNotEmpty) {
           for (var item in fetchChatMessagesModel.data) {
-            await _databaseHelper.insertMessage(item.msgJson.toJson());
-            ChatBloc().add(RebuildChatMessagingScreen(employeeDetailsMap: {
-              'rid': item.msgJson.toJson()['rid'],
-              'sid': item.msgJson.toJson()['sid']
-            }));
+            final chatMsgJson = item.msgJson.toJson();
+            Map<String, dynamic> chatDetailsMap = {
+              'rid': chatMsgJson['rid'],
+              'rtype': chatMsgJson['rtype'],
+              'sid': chatMsgJson['sid'],
+              'stype': chatMsgJson['stype'],
+              "msg_id": chatMsgJson['msg_id'],
+              "quote_msg_id": chatMsgJson['quote_msg_id'],
+              "msg_type": chatMsgJson['msg_type'],
+              "msg_time": chatMsgJson['msg_time'],
+              "msg": chatMsgJson['msg'],
+              "sid_2": "2",
+              "stype_2": "1",
+              "msg_status": '1',
+              "isMessageUnread": 1,
+              "employee_name": item.userName,
+              "sender_name": item.senderName,
+              'isReceiver': 1,
+              'isGroup': (chatMsgJson['rtype'] == '3') ? 1 : 0,
+              'clientid': chatMsgJson['clientid']
+            };
+            await _databaseHelper.insertMessage(chatDetailsMap).then((result) {
+              if (chatScreenName == ChatMessagingScreen.routeName) {
+                ChatBloc().add(RebuildChatMessagingScreen(
+                    employeeDetailsMap: ChatBloc().chatDetailsMap));
+              } else {
+                ChatBloc().add(FetchChatsList());
+              }
+            });
           }
           if (fetchChatMessagesModel.data.length < 30) {
             hasMoreData = false;

@@ -39,6 +39,7 @@ class PermitDetailsData {
   final List<Tab4> tab4;
   final List<Tab5> tab5;
   final List<Tab6> tab6;
+  final List<Tab7> tab7;
   final Map<String, String> html;
 
   PermitDetailsData(
@@ -48,7 +49,8 @@ class PermitDetailsData {
       required this.tab4,
       required this.tab5,
       required this.tab6,
-      required this.html});
+      required this.html,
+      required this.tab7});
 
   factory PermitDetailsData.fromJson(Map<String, dynamic> json) =>
       PermitDetailsData(
@@ -67,7 +69,10 @@ class PermitDetailsData {
               ? []
               : List<Tab6>.from(json["tab6"].map((x) => Tab6.fromJson(x))),
           html: Map.from(json["html"] ?? {})
-              .map((k, v) => MapEntry<String, String>(k, v)));
+              .map((k, v) => MapEntry<String, String>(k, v)),
+          tab7: (json["tab7"] == null)
+              ? []
+              : List<Tab7>.from(json["tab7"].map((x) => Tab7.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "tab1": tab1.toJson(),
@@ -77,6 +82,7 @@ class PermitDetailsData {
         "tab5": List<dynamic>.from(tab5.map((x) => x.toJson())),
         "tab6": List<dynamic>.from(tab6.map((x) => x.toJson())),
         "html": Map.from(html).map((k, v) => MapEntry<String, dynamic>(k, v)),
+        "tab7": List<dynamic>.from(tab7.map((x) => x.toJson()))
       };
 }
 
@@ -401,5 +407,33 @@ class Tab6 {
         "action": action,
         "created_by": createdBy,
         "role": role,
+      };
+}
+
+class Tab7 {
+  final String id;
+  final String number;
+  final String title;
+  final dynamic status;
+
+  Tab7({
+    required this.id,
+    required this.number,
+    required this.title,
+    required this.status,
+  });
+
+  factory Tab7.fromJson(Map<String, dynamic> json) => Tab7(
+        id: json["id"],
+        number: json["number"],
+        title: json["title"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "number": number,
+        "title": title,
+        "status": status,
       };
 }

@@ -12,6 +12,7 @@ import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorder_details_model.dart';
 import '../../../utils/constants/string_constants.dart';
 import '../../../utils/database_utils.dart';
+import '../../../utils/global.dart';
 import '../../../widgets/custom_card.dart';
 import '../../../widgets/custom_icon_button.dart';
 import '../workorder_add_mis_cost_screen.dart';
@@ -47,52 +48,57 @@ class WorkOrderTabThreeMiscCostTab extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: AppColor.black)),
                           const Spacer(),
-                          CustomIconButton(
-                              icon: Icons.delete,
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AndroidPopUp(
-                                          titleValue: DatabaseUtil.getText(
-                                              'DeleteRecord'),
-                                          contentValue: '',
-                                          onPrimaryButton: () {
-                                            context
-                                                    .read<WorkOrderTabDetailsBloc>()
-                                                    .misCostId =
-                                                data.misccost[index].id;
-                                            context
-                                                .read<WorkOrderTabDetailsBloc>()
-                                                .add(
-                                                    DeleteWorkOrderSingleMiscCost());
-                                            Navigator.pop(context);
-                                          });
-                                    });
-                              },
-                              size: kEditAndDeleteIconTogether),
+                          if (isNetworkEstablished)
+                            CustomIconButton(
+                                icon: Icons.delete,
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AndroidPopUp(
+                                            titleValue: DatabaseUtil.getText(
+                                                'DeleteRecord'),
+                                            contentValue: '',
+                                            onPrimaryButton: () {
+                                              context
+                                                      .read<
+                                                          WorkOrderTabDetailsBloc>()
+                                                      .misCostId =
+                                                  data.misccost[index].id;
+                                              context
+                                                  .read<
+                                                      WorkOrderTabDetailsBloc>()
+                                                  .add(
+                                                      DeleteWorkOrderSingleMiscCost());
+                                              Navigator.pop(context);
+                                            });
+                                      });
+                                },
+                                size: kEditAndDeleteIconTogether),
                           const SizedBox(width: xxxTinierSpacing),
-                          CustomIconButton(
-                              icon: Icons.edit,
-                              onPressed: () {
-                                WorkOrderAddMisCostScreen.workOrderMasterDatum =
-                                    context
-                                        .read<WorkOrderBloc>()
-                                        .workOrderMasterDatum;
-                                WorkOrderAddMisCostScreen
-                                        .workOrderDetailsMap['misCostId'] =
-                                    data.misccost[index].id;
-                                WorkOrderAddMisCostScreen
-                                        .workOrderDetailsMap['vendorName'] =
-                                    data.misccost[index].vendorname;
-                                WorkOrderAddMisCostScreen
-                                        .workOrderDetailsMap['workorderId'] =
-                                    data.id;
-                                WorkOrderAddMisCostScreen.isFromEdit = true;
-                                Navigator.pushNamed(context,
-                                    WorkOrderAddMisCostScreen.routeName);
-                              },
-                              size: kEditAndDeleteIconTogether)
+                          if (isNetworkEstablished)
+                            CustomIconButton(
+                                icon: Icons.edit,
+                                onPressed: () {
+                                  WorkOrderAddMisCostScreen
+                                          .workOrderMasterDatum =
+                                      context
+                                          .read<WorkOrderBloc>()
+                                          .workOrderMasterDatum;
+                                  WorkOrderAddMisCostScreen
+                                          .workOrderDetailsMap['misCostId'] =
+                                      data.misccost[index].id;
+                                  WorkOrderAddMisCostScreen
+                                          .workOrderDetailsMap['vendorName'] =
+                                      data.misccost[index].vendorname;
+                                  WorkOrderAddMisCostScreen
+                                          .workOrderDetailsMap['workorderId'] =
+                                      data.id;
+                                  WorkOrderAddMisCostScreen.isFromEdit = true;
+                                  Navigator.pushNamed(context,
+                                      WorkOrderAddMisCostScreen.routeName);
+                                },
+                                size: kEditAndDeleteIconTogether)
                         ],
                       ),
                       subtitle: Padding(

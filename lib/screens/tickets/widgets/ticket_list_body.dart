@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import 'package:toolkit/screens/tickets/ticket_details_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
 import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
-import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
+import '../ticket_details_screen.dart';
 
 class TicketListBody extends StatelessWidget {
   const TicketListBody({super.key, required this.ticketListDatum});
@@ -78,13 +77,9 @@ class TicketListBody extends StatelessWidget {
                     )
                   ],
                 ),
-                trailing: SizedBox(
-                  width: kSmallSizedBoxWidth,
-                  child: Text(ticketListDatum[index].statusname,
-                      style: Theme.of(context).textTheme.xSmall.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.deepBlue)),
-                ),
+                trailing: Text(ticketListDatum[index].statusname,
+                    style: Theme.of(context).textTheme.xSmall.copyWith(
+                        fontWeight: FontWeight.w500, color: AppColor.deepBlue)),
               ),
             ));
           } else {

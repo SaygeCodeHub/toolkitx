@@ -20,8 +20,7 @@ class SafetyNoticeScreen extends StatelessWidget {
   static int pageNo = 1;
   final bool isFromHomeScreen;
 
-  const SafetyNoticeScreen({Key? key, this.isFromHomeScreen = false})
-      : super(key: key);
+  const SafetyNoticeScreen({super.key, this.isFromHomeScreen = false});
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +31,26 @@ class SafetyNoticeScreen extends StatelessWidget {
         FetchSafetyNotices(pageNo: pageNo, isFromHomeScreen: isFromHomeScreen));
     return Scaffold(
       appBar: GenericAppBar(title: DatabaseUtil.getText('SafetyNotice')),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            AddAndEditSafetyNoticeScreen.isFromEditOption = false;
-            context.read<ImagePickerBloc>().pickedImagesList.clear();
-            context.read<ImagePickerBloc>().add(PickImageInitial());
-            Navigator.pushNamed(
-                context, AddAndEditSafetyNoticeScreen.routeName);
-          },
-          child: const Icon(Icons.add)),
+      floatingActionButton: BlocBuilder<SafetyNoticeBloc, SafetyNoticeStates>(
+        builder: (context, state) {
+          if (state is SafetyNoticesFetched) {
+            return Visibility(
+              visible: state.canAdd == '1',
+              child: FloatingActionButton(
+                  onPressed: () {
+                    AddAndEditSafetyNoticeScreen.isFromEditOption = false;
+                    context.read<ImagePickerBloc>().pickedImagesList.clear();
+                    context.read<ImagePickerBloc>().add(PickImageInitial());
+                    Navigator.pushNamed(
+                        context, AddAndEditSafetyNoticeScreen.routeName);
+                  },
+                  child: const Icon(Icons.add)),
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.only(
             left: leftRightMargin,
@@ -68,10 +78,9 @@ class SafetyNoticeScreen extends StatelessWidget {
                       secondaryOnPress: () {
                         Navigator.pushNamed(
                                 context, SafetyNoticeHistoryScreen.routeName)
-                            .then((value) => context
-                                .read<SafetyNoticeBloc>()
-                                .add(FetchSafetyNotices(
-                                    pageNo: 1, isFromHomeScreen: false)));
+                            .then((value) => Navigator.pushReplacementNamed(
+                                context, SafetyNoticeScreen.routeName,
+                                arguments: false));
                       },
                       secondaryIcon: Icons.history,
                       clearVisible: state.safetyNoticeFilterMap.isNotEmpty &&

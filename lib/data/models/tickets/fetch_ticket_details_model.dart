@@ -226,23 +226,25 @@ class Ment {
   final String author;
   final String createddate;
   final String comment;
+  final String fileName;
 
-  Ment({
-    required this.author,
-    required this.createddate,
-    required this.comment,
-  });
+  Ment(
+      {required this.author,
+      required this.createddate,
+      required this.comment,
+      required this.fileName});
 
   factory Ment.fromJson(Map<String, dynamic> json) => Ment(
-        author: json["author"],
-        createddate: json["createddate"],
-        comment: json["comment"],
-      );
+      author: json["author"],
+      createddate: json["createddate"],
+      comment: json["comment"],
+      fileName: json["filename"] ?? '');
 
   Map<String, dynamic> toJson() => {
         "author": author,
         "createddate": createddate,
         "comment": comment,
+        "filename": fileName
       };
 }
 

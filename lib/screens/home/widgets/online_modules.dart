@@ -3,18 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_bloc.dart';
 import 'package:toolkit/blocs/chat/chat_event.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/accounting_screen.dart';
 import 'package:toolkit/screens/assets/assets_list_screen.dart';
 import 'package:toolkit/screens/calendar/calendar_screen.dart';
 import 'package:toolkit/screens/certificates/certificates_list_screen.dart';
 import 'package:toolkit/screens/documents/documents_list_screen.dart';
+import 'package:toolkit/screens/meetingRoom/my_meetings_screen.dart';
+import 'package:toolkit/screens/tankManagement/tank_management_list_screen.dart';
 import 'package:toolkit/screens/tickets/ticket_list_screen.dart';
 import 'package:toolkit/screens/trips/trips_list_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_list_screen.dart';
 
+import '../../../blocs/accounting/accounting_bloc.dart';
+import '../../../blocs/accounting/accounting_event.dart';
 import '../../../blocs/client/client_bloc.dart';
 import '../../../blocs/client/client_events.dart';
 import '../../../blocs/client/client_states.dart';
 import '../../../blocs/global/global_bloc.dart';
+import '../../../blocs/tickets2/tickets2_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
@@ -33,12 +39,13 @@ import '../../permit/permit_list_screen.dart';
 import '../../qualityManagement/qm_list_screen.dart';
 import '../../safetyNotice/safety_notice_screen.dart';
 import '../../signInQRCode/signin_list_screen.dart';
+import '../../tickets2/ticket_two_list_screen.dart';
 import '../../todo/todo_assigned_to_me_and_by_me_list_screen.dart';
 
 class OnLineModules extends StatelessWidget {
   static bool isFirstTime = true;
 
-  const OnLineModules({Key? key}) : super(key: key);
+  const OnLineModules({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,8 @@ class OnLineModules extends StatelessWidget {
         .add(FetchHomeScreenData(isFirstTime: isFirstTime));
     final globalBloc = context.read<GlobalBloc>();
     final clientBloc = context.read<ClientBloc>();
+    final accountingBloc = context.read<AccountingBloc>();
+    final tickets2Bloc = context.read<Tickets2Bloc>();
     return BlocBuilder<ClientBloc, ClientStates>(
         buildWhen: (previousState, currentState) =>
             currentState is HomeScreenFetching && isFirstTime == true ||
@@ -81,7 +90,9 @@ class OnLineModules extends StatelessWidget {
                           state.availableModules[index].moduleName,
                           context,
                           globalBloc,
-                          clientBloc),
+                          clientBloc,
+                          accountingBloc,
+                          tickets2Bloc),
                       child: CustomCard(
                           color: AppColor.transparent,
                           elevation: kZeroElevation,
@@ -158,7 +169,8 @@ class OnLineModules extends StatelessWidget {
         });
   }
 
-  navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc) {
+  navigateToModule(moduleKey, moduleName, context, globalBloc, clientBloc,
+      AccountingBloc accountingBloc, Tickets2Bloc tickets2Bloc) {
     switch (moduleKey) {
       case 'ptw':
         globalBloc.add(UpdateCount(type: 'permit'));
@@ -237,6 +249,7 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, SignInListScreen.routeName);
         break;
       case 'calendar':
+      case 'wf_calendar':
         Navigator.pushNamed(context, CalendarScreen.routeName);
         break;
       case 'workorder':
@@ -290,9 +303,9 @@ class OnLineModules extends StatelessWidget {
         Navigator.pushNamed(context, EquipmentTraceScreen.routeName).then((_) =>
             clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
-      case 'meetingRoom':
-        globalBloc.add(UpdateCount(type: 'meetingroom'));
-
+      case 'meeting':
+        globalBloc.add(UpdateCount(type: 'meeting'));
+        Navigator.pushNamed(context, MyMeetingsScreen.routeName);
         break;
       case 'tickets':
         globalBloc.add(UpdateCount(type: 'tickets'));
@@ -301,15 +314,37 @@ class OnLineModules extends StatelessWidget {
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
+      case 'tickets2':
+        tickets2Bloc.filters.clear();
+        globalBloc.add(UpdateCount(type: 'tickets2'));
+        Navigator.pushNamed(context, TicketTwoListScreen.routeName,
+                arguments: true)
+            .then((_) =>
+                clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
       case 'hf':
+        globalBloc.add(UpdateCount(type: 'manifest'));
         Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
       case 'wf_trips':
+        globalBloc.add(UpdateCount(type: 'manifest'));
         Navigator.pushNamed(context, TripsListScreen.routeName, arguments: true)
             .then((_) =>
                 clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'tanks':
+        globalBloc.add(UpdateCount(type: 'tanks'));
+        Navigator.pushNamed(context, TankManagementListScreen.routeName).then(
+            (_) =>
+                clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
+        break;
+      case 'accounting':
+        globalBloc.add(UpdateCount(type: 'accounting'));
+        accountingBloc.add(FetchAccountingMaster());
+        Navigator.pushNamed(context, AccountingScreen.routeName).then((_) =>
+            clientBloc.add(FetchHomeScreenData(isFirstTime: isFirstTime)));
         break;
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toolkit/screens/permit/permit_select_file_screen.dart';
 import 'package:toolkit/utils/global.dart';
 
 import '../../blocs/permit/permit_bloc.dart';
@@ -30,7 +31,7 @@ class PermitListScreen extends StatelessWidget {
     context.read<PermitBloc>().permitListData = [];
     context
         .read<PermitBloc>()
-        .add(GetAllPermits(isFromHome: isFromHome, page: page));
+        .add(GetAllPermits(isFromHome: isFromHome, page: 1));
     return Scaffold(
         appBar: GenericAppBar(title: DatabaseUtil.getText('PermitToWork')),
         body: Padding(
@@ -46,50 +47,64 @@ class PermitListScreen extends StatelessWidget {
               if (state is PermitLocalDatabasePrepared) {
                 showCustomSnackBar(
                     context, StringConstants.kOfflineDataReady, '');
+                context
+                    .read<PermitBloc>()
+                    .add(GetAllPermits(isFromHome: isFromHome, page: 1));
                 ProgressBar.dismiss(context);
               }
               if (state is PreparingPermitLocalDatabaseFailed) {
-                showCustomSnackBar(context,
-                    StringConstants.kOfflineFailedInDataPreparation, '');
+                showCustomSnackBar(context, state.errorMessage, '');
                 ProgressBar.dismiss(context);
               }
             }, builder: (context, state) {
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Visibility(
-                      visible: isNetworkEstablished == true,
-                      child: BlocBuilder<PermitBloc, PermitStates>(
-                          builder: (context, state) {
-                        return CustomIconButtonRow(
-                            downloadVisible: true,
-                            onDownloadPress: () {
-                              context
-                                  .read<PermitBloc>()
-                                  .add(PreparePermitLocalDatabase());
-                            },
-                            isEnabled: true,
-                            primaryOnPress: () {
-                              PermitFilterScreen.isFromLocation = false;
-                              Navigator.pushNamed(
-                                  context, PermitFilterScreen.routeName);
-                            },
-                            secondaryOnPress: () {
-                              Navigator.pushNamed(
-                                  context, GetPermitRolesScreen.routeName);
-                            },
-                            clearVisible:
-                                context.read<PermitBloc>().filters.isNotEmpty,
-                            clearOnPress: () {
-                              page = 1;
-                              context
-                                  .read<PermitBloc>()
-                                  .add(const ClearPermitFilters());
-                              context.read<PermitBloc>().add(GetAllPermits(
-                                  isFromHome: isFromHome, page: 1));
-                            });
-                      }),
-                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      Visibility(
+                          visible: !isNetworkEstablished,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, PermitSelectFileScreen.routeName);
+                              },
+                              icon: const Icon(Icons.drive_folder_upload,
+                                  size: 30))),
+                      Visibility(
+                          visible: isNetworkEstablished == true,
+                          child: BlocBuilder<PermitBloc, PermitStates>(
+                              builder: (context, state) {
+                            return CustomIconButtonRow(
+                                downloadVisible: true,
+                                onDownloadPress: () {
+                                  context
+                                      .read<PermitBloc>()
+                                      .add(PreparePermitLocalDatabase());
+                                },
+                                isEnabled: true,
+                                primaryOnPress: () {
+                                  PermitFilterScreen.isFromLocation = false;
+                                  Navigator.pushNamed(
+                                      context, PermitFilterScreen.routeName);
+                                },
+                                secondaryOnPress: () {
+                                  Navigator.pushNamed(
+                                      context, GetPermitRolesScreen.routeName);
+                                },
+                                clearVisible: context
+                                    .read<PermitBloc>()
+                                    .filters
+                                    .isNotEmpty,
+                                clearOnPress: () {
+                                  page = 1;
+                                  context
+                                      .read<PermitBloc>()
+                                      .add(const ClearPermitFilters());
+                                  context.read<PermitBloc>().add(GetAllPermits(
+                                      isFromHome: isFromHome, page: 1));
+                                });
+                          }))
+                    ]),
                     const SizedBox(height: xxTinierSpacing),
                     const PermitListTile()
                   ]);

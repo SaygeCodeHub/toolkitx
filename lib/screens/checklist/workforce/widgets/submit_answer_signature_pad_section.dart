@@ -50,14 +50,15 @@ class SubmitAnswerSignaturePadSection extends StatelessWidget {
                                   actionsPadding: const EdgeInsets.only(
                                       right: xxTinySpacing,
                                       bottom: tiniestSpacing),
-                                  title: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SignaturePad(
-                                            map: checklistDataMap,
-                                            mapKey: 'sign_text'),
-                                      ]),
+                                  title: SizedBox(
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 0.25,
+                                    height:
+                                        MediaQuery.sizeOf(context).width * 0.75,
+                                    child: SignaturePad(
+                                        map: checklistDataMap,
+                                        mapKey: 'sign_text'),
+                                  ),
                                   actions: [
                                     CustomTextButton(
                                         onPressed: () {
@@ -67,13 +68,13 @@ class SubmitAnswerSignaturePadSection extends StatelessWidget {
                                         textValue: StringConstants.kNo),
                                     CustomTextButton(
                                         onPressed: () {
+                                          Navigator.pop(context);
                                           context.read<SubmitAnswerBloc>().add(
                                               SubmitAnswers(
                                                   editQuestionsList: answerList,
                                                   isDraft: false,
                                                   allChecklistDataMap:
                                                       checklistDataMap));
-                                          Navigator.pop(context);
                                         },
                                         textValue: StringConstants.kYes)
                                   ]);

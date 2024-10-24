@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/workorder/widgets/offline/workorder_sap_model.dart';
+import 'package:toolkit/screens/workorder/widgets/offline/workorder_sign_as_user_screen.dart';
 import 'package:toolkit/screens/workorder/workorder_add_parts_screen.dart';
+import 'package:toolkit/utils/global.dart';
+import '../../blocs/imagePickerBloc/image_picker_bloc.dart';
+import '../../blocs/imagePickerBloc/image_picker_event.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
 import '../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_events.dart';
 import '../../blocs/workorder/workorder_bloc.dart';
@@ -25,11 +30,10 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
   final String woId;
 
   const WorkOrderPopUpMenuScreen(
-      {Key? key,
+      {super.key,
       required this.popUpMenuOptions,
       required this.workOrderDetailsMap,
-      required this.woId})
-      : super(key: key);
+      required this.woId});
 
   PopupMenuItem _buildPopupMenuItem(context, String title, String position) {
     return PopupMenuItem(
@@ -90,11 +94,20 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                     titleValue: DatabaseUtil.getText('AcceptWO'),
                     contentValue: '',
                     onPrimaryButton: () {
-                      context.read<WorkOrderTabDetailsBloc>().add(
-                          AcceptWorkOrder(
-                              workOrderId:
-                                  workOrderDetailsMap['workorderId'] ?? ''));
-                      Navigator.pop(context);
+                      if (isNetworkEstablished) {
+                        context.read<WorkOrderTabDetailsBloc>().add(
+                            AcceptWorkOrder(
+                                workOrderId:
+                                    workOrderDetailsMap['workorderId'] ?? '',
+                                acceptOfflineMap: {}));
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pushNamed(
+                            context, WorkOrderSignAsUserScreen.routeName,
+                            arguments: WorkOrderSapModel(
+                                sapMap: workOrderDetailsMap,
+                                previousScreen: 'AcceptScreen'));
+                      }
                     });
               });
         }
@@ -171,11 +184,19 @@ class WorkOrderPopUpMenuScreen extends StatelessWidget {
                   WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
         }
         if (value == DatabaseUtil.getText('AddComment')) {
+          WorkOrderAddCommentsScreen.addCommentsMap.clear();
+          context.read<ImagePickerBloc>().pickedImagesList.clear();
+          context.read<ImagePickerBloc>().add(PickImageInitial());
           WorkOrderAddCommentsScreen.addCommentsMap['workorderId'] =
               workOrderDetailsMap['workorderId'];
           Navigator.pushNamed(context, WorkOrderAddCommentsScreen.routeName)
-              .then((_) => context.read<WorkOrderTabDetailsBloc>().add(
-                  WorkOrderDetails(initialTabIndex: 0, workOrderId: woId)));
+              .then((_) {
+            if (context.mounted) {
+              context
+                  .read<WorkOrderTabDetailsBloc>()
+                  .add(WorkOrderDetails(initialTabIndex: 0, workOrderId: woId));
+            }
+          });
         }
       },
       position: PopupMenuPosition.under,

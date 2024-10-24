@@ -40,5 +40,10 @@ class PermitUtil {
       Icons.chat,
       color: AppColor.grey,
     )),
+    const Tab(
+        icon: Icon(
+      Icons.schedule,
+      color: AppColor.grey,
+    ))
   ];
 }

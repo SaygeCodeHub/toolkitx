@@ -19,7 +19,8 @@ class WorkForceCheckListPopUpMenuItemsBloc extends Bloc<
       Emitter<CheckListWorkForcePopUpMenuItemsFetched> emit) {
     List popUpMenuItems = [
       DatabaseUtil.getText('Edit'),
-      DatabaseUtil.getText('Reject')
+      DatabaseUtil.getText('Reject'),
+      DatabaseUtil.getText('view_Details')
     ];
     emit(CheckListWorkForcePopUpMenuItemsFetched(
         popUpMenuItems: popUpMenuItems,

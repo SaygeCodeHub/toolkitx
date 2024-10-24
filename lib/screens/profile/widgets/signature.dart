@@ -11,6 +11,7 @@ import 'package:toolkit/configs/app_spacing.dart';
 import 'package:toolkit/configs/app_theme.dart';
 import 'package:toolkit/screens/checklist/workforce/widgets/upload_image_section.dart';
 import 'package:toolkit/utils/constants/string_constants.dart';
+import '../../../blocs/imagePickerBloc/image_picker_bloc.dart';
 import '../../../blocs/pickAndUploadImage/pick_and_upload_image_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../utils/constants/api_constants.dart';
@@ -72,6 +73,7 @@ class _SignaturePadState extends State<SignaturePad> {
           IconButton(
               onPressed: () {
                 signController.clear();
+                widget.map[widget.mapKey] = '';
               },
               icon: const Icon(Icons.refresh),
               iconSize: kIconSize)
@@ -137,6 +139,7 @@ class _SignaturePadState extends State<SignaturePad> {
                     }))),
       (newSign == false)
           ? UploadImageMenu(
+              imagePickerBloc: ImagePickerBloc(),
               onUploadImageResponse: (List uploadImageList) {},
               isSignature: true,
               removeSignPad: () {

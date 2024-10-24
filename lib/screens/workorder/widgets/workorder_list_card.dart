@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
-import '../../../blocs/workorder/workOrderTabsDetails/workorder_tab_details_bloc.dart';
+import '../../../blocs/workorder/workorder_bloc.dart';
+import '../../../blocs/workorder/workorder_events.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_dimensions.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../data/models/workorder/fetch_workorders_model.dart';
 import '../../../widgets/custom_card.dart';
 import '../workorder_details_tab_screen.dart';
-import '../workorder_list_screen.dart';
 
 class WorkOrderListCard extends StatelessWidget {
   final WorkOrderDatum data;
 
-  const WorkOrderListCard({Key? key, required this.data}) : super(key: key);
+  const WorkOrderListCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,14 @@ class WorkOrderListCard extends StatelessWidget {
       child: ListTile(
         onTap: () {
           Navigator.pushNamed(context, WorkOrderDetailsTabScreen.routeName,
-                  arguments:
-                      context.read<WorkOrderTabDetailsBloc>().workOrderId)
-              .then((value) => Navigator.pushReplacementNamed(
-                  context, WorkOrderListScreen.routeName,
-                  arguments: false));
+                  arguments: data.id)
+              .then((value) {
+            if (context.mounted) {
+              context
+                  .read<WorkOrderBloc>()
+                  .add(FetchWorkOrders(pageNo: 1, isFromHome: false));
+            }
+          });
         },
         contentPadding: const EdgeInsets.all(xxTinierSpacing),
         title: Padding(
@@ -38,6 +41,11 @@ class WorkOrderListCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.small.copyWith(
                           color: AppColor.black, fontWeight: FontWeight.w600)),
                   const SizedBox(width: tinierSpacing),
+                  (data.actionCount > 0)
+                      ? const Icon(Icons.pending_actions_rounded,
+                          size: kImageHeight, color: AppColor.orange)
+                      : const SizedBox.shrink(),
+                  const Spacer(),
                   Text(data.status,
                       style: Theme.of(context)
                           .textTheme
