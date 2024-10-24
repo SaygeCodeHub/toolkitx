@@ -56,6 +56,7 @@ class BankStatementFilterScreen extends StatelessWidget {
                           .read<AccountingBloc>()
                           .bankStatementFilterMap['bank'] = selectedBank;
                     },
+                    initialBank: '',
                   ),
                   const SizedBox(height: xxTinySpacing),
                   Text(StringConstants.kYear,

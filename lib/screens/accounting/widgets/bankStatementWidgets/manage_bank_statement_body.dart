@@ -45,10 +45,16 @@ class ManageBankStatementBody extends StatelessWidget {
                         .manageBankStatementMap['entity'] ??
                     ''),
             const SizedBox(height: xxTinySpacing),
-            BankDropdown(onBankChanged: (String selectedBank) {
-              context.read<AccountingBloc>().manageBankStatementMap['bank'] =
-                  selectedBank;
-            }),
+            BankDropdown(
+                onBankChanged: (String selectedBank) {
+                  context
+                      .read<AccountingBloc>()
+                      .manageBankStatementMap['bank'] = selectedBank;
+                },
+                initialBank: context
+                        .read<AccountingBloc>()
+                        .manageBankStatementMap['bank'] ??
+                    ''),
             const SizedBox(height: xxTinySpacing),
             Text(StringConstants.kStatementMonth,
                 style: Theme.of(context)
