@@ -13,7 +13,7 @@ import '../../../data/models/tickets2/fetch_ticket_two_details_model.dart';
 import '../add_ticket_two_document_screen.dart';
 import '../ticket_two_completion_date_screen.dart';
 import '../ticket_two_edt_hours_screen.dart';
-import 'add_ticket_two_comments_screen.dart';
+import '../add_ticket_two_comments_screen.dart';
 import '../open_ticket_two_screen.dart';
 
 class TicketTwoDetailsPopUpMenu extends StatelessWidget {

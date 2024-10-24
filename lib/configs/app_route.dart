@@ -208,7 +208,7 @@ import '../screens/tickets2/ticket_two_details_screen.dart';
 import '../screens/tickets2/ticket_two_edt_hours_screen.dart';
 import '../screens/tickets2/ticket_two_filter_screen.dart';
 import '../screens/tickets2/ticket_two_list_screen.dart';
-import '../screens/tickets2/widgets/add_ticket_two_comments_screen.dart';
+import '../screens/tickets2/add_ticket_two_comments_screen.dart';
 import '../screens/tickets2/open_ticket_two_screen.dart';
 import '../screens/tickets2/widgets/ticket_two_application_filter_list.dart';
 import '../screens/todo/add_todo_screen.dart';

@@ -23,7 +23,7 @@ class AttachDocumentSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Attached Documents',
+            Text(docMap['title_name'] ?? 'Attached Documents',
                 style: Theme.of(context)
                     .textTheme
                     .xSmall

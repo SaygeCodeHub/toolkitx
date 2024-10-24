@@ -7,8 +7,7 @@ import '../../../blocs/tickets/tickets_bloc.dart';
 import '../../../configs/app_color.dart';
 import '../../../configs/app_spacing.dart';
 import '../../../widgets/custom_card.dart';
-import '../../tickets2/ticket_two_details_screen.dart';
-import '../../tickets2/ticket_two_list_screen.dart';
+import '../ticket_details_screen.dart';
 
 class TicketListBody extends StatelessWidget {
   const TicketListBody({super.key, required this.ticketListDatum});
@@ -28,10 +27,10 @@ class TicketListBody extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: xxTinierSpacing),
               child: ListTile(
                 onTap: () {
-                  Navigator.pushNamed(context, TicketTwoDetailsScreen.routeName,
+                  Navigator.pushNamed(context, TicketDetailsScreen.routeName,
                           arguments: ticketListDatum[index].id)
                       .then((_) => Navigator.pushReplacementNamed(
-                          context, TicketTwoListScreen.routeName,
+                          context, TicketListScreen.routeName,
                           arguments: true));
                 },
                 title: Text(ticketListDatum[index].ticketNo,

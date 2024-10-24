@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toolkit/configs/app_theme.dart';
+import 'package:toolkit/screens/accounting/widgets/attach_document_widget.dart';
 import 'package:toolkit/utils/database_utils.dart';
 import 'package:toolkit/widgets/generic_app_bar.dart';
 
@@ -18,7 +19,6 @@ import '../../widgets/custom_snackbar.dart';
 import '../../widgets/generic_loading_popup.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/progress_bar.dart';
-import '../checklist/workforce/widgets/upload_image_section.dart';
 
 class AddTicketTwoDocumentScreen extends StatelessWidget {
   AddTicketTwoDocumentScreen({super.key});
@@ -63,13 +63,12 @@ class AddTicketTwoDocumentScreen extends StatelessWidget {
                       filled: true,
                       fillColor: AppColor.white)),
               const SizedBox(height: xxTinierSpacing),
-              UploadImageMenu(
-                imagePickerBloc: ImagePickerBloc(),
-                isUpload: true,
-                onUploadImageResponse: (List uploadImageList) {
-                  saveDocumentMap['fileList'] = uploadImageList;
-                },
-              ),
+              AttachDocumentWidget(
+                  titleName: DatabaseUtil.getText('upload_docs'),
+                  onUploadDocument: (uploadDocList) {
+                    saveDocumentMap['fileList'] = uploadDocList;
+                  },
+                  imagePickerBloc: ImagePickerBloc())
             ],
           ),
         ),

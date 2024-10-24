@@ -14,12 +14,14 @@ class AttachDocumentWidget extends StatefulWidget {
   final void Function(List uploadDocList) onUploadDocument;
   final ImagePickerBloc imagePickerBloc;
   final List<dynamic> initialImages;
+  final String titleName;
 
   const AttachDocumentWidget(
       {super.key,
       required this.onUploadDocument,
       required this.imagePickerBloc,
-      this.initialImages = const []});
+      this.initialImages = const [],
+      this.titleName = 'Attached Documents'});
 
   @override
   State<AttachDocumentWidget> createState() => _AttachDocumentWidgetState();
@@ -68,6 +70,7 @@ class _AttachDocumentWidgetState extends State<AttachDocumentWidget> {
           widget.onUploadDocument(state.pickedImagesList);
           return AttachDocumentSection(
             docMap: {
+              'title_name': widget.titleName,
               'imageCount': state.imageCount,
               'imageList': state.pickedImagesList,
               'clientId': state.clientId,
@@ -84,6 +87,7 @@ class _AttachDocumentWidgetState extends State<AttachDocumentWidget> {
           widget.onUploadDocument(state.images);
           return AttachDocumentSection(
             docMap: {
+              'title_name': widget.titleName,
               'imageCount': state.imageCount,
               'imageList': state.images,
               'clientId': state.clientId,
@@ -92,9 +96,12 @@ class _AttachDocumentWidgetState extends State<AttachDocumentWidget> {
             imagePickerBloc: _imagePickerBloc,
           );
         } else {
-          return AttachDocumentSection(
-              docMap: const {'imageCount': 0, 'imageList': [], 'clientId': ''},
-              imagePickerBloc: _imagePickerBloc);
+          return AttachDocumentSection(docMap: {
+            'title_name': widget.titleName,
+            'imageCount': 0,
+            'imageList': const [],
+            'clientId': ''
+          }, imagePickerBloc: _imagePickerBloc);
         }
       },
     );
